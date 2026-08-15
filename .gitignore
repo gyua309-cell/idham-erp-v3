@@ -38,6 +38,11 @@ scratch/
 !/firebase.json
 !/firestore.indexes.json
 
+# Allow database backups folder and the backup script
+!/database_backup/
+!/database_backup/*.json
+!/take_database_backup.mjs
+
 # OS files
 .DS_Store
 Thumbs.db
