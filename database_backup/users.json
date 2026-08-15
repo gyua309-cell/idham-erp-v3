@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "YmnOYFTWQc3kgWOmKy3M",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/users/YmnOYFTWQc3kgWOmKy3M",
+    "createdAt": "2026-07-08T00:30:40.156Z",
+    "permissions": [
+      "sales",
+      "inventory",
+      "hr",
+      "purchases",
+      "accounts",
+      "settings"
+    ],
+    "email": "alifayad18@gmail.com",
+    "name": "على فياض",
+    "role": "admin",
+    "status": "active",
+    "updatedAt": "2026-07-26T19:40:58.685Z"
+  },
+  {
+    "_id": "eZ8UlvjeYawtWSre5EwW",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/users/eZ8UlvjeYawtWSre5EwW",
+    "updatedAt": "2026-07-11T22:39:54.696Z",
+    "name": "على فيااض",
+    "role": "admin",
+    "email": "alifayadacc18@gmail.com",
+    "passwordHash": "6f496eaf16d46f92b4dd7827da5a81b9acdd5eec77818b3108abebd545166f1a",
+    "createdAt": "2026-07-11T22:39:54.696Z",
+    "id": "eZ8UlvjeYawtWSre5EwW"
+  },
+  {
+    "_id": "t6ILliJdh8STfuDKHVRvI8ey7EO2",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/users/t6ILliJdh8STfuDKHVRvI8ey7EO2",
+    "email": "nagy@gmail.com",
+    "passwordHash": "076498881fb648b271ee525d8cd58b3f7f29b1979b838346021796de77389782",
+    "id": "t6ILliJdh8STfuDKHVRvI8ey7EO2",
+    "createdAt": "2026-08-03T08:21:14.611Z",
+    "updatedAt": "2026-08-03T08:21:14.611Z",
+    "role": "warehouse_keeper",
+    "name": "ناجى عاطف"
+  }
+]

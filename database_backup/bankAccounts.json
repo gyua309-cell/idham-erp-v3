@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "bank-aljazira",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/bankAccounts/bank-aljazira",
+    "accountCode": "1-1-1-3-01",
+    "balance": 133311.9,
+    "bankName": "بنك الجزيرة",
+    "currency": "SAR",
+    "updatedAt": "2026-08-12T08:01:26.314Z",
+    "active": true,
+    "name": "بنك الجزيرة",
+    "accountName": "حساب بنك الجزيرة الجاري"
+  },
+  {
+    "_id": "bank-alrajhi",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/bankAccounts/bank-alrajhi",
+    "name": "بنك الراجحي",
+    "accountName": "حساب بنك الراجحي",
+    "balance": 764,
+    "accountCode": "1-1-1-3-02",
+    "active": true,
+    "bankName": "بنك الراجحي",
+    "updatedAt": "2026-08-13T08:03:48.359Z",
+    "currency": "SAR"
+  }
+]
