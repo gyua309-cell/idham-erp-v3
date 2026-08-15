@@ -1,0 +1,116 @@
+{
+  "hosting": {
+    "site": "idham-foodstuffs-sa",
+    "public": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "functions/**",
+      "**/*.mjs",
+      "**/*.sh",
+      "**/*.exe",
+      "**/*.bat",
+      "**/*.cmd",
+      "**/scratch/**",
+      "package.json",
+      "package-lock.json",
+      "users*.json",
+      "firestore.rules",
+      "firestore.indexes.json"
+    ],
+    "rewrites": [
+      { "source": "/rep.html",                    "destination": "/rep.html" },
+      { "source": "/clearcache.html",             "destination": "/clearcache.html" },
+      { "source": "/migrate-rep-accounts.html",   "destination": "/migrate-rep-accounts.html" },
+      { "source": "/sw-rep.js",                   "destination": "/sw-rep.js" },
+      { "source": "/manifest-rep.json",           "destination": "/manifest-rep.json" },
+      { "source": "/css/rep2.css",                "destination": "/css/rep2.css" },
+      { "source": "/js/rep/app2.js",              "destination": "/js/rep/app2.js" },
+      { "source": "/purchases-app",         "destination": "/purchases-app/index.html" },
+      { "source": "/purchases-app/**",      "destination": "/purchases-app/index.html" },
+      { "source": "/js/**",                 "destination": "/js/**" },
+      { "source": "/css/**",                "destination": "/css/**" },
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/purchases-app/**",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "Pragma", "value": "no-cache" }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "Pragma", "value": "no-cache" },
+          { "key": "X-Content-Type-Options", "value": "nosniff" },
+          { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+          { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+        ]
+      },
+      {
+        "source": "/rep.html",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "Pragma", "value": "no-cache" }
+        ]
+      },
+      {
+        "source": "/clearcache.html",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "Pragma", "value": "no-cache" }
+        ]
+      },
+      {
+        "source": "/sw-rep.js",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "Pragma", "value": "no-cache" }
+        ]
+      },
+      {
+        "source": "/js/**/*.js",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "Pragma", "value": "no-cache" }
+        ]
+      },
+      {
+        "source": "/css/**/*.css",
+        "headers": [
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" },
+          { "key": "Pragma", "value": "no-cache" }
+        ]
+      },
+      {
+        "source": "**/*.@(png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|eot)",
+        "headers": [
+          { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+        ]
+      }
+    ]
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": {
+    "source": "functions",
+    "runtime": "nodejs20",
+    "predeploy": []
+  },
+  "emulators": {
+    "auth":      { "port": 9099 },
+    "firestore": { "port": 8080 },
+    "functions": { "port": 5001 },
+    "hosting":   { "port": 5000 },
+    "ui":        { "enabled": true, "port": 4000 }
+  }
+}

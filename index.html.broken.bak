@@ -1,0 +1,958 @@
+ï»¿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ÃÂ¥ÃÂ¯Ãâ¡ÃÂ§Ãâ¦ ÃâÃâÃâ¦ÃËÃÂ§ÃÂ¯ ÃÂ§ÃâÃÂºÃÂ°ÃÂ§ÃÂ¦ÃÅ ÃÂ© Ã¢â¬â Ãâ ÃÂ¸ÃÂ§Ãâ¦ ERP</title>
+  <meta name="description" content="Ãâ ÃÂ¸ÃÂ§Ãâ¦ ÃÂ¥ÃÂ¯ÃÂ§ÃÂ±ÃÂ© Ãâ¦ÃËÃÂ§ÃÂ±ÃÂ¯ ÃÂ§ÃâÃâ¦ÃÂ¤ÃÂ³ÃÂ³ÃÂ§ÃÂª ÃâÃÂ´ÃÂ±ÃÆÃÂ© ÃÂ¥ÃÂ¯Ãâ¡ÃÂ§Ãâ¦ ÃâÃâÃâ¦ÃËÃÂ§ÃÂ¯ ÃÂ§ÃâÃÂºÃÂ°ÃÂ§ÃÂ¦ÃÅ ÃÂ© Ã¢â¬â Ãâ¦ÃÂªÃËÃÂ§ÃÂÃâ Ãâ¦ÃÂ¹ Ãâ¡ÃÅ ÃÂ¦ÃÂ© ÃÂ§ÃâÃÂ²ÃÆÃÂ§ÃÂ© ÃËÃÂ§ÃâÃÂ¬Ãâ¦ÃÂ§ÃÂ±ÃÆ (ZATCA)" />
+  <meta name="robots" content="noindex, nofollow" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/design-system.css?v=25.1" />
+  <link rel="stylesheet" href="css/layout.css?v=24.0" />
+  <link rel="stylesheet" href="css/components.css?v=24.0" />
+
+  <!-- Ã¢â¢ÂÃ¢â¢Â Unified Export Button Styles Ã¢â¢ÂÃ¢â¢Â -->
+  <style>
+    .btn-export {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 7px 13px; border-radius: 8px; border: 1px solid var(--border-soft, #2d3748);
+      background: var(--bg-2, #1e293b); color: var(--text-1, #cbd5e1);
+      font-family: var(--font-body, 'IBM Plex Sans Arabic', sans-serif);
+      font-size: 12.5px; font-weight: 500; cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-export:hover { background: var(--primary, #5B5CEB); color: #fff;
+      border-color: var(--primary, #5B5CEB); }
+    .btn-export.excel:hover { background: #16a34a; border-color: #16a34a; }
+    .btn-export.print:hover  { background: #0369a1; border-color: #0369a1; }
+    .btn-export span { font-size: 14px; }
+
+    /* Ã¢ââ¬Ã¢ââ¬ Print Styles Ã¢ââ¬Ã¢ââ¬ */
+    @media print {
+      /* Hide everything that isn't content */
+      #sidebar, #topbar, .filterbar, .no-print,
+      .btn, .btn-export, .btn-primary, .btn-secondary, .btn-danger,
+      .nav-section, .kpi-grid, #toast-container,
+      .page-header > *:not(.print-title),
+      .modal-overlay, #f8-search-modal,
+      [onclick], .actions-col, td:last-child .btn,
+      .quick-filter-btn, .filter-select-group label + select,
+      #sidebar-overlay, .mobile-menu-btn { display: none !important; }
+
+      /* Show content area full-width */
+      #app { display: block !important; }
+      #page-router-outlet {
+        display: block !important; width: 100%; padding: 0; margin: 0;
+      }
+      .page-content { padding: 0 !important; margin: 0 !important; }
+
+      /* Table print styles */
+      table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+      thead th {
+        background: #1a1a2e !important; color: #fff !important;
+        padding: 6pt 8pt; font-weight: 700;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      }
+      tbody td { padding: 4pt 8pt; border-bottom: 0.5pt solid #ccc; }
+      tbody tr:nth-child(even) { background: #f5f5ff !important;
+        -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .card { box-shadow: none !important; border: 1pt solid #ddd !important; }
+
+      /* Print header auto-added */
+      body::before {
+        content: "Ãâ ÃÂ¸ÃÂ§Ãâ¦ ÃÂ¥ÃÂ¯Ãâ¡ÃÂ§Ãâ¦ ERP Ã¢â¬â " attr(data-print-title);
+        display: block; font-size: 14pt; font-weight: 700;
+        color: #1a1a2e; margin-bottom: 8pt; padding-bottom: 6pt;
+        border-bottom: 2pt solid #5B5CEB;
+        font-family: 'IBM Plex Sans Arabic', Tahoma, sans-serif;
+      }
+      @page { size: A4 landscape; margin: 12mm 10mm; }
+    }
+  </style>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- QR Code Generator -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+  <!-- Barcode Generator -->
+  <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+
+  <!-- Apply saved appearance settings INSTANTLY (before modules load) -->
+  <script>
+    (function() {
+      try {
+        const app = JSON.parse(localStorage.getItem('idham_appearance') || '{}');
+        const root = document.documentElement;
+        if (app.fontFamily) {
+          root.style.setProperty('--font-body',    "'" + app.fontFamily + "', sans-serif");
+          root.style.setProperty('--font-heading', "'" + app.fontFamily + "', sans-serif");
+        }
+        if (app.fontSize) {
+          root.style.setProperty('--font-size-base', app.fontSize + 'px');
+          document.body && (document.body.style.fontSize = app.fontSize + 'px');
+        }
+        if (app.primaryColor) {
+          root.style.setProperty('--primary',      app.primaryColor);
+          root.style.setProperty('--primary-dim',  app.primaryColor + '22');
+          root.style.setProperty('--primary-glow', app.primaryColor + '55');
+        }
+      } catch(e) {}
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+  <!-- Loading Screen Ã¢â¬â Ãâ ÃÂ¸Ãâ¦ ÃÂ§ÃâÃÂ§Ãâ¦ÃÂ¯ÃÂ§ÃÂ¯ ÃÂ§ÃâÃÂ­ÃÂ¯ÃÅ ÃÂ«ÃÂ©  -->
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+  <div id="loading-screen" style="
+    position:fixed; inset:0;
+    background: linear-gradient(160deg, #071a0b 0%, #0d2b12 50%, #071a0b 100%);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; z-index:9999;
+    font-family:'IBM Plex Sans Arabic', sans-serif;
+  ">
+    <!-- Subtle background pattern -->
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(212,175,55,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;"></div>
+
+    <div style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:24px; position:relative; z-index:2;">
+
+      <!-- Logo Icon -->
+      <div style="
+        width:100px; height:100px;
+        background: linear-gradient(145deg, #1a5c2a 0%, #0f3d19 100%);
+        border-radius:28px;
+        display:flex; align-items:center; justify-content:center;
+        border: 2px solid rgba(212,175,55,0.4);
+        box-shadow: 0 0 0 8px rgba(212,175,55,0.06), 0 20px 50px rgba(0,0,0,0.5);
+      ">
+        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
+          <!-- Truck body -->
+          <rect x="6" y="26" width="30" height="18" rx="3" fill="#D4AF37" opacity=".9"/>
+          <rect x="36" y="30" width="14" height="14" rx="3" fill="#D4AF37" opacity=".7"/>
+          <!-- Wheels -->
+          <circle cx="14" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="1.5"/>
+          <circle cx="42" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="1.5"/>
+          <!-- Wheat stalks -->
+          <line x1="28" y1="22" x2="28" y2="10" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="28" cy="8" rx="3" ry="5" fill="#4ade80" opacity=".8"/>
+          <line x1="24" y1="20" x2="20" y2="12" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
+          <ellipse cx="19" cy="10" rx="2.5" ry="4" fill="#4ade80" opacity=".6" transform="rotate(-20 19 10)"/>
+          <line x1="32" y1="20" x2="36" y2="12" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
+          <ellipse cx="37" cy="10" rx="2.5" ry="4" fill="#4ade80" opacity=".6" transform="rotate(20 37 10)"/>
+        </svg>
+      </div>
+
+      <!-- Company Name -->
+      <div>
+        <div style="font-size:30px; font-weight:900; color:#D4AF37; margin:0; letter-spacing:-0.5px; line-height:1.2; text-shadow:0 2px 20px rgba(212,175,55,0.3);">
+          &#x646;&#x638;&#x645; &#x627;&#x644;&#x627;&#x645;&#x62f;&#x627;&#x62f; &#x627;&#x644;&#x62d;&#x62f;&#x64a;&#x62b;&#x629;
+        </div>
+        <div style="font-size:14px; font-weight:600; color:#4ade80; margin:6px 0 0 0; letter-spacing:.5px;">
+          &#x62a;&#x648;&#x632;&#x64a;&#x639; &#x627;&#x644;&#x645;&#x648;&#x627;&#x62f; &#x627;&#x644;&#x63a;&#x630;&#x627;&#x626;&#x64a;&#x629; &#x628;&#x627;&#x644;&#x62c;&#x645;&#x644;&#x629;
+        </div>
+        <div style="width:120px; height:2px; background:linear-gradient(90deg,transparent,#D4AF37,transparent); margin:12px auto 0;"></div>
+        <div style="font-size:12px; color:#4b7a55; margin:10px 0 0 0; font-weight:400; letter-spacing:1px;">
+          &#x646;&#x638;&#x627;&#x645; &#x625;&#x62f;&#x627;&#x631;&#x629; &#x645;&#x648;&#x627;&#x631;&#x62f; &#x627;&#x644;&#x645;&#x624;&#x633;&#x633;&#x627;&#x62a;
+        </div>
+      </div>
+
+      <!-- Static progress bar (no animation - fast) -->
+      <div style="width:180px; height:3px; background:rgba(255,255,255,0.08); border-radius:10px; overflow:hidden;">
+        <div id="splash-bar" style="height:100%; width:20%; background:linear-gradient(90deg,#D4AF37,#f5d76e); border-radius:10px;"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    // ÃÂªÃâÃÂ¯Ãâ¦ ÃÂ´ÃÂ±ÃÅ ÃÂ· ÃÂ§ÃâÃÂªÃÂ­Ãâ¦ÃÅ Ãâ ÃÂ¨ÃÂ¯ÃËÃâ  animation CSS
+    (function(){
+      var bar = document.getElementById('splash-bar'), w = 20;
+      var t = setInterval(function(){
+        w = Math.min(w + 15, 90);
+        if(bar) bar.style.width = w + '%';
+        if(w >= 90) clearInterval(t);
+      }, 200);
+    })();
+  </script>
+
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+  <!-- Auth Page Ã¢â¬â Ãâ ÃÂ¸Ãâ¦ ÃÂ§ÃâÃÂ§Ãâ¦ÃÂ¯ÃÂ§ÃÂ¯ ÃÂ§ÃâÃÂ­ÃÂ¯ÃÅ ÃÂ«ÃÂ© v3.0  -->
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+    <div id="auth-page" class="auth-page hidden">
+
+    <style>
+    *, *::before, *::after { animation-duration:0.001ms!important; animation-iteration-count:1!important; transition-duration:0.001ms!important; }
+    .auth-page { position:fixed;inset:0;z-index:100;background:linear-gradient(160deg,#071a0b 0%,#0d2b12 50%,#071a0b 100%);display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Sans Arabic",sans-serif;overflow:hidden; }
+    .auth-grid { position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(212,175,55,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,.04) 1px,transparent 1px);background-size:60px 60px; }
+    .auth-wrap { position:relative;z-index:10;display:grid;grid-template-columns:58% 42%;width:100%;max-width:1040px;min-height:580px;border-radius:24px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 1px rgba(212,175,55,.15); }
+    @media(max-width:700px){ .auth-wrap{grid-template-columns:1fr;max-width:400px;} .auth-brand-panel{display:none;} }
+    .auth-brand-panel { background:linear-gradient(160deg,#0c2412 0%,#071a0b 100%);border-left:1px solid rgba(212,175,55,.2);padding:48px 44px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden; }
+    .auth-brand-panel::before { content:"";position:absolute;top:-60px;right:-60px;width:250px;height:250px;border-radius:50%;background:rgba(212,175,55,.05);filter:blur(50px);pointer-events:none; }
+    .auth-logo-box { width:66px;height:66px;border-radius:20px;background:linear-gradient(145deg,#1a5c2a 0%,#0f3d19 100%);display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(212,175,55,.5);box-shadow:0 8px 28px rgba(0,0,0,.4);flex-shrink:0; }
+    .auth-logo-title { font-size:20px;font-weight:900;color:#D4AF37;letter-spacing:-.3px; }
+    .auth-logo-sub   { font-size:11px;color:#4ade80;font-weight:600;margin-top:3px;letter-spacing:.3px; }
+    .auth-hero-title { font-size:26px;font-weight:900;color:#ffffff;line-height:1.45;margin-bottom:14px;letter-spacing:-.5px; }
+    .auth-hero-title span { color:#D4AF37; }
+    .auth-hero-desc { font-size:13px;color:rgba(255,255,255,.7);line-height:1.75;margin-bottom:30px;font-weight:400; }
+    .auth-features { display:flex;flex-direction:column;gap:10px; }
+    .auth-feat { display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.12);border-radius:14px;padding:12px 16px; }
+    .auth-feat-icon { width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px; }
+    .auth-feat-text { font-size:13px;color:#ffffff;font-weight:700; }
+    .auth-feat-sub  { font-size:11px;color:#6b9e7a;margin-top:2px; }
+    .auth-gold-bar  { height:3px;border-radius:2px;background:linear-gradient(90deg,#D4AF37,#f5d76e,rgba(212,175,55,.2));margin-top:30px; }
+    .auth-login-panel { background:#081507;border-left:1px solid rgba(212,175,55,.15);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;position:relative; }
+    .auth-login-title { font-size:26px;font-weight:900;color:#ffffff;margin-bottom:6px;letter-spacing:-.5px; }
+    .auth-login-sub   { font-size:13px;color:#4b7a55;margin-bottom:32px;font-weight:500; }
+    .auth-field { position:relative;margin-bottom:20px; }
+    .auth-field label { display:block;font-size:11px;font-weight:800;color:#5a8a68;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px; }
+    .auth-input-wrap { position:relative; }
+    .auth-input { width:100%;box-sizing:border-box;background:rgba(212,175,55,.06);border:1.5px solid rgba(212,175,55,.2);border-radius:12px;padding:13px 44px 13px 16px;font-size:14px;color:#f1f5f9;font-family:"IBM Plex Sans Arabic",sans-serif;outline:none; }
+    .auth-input::placeholder { color:#2d5a3a; }
+    .auth-input:focus { border-color:rgba(212,175,55,.8);background:rgba(212,175,55,.08);box-shadow:0 0 0 3px rgba(212,175,55,.15); }
+    .auth-input-icon { position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:16px;color:#2d5a3a;pointer-events:none; }
+    .auth-eye-btn { position:absolute;left:12px;top:50%;transform:translateY(-50%);background:transparent;border:none;cursor:pointer;color:#4b7a55;font-size:18px;padding:2px; }
+    .auth-submit { width:100%;padding:14px;border:1px solid rgba(212,175,55,.4);cursor:pointer;background:linear-gradient(135deg,#1a6b2a,#0f3d19);color:#D4AF37;font-size:15px;font-weight:800;font-family:"IBM Plex Sans Arabic",sans-serif;border-radius:12px;margin-top:4px;box-shadow:0 6px 24px rgba(0,0,0,.4);position:relative; }
+    .auth-submit:disabled { opacity:.6;cursor:not-allowed; }
+    .auth-progress { position:absolute;bottom:0;left:0;height:3px;width:0%;background:linear-gradient(90deg,#D4AF37,#f5d76e);border-radius:0 2px 2px 0; }
+    .auth-error { background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:10px 14px;font-size:13px;color:#fca5a5;margin-bottom:16px;display:none; }
+    .auth-error.show { display:block; }
+    .auth-footer { margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,175,55,.1);text-align:center; }
+    .auth-footer p { font-size:11px;color:#2d5a3a;margin:3px 0; }
+    .auth-footer span { color:#D4AF37;font-weight:700; }
+    </style>
+
+    <div class="auth-grid"></div>
+    <div class="auth-wrap">
+      <!-- Brand Panel -->
+      <div class="auth-brand-panel">
+        <div>
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:36px;">
+            <div class="auth-logo-box">
+              <svg width="38" height="38" viewBox="0 0 56 56" fill="none">
+                <rect x="6" y="26" width="30" height="18" rx="3" fill="#D4AF37" opacity=".9"/>
+                <rect x="36" y="30" width="14" height="14" rx="3" fill="#D4AF37" opacity=".7"/>
+                <circle cx="14" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="1.5"/>
+                <circle cx="42" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="1.5"/>
+                <line x1="28" y1="22" x2="28" y2="10" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/>
+                <ellipse cx="28" cy="8" rx="3" ry="5" fill="#4ade80" opacity=".8"/>
+                <line x1="24" y1="20" x2="20" y2="12" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
+                <ellipse cx="19" cy="10" rx="2.5" ry="4" fill="#4ade80" opacity=".6" transform="rotate(-20 19 10)"/>
+                <line x1="32" y1="20" x2="36" y2="12" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
+                <ellipse cx="37" cy="10" rx="2.5" ry="4" fill="#4ade80" opacity=".6" transform="rotate(20 37 10)"/>
+              </svg>
+            </div>
+            <div>
+              <div class="auth-logo-title">&#x646;&#x638;&#x645; &#x627;&#x644;&#x627;&#x645;&#x62f;&#x627;&#x62f; &#x627;&#x644;&#x62d;&#x62f;&#x64a;&#x62b;&#x629;</div>
+              <div class="auth-logo-sub">&#x62a;&#x648;&#x632;&#x64a;&#x639; &#x627;&#x644;&#x645;&#x648;&#x627;&#x62f; &#x627;&#x644;&#x63a;&#x630;&#x627;&#x626;&#x64a;&#x629; &#x628;&#x627;&#x644;&#x62c;&#x645;&#x644;&#x629;</div>
+            </div>
+          </div>
+          <h1 class="auth-hero-title">&#x646;&#x638;&#x627;&#x645; &#x645;&#x62a;&#x643;&#x627;&#x645;&#x644; &#x644;&#x625;&#x62f;&#x627;&#x631;&#x629;<br/><span>&#x633;&#x644;&#x627;&#x633;&#x644; &#x627;&#x644;&#x625;&#x645;&#x62f;&#x627;&#x62f; &#x648;&#x627;&#x644;&#x62a;&#x648;&#x632;&#x64a;&#x639;</span></h1>
+          <p class="auth-hero-desc">&#x645;&#x646;&#x635;&#x629; &#x633;&#x62d;&#x627;&#x628;&#x64a;&#x629; &#x645;&#x62a;&#x643;&#x627;&#x645;&#x644;&#x629; &#x644;&#x625;&#x62f;&#x627;&#x631;&#x629; &#x627;&#x644;&#x645;&#x62e;&#x627;&#x632;&#x646; &#x648;&#x627;&#x644;&#x641;&#x648;&#x627;&#x62a;&#x64a;&#x631; &#x627;&#x644;&#x625;&#x644;&#x643;&#x62a;&#x631;&#x648;&#x646;&#x64a;&#x629; &#x648;&#x633;&#x644;&#x627;&#x633;&#x644; &#x627;&#x644;&#x62a;&#x648;&#x632;&#x64a;&#x639;&#x60c; &#x645;&#x62a;&#x648;&#x627;&#x641;&#x642;&#x629; &#x645;&#x639; &#x647;&#x64a;&#x626;&#x629; &#x627;&#x644;&#x632;&#x643;&#x627;&#x629; &#x648;&#x627;&#x644;&#x636;&#x631;&#x64a;&#x628;&#x629; &#x648;&#x627;&#x644;&#x62c;&#x645;&#x627;&#x631;&#x643; (ZATCA).</p>
+          <div class="auth-features">
+            <div class="auth-feat"><div class="auth-feat-icon" style="background:linear-gradient(135deg,#1a5c2a,#0f3d19);border:1px solid rgba(212,175,55,.3);">&#x1F9FE;</div><div><div class="auth-feat-text">&#x627;&#x644;&#x641;&#x627;&#x62a;&#x648;&#x631;&#x629; &#x627;&#x644;&#x625;&#x644;&#x643;&#x62a;&#x631;&#x648;&#x646;&#x64a;&#x629; ZATCA</div><div class="auth-feat-sub">&#x641;&#x648;&#x627;&#x62a;&#x64a;&#x631; &#x645;&#x634;&#x641;&#x631;&#x629; &#x2014; &#x627;&#x644;&#x645;&#x631;&#x62d;&#x644;&#x629; &#x627;&#x644;&#x62b;&#x627;&#x646;&#x64a;&#x629;</div></div></div>
+            <div class="auth-feat"><div class="auth-feat-icon" style="background:linear-gradient(135deg,#1a5c2a,#0f3d19);border:1px solid rgba(212,175,55,.3);">&#x1F69B;</div><div><div class="auth-feat-text">&#x625;&#x62f;&#x627;&#x631;&#x629; &#x627;&#x644;&#x645;&#x62e;&#x627;&#x632;&#x646; &#x648;&#x627;&#x644;&#x62a;&#x648;&#x632;&#x64a;&#x639;</div><div class="auth-feat-sub">&#x62a;&#x62d;&#x645;&#x64a;&#x644; &#x627;&#x644;&#x633;&#x64a;&#x627;&#x631;&#x627;&#x62a;&#x60c; &#x646;&#x642;&#x644; &#x627;&#x644;&#x645;&#x62e;&#x632;&#x648;&#x646;&#x60c; GRPO</div></div></div>
+            <div class="auth-feat"><div class="auth-feat-icon" style="background:linear-gradient(135deg,#1a5c2a,#0f3d19);border:1px solid rgba(212,175,55,.3);">&#x1F4CA;</div><div><div class="auth-feat-text">&#x627;&#x644;&#x645;&#x62d;&#x627;&#x633;&#x628;&#x629; &#x648;&#x627;&#x644;&#x62a;&#x642;&#x627;&#x631;&#x64a;&#x631; &#x627;&#x644;&#x645;&#x627;&#x644;&#x64a;&#x629;</div><div class="auth-feat-sub">&#x642;&#x64a;&#x648;&#x62f; &#x62a;&#x644;&#x642;&#x627;&#x626;&#x64a;&#x629;&#x60c; &#x645;&#x64a;&#x632;&#x627;&#x646; &#x627;&#x644;&#x645;&#x631;&#x627;&#x62c;&#x639;&#x629;&#x60c; &#x627;&#x644;&#x623;&#x631;&#x628;&#x627;&#x62d;</div></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="auth-gold-bar"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:16px;">
+            <div style="width:8px;height:8px;background:#16a34a;border-radius:50%;"></div>
+            <span style="font-size:11px;color:#4ade80;font-weight:700;">&#x627;&#x644;&#x646;&#x638;&#x627;&#x645; &#x64a;&#x639;&#x645;&#x644; &#xB7; ZATCA Compliant &#xB7; v44.x</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Login Panel -->
+      <div class="auth-login-panel">
+        <div style="max-width:320px;width:100%;margin:0 auto">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid rgba(212,175,55,.12);">
+            <div style="width:40px;height:40px;background:linear-gradient(145deg,#1a5c2a,#0f3d19);border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(212,175,55,.4);">
+              <svg width="22" height="22" viewBox="0 0 56 56" fill="none">
+                <rect x="6" y="26" width="30" height="18" rx="3" fill="#D4AF37"/>
+                <rect x="36" y="30" width="14" height="14" rx="3" fill="#D4AF37" opacity=".7"/>
+                <circle cx="14" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="2"/>
+                <circle cx="42" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="2"/>
+                <line x1="28" y1="22" x2="28" y2="12" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="28" cy="9" rx="3" ry="5" fill="#4ade80"/>
+              </svg>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:900;color:#D4AF37;">&#x646;&#x638;&#x645; &#x627;&#x644;&#x627;&#x645;&#x62f;&#x627;&#x62f; &#x627;&#x644;&#x62d;&#x62f;&#x64a;&#x62b;&#x629;</div>
+              <div style="font-size:10px;color:#4b7a55;font-weight:600;">&#x646;&#x638;&#x627;&#x645; &#x625;&#x62f;&#x627;&#x631;&#x629; &#x645;&#x648;&#x627;&#x631;&#x62f; &#x627;&#x644;&#x645;&#x624;&#x633;&#x633;&#x627;&#x62a;</div>
+            </div>
+          </div>
+          <div class="auth-login-title">&#x1F44B; &#x645;&#x631;&#x62d;&#x628;&#x627;&#x64b; &#x628;&#x643;</div>
+          <div class="auth-login-sub">&#x623;&#x62f;&#x62e;&#x644; &#x628;&#x64a;&#x627;&#x646;&#x627;&#x62a;&#x643; &#x644;&#x644;&#x648;&#x635;&#x648;&#x644; &#x625;&#x644;&#x649; &#x627;&#x644;&#x646;&#x638;&#x627;&#x645;</div>
+          <form id="login-form" novalidate onsubmit="return false">
+            <div class="auth-field">
+              <label>&#x627;&#x644;&#x628;&#x631;&#x64a;&#x62f; &#x627;&#x644;&#x625;&#x644;&#x643;&#x62a;&#x631;&#x648;&#x646;&#x64a;</label>
+              <div class="auth-input-wrap">
+                <input type="email" id="login-email" class="auth-input" value="alifayad18@gmail.com" required autocomplete="email" placeholder="example@company.com" style="padding-left:16px;padding-right:44px" />
+                <span class="auth-input-icon" style="left:auto;right:14px">&#x2709;&#xFE0F;</span>
+              </div>
+            </div>
+            <div class="auth-field">
+              <label>&#x643;&#x644;&#x645;&#x629; &#x627;&#x644;&#x645;&#x631;&#x648;&#x631;</label>
+              <div class="auth-input-wrap">
+                <input type="password" id="login-password" class="auth-input" value="Aa121234" required autocomplete="current-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" style="padding-left:44px;padding-right:16px" />
+                <button type="button" class="auth-eye-btn" onclick="togglePassword()">&#x1F441;&#xFE0F;</button>
+              </div>
+            </div>
+            <div id="login-error" class="auth-error"></div>
+            <button type="submit" class="auth-submit" id="login-btn">
+              <div class="auth-progress" id="login-progress"></div>
+              <span id="login-btn-text">&#x62A;&#x633;&#x62C;&#x64A;&#x644; &#x627;&#x644;&#x62F;&#x62E;&#x648;&#x644;</span>
+              <span id="login-spinner" style="display:none">&#x23F3;</span>
+            </button>
+          </form>
+          <div class="auth-footer">
+            <p>&#x646;&#x638;&#x627;&#x645; ERP &#x644;&#x634;&#x631;&#x643;&#x629; <span>&#x646;&#x638;&#x645; &#x627;&#x644;&#x627;&#x645;&#x62f;&#x627;&#x62f; &#x627;&#x644;&#x62d;&#x62f;&#x64a;&#x62b;&#x629;</span></p>
+            <p style="margin-top:4px">ZATCA Compliant &#xB7; Firebase Hosted &#xB7; <span>v44.x</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App Shell -->
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+  <div id="app" class="hidden">
+
+    <!-- Sidebar Overlay (Mobile) -->
+    <div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+    <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â SIDEBAR Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+    <nav id="sidebar" class="sidebar">
+      <!-- Brand -->
+      <div class="sidebar-brand">
+        <div class="brand-logo">&#128202;</div>
+        <div class="brand-text">
+          <div class="brand-name">ÃÂ¥ÃÂ¯Ãâ¡ÃÂ§Ãâ¦ ERP</div>
+          <div class="brand-sub">ÃÂªÃËÃÂ²ÃÅ ÃÂ¹ ÃÂ§ÃâÃâ¦ÃËÃÂ§ÃÂ¯ ÃÂ§ÃâÃÂºÃÂ°ÃÂ§ÃÂ¦ÃÅ ÃÂ©</div>
+        </div>
+        <button class="sidebar-toggle" id="sidebar-toggle" title="ÃÂ·ÃÅ  / ÃÂªÃËÃÂ³ÃÅ ÃÂ¹ ÃÂ§ÃâÃâÃÂ§ÃÂ¦Ãâ¦ÃÂ©">
+          <span class="toggle-icon">&#9664;</span>
+        </button>
+      </div>
+
+      <!-- Navigation -->
+      <div class="sidebar-scroll">
+
+        <!-- Dashboard -->
+        <div class="nav-item-single">
+          <a class="nav-item" data-route="dashboard" onclick="navigate('dashboard')">
+            <span class="nav-icon">&#127968;</span>
+            <span class="nav-label">ÃâÃËÃÂ­ÃÂ© ÃÂ§ÃâÃÂªÃÂ­ÃÆÃâ¦</span>
+          </a>
+        </div>
+
+        <!-- Catalog & Inventory -->
+        <div class="nav-section" data-section="catalog">
+          <div class="nav-section-header" onclick="toggleSection('catalog')">
+            <span class="nav-section-icon">&#128230;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃâ¦ÃÂ®ÃÂ²ÃËÃâ  ÃËÃÂ§ÃâÃÆÃÂªÃÂ§ÃâÃËÃÂ¬</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="products"        onclick="navigate('products')">
+              <span class="nav-icon">&#127991;&#65039;</span><span class="nav-label">ÃÂ§ÃâÃÂ£ÃÂµÃâ ÃÂ§ÃÂ</span>
+            </a>
+            <a class="nav-item" data-route="categories"      onclick="navigate('categories')">
+              <span class="nav-icon">&#128194;</span><span class="nav-label">ÃÂ§ÃâÃÂÃÂ¦ÃÂ§ÃÂª ÃËÃÂ§ÃâÃËÃÂ­ÃÂ¯ÃÂ§ÃÂª</span>
+            </a>
+            <a class="nav-item" data-route="warehouses"      onclick="navigate('warehouses')">
+              <span class="nav-icon">&#127981;</span><span class="nav-label">ÃÂ§ÃâÃâ¦ÃÂ®ÃÂ§ÃÂ²Ãâ </span>
+            </a>
+            <a class="nav-item" data-route="inventory-locations" onclick="navigate('inventory-locations')">
+              <span class="nav-icon">&#128205;</span><span class="nav-label">Ãâ¦ÃËÃÂ§ÃâÃÂ¹ ÃËÃÂ±ÃÂÃËÃÂ ÃÂ§ÃâÃÂªÃÂ®ÃÂ²ÃÅ Ãâ </span>
+            </a>
+            <a class="nav-item" data-route="stock-card"      onclick="navigate('stock-card')">
+              <span class="nav-icon">&#128202;</span><span class="nav-label">ÃÆÃÂ±ÃÂª ÃÂ­ÃÂ±ÃÆÃÂ© ÃÂ§ÃâÃÂµÃâ ÃÂ ÃÂ§ÃâÃÂªÃÂÃÂµÃÅ ÃâÃÅ </span>
+            </a>
+            <a class="nav-item" data-route="stock-transfer"  onclick="navigate('stock-transfer')">
+              <span class="nav-icon">&#128196;</span><span class="nav-label">ÃÂªÃÂ­ÃËÃÅ Ãâ ÃÂ¨ÃÂ¶ÃÂ§ÃÂ¹ÃÂ©</span>
+            </a>
+            <a class="nav-item" data-route="inventory-ops"   onclick="navigate('inventory-ops')">
+              <span class="nav-icon">&#9881;&#65039;</span><span class="nav-label">ÃÂ§ÃâÃÂ¹Ãâ¦ÃâÃÅ ÃÂ§ÃÂª ÃÂ§ÃâÃÅ ÃËÃâ¦ÃÅ ÃÂ© ÃËÃÂ³ÃâÃÂ§ÃÂ³Ãâ ÃÂ§ÃâÃÂ¥Ãâ¦ÃÂ¯ÃÂ§ÃÂ¯</span>
+            </a>
+            <a class="nav-item" data-route="reorder-points"  onclick="navigate('reorder-points')">
+              <span class="nav-icon">&#128276;</span><span class="nav-label">Ãâ ÃâÃÂ§ÃÂ· ÃÂ¥ÃÂ¹ÃÂ§ÃÂ¯ÃÂ© ÃÂ§ÃâÃÂ·ÃâÃÂ¨ ÃËÃÂ§ÃâÃÂ£Ãâ¦ÃÂ§Ãâ </span>
+            </a>
+            <a class="nav-item" data-route="expiry-tracking" onclick="navigate('expiry-tracking')">
+              <span class="nav-icon">&#9200;</span><span class="nav-label">Ãâ¦ÃÂªÃÂ§ÃÂ¨ÃÂ¹ÃÂ© ÃÂªÃËÃÂ§ÃÂ±ÃÅ ÃÂ® ÃÂ§Ãâ ÃÂªÃâ¡ÃÂ§ÃÂ¡ ÃÂ§ÃâÃÂµÃâÃÂ§ÃÂ­ÃÅ ÃÂ©</span>
+            </a>
+            <a class="nav-item" data-route="inventory-closing" onclick="navigate('inventory-closing')">
+              <span class="nav-icon">&#128274;</span><span class="nav-label">ÃÂ§ÃâÃÂ¬ÃÂ±ÃÂ¯ ÃËÃÂ§ÃâÃâÃÂÃâÃÂ§ÃÂª ÃÂ§ÃâÃâ¦ÃÂ®ÃÂ²Ãâ ÃÅ ÃÂ©</span>
+            </a>
+            <a class="nav-item" data-route="inventory-dashboard" onclick="navigate('inventory-dashboard')">
+              <span class="nav-icon">&#128200;</span><span class="nav-label">ÃÂªÃÂ­ÃâÃÅ Ãâ ÃËÃÂ°ÃÆÃÂ§ÃÂ¡ ÃÂ§ÃâÃâ¦ÃÂ®ÃÂ²ÃËÃâ  ABC/XYZ</span>
+            </a>
+            <a class="nav-item" data-route="inventory-reports" onclick="navigate('inventory-reports')">
+              <span class="nav-icon">&#128203;</span><span class="nav-label">ÃÂªÃâÃÂ§ÃÂ±ÃÅ ÃÂ± ÃÂ§ÃâÃâ¦ÃÂ®ÃÂ²ÃËÃâ  (70+ ÃÂªÃâÃÂ±ÃÅ ÃÂ±)</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Customers & Reps -->
+        <div class="nav-section" data-section="parties">
+          <div class="nav-section-header" onclick="toggleSection('parties')">
+            <span class="nav-section-icon">&#128101;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃÂ¹Ãâ¦ÃâÃÂ§ÃÂ¡ ÃËÃÂ§ÃâÃâ¦Ãâ ÃÂ§ÃÂ¯ÃÅ ÃÂ¨</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="customers"       onclick="navigate('customers')">
+              <span class="nav-icon">&#128100;</span><span class="nav-label">ÃÂ§ÃâÃÂ¹Ãâ¦ÃâÃÂ§ÃÂ¡</span>
+            </a>
+            <a class="nav-item" data-route="suppliers"       onclick="navigate('suppliers')">
+              <span class="nav-icon">&#127981;</span><span class="nav-label">ÃÂ§ÃâÃâ¦ÃËÃÂ±ÃÂ¯ÃËÃâ </span>
+            </a>
+            <a class="nav-item" data-route="sales-reps"      onclick="navigate('sales-reps')">
+              <span class="nav-icon">&#128694;</span><span class="nav-label">ÃÂ§ÃâÃâ¦Ãâ ÃÂ§ÃÂ¯ÃÅ ÃÂ¨</span>
+            </a>
+            <a class="nav-item" data-route="price-lists"     onclick="navigate('price-lists')">
+              <span class="nav-icon">&#128178;</span><span class="nav-label">ÃâÃËÃÂ§ÃÂ¦Ãâ¦ ÃÂ§ÃâÃÂ£ÃÂ³ÃÂ¹ÃÂ§ÃÂ±</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Sales -->
+        <div class="nav-section" data-section="sales">
+          <div class="nav-section-header" onclick="toggleSection('sales')">
+            <span class="nav-section-icon">&#129534;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃâ¦ÃÂ¨ÃÅ ÃÂ¹ÃÂ§ÃÂª</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="quotations"      onclick="navigate('quotations')">
+              <span class="nav-icon">&#128220;</span><span class="nav-label">ÃÂ¹ÃÂ±ÃËÃÂ¶ ÃÂ§ÃâÃÂ£ÃÂ³ÃÂ¹ÃÂ§ÃÂ±</span>
+            </a>
+            <a class="nav-item" data-route="sales-invoices"  onclick="navigate('sales-invoices')">
+              <span class="nav-icon">&#128196;</span><span class="nav-label">ÃÂÃËÃÂ§ÃÂªÃÅ ÃÂ± ÃÂ§ÃâÃâ¦ÃÂ¨ÃÅ ÃÂ¹ÃÂ§ÃÂª</span>
+            </a>
+            <a class="nav-item" data-route="pos"             onclick="navigate('pos')">
+              <span class="nav-icon">&#128722;</span><span class="nav-label">Ãâ ÃâÃÂ·ÃÂ© ÃÂ§ÃâÃÂ¨ÃÅ ÃÂ¹ (POS)</span>
+            </a>
+            <a class="nav-item" data-route="sales-returns"   onclick="navigate('sales-returns')">
+              <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">Ãâ¦ÃÂ±ÃÂ¯ÃËÃÂ¯ÃÂ§ÃÂª ÃÂ§ÃâÃÂ¨ÃÅ ÃÂ¹</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Purchases -->
+        <div class="nav-section" data-section="purchases">
+          <div class="nav-section-header" onclick="toggleSection('purchases')">
+            <span class="nav-section-icon">&#128722;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃâ¦ÃÂ´ÃÂªÃÂ±ÃÅ ÃÂ§ÃÂª</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="purchase-requests" onclick="navigate('purchase-requests')">
+              <span class="nav-icon">&#128196;</span><span class="nav-label">ÃÂ·ÃâÃÂ¨ ÃÂ£ÃÂ³ÃÂ¹ÃÂ§ÃÂ± Ãâ¦Ãâ  Ãâ¦ÃËÃÂ±ÃÂ¯</span>
+            </a>
+            <a class="nav-item" data-route="purchase-invoices" onclick="navigate('purchase-invoices')">
+              <span class="nav-icon">&#128203;</span><span class="nav-label">ÃÂÃËÃÂ§ÃÂªÃÅ ÃÂ± ÃÂ§ÃâÃÂ´ÃÂ±ÃÂ§ÃÂ¡</span>
+            </a>
+            <a class="nav-item" data-route="purchase-returns"  onclick="navigate('purchase-returns')">
+              <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">Ãâ¦ÃÂ±ÃÂ¯ÃËÃÂ¯ÃÂ§ÃÂª ÃÂ§ÃâÃÂ´ÃÂ±ÃÂ§ÃÂ¡</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Treasury -->
+        <div class="nav-section" data-section="treasury">
+          <div class="nav-section-header" onclick="toggleSection('treasury')">
+            <span class="nav-section-icon">&#128176;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃÂ®ÃÂ²ÃÅ Ãâ ÃÂ© ÃËÃÂ§ÃâÃÂ¨Ãâ ÃËÃÆ</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="cash-boxes"      onclick="navigate('cash-boxes')">
+              <span class="nav-icon">&#128181;</span><span class="nav-label">ÃÂ§ÃâÃÂµÃâ ÃÂ§ÃÂ¯ÃÅ Ãâ ÃÂ§ÃâÃâ ÃâÃÂ¯ÃÅ ÃÂ©</span>
+            </a>
+            <a class="nav-item" data-route="bank-accounts"   onclick="navigate('bank-accounts')">
+              <span class="nav-icon">&#127974;</span><span class="nav-label">ÃÂ§ÃâÃÂ­ÃÂ³ÃÂ§ÃÂ¨ÃÂ§ÃÂª ÃÂ§ÃâÃÂ¨Ãâ ÃÆÃÅ ÃÂ©</span>
+            </a>
+            <a class="nav-item" data-route="cheques"         onclick="navigate('cheques')">
+              <span class="nav-icon">&#128209;</span><span class="nav-label">ÃÂ£ÃËÃÂ±ÃÂ§Ãâ ÃÂ§ÃâÃâÃÂ¨ÃÂ¶ ÃËÃÂ§ÃâÃÂ¯ÃÂÃÂ¹ (ÃÂ´ÃÅ ÃÆÃÂ§ÃÂª)</span>
+            </a>
+            <a class="nav-item" data-route="expenses"        onclick="navigate('expenses')">
+              <span class="nav-icon">&#128184;</span><span class="nav-label">ÃÂ³Ãâ ÃÂ¯ÃÂ§ÃÂª ÃÂ§ÃâÃÂµÃÂ±ÃÂ</span>
+            </a>
+            <a class="nav-item" data-route="receipts"        onclick="navigate('receipts')">
+              <span class="nav-icon">&#128188;</span><span class="nav-label">ÃÂ³Ãâ ÃÂ¯ÃÂ§ÃÂª ÃÂ§ÃâÃâÃÂ¨ÃÂ¶</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Accounting -->
+        <div class="nav-section" data-section="accounting">
+          <div class="nav-section-header" onclick="toggleSection('accounting')">
+            <span class="nav-section-icon">&#128202;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃâ¦ÃÂ­ÃÂ§ÃÂ³ÃÂ¨ÃÂ©</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="chart-of-accounts" onclick="navigate('chart-of-accounts')">
+              <span class="nav-icon">&#127795;</span><span class="nav-label">ÃÂ´ÃÂ¬ÃÂ±ÃÂ© ÃÂ§ÃâÃÂ­ÃÂ³ÃÂ§ÃÂ¨ÃÂ§ÃÂª</span>
+            </a>
+            <a class="nav-item" data-route="journal-entries"   onclick="navigate('journal-entries')">
+              <span class="nav-icon">&#128209;</span><span class="nav-label">ÃÂ§ÃâÃâÃÅ ÃËÃÂ¯ ÃÂ§ÃâÃÅ ÃËÃâ¦ÃÅ ÃÂ©</span>
+            </a>
+            <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports')">
+              <span class="nav-icon">&#128200;</span><span class="nav-label">ÃÂ§ÃâÃâÃËÃÂ§ÃÂ¦Ãâ¦ ÃÂ§ÃâÃâ¦ÃÂ§ÃâÃÅ ÃÂ© ÃËÃÂ§ÃâÃÂªÃÂ­ÃâÃÅ Ãâ</span>
+            </a>
+            <a class="nav-item" data-route="financial-analysis" onclick="navigate('financial-analysis')" style="background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.25);border-radius:8px;margin:2px 0;">
+              <span class="nav-icon">&#128293;</span><span class="nav-label" style="color:#a5b4fc;font-weight:800;">ÃÂ§ÃâÃÂªÃÂ­ÃâÃÅ Ãâ ÃÂ§ÃâÃâ¦ÃÂ§ÃâÃÅ  ÃÂ§ÃâÃÂ´ÃÂ§Ãâ¦Ãâ Ã¢ÅÂ¦</span>
+            </a>
+            <a class="nav-item" data-route="vat-zakat" onclick="navigate('vat-zakat')">
+              <span class="nav-icon">&#127963;&#65039;</span><span class="nav-label">ÃÂ¶ÃÂ±ÃÅ ÃÂ¨ÃÂ© VAT ÃËÃÂ§ÃâÃÂ²ÃÆÃÂ§ÃÂ© ÃËÃÂ§ÃâÃÂ¯ÃÂ®Ãâ</span>
+            </a>
+            <a class="nav-item" data-route="cost-centers" onclick="navigate('cost-centers')" style="background:linear-gradient(135deg,rgba(5,150,105,.15),rgba(16,185,129,.08));border:1px solid rgba(5,150,105,.3);border-radius:8px;margin:2px 0;">
+              <span class="nav-icon">Ã°Å¸Å¡Â</span><span class="nav-label" style="color:#6ee7b7;font-weight:800;">Ãâ¦ÃÂ±ÃÂ§ÃÆÃÂ² ÃÂ§ÃâÃÂªÃÆÃâÃÂÃÂ© ÃËÃÂ§ÃâÃÂ³ÃÅ ÃÂ§ÃÂ±ÃÂ§ÃÂª Ã¢ÅÂ¦</span>
+            </a>
+          </div>
+        </div>
+
+
+        <!-- Reports -->
+        <div class="nav-section" data-section="reports">
+          <div class="nav-section-header" onclick="toggleSection('reports')">
+            <span class="nav-section-icon">&#128200;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃÂªÃâÃÂ§ÃÂ±ÃÅ ÃÂ±</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="report-sales-product"  onclick="navigate('report-sales-product')">
+              <span class="nav-icon">&#128230;</span><span class="nav-label">Ãâ¦ÃÂ¨ÃÅ ÃÂ¹ÃÂ§ÃÂª ÃÂ­ÃÂ³ÃÂ¨ ÃÂ§ÃâÃÂµÃâ ÃÂ</span>
+            </a>
+            <a class="nav-item" data-route="report-sales-rep"      onclick="navigate('report-sales-rep')">
+              <span class="nav-icon">&#128694;</span><span class="nav-label">Ãâ¦ÃÂ¨ÃÅ ÃÂ¹ÃÂ§ÃÂª ÃÂ­ÃÂ³ÃÂ¨ ÃÂ§ÃâÃâ¦Ãâ ÃÂ¯ÃËÃÂ¨</span>
+            </a>
+            <a class="nav-item" data-route="report-sales-customer" onclick="navigate('report-sales-customer')">
+              <span class="nav-icon">&#128100;</span><span class="nav-label">Ãâ¦ÃÂ¨ÃÅ ÃÂ¹ÃÂ§ÃÂª ÃÂ­ÃÂ³ÃÂ¨ ÃÂ§ÃâÃÂ¹Ãâ¦ÃÅ Ãâ</span>
+            </a>
+            <a class="nav-item" data-route="report-stock"          onclick="navigate('report-stock')">
+              <span class="nav-icon">&#127981;</span><span class="nav-label">ÃÂªÃâÃÂ±ÃÅ ÃÂ± ÃÂ§ÃâÃâ¦ÃÂ®ÃÂ²ÃËÃâ </span>
+            </a>
+            <a class="nav-item" data-route="inventory-reports"     onclick="navigate('inventory-reports')">
+              <span class="nav-icon">&#128202;</span><span class="nav-label">Ãâ¦ÃÂ±ÃÆÃÂ² ÃÂ§ÃâÃÂªÃâÃÂ§ÃÂ±ÃÅ ÃÂ± (22+ ÃÂªÃâÃÂ±ÃÅ ÃÂ±)</span>
+            </a>
+            <a class="nav-item" data-route="report-customer-statement" onclick="navigate('report-customer-statement')">
+              <span class="nav-icon">&#128196;</span><span class="nav-label">ÃÆÃÂ´ÃÂ ÃÂ§ÃâÃÂ­ÃÂ³ÃÂ§ÃÂ¨ ÃÂ§ÃâÃâ¦ÃËÃÂ­ÃÂ¯</span>
+            </a>
+            <a class="nav-item" data-route="report-consolidated-balances" onclick="navigate('report-consolidated-balances')">
+              <span class="nav-icon">Ã°Å¸âÅ </span><span class="nav-label">ÃÂ£ÃÂ±ÃÂµÃÂ¯ÃÂ© ÃÂ§ÃâÃÂ¹Ãâ¦ÃâÃÂ§ÃÂ¡ ÃËÃÂ§ÃâÃâ¦ÃËÃÂ±ÃÂ¯ÃÅ Ãâ  ÃÂ§ÃâÃâ¦ÃÂ¬Ãâ¦ÃÂ¹</span>
+            </a>
+            <a class="nav-item" data-route="report-warehouse-comparison" onclick="navigate('report-warehouse-comparison')">
+              <span class="nav-icon">Ã°Å¸ÂÂ¬</span><span class="nav-label">Ãâ¦ÃâÃÂ§ÃÂ±Ãâ ÃÂ© ÃÂ£ÃÂ±ÃÂµÃÂ¯ÃÂ© ÃÂ§ÃâÃâ¦ÃÂ³ÃÂªÃËÃÂ¯ÃÂ¹ÃÂ§ÃÂª ÃËÃÂ§ÃâÃÂ³ÃÅ ÃÂ§ÃÂ±ÃÂ§ÃÂª</span>
+            </a>
+            <a class="nav-item" data-route="rep-performance"       onclick="navigate('rep-performance')">
+              <span class="nav-icon">&#127942;</span><span class="nav-label">ÃÂ£ÃÂ¯ÃÂ§ÃÂ¡ ÃÂ§ÃâÃâ¦Ãâ ÃÂ§ÃÂ¯ÃÅ ÃÂ¨</span>
+            </a>
+            <a class="nav-item" data-route="report-profit-loss"    onclick="navigate('report-profit-loss')">
+              <span class="nav-icon">&#128185;</span><span class="nav-label">ÃÂ£ÃÂ±ÃÂ¨ÃÂ§ÃÂ­ ÃËÃÂ®ÃÂ³ÃÂ§ÃÂ¦ÃÂ±</span>
+            </a>
+            <a class="nav-item" data-route="report-expense-analysis" onclick="navigate('report-expense-analysis')">
+              <span class="nav-icon">Ã°Å¸âÂ¸</span><span class="nav-label">ÃÂªÃÂ­ÃâÃÅ Ãâ ÃÂ§ÃâÃâ¦ÃÂµÃÂ±ÃËÃÂÃÂ§ÃÂª</span>
+            </a>
+            <a class="nav-item" data-route="report-product-analytics" onclick="navigate('report-product-analytics')">
+              <span class="nav-icon">Ã¢Å¡Â¡</span><span class="nav-label">ÃÂ¯ÃËÃÂ±ÃÂ§Ãâ  ÃËÃÂ±ÃÂ¨ÃÂ­ÃÅ ÃÂ© ÃÂ§ÃâÃÂ£ÃÂµÃâ ÃÂ§ÃÂ</span>
+            </a>
+            <a class="nav-item" data-route="report-expense-tracking" onclick="navigate('report-expense-tracking')">
+              <span class="nav-icon">Ã°Å¸ââ¹</span><span class="nav-label">ÃÂªÃÂªÃÂ¨ÃÂ¹ ÃÂ§ÃâÃâ¦ÃÂµÃÂ±ÃËÃÂÃÂ§ÃÂª ÃÂ§ÃâÃÂªÃÂÃÂµÃÅ ÃâÃÅ </span>
+            </a>
+          </div>
+        </div>
+        <!-- HR & Payroll -->
+        <div class="nav-section" data-section="hr">
+          <div class="nav-section-header" onclick="toggleSection('hr')">
+            <span class="nav-section-icon">&#128101;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃâ¦ÃËÃÂ§ÃÂ±ÃÂ¯ ÃÂ§ÃâÃÂ¨ÃÂ´ÃÂ±ÃÅ ÃÂ©</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="hr-payroll" onclick="navigate('hr-payroll')">
+              <span class="nav-icon">&#128179;</span><span class="nav-label">ÃÂ´ÃÂ¤ÃËÃâ  ÃÂ§ÃâÃâ¦ÃËÃÂ¸ÃÂÃÅ Ãâ  ÃËÃÂ§ÃâÃÂ±ÃËÃÂ§ÃÂªÃÂ¨</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Cloud Archive -->
+        <div class="nav-section" data-section="archive">
+          <div class="nav-section-header" onclick="toggleSection('archive')">
+            <span class="nav-section-icon">Ã°Å¸âÂ</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃÂ£ÃÂ±ÃÂ´ÃÅ ÃÂ ÃÂ§ÃâÃÂ±ÃâÃâ¦ÃÅ </span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="archive" onclick="navigate('archive')">
+              <span class="nav-icon">Ã°Å¸ââ</span><span class="nav-label">Ãâ¦ÃÂ³ÃÂªÃâ ÃÂ¯ÃÂ§ÃÂª ÃËÃÂ£ÃÂ±ÃÂ´ÃÅ ÃÂ ÃÂ§ÃâÃÂ´ÃÂ±ÃÆÃÂ©</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="nav-section" data-section="settings">
+          <div class="nav-section-header" onclick="toggleSection('settings')">
+            <span class="nav-section-icon">&#9881;&#65039;</span>
+            <span class="nav-section-label">ÃÂ§ÃâÃÂ¥ÃÂ¹ÃÂ¯ÃÂ§ÃÂ¯ÃÂ§ÃÂª</span>
+            <span class="nav-section-arrow">&#9662;</span>
+          </div>
+          <div class="nav-section-body">
+            <a class="nav-item" data-route="settings-company" onclick="navigate('settings-company')">
+              <span class="nav-icon">&#127970;</span><span class="nav-label">ÃÂ¨ÃÅ ÃÂ§Ãâ ÃÂ§ÃÂª ÃÂ§ÃâÃÂ´ÃÂ±ÃÆÃÂ©</span>
+            </a>
+            <a class="nav-item" data-route="settings-users"   onclick="navigate('settings-users')">
+              <span class="nav-icon">&#128100;</span><span class="nav-label">ÃÂ§ÃâÃâ¦ÃÂ³ÃÂªÃÂ®ÃÂ¯Ãâ¦ÃËÃâ </span>
+            </a>
+            <a class="nav-item" data-route="data-reset" onclick="navigate('data-reset')"
+               style="color:var(--danger,#ef4444);">
+              <span class="nav-icon">Ã°Å¸ââÃ¯Â¸Â</span><span class="nav-label">ÃÂªÃÂµÃÂÃÅ ÃÂ± ÃÂ§ÃâÃÂ¨ÃÅ ÃÂ§Ãâ ÃÂ§ÃÂª</span>
+            </a>
+          </div>
+        </div>
+
+      </div><!-- /sidebar-scroll -->
+
+      <!-- Sidebar Footer (User Info) -->
+      <div class="sidebar-footer">
+        <div class="user-avatar" id="user-avatar">A</div>
+        <div class="user-info">
+          <div class="user-name" id="user-name">ÃÂ¬ÃÂ§ÃÂ±ÃÂ ÃÂ§ÃâÃÂªÃÂ­Ãâ¦ÃÅ Ãâ...</div>
+          <div class="user-role" id="user-role"></div>
+        </div>
+        <button class="btn btn-icon btn-ghost" onclick="signOutUser()" title="ÃÂªÃÂ³ÃÂ¬ÃÅ Ãâ ÃÂ®ÃÂ±ÃËÃÂ¬" style="opacity:0.6;">&#9199;&#65039;</button>
+      </div>
+    </nav>
+
+    <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â MAIN CONTENT Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+    <div class="main-content" id="main">
+
+      <!-- Top Bar -->
+      <header class="topbar" id="topbar">
+        <!-- Mobile menu -->
+        <button id="mobile-menu-btn" class="btn btn-icon btn-ghost" onclick="toggleMobileSidebar()" style="display:none;">&#9776;</button>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb animate-fade-in">
+          <div class="breadcrumb-pill muted">&#127968; ÃÂ¥ÃÂ¯Ãâ¡ÃÂ§Ãâ¦ ERP</div>
+          <span class="separator" style="color:var(--text-3); font-size:18px;">/</span>
+          <div class="breadcrumb-pill" style="box-shadow: 0 0 15px rgba(91,127,255,0.1); border-color:var(--indigo);">
+            <span id="breadcrumb-current">ÃâÃËÃÂ­ÃÂ© ÃÂ§ÃâÃÂªÃÂ­ÃÆÃâ¦</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="topbar-actions">
+          <!-- Search Bar -->
+          <div class="topbar-search">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" placeholder="ÃÂ¨ÃÂ­ÃÂ« ÃÂ³ÃÂ±ÃÅ ÃÂ¹..." id="topbar-search-input" />
+          </div>
+
+          <!-- Live Date -->
+          <div class="topbar-date" style="display:flex; flex-direction:column; align-items:flex-end;">
+             <span id="date-hijri" style="font-size:12px; color:var(--text-0); font-weight:600; font-family:var(--font-heading);"></span>
+             <span id="date-gregorian" style="font-size:10px; color:var(--text-2); font-family:var(--font-mono);"></span>
+          </div>
+
+          <div style="width:1px; height:22px; background:var(--border);"></div>
+
+          <!-- ZATCA Status Badge -->
+          <div class="zatca-badge">
+            <span class="dot"></span>
+            ZATCA
+          </div>
+
+          <!-- Quick Access -->
+          <div class="dropdown-container" style="position:relative; cursor:pointer;">
+            <button id="quick-access-btn" class="btn btn-outline btn-sm" onclick="togglePortalDropdown('quick-access-btn','quick-dropdown-portal')">
+               &#9889; ÃËÃÂµÃËÃâ ÃÂ³ÃÂ±ÃÅ ÃÂ¹
+            </button>
+          </div>
+
+          <!-- Theme Toggle -->
+          <button class="theme-toggle" onclick="toggleTheme()" title="ÃÂªÃÂ¨ÃÂ¯ÃÅ Ãâ ÃÂ§ÃâÃËÃÂ¶ÃÂ¹ (ÃâÃÅ ÃâÃÅ /Ãâ Ãâ¡ÃÂ§ÃÂ±ÃÅ )">
+            <span id="theme-icon">&#9728;&#65039;</span>
+          </button>
+
+          <!-- Notifications -->
+          <button class="notif-btn" onclick="toggleNotifications()" title="ÃÂ§ÃâÃÂ¥ÃÂ´ÃÂ¹ÃÂ§ÃÂ±ÃÂ§ÃÂª">
+            <span style="font-size:17px;">&#128276;</span>
+            <span class="notif-badge">3</span>
+          </button>
+
+          <!-- User Profile -->
+          <div class="dropdown-container" style="position:relative; cursor:pointer;">
+            <div id="user-profile-btn" onclick="togglePortalDropdown('user-profile-btn','user-dropdown-portal')" style="display:flex; align-items:center; gap:8px; background:var(--bg-2); border:1px solid var(--border); padding:5px 14px 5px 5px; border-radius:30px; transition: all 0.2s;">
+               <div style="width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg, var(--primary), var(--secondary)); display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; color:#fff;">ÃÂ¥</div>
+               <span style="font-size:12.5px; font-weight:600; color:var(--text-0);">ÃÂ¥ÃÂ¯ÃÂ§ÃÂ±ÃÂ©</span>
+               <span style="font-size:10px; color:var(--text-dim);">&#9660;</span>
+            </div>
+          </div>
+
+          <div style="width:1px; height:22px; background:var(--border);"></div>
+
+          <!-- New Invoice CTA -->
+          <button class="btn btn-primary" onclick="navigate('sales-invoices')">
+            <span style="font-size:16px; font-weight:400;">+</span> ÃÂÃÂ§ÃÂªÃËÃÂ±ÃÂ©
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Router Outlet -->
+      <main id="page-router-outlet">
+        <div class="page-loading" style="padding:80px;">
+          <div class="loading-spinner" style="width:40px;height:40px;border-width:3px;"></div>
+        </div>
+      </main>
+
+    </div><!-- /main-content -->
+  </div><!-- /app -->
+
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+  <!-- Toast Container -->
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+  <div id="toast-container"></div>
+
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+  <!-- App Entrypoint -->
+  <!-- Ã¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢ÂÃ¢â¢Â -->
+  <script type="module" src="js/app.js?v=44.0"></script>
+
+  <script>
+    // Service Worker disabled in offline desktop mode
+
+    // Password toggle
+    window.togglePassword = () => {
+      const inp = document.getElementById("login-password");
+      inp.type = inp.type === "password" ? "text" : "password";
+    };
+
+    // Prevent context menu in production
+    // document.addEventListener("contextmenu", e => e.preventDefault());
+  </script>
+
+  <!-- Inline styles for auth page and misc not in design system -->
+  <style>
+    .auth-page { display:flex; align-items:center; justify-content:center; min-height:100vh; background:var(--bg-0); }
+    .auth-container { display:grid; grid-template-columns:1fr 440px; min-height:100vh; width:100%; }
+    
+    .auth-brand {
+      background-color: #0A0D18;
+      background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.03) 1.2px, transparent 1.2px), 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.12) 0%, transparent 40%), 
+        radial-gradient(circle at 90% 80%, rgba(79, 70, 229, 0.12) 0%, transparent 40%);
+      background-size: 24px 24px, 100% 100%, 100% 100%;
+      padding: 80px;
+      display: flex;
+      align-items: center;
+      border-left: 1px solid var(--border);
+      position: relative;
+    }
+    
+    .auth-form-panel {
+      background: var(--bg-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 40px;
+    }
+    
+    body.theme-light .auth-form-panel {
+      background: #FFFFFF;
+    }
+    
+    .auth-form-card { width:100%; max-width:360px; }
+    
+    /* Login inputs styling with integrated SVGs */
+    .auth-form-panel .input {
+      padding-right: 42px !important;
+      background-repeat: no-repeat !important;
+      background-position: right 14px center !important;
+      background-size: 18px !important;
+      border: 1px solid var(--border) !important;
+      background-color: var(--surface-input) !important;
+      color: var(--text-0) !important;
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
+    }
+    
+    body.theme-light .auth-form-panel .input {
+      background-color: #F8FAFC !important;
+      border-color: #E2E8F0 !important;
+      color: #0F172A !important;
+    }
+    
+    .auth-form-panel #login-email {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 14px center !important;
+      background-size: 18px 18px !important;
+    }
+    
+    .auth-form-panel #login-password {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394A3B8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'/%3E%3C/svg%3E") !important;
+      background-repeat: no-repeat !important;
+      background-position: right 14px center !important;
+      background-size: 18px 18px !important;
+    }
+    
+    .auth-form-panel .input:focus {
+      border-color: var(--primary) !important;
+      box-shadow: 0 0 0 3px var(--primary-dim) !important;
+    }
+    
+    body.theme-light .auth-form-panel h2 {
+      color: #0F172A !important;
+    }
+    
+    body.theme-light .auth-form-panel p {
+      color: #475569 !important;
+    }
+
+    body.theme-light .auth-form-panel label {
+      color: #1E293B !important;
+      font-weight: 600 !important;
+    }
+    
+    .feature-list { display:flex; flex-direction:column; gap:14px; }
+    
+    .feature-item {
+      font-size: 13.5px;
+      color: #A5B4FC;
+      display: flex;
+      align-items: center;
+      line-height: 1.5;
+    }
+    
+    .feature-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      background: rgba(16, 185, 129, 0.15);
+      color: #10B981;
+      border-radius: 50%;
+      font-size: 11px;
+      font-weight: 800;
+      margin-left: 12px;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      flex-shrink: 0;
+    }
+    
+    .settings-nav { display:flex; flex-direction:column; gap:2px; }
+    .settings-nav-item { padding:10px 12px; border-radius:var(--radius-sm); font-size:13px; font-family:var(--font-heading); color:var(--text-2); cursor:pointer; transition:all var(--transition-fast); }
+    .settings-nav-item:hover { background:var(--bg-2); color:var(--text-0); }
+    .settings-nav-item.active { background:rgba(91,127,255,0.1); color:var(--indigo); }
+    
+    .zatca-indicator { display:flex; align-items:center; gap:6px; padding:4px 10px; background:rgba(34,197,94,0.1); border:1px solid rgba(34,197,94,0.2); border-radius:20px; }
+    .zatca-dot { width:6px; height:6px; background:var(--good); border-radius:50%; animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+    
+    @media (max-width: 768px) {
+      .auth-container { grid-template-columns: 1fr; grid-template-rows: auto 1fr; min-height: 100vh; }
+      .auth-brand {
+        padding: 40px 24px;
+        border-left: none;
+        border-bottom: 1px solid var(--border);
+        justify-content: center;
+        align-items: center;
+      }
+      .auth-brand > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 100% !important;
+      }
+      .auth-brand h1 { font-size: 24px !important; text-align: center; margin-bottom: 10px !important; }
+      .auth-brand p { font-size: 13.5px !important; text-align: center; margin-bottom: 0 !important; }
+      .auth-brand .feature-list { display: none; }
+      .auth-brand div[style*="margin-bottom:48px"] { margin-bottom: 24px !important; }
+      .auth-form-panel { padding: 40px 24px; align-items: flex-start; }
+    }
+    
+    .loading-spinner { width:24px; height:24px; border:2px solid rgba(91,127,255,0.2); border-top:2px solid #5B7FFF; border-radius:50%; animation:spin 0.7s linear infinite; display:inline-block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .hidden { display: none !important; }
+  </style>
+
+  <!-- Portal Dropdowns (appended to body to escape overflow clipping) -->
+  <div id="quick-dropdown-portal" class="dropdown-portal" style="width:210px;">
+    <button class="btn btn-ghost" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="navigate('sales-invoices'); closeAllPortalDropdowns()">&#129534; ÃÂÃÂ§ÃÂªÃËÃÂ±ÃÂ© Ãâ¦ÃÂ¨ÃÅ ÃÂ¹ÃÂ§ÃÂª ÃÂ¬ÃÂ¯ÃÅ ÃÂ¯ÃÂ©</button>
+    <button class="btn btn-ghost" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="navigate('purchase-invoices'); closeAllPortalDropdowns()">&#128722; ÃÂÃÂ§ÃÂªÃËÃÂ±ÃÂ© Ãâ¦ÃÂ´ÃÂªÃÂ±ÃÅ ÃÂ§ÃÂª ÃÂ¬ÃÂ¯ÃÅ ÃÂ¯ÃÂ©</button>
+    <hr style="border-color:var(--border-soft); margin:4px 0;" />
+    <button class="btn btn-ghost" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="navigate('products'); closeAllPortalDropdowns()">&#127991;&#65039; ÃÂ¥ÃÂ¶ÃÂ§ÃÂÃÂ© ÃÂµÃâ ÃÂ ÃÂ¬ÃÂ¯ÃÅ ÃÂ¯</button>
+    <button class="btn btn-ghost" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="navigate('customers'); closeAllPortalDropdowns()">&#128101; ÃÂ¥ÃÂ¶ÃÂ§ÃÂÃÂ© ÃÂ¹Ãâ¦ÃÅ Ãâ ÃÂ¬ÃÂ¯ÃÅ ÃÂ¯</button>
+    <button class="btn btn-ghost" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="navigate('receipts'); closeAllPortalDropdowns()">&#128203; ÃÂ³Ãâ ÃÂ¯ ÃâÃÂ¨ÃÂ¶ ÃÂ¬ÃÂ¯ÃÅ ÃÂ¯</button>
+    <button class="btn btn-ghost" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="navigate('payments'); closeAllPortalDropdowns()">&#128203; ÃÂ³Ãâ ÃÂ¯ ÃÂµÃÂ±ÃÂ ÃÂ¬ÃÂ¯ÃÅ ÃÂ¯</button>
+  </div>
+
+  <div id="user-dropdown-portal" class="dropdown-portal" style="width:190px;">
+    <button class="btn btn-ghost" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="navigate('settings-company'); closeAllPortalDropdowns()">&#9881;&#65039; ÃÂ¥ÃÂ¹ÃÂ¯ÃÂ§ÃÂ¯ÃÂ§ÃÂª ÃÂ§ÃâÃÂ´ÃÂ±ÃÆÃÂ©</button>
+    <button class="btn btn-ghost" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="navigate('settings-users'); closeAllPortalDropdowns()">&#128101; ÃÂ¥ÃÂ¯ÃÂ§ÃÂ±ÃÂ© ÃÂ§ÃâÃâ¦ÃÂ³ÃÂªÃÂ®ÃÂ¯Ãâ¦ÃÅ Ãâ </button>
+    <hr style="border-color:var(--border-soft); margin:4px 0;" />
+    <button class="btn btn-ghost text-bad" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="signOutUser()">&#9199;&#65039; ÃÂªÃÂ³ÃÂ¬ÃÅ Ãâ ÃÂ§ÃâÃÂ®ÃÂ±ÃËÃÂ¬</button>
+  </div>
+
+  <script>
+  // Portal Dropdown Engine
+  let _activePortal = null;
+
+  function closeAllPortalDropdowns() {
+    document.querySelectorAll('.dropdown-portal').forEach(p => p.classList.remove('open'));
+    _activePortal = null;
+  }
+
+  function togglePortalDropdown(triggerId, portalId) {
+    const trigger = document.getElementById(triggerId);
+    const portal  = document.getElementById(portalId);
+    if (!trigger || !portal) return;
+
+    if (_activePortal === portalId && portal.classList.contains('open')) {
+      closeAllPortalDropdowns();
+      return;
+    }
+    closeAllPortalDropdowns();
+
+    const rect = trigger.getBoundingClientRect();
+    const portalW = parseInt(portal.style.width) || 200;
+    let left = rect.left;
+    // Keep inside viewport
+    if (left + portalW > window.innerWidth - 10) left = window.innerWidth - portalW - 10;
+    if (left < 10) left = 10;
+
+    portal.style.top  = (rect.bottom + 8) + 'px';
+    portal.style.left = left + 'px';
+    portal.classList.add('open');
+    _activePortal = portalId;
+  }
+
+  // Close portal dropdowns on outside click
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.dropdown-portal') && !e.target.closest('.dropdown-container')) {
+      closeAllPortalDropdowns();
+    }
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>تشخيص تطبيق المندوب</title>
+<style>
+body { font-family: monospace; background:#111; color:#0f0; padding:10px; font-size:13px; }
+h2 { color:#ff0; }
+.ok { color:#0f0; } .err { color:#f00; } .warn { color:#ff0; }
+button { background:#333; color:#fff; border:1px solid #666; padding:8px 16px; margin:4px; cursor:pointer; border-radius:4px; font-size:14px; }
+#log { border:1px solid #333; padding:10px; max-height:60vh; overflow-y:auto; }
+</style>
+</head>
+<body>
+<h2>🔍 تشخيص تطبيق المندوب</h2>
+
+<button onclick="checkLS()">1. فحص localStorage</button>
+<button onclick="checkFirestore()">2. فحص Firestore</button>
+<button onclick="clearAll()">3. مسح الجلسة</button>
+<button onclick="tryLogin()">4. تسجيل دخول تجريبي</button>
+<hr>
+<div id="log"></div>
+
+<script>
+const log = document.getElementById('log');
+function L(msg, cls='') {
+  const d = document.createElement('div');
+  d.className = cls;
+  d.textContent = new Date().toLocaleTimeString('ar') + ' | ' + msg;
+  log.prepend(d);
+}
+
+function checkLS() {
+  L('=== localStorage ===');
+  const session = localStorage.getItem('rep_v2_session');
+  L('rep_v2_session: ' + (session ? session.substring(0,100) : 'NULL'), session ? 'ok' : 'err');
+  const theme = localStorage.getItem('rep_theme');
+  L('rep_theme: ' + (theme || 'null'));
+  const queue = localStorage.getItem('rep_offline_queue');
+  L('offline_queue: ' + (queue || '[]'));
+}
+
+async function checkFirestore() {
+  L('=== Firestore REST API Test ===');
+  try {
+    const url = 'https://firestore.googleapis.com/v1/projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/salesReps?pageSize=5';
+    L('Fetching: ' + url);
+    const res = await fetch(url);
+    const json = await res.json();
+    if (json.error) {
+      L('ERROR: ' + JSON.stringify(json.error), 'err');
+      return;
+    }
+    const docs = json.documents || [];
+    L('Found ' + docs.length + ' reps:', 'ok');
+    docs.forEach(d => {
+      const id = d.name.split('/').pop();
+      const f = d.fields || {};
+      const get = v => v && v.stringValue !== undefined ? v.stringValue : '';
+      L(`  ID:${id} phone:"${get(f.phone)}" pin:"${get(f.pin)||'NO PIN'}"`, get(f.pin) ? 'ok' : 'warn');
+    });
+  } catch(e) {
+    L('FETCH ERROR: ' + e.message, 'err');
+  }
+}
+
+function clearAll() {
+  localStorage.removeItem('rep_v2_session');
+  localStorage.removeItem('rep_theme');
+  localStorage.removeItem('rep_offline_queue');
+  L('✓ Session cleared', 'ok');
+}
+
+async function tryLogin() {
+  const phone = '0539809616';
+  const pin = '1234';
+  L('=== Login Test: phone=' + phone + ' pin=' + pin + ' ===');
+  try {
+    const API_URL = 'https://firestore.googleapis.com/v1/projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main:runQuery';
+    const body = JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: 'salesReps' }],
+        where: { fieldFilter: { field: { fieldPath: 'phone' }, op: 'EQUAL', value: { stringValue: phone } } },
+        limit: 1
+      }
+    });
+    const res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+    const results = await res.json();
+    L('API Response: ' + JSON.stringify(results).substring(0, 200));
+    if (!Array.isArray(results) || !results[0] || !results[0].document) {
+      L('❌ No rep found for phone ' + phone, 'err');
+      return;
+    }
+    const fields = results[0].document.fields || {};
+    const storedPin = fields.pin && fields.pin.stringValue;
+    L('Found rep, stored pin: "' + storedPin + '"', storedPin ? 'ok' : 'err');
+    if (storedPin !== pin) {
+      L('❌ PIN mismatch! stored:"' + storedPin + '" entered:"' + pin + '"', 'err');
+      return;
+    }
+    L('✓ Login OK - saving session...', 'ok');
+    const docId = results[0].document.name.split('/').pop();
+    function getAny(f, key) {
+      if (!f[key]) return undefined;
+      if (f[key].stringValue !== undefined) return f[key].stringValue;
+      if (f[key].booleanValue !== undefined) return f[key].booleanValue;
+      return undefined;
+    }
+    const rep = { id: docId };
+    Object.keys(fields).forEach(k => { rep[k] = getAny(fields, k); });
+    localStorage.setItem('rep_v2_session', JSON.stringify(rep));
+    L('✓ Session saved: ' + JSON.stringify(rep).substring(0,150), 'ok');
+    
+    // Verify it was saved
+    const verify = localStorage.getItem('rep_v2_session');
+    L('Verify read: ' + (verify ? 'OK' : 'FAILED!'), verify ? 'ok' : 'err');
+    
+    L('>>> Now go to /rep.html and see if it auto-logs in', 'warn');
+  } catch(e) {
+    L('ERROR: ' + e.message, 'err');
+  }
+}
+
+// Auto run on load
+L('Page loaded. Click buttons above to diagnose.');
+checkLS();
+</script>
+</body>
+</html>

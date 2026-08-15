@@ -1,0 +1,132 @@
+{
+  "backupDate": "2026-08-13T12:17:10.380Z",
+  "backupDir": "e:\\ادهام للمواد الغذائية\\backups\\backup_20260813_151710",
+  "totalDocuments": 1363,
+  "collections": [
+    {
+      "collection": "journalEntries",
+      "count": 555,
+      "file": "journalEntries.json"
+    },
+    {
+      "collection": "chartOfAccounts",
+      "count": 192,
+      "file": "chartOfAccounts.json"
+    },
+    {
+      "collection": "salesInvoices",
+      "count": 121,
+      "file": "salesInvoices.json"
+    },
+    {
+      "collection": "purchaseInvoices",
+      "count": 22,
+      "file": "purchaseInvoices.json"
+    },
+    {
+      "collection": "customers",
+      "count": 41,
+      "file": "customers.json"
+    },
+    {
+      "collection": "products",
+      "count": 128,
+      "file": "products.json"
+    },
+    {
+      "collection": "receipts",
+      "count": 137,
+      "file": "receipts.json"
+    },
+    {
+      "collection": "expenses",
+      "count": 25,
+      "file": "expenses.json"
+    },
+    {
+      "collection": "warehouses",
+      "count": 4,
+      "file": "warehouses.json"
+    },
+    {
+      "collection": "bankAccounts",
+      "count": 2,
+      "file": "bankAccounts.json"
+    },
+    {
+      "collection": "cashBoxes",
+      "count": 5,
+      "file": "cashBoxes.json"
+    },
+    {
+      "collection": "salesReps",
+      "count": 3,
+      "file": "salesReps.json"
+    },
+    {
+      "collection": "suppliers",
+      "count": 8,
+      "file": "suppliers.json"
+    },
+    {
+      "collection": "categories",
+      "count": 31,
+      "file": "categories.json"
+    },
+    {
+      "collection": "stockTransfers",
+      "count": 75,
+      "file": "stockTransfers.json"
+    },
+    {
+      "collection": "inventoryOperations",
+      "count": 0,
+      "file": "inventoryOperations.json"
+    },
+    {
+      "collection": "salesReturns",
+      "count": 0,
+      "file": "salesReturns.json"
+    },
+    {
+      "collection": "purchaseReturns",
+      "count": 0,
+      "file": "purchaseReturns.json"
+    },
+    {
+      "collection": "quotations",
+      "count": 1,
+      "file": "quotations.json"
+    },
+    {
+      "collection": "purchaseRequests",
+      "count": 0,
+      "file": "purchaseRequests.json"
+    },
+    {
+      "collection": "cheques",
+      "count": 0,
+      "file": "cheques.json"
+    },
+    {
+      "collection": "costCenters",
+      "count": 4,
+      "file": "costCenters.json"
+    },
+    {
+      "collection": "settings",
+      "count": 6,
+      "file": "settings.json"
+    },
+    {
+      "collection": "users",
+      "count": 3,
+      "file": "users.json"
+    },
+    {
+      "collection": "priceLists",
+      "count": 0,
+      "file": "priceLists.json"
+    }
+  ]
+}

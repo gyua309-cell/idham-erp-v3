@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Fixer</title>
+  <style>
+    body { font-family: monospace; background: #111; color: #0f0; padding: 20px; }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { firebaseConfig } from "./js/config/firebase-config.js";
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const COID = "idham-main";
+    
+    function log(msg) {
+      document.body.innerHTML += `<div>${msg}</div>`;
+      console.log(msg);
+    }
+
+    async function run() {
+      log("Starting data fix...");
+      try {
+        const snap = await getDocs(collection(db, `companies/${COID}/salesInvoices`));
+        const repCash = {};
+        
+        let fixedCount = 0;
+
+        for (const docSnap of snap.docs) {
+          const inv = docSnap.data();
+          const id = docSnap.id;
+          
+          let needsUpdate = false;
+          let realSubtotal = 0;
+          
+          if (inv.lines && inv.lines.length > 0) {
+             realSubtotal = inv.lines.reduce((sum, l) => sum + ((l.qty || 0) * (l.unitPrice !== undefined ? l.unitPrice : (l.price || 0))), 0);
+          }
+          
+          const discount = inv.discountAmount || 0;
+          const afterDisc = Math.max(0, realSubtotal - discount);
+          const realVat = afterDisc * 0.15;
+          const realTotal = afterDisc + realVat;
+
+          if (Math.abs((inv.total || 0) - realTotal) > 0.05 || Math.abs((inv.subtotal || 0) - realSubtotal) > 0.05 || Math.abs((inv.vatAmount || 0) - realVat) > 0.05) {
+             needsUpdate = true;
+          }
+
+          if (needsUpdate) {
+             log(`Fixing Invoice ${inv.invoiceNumber || id}: Total was ${inv.total}, should be ${realTotal}`);
+             
+             const paid = inv.paymentMethod === 'cash' ? realTotal : (inv.paidAmount || 0);
+             const remaining = Math.max(0, realTotal - paid);
+
+             await updateDoc(docSnap.ref, {
+               subtotal: realSubtotal,
+               vatAmount: realVat,
+               totalWithVat: realTotal,
+               total: realTotal,
+               paidAmount: paid,
+               remainingAmount: remaining
+             });
+             fixedCount++;
+             
+             // Update the object in memory so cash box calculation uses the fixed value
+             inv.paidAmount = paid;
+             inv.paymentMethod = (remaining > 0 && paid > 0) ? 'partial' : inv.paymentMethod;
+             inv.total = realTotal;
+          }
+
+          if (inv.repId && inv.status !== 'cancelled') {
+            let paid = 0;
+            if (inv.paidAmount !== undefined) {
+              paid = parseFloat(inv.paidAmount) || 0;
+            } else if (inv.paymentMethod === 'cash') {
+              paid = parseFloat(inv.total) || 0;
+            }
+            if (!repCash[inv.repId]) repCash[inv.repId] = 0;
+            repCash[inv.repId] += paid;
+          }
+        }
+
+        log(`Fixed ${fixedCount} corrupted invoices.`);
+        log("Recalculating cash boxes...");
+
+        for (const repId in repCash) {
+          log(`Cashbox ${repId}: ${repCash[repId]}`);
+          await setDoc(doc(db, `companies/${COID}/cashBoxes/cashBox_${repId}`), {
+            balance: repCash[repId],
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+        }
+        
+        log("<div id='done'>✅ تمت العملية بنجاح!</div>");
+      } catch (err) {
+        log(`<div id='error'>❌ Error: ${err.message}</div>`);
+      }
+    }
+    
+    // Auto run
+    run();
+  </script>
+</head>
+<body>
+  <h2>Fixing Data...</h2>
+</body>
+</html>

@@ -1,0 +1,68 @@
+[
+  {
+    "_id": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/cashBoxes/cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "createdAt": "2026-08-01T12:48:34.990Z",
+    "repId": "61pG3jXw8Ps7HCJc9ljI",
+    "updatedAt": "2026-08-04T10:11:16.670Z",
+    "keeper": "المندوب خالد",
+    "accountCode": "1-1-1-2-03",
+    "balance": 0,
+    "name": "صندوق المندوب - المندوب خالد",
+    "type": "rep",
+    "openingBalance": 0,
+    "accountId": "noHuPplJVDkM8ImeBFNK"
+  },
+  {
+    "_id": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/cashBoxes/cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": "2026-07-14T17:27:24.517Z",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "updatedAt": "2026-08-13T08:03:12.938Z",
+    "keeper": "مصطفى",
+    "accountCode": "1-1-1-2-01",
+    "name": "صندوق المندوب - مصطفى",
+    "balance": 1160,
+    "type": "rep",
+    "accountId": "ykm6ygUC2MBpSXoOXoiC",
+    "openingBalance": 0
+  },
+  {
+    "_id": "cashBox_i6qFzXabMQq8R7j7GxgL",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/cashBoxes/cashBox_i6qFzXabMQq8R7j7GxgL",
+    "createdAt": "2026-07-29T21:24:22.944Z",
+    "repId": "i6qFzXabMQq8R7j7GxgL",
+    "updatedAt": "2026-08-04T10:11:15.430Z",
+    "keeper": "محمد عوض",
+    "accountCode": "1-1-1-2-02",
+    "balance": 0,
+    "name": "صندوق المندوب - محمد عوض",
+    "type": "rep",
+    "openingBalance": 0,
+    "accountId": "dNNuor7fjm6dE3jvT7oz"
+  },
+  {
+    "_id": "cashBox_owner_current",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/cashBoxes/cashBox_owner_current",
+    "accountCode": "3-1-4",
+    "name": "👤 حساب جاري المالك (تمويل شخصي)",
+    "balance": 77927.36,
+    "code": "3-1-4",
+    "type": "owner_current",
+    "notes": "حساب جاري المالك لتمويل المصروفات أو المسحوبات الشخصية",
+    "accountId": "ErUeZws4zc9XMUzil3xx",
+    "updatedAt": "2026-08-13T11:18:18.816Z"
+  },
+  {
+    "_id": "fldAOs5swMd3RCbxVi8a",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/cashBoxes/fldAOs5swMd3RCbxVi8a",
+    "keeper": "",
+    "accountId": "DDJXykWLQP7HqFvo0X8n",
+    "updatedAt": "2026-08-03T12:25:01.823Z",
+    "type": "main",
+    "createdAt": "2026-07-11T17:34:46.864Z",
+    "name": "الصندوق الرئيسى",
+    "balance": 1,
+    "accountCode": "1-1-1-1-3"
+  }
+]

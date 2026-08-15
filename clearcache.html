@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>تنظيف ذاكرة التطبيق</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+    .card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 24px;
+      padding: 48px 40px;
+      text-align: center;
+      max-width: 360px;
+      width: 90%;
+    }
+    .icon { font-size: 64px; margin-bottom: 20px; }
+    h1 { font-size: 22px; font-weight: 800; margin-bottom: 10px; }
+    p { font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.6; margin-bottom: 24px; }
+    .progress-bar {
+      background: rgba(255,255,255,0.1);
+      border-radius: 50px;
+      height: 8px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6C63FF, #EC4899);
+      border-radius: 50px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+    #status { font-size: 13px; color: rgba(255,255,255,0.6); }
+    .btn {
+      display: none;
+      background: linear-gradient(135deg, #6C63FF, #EC4899);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="icon" id="ico">🧹</div>
+  <h1 id="title">جاري تنظيف الذاكرة</h1>
+  <p id="desc">يتم حذف الملفات القديمة المخزنة والبيانات المحلية لضمان تحميل أحدث نسخة من التطبيق.</p>
+  <div class="progress-bar"><div class="progress-fill" id="bar"></div></div>
+  <div id="status">جاري التنظيف...</div>
+  <a href="/" class="btn" id="goBtn">🚀 فتح البرنامج الرئيسي الآن</a>
+</div>
+
+<script>
+  const bar    = document.getElementById('bar');
+  const status = document.getElementById('status');
+  const goBtn  = document.getElementById('goBtn');
+  const ico    = document.getElementById('ico');
+  const title  = document.getElementById('title');
+
+  function setProgress(pct, msg) {
+    bar.style.width = pct + '%';
+    status.textContent = msg;
+  }
+
+  async function clearEverything() {
+    try {
+      setProgress(10, 'إلغاء تسجيل Service Workers...');
+      if ('serviceWorker' in navigator) {
+        const regs = await navigator.serviceWorker.getRegistrations();
+        for (const reg of regs) {
+          await reg.unregister();
+        }
+      }
+
+      setProgress(40, 'حذف الكاش المخزن...');
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        for (const key of keys) {
+          await caches.delete(key);
+        }
+      }
+
+      setProgress(70, 'مسح البيانات المحلية...');
+      try { localStorage.clear(); } catch(e) {}
+      try { sessionStorage.clear(); } catch(e) {}
+
+      setProgress(100, '✅ تم التنظيف بنجاح!');
+      await new Promise(r => setTimeout(r, 600));
+
+      ico.textContent   = '✅';
+      title.textContent = 'تم التنظيف!';
+      status.textContent = 'الآن سيتم تحميل أحدث نسخة من التطبيق.';
+      goBtn.style.display = 'inline-block';
+
+      // Auto redirect after 1.5 sec
+      setTimeout(() => {
+        window.location.href = '/?nocache=' + Date.now();
+      }, 1500);
+
+    } catch(err) {
+      status.textContent = 'خطأ: ' + err.message;
+      ico.textContent = '⚠️';
+      goBtn.style.display = 'inline-block';
+    }
+  }
+
+  clearEverything();
+</script>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#6C63FF" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="إدهام — مندوب" />
+  <meta name="description" content="تطبيق المندوب الميداني — إدهام للمواد الغذائية" />
+  <title>إدهام — مندوب ميداني</title>
+
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="manifest-rep.json" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="icon" href="icons/icon-192.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="css/rep2.css?v=2.1" />
+</head>
+<body>
+
+<!-- NO SPLASH - login shows immediately -->
+<div id="splash-screen" style="display:none"></div>
+
+<!-- ═══════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════ -->
+<div id="login-screen" class="screen">
+  <div class="login-bg">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+    <div class="blob b3"></div>
+  </div>
+  <div class="login-wrap">
+    <div class="login-header">
+      <div class="login-icon">🚚</div>
+      <h2>إدهام ERP</h2>
+      <p>بوابة المندوب الميداني</p>
+    </div>
+    <div class="login-card">
+      <div class="field-group">
+        <label class="field-label">📞 رقم الهاتف</label>
+        <input id="login-phone" type="tel" class="field-input" placeholder="05xxxxxxxx" inputmode="tel" autocomplete="tel" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">🔑 رقم PIN</label>
+        <div class="pin-wrap">
+          <input id="login-pin" type="password" class="field-input" placeholder="••••••" inputmode="numeric" maxlength="6" />
+          <button class="pin-toggle" onclick="togglePin(this)">👁</button>
+        </div>
+      </div>
+      <div id="login-error" class="error-box hidden"></div>
+      <button id="login-btn" class="btn-primary full" onclick="window._doLogin()">
+        <span id="login-label">تسجيل الدخول</span>
+        <span id="login-spin" class="spin hidden"></span>
+      </button>
+    </div>
+    <p class="login-hint">تواصل مع المدير للحصول على رقم PIN</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════
+     MAIN APP SHELL
+═══════════════════════════════ -->
+<div id="app-shell" class="screen hidden">
+
+  <!-- Top Header -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="rep-ava" id="rep-ava">م</div>
+      <div class="header-info">
+        <span class="header-name" id="header-name">المندوب</span>
+        <span class="header-zone" id="header-zone">—</span>
+    </div>
+    <div class="header-center" style="display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; padding:0 10px; overflow:hidden;">
+      <span id="header-company" style="font-family:'Cairo',sans-serif; font-size:13px; font-weight:800; color:var(--brand-2); max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">نظم الإمداد الحديثة</span>
+      <span id="header-time-date" style="font-family:'Cairo',sans-serif; font-size:10px; font-weight:600; color:var(--t2); margin-top:2px; direction:ltr;">—</span>
+    </div>
+    <div class="header-right">
+      <!-- Offline badge -->
+      <div class="offline-badge hidden" id="offline-badge" title="يوجد فواتير معلقة">
+        <span>☁️</span><span id="offline-count">0</span>
+      </div>
+      <!-- Dark/Light toggle -->
+      <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="تبديل السمة">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <!-- Logout -->
+      <button class="icon-btn" onclick="doLogout()" title="خروج">🚪</button>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <main class="app-main" id="page-content"></main>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="dashboard" onclick="navigate('dashboard')">
+      <span class="nav-icon">🏠</span><span class="nav-lbl">الرئيسية</span>
+    </button>
+    <button class="nav-btn" data-page="pos" onclick="navigate('pos')">
+      <span class="nav-icon">🧾</span><span class="nav-lbl">فاتورة</span>
+    </button>
+    <button class="nav-btn" data-page="credit" onclick="navigate('credit')">
+      <span class="nav-icon">↩️</span><span class="nav-lbl">إشعار</span>
+    </button>
+    <button class="nav-btn" data-page="customers" onclick="navigate('customers')">
+      <span class="nav-icon">👥</span><span class="nav-lbl">عملائي</span>
+    </button>
+    <button class="nav-btn" data-page="stock" onclick="navigate('stock')">
+      <span class="nav-icon">📦</span><span class="nav-lbl">مخزوني</span>
+    </button>
+  </nav>
+
+</div>
+
+<!-- ═══ PRINT FRAME ═══ -->
+<iframe id="print-frame" style="display:none;"></iframe>
+
+<!-- QR Code Generator -->
+<script src="js/utils/qrcode.min.js"></script>
+
+<script>
+// Force unregister ALL service workers immediately
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(regs) {
+    regs.forEach(function(r) { r.unregister(); });
+  });
+}
+// Clear all caches
+if (window.caches) {
+  caches.keys().then(function(keys) { keys.forEach(function(k) { caches.delete(k); }); });
+}
+
+window.togglePin = function(btn) {
+  var inp = document.getElementById('login-pin');
+  if (!inp) return;
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  btn.textContent = inp.type === 'password' ? '👁' : '🚫';
+};
+
+function getField(fields, key) {
+  if (!fields || !fields[key]) return undefined;
+  var f = fields[key];
+  if (f.stringValue !== undefined) return f.stringValue;
+  if (f.booleanValue !== undefined) return f.booleanValue;
+  if (f.integerValue !== undefined) return Number(f.integerValue);
+  if (f.doubleValue !== undefined) return f.doubleValue;
+  if (f.arrayValue !== undefined) return [];
+  return undefined;
+}
+
+window._doLogin = async function() {
+  var phone = (document.getElementById('login-phone').value || '').trim();
+  var pin = (document.getElementById('login-pin').value || '').trim();
+  var errEl = document.getElementById('login-error');
+  var btn = document.getElementById('login-btn');
+  var lbl = document.getElementById('login-label');
+  var spin = document.getElementById('login-spin');
+
+  errEl.classList.add('hidden'); errEl.textContent = '';
+  if (!phone) { errEl.textContent = 'أدخل رقم الهاتف'; errEl.classList.remove('hidden'); return; }
+  if (!pin)   { errEl.textContent = 'أدخل رقم PIN';   errEl.classList.remove('hidden'); return; }
+
+  btn.disabled = true;
+  if (lbl) lbl.classList.add('hidden');
+  if (spin) spin.classList.remove('hidden');
+
+  try {
+    var API_URL = 'https://firestore.googleapis.com/v1/projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main:runQuery';
+    var body = JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: 'salesReps' }],
+        where: { fieldFilter: { field: { fieldPath: 'phone' }, op: 'EQUAL', value: { stringValue: phone } } },
+        limit: 1
+      }
+    });
+
+    var res = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: body
+    });
+    var results = await res.json();
+
+    if (results && results.error) {
+      var msg = results.error.message || '';
+      if (msg.includes('Quota exceeded') || results.error.status === 'RESOURCE_EXHAUSTED') {
+        errEl.textContent = '⚠️ نفدت الحصة اليومية لقاعدة البيانات (ستفتح تلقائياً الساعة 10:00 صباحاً)';
+      } else {
+        errEl.textContent = 'خطأ في الاتصال: ' + msg;
+      }
+      errEl.classList.remove('hidden');
+      btn.disabled = false;
+      if (lbl) lbl.classList.remove('hidden');
+      if (spin) spin.classList.add('hidden');
+      return;
+    }
+
+    if (!Array.isArray(results) || !results[0] || !results[0].document) {
+      errEl.textContent = 'رقم الهاتف غير مسجّل في النظام';
+      errEl.classList.remove('hidden');
+      btn.disabled = false;
+      if (lbl) lbl.classList.remove('hidden');
+      if (spin) spin.classList.add('hidden');
+      return;
+    }
+
+    var fields = results[0].document.fields || {};
+    var docId  = results[0].document.name.split('/').pop();
+
+    function getAny(f, key) {
+      if (!f[key]) return undefined;
+      if (f[key].stringValue !== undefined) return f[key].stringValue;
+      if (f[key].booleanValue !== undefined) return f[key].booleanValue;
+      if (f[key].integerValue !== undefined) return Number(f[key].integerValue);
+      if (f[key].doubleValue !== undefined) return f[key].doubleValue;
+      return undefined;
+    }
+
+    var storedPin = fields.pin && fields.pin.stringValue;
+    if (!storedPin) { errEl.textContent = 'لم يُفعّل الـ PIN — تواصل مع المدير'; errEl.classList.remove('hidden'); btn.disabled=false; if(lbl)lbl.classList.remove('hidden'); if(spin)spin.classList.add('hidden'); return; }
+    if (storedPin !== pin) { errEl.textContent = 'رقم PIN غير صحيح'; errEl.classList.remove('hidden'); btn.disabled=false; if(lbl)lbl.classList.remove('hidden'); if(spin)spin.classList.add('hidden'); return; }
+
+    var rep = { id: docId };
+    Object.keys(fields).forEach(function(k) { rep[k] = getAny(fields, k); });
+
+    localStorage.setItem('rep_v2_session', JSON.stringify(rep));
+    window._booted = true;
+
+    // Hide login immediately to prevent double-click loops
+    var loginEl = document.getElementById('login-screen');
+    if (loginEl) loginEl.style.display = 'none';
+
+    // Show loading overlay while module finishes loading
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:#0d1117;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;color:#fff;font-family:Cairo,sans-serif;';
+    ov.innerHTML = '<div style="font-size:56px;margin-bottom:16px">🚚</div><p style="font-size:18px;opacity:.8">جاري تحميل التطبيق...</p>';
+    document.body.appendChild(ov);
+
+    var _tries = 0;
+    function tryInit() {
+      if (typeof window._moduleInitApp === 'function') {
+        ov.remove();
+        window._moduleInitApp(rep);
+      } else {
+        _tries++;
+        if (_tries > 53) { // 8 seconds (53 * 150ms)
+          ov.innerHTML = '<div style="font-size:48px">⚠️</div><p style="font-size:16px;margin:16px;text-align:center">تعذّر تحميل التطبيق<br>تحقق من الاتصال بالإنترنت</p><button onclick="location.reload()" style="background:#6C63FF;color:#fff;border:none;padding:14px 32px;border-radius:12px;font-size:16px;font-family:Cairo,sans-serif;cursor:pointer;margin-top:8px">إعادة المحاولة</button>';
+        } else {
+          setTimeout(tryInit, 150);
+        }
+      }
+    }
+    tryInit();
+
+  } catch(e) {
+    errEl.textContent = 'خطأ في الاتصال: ' + e.message;
+    errEl.classList.remove('hidden');
+  } finally {
+    btn.disabled = false;
+    if (lbl) lbl.classList.remove('hidden');
+    if (spin) spin.classList.add('hidden');
+  }
+};
+
+
+// Module handles all navigation - no fallback timer needed
+</script>
+
+<!-- Firebase Module App -->
+<script type="module" src="js/rep/app2.js?v=48.0"></script>
+</body>
+</html>

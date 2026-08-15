@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# Antigravity & Agent cache
+.gemini/
+scratch/
+*.log
+
+# Ignore all scratch/utility scripts in the root directory
+/*.mjs
+/*.json
+/*.js.bak
+/*.html.bak
+/*.bat
+/*.docx
+/*.doc
+/*.rar
+/*.zip
+/test.js
+/test2.js
+/test3.js
+/test5.js
+/test_adc.js
+/temp_products.js
+/backup_script.js
+
+# Exclude essential production config JSONs from ignore
+!/package.json
+!/package-lock.json
+!/manifest.json
+!/manifest-rep.json
+!/firebase.json
+!/firestore.indexes.json
+
+# OS files
+.DS_Store
+Thumbs.db

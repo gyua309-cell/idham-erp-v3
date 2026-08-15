@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>IDHAM — تصحيح حساب فخر الضيافة</title>
+<style>
+  body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:20px;direction:rtl}
+  h1{color:#f87171;font-size:1.3rem;margin-bottom:4px}
+  p{color:#94a3b8;font-size:.85rem;margin-bottom:16px}
+  .card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px;margin-bottom:16px}
+  .log{background:#0f172a;border:1px solid #1e3a5f;border-radius:8px;padding:12px;height:420px;overflow-y:auto;font-size:12px;font-family:monospace;white-space:pre-wrap;line-height:1.7}
+  button{background:#3b82f6;color:#fff;border:none;padding:10px 22px;border-radius:8px;cursor:pointer;font-size:13px;margin-left:8px;font-weight:600}
+  button:hover{opacity:.85} button:disabled{background:#374151;cursor:not-allowed}
+  button.green{background:#16a34a}
+</style>
+</head>
+<body>
+<h1>🔧 تصحيح حساب فخر الضيافة — إزالة paidAmount المكررة</h1>
+<p>يفحص الفواتير التي بها manuallyPaid=true ولها إيصالات فعلية، ويمسح paidAmount منها لإزالة التكرار في كشف الحساب.</p>
+<div class="card">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <button id="b1" onclick="scan()">🔎 فحص التكرارات</button>
+    <button id="b2" class="green" onclick="fix()" disabled>✅ إصلاح التكرارات</button>
+    <button onclick="document.getElementById('log').innerHTML=''">مسح</button>
+  </div>
+</div>
+<div class="card">
+  <div class="log" id="log">اضغط "فحص التكرارات" أولاً.
+</div>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import{getFirestore,collection,getDocs,updateDoc,doc,query,where,limit}from"https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+const FB={apiKey:"AIzaSyAike2lPO7VnFoRHevnGkbHpAQbKoDb5r8",authDomain:"idham-foodstuffs-sa.firebaseapp.com",projectId:"idham-foodstuffs-sa",storageBucket:"idham-foodstuffs-sa.appspot.com",messagingSenderId:"271994882624",appId:"1:271994882624:web:ce8afd3e3c08fec01a2f1c"};
+const db=getFirestore(initializeApp(FB,"fix-fakhr"));
+const COID="idham-main";
+
+function L(m,c=""){const el=document.getElementById("log");const s=document.createElement("span");s.textContent=m+"\n";if(c)s.style.color=c;el.appendChild(s);el.scrollTop=el.scrollHeight;}
+
+let toFix=[];
+
+window.scan=async()=>{
+  document.getElementById("b1").disabled=true;
+  toFix=[];
+  L("🔎 جاري الفحص...","#94a3b8");
+
+  // جلب جميع الفواتير بها manuallyPaid=true
+  const invQ=query(collection(db,`companies/${COID}/salesInvoices`),where("manuallyPaid","==",true),limit(200));
+  const invSnap=await getDocs(invQ);
+  L(`وجدنا ${invSnap.size} فاتورة بها manuallyPaid=true`,"#38bdf8");
+
+  for(const d of invSnap.docs){
+    const inv={id:d.id,...d.data()};
+    if(!inv.paidAmount||inv.paidAmount<=0){continue;}
+
+    // جلب إيصالات هذا العميل
+    const rcptQ=query(collection(db,`companies/${COID}/receipts`),where("targetId","==",inv.customerId),limit(50));
+    const rcptSnap=await getDocs(rcptQ);
+    const receipts=rcptSnap.docs.map(r=>({id:r.id,...r.data()}));
+
+    if(receipts.length===0){
+      L(`  [${inv.number}] paidAmount=${inv.paidAmount} — لا إيصالات للعميل — تجاهل`,"#64748b");
+      continue;
+    }
+
+    // فحص تطابق ±5% و 30 يوم
+    const invDate=inv.date||"";
+    const matched=receipts.some(r=>{
+      const rDate=r.date||"";
+      const daysDiff=invDate&&rDate?Math.abs(new Date(rDate)-new Date(invDate))/86400000:99;
+      const amtDiff=inv.paidAmount>0?Math.abs((r.amount||0)-inv.paidAmount)/inv.paidAmount:1;
+      const notesMatch=(r.notes||"").includes(inv.number);
+      return notesMatch||(daysDiff<=30&&amtDiff<=0.05);
+    });
+
+    if(matched){
+      L(`  ⚠️ [${inv.number}] paidAmount=${inv.paidAmount.toFixed(2)} — يوجد إيصال مطابق → يحتاج إصلاح`,"#f87171");
+      toFix.push(inv);
+    } else {
+      L(`  ✓ [${inv.number}] paidAmount=${inv.paidAmount.toFixed(2)} — لا إيصال مطابق — بخير`,"#4ade80");
+    }
+  }
+
+  L(`\n📊 النتيجة: ${toFix.length} فاتورة تحتاج إصلاح`,"#f59e0b");
+  if(toFix.length>0){
+    document.getElementById("b2").disabled=false;
+    L(`اضغط "إصلاح التكرارات" للمتابعة`,"#94a3b8");
+  }
+  document.getElementById("b1").disabled=false;
+};
+
+window.fix=async()=>{
+  if(toFix.length===0){L("لا يوجد شيء للإصلاح","#f59e0b");return;}
+  document.getElementById("b2").disabled=true;
+  L(`\n🔧 جاري الإصلاح لـ ${toFix.length} فاتورة...`,"#38bdf8");
+
+  let done=0;
+  for(const inv of toFix){
+    try{
+      await updateDoc(doc(db,`companies/${COID}/salesInvoices`,inv.id),{
+        paidAmount:0,
+        // نُبقي status=paid و manuallyPaid=true
+      });
+      L(`  ✅ [${inv.number}] تم مسح paidAmount (كان: ${inv.paidAmount.toFixed(2)})`,"#4ade80");
+      done++;
+    }catch(e){
+      L(`  ❌ [${inv.number}] خطأ: ${e.message}`,"#f87171");
+    }
+  }
+  L(`\n✅ تم الإصلاح لـ ${done} فاتورة. افتح كشف حساب فخر الضيافة للتحقق.`,"#4ade80");
+};
+</script>
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔧 تصحيح أرصدة العملاء — إدهام ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Cairo', sans-serif;
+    direction: rtl;
+    background: linear-gradient(135deg, #0a0e1a 0%, #0d1f3c 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #e2e8f0;
+  }
+  .card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 36px;
+    max-width: 680px;
+    width: 100%;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+  }
+  h1 {
+    font-size: 22px; font-weight: 900;
+    background: linear-gradient(135deg, #60a5fa, #f59e0b);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 6px;
+  }
+  .subtitle { font-size: 13px; color: #94a3b8; margin-bottom: 28px; }
+
+  .warning-box {
+    background: rgba(245,158,11,0.1);
+    border: 1px solid rgba(245,158,11,0.4);
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #fbbf24;
+    margin-bottom: 24px;
+    line-height: 1.8;
+  }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 8px; padding: 14px 28px;
+    border: none; border-radius: 12px;
+    font-family: 'Cairo', sans-serif; font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: all 0.2s; width: 100%;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    box-shadow: 0 4px 20px rgba(37,99,235,0.4);
+  }
+  .btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(37,99,235,0.5); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .progress-wrap {
+    display: none;
+    margin: 24px 0 0;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    padding: 20px;
+  }
+  .progress-track {
+    height: 8px; background: rgba(255,255,255,0.1);
+    border-radius: 999px; overflow: hidden; margin: 10px 0;
+  }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, #2563eb, #f59e0b);
+    border-radius: 999px; transition: width 0.3s ease;
+    box-shadow: 0 0 12px rgba(245,158,11,0.5);
+    width: 0%;
+  }
+  .progress-text { font-size: 13px; color: #94a3b8; }
+  .progress-pct { font-size: 20px; font-weight: 900; color: #f59e0b; }
+
+  #log-container {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 12px;
+    font-family: monospace;
+    line-height: 1.7;
+    display: none;
+  }
+  .log-ok   { color: #34d399; }
+  .log-err  { color: #f87171; }
+  .log-info { color: #60a5fa; }
+  .log-warn { color: #fbbf24; }
+
+  .summary-box {
+    display: none;
+    margin-top: 20px;
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.4);
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+  .summary-box h3 { font-size: 15px; color: #34d399; margin-bottom: 10px; }
+  .summary-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px; text-align: center;
+  }
+  .summary-item .val { font-size: 24px; font-weight: 900; color: #f59e0b; }
+  .summary-item .lbl { font-size: 11px; color: #94a3b8; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>🔧 تصحيح أرصدة العملاء تلقائياً</h1>
+  <p class="subtitle">يقوم بإعادة حساب رصيد كل عميل من جميع مصادر البيانات (فواتير + سندات + مرتجعات + تحصيلات)</p>
+
+  <div class="warning-box">
+    ⚠️ <strong>ما الذي سيحدث؟</strong><br>
+    سيتم قراءة <strong>جميع العملاء</strong> ثم لكل عميل إعادة حساب رصيده من:<br>
+    ✅ فواتير البيع الآجلة والجزئية<br>
+    ✅ سندات القبض (receipts)<br>
+    ✅ تحصيلات المندوب (repReceipts)<br>
+    ✅ مرتجعات المبيعات<br>
+    ✅ المدفوعات اليدوية<br>
+    ثم يُحدَّث حقل <code>balance</code> في مستند العميل تلقائياً.
+  </div>
+
+  <button class="btn btn-primary" id="start-btn" onclick="startFix()">
+    🚀 بدء تصحيح جميع الأرصدة
+  </button>
+
+  <div class="progress-wrap" id="progress-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span class="progress-text" id="progress-label">جاري المعالجة…</span>
+      <span class="progress-pct" id="progress-pct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-text" id="progress-detail">—</div>
+  </div>
+
+  <div id="log-container"></div>
+
+  <div class="summary-box" id="summary-box">
+    <h3>✅ اكتمل التصحيح!</h3>
+    <div class="summary-grid">
+      <div class="summary-item">
+        <div class="val" id="sum-total">0</div>
+        <div class="lbl">إجمالي العملاء</div>
+      </div>
+      <div class="summary-item">
+        <div class="val" id="sum-ok" style="color:#34d399;">0</div>
+        <div class="lbl">تم تصحيحهم</div>
+      </div>
+      <div class="summary-item">
+        <div class="val" id="sum-err" style="color:#f87171;">0</div>
+        <div class="lbl">فشل التصحيح</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp }     from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {
+  getFirestore, collection, getDocs, doc, getDoc,
+  query, where, updateDoc
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+const FB_CFG = {
+  apiKey:            "AIzaSyAike2lPO7VnFoRHevnGkbHpAQbKoDb5r8",
+  authDomain:        "idham-foodstuffs-sa.firebaseapp.com",
+  projectId:         "idham-foodstuffs-sa",
+  storageBucket:     "idham-foodstuffs-sa.firebasestorage.app",
+  messagingSenderId: "771445462953",
+  appId:             "1:771445462953:web:05d70fb7c36a385c9796b8",
+};
+
+const app  = initializeApp(FB_CFG, "fix-balances");
+const db   = getFirestore(app);
+const COID = "idham-main";
+const COL  = (n) => collection(db, `companies/${COID}/${n}`);
+
+// ─── Logging ────────────────────────────────────────────
+const logEl = document.getElementById("log-container");
+function log(msg, type = "info") {
+  const line = document.createElement("div");
+  line.className = `log-${type}`;
+  line.textContent = `[${new Date().toLocaleTimeString("ar-SA")}] ${msg}`;
+  logEl.appendChild(line);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+// ─── Core: Recalculate one customer ─────────────────────
+async function recalcCustomer(customerId, customerName) {
+  try {
+    const companyId = COID;
+
+    // 1. Credit/Partial invoices
+    const invSnap = await getDocs(query(COL("salesInvoices"), where("customerId", "==", customerId)));
+    let totalDebit = 0;
+    const creditInvoices = [];
+
+    invSnap.docs.forEach(d => {
+      const inv = d.data();
+      if (inv.status === "cancelled") return;
+      const pm  = (inv.paymentMethod || "cash").toLowerCase();
+      const tot = parseFloat(inv.totalWithVat || inv.total || 0);
+      if (pm === "credit" || pm === "deferred" || pm === "آجل") {
+        totalDebit += tot;
+        creditInvoices.push({ id: d.id, ...inv });
+      } else if (pm === "partial" || pm === "جزئي") {
+        const paid = parseFloat(inv.paidAmount || 0);
+        const rem  = parseFloat(inv.remainingAmount !== undefined
+          ? inv.remainingAmount
+          : (tot - paid));
+        totalDebit += Math.max(0, rem);
+        creditInvoices.push({ id: d.id, ...inv });
+      }
+    });
+
+    // 2. Receipts
+    const rcptSnap = await getDocs(query(COL("receipts"), where("targetId", "==", customerId)));
+    let totalReceipts = 0;
+    const receipts = rcptSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.entityType === "customer");
+    receipts.forEach(r => { totalReceipts += parseFloat(r.amount || 0); });
+
+    // 3. repReceipts (from rep app)
+    let totalRepReceipts = 0;
+    try {
+      const repRcptSnap = await getDocs(query(COL("repReceipts"), where("customerId", "==", customerId)));
+      repRcptSnap.docs.forEach(d => { totalRepReceipts += parseFloat(d.data().amount || 0); });
+    } catch (_) {}
+
+    // 4. Collections
+    let totalCollections = 0;
+    try {
+      const colSnap = await getDocs(query(COL("collections"), where("customerId", "==", customerId)));
+      colSnap.docs.forEach(d => { totalCollections += parseFloat(d.data().amount || 0); });
+    } catch (_) {}
+
+    // 5. Returns
+    const retSnap = await getDocs(query(COL("salesReturns"), where("customerId", "==", customerId)));
+    let totalReturns = 0;
+    retSnap.docs.forEach(d => {
+      const ret = d.data();
+      if (ret.status === "cancelled" || ret.status === "void") return;
+      totalReturns += parseFloat(ret.totalWithVat || ret.total || 0);
+    });
+
+    // 6. Manual payments fallback
+    let manualPayments = 0;
+    creditInvoices.forEach(inv => {
+      if (inv.status === "paid") {
+        const val = parseFloat(inv.totalWithVat || inv.total || 0);
+        const hasReceipt = receipts.some(r => Math.abs(r.amount - val) < 1.0);
+        if (!hasReceipt) manualPayments += val;
+      }
+    });
+
+    // 7. Final balance
+    const actualBalance = totalDebit - (totalReceipts + totalRepReceipts + totalCollections + totalReturns + manualPayments);
+    const roundedBalance = Math.round(actualBalance * 100) / 100;
+
+    // 8. Update customer doc
+    await updateDoc(doc(db, `companies/${companyId}/customers`, customerId), {
+      balance: roundedBalance
+    });
+
+    return { ok: true, balance: roundedBalance };
+  } catch (err) {
+    return { ok: false, error: err.message };
+  }
+}
+
+// ─── Main ────────────────────────────────────────────────
+window.startFix = async () => {
+  const btn = document.getElementById("start-btn");
+  btn.disabled = true;
+  btn.textContent = "⏳ جاري التصحيح…";
+
+  document.getElementById("progress-wrap").style.display = "block";
+  logEl.style.display = "block";
+  log("🚀 بدء تحميل قائمة العملاء…", "info");
+
+  let total = 0, ok = 0, err = 0;
+
+  try {
+    const custSnap = await getDocs(COL("customers"));
+    const customers = custSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    total = customers.length;
+    log(`📋 تم العثور على ${total} عميل — بدء المعالجة…`, "info");
+
+    for (let i = 0; i < customers.length; i++) {
+      const cust = customers[i];
+      const pct  = Math.round(((i + 1) / total) * 100);
+
+      document.getElementById("progress-fill").style.width = pct + "%";
+      document.getElementById("progress-pct").textContent   = pct + "%";
+      document.getElementById("progress-label").textContent = `جاري معالجة ${i + 1} من ${total}`;
+      document.getElementById("progress-detail").textContent = `العميل: ${cust.name || cust.id}`;
+
+      const result = await recalcCustomer(cust.id, cust.name);
+
+      if (result.ok) {
+        ok++;
+        const oldBal = parseFloat(cust.balance || 0);
+        const newBal = result.balance;
+        const changed = Math.abs(oldBal - newBal) > 0.01;
+        log(
+          `✅ ${cust.name} — رصيد جديد: ${newBal.toFixed(2)} ر.س${changed ? ` (كان: ${oldBal.toFixed(2)})` : " (بدون تغيير)"}`,
+          changed ? "warn" : "ok"
+        );
+      } else {
+        err++;
+        log(`❌ ${cust.name || cust.id} — خطأ: ${result.error}`, "err");
+      }
+
+      // Small delay to avoid Firestore rate limits
+      if (i % 5 === 4) await new Promise(r => setTimeout(r, 300));
+    }
+
+    // Done
+    document.getElementById("progress-label").textContent = "✅ اكتمل التصحيح!";
+    document.getElementById("progress-detail").textContent = "";
+    log(`\n🎉 انتهى التصحيح: ${ok} نجاح، ${err} فشل من أصل ${total} عميل`, "info");
+
+    // Summary
+    document.getElementById("summary-box").style.display = "block";
+    document.getElementById("sum-total").textContent = total;
+    document.getElementById("sum-ok").textContent    = ok;
+    document.getElementById("sum-err").textContent   = err;
+
+    btn.textContent = "✅ اكتمل — أغلق الصفحة";
+  } catch (e) {
+    log(`💥 خطأ عام: ${e.message}`, "err");
+    btn.disabled = false;
+    btn.textContent = "🔄 إعادة المحاولة";
+  }
+};
+</script>
+</body>
+</html>

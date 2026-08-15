@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تحديث أرصدة الصناديق</title>
+  <style>
+    body { font-family: Tahoma, Arial, sans-serif; padding: 20px; background: #f8fafc; }
+    button { padding: 10px 20px; font-size: 16px; background: #2563eb; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+    #log { margin-top: 20px; background: #1e293b; color: #10b981; padding: 15px; border-radius: 8px; font-family: monospace; white-space: pre-wrap; min-height: 200px; }
+  </style>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { firebaseConfig } from "./js/config/firebase-config.js";
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const COID = "IdhamFoodstuffs"; // Or whatever company ID is used, wait! 
+    // In app.js it is typically fetched from somewhere, let's assume it's IdhamFoodstuffs
+    
+    function log(msg) {
+      document.getElementById('log').textContent += msg + "\n";
+    }
+
+    window.runFix = async () => {
+      document.getElementById('log').textContent = "";
+      log("جاري جلب الفواتير...");
+      try {
+        const snap = await getDocs(collection(db, `companies/idham-main/salesInvoices`));
+        const repCash = {};
+        
+        snap.forEach(docSnap => {
+          const inv = docSnap.data();
+          if (!inv.repId) return;
+          
+          let paid = 0;
+          if (inv.paidAmount !== undefined) {
+            paid = parseFloat(inv.paidAmount) || 0;
+          } else if (inv.paymentMethod === 'cash') {
+            paid = parseFloat(inv.total) || 0;
+          }
+          
+          if (!repCash[inv.repId]) repCash[inv.repId] = 0;
+          repCash[inv.repId] += paid;
+        });
+
+        log("تم حساب الأرصدة الصحيحة:");
+        log(JSON.stringify(repCash, null, 2));
+
+        for (const repId in repCash) {
+          log(`تحديث صندوق المندوب: ${repId} ...`);
+          await setDoc(doc(db, `companies/idham-main/cashBoxes/cashBox_${repId}`), {
+            balance: repCash[repId],
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+        }
+        
+        log("✅ تمت العملية بنجاح! يمكنك إغلاق هذه الصفحة الآن والعودة للتطبيق.");
+      } catch (err) {
+        log("❌ خطأ: " + err.message);
+      }
+    };
+  </script>
+</head>
+<body>
+  <h2>أداة صيانة: تصفير وتصحيح صناديق المناديب</h2>
+  <p>هذه الأداة تقوم بإعادة حساب رصيد كل مندوب بناءً على مبيعاته النقدية الصحيحة فقط.</p>
+  <button onclick="runFix()">بدء عملية التصحيح</button>
+  <div id="log"></div>
+</body>
+</html>

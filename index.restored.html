@@ -1,0 +1,23 @@
+import fs from 'fs';
+import readline from 'readline';
+
+const fileStream = fs.createReadStream('C:\\Users\\it\\.gemini\\antigravity\\brain\\9146d1fd-5942-45e4-83d4-ba6a3be01536\\.system_generated\\logs\\transcript_full.jsonl');
+const rl = readline.createInterface({ input: fileStream, crlfDelay: Infinity });
+
+for await (const line of rl) {
+  if (line.includes('نظام ERP لشركة إدهام للمواد الغذائية') || line.includes('nav-label') || line.includes('main-sidebar')) {
+    try {
+      const obj = JSON.parse(line);
+      if (obj.tool_calls) {
+        for (const tc of obj.tool_calls) {
+          if (tc.args && tc.args.CodeContent && tc.args.CodeContent.includes('data-route="sales-invoices"')) {
+            console.log(`Found complete original index.html in Step ${obj.step_index}! Length:`, tc.args.CodeContent.length);
+            fs.writeFileSync('index.restored.html', tc.args.CodeContent, 'utf8');
+            console.log("Successfully extracted original index.html to index.restored.html!");
+            process.exit(0);
+          }
+        }
+      }
+    } catch (e) {}
+  }
+}

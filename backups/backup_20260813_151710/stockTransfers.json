@@ -1,0 +1,4946 @@
+[
+  {
+    "_id": "0VoR0Io28vsIqJDZQz1K",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/0VoR0Io28vsIqJDZQz1K",
+    "date": "2026-07-16",
+    "receivedByName": "على فيااض",
+    "createdByName": "على فيااض",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdAt": "2026-07-16T08:34:46.846Z",
+    "receivedAt": "2026-07-16T08:37:38.801Z",
+    "number": "TR-000002",
+    "status": "received",
+    "updatedAt": "2026-07-16T08:37:38.652Z",
+    "lines": [
+      {
+        "productName": "تونه الطائى صغير  تايلاندى 48*90",
+        "sku": "09004",
+        "productId": "YV2OumfkBeqlzRG2YruG",
+        "availQty": 10,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "unit": "Tank",
+        "qty": 1,
+        "availQty": 15,
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "productName": "زيت تنك نسرين *17 لتر",
+        "sku": "02008"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "availQty": 10,
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005"
+      },
+      {
+        "productId": "vQkzxlzdOHu7z21s9SMV",
+        "availQty": 6,
+        "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+        "sku": "45005",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "unit": "Bale",
+        "qty": 1,
+        "productId": "oILf9Ggdj8bYNt4Pl492",
+        "availQty": 10,
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت",
+        "sku": "04005"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "CcXTqwIBYvF3O1XSa6v2",
+        "availQty": 5,
+        "productName": "سمن القمرية علب 12* 900 جرام",
+        "sku": "02007"
+      },
+      {
+        "productId": "x1cIL2f0tNMlLQWMw2ky",
+        "availQty": 20,
+        "sku": "04003",
+        "productName": "سكر الاسرة صغير 20*1 كيلو",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "productId": "ndlDJpMG9hlBKQe4MauJ",
+        "availQty": 10,
+        "productName": "سكر الاسرة كرتون 4*5 كيلو",
+        "sku": "04006",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "سكر الاسرة وسط 10*2 كيلو",
+        "sku": "04004",
+        "availQty": 20,
+        "productId": "thEesj4aPMBKJePRHTlE"
+      },
+      {
+        "availQty": 20,
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "sku": "43006",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "sku": "45002",
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "availQty": 10,
+        "qty": 1,
+        "unit": "Carton"
+      }
+    ],
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "eZ8UlvjeYawtWSre5EwW",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "eZ8UlvjeYawtWSre5EwW",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "10Jak0wyABIUj5Rb3xuT",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/10Jak0wyABIUj5Rb3xuT",
+    "createdAt": "2026-08-03T18:56:07.185Z",
+    "createdByName": "علي فياض — مدير النظا��",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "date": "2026-08-03",
+    "receivedByName": "علي فياض — مدير النظام",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "availQty": 38,
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "productName": "زيت تنك شيف 17 لتر",
+        "sku": "02009",
+        "unit": "Tank",
+        "qty": 5
+      },
+      {
+        "unit": "Tank",
+        "qty": 2,
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "sku": "19001",
+        "availQty": 4,
+        "productId": "GjMW892nmjpmLeV5Kx3c"
+      },
+      {
+        "unit": "Bag",
+        "qty": 1,
+        "productName": "ارز الرواسى هندى مزة 40 كجم",
+        "sku": "03004",
+        "productId": "wGEk0xKjCvX7pSSQGUU1",
+        "availQty": 14
+      },
+      {
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "availQty": 150,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "qty": 5,
+        "unit": "Bag"
+      },
+      {
+        "sku": "31017",
+        "productName": "علب ميكرويف دائرى اسود 250 مل 10 - اونز 18",
+        "availQty": 8,
+        "productId": "KH4VsMfbVjboRlPsCKpz",
+        "qty": 1,
+        "unit": "Carton"
+      }
+    ],
+    "updatedAt": "2026-08-03T18:56:36.494Z",
+    "status": "received",
+    "receivedAt": "2026-08-03T18:56:37.322Z",
+    "number": "TR-8951284"
+  },
+  {
+    "_id": "1GdBnXG0okykhWXEqyNz",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/1GdBnXG0okykhWXEqyNz",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-25",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-25T19:38:20.910Z",
+    "number": "TR-8951261",
+    "receivedAt": "2026-07-25T19:38:29.744Z",
+    "updatedAt": "2026-07-25T19:38:30.312Z",
+    "status": "received",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Tank",
+        "sku": "02004",
+        "productName": "زيت تنك دلال * 17 لتر",
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "availQty": 18
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad"
+  },
+  {
+    "_id": "1N9JzTC78PKo5ykcz3w4",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/1N9JzTC78PKo5ykcz3w4",
+    "date": "2026-08-05",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-05T07:59:56.820Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "status": "received",
+    "updatedAt": "2026-08-05T08:00:41.306Z",
+    "receivedAt": "2026-08-05T08:00:41.941Z",
+    "number": "TR-8951287",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "availQty": 10,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+        "sku": "31011",
+        "productId": "SzHULsTeLonnDaH4vh4Y",
+        "availQty": 14
+      },
+      {
+        "sku": "14004",
+        "productName": "سائل صحون شاينكس بالليمون *30",
+        "productId": "nn7SSyLySTxv0WgkoWf8",
+        "availQty": 6,
+        "qty": 2,
+        "unit": "Barrel"
+      },
+      {
+        "productId": "MWXMvWA35h2AHzrUVO71",
+        "availQty": 2,
+        "sku": "31033",
+        "productName": "فلين سادة 100 حبة LB2",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "availQty": 7,
+        "sku": "45003",
+        "productName": "صلصة طماطم الفخامه 12* 850 جم"
+      },
+      {
+        "qty": 2,
+        "unit": "Bale",
+        "sku": "04005",
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت",
+        "productId": "oILf9Ggdj8bYNt4Pl492",
+        "availQty": 6
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 5,
+        "productId": "PmtB5uXbDG1nXnx8GMSJ",
+        "sku": "12005",
+        "productName": "شطة سومطره حار كبير 340 ح*24"
+      },
+      {
+        "sku": "03003",
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "availQty": 15,
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "availQty": 33,
+        "productName": "زيت تنك شيف 17 لتر",
+        "sku": "02009",
+        "unit": "Tank",
+        "qty": 5
+      }
+    ]
+  },
+  {
+    "_id": "2NHbueSsykOhEG7TYFy9",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/2NHbueSsykOhEG7TYFy9",
+    "date": "2026-08-11",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdAt": "2026-08-11T19:26:24.691Z",
+    "receivedAt": "2026-08-11T19:26:57.294Z",
+    "number": "TR-8951302",
+    "status": "received",
+    "updatedAt": "2026-08-11T19:27:01.865Z",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "DviRgNpE8LLhT5ASxST3",
+        "availQty": 4,
+        "sku": "03011",
+        "productName": "ارز ابو كاس 4*10 كجم"
+      },
+      {
+        "productId": "yLOfiimlko7x0ORSKc5c",
+        "availQty": 5,
+        "sku": "03015",
+        "productName": "ارز دلفين مزة  بسمتى 4*10 كجم",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "availQty": 10,
+        "productId": "IV8f71IUPMlWk4unzQas",
+        "productName": "قودى طويل رقم 20 - 24*450 ج",
+        "sku": "03016",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "sku": "03014",
+        "productName": "ارز دلفين بسمتى 8*5 كجم",
+        "availQty": 5,
+        "productId": "kAm09NsM5EPXF8UvrFeX",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005",
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "availQty": 6,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "sku": "02006",
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر",
+        "availQty": 1,
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004",
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "availQty": 176,
+        "unit": "Tank",
+        "qty": 2
+      }
+    ],
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "3q76rXLc8ONijVYCfwVP",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/3q76rXLc8ONijVYCfwVP",
+    "lines": [
+      {
+        "availQty": 5,
+        "productId": "iht0utKRHl3JCWuI4D1E",
+        "sku": "03018",
+        "productName": "اندومى خضار 60*75 جرام",
+        "qty": 4,
+        "unit": "Carton"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "ارز ابو كاس 8*5 كجم",
+        "sku": "03012",
+        "availQty": 4,
+        "productId": "LYDz1hvYQAgGoTpbTOSw"
+      },
+      {
+        "availQty": 1,
+        "productId": "2NbmryZHvF4OFOPE19XG",
+        "sku": "03007",
+        "productName": "ارز علمين الشعلان مزه 8*5 كجم",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "availQty": 4,
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+        "sku": "31001",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "availQty": 13,
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "sku": "43006",
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "qty": 3,
+        "unit": "Carton"
+      }
+    ],
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedAt": "2026-07-25T16:38:01.924Z",
+    "number": "TR-TMS0LB12U",
+    "status": "received",
+    "updatedAt": "2026-07-25T16:38:01.988Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdAt": "2026-07-25T16:37:20.271Z",
+    "date": "2026-07-25",
+    "receivedByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "4EmTFMZxEdIWOKoSHChy",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/4EmTFMZxEdIWOKoSHChy",
+    "date": "2026-07-25",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-25T07:26:03.850Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedByName": "علي فياض — مدير النظام",
+    "updatedAt": "2026-07-25T07:28:18.047Z",
+    "status": "received",
+    "receivedAt": "2026-07-25T07:27:26.374Z",
+    "number": "TR-8951255",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "sku": "31004",
+        "productName": "علب 50 جرام 2 اونز شفاف ارنون عبوة 200",
+        "availQty": 5,
+        "productId": "FlofDooOmuOEFrQiCWFQ",
+        "qty": 1,
+        "unit": "Carton",
+        "_origQty": 1
+      },
+      {
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "availQty": 5,
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "sku": "31005"
+      },
+      {
+        "qty": 3,
+        "_origQty": 3,
+        "unit": "Carton",
+        "productId": "WruLvzM1VpCOZ6yEHf8Y",
+        "availQty": 10,
+        "sku": "09008",
+        "productName": "شطة رنا عريض كبير 4.5 * 4 جالون"
+      },
+      {
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "availQty": 4,
+        "sku": "43003",
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton"
+      },
+      {
+        "_origQty": 2,
+        "unit": "Tank",
+        "qty": 2,
+        "availQty": 5,
+        "productId": "GjMW892nmjpmLeV5Kx3c",
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "sku": "19001"
+      },
+      {
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005",
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "availQty": 16,
+        "unit": "Carton",
+        "_origQty": 2,
+        "qty": 2
+      },
+      {
+        "sku": "03019",
+        "productName": "اندومى نكهة دجاج 60*70 جرام",
+        "availQty": 5,
+        "productId": "C1ac8RMQhx2gXejGiyF3",
+        "qty": 2,
+        "_origQty": 2,
+        "unit": "Carton"
+      },
+      {
+        "productId": "IV8f71IUPMlWk4unzQas",
+        "availQty": 10,
+        "productName": "قودى طويل رقم 20 - 24*450 ج",
+        "sku": "03016",
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 4,
+        "qty": 4,
+        "availQty": 5,
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+        "sku": "45002"
+      },
+      {
+        "sku": "09007",
+        "productName": "معجون طماطم لونا 8*6 ربطة * 135 ح",
+        "availQty": 10,
+        "productId": "dtCMNYIhjGBZGCUE6Lr1",
+        "qty": 2,
+        "unit": "Carton",
+        "_origQty": 2
+      },
+      {
+        "availQty": 10,
+        "productId": "EDm62noDcoaSqIWpOgdD",
+        "productName": "طماطم  مقشرة الطائى 24*400",
+        "sku": "35001",
+        "unit": "Carton",
+        "_origQty": 2,
+        "qty": 2
+      },
+      {
+        "sku": "31011",
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+        "availQty": 20,
+        "productId": "SzHULsTeLonnDaH4vh4Y",
+        "qty": 2,
+        "_origQty": 2,
+        "unit": "Carton"
+      },
+      {
+        "qty": 2,
+        "_origQty": 2,
+        "unit": "Carton",
+        "sku": "31009",
+        "productName": "سفر رول 85*110 الربيع 20 لفة",
+        "availQty": 10,
+        "productId": "ZINptjXdR8FmNmwaGo2t"
+      },
+      {
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "ورق برشمان كبير اصلى جيلانى 20 ربطه",
+        "sku": "43018",
+        "productId": "wxepIAahN8ati3vwaa2L",
+        "availQty": 10
+      },
+      {
+        "productName": "سفر رول بن سلمان 110*100 ملون 10 لفة",
+        "sku": "31010",
+        "availQty": 8,
+        "productId": "EXLDPRwT8ppDGrKjmDBM",
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 1
+      },
+      {
+        "productId": "LecJvj5mC6WvkN8boroZ",
+        "availQty": 5,
+        "productName": "مرقة دجاج ماجى مصرى 24 بكت * 24 ح",
+        "sku": "09009",
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 1
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "_origQty": 2,
+        "productId": "Daq0kIm7IykV0OkO4oLa",
+        "availQty": 5,
+        "sku": "03020",
+        "productName": "بيرفتو طويل 220 - 450 جرام * 24 بكت"
+      },
+      {
+        "qty": 4,
+        "unit": "Bag",
+        "_origQty": 4,
+        "availQty": 5,
+        "productId": "2NbmryZHvF4OFOPE19XG",
+        "sku": "03007",
+        "productName": "ارز علمين الشعلان مزه 8*5 كجم"
+      },
+      {
+        "availQty": 5,
+        "productId": "MNSnc8uULDA5wfiYIW99",
+        "sku": "03006",
+        "productName": "ارز علمين الشعلان مزه 4 ×10",
+        "qty": 4,
+        "_origQty": 4,
+        "unit": "Bag"
+      },
+      {
+        "availQty": 5,
+        "productId": "LYDz1hvYQAgGoTpbTOSw",
+        "productName": "ارز ابو كاس 8*5 كجم",
+        "sku": "03012",
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "productId": "poGgeZhrDTm4eW0nHNK1",
+        "availQty": 5,
+        "productName": "ارز صنوايت كالروز 20* 1 كجم",
+        "sku": "03009",
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 1,
+        "availQty": 1,
+        "productId": "5hFoTTktBTSAB9Fi9SLn",
+        "productName": "علب شفاف 207 ارنون عبوة 500",
+        "sku": "31008"
+      },
+      {
+        "qty": 2,
+        "unit": "Tank",
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "availQty": 10,
+        "sku": "02008",
+        "productName": "زيت تنك نسرين *17 لتر"
+      }
+    ],
+    "updatedBy": "admin_ali_fayad"
+  },
+  {
+    "_id": "4a3xapa3eG0ZWYwEAdh2",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/4a3xapa3eG0ZWYwEAdh2",
+    "createdAt": "2026-08-10T07:44:06.784Z",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-10",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "qty": 2,
+        "unit": "Bag",
+        "availQty": 7,
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "sku": "03003",
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "علب شفاف 205 ارنون عبوة 500",
+        "sku": "31006",
+        "productId": "iqrB1dkzgtyvBOVVXl6q",
+        "availQty": 4
+      },
+      {
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "availQty": 3,
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "unit": "Carton",
+        "qty": 2
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-08-10T07:44:31.826Z",
+    "number": "TR-8951299",
+    "receivedAt": "2026-08-10T07:44:33.436Z"
+  },
+  {
+    "_id": "6gMafYaDODJIr3R5NvAU",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/6gMafYaDODJIr3R5NvAU",
+    "createdBy": "Z8vkxuOfaumR63DMz7vA",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "12001",
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "productId": "tAq8ENjtZ0cRpzhW6xFH"
+      }
+    ],
+    "status": "cancelled",
+    "updatedAt": "2026-07-16T16:40:50.476Z",
+    "receivedAt": null,
+    "number": "REQ-08951241",
+    "rejectedAt": "2026-07-16T16:40:50.291Z",
+    "createdAt": "2026-07-16T13:35:52.564Z",
+    "createdByName": "مصطفى",
+    "notes": " (تم رفض الطلب من قبل الإدارة)",
+    "toWarehouseName": "سيارة مصطفى",
+    "date": "2026-07-16",
+    "rejectedBy": "admin_ali_fayad",
+    "rejectedByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "7rQ59BYXMONd22kjE88f",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/7rQ59BYXMONd22kjE88f",
+    "date": "2026-07-19",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdAt": "2026-07-19T19:33:45.950Z",
+    "receivedAt": "2026-07-19T19:33:56.271Z",
+    "number": "TR-8951248",
+    "updatedAt": "2026-07-19T19:33:56.263Z",
+    "status": "received",
+    "lines": [
+      {
+        "sku": "12003",
+        "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+        "productId": "H5l12QDSE7W2hZOdcl1C",
+        "availQty": 5,
+        "qty": 1,
+        "unit": "Carton"
+      }
+    ],
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "81rRH2qRAKTLUG8k4GJ6",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/81rRH2qRAKTLUG8k4GJ6",
+    "status": "received",
+    "updatedAt": "2026-07-30T21:40:34.863Z",
+    "number": "TR-8951277",
+    "receivedAt": "2026-07-30T21:40:34.792Z",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "qty": 20,
+        "unit": "Tank",
+        "sku": "02008",
+        "productName": "زيت تنك نسرين *17 لتر",
+        "availQty": 120,
+        "productId": "c1AGjekAaUO0zQchv0bK"
+      },
+      {
+        "qty": 4,
+        "unit": "Carton",
+        "productId": "atrR6pMjwiEfK6Hdo2Oi",
+        "availQty": 10,
+        "sku": "31020",
+        "productName": "علب 50 جرام 2 اونز اسود ارنون عبوة 200"
+      },
+      {
+        "qty": 4,
+        "unit": "Carton",
+        "availQty": 14,
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "sku": "31005",
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2"
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "علب ميكرويف دائرى اسود 250 مل 10 - اونز 18",
+        "sku": "31017",
+        "productId": "KH4VsMfbVjboRlPsCKpz",
+        "availQty": 10
+      },
+      {
+        "productId": "0cniV5I2oOQBqUJLlu39",
+        "availQty": 5,
+        "sku": "31034",
+        "productName": "فلين رقم 2 - 500 حبة",
+        "qty": 2,
+        "unit": "Bag"
+      },
+      {
+        "unit": "Bag",
+        "qty": 2,
+        "availQty": 5,
+        "productId": "MWXMvWA35h2AHzrUVO71",
+        "productName": "فلين سادة 100 حبة LB2",
+        "sku": "31033"
+      },
+      {
+        "unit": "Pack",
+        "qty": 3,
+        "productName": "ورق بنى  مقاس 5",
+        "sku": "43019",
+        "productId": "O5Pc4ZP3ks1TWq2AfhOo",
+        "availQty": 5
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productId": "BRYy3jvl6JJOqON0PnPr",
+        "availQty": 10,
+        "productName": "علب 16 اونز 450 ملى اسود دائرى عبوه 150",
+        "sku": "31016"
+      }
+    ],
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-30",
+    "createdAt": "2026-07-30T21:39:50.868Z",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "8BuU5sp4KsGuFq0jH4mw",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/8BuU5sp4KsGuFq0jH4mw",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-30T21:31:53.460Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-30",
+    "lines": [
+      {
+        "availQty": 1,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "qty": 1,
+        "unit": "Bag"
+      }
+    ],
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "receivedBy": "admin_ali_fayad",
+    "number": "TR-8951276",
+    "receivedAt": "2026-07-30T21:32:36.921Z",
+    "status": "received",
+    "updatedAt": "2026-07-30T21:32:37.001Z"
+  },
+  {
+    "_id": "9TJNzvNUGRPh5fdNHu8Q",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/9TJNzvNUGRPh5fdNHu8Q",
+    "number": "TR-8951270",
+    "receivedAt": "2026-07-28T15:09:46.726Z",
+    "updatedAt": "2026-07-28T15:09:46.668Z",
+    "status": "received",
+    "lines": [
+      {
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "availQty": 11,
+        "unit": "Carton",
+        "qty": 6
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "availQty": 15,
+        "productId": "cdQSjHVqLxAYqBMVUyLE",
+        "sku": "43001",
+        "productName": "المنيوم برست جودى 1635 غطا مطبوع 800 جرام"
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "sku": "12001",
+        "availQty": 12,
+        "productId": "tAq8ENjtZ0cRpzhW6xFH"
+      },
+      {
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "sku": "43012",
+        "availQty": 5,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "unit": "Carton",
+        "qty": 4
+      },
+      {
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "availQty": 28,
+        "qty": 5,
+        "unit": "Bag"
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-28",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-28T15:09:05.107Z"
+  },
+  {
+    "_id": "9cnk5p7AHOdDTekTDjte",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/9cnk5p7AHOdDTekTDjte",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-05",
+    "createdAt": "2026-08-05T22:16:57.435Z",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "updatedAt": "2026-08-06T12:48:38.564Z",
+    "status": "received",
+    "number": "TR-8951289",
+    "receivedAt": "2026-08-06T12:48:37.734Z",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "lines": [
+      {
+        "qty": 4,
+        "unit": "Bag",
+        "availQty": 4,
+        "productId": "ols8aSnfOWwSSwgvIzp7",
+        "sku": "03008",
+        "productName": "ارز ابو بنت امريكى 40 كجم"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 20,
+        "productId": "cdQSjHVqLxAYqBMVUyLE",
+        "productName": "المنيوم برست جودى 1635 غطا مطبوع 800 جرام",
+        "sku": "43001"
+      }
+    ]
+  },
+  {
+    "_id": "A7BJLIaKxtuiIMPI29wJ",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/A7BJLIaKxtuiIMPI29wJ",
+    "createdAt": "2026-07-29T09:37:00.994Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "date": "2026-07-28",
+    "receivedByName": "علي فياض — مدير النظام",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 5,
+        "productId": "CcXTqwIBYvF3O1XSa6v2",
+        "productName": "سمن القمرية علب 12* 900 جرام",
+        "sku": "02007"
+      },
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "sku": "03003",
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "availQty": 16
+      },
+      {
+        "qty": 1,
+        "unit": "Tank",
+        "sku": "02004",
+        "productName": "زيت تنك دلال * 17 لتر",
+        "availQty": 10,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-07-29T09:37:34.580Z",
+    "receivedAt": "2026-07-29T09:37:34.785Z",
+    "number": "TR-8951271"
+  },
+  {
+    "_id": "D5OldRlCDJG6TnEX3arj",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/D5OldRlCDJG6TnEX3arj",
+    "date": "2026-08-01",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-01T18:05:15.038Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "status": "received",
+    "updatedAt": "2026-08-01T18:07:21.402Z",
+    "receivedAt": "2026-08-01T18:07:20.946Z",
+    "number": "TR-8951281",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "sku": "02009",
+        "productName": "زيت تنك شيف 17 لتر",
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "availQty": 48,
+        "qty": 5,
+        "unit": "Tank"
+      },
+      {
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "availQty": 155,
+        "qty": 5,
+        "unit": "Bag"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "31025",
+        "productName": "صحن قصدير جودى  1030",
+        "availQty": 5,
+        "productId": "Ronvj4u2vzdxVDsKhhi5"
+      },
+      {
+        "availQty": 5,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "sku": "43012",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "31005",
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "availQty": 10
+      },
+      {
+        "sku": "43020",
+        "productName": "ورق بنى مقاس 4",
+        "availQty": 5,
+        "productId": "WxGec0F3udluHDEFApv7",
+        "qty": 1,
+        "unit": "Pack"
+      },
+      {
+        "qty": 5,
+        "unit": "Tank",
+        "sku": "02004",
+        "productName": "زيت تنك دلال * 17 لتر",
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "availQty": 184
+      },
+      {
+        "productId": "MWXMvWA35h2AHzrUVO71",
+        "availQty": 3,
+        "productName": "فلين سادة 100 حبة LB2",
+        "sku": "31033",
+        "unit": "Bag",
+        "qty": 2
+      }
+    ]
+  },
+  {
+    "_id": "DpE3cjmvXJOlwP7uKRo1",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/DpE3cjmvXJOlwP7uKRo1",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "receivedBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "availQty": 10,
+        "productId": "ols8aSnfOWwSSwgvIzp7",
+        "sku": "03008",
+        "productName": "ارز ابو بنت امريكى 40 كجم",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "unit": "Bag",
+        "qty": 1,
+        "productName": "ارز دلفين مزه بسمتى 40 كجم",
+        "sku": "03013",
+        "availQty": 10,
+        "productId": "qwuMMK8xWSJhh2Q2KbV8"
+      },
+      {
+        "availQty": 5,
+        "productId": "yLOfiimlko7x0ORSKc5c",
+        "sku": "03015",
+        "productName": "ارز دلفين مزة  بسمتى 4*10 كجم",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "sku": "03014",
+        "productName": "ارز دلفين بسمتى 8*5 كجم",
+        "availQty": 5,
+        "productId": "kAm09NsM5EPXF8UvrFeX",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "productId": "CwXTkvyG6odoZzZuEDja",
+        "availQty": 10,
+        "sku": "03005",
+        "productName": "ارز علمين  الشعلان مزه 40 كجم",
+        "qty": 1,
+        "unit": "Bag"
+      }
+    ],
+    "updatedAt": "2026-07-25T09:41:50.202Z",
+    "status": "received",
+    "number": "TR-8951256",
+    "receivedAt": "2026-07-25T09:41:52.186Z",
+    "createdAt": "2026-07-25T09:41:28.269Z",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "تحويل مؤقت لم يتم التحويل الفعلى",
+    "createdByName": "علي فياض — مدير النظام",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-25"
+  },
+  {
+    "_id": "E99hVDaagP8y392MQw4d",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/E99hVDaagP8y392MQw4d",
+    "createdAt": "2026-08-12T08:07:17.617Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "date": "2026-08-12",
+    "receivedByName": "علي فياض — مدير النظام",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 4,
+        "productId": "Daq0kIm7IykV0OkO4oLa",
+        "sku": "03020",
+        "productName": "بيرفتو طويل 220 - 450 جرام * 24 بكت"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "x1cIL2f0tNMlLQWMw2ky",
+        "availQty": 13,
+        "sku": "04003",
+        "productName": "سكر الاسرة صغير 20*1 كيلو"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "سكر الاسرة كرتون 4*5 كيلو",
+        "sku": "04006",
+        "availQty": 3,
+        "productId": "ndlDJpMG9hlBKQe4MauJ"
+      },
+      {
+        "sku": "04004",
+        "productName": "سكر الاسرة وسط 10*2 كيلو",
+        "availQty": 13,
+        "productId": "thEesj4aPMBKJePRHTlE",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "03009",
+        "productName": "ارز صنوايت كالروز 20* 1 كجم",
+        "productId": "poGgeZhrDTm4eW0nHNK1",
+        "availQty": 4
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 9,
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "sku": "12004",
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-08-12T08:07:48.719Z",
+    "receivedAt": "2026-08-12T08:07:48.581Z",
+    "number": "TR-8951303"
+  },
+  {
+    "_id": "FNvZ63VAuGq53bXvV4QI",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/FNvZ63VAuGq53bXvV4QI",
+    "createdAt": "2026-07-19T08:24:00.542Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "date": "2026-07-19",
+    "receivedByName": "علي فياض — مدير النظام",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "sku": "12004",
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم",
+        "availQty": 4,
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton"
+      },
+      {
+        "productName": "صلصة طماطم الفخامه 12* 850 جم",
+        "sku": "45003",
+        "availQty": 8,
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "sku": "12005",
+        "productName": "شطة سومطره حار كبير 340 ح*24",
+        "availQty": 5,
+        "productId": "PmtB5uXbDG1nXnx8GMSJ",
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton"
+      },
+      {
+        "sku": "02008",
+        "productName": "زيت تنك نسرين *17 لتر",
+        "availQty": 1,
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "qty": 1,
+        "unit": "Tank",
+        "_origQty": 1
+      },
+      {
+        "unit": "Bag",
+        "_origQty": 1,
+        "qty": 3,
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "sku": "03002",
+        "availQty": 25,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN"
+      }
+    ],
+    "updatedBy": "admin_ali_fayad",
+    "updatedByName": "علي فياض — مدير النظام",
+    "updatedAt": "2026-07-19T08:24:53.963Z",
+    "status": "received",
+    "receivedAt": "2026-07-19T08:24:54.045Z",
+    "number": "TR-8951247"
+  },
+  {
+    "_id": "G3vKX8EBqUfGwtD0aAVT",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/G3vKX8EBqUfGwtD0aAVT",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "12003",
+        "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+        "availQty": 3,
+        "productId": "H5l12QDSE7W2hZOdcl1C"
+      },
+      {
+        "unit": "Tank",
+        "qty": 5,
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004",
+        "availQty": 9,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX"
+      },
+      {
+        "availQty": 7,
+        "productId": "EDm62noDcoaSqIWpOgdD",
+        "productName": "طماطم  مقشرة الطائى 24*400",
+        "sku": "35001",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "sku": "43006",
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "availQty": 10
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "سفر رول بن سلمان 110*100 ملون 10 لفة",
+        "sku": "31010",
+        "availQty": 7,
+        "productId": "EXLDPRwT8ppDGrKjmDBM"
+      },
+      {
+        "qty": 2,
+        "unit": "Tank",
+        "sku": "02008",
+        "productName": "زيت تنك نسرين *17 لتر",
+        "availQty": 2,
+        "productId": "c1AGjekAaUO0zQchv0bK"
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "number": "TR-8951273",
+    "receivedAt": "2026-07-29T14:10:58.004Z",
+    "status": "received",
+    "updatedAt": "2026-07-29T14:10:58.516Z",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-29T09:40:37.453Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-28"
+  },
+  {
+    "_id": "GS5HMeL6NtDJVxRrcnUP",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/GS5HMeL6NtDJVxRrcnUP",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-25T19:06:22.799Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-25",
+    "lines": [
+      {
+        "unit": "Bag",
+        "qty": 1,
+        "productName": "ارز علمين  الشعلان مزه 40 كجم",
+        "sku": "03005",
+        "availQty": 10,
+        "productId": "CwXTkvyG6odoZzZuEDja"
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "number": "TR-8951260",
+    "receivedAt": "2026-07-25T19:06:31.077Z",
+    "status": "received",
+    "updatedAt": "2026-07-25T19:06:31.641Z"
+  },
+  {
+    "_id": "GWqlyjLnGMOT7idPhSIO",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/GWqlyjLnGMOT7idPhSIO",
+    "date": "2026-08-06",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-07T22:53:01.623Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "status": "received",
+    "updatedAt": "2026-08-07T22:53:14.586Z",
+    "receivedAt": "2026-08-07T22:53:14.603Z",
+    "number": "TR-8951294",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع ��لرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "sku": "03003",
+        "availQty": 11,
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "unit": "Bag",
+        "qty": 2
+      },
+      {
+        "availQty": 18,
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "productName": "زيت تنك شيف 17 لتر",
+        "sku": "02009",
+        "unit": "Tank",
+        "qty": 5
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "30001",
+        "productName": "زبيب ذهبى  رقم 1  - 10 كيلو",
+        "productId": "rsK4qZNXiYsQYzw97O9W",
+        "availQty": 1
+      },
+      {
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "availQty": 6,
+        "unit": "Carton",
+        "qty": 2
+      }
+    ]
+  },
+  {
+    "_id": "HZoSaHI9yjiASIUfvD03",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/HZoSaHI9yjiASIUfvD03",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-06",
+    "createdAt": "2026-08-06T15:07:01.259Z",
+    "notes": "",
+    "toWarehouseName": "المستودع الرئيسى",
+    "createdByName": "علي فياض — مدير النظام",
+    "status": "received",
+    "updatedAt": "2026-08-06T15:07:10.483Z",
+    "number": "TR-8951292",
+    "receivedAt": "2026-08-06T15:07:10.440Z",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "productId": "0cniV5I2oOQBqUJLlu39",
+        "availQty": 2,
+        "sku": "31034",
+        "productName": "فلين رقم 2 - 500 حبة"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "DviRgNpE8LLhT5ASxST3",
+        "availQty": 1,
+        "sku": "03011",
+        "productName": "ارز ابو كاس 4*10 كجم"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "H5l12QDSE7W2hZOdcl1C",
+        "availQty": 2,
+        "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+        "sku": "12003"
+      }
+    ]
+  },
+  {
+    "_id": "HvEwKNL2UpXEprG2RbFu",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/HvEwKNL2UpXEprG2RbFu",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdAt": "2026-07-26T07:38:18.637Z",
+    "date": "2026-07-26",
+    "receivedByName": "علي فياض — مدير النظام",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 1,
+        "productId": "iht0utKRHl3JCWuI4D1E",
+        "sku": "03018",
+        "productName": "اندومى خضار 60*75 جرام"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 3,
+        "productId": "C1ac8RMQhx2gXejGiyF3",
+        "productName": "اندومى نكهة دجاج 60*70 جرام",
+        "sku": "03019"
+      }
+    ],
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedAt": "2026-07-26T07:41:41.984Z",
+    "number": "TR-8951264",
+    "status": "received",
+    "updatedAt": "2026-07-26T07:41:42.763Z"
+  },
+  {
+    "_id": "I3XT06YOhQOdkCRhG544",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/I3XT06YOhQOdkCRhG544",
+    "updatedBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "qty": 3,
+        "unit": "Tank",
+        "_origQty": 3,
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "availQty": 7,
+        "sku": "02008",
+        "productName": "زيت تنك نسرين *17 لتر"
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "_origQty": 2,
+        "sku": "04003",
+        "productName": "سكر الاسرة صغير 20*1 كيلو",
+        "availQty": 22,
+        "productId": "x1cIL2f0tNMlLQWMw2ky"
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "_origQty": 2,
+        "sku": "04006",
+        "productName": "سكر الاسرة كرتون 4*5 كيلو",
+        "availQty": 12,
+        "productId": "ndlDJpMG9hlBKQe4MauJ"
+      },
+      {
+        "qty": 2,
+        "_origQty": 2,
+        "unit": "Carton",
+        "availQty": 22,
+        "productId": "thEesj4aPMBKJePRHTlE",
+        "sku": "04004",
+        "productName": "سكر الاسرة وسط 10*2 كيلو"
+      },
+      {
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "availQty": 24,
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "sku": "03003",
+        "_origQty": 4,
+        "unit": "Bag",
+        "qty": 4
+      },
+      {
+        "_origQty": 3,
+        "unit": "Bag",
+        "qty": 3,
+        "availQty": 17,
+        "productId": "wGEk0xKjCvX7pSSQGUU1",
+        "productName": "ارز الرواسى هندى مزة 40 كجم",
+        "sku": "03004"
+      },
+      {
+        "_origQty": 3,
+        "unit": "Bag",
+        "qty": 3,
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "sku": "03002",
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "availQty": 31
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 2,
+        "qty": 2,
+        "availQty": 12,
+        "productId": "1EU9O4mqrEtwitQPnZ3o",
+        "productName": "تونة الوها صغير 48 *100 جم",
+        "sku": "09002"
+      },
+      {
+        "productName": "تونه الطائى صغير  تايلاندى 48*90",
+        "sku": "09004",
+        "productId": "YV2OumfkBeqlzRG2YruG",
+        "availQty": 12,
+        "unit": "Carton",
+        "_origQty": 2,
+        "qty": 2
+      },
+      {
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "availQty": 14,
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004",
+        "_origQty": 1,
+        "unit": "Tank",
+        "qty": 1
+      },
+      {
+        "productName": "تونة فرشكو صغير 48* 90 جم",
+        "sku": "09001",
+        "productId": "DY5ADETYmJoMo354HbS6",
+        "availQty": 7,
+        "unit": "Carton",
+        "_origQty": 2,
+        "qty": 2
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "_origQty": 1,
+        "sku": "19002",
+        "productName": "طحينة سائلة الجميل 500 جرام *12",
+        "availQty": 2,
+        "productId": "afCATiCiSHOBFsMH1aLK"
+      },
+      {
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت",
+        "sku": "04005",
+        "availQty": 12,
+        "productId": "oILf9Ggdj8bYNt4Pl492",
+        "_origQty": 2,
+        "unit": "Bale",
+        "qty": 2
+      },
+      {
+        "sku": "45005",
+        "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+        "productId": "vQkzxlzdOHu7z21s9SMV",
+        "availQty": 7,
+        "qty": 1,
+        "unit": "Carton",
+        "_origQty": 1
+      },
+      {
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton",
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "availQty": 10,
+        "sku": "31001",
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة"
+      },
+      {
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 11,
+        "productId": "oJ9v6weiVvLu7VgYVp1i",
+        "productName": "كاسات شاهى قدح 20 ربطة * 50 كاسة",
+        "sku": "31002"
+      },
+      {
+        "availQty": 22,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "_origQty": 2,
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "sku": "14004",
+        "productName": "سائل صحون شاينكس بالليمون *30",
+        "availQty": 11,
+        "productId": "nn7SSyLySTxv0WgkoWf8",
+        "qty": 2,
+        "unit": "Barrel",
+        "_origQty": 2
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 4,
+        "qty": 4,
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "sku": "43006",
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "availQty": 24
+      },
+      {
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 10,
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+        "sku": "45002"
+      },
+      {
+        "availQty": 11,
+        "productId": "3CYNTCRyqTGGTj2ccAgH",
+        "sku": "45004",
+        "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه",
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton"
+      },
+      {
+        "productName": "مناديل رول مطعم طبقة 5 كيلو",
+        "sku": "15002",
+        "availQty": 101,
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "_origQty": 1,
+        "unit": "Roll",
+        "qty": 5
+      },
+      {
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "availQty": 11,
+        "sku": "02006",
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر",
+        "qty": 1,
+        "unit": "Carton",
+        "_origQty": 1
+      },
+      {
+        "availQty": 11,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005",
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "_origQty": 2,
+        "productId": "rsK4qZNXiYsQYzw97O9W",
+        "availQty": 8,
+        "sku": "30001",
+        "productName": "زبيب ذهبى  رقم 1  - 10 كيلو"
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 1,
+        "productName": "كمامات 3 طبقات 50*40 بكت",
+        "sku": "14001",
+        "availQty": 10,
+        "productId": "RcrtoSwuKI63talw1zuG"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "_origQty": 1,
+        "sku": "43007",
+        "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+        "availQty": 5,
+        "productId": "ERMKWYiTKdyUihtCTePI"
+      },
+      {
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton",
+        "productId": "cpOYrBAZbabLvo5DoZ6B",
+        "availQty": 13,
+        "sku": "09005",
+        "productName": "قشطة ريفونى اقتصادى  155 *48 علبة"
+      },
+      {
+        "availQty": 10,
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "sku": "43003",
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton"
+      },
+      {
+        "_origQty": 1,
+        "unit": "Bale",
+        "qty": 1,
+        "productName": "اكياس قمامة  سابك 70 جالون",
+        "sku": "43005",
+        "productId": "wDrRu3ce1hpW4P4XXt0d",
+        "availQty": 10
+      },
+      {
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton",
+        "sku": "43012",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "availQty": 9
+      },
+      {
+        "_origQty": 2,
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "تونة شاهين صغير 48 95 جرام",
+        "sku": "09003",
+        "availQty": 10,
+        "productId": "7tCWhZq9UWRXwJxkRTTA"
+      },
+      {
+        "sku": "45003",
+        "productName": "صلصة طماطم الفخامه 12* 850 جم",
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "availQty": 9,
+        "qty": 1,
+        "_origQty": 1,
+        "unit": "Carton"
+      },
+      {
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "قصدير فالكون 1500 جرام 45سم 6 شد",
+        "sku": "43016",
+        "productId": "YDGp6p8TPz1bqNnOue4N",
+        "availQty": 10
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "number": "TR-8951245",
+    "receivedAt": "2026-07-18T14:39:45.730Z",
+    "status": "received",
+    "updatedAt": "2026-07-18T14:40:29.808Z",
+    "updatedByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-18T12:22:44.099Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-18"
+  },
+  {
+    "_id": "IEuUAVpaj7uOIHioccW9",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/IEuUAVpaj7uOIHioccW9",
+    "date": "2026-07-25",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "استرجاع سند التحويل الوهمى",
+    "toWarehouseName": "المستودع الرئيسى",
+    "createdAt": "2026-07-25T18:23:34.444Z",
+    "receivedAt": "2026-07-25T18:24:03.024Z",
+    "number": "TR-8951259",
+    "status": "received",
+    "updatedAt": "2026-07-25T18:24:03.604Z",
+    "lines": [
+      {
+        "productId": "ols8aSnfOWwSSwgvIzp7",
+        "availQty": 1,
+        "productName": "ارز ابو بنت امريكى 40 كجم",
+        "sku": "03008",
+        "unit": "Bag",
+        "qty": 1
+      },
+      {
+        "productName": "ارز دلفين مزه بسمتى 40 كجم",
+        "sku": "03013",
+        "productId": "qwuMMK8xWSJhh2Q2KbV8",
+        "availQty": 1,
+        "unit": "Bag",
+        "qty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "availQty": 1,
+        "productId": "yLOfiimlko7x0ORSKc5c",
+        "sku": "03015",
+        "productName": "ارز دلفين مزة  بسمتى 4*10 كجم"
+      },
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "sku": "03014",
+        "productName": "ارز دلفين بسمتى 8*5 كجم",
+        "availQty": 1,
+        "productId": "kAm09NsM5EPXF8UvrFeX"
+      },
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "availQty": 1,
+        "productId": "CwXTkvyG6odoZzZuEDja",
+        "sku": "03005",
+        "productName": "ارز علمين  الشعلان مزه 40 كجم"
+      }
+    ],
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "IcsKUx3b2ixsyrJGefYz",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/IcsKUx3b2ixsyrJGefYz",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "المستودع الرئيسى",
+    "createdAt": "2026-07-29T14:21:22.682Z",
+    "date": "2026-07-28",
+    "receivedByName": "علي فياض — مدير النظام",
+    "lines": [
+      {
+        "sku": "43007",
+        "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+        "productId": "ERMKWYiTKdyUihtCTePI",
+        "availQty": 2,
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "sku": "14001",
+        "productName": "كمامات 3 طبقات 50*40 بكت",
+        "productId": "RcrtoSwuKI63talw1zuG",
+        "availQty": 1,
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "sku": "19001",
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "availQty": 1,
+        "productId": "GjMW892nmjpmLeV5Kx3c",
+        "qty": 1,
+        "unit": "Tank"
+      },
+      {
+        "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه",
+        "sku": "45004",
+        "availQty": 1,
+        "productId": "3CYNTCRyqTGGTj2ccAgH",
+        "unit": "Carton",
+        "qty": 1
+      }
+    ],
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedAt": "2026-07-30T21:32:06.805Z",
+    "number": "TR-8951274",
+    "status": "received",
+    "updatedAt": "2026-07-30T21:32:06.899Z"
+  },
+  {
+    "_id": "IrE4DZ2Ebhsn5wsXsjfM",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/IrE4DZ2Ebhsn5wsXsjfM",
+    "date": "2026-07-30",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdAt": "2026-08-01T09:58:25.058Z",
+    "cancelledAt": "2026-08-01T09:59:11.279Z",
+    "receivedAt": null,
+    "number": "TR-8951280",
+    "status": "cancelled",
+    "updatedAt": "2026-08-01T09:59:10.751Z",
+    "lines": [
+      {
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "availQty": 13,
+        "qty": 1,
+        "unit": "Carton"
+      }
+    ],
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "JmSo1FbaHzrOl4X7wCpD",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/JmSo1FbaHzrOl4X7wCpD",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-27T12:59:59.434Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-27",
+    "lines": [
+      {
+        "availQty": 1,
+        "productId": "qwuMMK8xWSJhh2Q2KbV8",
+        "productName": "ارز دلفين مزه بسمتى 40 كجم",
+        "sku": "03013",
+        "unit": "Bag",
+        "qty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "productId": "kAm09NsM5EPXF8UvrFeX",
+        "availQty": 1,
+        "sku": "03014",
+        "productName": "ارز دلفين بسمتى 8*5 كجم"
+      }
+    ],
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "receivedBy": "admin_ali_fayad",
+    "number": "TR-8951267",
+    "receivedAt": "2026-07-27T13:00:11.715Z",
+    "updatedAt": "2026-07-27T13:00:10.604Z",
+    "status": "received"
+  },
+  {
+    "_id": "JsPP9uATjkdlOmXGMZF1",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/JsPP9uATjkdlOmXGMZF1",
+    "updatedAt": "2026-07-18T11:58:55.071Z",
+    "status": "received",
+    "receivedAt": "2026-07-18T11:58:56.285Z",
+    "number": "TR-8951244",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "lines": [
+      {
+        "productId": "oJ9v6weiVvLu7VgYVp1i",
+        "availQty": 1,
+        "sku": "31002",
+        "productName": "كاسات شاهى قدح 20 ربطة * 50 كاسة",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "sku": "03004",
+        "productName": "ارز الرواسى هندى مزة 40 كجم",
+        "productId": "wGEk0xKjCvX7pSSQGUU1",
+        "availQty": 2,
+        "qty": 2,
+        "unit": "Bag"
+      },
+      {
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "availQty": 4,
+        "productName": "صلصة طماطم الفخامه 12* 850 جم",
+        "sku": "45003",
+        "unit": "Carton",
+        "qty": 4
+      },
+      {
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "availQty": 4,
+        "sku": "43006",
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "qty": 4,
+        "unit": "Carton"
+      },
+      {
+        "productName": "زبيب ذهبى  رقم 1  - 10 كيلو",
+        "sku": "30001",
+        "productId": "rsK4qZNXiYsQYzw97O9W",
+        "availQty": 2,
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "availQty": 1,
+        "productId": "oILf9Ggdj8bYNt4Pl492",
+        "sku": "04005",
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت",
+        "qty": 1,
+        "unit": "Bale"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "sku": "43003",
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "availQty": 1
+      },
+      {
+        "unit": "Bag",
+        "qty": 2,
+        "availQty": 2,
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "sku": "03003"
+      },
+      {
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "availQty": 2,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "09003",
+        "productName": "تونة شاهين صغير 48 95 جرام",
+        "productId": "7tCWhZq9UWRXwJxkRTTA",
+        "availQty": 1
+      },
+      {
+        "qty": 4,
+        "unit": "Carton",
+        "sku": "43016",
+        "productName": "قصدير فالكون 1500 جرام 45سم 6 شد",
+        "productId": "YDGp6p8TPz1bqNnOue4N",
+        "availQty": 4
+      },
+      {
+        "productName": "تونه الطائى صغير  تايلاندى 48*90",
+        "sku": "09004",
+        "availQty": 1,
+        "productId": "YV2OumfkBeqlzRG2YruG",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "02005",
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "availQty": 1,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "12005",
+        "productName": "شطة سومطره حار كبير 340 ح*24",
+        "availQty": 1,
+        "productId": "PmtB5uXbDG1nXnx8GMSJ"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "xatSIYYexbA9vqwkiabB",
+        "availQty": 1,
+        "sku": "43017",
+        "productName": "جوانتى طبى فينيل + اى او تى كبير جدا 70*10 بكت"
+      },
+      {
+        "productName": "مناديل رول مطعم طبقة 5 كيلو",
+        "sku": "15002",
+        "availQty": 2,
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "unit": "Roll",
+        "qty": 2
+      },
+      {
+        "sku": "09001",
+        "productName": "تونة فرشكو صغير 48* 90 جم",
+        "productId": "DY5ADETYmJoMo354HbS6",
+        "availQty": 4,
+        "qty": 4,
+        "unit": "Carton"
+      },
+      {
+        "unit": "Tank",
+        "qty": 4,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "availQty": 4,
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004"
+      },
+      {
+        "productName": "اكياس قمامة  سابك 70 جالون",
+        "sku": "43005",
+        "productId": "wDrRu3ce1hpW4P4XXt0d",
+        "availQty": 4,
+        "unit": "Bale",
+        "qty": 4
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "thEesj4aPMBKJePRHTlE",
+        "availQty": 1,
+        "productName": "سكر الاسرة وسط 10*2 كيلو",
+        "sku": "04004"
+      },
+      {
+        "sku": "04006",
+        "productName": "سكر الاسرة كرتون 4*5 كيلو",
+        "productId": "ndlDJpMG9hlBKQe4MauJ",
+        "availQty": 1,
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+        "sku": "31001",
+        "availQty": 1,
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+        "sku": "45005",
+        "productId": "vQkzxlzdOHu7z21s9SMV",
+        "availQty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "14001",
+        "productName": "كمامات 3 طبقات 50*40 بكت",
+        "productId": "RcrtoSwuKI63talw1zuG",
+        "availQty": 1
+      },
+      {
+        "qty": 3,
+        "unit": "Barrel",
+        "productId": "nn7SSyLySTxv0WgkoWf8",
+        "availQty": 3,
+        "sku": "14004",
+        "productName": "سائل صحون شاينكس بالليمون *30"
+      },
+      {
+        "productName": "تونة الوها صغير 48 *100 جم",
+        "sku": "09002",
+        "productId": "1EU9O4mqrEtwitQPnZ3o",
+        "availQty": 5,
+        "unit": "Carton",
+        "qty": 5
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 1,
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "sku": "45002",
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "09005",
+        "productName": "قشطة ريفونى اقتصادى  155 *48 علبة",
+        "availQty": 1,
+        "productId": "cpOYrBAZbabLvo5DoZ6B"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "CcXTqwIBYvF3O1XSa6v2",
+        "availQty": 1,
+        "productName": "سمن القمرية علب 12* 900 جرام",
+        "sku": "02007"
+      },
+      {
+        "productId": "x1cIL2f0tNMlLQWMw2ky",
+        "availQty": 1,
+        "productName": "سكر الاسرة صغير 20*1 كيلو",
+        "sku": "04003",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "availQty": 2,
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "qty": 1,
+        "unit": "Bag"
+      }
+    ],
+    "date": "2026-07-18",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-18T11:56:08.704Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "المستودع الرئيسى"
+  },
+  {
+    "_id": "KLSt7vtYfaAzuxvJY3Ng",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/KLSt7vtYfaAzuxvJY3Ng",
+    "number": "TR-8951275",
+    "receivedAt": "2026-07-29T21:01:24.440Z",
+    "status": "received",
+    "updatedAt": "2026-07-29T21:01:24.055Z",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "availQty": 10,
+        "productId": "ols8aSnfOWwSSwgvIzp7",
+        "sku": "03008",
+        "productName": "ارز ابو بنت امريكى 40 كجم"
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-29",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-29T21:01:12.308Z"
+  },
+  {
+    "_id": "KNE5DO3PwpjuV7mubcwr",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/KNE5DO3PwpjuV7mubcwr",
+    "receivedAt": "2026-07-15T08:48:22.249Z",
+    "number": "TR-000001",
+    "status": "received",
+    "updatedAt": "2026-07-15T08:48:23.507Z",
+    "lines": [
+      {
+        "sku": "09002",
+        "productName": "تونة الوها صغير 48 *100 جم",
+        "availQty": 10,
+        "productId": "1EU9O4mqrEtwitQPnZ3o",
+        "qty": 5,
+        "unit": "Carton"
+      },
+      {
+        "unit": "Carton",
+        "qty": 4,
+        "productId": "DY5ADETYmJoMo354HbS6",
+        "availQty": 5,
+        "productName": "تونة فرشكو صغير 48* 90 جم",
+        "sku": "09001"
+      },
+      {
+        "availQty": 20,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "qty": 4,
+        "unit": "Carton"
+      },
+      {
+        "sku": "43016",
+        "productName": "قصدير فالكون 1500 جرام 45سم 6 شد",
+        "productId": "YDGp6p8TPz1bqNnOue4N",
+        "availQty": 10,
+        "qty": 4,
+        "unit": "Carton"
+      },
+      {
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "availQty": 10,
+        "sku": "45003",
+        "productName": "صلصة طماطم الفخامه 12* 850 جم",
+        "qty": 5,
+        "unit": "Carton"
+      },
+      {
+        "availQty": 35,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "qty": 3,
+        "unit": "Bag"
+      },
+      {
+        "sku": "03004",
+        "productName": "ارز الرواسى هندى مزة 40 كجم",
+        "availQty": 15,
+        "productId": "wGEk0xKjCvX7pSSQGUU1",
+        "qty": 3,
+        "unit": "Bag"
+      },
+      {
+        "sku": "03003",
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "availQty": 21,
+        "qty": 3,
+        "unit": "Bag"
+      },
+      {
+        "qty": 4,
+        "unit": "Bale",
+        "sku": "43005",
+        "productName": "اكياس قمامة  سابك 70 جالون",
+        "availQty": 10,
+        "productId": "wDrRu3ce1hpW4P4XXt0d"
+      },
+      {
+        "qty": 4,
+        "unit": "Barrel",
+        "availQty": 10,
+        "productId": "nn7SSyLySTxv0WgkoWf8",
+        "sku": "14004",
+        "productName": "سائل صحون شاينكس بالليمون *30"
+      }
+    ],
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "date": "2026-07-15",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdAt": "2026-07-15T08:46:41.800Z"
+  },
+  {
+    "_id": "KoxuxdyBQcEd4dWZ9N0T",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/KoxuxdyBQcEd4dWZ9N0T",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "على فيااض",
+    "createdAt": "2026-07-16T08:58:10.345Z",
+    "receivedByName": "على فيااض",
+    "date": "2026-07-16",
+    "lines": [
+      {
+        "sku": "43017",
+        "productName": "جوانتى طبى فينيل + اى او تى كبير جدا 70*10 بكت",
+        "productId": "xatSIYYexbA9vqwkiabB",
+        "availQty": 5,
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "7tCWhZq9UWRXwJxkRTTA",
+        "availQty": 10,
+        "sku": "09003",
+        "productName": "تونة شاهين صغير 48 95 جرام"
+      },
+      {
+        "sku": "19002",
+        "productName": "طحينة سائلة الجميل 500 جرام *12",
+        "productId": "afCATiCiSHOBFsMH1aLK",
+        "availQty": 2,
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "availQty": 13,
+        "productId": "cpOYrBAZbabLvo5DoZ6B",
+        "sku": "09005",
+        "productName": "قشطة ريفونى اقتصادى  155 *48 علبة",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "31001",
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "availQty": 9
+      },
+      {
+        "availQty": 10,
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "sku": "43003",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "sku": "30001",
+        "productName": "زبيب ذهبى  رقم 1  - 10 كيلو",
+        "availQty": 8,
+        "productId": "rsK4qZNXiYsQYzw97O9W"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 10,
+        "productId": "oJ9v6weiVvLu7VgYVp1i",
+        "productName": "كاسات شاهى قدح 20 ربطة * 50 كاسة",
+        "sku": "31002"
+      },
+      {
+        "unit": "Tank",
+        "qty": 1,
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004",
+        "availQty": 15,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX"
+      },
+      {
+        "productId": "RcrtoSwuKI63talw1zuG",
+        "availQty": 10,
+        "productName": "كمامات 3 طبقات 50*40 بكت",
+        "sku": "14001",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "availQty": 100,
+        "productName": "مناديل ��ول مطعم طبقة 5 كيلو",
+        "sku": "15002",
+        "unit": "Roll",
+        "qty": 2
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "eZ8UlvjeYawtWSre5EwW",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "eZ8UlvjeYawtWSre5EwW",
+    "number": "TR-000005",
+    "receivedAt": "2026-07-16T08:59:17.981Z",
+    "updatedAt": "2026-07-16T08:59:19.340Z",
+    "status": "received"
+  },
+  {
+    "_id": "LiARHAyfkevRckyvWvDQ",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/LiARHAyfkevRckyvWvDQ",
+    "createdAt": "2026-08-08T10:51:29.805Z",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-31",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "qty": 2,
+        "unit": "Tank",
+        "availQty": 13,
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "sku": "02009",
+        "productName": "زيت تنك شيف 17 لتر"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-08-08T10:52:15.031Z",
+    "number": "TR-8951297",
+    "receivedAt": "2026-08-08T10:52:15.099Z"
+  },
+  {
+    "_id": "N76Jq3Usrk6IzMBWXOOd",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/N76Jq3Usrk6IzMBWXOOd",
+    "date": "2026-08-01",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-01T06:25:27.056Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "updatedByName": "علي فياض — مدير النظام",
+    "updatedAt": "2026-08-01T08:10:24.837Z",
+    "status": "received",
+    "receivedAt": "2026-08-01T08:10:25.279Z",
+    "number": "TR-TMS9ZFPQI",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "_origQty": 2,
+        "unit": "Tank",
+        "qty": 2,
+        "availQty": 52,
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "productName": "زيت تنك شيف 17 لتر",
+        "sku": "02009"
+      },
+      {
+        "sku": "09008",
+        "productName": "شطة رنا عريض كبير 4.5 * 4 جالون",
+        "availQty": 5,
+        "productId": "WruLvzM1VpCOZ6yEHf8Y",
+        "qty": 2,
+        "unit": "Carton",
+        "_origQty": 2
+      },
+      {
+        "qty": 4,
+        "unit": "Carton",
+        "_origQty": 4,
+        "sku": "12001",
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "availQty": 14,
+        "productId": "tAq8ENjtZ0cRpzhW6xFH"
+      },
+      {
+        "unit": "Roll",
+        "_origQty": 5,
+        "qty": 5,
+        "productName": "مناديل رول مطعم طبقة 4 كيلو",
+        "sku": "15001",
+        "productId": "hsweOtlJmOZIBAB1tlu1",
+        "availQty": 10
+      },
+      {
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 7,
+        "productId": "atrR6pMjwiEfK6Hdo2Oi",
+        "productName": "علب 50 جرام 2 اونز اسود ارنون عبوة 200",
+        "sku": "31020"
+      },
+      {
+        "_origQty": 1,
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "sku": "31005",
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "availQty": 11
+      },
+      {
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "availQty": 17,
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "qty": 3,
+        "_origQty": 3,
+        "unit": "Carton"
+      },
+      {
+        "qty": 2,
+        "unit": "Tank",
+        "_origQty": 2,
+        "availQty": 60,
+        "productId": "oU8yH7WDRu2ZBKLVYg1A",
+        "sku": "02010",
+        "productName": "زيت تنك الرائد 17 لتر"
+      },
+      {
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "sku": "03002",
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "availQty": 157,
+        "unit": "Bag",
+        "_origQty": 2,
+        "qty": 2
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 1,
+        "productName": "مل��عق اكل فالكون ابيض 50ح* 20 ربطه",
+        "sku": "43003",
+        "availQty": 1,
+        "productId": "A1yASYzpEy0S0M4xm1r8"
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 1,
+        "productId": "SzHULsTeLonnDaH4vh4Y",
+        "availQty": 18,
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+        "sku": "31011"
+      },
+      {
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم",
+        "sku": "12004",
+        "availQty": 11,
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 1
+      },
+      {
+        "sku": "31034",
+        "productName": "فلين رقم 2 - 500 حبة",
+        "productId": "0cniV5I2oOQBqUJLlu39",
+        "availQty": 3,
+        "qty": 1,
+        "unit": "Bag"
+      }
+    ],
+    "updatedBy": "admin_ali_fayad"
+  },
+  {
+    "_id": "N7VaXGDjt0hnLX8Tnoay",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/N7VaXGDjt0hnLX8Tnoay",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "كاسات شاهى قدح 20 ربطة * 50 كاسة",
+        "sku": "31002",
+        "availQty": 1,
+        "productId": "oJ9v6weiVvLu7VgYVp1i"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-07-26T07:36:45.118Z",
+    "receivedAt": "2026-07-26T07:36:44.970Z",
+    "number": "TR-8951263",
+    "createdAt": "2026-07-26T07:36:28.511Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "المستودع الرئيسى",
+    "date": "2026-07-26",
+    "receivedByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "Ng6vUytkF3PBGrfAUlpK",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/Ng6vUytkF3PBGrfAUlpK",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-18T15:37:58.528Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-18",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مز�� بسمتى 40 كجم خط احمر",
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "availQty": 25
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "number": "TR-8951246",
+    "receivedAt": "2026-07-18T15:38:33.056Z",
+    "status": "received",
+    "updatedAt": "2026-07-18T15:38:30.904Z"
+  },
+  {
+    "_id": "NxRSrN6dD53KrN83xYA6",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/NxRSrN6dD53KrN83xYA6",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "unit": "Tank",
+        "qty": 2,
+        "productName": "زيت تنك شيف 17 لتر",
+        "sku": "02009",
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "availQty": 50
+      },
+      {
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "availQty": 14,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "sku": "43006",
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "availQty": 8,
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "qty": 2,
+        "unit": "Carton"
+      },
+      {
+        "qty": 5,
+        "unit": "Roll",
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "availQty": 90,
+        "sku": "15002",
+        "productName": "مناديل رول مطعم طبقة 5 كيلو"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-08-01T08:15:30.528Z",
+    "receivedAt": "2026-08-01T08:15:30.960Z",
+    "number": "TR-8951278",
+    "createdAt": "2026-08-01T08:14:45.552Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "بمعرفة على يوم الخميس اخر اليوم",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "date": "2026-07-30",
+    "receivedByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "QQ95Xqp9sjv5Ja6iTp7X",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/QQ95Xqp9sjv5Ja6iTp7X",
+    "createdAt": "2026-07-21T06:34:21.818Z",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-21",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "receivedBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "sku": "12003",
+        "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+        "productId": "H5l12QDSE7W2hZOdcl1C",
+        "availQty": 4,
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "availQty": 4,
+        "productId": "ERMKWYiTKdyUihtCTePI",
+        "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+        "sku": "43007",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "availQty": 3,
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم",
+        "sku": "12004",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "qty": 3,
+        "unit": "Carton",
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "availQty": 9,
+        "sku": "43003",
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 18,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010"
+      },
+      {
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "availQty": 8,
+        "sku": "31001",
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+        "qty": 2,
+        "unit": "Carton"
+      }
+    ],
+    "updatedAt": "2026-07-21T06:35:06.093Z",
+    "status": "received",
+    "number": "TR-8951252",
+    "receivedAt": "2026-07-21T06:35:08.172Z"
+  },
+  {
+    "_id": "TA6elo5OF9NUKPBEQloS",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/TA6elo5OF9NUKPBEQloS",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-20T19:58:07.026Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-20",
+    "lines": [
+      {
+        "unit": "Tank",
+        "qty": 3,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "availQty": 12,
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004"
+      },
+      {
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "availQty": 16,
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "sku": "43006",
+        "unit": "Carton",
+        "qty": 3
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "number": "TR-8951251",
+    "receivedAt": "2026-07-20T19:58:48.942Z",
+    "status": "received",
+    "updatedAt": "2026-07-20T19:58:47.967Z"
+  },
+  {
+    "_id": "TuRa02K9U6kflZ1NF4zm",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/TuRa02K9U6kflZ1NF4zm",
+    "date": "2026-07-16",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-16T18:58:13.224Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "status": "received",
+    "updatedAt": "2026-07-16T18:58:26.093Z",
+    "receivedAt": "2026-07-16T18:58:26.647Z",
+    "number": "TR-8951243",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004",
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "availQty": 14,
+        "unit": "Tank",
+        "qty": 4
+      },
+      {
+        "availQty": 10,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "sku": "43012",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "qty": 1,
+        "unit": "Carton"
+      }
+    ]
+  },
+  {
+    "_id": "UJbSSdOxUTPmsKFvrHr3",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/UJbSSdOxUTPmsKFvrHr3",
+    "updatedAt": "2026-07-16T16:43:54.349Z",
+    "status": "cancelled",
+    "rejectedAt": "2026-07-16T16:43:52.036Z",
+    "number": "REQ-08884113",
+    "receivedAt": null,
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "Z8vkxuOfaumR63DMz7vA",
+    "lines": [
+      {
+        "qty": 10,
+        "unit": "Tank",
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "sku": "02008",
+        "productName": "زيت تنك نسرين *17 لتر"
+      }
+    ],
+    "date": "2026-07-16",
+    "rejectedBy": "admin_ali_fayad",
+    "rejectedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-16T13:34:45.499Z",
+    "notes": " (تم رفض الطلب من قبل الإدارة)",
+    "toWarehouseName": "سيارة مصطفى",
+    "createdByName": "مصطفى"
+  },
+  {
+    "_id": "USQpxubmGpTnanXq0Tcx",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/USQpxubmGpTnanXq0Tcx",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-20",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-20T06:42:02.393Z",
+    "number": "TR-TMRSUOXVN",
+    "receivedAt": "2026-07-20T07:03:49.524Z",
+    "status": "received",
+    "updatedAt": "2026-07-20T07:03:49.607Z",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 18,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010"
+      },
+      {
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+        "sku": "45002",
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "availQty": 8,
+        "unit": "Carton",
+        "qty": 3
+      },
+      {
+        "availQty": 8,
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+        "sku": "31001",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "availQty": 9,
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "sku": "43003",
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "qty": 2,
+        "unit": "Carton"
+      },
+      {
+        "productId": "xatSIYYexbA9vqwkiabB",
+        "availQty": 5,
+        "productName": "جوانتى طبى فينيل + اى او تى كبير جدا 70*10 بكت",
+        "sku": "43017",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "sku": "43007",
+        "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+        "availQty": 4,
+        "productId": "ERMKWYiTKdyUihtCTePI",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "vQkzxlzdOHu7z21s9SMV",
+        "availQty": 5,
+        "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+        "sku": "45005"
+      },
+      {
+        "unit": "Roll",
+        "qty": 5,
+        "productName": "مناديل رول مطعم طبقة 5 كيلو",
+        "sku": "15002",
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "availQty": 95
+      },
+      {
+        "availQty": 8,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "sku": "43012",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Barrel",
+        "sku": "14004",
+        "productName": "سائل صحون شاينكس بالليمون *30",
+        "productId": "nn7SSyLySTxv0WgkoWf8",
+        "availQty": 7
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "receivedBy": "admin_ali_fayad"
+  },
+  {
+    "_id": "VVgit5mPrhj6sjNeP4cm",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/VVgit5mPrhj6sjNeP4cm",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-22T18:11:37.161Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-22",
+    "lines": [
+      {
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "availQty": 16,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "qty": 3,
+        "unit": "Bag"
+      },
+      {
+        "qty": 4,
+        "unit": "Carton",
+        "availQty": 4,
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "sku": "02006",
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر"
+      },
+      {
+        "qty": 4,
+        "unit": "Carton",
+        "sku": "04004",
+        "productName": "سكر الاسرة وسط 10*2 كيلو",
+        "availQty": 17,
+        "productId": "thEesj4aPMBKJePRHTlE"
+      },
+      {
+        "productName": "سكر الاسرة صغير 20*1 كيلو",
+        "sku": "04003",
+        "productId": "x1cIL2f0tNMlLQWMw2ky",
+        "availQty": 18,
+        "unit": "Carton",
+        "qty": 4
+      },
+      {
+        "availQty": 15,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "qty": 1,
+        "unit": "Tank",
+        "sku": "02004",
+        "productName": "زيت تنك دلال * 17 لتر",
+        "availQty": 9,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "02005",
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "availQty": 7
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "number": "TR-8951254",
+    "receivedAt": "2026-07-22T18:13:05.761Z",
+    "updatedAt": "2026-07-22T18:13:06.276Z",
+    "status": "received"
+  },
+  {
+    "_id": "Ves8sCgKNroo51LzxLnV",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/Ves8sCgKNroo51LzxLnV",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "lines": [
+      {
+        "sku": "02009",
+        "productName": "زيت تنك شيف 17 لتر",
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "availQty": 43,
+        "qty": 5,
+        "unit": "Tank"
+      },
+      {
+        "qty": 5,
+        "unit": "Bag",
+        "sku": "03008",
+        "productName": "ارز ابو بنت امريكى 40 كجم",
+        "productId": "ols8aSnfOWwSSwgvIzp7",
+        "availQty": 9
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "09008",
+        "productName": "شطة رنا عريض ك��ير 4.5 * 4 جالون",
+        "availQty": 3,
+        "productId": "WruLvzM1VpCOZ6yEHf8Y"
+      },
+      {
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "availQty": 14,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "qty": 4,
+        "unit": "Carton"
+      },
+      {
+        "availQty": 4,
+        "productId": "LecJvj5mC6WvkN8boroZ",
+        "sku": "09009",
+        "productName": "مرقة دجاج ماجى مصرى 24 بكت * 24 ح",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "unit": "Carton",
+        "qty": 4,
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "sku": "43006",
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "availQty": 6
+      },
+      {
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "sku": "43012",
+        "availQty": 4,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "sku": "31005",
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "availQty": 9,
+        "productId": "hvysP8vRqA8wXPIz75nN"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-08-03T08:13:30.501Z",
+    "number": "TR-8951282",
+    "receivedAt": "2026-08-03T08:13:20.875Z",
+    "createdAt": "2026-08-03T08:10:17.375Z",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-03"
+  },
+  {
+    "_id": "WoIPBQkq7PZuUpNcFKJP",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/WoIPBQkq7PZuUpNcFKJP",
+    "createdByName": "علي فياض �� مدير النظام",
+    "notes": "",
+    "toWarehouseName": "المستودع الرئيسى",
+    "createdAt": "2026-08-04T09:17:17.930Z",
+    "date": "2026-08-04",
+    "receivedByName": "علي فياض — مدير النظام",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "sku": "43012",
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "availQty": 2
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "31020",
+        "productName": "علب 50 جرام 2 اونز اسود ارنون عبوة 200",
+        "availQty": 1,
+        "productId": "atrR6pMjwiEfK6Hdo2Oi"
+      },
+      {
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "availQty": 4,
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "sku": "31005",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "productName": "علب ميكرويف دائرى اسود 250 مل 10 - اونز 18",
+        "sku": "31017",
+        "productId": "KH4VsMfbVjboRlPsCKpz",
+        "availQty": 1,
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "Ronvj4u2vzdxVDsKhhi5",
+        "availQty": 1,
+        "sku": "31025",
+        "productName": "صحن قصدير جودى  1030"
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "availQty": 2,
+        "productId": "BRYy3jvl6JJOqON0PnPr",
+        "productName": "علب 16 اونز 450 ملى اسود دائرى عبوه 150",
+        "sku": "31016"
+      },
+      {
+        "unit": "Bag",
+        "qty": 1,
+        "productId": "MWXMvWA35h2AHzrUVO71",
+        "availQty": 1,
+        "productName": "فلين سادة 100 حبة LB2",
+        "sku": "31033"
+      }
+    ],
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdBy": "admin_ali_fayad",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedAt": "2026-08-04T09:19:48.765Z",
+    "number": "TR-8951286",
+    "updatedAt": "2026-08-04T09:19:54.217Z",
+    "status": "received"
+  },
+  {
+    "_id": "Z6PIKHOxAtirlRtbL9JU",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/Z6PIKHOxAtirlRtbL9JU",
+    "notes": "مرتجع من سيارة مصطفى",
+    "toWarehouseName": "المستودع الرئيسى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-10T07:45:26.876Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-10",
+    "lines": [
+      {
+        "availQty": 10,
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "sku": "31005",
+        "unit": "Carton",
+        "qty": 2
+      }
+    ],
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdBy": "admin_ali_fayad",
+    "number": "TR-8951300",
+    "receivedAt": "2026-08-10T07:45:37.557Z",
+    "updatedAt": "2026-08-10T07:45:35.957Z",
+    "status": "received"
+  },
+  {
+    "_id": "ZLmSYxUxqQD3ETC13pZb",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/ZLmSYxUxqQD3ETC13pZb",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-05T20:47:06.410Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-05",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Tank",
+        "availQty": 179,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "sku": "02004",
+        "productName": "زيت تنك دلال * 17 لتر"
+      },
+      {
+        "qty": 5,
+        "unit": "Carton",
+        "availQty": 10,
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "sku": "02006",
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر"
+      },
+      {
+        "unit": "Bag",
+        "qty": 3,
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "availQty": 14,
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "sku": "03003"
+      },
+      {
+        "unit": "Tank",
+        "qty": 5,
+        "productName": "زيت تنك الرائد 17 لتر",
+        "sku": "02010",
+        "productId": "oU8yH7WDRu2ZBKLVYg1A",
+        "availQty": 58
+      },
+      {
+        "unit": "Tank",
+        "qty": 5,
+        "productName": "زيت تنك شيف 17 لتر",
+        "sku": "02009",
+        "availQty": 28,
+        "productId": "tkgjwvljS7IKGfpkueOm"
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "sku": "12001",
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "productId": "tAq8ENjtZ0cRpzhW6xFH",
+        "availQty": 10
+      },
+      {
+        "qty": 1,
+        "unit": "Tank",
+        "sku": "19001",
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "availQty": 2,
+        "productId": "GjMW892nmjpmLeV5Kx3c"
+      },
+      {
+        "availQty": 85,
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "sku": "15002",
+        "productName": "مناديل رول مطعم طبقة 5 كيلو",
+        "qty": 5,
+        "unit": "Roll"
+      },
+      {
+        "availQty": 12,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "sku": "02005",
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "productId": "PmtB5uXbDG1nXnx8GMSJ",
+        "availQty": 4,
+        "productName": "شطة سومطره حار كبير 340 ح*24",
+        "sku": "12005",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "02007",
+        "productName": "سمن القمرية علب 12* 900 جرام",
+        "productId": "CcXTqwIBYvF3O1XSa6v2",
+        "availQty": 4
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 6,
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "sku": "45003",
+        "productName": "صلصة طماطم الفخامه 12* 850 جم"
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "number": "TR-8951288",
+    "receivedAt": "2026-08-05T20:47:53.498Z",
+    "status": "received",
+    "updatedAt": "2026-08-05T20:47:54.288Z"
+  },
+  {
+    "_id": "ZsjHHcG5kILTAoekRQus",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/ZsjHHcG5kILTAoekRQus",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "lines": [
+      {
+        "sku": "03020",
+        "productName": "بيرفتو طويل 220 - 450 جرام * 24 بكت",
+        "productId": "Daq0kIm7IykV0OkO4oLa",
+        "availQty": 1,
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "قودى طويل رقم 20 - 24*450 ج",
+        "sku": "03016",
+        "productId": "IV8f71IUPMlWk4unzQas",
+        "availQty": 1
+      },
+      {
+        "availQty": 1,
+        "productId": "afCATiCiSHOBFsMH1aLK",
+        "sku": "19002",
+        "productName": "طحينة سائلة الجميل 500 جرام *12",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "wxepIAahN8ati3vwaa2L",
+        "availQty": 1,
+        "productName": "ورق برشمان كبير اصلى جيلانى 20 ربطه",
+        "sku": "43018"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "03009",
+        "productName": "ارز صنوايت كالروز 20* 1 كجم",
+        "availQty": 1,
+        "productId": "poGgeZhrDTm4eW0nHNK1"
+      }
+    ],
+    "updatedAt": "2026-08-06T15:09:42.171Z",
+    "status": "received",
+    "receivedAt": "2026-08-06T15:09:42.117Z",
+    "number": "TR-8951293",
+    "createdAt": "2026-08-06T15:09:34.856Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "",
+    "date": "2026-08-06",
+    "receivedByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "aHSb7IVjuGQMixf4zFsw",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/aHSb7IVjuGQMixf4zFsw",
+    "number": "TR-8951269",
+    "receivedAt": "2026-07-28T07:30:50.303Z",
+    "updatedAt": "2026-07-28T07:30:50.430Z",
+    "status": "received",
+    "lines": [
+      {
+        "availQty": 2,
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "sku": "43003",
+        "unit": "Carton",
+        "qty": 1
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-27",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-28T07:30:38.462Z"
+  },
+  {
+    "_id": "bSvJ49cWfIE3oqnNEJ0d",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/bSvJ49cWfIE3oqnNEJ0d",
+    "createdAt": "2026-07-27T12:58:30.760Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "date": "2026-07-27",
+    "receivedByName": "علي فياض — مدير النظام",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "qty": 5,
+        "unit": "Bag",
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "availQty": 13,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN"
+      },
+      {
+        "availQty": 12,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 5,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "sku": "43012"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "WruLvzM1VpCOZ6yEHf8Y",
+        "availQty": 7,
+        "sku": "09008",
+        "productName": "شطة رنا عريض كبير 4.5 * 4 جالون"
+      },
+      {
+        "productName": "اكياس قمامة  سابك 70 جالون",
+        "sku": "43005",
+        "productId": "wDrRu3ce1hpW4P4XXt0d",
+        "availQty": 6,
+        "unit": "Bale",
+        "qty": 1
+      }
+    ],
+    "updatedAt": "2026-07-27T12:58:56.833Z",
+    "status": "received",
+    "receivedAt": "2026-07-27T12:58:58.011Z",
+    "number": "TR-8951266"
+  },
+  {
+    "_id": "bh0fFW92Fdf8cwfo6QEf",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/bh0fFW92Fdf8cwfo6QEf",
+    "number": "TR-8951283",
+    "receivedAt": "2026-08-03T09:16:17.725Z",
+    "updatedAt": "2026-08-03T09:16:20.414Z",
+    "status": "received",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "sku": "31034",
+        "productName": "فلين رقم 2 - 500 حبة",
+        "availQty": 3,
+        "productId": "0cniV5I2oOQBqUJLlu39"
+      }
+    ],
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdBy": "admin_ali_fayad",
+    "receivedBy": "admin_ali_fayad",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-03",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "مرتجع من سيارة مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-03T08:17:06.159Z"
+  },
+  {
+    "_id": "bl1hMTpt5uWQwuxmZhes",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/bl1hMTpt5uWQwuxmZhes",
+    "updatedAt": "2026-07-26T17:32:16.591Z",
+    "status": "received",
+    "updatedByName": "علي فياض — مدير النظام",
+    "number": "TR-8951265",
+    "receivedAt": "2026-07-26T17:32:16.158Z",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "receivedBy": "admin_ali_fayad",
+    "updatedBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "unit": "Tank",
+        "_origQty": 6,
+        "qty": 6,
+        "availQty": 16,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004"
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 1,
+        "availQty": 13,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "_origQty": 1,
+        "productId": "EDm62noDcoaSqIWpOgdD",
+        "availQty": 8,
+        "sku": "35001",
+        "productName": "طماطم  مقشرة الطائى 24*400"
+      },
+      {
+        "unit": "Carton",
+        "_origQty": 1,
+        "qty": 2,
+        "availQty": 16,
+        "productId": "tAq8ENjtZ0cRpzhW6xFH",
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "sku": "12001"
+      },
+      {
+        "_origQty": 6,
+        "unit": "Tank",
+        "qty": 6,
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "availQty": 8,
+        "productName": "زيت تنك نسرين *17 لتر",
+        "sku": "02008"
+      }
+    ],
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-26",
+    "createdAt": "2026-07-26T17:30:12.289Z",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "c0Wv7YTUaBfoAtVtXpsY",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/c0Wv7YTUaBfoAtVtXpsY",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-06",
+    "createdAt": "2026-08-06T15:00:08.137Z",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "updatedAt": "2026-08-06T15:01:03.841Z",
+    "status": "received",
+    "number": "TR-8951291",
+    "receivedAt": "2026-08-06T15:01:03.795Z",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "unit": "Bag",
+        "qty": 7,
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "sku": "03002",
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "availQty": 145
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "زبيب اخضر 10 ك",
+        "sku": "39001",
+        "productId": "jcvBhus9KJxTvFOKPYea",
+        "availQty": 10
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "availQty": 8,
+        "productId": "Zpy1JPhHmUYrRbFao1IO"
+      },
+      {
+        "sku": "31001",
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "availQty": 3,
+        "qty": 2,
+        "unit": "Carton"
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "طماطم  مقشرة الطائى 24*400",
+        "sku": "35001",
+        "availQty": 5,
+        "productId": "EDm62noDcoaSqIWpOgdD"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "علب شفاف 205 ارنون عبوة 500",
+        "sku": "31006",
+        "productId": "iqrB1dkzgtyvBOVVXl6q",
+        "availQty": 6
+      },
+      {
+        "unit": "Tank",
+        "qty": 5,
+        "productName": "زيت تنك شيف 17 لتر",
+        "sku": "02009",
+        "availQty": 23,
+        "productId": "tkgjwvljS7IKGfpkueOm"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 3,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "sku": "43012",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 9,
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "sku": "31005",
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2"
+      },
+      {
+        "unit": "Carton",
+        "qty": 3,
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "sku": "12001",
+        "availQty": 8,
+        "productId": "tAq8ENjtZ0cRpzhW6xFH"
+      }
+    ]
+  },
+  {
+    "_id": "cPLfy9TbSoujF1zE4m6e",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/cPLfy9TbSoujF1zE4m6e",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "cancelledAt": "2026-07-21T20:40:58.218Z",
+    "cancelledByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-19T06:45:10.725Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-19",
+    "lines": [
+      {
+        "availQty": 1,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "sku": "03002",
+        "unit": "Bag",
+        "qty": 1
+      }
+    ],
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "receivedBy": "admin_ali_fayad",
+    "number": "TR-TMRRFL6D2",
+    "receivedAt": "2026-07-19T07:10:03.894Z",
+    "status": "cancelled",
+    "updatedAt": "2026-07-21T20:40:58.218Z"
+  },
+  {
+    "_id": "eVWcnKimhTHXDDNgpHfc",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/eVWcnKimhTHXDDNgpHfc",
+    "lines": [
+      {
+        "sku": "12005",
+        "productName": "شطة سومطره حار كبير 340 ح*24",
+        "availQty": 1,
+        "productId": "PmtB5uXbDG1nXnx8GMSJ",
+        "qty": 1,
+        "unit": "Carton"
+      }
+    ],
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "number": "TR-8951250",
+    "receivedAt": "2026-07-20T07:05:16.309Z",
+    "updatedAt": "2026-07-20T07:05:15.692Z",
+    "status": "received",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-20T07:05:07.345Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-20"
+  },
+  {
+    "_id": "gX2K8o9XRZrDw49aXIXP",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/gX2K8o9XRZrDw49aXIXP",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdBy": "admin_ali_fayad",
+    "receivedBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "availQty": 1,
+        "productId": "MNSnc8uULDA5wfiYIW99",
+        "productName": "ارز علمين الشعلان مزه 4 ×10",
+        "sku": "03006",
+        "unit": "Bag",
+        "qty": 1
+      },
+      {
+        "sku": "03007",
+        "productName": "ارز علمين الشعلان مزه 8*5 كجم",
+        "availQty": 1,
+        "productId": "2NbmryZHvF4OFOPE19XG",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "availQty": 1,
+        "productId": "CwXTkvyG6odoZzZuEDja",
+        "productName": "ارز علمين  الشعلان مزه 40 كجم",
+        "sku": "03005",
+        "unit": "Bag",
+        "qty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Bag",
+        "productId": "yLOfiimlko7x0ORSKc5c",
+        "availQty": 1,
+        "sku": "03015",
+        "productName": "ارز دلفين مزة  بسمتى 4*10 كجم"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "iFJ8JyexxPdWuYlzbU5Y",
+        "availQty": 1,
+        "sku": "03010",
+        "productName": "ارز ابو كاس مزه 40 كجم"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "ارز ابو كاس 4*10 كجم",
+        "sku": "03011",
+        "productId": "DviRgNpE8LLhT5ASxST3",
+        "availQty": 1
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "LYDz1hvYQAgGoTpbTOSw",
+        "availQty": 1,
+        "productName": "ارز ابو كاس 8*5 كجم",
+        "sku": "03012"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-08-01T08:43:16.229Z",
+    "number": "TR-8951279",
+    "receivedAt": "2026-08-01T08:43:16.027Z",
+    "createdAt": "2026-08-01T08:17:17.170Z",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "",
+    "createdByName": "علي ��ياض — مدير النظام",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-30"
+  },
+  {
+    "_id": "hooupn4kRk18Nuc5O7QE",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/hooupn4kRk18Nuc5O7QE",
+    "number": "TR-8951285",
+    "receivedAt": "2026-08-04T08:08:16.210Z",
+    "updatedAt": "2026-08-04T08:08:15.245Z",
+    "status": "received",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 3,
+        "productId": "LYDz1hvYQAgGoTpbTOSw",
+        "productName": "ارز ابو كاس 8*5 كجم",
+        "sku": "03012"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "03011",
+        "productName": "ارز ابو كاس 4*10 كجم",
+        "availQty": 7,
+        "productId": "DviRgNpE8LLhT5ASxST3"
+      },
+      {
+        "unit": "Bag",
+        "qty": 1,
+        "productId": "2NbmryZHvF4OFOPE19XG",
+        "availQty": 1,
+        "productName": "ارز علمين الشعلان مزه 8*5 كجم",
+        "sku": "03007"
+      },
+      {
+        "productName": "ارز علمين الشعلان مزه 4 ×10",
+        "sku": "03006",
+        "productId": "MNSnc8uULDA5wfiYIW99",
+        "availQty": 2,
+        "unit": "Bag",
+        "qty": 1
+      },
+      {
+        "sku": "31011",
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+        "availQty": 17,
+        "productId": "SzHULsTeLonnDaH4vh4Y",
+        "qty": 3,
+        "unit": "Carton"
+      },
+      {
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005",
+        "availQty": 14,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "productId": "C1ac8RMQhx2gXejGiyF3",
+        "availQty": 1,
+        "sku": "03019",
+        "productName": "اندومى نكهة دجاج 60*70 جرام",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "DYAhGplYopMJF95oK0IS",
+        "availQty": 5,
+        "sku": "03017",
+        "productName": "اندومى مقلية 60*80 جرام"
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "receivedBy": "admin_ali_fayad",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-04",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-04T08:07:30.004Z"
+  },
+  {
+    "_id": "iFc8VKac7Z1kOBFD5fyM",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/iFc8VKac7Z1kOBFD5fyM",
+    "createdAt": "2026-08-12T08:15:29.816Z",
+    "notes": "",
+    "toWarehouseName": "المستودع الرئيسى",
+    "createdByName": "علي فياض — مدير النظام",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-12",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdBy": "admin_ali_fayad",
+    "lines": [
+      {
+        "productId": "BRYy3jvl6JJOqON0PnPr",
+        "availQty": 2,
+        "sku": "31016",
+        "productName": "علب 16 اونز 450 ملى اسود دائرى عبوه 150",
+        "qty": 2,
+        "unit": "Carton"
+      }
+    ],
+    "updatedAt": "2026-08-12T08:15:42.854Z",
+    "status": "received",
+    "number": "TR-8951304",
+    "receivedAt": "2026-08-12T08:15:42.704Z"
+  },
+  {
+    "_id": "iaom03pvLNZrg2SecHIe",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/iaom03pvLNZrg2SecHIe",
+    "date": "2026-07-21",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "بمعرفة محمد",
+    "createdAt": "2026-07-21T20:58:25.051Z",
+    "receivedAt": "2026-07-21T20:59:08.769Z",
+    "number": "TR-8951253",
+    "status": "received",
+    "updatedAt": "2026-07-21T20:59:08.998Z",
+    "lines": [
+      {
+        "availQty": 21,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "sku": "03002",
+        "unit": "Bag",
+        "qty": 5
+      },
+      {
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "availQty": 16,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "availQty": 9,
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "sku": "02006",
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر",
+        "qty": 5,
+        "unit": "Carton"
+      },
+      {
+        "availQty": 9,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "thEesj4aPMBKJePRHTlE",
+        "availQty": 18,
+        "productName": "سكر الاسرة وسط 10*2 كيلو",
+        "sku": "04004"
+      }
+    ],
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "jbPrW4TwSuHYOhdvKFeC",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/jbPrW4TwSuHYOhdvKFeC",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 4,
+        "availQty": 5,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "sku": "43012"
+      }
+    ],
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "number": "TR-8951272",
+    "receivedAt": "2026-07-29T14:11:36.963Z",
+    "status": "received",
+    "updatedAt": "2026-07-29T14:11:37.010Z",
+    "notes": "",
+    "toWarehouseName": "المستودع الرئيسى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-29T09:38:21.321Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-28"
+  },
+  {
+    "_id": "kJ0lPFxZcJUhQypCxROr",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/kJ0lPFxZcJUhQypCxROr",
+    "receivedAt": "2026-08-09T08:04:40.818Z",
+    "number": "TR-8951298",
+    "status": "received",
+    "updatedAt": "2026-08-09T08:04:39.889Z",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "04003",
+        "productName": "سكر الاسرة صغير 20*1 كيلو",
+        "productId": "x1cIL2f0tNMlLQWMw2ky",
+        "availQty": 14
+      },
+      {
+        "availQty": 178,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "sku": "02004",
+        "productName": "زيت تنك دلال * 17 لتر",
+        "qty": 2,
+        "unit": "Tank"
+      },
+      {
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "availQty": 9,
+        "sku": "03003",
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "qty": 2,
+        "unit": "Bag"
+      },
+      {
+        "productName": "زبيب اخضر 10 ك",
+        "sku": "39001",
+        "availQty": 8,
+        "productId": "jcvBhus9KJxTvFOKPYea",
+        "unit": "Carton",
+        "qty": 2
+      }
+    ],
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "date": "2026-08-09",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdAt": "2026-08-09T08:03:54.246Z"
+  },
+  {
+    "_id": "kcrd84dCO1LU8S6VNYvF",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/kcrd84dCO1LU8S6VNYvF",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-27",
+    "createdAt": "2026-07-27T18:36:32.712Z",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "status": "received",
+    "updatedAt": "2026-07-27T18:37:33.879Z",
+    "number": "TR-8951268",
+    "receivedAt": "2026-07-27T18:37:33.099Z",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم",
+        "sku": "12004",
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "availQty": 12
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "31006",
+        "productName": "علب شفاف 205 ارنون عبوة 500",
+        "productId": "iqrB1dkzgtyvBOVVXl6q",
+        "availQty": 2
+      },
+      {
+        "unit": "Bale",
+        "qty": 2,
+        "productId": "oILf9Ggdj8bYNt4Pl492",
+        "availQty": 8,
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت",
+        "sku": "04005"
+      },
+      {
+        "sku": "09006",
+        "productName": "تونه فريشكو 48*100 جم",
+        "availQty": 4,
+        "productId": "MrmWUHqDh6stxloRQNkT",
+        "qty": 2,
+        "unit": "Carton"
+      },
+      {
+        "availQty": 14,
+        "productId": "tAq8ENjtZ0cRpzhW6xFH",
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "sku": "12001",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 6,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "sku": "43012",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة"
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "شطة رنا عريض كبير 4.5 * 4 جالون",
+        "sku": "09008",
+        "productId": "WruLvzM1VpCOZ6yEHf8Y",
+        "availQty": 5
+      }
+    ]
+  },
+  {
+    "_id": "lCUebL1orrJArf7jkPg4",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/lCUebL1orrJArf7jkPg4",
+    "status": "received",
+    "updatedAt": "2026-07-19T21:41:22.530Z",
+    "number": "TR-8951249",
+    "receivedAt": "2026-07-19T21:41:22.606Z",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productId": "afCATiCiSHOBFsMH1aLK",
+        "availQty": 2,
+        "productName": "طحينة سائلة الجميل 500 جرام *12",
+        "sku": "19002"
+      }
+    ],
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-18",
+    "createdAt": "2026-07-19T21:41:12.900Z",
+    "notes": "",
+    "toWarehouseName": "المستودع الرئيسى",
+    "createdByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "od33uGqNsExzCNh7z9ra",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/od33uGqNsExzCNh7z9ra",
+    "updatedAt": "2026-08-09T07:38:27.462Z",
+    "status": "received",
+    "receivedAt": "2026-08-09T07:38:27.867Z",
+    "number": "TR-TMSKN12GQ",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "sku": "43006",
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "availQty": 2,
+        "productId": "9PeZIfHYdFJtZgsKzNbQ"
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+        "sku": "31011",
+        "availQty": 12,
+        "productId": "SzHULsTeLonnDaH4vh4Y"
+      },
+      {
+        "unit": "Carton",
+        "qty": 2,
+        "productName": "علب 16 اونز 450 ملى اسود دائرى عبوه 150",
+        "sku": "31016",
+        "productId": "BRYy3jvl6JJOqON0PnPr",
+        "availQty": 10
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 4,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "قصدير فالكون 1500 جرام 45سم 6 شد",
+        "sku": "43016",
+        "availQty": 9,
+        "productId": "YDGp6p8TPz1bqNnOue4N"
+      },
+      {
+        "qty": 1,
+        "unit": "Bale",
+        "sku": "43005",
+        "productName": "اكياس قمامة  سابك 70 جالون",
+        "availQty": 8,
+        "productId": "wDrRu3ce1hpW4P4XXt0d"
+      },
+      {
+        "unit": "Carton",
+        "qty": 4,
+        "productName": "علب 50 جرام 2 اونز اسود ارنون عبوة 200",
+        "sku": "31020",
+        "productId": "atrR6pMjwiEfK6Hdo2Oi",
+        "availQty": 6
+      },
+      {
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "availQty": 10,
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "sku": "31005",
+        "unit": "Carton",
+        "qty": 7
+      },
+      {
+        "productId": "FlofDooOmuOEFrQiCWFQ",
+        "availQty": 4,
+        "sku": "31004",
+        "productName": "علب 50 جرام 2 اونز شفاف ارنون عبوة 200",
+        "qty": 1,
+        "unit": "Carton"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 1,
+        "productId": "LYDz1hvYQAgGoTpbTOSw",
+        "sku": "03012",
+        "productName": "ارز ابو كاس 8*5 كجم"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "DviRgNpE8LLhT5ASxST3",
+        "availQty": 5,
+        "sku": "03011",
+        "productName": "ارز ابو كاس 4*10 كجم"
+      },
+      {
+        "productName": "ارز علمين الشعلان مزه 4 ×10",
+        "sku": "03006",
+        "productId": "MNSnc8uULDA5wfiYIW99",
+        "availQty": 1,
+        "unit": "Bag",
+        "qty": 1
+      },
+      {
+        "availQty": 2,
+        "productId": "DYAhGplYopMJF95oK0IS",
+        "productName": "اندومى مقلية 60*80 جرام",
+        "sku": "03017",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "productId": "C1ac8RMQhx2gXejGiyF3",
+        "availQty": 2,
+        "productName": "اندومى نكهة دجاج 60*70 جرام",
+        "sku": "03019",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "سمن القمرية علب 12* 900 جرام",
+        "sku": "02007",
+        "productId": "CcXTqwIBYvF3O1XSa6v2",
+        "availQty": 3
+      },
+      {
+        "sku": "02006",
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر",
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "availQty": 5,
+        "qty": 4,
+        "unit": "Carton"
+      },
+      {
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005",
+        "availQty": 7,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "availQty": 4,
+        "productId": "dtCMNYIhjGBZGCUE6Lr1",
+        "sku": "09007",
+        "productName": "معجون طماطم لونا 8*6 ربطة * 135 ح",
+        "qty": 2,
+        "unit": "Carton"
+      },
+      {
+        "availQty": 3,
+        "productId": "EDm62noDcoaSqIWpOgdD",
+        "productName": "طماطم  مقشرة الطائى 24*400",
+        "sku": "35001",
+        "unit": "Carton",
+        "qty": 2
+      }
+    ],
+    "date": "2026-08-08",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-08T17:27:22.448Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "_id": "okOz2CBR44Ue19xdkuGR",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/okOz2CBR44Ue19xdkuGR",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 4,
+        "productId": "poGgeZhrDTm4eW0nHNK1",
+        "productName": "ارز صنوايت كالروز 20* 1 كجم",
+        "sku": "03009"
+      },
+      {
+        "availQty": 5,
+        "productId": "DYAhGplYopMJF95oK0IS",
+        "productName": "اندومى مقلية 60*80 جرام",
+        "sku": "03017",
+        "unit": "Carton",
+        "qty": 1
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 10,
+        "productId": "iFJ8JyexxPdWuYlzbU5Y",
+        "sku": "03010",
+        "productName": "ارز ابو كاس مزه 40 كجم"
+      },
+      {
+        "unit": "Tank",
+        "qty": 1,
+        "productName": "زيت تنك دلال * 17 لتر",
+        "sku": "02004",
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "availQty": 17
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "availQty": 7,
+        "productId": "WruLvzM1VpCOZ6yEHf8Y",
+        "sku": "09008",
+        "productName": "شطة رنا عريض كبير 4.5 * 4 جالون"
+      },
+      {
+        "availQty": 10,
+        "productId": "qwuMMK8xWSJhh2Q2KbV8",
+        "sku": "03013",
+        "productName": "ارز دلفين مزه بسمتى 40 كجم",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "sku": "03014",
+        "productName": "ارز دلفين بسمتى 8*5 كجم",
+        "availQty": 5,
+        "productId": "kAm09NsM5EPXF8UvrFeX",
+        "qty": 1,
+        "unit": "Bag"
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "sku": "43003",
+        "availQty": 3,
+        "productId": "A1yASYzpEy0S0M4xm1r8"
+      },
+      {
+        "productId": "CwXTkvyG6odoZzZuEDja",
+        "availQty": 9,
+        "productName": "ارز علمين  الشعلان مزه 40 كجم",
+        "sku": "03005",
+        "unit": "Bag",
+        "qty": 1
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "sku": "43010",
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "availQty": 14
+      },
+      {
+        "productName": "ارز دلفين مزة  بسمتى 4*10 كجم",
+        "sku": "03015",
+        "availQty": 5,
+        "productId": "yLOfiimlko7x0ORSKc5c",
+        "unit": "Bag",
+        "qty": 1
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "number": "TR-8951262",
+    "receivedAt": "2026-07-26T07:34:52.783Z",
+    "updatedAt": "2026-07-26T07:34:53.631Z",
+    "status": "received",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-26T07:33:30.126Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-26"
+  },
+  {
+    "_id": "qcveIbq47tILOj1yaaeU",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/qcveIbq47tILOj1yaaeU",
+    "lines": [
+      {
+        "availQty": 2,
+        "productId": "7tCWhZq9UWRXwJxkRTTA",
+        "productName": "تونة شاهين صغير 48 95 جرام",
+        "sku": "09003",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "productId": "DY5ADETYmJoMo354HbS6",
+        "availQty": 2,
+        "productName": "تونة فرشكو صغير 48* 90 جم",
+        "sku": "09001",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "productName": "تونة الوها صغير 48 *100 جم",
+        "sku": "09002",
+        "availQty": 2,
+        "productId": "1EU9O4mqrEtwitQPnZ3o",
+        "unit": "Carton",
+        "qty": 2
+      },
+      {
+        "qty": 2,
+        "unit": "Carton",
+        "sku": "09004",
+        "productName": "تونه الطائى صغير  تايلاندى 48*90",
+        "availQty": 2,
+        "productId": "YV2OumfkBeqlzRG2YruG"
+      },
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "cpOYrBAZbabLvo5DoZ6B",
+        "availQty": 1,
+        "sku": "09005",
+        "productName": "قشطة ريفونى اقتصادى  155 *48 علبة"
+      },
+      {
+        "qty": 3,
+        "unit": "Bag",
+        "productId": "wGEk0xKjCvX7pSSQGUU1",
+        "availQty": 3,
+        "sku": "03004",
+        "productName": "ارز الرواسى هندى مزة 40 كجم"
+      },
+      {
+        "qty": 4,
+        "unit": "Carton",
+        "sku": "45002",
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "availQty": 5
+      }
+    ],
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedBy": "admin_ali_fayad",
+    "number": "TR-8951258",
+    "receivedAt": "2026-07-25T17:38:11.514Z",
+    "status": "received",
+    "updatedAt": "2026-07-25T17:38:12.783Z",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-07-25T17:34:03.791Z",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-07-25"
+  },
+  {
+    "_id": "rH73MYH0s4Q87kZ3V869",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/rH73MYH0s4Q87kZ3V869",
+    "createdAt": "2026-07-25T17:08:53.654Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "date": "2026-07-25",
+    "receivedByName": "علي فياض — مدير النظام",
+    "receivedBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 4,
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "sku": "12001",
+        "availQty": 20,
+        "productId": "tAq8ENjtZ0cRpzhW6xFH"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-07-25T17:29:11.033Z",
+    "receivedAt": "2026-07-25T17:29:05.660Z",
+    "number": "TR-8951257"
+  },
+  {
+    "_id": "rsecPsMq7KFwZdQXBQBh",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/rsecPsMq7KFwZdQXBQBh",
+    "updatedAt": "2026-07-16T08:39:12.084Z",
+    "status": "received",
+    "number": "TR-000003",
+    "receivedAt": "2026-07-16T08:39:12.252Z",
+    "toWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "createdBy": "eZ8UlvjeYawtWSre5EwW",
+    "fromWarehouseName": "مخزن سيارة 1 مصطفى",
+    "receivedBy": "eZ8UlvjeYawtWSre5EwW",
+    "lines": [
+      {
+        "sku": "43010",
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "availQty": 4,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "qty": 2,
+        "unit": "Carton"
+      }
+    ],
+    "receivedByName": "على فيااض",
+    "date": "2026-07-16",
+    "createdAt": "2026-07-16T08:36:35.108Z",
+    "toWarehouseName": "المستودع الرئيسى",
+    "notes": "",
+    "createdByName": "على فيااض"
+  },
+  {
+    "_id": "uVuzjfwc52LAxBcL8IVS",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/uVuzjfwc52LAxBcL8IVS",
+    "date": "2026-08-07",
+    "receivedByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-07T22:56:36.591Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "تسويه",
+    "status": "received",
+    "updatedAt": "2026-08-07T22:56:44.372Z",
+    "receivedAt": "2026-08-07T22:56:44.385Z",
+    "number": "TR-8951295",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "qty": 1,
+        "unit": "Carton",
+        "productId": "x1cIL2f0tNMlLQWMw2ky",
+        "availQty": 14,
+        "sku": "04003",
+        "productName": "سكر الاسرة صغير 20*1 كيلو"
+      }
+    ]
+  },
+  {
+    "_id": "v1GcbtSWrXiO5mKpGY1z",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/v1GcbtSWrXiO5mKpGY1z",
+    "number": "TR-8951301",
+    "receivedAt": "2026-08-11T08:07:12.863Z",
+    "status": "received",
+    "updatedAt": "2026-08-11T08:07:18.183Z",
+    "lines": [
+      {
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "sku": "19001",
+        "availQty": 1,
+        "productId": "GjMW892nmjpmLeV5Kx3c",
+        "unit": "Tank",
+        "qty": 1
+      },
+      {
+        "availQty": 7,
+        "productId": "XCQOI94ocO903Gm0xeK8",
+        "sku": "31007",
+        "productName": "علب شفاف 206 ارنون عبوة 500",
+        "qty": 1,
+        "unit": "Carton"
+      }
+    ],
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "receivedBy": "admin_ali_fayad",
+    "receivedByName": "علي فياض — مدير النظام",
+    "date": "2026-08-10",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdByName": "علي فياض — مدير النظام",
+    "createdAt": "2026-08-11T08:02:07.635Z"
+  },
+  {
+    "_id": "vZ74LNPYqZT6bwchxdKa",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/vZ74LNPYqZT6bwchxdKa",
+    "date": "2026-07-16",
+    "receivedByName": "على فيااض",
+    "createdByName": "على فيااض",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "createdAt": "2026-07-16T08:38:46.238Z",
+    "receivedAt": "2026-07-16T08:38:56.797Z",
+    "number": "TR-000004",
+    "status": "received",
+    "updatedAt": "2026-07-16T08:38:56.656Z",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 3,
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "sku": "43006",
+        "availQty": 19,
+        "productId": "9PeZIfHYdFJtZgsKzNbQ"
+      }
+    ],
+    "receivedBy": "eZ8UlvjeYawtWSre5EwW",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdBy": "eZ8UlvjeYawtWSre5EwW",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "xL01an3QTc0TdJ0ze7Rk",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/xL01an3QTc0TdJ0ze7Rk",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "productName": "زيت تنك نسرين *17 لتر",
+        "sku": "02008",
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "availQty": 14,
+        "unit": "Tank",
+        "qty": 10
+      },
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "productName": "شطة سومطره حار كبير 340 ح*24",
+        "sku": "12005",
+        "availQty": 5,
+        "productId": "PmtB5uXbDG1nXnx8GMSJ"
+      }
+    ],
+    "status": "received",
+    "updatedAt": "2026-07-16T15:13:36.549Z",
+    "receivedAt": "2026-07-16T15:13:36.961Z",
+    "number": "TR-8951242",
+    "createdAt": "2026-07-16T15:13:17.106Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "date": "2026-07-16",
+    "receivedByName": "علي فياض — مدير النظام"
+  },
+  {
+    "_id": "xmes9dOcgJJtkqS5owty",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/xmes9dOcgJJtkqS5owty",
+    "createdByName": "علي فياض — م��ير النظام",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى",
+    "notes": "",
+    "createdAt": "2026-08-06T12:59:00.760Z",
+    "date": "2026-08-06",
+    "receivedByName": "علي فياض — مدير النظام",
+    "lines": [
+      {
+        "unit": "Carton",
+        "qty": 1,
+        "availQty": 10,
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم",
+        "sku": "12004"
+      }
+    ],
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "createdBy": "admin_ali_fayad",
+    "receivedBy": "admin_ali_fayad",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "receivedAt": "2026-08-06T12:59:43.251Z",
+    "number": "TR-8951290",
+    "status": "received",
+    "updatedAt": "2026-08-06T12:59:43.417Z"
+  },
+  {
+    "_id": "y1RQCiQvNFkMd07JX3kl",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/stockTransfers/y1RQCiQvNFkMd07JX3kl",
+    "status": "received",
+    "updatedAt": "2026-08-08T08:15:35.905Z",
+    "receivedAt": "2026-08-08T08:15:35.927Z",
+    "number": "TR-8951296",
+    "receivedBy": "admin_ali_fayad",
+    "createdBy": "admin_ali_fayad",
+    "fromWarehouseName": "المستودع الرئيسى",
+    "fromWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "toWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "availQty": 1,
+        "productId": "MWXMvWA35h2AHzrUVO71",
+        "productName": "فلين سادة 100 حبة LB2",
+        "sku": "31033",
+        "unit": "Bag",
+        "qty": 1
+      }
+    ],
+    "date": "2026-08-08",
+    "receivedByName": "علي فياض — مدير ال��ظام",
+    "createdAt": "2026-08-08T08:15:23.060Z",
+    "createdByName": "علي فياض — مدير النظام",
+    "notes": "",
+    "toWarehouseName": "مخزن سيارة 1 مصطفى"
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "_id": "cc_201",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/costCenters/cc_201",
+    "type": "warehouse",
+    "name": "المستودع الرئيسى",
+    "createdAt": "2026-07-31T18:09:37.035Z",
+    "isActive": true,
+    "code": "201",
+    "id": "cc_201",
+    "updatedAt": "2026-07-31T18:09:37.035Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "cc_301",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/costCenters/cc_301",
+    "id": "cc_301",
+    "code": "301",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T10:41:26.695Z",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "parentId": "cc_300",
+    "type": "detail",
+    "name": "سيارة المندوب مصطفى (ينبع والمسارات)"
+  },
+  {
+    "_id": "cc_302",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/costCenters/cc_302",
+    "type": "detail",
+    "name": "سيارة المندوب محمد عوض",
+    "code": "302",
+    "id": "cc_302",
+    "updatedAt": "2026-07-27T10:41:27.091Z",
+    "repId": "i6qFzXabMQq8R7j7GxgL",
+    "parentId": "cc_300"
+  },
+  {
+    "_id": "nv2ZmtprTHESzdhmcTIV",
+    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/costCenters/nv2ZmtprTHESzdhmcTIV",
+    "type": "vehicle",
+    "allocPct": null,
+    "vehicleId": "",
+    "createdAt": "2026-07-28T14:30:35.455Z",
+    "plateNumber": "",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "notes": "",
+    "name": "سيارة المندوب خالد",
+    "code": "003",
+    "isActive": true,
+    "driverName": "خالد",
+    "updatedAt": "2026-07-28T14:30:40.265Z",
+    "fixedCost": 0
+  }
+]

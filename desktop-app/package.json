@@ -1,0 +1,20 @@
+{
+  "name": "idham-erp-desktop",
+  "version": "1.0.0",
+  "description": "تطبيق ديسكتوب لإدارة إدهام للمواد الغذائية - ERP",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "package": "electron-builder"
+  },
+  "keywords": [
+    "ERP",
+    "Electron",
+    "Idham"
+  ],
+  "author": "Antigravity AI",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}

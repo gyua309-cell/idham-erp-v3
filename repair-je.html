@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>إصلاح قيود العملاء — IDHAM ERP</title>
+<style>
+  body { font-family: Arial, sans-serif; background:#0f172a; color:#e2e8f0; padding:32px; max-width:800px; margin:0 auto; }
+  h2 { color:#6366f1; border-bottom:1px solid #334155; padding-bottom:12px; }
+  .log { background:#1e293b; border-radius:8px; padding:16px; min-height:200px; max-height:500px; overflow-y:auto; font-family:monospace; font-size:13px; line-height:1.8; }
+  .ok  { color:#22c55e; }
+  .err { color:#ef4444; }
+  .inf { color:#60a5fa; }
+  .wrn { color:#f59e0b; }
+  .btn { background:#6366f1; color:#fff; border:none; padding:12px 28px; border-radius:8px; font-size:15px; cursor:pointer; margin-top:16px; }
+  .btn:disabled { background:#334155; cursor:not-allowed; }
+  .summary { background:#1e293b; border-radius:8px; padding:16px; margin-top:16px; display:none; }
+  .stat { display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #334155; }
+  .stat:last-child { border:none; }
+</style>
+</head>
+<body>
+<h2>🔧 إصلاح القيود المحاسبية — ربط حسابات العملاء</h2>
+<p style="color:#94a3b8; margin-bottom:16px;">
+  هذه الصفحة تُصحح القيود التي ذهبت لحسابات الآباء العامة بدلاً من حسابات العملاء الفردية.<br>
+  <strong>اضغط "تشغيل الإصلاح"</strong> وانتظر حتى تنتهي العملية.
+</p>
+<div class="log" id="log"><span class="inf">⏳ جاهز للتشغيل — اضغط الزر أدناه...</span></div>
+<button class="btn" id="runBtn" onclick="runRepair()">▶ تشغيل الإصلاح</button>
+<div class="summary" id="summary"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import {
+  getFirestore, collection, getDocs, query, where, writeBatch, doc
+} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyAike2lPO7VnFoRHevnGkbHpAQbKoDb5r8",
+  authDomain:        "idham-foodstuffs-sa.firebaseapp.com",
+  projectId:         "idham-foodstuffs-sa",
+  storageBucket:     "idham-foodstuffs-sa.firebasestorage.app",
+  messagingSenderId: "771445462953",
+  appId:             "1:771445462953:web:05d70fb7c36a385c9796b8",
+};
+
+const app  = initializeApp(firebaseConfig, "repair-tool");
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+const COMPANY_ID = "idham-main";
+
+const logEl = document.getElementById("log");
+function log(msg, cls = "inf") {
+  logEl.innerHTML += `<div class="${cls}">${msg}</div>`;
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+// Expose runRepair globally
+window.runRepair = async function() {
+  const btn = document.getElementById("runBtn");
+  btn.disabled = true;
+  logEl.innerHTML = "";
+
+  // ── حالة المصادقة ──
+  const user = auth.currentUser;
+  if (!user) {
+    log("❌ يجب تسجيل الدخول أولاً من التطبيق الرئيسي ثم فتح هذه الصفحة.", "err");
+    btn.disabled = false;
+    return;
+  }
+  log(`✅ مسجّل دخول: ${user.email}`, "ok");
+
+  try {
+    // ── 1. شجرة الحسابات ──
+    log("📂 جارٍ تحميل شجرة الحسابات...", "inf");
+    const coaSnap = await getDocs(collection(db, `companies/${COMPANY_ID}/chartOfAccounts`));
+    const coaByCode = {};
+    const coaById   = {};
+    coaSnap.docs.forEach(d => {
+      const data = d.data();
+      coaByCode[data.code] = { id: d.id, ...data };
+      coaById[d.id]        = { id: d.id, ...data };
+    });
+    log(`  → ${coaSnap.size} حساب محمَّل`, "ok");
+
+    // ── 2. العملاء ──
+    log("👥 جارٍ تحميل بيانات العملاء...", "inf");
+    const custSnap = await getDocs(collection(db, `companies/${COMPANY_ID}/customers`));
+    const customerMap = {};
+    let withAccount = 0;
+    custSnap.docs.forEach(d => {
+      const data = d.data();
+      if (data.accountCode && data.accountId) {
+        customerMap[d.id] = {
+          accountId:   data.accountId,
+          accountCode: data.accountCode,
+          name:        data.name || d.id,
+        };
+        withAccount++;
+      }
+    });
+    log(`  → ${custSnap.size} عميل، منهم ${withAccount} ذوو حسابات فردية`, withAccount > 0 ? "ok" : "wrn");
+
+    // ── 3. الفواتير ──
+    log("🧾 جارٍ تحميل الفواتير...", "inf");
+    const [salesSnap, repSnap] = await Promise.all([
+      getDocs(collection(db, `companies/${COMPANY_ID}/salesInvoices`)),
+      getDocs(collection(db, `companies/${COMPANY_ID}/repInvoices`)),
+    ]);
+    const invoiceMap = {};
+    const reg = (d) => {
+      const data = d.data();
+      const e = { customerId: data.customerId||null, paymentMethod: data.paymentMethod||"cash" };
+      invoiceMap[d.id] = e;
+      if (data.invoiceNumber) invoiceMap[data.invoiceNumber] = e;
+    };
+    salesSnap.docs.forEach(reg);
+    repSnap.docs.forEach(reg);
+    log(`  → ${salesSnap.size + repSnap.size} فاتورة محمَّلة`, "ok");
+
+    // ── 4. الحسابات الأب العامة ──
+    const PARENT_CODES = new Set(["1-1-2-1-1","1-1-2-1-2","1-1-2-2-1"]);
+    const CREDIT_METHODS = new Set(["credit","deferred","آجل","partial","جزئي"]);
+
+    // ── 5. قيود المبيعات ──
+    log("📒 جارٍ فحص قيود المبيعات الآجلة...", "inf");
+    const jeSnap = await getDocs(
+      query(
+        collection(db, `companies/${COMPANY_ID}/journalEntries`),
+        where("sourceType", "in", ["salesInvoice","repSale","posSale","salesInvoices"])
+      )
+    );
+    log(`  → ${jeSnap.size} قيد مبيعات للفحص`, "inf");
+
+    const results = { fixed:[], skipped:[], errors:[] };
+    let batchW = writeBatch(db);
+    let opCount = 0;
+    const BATCH_SIZE = 400;
+
+    const flush = async () => {
+      if (opCount > 0) {
+        await batchW.commit();
+        batchW = writeBatch(db);
+        opCount = 0;
+      }
+    };
+
+    for (const jeDoc of jeSnap.docs) {
+      const je = jeDoc.data();
+      const inv = invoiceMap[je.sourceId || ""];
+      if (!inv) { results.skipped.push(`${je.entryNumber||jeDoc.id.slice(0,8)} — لا فاتورة`); continue; }
+
+      const { customerId, paymentMethod } = inv;
+      if (!CREDIT_METHODS.has((paymentMethod||"").toLowerCase())) {
+        results.skipped.push(`${je.entryNumber||jeDoc.id.slice(0,8)} — نقدي`);
+        continue;
+      }
+
+      const custAcc = customerId ? customerMap[customerId] : null;
+      if (!custAcc) {
+        results.skipped.push(`${je.entryNumber||jeDoc.id.slice(0,8)} — عميل بلا حساب فردي`);
+        continue;
+      }
+
+      const lines = je.lines || [];
+      let needsFix = false;
+      const updated = lines.map(line => {
+        const fromId = coaById[line.accountId || ""];
+        if (PARENT_CODES.has(line.accountCode) || (fromId && PARENT_CODES.has(fromId.code))) {
+          needsFix = true;
+          return { ...line, accountCode: custAcc.accountCode, accountId: custAcc.accountId, accountName: custAcc.name };
+        }
+        return line;
+      });
+
+      if (!needsFix) { results.skipped.push(`${je.entryNumber||jeDoc.id.slice(0,8)} — سليم`); continue; }
+
+      try {
+        batchW.update(jeDoc.ref, { lines: updated });
+        opCount++;
+        results.fixed.push(`${je.entryNumber||jeDoc.id.slice(0,8)} → ${custAcc.name} (${custAcc.accountCode})`);
+        log(`  🔧 إصلاح: ${je.entryNumber||jeDoc.id.slice(0,8)} → <span style="color:#a78bfa">${custAcc.name}</span> (${custAcc.accountCode})`, "ok");
+        if (opCount >= BATCH_SIZE) await flush();
+      } catch(e) {
+        results.errors.push(`${jeDoc.id.slice(0,8)}: ${e.message}`);
+        log(`  ❌ ${jeDoc.id.slice(0,8)}: ${e.message}`, "err");
+      }
+    }
+    await flush();
+
+    // ── 6. النتائج ──
+    log("═".repeat(50), "inf");
+    log(`✅ قيود مُصلَحة: ${results.fixed.length}`, "ok");
+    log(`⏭️ متخطّى: ${results.skipped.length}`, "inf");
+    if (results.errors.length) log(`⚠️ أخطاء: ${results.errors.length}`, "err");
+
+    const sumEl = document.getElementById("summary");
+    sumEl.style.display = "block";
+    sumEl.innerHTML = `
+      <h3 style="margin-top:0;color:#6366f1">📊 تقرير الإصلاح</h3>
+      <div class="stat"><span>✅ قيود مُصلَحة</span><strong style="color:#22c55e">${results.fixed.length}</strong></div>
+      <div class="stat"><span>⏭️ متخطّى (نقدي/سليم/بلا عميل)</span><strong>${results.skipped.length}</strong></div>
+      <div class="stat"><span>⚠️ أخطاء</span><strong style="color:#ef4444">${results.errors.length}</strong></div>
+      ${results.fixed.length > 0 ? `
+      <div style="margin-top:12px;padding:12px;background:#0f172a;border-radius:6px;font-size:12px;color:#94a3b8">
+        ${results.fixed.slice(0,20).join("<br>")}${results.fixed.length>20?`<br>... و${results.fixed.length-20} أخرى`:""}
+      </div>
+      <p style="color:#f59e0b;margin-top:8px;">⏳ سيتم تحديث أرصدة دفتر الأستاذ خلال 30 ثانية — اذهب لشجرة الحسابات واضغط "إعادة بناء الأرصدة"</p>
+      ` : '<p style="color:#22c55e">جميع القيود سليمة بالفعل ✅</p>'}
+    `;
+
+    btn.disabled = false;
+    btn.textContent = "✅ اكتمل — يمكنك إغلاق هذه الصفحة";
+
+  } catch(err) {
+    log(`❌ خطأ عام: ${err.message}`, "err");
+    console.error(err);
+    btn.disabled = false;
+  }
+};
+
+// تحقق من حالة تسجيل الدخول عند التحميل
+onAuthStateChanged(auth, user => {
+  if (user) {
+    log(`✅ مسجّل دخول كـ: ${user.email} — اضغط الزر للتشغيل`, "ok");
+  } else {
+    log(`⚠️ غير مسجّل دخول. افتح التطبيق الرئيسي (idham-foodstuffs-sa.web.app) وسجّل دخول ثم عد لهذه الصفحة.`, "wrn");
+  }
+});
+</script>
+</body>
+</html>

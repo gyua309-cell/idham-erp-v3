@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDHAM — تنظيف القيود المكررة</title>
+<style>
+  body{font-family:'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:20px;direction:rtl}
+  h1{color:#f87171;font-size:1.3rem;margin-bottom:4px}
+  p{color:#94a3b8;font-size:.85rem;margin-bottom:16px}
+  .card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px;margin-bottom:16px}
+  .log{background:#0f172a;border:1px solid #1e3a5f;border-radius:8px;padding:12px;height:420px;overflow-y:auto;font-size:12px;font-family:monospace;white-space:pre-wrap;line-height:1.7}
+  button{background:#3b82f6;color:#fff;border:none;padding:10px 22px;border-radius:8px;cursor:pointer;font-size:13px;margin-left:8px;font-weight:600}
+  button:hover{opacity:.85} button:disabled{background:#374151;cursor:not-allowed}
+  button.danger{background:#ef4444} button.green{background:#16a34a}
+  .stat{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  .sb{background:#0f172a;border:1px solid #334155;border-radius:8px;padding:10px 14px;text-align:center;min-width:110px}
+  .sb .n{font-size:1.5rem;font-weight:700} .sb .l{font-size:10px;color:#64748b;margin-top:2px}
+</style>
+</head>
+<body>
+<h1>🚨 تنظيف القيود المكررة</h1>
+<p>يحذف القيود التي أنشأها الترحيل للفواتير التي كانت لها قيود صحيحة مسبقاً، ويُعيد ربط الفواتير بقيودها الأصلية.</p>
+<div class="card">
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <button id="b1" onclick="scan()">🔎 فحص التكرارات</button>
+    <button id="b2" class="danger" onclick="cleanup(false)">🗑️ تنظيف التكرارات</button>
+    <button onclick="document.getElementById('log').innerHTML=''">مسح</button>
+  </div>
+  <div class="stat" id="stats" style="display:none">
+    <div class="sb"><div class="n" id="n1" style="color:#38bdf8">0</div><div class="l">فواتير مناديب</div></div>
+    <div class="sb"><div class="n" id="n2" style="color:#f87171">0</div><div class="l">قيود مكررة للحذف</div></div>
+    <div class="sb"><div class="n" id="n3" style="color:#4ade80">0</div><div class="l">فواتير سليمة</div></div>
+    <div class="sb"><div class="n" id="n4" style="color:#f87171">0</div><div class="l">فواتير بلا قيد سليم</div></div>
+  </div>
+</div>
+<div class="card">
+  <div class="log" id="log">اضغط "فحص التكرارات" أولاً.
+</div>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import{getFirestore,collection,doc,getDoc,getDocs,addDoc,updateDoc,deleteDoc,query,where,orderBy,serverTimestamp}from"https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+const FB={apiKey:"AIzaSyAike2lPO7VnFoRHevnGkbHpAQbKoDb5r8",authDomain:"idham-foodstuffs-sa.firebaseapp.com",projectId:"idham-foodstuffs-sa",storageBucket:"idham-foodstuffs-sa.appspot.com",messagingSenderId:"271994882624",appId:"1:271994882624:web:ce8afd3e3c08fec01a2f1c"};
+const db=getFirestore(initializeApp(FB,"clean3"));
+const COID="idham-main";
+const PAR="1-1-2-1-2";
+const ACC={CASH:"1-1-1-1-3",SC:"4-1-1-1-1",SN:"4-1-1-1-2",SA:"4-1-1-1-3",VAT:"2-1-3-1"};
+const REV=new Set(["4-1-1-1-1","4-1-1-1-2","4-1-1-1-3","4-1-2-1","4-1-1-2-1"]);
+
+function L(m,c=""){const el=document.getElementById("log");const s=document.createElement("span");s.textContent=m+"\n";if(c)s.style.color=c;el.appendChild(s);el.scrollTop=el.scrollHeight;}
+function N(id,v,c=""){const el=document.getElementById(id);if(el){el.textContent=v;if(c)el.style.color=c;}}
+function jeHasRevenue(je){return(je?.lines||[]).some(l=>REV.has(l.accountCode)||REV.has(l.accountId));}
+
+async function fetchJE(id){
+  if(!id)return null;
+  try{const s=await getDoc(doc(db,`companies/${COID}/journalEntries`,id));return s.exists()?{id:s.id,...s.data()}:null;}
+  catch(e){return null;}
+}
+
+// جلب جميع قيود فاتورة معينة (بالـ sourceId)
+async function fetchAllJEsForInvoice(invId,invNo){
+  const jeRef=collection(db,`companies/${COID}/journalEntries`);
+  const results=[];
+  // البحث بـ sourceId = invId
+  const q1=await getDocs(query(jeRef,where("sourceId","==",invId)));
+  for(const d of q1.docs)results.push({id:d.id,...d.data()});
+  // البحث بـ sourceId = invoiceNumber (بعض القيود تستخدم رقم الفاتورة)
+  if(invNo&&invNo!==invId){
+    const q2=await getDocs(query(jeRef,where("sourceId","==",invNo)));
+    for(const d of q2.docs){
+      if(!results.find(r=>r.id===d.id))results.push({id:d.id,...d.data()});
+    }
+  }
+  return results;
+}
+
+// بناء قيد صحيح
+function buildLines(inv,drCode,repName){
+  const sub=parseFloat(inv.subtotal||inv.totalBeforeTax||0);
+  const vat=parseFloat(inv.vatAmount||inv.taxAmount||0);
+  const tot=parseFloat(inv.total||(sub+vat));
+  const pm=(inv.paymentMethod||"cash").toLowerCase();
+  const isCr=pm==="credit"||pm==="آجل"||pm==="deferred";
+  const isNet=pm==="network"||pm==="شبكة"||pm==="مدى"||pm==="mada";
+  const sCode=isCr?ACC.SA:isNet?ACC.SN:ACC.SC;
+  const lines=[
+    {accountCode:drCode,accountId:drCode,accountName:isCr?`عملاء ${repName}`:"الصندوق",debit:tot,credit:0},
+    {accountCode:sCode,accountId:sCode,accountName:"مبيعات تجزئة",debit:0,credit:sub},
+  ];
+  if(vat>0.01)lines.push({accountCode:ACC.VAT,accountId:ACC.VAT,accountName:"ض.ق.م مخرجات",debit:0,credit:vat});
+  const dr=lines.reduce((s,l)=>s+l.debit,0),cr=lines.reduce((s,l)=>s+l.credit,0),df=Math.round((dr-cr)*100)/100;
+  if(Math.abs(df)>0.001&&Math.abs(df)<1)lines[1].credit=Math.round((lines[1].credit+df)*100)/100;
+  return{lines,sCode,tot};
+}
+
+// خريطة عامة للنتائج (تُحدَّث بالفحص وتُستخدم في التنظيف)
+let scanResults=null;
+
+window.scan=async()=>{
+  ["b1","b2"].forEach(id=>document.getElementById(id).disabled=true);
+  document.getElementById("stats").style.display="flex";
+  L("\n🔍 فحص القيود المكررة...","#38bdf8");
+
+  // جلب بيانات
+  const rsSnap=await getDocs(collection(db,`companies/${COID}/salesReps`));
+  const rm={};for(const d of rsSnap.docs)rm[d.id]={...d.data(),id:d.id};
+
+  const allInv=await getDocs(collection(db,`companies/${COID}/salesInvoices`));
+  const repInvs=allInv.docs.filter(d=>{const v=d.data();return!!(v.repId||v.salesRepId);});
+  N("n1",repInvs.length);
+  L(`  فواتير مناديب: ${repInvs.length}`);
+
+  const plan={toDelete:[],toCreate:[],toUpdate:[]};
+  let good=0,dupes=0,needFix=0;
+
+  for(const idoc of repInvs){
+    const inv={id:idoc.id,...idoc.data()};
+    const invNo=inv.invoiceNumber||inv.id;
+    const tot=parseFloat(inv.total||0);
+    if(tot<=0)continue;
+
+    // جلب كل القيود لهذه الفاتورة
+    const allJEs=await fetchAllJEsForInvoice(inv.id,invNo);
+    const validJEs=allJEs.filter(je=>jeHasRevenue(je));
+    const invalidJEs=allJEs.filter(je=>!jeHasRevenue(je));
+    const migrationJEs=allJEs.filter(je=>je.isFixed||je.isMigrated);
+
+    L(`\n  📄 ${invNo} | ${tot.toFixed(2)} ر.س | ${inv.paymentMethod||"?"}`);
+    L(`     كل القيود: ${allJEs.length} | صحيحة: ${validJEs.length} | خاطئة: ${invalidJEs.length} | ترحيل: ${migrationJEs.length}`);
+
+    if(allJEs.length===0){
+      // لا قيود على الإطلاق — يحتاج إنشاء
+      L(`     ⚠️ لا توجد قيود — سيُنشأ قيد جديد`,"#facc15");
+      needFix++;
+      const repId=inv.repId||inv.salesRepId;
+      const rep=rm[repId];
+      const pm=(inv.paymentMethod||"cash").toLowerCase();
+      const isCr=pm==="credit"||pm==="آجل"||pm==="deferred";
+      let drCode=isCr?(rep?.accountCode||PAR):(rep?.cashBoxCode||ACC.CASH);
+      plan.toCreate.push({idoc,inv,drCode,repName:rep?.name||repId});
+    } else if(validJEs.length>=2){
+      // قيود صحيحة متعددة — احذف الزائدة
+      const keepJE=validJEs.find(je=>!je.isFixed&&!je.isMigrated)||validJEs[0];
+      const deleteJEs=validJEs.filter(je=>je.id!==keepJE.id);
+      L(`     ❌ ${deleteJEs.length} قيود مكررة سيُحذف → يُبقي: ${keepJE.id.slice(0,12)}`,"#f87171");
+      dupes+=deleteJEs.length;
+      plan.toDelete.push(...deleteJEs.map(je=>je.id));
+      // تأكد أن الفاتورة مرتبطة بالقيد المحتفظ به
+      if(inv.journalEntryId!==keepJE.id)plan.toUpdate.push({idoc,jeId:keepJE.id});
+      // احذف أيضاً القيود الخاطئة
+      plan.toDelete.push(...invalidJEs.map(je=>je.id));
+      good++;
+    } else if(validJEs.length===1){
+      // قيد صحيح واحد — سليم! احذف الخاطئة
+      const keepJE=validJEs[0];
+      if(invalidJEs.length>0){
+        L(`     🔧 قيد صحيح موجود + ${invalidJEs.length} قيود خاطئة تُحذف`,"#facc15");
+        plan.toDelete.push(...invalidJEs.map(je=>je.id));
+      }else{
+        L(`     ✅ سليم — قيد واحد صحيح`,"#4ade80");
+      }
+      if(inv.journalEntryId!==keepJE.id)plan.toUpdate.push({idoc,jeId:keepJE.id});
+      good++;
+    } else {
+      // validJEs.length===0 — كل القيود خاطئة أو لا قيود
+      if(invalidJEs.length>0){
+        L(`     ❌ ${invalidJEs.length} قيود بلا إيراد — ستُحذف وتُنشأ قيداً صحيحاً`,"#f87171");
+        plan.toDelete.push(...invalidJEs.map(je=>je.id));
+      }
+      needFix++;
+      const repId=inv.repId||inv.salesRepId;
+      const rep=rm[repId];
+      const pm=(inv.paymentMethod||"cash").toLowerCase();
+      const isCr=pm==="credit"||pm==="آجل"||pm==="deferred";
+      let drCode=isCr?(rep?.accountCode||PAR):(rep?.cashBoxCode||ACC.CASH);
+      plan.toCreate.push({idoc,inv,drCode,repName:rep?.name||repId});
+    }
+  }
+
+  N("n2",dupes,dupes>0?"#f87171":"#4ade80");
+  N("n3",good,"#4ade80");
+  N("n4",needFix,needFix>0?"#facc15":"#4ade80");
+
+  scanResults={plan,rm};
+  L(`\n═══ ملخص الفحص ═══`,"#38bdf8");
+  L(`قيود مكررة للحذف: ${plan.toDelete.length}`,"#f87171");
+  L(`قيود تحتاج إنشاء: ${plan.toCreate.length}`,"#facc15");
+  L(`فواتير سليمة:      ${good}`,"#4ade80");
+  if(plan.toDelete.length>0||plan.toCreate.length>0){
+    L(`\n⚠️ اضغط "تنظيف التكرارات" لإصلاح المشكلة.`,"#facc15");
+  }else{
+    L(`\n✅ لا توجد مشاكل — كل القيود سليمة.`,"#4ade80");
+  }
+  ["b1","b2"].forEach(id=>document.getElementById(id).disabled=false);
+};
+
+window.cleanup=async(dry)=>{
+  if(!scanResults){L("❌ افحص أولاً باستخدام 'فحص التكرارات'","#f87171");return;}
+  ["b1","b2"].forEach(id=>document.getElementById(id).disabled=true);
+  const{plan,rm}=scanResults;
+  L(`\n🗑️ بدء التنظيف...`,"#38bdf8");
+  const jeRef=collection(db,`companies/${COID}/journalEntries`);
+  let deleted=0,created=0,updated=0,errs=0;
+
+  // 1. حذف القيود المكررة/الخاطئة
+  for(const jeId of plan.toDelete){
+    try{
+      await deleteDoc(doc(db,`companies/${COID}/journalEntries`,jeId));
+      deleted++;
+      L(`  🗑️ حُذف: ${jeId}`);
+    }catch(e){errs++;L(`  ❌ فشل حذف ${jeId}: ${e.message}`,"#f87171");}
+  }
+
+  // 2. تحديث ربط الفواتير
+  for(const{idoc,jeId}of plan.toUpdate){
+    try{
+      await updateDoc(idoc.ref,{journalEntryId:jeId});
+      updated++;
+      L(`  🔗 ربط الفاتورة ${idoc.data().invoiceNumber||idoc.id} → ${jeId}`,"#4ade80");
+    }catch(e){errs++;L(`  ❌ ${e.message}`,"#f87171");}
+  }
+
+  // 3. إنشاء قيود جديدة للفواتير المفقودة
+  for(const{idoc,inv,drCode,repName}of plan.toCreate){
+    try{
+      const{lines}=buildLines(inv,drCode,repName);
+      const newJE=await addDoc(jeRef,{
+        date:inv.date||new Date().toISOString().slice(0,10),
+        description:`مبيعات — ${inv.invoiceNumber||inv.id} — ${inv.customerName||""} [تصحيح]`,
+        lines,sourceType:"salesInvoice",sourceId:idoc.id,
+        status:"posted",createdByName:"النظام — تصحيح",createdAt:serverTimestamp(),
+      });
+      await updateDoc(idoc.ref,{journalEntryId:newJE.id});
+      created++;
+      L(`  ✅ قيد جديد لـ ${inv.invoiceNumber||inv.id}: ${newJE.id}`,"#4ade80");
+    }catch(e){errs++;L(`  ❌ فشل: ${e.message}`,"#f87171");}
+  }
+
+  L(`\n═══ نتيجة التنظيف ═══`,"#38bdf8");
+  L(`محذوف: ${deleted} | منشأ: ${created} | مُحدَّث: ${updated} | أخطاء: ${errs}`);
+  if(errs===0)L("\n✅ تم التنظيف. أعد تحميل قائمة الدخل.","#4ade80");
+  else L(`\n⚠️ اكتمل مع ${errs} أخطاء.`,"#facc15");
+  ["b1","b2"].forEach(id=>document.getElementById(id).disabled=false);
+  scanResults=null;
+};
+</script>
+</body>
+</html>
