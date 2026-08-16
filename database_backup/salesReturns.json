@@ -1,1 +1,90 @@
-[]
+[
+  {
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/salesReturns/CR-31059897",
+    "fields": {
+      "source": {
+        "stringValue": "rep_van_app"
+      },
+      "repName": {
+        "stringValue": "مصطفى"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "warehouseName": {
+        "stringValue": "مخزن سيارة 1 مصطفى"
+      },
+      "refInvoice": {
+        "nullValue": null
+      },
+      "customerName": {
+        "stringValue": "مطعم الصفا البخارى لتقديم الوجبات"
+      },
+      "repId": {
+        "stringValue": "Z8vkxuOfaumR63DMz7vA"
+      },
+      "companyId": {
+        "stringValue": "idham-main"
+      },
+      "journalEntryId": {
+        "stringValue": "5FRid0z6MhZjD7qqoG96"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-13T14:24:21.336Z"
+      },
+      "type": {
+        "stringValue": "sales_return"
+      },
+      "vatAmount": {
+        "doubleValue": 17.25
+      },
+      "totalCost": {
+        "doubleValue": 100
+      },
+      "creditNoteNumber": {
+        "stringValue": "CR-31059897"
+      },
+      "date": {
+        "stringValue": "2026-08-13"
+      },
+      "warehouseId": {
+        "stringValue": "Zyltw7uwvd0aKejdeqQq"
+      },
+      "subtotal": {
+        "integerValue": "115"
+      },
+      "total": {
+        "doubleValue": 132.25
+      },
+      "lines": {
+        "arrayValue": {
+          "values": [
+            {
+              "mapValue": {
+                "fields": {
+                  "productId": {
+                    "stringValue": "BRYy3jvl6JJOqON0PnPr"
+                  },
+                  "name": {
+                    "stringValue": "علب 16 اونز 450 ملى اسود دائرى عبوه 150"
+                  },
+                  "price": {
+                    "doubleValue": 57.5
+                  },
+                  "qty": {
+                    "integerValue": "2"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "customerId": {
+        "stringValue": "5OiBiic5mL02ZvG6jc58"
+      }
+    },
+    "createTime": "2026-08-13T14:24:21.396330Z",
+    "updateTime": "2026-08-15T10:00:35.411967Z"
+  }
+]

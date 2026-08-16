@@ -1,81 +1,219 @@
 [
   {
-    "_id": "5spakstdxOmDW0dhLZgp",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/warehouses/5spakstdxOmDW0dhLZgp",
-    "type": "Vehicle",
-    "accountCode": "1-1-4-1-02-02",
-    "barcodePrefix": "003",
-    "requireExpiry": false,
-    "location": "سيارة توزيع",
-    "name": "مخزن سيارة 2",
-    "inventoryAccountName": "مخزون مخزن سيارة 2",
-    "manager": "",
-    "isActive": true,
-    "inventoryAccountCode": "1-1-4-2-02",
-    "allowNegative": false,
-    "storageTemperature": "ambient",
-    "requireBatch": false
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/warehouses/5spakstdxOmDW0dhLZgp",
+    "fields": {
+      "barcodePrefix": {
+        "stringValue": "003"
+      },
+      "requireBatch": {
+        "booleanValue": false
+      },
+      "inventoryAccountName": {
+        "stringValue": "مخزون مخزن سيارة 2"
+      },
+      "requireExpiry": {
+        "booleanValue": false
+      },
+      "manager": {
+        "stringValue": ""
+      },
+      "name": {
+        "stringValue": "مخزن سيارة 2"
+      },
+      "allowNegative": {
+        "booleanValue": false
+      },
+      "inventoryAccountCode": {
+        "stringValue": "1-1-4-2-02"
+      },
+      "isActive": {
+        "booleanValue": true
+      },
+      "accountCode": {
+        "stringValue": "1-1-4-1-02-02"
+      },
+      "location": {
+        "stringValue": "سيارة توزيع"
+      },
+      "type": {
+        "stringValue": "Vehicle"
+      },
+      "storageTemperature": {
+        "stringValue": "ambient"
+      }
+    },
+    "createTime": "2026-07-26T18:15:44.674312Z",
+    "updateTime": "2026-07-31T22:35:15.269823Z"
   },
   {
-    "_id": "7egAcDBCbCctJyO4LH91",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/warehouses/7egAcDBCbCctJyO4LH91",
-    "name": "مخزن سيارة — سيارة المندوب خالد",
-    "plateNumber": "",
-    "createdAt": "2026-07-28T14:30:36.169Z",
-    "requireBatch": false,
-    "allowNegative": false,
-    "storageTemperature": "ambient",
-    "manager": "خالد",
-    "driverName": "خالد",
-    "isActive": true,
-    "costCenterId": "nv2ZmtprTHESzdhmcTIV",
-    "notes": "مخزن سيارة توزيع — تم إنشاؤه تلقائياً",
-    "barcodePrefix": "003",
-    "accountCode": "1-1-4-1-02-02",
-    "type": "Vehicle",
-    "requireSerial": false,
-    "accountId": "RRpQ5ic6g5hgI9bwq6Lv",
-    "updatedAt": "2026-07-28T14:30:39.876Z",
-    "requireExpiry": false
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/warehouses/7egAcDBCbCctJyO4LH91",
+    "fields": {
+      "notes": {
+        "stringValue": "مخزن سيارة توزيع — تم إنشاؤه تلقائياً"
+      },
+      "requireBatch": {
+        "booleanValue": false
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-28T14:30:39.876Z"
+      },
+      "barcodePrefix": {
+        "stringValue": "003"
+      },
+      "driverName": {
+        "stringValue": "خالد"
+      },
+      "accountId": {
+        "stringValue": "RRpQ5ic6g5hgI9bwq6Lv"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-28T14:30:36.169Z"
+      },
+      "costCenterId": {
+        "stringValue": "nv2ZmtprTHESzdhmcTIV"
+      },
+      "plateNumber": {
+        "stringValue": ""
+      },
+      "name": {
+        "stringValue": "مخزن سيارة — سيارة المندوب خالد"
+      },
+      "requireExpiry": {
+        "booleanValue": false
+      },
+      "manager": {
+        "stringValue": "خالد"
+      },
+      "requireSerial": {
+        "booleanValue": false
+      },
+      "allowNegative": {
+        "booleanValue": false
+      },
+      "accountCode": {
+        "stringValue": "1-1-4-1-02-02"
+      },
+      "isActive": {
+        "booleanValue": true
+      },
+      "type": {
+        "stringValue": "Vehicle"
+      },
+      "storageTemperature": {
+        "stringValue": "ambient"
+      }
+    },
+    "createTime": "2026-07-28T14:30:36.250089Z",
+    "updateTime": "2026-07-31T22:35:15.615315Z"
   },
   {
-    "_id": "W5uANJjMgfFh2p3xU4bT",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/warehouses/W5uANJjMgfFh2p3xU4bT",
-    "type": "Main",
-    "accountCode": "1-1-4-1-01",
-    "barcodePrefix": "001",
-    "costCenterName": "المستودع الرئيسي (ينبع)",
-    "requireExpiry": false,
-    "location": "ينبع",
-    "name": "المستودع الرئيسى",
-    "costCenter": "201 - المستودع الرئيسي (ينبع)",
-    "costCenterId": "cc_201",
-    "manager": "ناجى عاطف",
-    "inventoryAccountName": "مخزون المستودع الرئيسي",
-    "isActive": true,
-    "storageTemperature": "ambient",
-    "allowNegative": false,
-    "inventoryAccountCode": "1-1-4-1-01",
-    "requireBatch": false
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/warehouses/W5uANJjMgfFh2p3xU4bT",
+    "fields": {
+      "requireBatch": {
+        "booleanValue": false
+      },
+      "barcodePrefix": {
+        "stringValue": "001"
+      },
+      "inventoryAccountName": {
+        "stringValue": "مخزون المستودع الرئيسي"
+      },
+      "costCenterId": {
+        "stringValue": "cc_201"
+      },
+      "allowNegative": {
+        "booleanValue": false
+      },
+      "name": {
+        "stringValue": "المستودع الرئيسى"
+      },
+      "requireExpiry": {
+        "booleanValue": false
+      },
+      "manager": {
+        "stringValue": "ناجى عاطف"
+      },
+      "costCenter": {
+        "stringValue": "201 - المستودع الرئيسي (ينبع)"
+      },
+      "inventoryAccountCode": {
+        "stringValue": "1-1-4-1-01"
+      },
+      "accountCode": {
+        "stringValue": "1-1-4-1-01"
+      },
+      "location": {
+        "stringValue": "ينبع"
+      },
+      "isActive": {
+        "booleanValue": true
+      },
+      "costCenterName": {
+        "stringValue": "المستودع الرئيسي (ينبع)"
+      },
+      "type": {
+        "stringValue": "Main"
+      },
+      "storageTemperature": {
+        "stringValue": "ambient"
+      }
+    },
+    "createTime": "2026-07-26T18:15:06.116185Z",
+    "updateTime": "2026-07-27T10:41:26.413520Z"
   },
   {
-    "_id": "Zyltw7uwvd0aKejdeqQq",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/warehouses/Zyltw7uwvd0aKejdeqQq",
-    "storageTemperature": "ambient",
-    "inventoryAccountCode": "1-1-4-2-01",
-    "allowNegative": false,
-    "requireBatch": false,
-    "costCenterId": "cc_301",
-    "costCenter": "301 - سيارة المندوب مصطفى (ينبع والمسارات)",
-    "inventoryAccountName": "مخزون مخزن سيارة 1 مصطفى",
-    "manager": "مصطفى",
-    "isActive": true,
-    "location": "سيارة مصطفى خط ينبع",
-    "name": "مخزن سيارة 1 مصطفى",
-    "requireExpiry": false,
-    "accountCode": "1-1-4-1-02-01",
-    "barcodePrefix": "002",
-    "costCenterName": "سيارة المندوب مصطفى (ينبع والمسارات)",
-    "type": "Vehicle"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/warehouses/Zyltw7uwvd0aKejdeqQq",
+    "fields": {
+      "storageTemperature": {
+        "stringValue": "ambient"
+      },
+      "type": {
+        "stringValue": "Vehicle"
+      },
+      "costCenterName": {
+        "stringValue": "سيارة المندوب مصطفى (ينبع والمسارات)"
+      },
+      "isActive": {
+        "booleanValue": true
+      },
+      "location": {
+        "stringValue": "سيارة مصطفى خط ينبع"
+      },
+      "accountCode": {
+        "stringValue": "1-1-4-1-02-01"
+      },
+      "inventoryAccountCode": {
+        "stringValue": "1-1-4-2-01"
+      },
+      "costCenter": {
+        "stringValue": "301 - سيارة المندوب مصطفى (ينبع والمسارات)"
+      },
+      "manager": {
+        "stringValue": "مصطفى"
+      },
+      "requireExpiry": {
+        "booleanValue": false
+      },
+      "name": {
+        "stringValue": "مخزن سيارة 1 مصطفى"
+      },
+      "allowNegative": {
+        "booleanValue": false
+      },
+      "costCenterId": {
+        "stringValue": "cc_301"
+      },
+      "inventoryAccountName": {
+        "stringValue": "مخزون مخزن سيارة 1 مصطفى"
+      },
+      "barcodePrefix": {
+        "stringValue": "002"
+      },
+      "requireBatch": {
+        "booleanValue": false
+      }
+    },
+    "createTime": "2026-07-26T18:15:06.519581Z",
+    "updateTime": "2026-07-31T22:35:15.945229Z"
   }
 ]

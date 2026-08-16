@@ -1,130 +1,346 @@
 [
   {
-    "_id": "D5aKNH2GBcpUa9N4r6HS",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/D5aKNH2GBcpUa9N4r6HS",
-    "address": "",
-    "code": "007",
-    "accountCode": "2-1-1-1-1-07",
-    "nationalId": "",
-    "phone": "",
-    "category": "other",
-    "accountId": "NyLkfSUpju1rVcEiCOKZ",
-    "name": "شركة الافاق العربية الحديثة للتجارة",
-    "balance": 0,
-    "createdAt": "2026-08-06T10:27:24.167Z",
-    "notes": "",
-    "vatNumber": "",
-    "updatedAt": "2026-08-06T11:33:04.977Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/D5aKNH2GBcpUa9N4r6HS",
+    "fields": {
+      "category": {
+        "stringValue": "other"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-06T11:33:04.977Z"
+      },
+      "code": {
+        "stringValue": "007"
+      },
+      "accountCode": {
+        "stringValue": "2-1-1-1-1-07"
+      },
+      "address": {
+        "stringValue": ""
+      },
+      "phone": {
+        "stringValue": ""
+      },
+      "name": {
+        "stringValue": "شركة الافاق العربية الحديثة للتجارة"
+      },
+      "balance": {
+        "integerValue": "0"
+      },
+      "notes": {
+        "stringValue": ""
+      },
+      "nationalId": {
+        "stringValue": ""
+      },
+      "vatNumber": {
+        "stringValue": ""
+      },
+      "accountId": {
+        "stringValue": "NyLkfSUpju1rVcEiCOKZ"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-06T10:27:24.167Z"
+      }
+    },
+    "createTime": "2026-08-06T10:27:24.227531Z",
+    "updateTime": "2026-08-08T00:37:54.425867Z"
   },
   {
-    "_id": "F0m6WKgZ056fj38gSbBc",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/F0m6WKgZ056fj38gSbBc",
-    "address": "شارع المحجر - جده",
-    "accountCode": "2-1-1-1-1-08",
-    "nationalId": "4030226951",
-    "phone": "",
-    "code": "007",
-    "accountId": "zoeHdWWvS9t6Y0P5d979",
-    "category": "flour",
-    "name": "ملتقى الخبازين  للتجارة",
-    "balance": 0,
-    "createdAt": "2026-08-06T10:33:46.694Z",
-    "notes": "",
-    "vatNumber": "310570726200003",
-    "updatedAt": "2026-08-06T11:53:06.926Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/F0m6WKgZ056fj38gSbBc",
+    "fields": {
+      "accountCode": {
+        "stringValue": "2-1-1-1-1-08"
+      },
+      "address": {
+        "stringValue": "شارع المحجر - جده"
+      },
+      "code": {
+        "stringValue": "007"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-06T11:53:06.926Z"
+      },
+      "category": {
+        "stringValue": "flour"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-06T10:33:46.694Z"
+      },
+      "notes": {
+        "stringValue": ""
+      },
+      "accountId": {
+        "stringValue": "zoeHdWWvS9t6Y0P5d979"
+      },
+      "nationalId": {
+        "stringValue": "4030226951"
+      },
+      "vatNumber": {
+        "stringValue": "310570726200003"
+      },
+      "balance": {
+        "integerValue": "0"
+      },
+      "phone": {
+        "stringValue": ""
+      },
+      "name": {
+        "stringValue": "ملتقى الخبازين  للتجارة"
+      }
+    },
+    "createTime": "2026-08-06T10:33:46.746125Z",
+    "updateTime": "2026-08-08T00:38:32.146971Z"
   },
   {
-    "_id": "G9jkfr5Eym3JwP8KJpsZ",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/G9jkfr5Eym3JwP8KJpsZ",
-    "vatNumber": "310668876500003",
-    "code": "001",
-    "accountCode": "2-1-1-1-1-1",
-    "nationalId": "",
-    "phone": "0549880636",
-    "notes": "",
-    "address": "حى النخيل -جدة",
-    "name": "شركة الرفادة العربية التجارية",
-    "balance": 0.5,
-    "accountId": "xQsQG3VQ5RmkFsKVL50r"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/G9jkfr5Eym3JwP8KJpsZ",
+    "fields": {
+      "accountId": {
+        "stringValue": "xQsQG3VQ5RmkFsKVL50r"
+      },
+      "vatNumber": {
+        "stringValue": "310668876500003"
+      },
+      "nationalId": {
+        "stringValue": ""
+      },
+      "code": {
+        "stringValue": "001"
+      },
+      "notes": {
+        "stringValue": ""
+      },
+      "address": {
+        "stringValue": "حى النخيل -جدة"
+      },
+      "accountCode": {
+        "stringValue": "2-1-1-1-1-1"
+      },
+      "name": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      },
+      "phone": {
+        "stringValue": "0549880636"
+      },
+      "balance": {
+        "doubleValue": 0.5
+      }
+    },
+    "createTime": "2026-07-26T18:14:04.123640Z",
+    "updateTime": "2026-07-26T23:50:58.173264Z"
   },
   {
-    "_id": "GG58T6gb5UDMgm7gJ2hU",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/GG58T6gb5UDMgm7gJ2hU",
-    "balance": 0,
-    "name": "مؤسسة باهطف للمواد الغذائية",
-    "category": "rice",
-    "accountId": "x5GhKK7caPgNmzBP5DPJ",
-    "accountCode": "2-1-1-1-1-06",
-    "nationalId": "",
-    "phone": "",
-    "code": "006",
-    "address": "جدة - بترومين - دوار النجوم",
-    "updatedAt": "2026-08-06T11:56:27.343Z",
-    "notes": "",
-    "vatNumber": "300099289100003",
-    "createdAt": "2026-08-06T10:24:43.516Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/GG58T6gb5UDMgm7gJ2hU",
+    "fields": {
+      "code": {
+        "stringValue": "006"
+      },
+      "accountCode": {
+        "stringValue": "2-1-1-1-1-06"
+      },
+      "address": {
+        "stringValue": "جدة - بترومين - دوار النجوم"
+      },
+      "category": {
+        "stringValue": "rice"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-06T11:56:27.343Z"
+      },
+      "accountId": {
+        "stringValue": "x5GhKK7caPgNmzBP5DPJ"
+      },
+      "vatNumber": {
+        "stringValue": "300099289100003"
+      },
+      "nationalId": {
+        "stringValue": ""
+      },
+      "notes": {
+        "stringValue": ""
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-06T10:24:43.516Z"
+      },
+      "name": {
+        "stringValue": "مؤسسة باهطف للمواد الغذائية"
+      },
+      "phone": {
+        "stringValue": ""
+      },
+      "balance": {
+        "integerValue": "0"
+      }
+    },
+    "createTime": "2026-08-06T10:24:43.591833Z",
+    "updateTime": "2026-08-10T08:45:29.124637Z"
   },
   {
-    "_id": "WIDvPcdlldzkab5ZikBB",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/WIDvPcdlldzkab5ZikBB",
-    "address": "جدة الكيلو 10 طريق مكة",
-    "vatNumber": "310110852500003",
-    "notes": "",
-    "phone": "6201774",
-    "code": "002",
-    "accountCode": "2-1-1-1-1-02",
-    "nationalId": "",
-    "category": "rice",
-    "accountId": "oKmWW9jBUajIIpHuvpZo",
-    "updatedAt": "2026-08-06T10:24:59.904Z",
-    "name": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
-    "balance": 0
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/WIDvPcdlldzkab5ZikBB",
+    "fields": {
+      "code": {
+        "stringValue": "002"
+      },
+      "notes": {
+        "stringValue": ""
+      },
+      "accountId": {
+        "stringValue": "oKmWW9jBUajIIpHuvpZo"
+      },
+      "vatNumber": {
+        "stringValue": "310110852500003"
+      },
+      "nationalId": {
+        "stringValue": ""
+      },
+      "accountCode": {
+        "stringValue": "2-1-1-1-1-02"
+      },
+      "address": {
+        "stringValue": "جدة الكيلو 10 طريق مكة"
+      },
+      "phone": {
+        "stringValue": "6201774"
+      },
+      "name": {
+        "stringValue": "شركة محمد على العيسانى للمواد الغذائية المحدودة"
+      },
+      "category": {
+        "stringValue": "rice"
+      },
+      "balance": {
+        "doubleValue": 60006.43
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-15T09:43:24.132Z"
+      }
+    },
+    "createTime": "2026-07-26T18:14:04.543293Z",
+    "updateTime": "2026-08-15T09:43:27.606758Z"
   },
   {
-    "_id": "cgr0XDvjx5sG3Kv9Nys1",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/cgr0XDvjx5sG3Kv9Nys1",
-    "balance": 0,
-    "name": "الشامل بلاستيك",
-    "updatedAt": "2026-07-30T19:51:56.647Z",
-    "accountId": "O9wPqShaOUyQCZTUZpbA",
-    "code": "004",
-    "phone": "",
-    "vatNumber": "310085644400003",
-    "nationalId": "4030370062",
-    "accountCode": "2-1-1-1-1-04",
-    "notes": "",
-    "createdAt": "2026-07-30T16:51:59.812Z",
-    "address": "جدة"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/cgr0XDvjx5sG3Kv9Nys1",
+    "fields": {
+      "balance": {
+        "integerValue": "0"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-30T19:51:56.647Z"
+      },
+      "phone": {
+        "stringValue": ""
+      },
+      "name": {
+        "stringValue": "الشامل بلاستيك"
+      },
+      "address": {
+        "stringValue": "جدة"
+      },
+      "accountCode": {
+        "stringValue": "2-1-1-1-1-04"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-30T16:51:59.812Z"
+      },
+      "code": {
+        "stringValue": "004"
+      },
+      "notes": {
+        "stringValue": ""
+      },
+      "nationalId": {
+        "stringValue": "4030370062"
+      },
+      "vatNumber": {
+        "stringValue": "310085644400003"
+      },
+      "accountId": {
+        "stringValue": "O9wPqShaOUyQCZTUZpbA"
+      }
+    },
+    "createTime": "2026-07-30T16:51:59.862921Z",
+    "updateTime": "2026-08-01T10:53:11.291033Z"
   },
   {
-    "_id": "d6qw7i99llSzSgTsq8NO",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/d6qw7i99llSzSgTsq8NO",
-    "address": "",
-    "createdAt": "2026-07-30T16:53:36.377Z",
-    "code": "005",
-    "phone": "",
-    "accountCode": "2-1-1-1-1-05",
-    "notes": "",
-    "nationalId": "",
-    "vatNumber": "314485677800003",
-    "accountId": "2IDy9DsZuOu47ZbAY5qU",
-    "updatedAt": "2026-07-30T20:12:07.874Z",
-    "name": "شركة متاجر النجوم للتجارة",
-    "balance": 0
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/d6qw7i99llSzSgTsq8NO",
+    "fields": {
+      "code": {
+        "stringValue": "005"
+      },
+      "notes": {
+        "stringValue": ""
+      },
+      "accountId": {
+        "stringValue": "2IDy9DsZuOu47ZbAY5qU"
+      },
+      "vatNumber": {
+        "stringValue": "314485677800003"
+      },
+      "nationalId": {
+        "stringValue": ""
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-30T16:53:36.377Z"
+      },
+      "accountCode": {
+        "stringValue": "2-1-1-1-1-05"
+      },
+      "address": {
+        "stringValue": ""
+      },
+      "phone": {
+        "stringValue": ""
+      },
+      "name": {
+        "stringValue": "شركة متاجر النجوم للتجارة"
+      },
+      "balance": {
+        "integerValue": "0"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-30T20:12:07.874Z"
+      }
+    },
+    "createTime": "2026-07-30T16:53:36.422477Z",
+    "updateTime": "2026-08-01T10:55:38.195752Z"
   },
   {
-    "_id": "gRFQtWbjOm4N84tSkTNs",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/gRFQtWbjOm4N84tSkTNs",
-    "address": "حى النخيل -جدة",
-    "phone": "",
-    "notes": "",
-    "accountCode": "2-1-1-1-1-03",
-    "vatNumber": "311127220300003",
-    "code": "003",
-    "nationalId": "113287",
-    "accountId": "wyfUvQNhZZ9EpM25nySC",
-    "updatedAt": "2026-07-30T20:22:56.932Z",
-    "name": "شركة جيلانى باك التجارية",
-    "balance": 78.1
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/suppliers/gRFQtWbjOm4N84tSkTNs",
+    "fields": {
+      "phone": {
+        "stringValue": ""
+      },
+      "name": {
+        "stringValue": "شركة جيلانى باك التجارية"
+      },
+      "balance": {
+        "doubleValue": 78.1
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-30T20:22:56.932Z"
+      },
+      "notes": {
+        "stringValue": ""
+      },
+      "code": {
+        "stringValue": "003"
+      },
+      "vatNumber": {
+        "stringValue": "311127220300003"
+      },
+      "nationalId": {
+        "stringValue": "113287"
+      },
+      "accountId": {
+        "stringValue": "wyfUvQNhZZ9EpM25nySC"
+      },
+      "accountCode": {
+        "stringValue": "2-1-1-1-1-03"
+      },
+      "address": {
+        "stringValue": "حى النخيل -جدة"
+      }
+    },
+    "createTime": "2026-07-26T18:14:04.992304Z",
+    "updateTime": "2026-08-01T10:54:36.440577Z"
   }
 ]

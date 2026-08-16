@@ -1,525 +1,1446 @@
 [
   {
-    "_id": "8tZSAK5zsjWHkx8B4t6g",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/8tZSAK5zsjWHkx8B4t6g",
-    "notes": "تحويل من الصندوق الى جارى المالك",
-    "costCenterId": "cc_301",
-    "method": "cash",
-    "targetId": "ErUeZws4zc9XMUzil3xx",
-    "amount": 3537,
-    "createdAt": "2026-08-11T09:15:48.979Z",
-    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
-    "costCenterName": "سيارة المندوب مصطفى (ينبع والمسارات)",
-    "sourceName": "صندوق المندوب - مص��فى",
-    "accountName": "جاري المالك",
-    "updatedAt": "2026-08-11T09:15:48.979Z",
-    "entityType": "other",
-    "date": "2026-08-11"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/8tZSAK5zsjWHkx8B4t6g",
+    "fields": {
+      "method": {
+        "stringValue": "cash"
+      },
+      "amount": {
+        "integerValue": "3537"
+      },
+      "costCenterId": {
+        "stringValue": "cc_301"
+      },
+      "targetId": {
+        "stringValue": "ErUeZws4zc9XMUzil3xx"
+      },
+      "costCenterName": {
+        "stringValue": "سيارة المندوب مصطفى (ينبع والمسارات)"
+      },
+      "sourceId": {
+        "stringValue": "cashBox_Z8vkxuOfaumR63DMz7vA"
+      },
+      "sourceName": {
+        "stringValue": "صندوق المندوب - مصطفى"
+      },
+      "entityType": {
+        "stringValue": "other"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-11T09:15:48.979Z"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-11T09:15:48.979Z"
+      },
+      "notes": {
+        "stringValue": "تحويل من الصندوق الى جارى المالك"
+      },
+      "accountName": {
+        "stringValue": "جاري المالك"
+      },
+      "date": {
+        "stringValue": "2026-08-11"
+      }
+    },
+    "createTime": "2026-08-11T09:15:49.271069Z",
+    "updateTime": "2026-08-11T09:15:49.271069Z"
   },
   {
-    "_id": "AOYGxjQtaj7rJdSjou0O",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/AOYGxjQtaj7rJdSjou0O",
-    "notes": "سداد",
-    "costCenterId": null,
-    "method": "bank",
-    "targetId": "F0m6WKgZ056fj38gSbBc",
-    "sourceId": "bank-alrajhi",
-    "createdAt": "2026-08-08T00:38:26.815Z",
-    "amount": 713,
-    "accountName": "ملتقى الخبازين  للتجارة",
-    "costCenterName": null,
-    "sourceName": "بنك الراجحي",
-    "entityType": "supplier",
-    "date": "2026-08-08",
-    "updatedAt": "2026-08-08T00:38:26.815Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/AOYGxjQtaj7rJdSjou0O",
+    "fields": {
+      "updatedAt": {
+        "timestampValue": "2026-08-08T00:38:26.815Z"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-08T00:38:26.815Z"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "targetId": {
+        "stringValue": "F0m6WKgZ056fj38gSbBc"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "sourceName": {
+        "stringValue": "بنك الراجحي"
+      },
+      "sourceId": {
+        "stringValue": "bank-alrajhi"
+      },
+      "amount": {
+        "integerValue": "713"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "date": {
+        "stringValue": "2026-08-08"
+      },
+      "accountName": {
+        "stringValue": "ملتقى الخبازين  للتجارة"
+      },
+      "notes": {
+        "stringValue": "سداد"
+      }
+    },
+    "createTime": "2026-08-08T00:38:26.888362Z",
+    "updateTime": "2026-08-08T00:38:26.888362Z"
   },
   {
-    "_id": "Ae8B6dZ0AzbMKeKlWhOC",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Ae8B6dZ0AzbMKeKlWhOC",
-    "costCenterId": null,
-    "method": "bank",
-    "targetId": "WIDvPcdlldzkab5ZikBB",
-    "notes": "سداد ف مشتروات",
-    "costCenterName": null,
-    "sourceName": "بنك الراجحي",
-    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
-    "updatedAt": "2026-08-01T10:56:19.365Z",
-    "date": "2026-08-01",
-    "entityType": "supplier",
-    "amount": 74024.39,
-    "createdAt": "2026-08-01T10:56:19.365Z",
-    "sourceId": "bank-alrajhi"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Ae8B6dZ0AzbMKeKlWhOC",
+    "fields": {
+      "accountName": {
+        "stringValue": "شركة محمد على العيسانى للمواد الغذائية المحدودة"
+      },
+      "date": {
+        "stringValue": "2026-08-01"
+      },
+      "notes": {
+        "stringValue": "سداد ف مشتروات"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-01T10:56:19.365Z"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-01T10:56:19.365Z"
+      },
+      "amount": {
+        "doubleValue": 74024.39
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "targetId": {
+        "stringValue": "WIDvPcdlldzkab5ZikBB"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "sourceId": {
+        "stringValue": "bank-alrajhi"
+      },
+      "sourceName": {
+        "stringValue": "بنك الراجحي"
+      }
+    },
+    "createTime": "2026-08-01T10:56:19.415124Z",
+    "updateTime": "2026-08-01T10:56:19.415124Z"
   },
   {
-    "_id": "FrCObG2k3hkvsNn14YoG",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/FrCObG2k3hkvsNn14YoG",
-    "method": "cash",
-    "targetId": "acc_hospitality",
-    "entryNumber": "JE-000203",
-    "category": "مصروفات مياه + وجبات",
-    "notes": "سند صرف رقم #FRCOBG - مصروفات مياه + وجبات",
-    "accountName": "ضيافة واستقبال",
-    "isReversed": false,
-    "reversedBy": "",
-    "sourceName": "صندوق المندوب - مصطفى",
-    "targetName": "ضيافة واستقبال",
-    "createdByName": "النظام",
-    "entityType": "expense",
-    "description": "سند صرف رقم #FRCOBG - مصروفات مياه + وجبات",
-    "date": "2026-07-24",
-    "jeId": "M5z2j8UqXtKcpdVarddV",
-    "number": "FRCOBG",
-    "type": "expense",
-    "id": "FrCObG2k3hkvsNn14YoG",
-    "amount": 100,
-    "status": "posted"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/FrCObG2k3hkvsNn14YoG",
+    "fields": {
+      "targetName": {
+        "stringValue": "ضيافة واستقبال"
+      },
+      "entityType": {
+        "stringValue": "expense"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "targetId": {
+        "stringValue": "acc_hospitality"
+      },
+      "number": {
+        "stringValue": "FRCOBG"
+      },
+      "sourceName": {
+        "stringValue": "صندوق المندوب - مصطفى"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "entryNumber": {
+        "stringValue": "JE-000203"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "amount": {
+        "integerValue": "100"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #FRCOBG - مصروفات مياه + وجبات"
+      },
+      "date": {
+        "stringValue": "2026-07-24"
+      },
+      "accountName": {
+        "stringValue": "ضيافة واستقبال"
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #FRCOBG - مصروفات مياه + وجبات"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "id": {
+        "stringValue": "FrCObG2k3hkvsNn14YoG"
+      },
+      "jeId": {
+        "stringValue": "M5z2j8UqXtKcpdVarddV"
+      },
+      "category": {
+        "stringValue": "مصروفات مياه + وجبات"
+      }
+    },
+    "createTime": "2026-07-27T00:29:10.545338Z",
+    "updateTime": "2026-07-27T00:39:47.251688Z"
   },
   {
-    "_id": "Fw6t7kj8xJfzKoNVUVMu",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Fw6t7kj8xJfzKoNVUVMu",
-    "method": "bank",
-    "targetId": "acc_freight_in",
-    "category": "مصروفات نقل",
-    "notes": "سند صرف رقم #FW6T7K - مصروفات نقل",
-    "entryNumber": "JE-000036",
-    "sourceName": "مصرف الراجحي",
-    "reversedBy": "",
-    "createdByName": "النظام",
-    "targetName": "مصروفات نقل بضاعة (للداخل)",
-    "accountName": "مصروفات نقل بضاعة (للداخل)",
-    "isReversed": false,
-    "jeId": "VzdwOoj3bg6ut8tE99jW",
-    "number": "FW6T7K",
-    "entityType": "expense",
-    "description": "سند صرف رقم #FW6T7K - مصروفات نقل",
-    "date": "2026-07-16",
-    "id": "Fw6t7kj8xJfzKoNVUVMu",
-    "amount": 600,
-    "type": "expense",
-    "status": "posted"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Fw6t7kj8xJfzKoNVUVMu",
+    "fields": {
+      "notes": {
+        "stringValue": "سند صرف رقم #FW6T7K - مصروفات نقل"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "id": {
+        "stringValue": "Fw6t7kj8xJfzKoNVUVMu"
+      },
+      "jeId": {
+        "stringValue": "VzdwOoj3bg6ut8tE99jW"
+      },
+      "category": {
+        "stringValue": "مصروفات نقل"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #FW6T7K - مصروفات نقل"
+      },
+      "date": {
+        "stringValue": "2026-07-16"
+      },
+      "accountName": {
+        "stringValue": "مصروفات نقل بضاعة (للداخل)"
+      },
+      "targetId": {
+        "stringValue": "acc_freight_in"
+      },
+      "number": {
+        "stringValue": "FW6T7K"
+      },
+      "sourceName": {
+        "stringValue": "مصرف الراجحي"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "entryNumber": {
+        "stringValue": "JE-000036"
+      },
+      "amount": {
+        "integerValue": "600"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "targetName": {
+        "stringValue": "مصروفات نقل بضاعة (للداخل)"
+      },
+      "entityType": {
+        "stringValue": "expense"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      }
+    },
+    "createTime": "2026-07-27T00:29:11.360929Z",
+    "updateTime": "2026-07-27T00:39:48.021721Z"
   },
   {
-    "_id": "JXur6WkVqI3pjacWi3Ed",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/JXur6WkVqI3pjacWi3Ed",
-    "accountName": "عهدة الموظف محمد عوض",
-    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
-    "costCenterName": null,
-    "date": "2026-08-11",
-    "entityType": "other",
-    "updatedAt": "2026-08-11T13:30:05.302Z",
-    "sourceId": "cashBox_owner_current",
-    "createdAt": "2026-08-11T13:30:05.302Z",
-    "amount": 1500,
-    "method": "cash",
-    "costCenterId": null,
-    "targetId": "M8NZ55YJqDomeO89bvFJ",
-    "notes": "عهدة للموظف محمد عوض"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/JXur6WkVqI3pjacWi3Ed",
+    "fields": {
+      "notes": {
+        "stringValue": "عهدة للموظف محمد عوض"
+      },
+      "date": {
+        "stringValue": "2026-08-11"
+      },
+      "accountName": {
+        "stringValue": "عهدة الموظف محمد عوض"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "targetId": {
+        "stringValue": "M8NZ55YJqDomeO89bvFJ"
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "sourceName": {
+        "stringValue": "👤 حساب جاري المالك (تمويل شخصي)"
+      },
+      "sourceId": {
+        "stringValue": "cashBox_owner_current"
+      },
+      "amount": {
+        "integerValue": "1500"
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-11T13:30:05.302Z"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-11T13:30:05.302Z"
+      },
+      "entityType": {
+        "stringValue": "other"
+      }
+    },
+    "createTime": "2026-08-11T13:30:06.145620Z",
+    "updateTime": "2026-08-11T13:30:06.145620Z"
   },
   {
-    "_id": "Ntd4PSk5NNIsND1Xaaun",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Ntd4PSk5NNIsND1Xaaun",
-    "status": "posted",
-    "id": "Ntd4PSk5NNIsND1Xaaun",
-    "amount": 10449.48,
-    "type": "supplierPayment",
-    "jeId": "Ew7IoNFvZMD3hzkzA0VT",
-    "number": "NTD4PSK5",
-    "entityType": "supplier",
-    "supplierId": "G9jkfr5Eym3JwP8KJpsZ",
-    "description": "سداد فاتورة مشتريات نقداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية",
-    "date": "2026-07-12",
-    "reversedBy": "",
-    "sourceName": "الصندوق الرئيسي",
-    "targetName": "شركة الرفادة العربية التجارية",
-    "createdByName": "النظام",
-    "accountName": "شركة الرفادة العربية التجارية",
-    "isReversed": false,
-    "category": "سداد فاتورة مشتريات ��قداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية",
-    "notes": "سداد فاتورة مشتريات نقداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية",
-    "entryNumber": "JE-000004",
-    "targetId": "G9jkfr5Eym3JwP8KJpsZ",
-    "method": "cash"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Ntd4PSk5NNIsND1Xaaun",
+    "fields": {
+      "date": {
+        "stringValue": "2026-07-12"
+      },
+      "description": {
+        "stringValue": "سداد فاتورة مشتريات نقداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية"
+      },
+      "accountName": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      },
+      "supplierId": {
+        "stringValue": "G9jkfr5Eym3JwP8KJpsZ"
+      },
+      "id": {
+        "stringValue": "Ntd4PSk5NNIsND1Xaaun"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "notes": {
+        "stringValue": "سداد فاتورة مشتريات نقداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية"
+      },
+      "category": {
+        "stringValue": "سداد فاتورة مشتريات نقداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية"
+      },
+      "jeId": {
+        "stringValue": "Ew7IoNFvZMD3hzkzA0VT"
+      },
+      "targetName": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "entryNumber": {
+        "stringValue": "JE-000004"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "number": {
+        "stringValue": "NTD4PSK5"
+      },
+      "sourceName": {
+        "stringValue": "الصندوق الرئيسي"
+      },
+      "targetId": {
+        "stringValue": "G9jkfr5Eym3JwP8KJpsZ"
+      },
+      "type": {
+        "stringValue": "supplierPayment"
+      },
+      "amount": {
+        "doubleValue": 10449.48
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      }
+    },
+    "createTime": "2026-07-27T00:29:08.924280Z",
+    "updateTime": "2026-07-27T00:39:45.636133Z"
   },
   {
-    "_id": "Ryt9th7PCIJ1MASemAqA",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Ryt9th7PCIJ1MASemAqA",
-    "notes": "سداد ف مشتروات",
-    "costCenterId": null,
-    "method": "bank",
-    "targetId": "d6qw7i99llSzSgTsq8NO",
-    "amount": 5200.3,
-    "createdAt": "2026-08-01T10:55:33.761Z",
-    "sourceId": "bank-alrajhi",
-    "costCenterName": null,
-    "sourceName": "بنك الراجحي",
-    "accountName": "شركة متاجر النجوم للتجارة",
-    "updatedAt": "2026-08-01T10:55:33.761Z",
-    "date": "2026-08-01",
-    "entityType": "supplier"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Ryt9th7PCIJ1MASemAqA",
+    "fields": {
+      "notes": {
+        "stringValue": "سداد ف مشتروات"
+      },
+      "date": {
+        "stringValue": "2026-08-01"
+      },
+      "accountName": {
+        "stringValue": "شركة متاجر النجوم للتجارة"
+      },
+      "targetId": {
+        "stringValue": "d6qw7i99llSzSgTsq8NO"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "sourceName": {
+        "stringValue": "بنك الراجحي"
+      },
+      "sourceId": {
+        "stringValue": "bank-alrajhi"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "amount": {
+        "doubleValue": 5200.3
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-01T10:55:33.761Z"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-01T10:55:33.761Z"
+      }
+    },
+    "createTime": "2026-08-01T10:55:33.808105Z",
+    "updateTime": "2026-08-01T10:55:33.808105Z"
   },
   {
-    "_id": "SUm2UJfq030OHxlONQmi",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/SUm2UJfq030OHxlONQmi",
-    "targetId": "ErUeZws4zc9XMUzil3xx",
-    "method": "cash",
-    "costCenterId": null,
-    "notes": "الايداعات النقدية عن يوم 03-08",
-    "updatedAt": "2026-08-04T12:46:57.979Z",
-    "entityType": "other",
-    "date": "2026-08-03",
-    "sourceName": "صندوق المندوب - مصطفى",
-    "costCenterName": null,
-    "accountName": "جاري المالك",
-    "amount": 840,
-    "createdAt": "2026-08-04T12:46:57.979Z",
-    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/SUm2UJfq030OHxlONQmi",
+    "fields": {
+      "updatedAt": {
+        "timestampValue": "2026-08-04T12:46:57.979Z"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-04T12:46:57.979Z"
+      },
+      "entityType": {
+        "stringValue": "other"
+      },
+      "sourceId": {
+        "stringValue": "cashBox_Z8vkxuOfaumR63DMz7vA"
+      },
+      "sourceName": {
+        "stringValue": "صندوق المندوب - مصطفى"
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "targetId": {
+        "stringValue": "ErUeZws4zc9XMUzil3xx"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "amount": {
+        "integerValue": "840"
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "date": {
+        "stringValue": "2026-08-03"
+      },
+      "accountName": {
+        "stringValue": "جاري المالك"
+      },
+      "notes": {
+        "stringValue": "الايداعات النقدية عن يوم 03-08"
+      }
+    },
+    "createTime": "2026-08-04T12:46:58.039745Z",
+    "updateTime": "2026-08-04T12:46:58.039745Z"
   },
   {
-    "_id": "SzkYx8AZ0Kg1tdLiGSut",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/SzkYx8AZ0Kg1tdLiGSut",
-    "category": "مصروف نقل البضاعة",
-    "notes": "سند صرف رقم #SZKYX8 - مصروف نقل البضاعة",
-    "entryNumber": "JE-000037",
-    "method": "bank",
-    "targetId": "acc_freight_in",
-    "id": "SzkYx8AZ0Kg1tdLiGSut",
-    "amount": 600,
-    "type": "expense",
-    "status": "posted",
-    "sourceName": "مصرف الراجحي",
-    "reversedBy": "",
-    "createdByName": "النظام",
-    "targetName": "مصروفات نقل بضاعة (للداخل)",
-    "accountName": "مصروفات نقل بضاعة (للداخل)",
-    "isReversed": false,
-    "jeId": "IViXlo0vWlKxBXCYEyU0",
-    "number": "SZKYX8",
-    "date": "2026-07-15",
-    "entityType": "expense",
-    "description": "سند صرف رقم #SZKYX8 - مصروف نقل البضاعة"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/SzkYx8AZ0Kg1tdLiGSut",
+    "fields": {
+      "type": {
+        "stringValue": "expense"
+      },
+      "amount": {
+        "integerValue": "600"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "entryNumber": {
+        "stringValue": "JE-000037"
+      },
+      "number": {
+        "stringValue": "SZKYX8"
+      },
+      "sourceName": {
+        "stringValue": "مصرف الراجحي"
+      },
+      "targetId": {
+        "stringValue": "acc_freight_in"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "entityType": {
+        "stringValue": "expense"
+      },
+      "targetName": {
+        "stringValue": "مصروفات نقل بضاعة (للداخل)"
+      },
+      "category": {
+        "stringValue": "مصروف نقل البضاعة"
+      },
+      "jeId": {
+        "stringValue": "IViXlo0vWlKxBXCYEyU0"
+      },
+      "id": {
+        "stringValue": "SzkYx8AZ0Kg1tdLiGSut"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #SZKYX8 - مصروف نقل البضاعة"
+      },
+      "accountName": {
+        "stringValue": "مصروفات نقل بضاعة (للداخل)"
+      },
+      "date": {
+        "stringValue": "2026-07-15"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #SZKYX8 - مصروف نقل البضاعة"
+      }
+    },
+    "createTime": "2026-07-27T00:29:09.790124Z",
+    "updateTime": "2026-07-27T00:39:46.458072Z"
   },
   {
-    "_id": "UJjcW3KVBLkt86MQBB0Z",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/UJjcW3KVBLkt86MQBB0Z",
-    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
-    "amount": 2380,
-    "createdAt": "2026-08-12T09:19:56.246Z",
-    "accountName": "ج��ري المالك",
-    "sourceName": "صندوق المندوب - مصطفى",
-    "costCenterName": null,
-    "date": "2026-08-12",
-    "entityType": "other",
-    "updatedAt": "2026-08-12T09:19:56.246Z",
-    "notes": "تصفيه عهدة الصندوق * الجارى",
-    "costCenterId": null,
-    "method": "cash",
-    "targetId": "ErUeZws4zc9XMUzil3xx"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/UJjcW3KVBLkt86MQBB0Z",
+    "fields": {
+      "amount": {
+        "integerValue": "2380"
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "targetId": {
+        "stringValue": "ErUeZws4zc9XMUzil3xx"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "sourceName": {
+        "stringValue": "صندوق المندوب - مصطفى"
+      },
+      "sourceId": {
+        "stringValue": "cashBox_Z8vkxuOfaumR63DMz7vA"
+      },
+      "entityType": {
+        "stringValue": "other"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-12T09:19:56.246Z"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-12T09:19:56.246Z"
+      },
+      "notes": {
+        "stringValue": "تصفيه عهدة الصندوق * الجارى"
+      },
+      "accountName": {
+        "stringValue": "جاري المالك"
+      },
+      "date": {
+        "stringValue": "2026-08-12"
+      }
+    },
+    "createTime": "2026-08-12T09:19:56.304327Z",
+    "updateTime": "2026-08-12T09:19:56.304327Z"
   },
   {
-    "_id": "X4fz0PmjScaHjh5VyGZo",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/X4fz0PmjScaHjh5VyGZo",
-    "method": "bank",
-    "targetId": "WIDvPcdlldzkab5ZikBB",
-    "category": "حساب فاتورة",
-    "notes": "سند صرف رقم #X4FZ0P - حساب فاتورة",
-    "entryNumber": "JE-000214",
-    "createdByName": "النظام",
-    "targetName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
-    "reversedBy": "",
-    "sourceName": "مصرف الراجحي",
-    "isReversed": false,
-    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
-    "jeId": "KrRTH3JXScmgMsOoVPT5",
-    "number": "X4FZ0P",
-    "date": "2026-07-26",
-    "description": "سند صرف رقم #X4FZ0P - حساب فاتورة",
-    "supplierId": "WIDvPcdlldzkab5ZikBB",
-    "entityType": "supplier",
-    "amount": 23506,
-    "id": "X4fz0PmjScaHjh5VyGZo",
-    "type": "expense",
-    "status": "posted"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/X4fz0PmjScaHjh5VyGZo",
+    "fields": {
+      "targetId": {
+        "stringValue": "WIDvPcdlldzkab5ZikBB"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "entryNumber": {
+        "stringValue": "JE-000214"
+      },
+      "number": {
+        "stringValue": "X4FZ0P"
+      },
+      "sourceName": {
+        "stringValue": "مصرف الراجحي"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "amount": {
+        "integerValue": "23506"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "targetName": {
+        "stringValue": "شركة محمد على العيسانى للمواد الغذائية المحدودة"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "id": {
+        "stringValue": "X4fz0PmjScaHjh5VyGZo"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #X4FZ0P - حساب فاتورة"
+      },
+      "category": {
+        "stringValue": "حساب فاتورة"
+      },
+      "jeId": {
+        "stringValue": "KrRTH3JXScmgMsOoVPT5"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #X4FZ0P - حساب فاتورة"
+      },
+      "date": {
+        "stringValue": "2026-07-26"
+      },
+      "supplierId": {
+        "stringValue": "WIDvPcdlldzkab5ZikBB"
+      },
+      "accountName": {
+        "stringValue": "شركة محمد على العيسانى للمواد الغذائية المحدودة"
+      }
+    },
+    "createTime": "2026-07-27T00:29:10.153763Z",
+    "updateTime": "2026-07-27T00:39:46.842135Z"
   },
   {
-    "_id": "Xow6KYNUKYZA75IqULI3",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Xow6KYNUKYZA75IqULI3",
-    "updatedAt": "2026-08-10T08:45:23.786Z",
-    "date": "2026-08-10",
-    "entityType": "supplier",
-    "sourceName": "بنك الراجحي",
-    "costCenterName": null,
-    "accountName": "مؤسسة باهطف للمواد الغذائية",
-    "amount": 158.7,
-    "createdAt": "2026-08-10T08:45:23.786Z",
-    "sourceId": "bank-alrajhi",
-    "targetId": "GG58T6gb5UDMgm7gJ2hU",
-    "costCenterId": null,
-    "method": "bank",
-    "notes": "تحويل بضاعه"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/Xow6KYNUKYZA75IqULI3",
+    "fields": {
+      "updatedAt": {
+        "timestampValue": "2026-08-10T08:45:23.786Z"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-10T08:45:23.786Z"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "targetId": {
+        "stringValue": "GG58T6gb5UDMgm7gJ2hU"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "sourceName": {
+        "stringValue": "بنك الراجحي"
+      },
+      "sourceId": {
+        "stringValue": "bank-alrajhi"
+      },
+      "amount": {
+        "doubleValue": 158.7
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "date": {
+        "stringValue": "2026-08-10"
+      },
+      "accountName": {
+        "stringValue": "مؤسسة باهطف للمواد الغذائية"
+      },
+      "notes": {
+        "stringValue": "تحويل بضاعه"
+      }
+    },
+    "createTime": "2026-08-10T08:45:23.831084Z",
+    "updateTime": "2026-08-10T08:45:23.831084Z"
   },
   {
-    "_id": "cFZxsK4e8Hiy8ytmyPuZ",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/cFZxsK4e8Hiy8ytmyPuZ",
-    "status": "posted",
-    "id": "cFZxsK4e8Hiy8ytmyPuZ",
-    "amount": 1252,
-    "type": "expense",
-    "jeId": "IQnaJTIDRo4VNCwwNkl0",
-    "number": "CFZXSK",
-    "description": "سند صرف رقم #CFZXSK - المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى",
-    "entityType": "expense",
-    "date": "2026-07-23",
-    "reversedBy": "JE-2026-0005",
-    "sourceName": "صندوق المندوب - مصطفى",
-    "targetName": "جاري المالك",
-    "createdByName": "النظام",
-    "accountName": "جاري المالك",
-    "isReversed": true,
-    "category": "المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى",
-    "notes": "سند صرف رقم #CFZXSK - المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى",
-    "entryNumber": "JE-000164",
-    "targetId": "acc_owner",
-    "method": "cash"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/cFZxsK4e8Hiy8ytmyPuZ",
+    "fields": {
+      "notes": {
+        "stringValue": "سند صرف رقم #CFZXSK - المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "id": {
+        "stringValue": "cFZxsK4e8Hiy8ytmyPuZ"
+      },
+      "jeId": {
+        "stringValue": "IQnaJTIDRo4VNCwwNkl0"
+      },
+      "category": {
+        "stringValue": "المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى"
+      },
+      "date": {
+        "stringValue": "2026-07-23"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #CFZXSK - المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى"
+      },
+      "accountName": {
+        "stringValue": "جاري المالك"
+      },
+      "sourceName": {
+        "stringValue": "صندوق المندوب - مصطفى"
+      },
+      "number": {
+        "stringValue": "CFZXSK"
+      },
+      "entryNumber": {
+        "stringValue": "JE-000164"
+      },
+      "isReversed": {
+        "booleanValue": true
+      },
+      "targetId": {
+        "stringValue": "acc_owner"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "amount": {
+        "integerValue": "1252"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "targetName": {
+        "stringValue": "جاري المالك"
+      },
+      "reversedBy": {
+        "stringValue": "JE-2026-0005"
+      },
+      "entityType": {
+        "stringValue": "expense"
+      }
+    },
+    "createTime": "2026-07-27T00:29:09.362818Z",
+    "updateTime": "2026-07-27T00:39:46.024313Z"
   },
   {
-    "_id": "jkNffsTvm4kMBDikdqoT",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/jkNffsTvm4kMBDikdqoT",
-    "jeId": "1PYReHhgNxnY3XqDa8xw",
-    "number": "JKNFFS",
-    "supplierId": "G9jkfr5Eym3JwP8KJpsZ",
-    "entityType": "supplier",
-    "description": "سند صرف رقم #JKNFFS - حساب ف مشتروات",
-    "date": "2026-07-26",
-    "sourceName": "مصرف الراجحي",
-    "reversedBy": "",
-    "targetName": "شركة الرفادة العربية التجارية",
-    "createdByName": "النظام",
-    "accountName": "شركة الرفادة العربية التجارية",
-    "isReversed": false,
-    "status": "posted",
-    "id": "jkNffsTvm4kMBDikdqoT",
-    "amount": 13994.06,
-    "type": "expense",
-    "targetId": "G9jkfr5Eym3JwP8KJpsZ",
-    "method": "bank",
-    "category": "حساب ف مشتروات",
-    "notes": "سند صرف رقم #JKNFFS - حساب ف مشتروات",
-    "entryNumber": "JE-000215"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/jkNffsTvm4kMBDikdqoT",
+    "fields": {
+      "category": {
+        "stringValue": "حساب ف مشتروات"
+      },
+      "jeId": {
+        "stringValue": "1PYReHhgNxnY3XqDa8xw"
+      },
+      "id": {
+        "stringValue": "jkNffsTvm4kMBDikdqoT"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #JKNFFS - حساب ف مشتروات"
+      },
+      "accountName": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      },
+      "supplierId": {
+        "stringValue": "G9jkfr5Eym3JwP8KJpsZ"
+      },
+      "date": {
+        "stringValue": "2026-07-26"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #JKNFFS - حساب ف مشتروات"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "amount": {
+        "doubleValue": 13994.06
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "entryNumber": {
+        "stringValue": "JE-000215"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "sourceName": {
+        "stringValue": "مصرف الراجحي"
+      },
+      "number": {
+        "stringValue": "JKNFFS"
+      },
+      "targetId": {
+        "stringValue": "G9jkfr5Eym3JwP8KJpsZ"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "targetName": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      }
+    },
+    "createTime": "2026-07-27T00:29:07.696319Z",
+    "updateTime": "2026-07-27T00:39:44.285004Z"
   },
   {
-    "_id": "l0XqtrOkyS5PGni8a2vj",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/l0XqtrOkyS5PGni8a2vj",
-    "status": "posted",
-    "type": "expense",
-    "amount": 1450,
-    "id": "l0XqtrOkyS5PGni8a2vj",
-    "entityType": "expense",
-    "date": "2026-07-25",
-    "description": "سند صرف رقم #L0XQTR - تحويل من الصندوق الى الجارى",
-    "jeId": "yQVDpYhZ5URI2QRVqs3S",
-    "number": "L0XQTR",
-    "isReversed": false,
-    "accountName": "جاري المالك",
-    "createdByName": "النظام",
-    "targetName": "جاري المالك",
-    "reversedBy": "",
-    "sourceName": "صندوق المندوب - مصطفى",
-    "entryNumber": "JE-000210",
-    "notes": "سند صرف رقم #L0XQTR - تحويل من الصندوق الى الجارى",
-    "category": "تحويل من الصندوق الى الجارى",
-    "targetId": "acc_owner",
-    "method": "cash"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/l0XqtrOkyS5PGni8a2vj",
+    "fields": {
+      "entityType": {
+        "stringValue": "expense"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "targetName": {
+        "stringValue": "جاري المالك"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "amount": {
+        "integerValue": "1450"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "targetId": {
+        "stringValue": "acc_owner"
+      },
+      "entryNumber": {
+        "stringValue": "JE-000210"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "number": {
+        "stringValue": "L0XQTR"
+      },
+      "sourceName": {
+        "stringValue": "صندوق المندوب - مصطفى"
+      },
+      "accountName": {
+        "stringValue": "جاري المالك"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #L0XQTR - تحويل من الصندوق الى الجارى"
+      },
+      "date": {
+        "stringValue": "2026-07-25"
+      },
+      "category": {
+        "stringValue": "تحويل من الصندوق الى الجارى"
+      },
+      "jeId": {
+        "stringValue": "yQVDpYhZ5URI2QRVqs3S"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "id": {
+        "stringValue": "l0XqtrOkyS5PGni8a2vj"
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #L0XQTR - تحويل من الصندوق الى الجارى"
+      }
+    },
+    "createTime": "2026-07-27T00:29:12.623504Z",
+    "updateTime": "2026-07-27T00:39:49.098729Z"
   },
   {
-    "_id": "mfnPmn72MSVE3TMnNIGr",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/mfnPmn72MSVE3TMnNIGr",
-    "notes": "سند صرف رقم #MFNPMN - تحويل لشركة الرفادة",
-    "category": "تحويل لشركة الرفادة",
-    "entryNumber": "JE-000021",
-    "targetId": "G9jkfr5Eym3JwP8KJpsZ",
-    "method": "bank",
-    "status": "posted",
-    "id": "mfnPmn72MSVE3TMnNIGr",
-    "amount": 33292,
-    "type": "expense",
-    "jeId": "D9h7httDeHQY50ZFrUl6",
-    "number": "MFNPMN",
-    "description": "سند صرف رقم #MFNPMN - تحويل لشركة الرفادة",
-    "date": "2026-07-13",
-    "supplierId": "G9jkfr5Eym3JwP8KJpsZ",
-    "entityType": "supplier",
-    "sourceName": "مصرف الراجحي",
-    "reversedBy": "",
-    "createdByName": "النظام",
-    "targetName": "شركة الرفادة العربية التجارية",
-    "accountName": "شركة الرفادة العربية التجارية",
-    "isReversed": false
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/mfnPmn72MSVE3TMnNIGr",
+    "fields": {
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "targetName": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "amount": {
+        "integerValue": "33292"
+      },
+      "targetId": {
+        "stringValue": "G9jkfr5Eym3JwP8KJpsZ"
+      },
+      "entryNumber": {
+        "stringValue": "JE-000021"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "number": {
+        "stringValue": "MFNPMN"
+      },
+      "sourceName": {
+        "stringValue": "مصرف الراجحي"
+      },
+      "supplierId": {
+        "stringValue": "G9jkfr5Eym3JwP8KJpsZ"
+      },
+      "accountName": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #MFNPMN - تحويل لشركة الرفادة"
+      },
+      "date": {
+        "stringValue": "2026-07-13"
+      },
+      "category": {
+        "stringValue": "تحويل لشركة الرفادة"
+      },
+      "jeId": {
+        "stringValue": "D9h7httDeHQY50ZFrUl6"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "id": {
+        "stringValue": "mfnPmn72MSVE3TMnNIGr"
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #MFNPMN - تحويل لشركة الرفادة"
+      }
+    },
+    "createTime": "2026-07-27T00:29:08.463487Z",
+    "updateTime": "2026-07-27T00:39:45.122479Z"
   },
   {
-    "_id": "pKer73SA1hBkrOwYKNmM",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/pKer73SA1hBkrOwYKNmM",
-    "sourceId": "bank-alrajhi",
-    "createdAt": "2026-08-08T00:37:47.832Z",
-    "amount": 2219.5,
-    "entityType": "supplier",
-    "date": "2026-08-08",
-    "updatedAt": "2026-08-08T00:37:47.832Z",
-    "accountName": "شركة الافاق العربية الحديثة للتجارة",
-    "sourceName": "بنك الراجحي",
-    "costCenterName": null,
-    "notes": "تحويل سداد المورد",
-    "targetId": "D5aKNH2GBcpUa9N4r6HS",
-    "costCenterId": null,
-    "method": "bank"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/pKer73SA1hBkrOwYKNmM",
+    "fields": {
+      "amount": {
+        "doubleValue": 2219.5
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "targetId": {
+        "stringValue": "D5aKNH2GBcpUa9N4r6HS"
+      },
+      "sourceId": {
+        "stringValue": "bank-alrajhi"
+      },
+      "sourceName": {
+        "stringValue": "بنك الراجحي"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-08T00:37:47.832Z"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-08T00:37:47.832Z"
+      },
+      "notes": {
+        "stringValue": "تحويل سداد المورد"
+      },
+      "accountName": {
+        "stringValue": "شركة الافاق العربية الحديثة للتجارة"
+      },
+      "date": {
+        "stringValue": "2026-08-08"
+      }
+    },
+    "createTime": "2026-08-08T00:37:47.908797Z",
+    "updateTime": "2026-08-08T00:37:47.908797Z"
   },
   {
-    "_id": "rJzkIp3aEn5Ozpx7SOX9",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/rJzkIp3aEn5Ozpx7SOX9",
-    "targetName": "مصروفات نقل بضاعة (للداخل)",
-    "createdByName": "النظام",
-    "sourceName": "صندوق المندوب - مصطفى",
-    "reversedBy": "",
-    "isReversed": false,
-    "accountName": "مصروفات نقل بضاعة (للداخل)",
-    "number": "RJZKIP",
-    "jeId": "oTW7iMm49bvnMdcTyhP9",
-    "date": "2026-07-25",
-    "description": "سند صرف رقم #RJZKIP - بيد الاستاذ محمود",
-    "entityType": "expense",
-    "amount": 650,
-    "id": "rJzkIp3aEn5Ozpx7SOX9",
-    "type": "expense",
-    "status": "posted",
-    "method": "cash",
-    "targetId": "acc_freight_in",
-    "category": "بيد الاستاذ محمود",
-    "notes": "سند صرف رقم #RJZKIP - بيد الاستاذ محمود",
-    "entryNumber": "JE-000184"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/rJzkIp3aEn5Ozpx7SOX9",
+    "fields": {
+      "targetId": {
+        "stringValue": "acc_freight_in"
+      },
+      "sourceName": {
+        "stringValue": "صندوق المندوب - مصطفى"
+      },
+      "number": {
+        "stringValue": "RJZKIP"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "entryNumber": {
+        "stringValue": "JE-000184"
+      },
+      "amount": {
+        "integerValue": "650"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "targetName": {
+        "stringValue": "مصروفات نقل بضاعة (للداخل)"
+      },
+      "entityType": {
+        "stringValue": "expense"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #RJZKIP - بيد الاستاذ محمود"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "id": {
+        "stringValue": "rJzkIp3aEn5Ozpx7SOX9"
+      },
+      "jeId": {
+        "stringValue": "oTW7iMm49bvnMdcTyhP9"
+      },
+      "category": {
+        "stringValue": "بيد الاستاذ محمود"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #RJZKIP - بيد الاستاذ محمود"
+      },
+      "date": {
+        "stringValue": "2026-07-25"
+      },
+      "accountName": {
+        "stringValue": "مصروفات نقل بضاعة (للداخل)"
+      }
+    },
+    "createTime": "2026-07-27T00:29:12.186161Z",
+    "updateTime": "2026-07-27T00:39:48.789117Z"
   },
   {
-    "_id": "sfnbOjt3CK7jwfsLpLY6",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/sfnbOjt3CK7jwfsLpLY6",
-    "targetId": "gRFQtWbjOm4N84tSkTNs",
-    "method": "bank",
-    "category": "حساب ف مشتروات",
-    "notes": "سند صرف رقم #SFNBOJ - حساب ف مشتروات",
-    "entryNumber": "JE-000213",
-    "number": "SFNBOJ",
-    "jeId": "kXG5fSN2XZInEp1B8Eab",
-    "description": "سند صرف رقم #SFNBOJ - حساب ف مشتروات",
-    "date": "2026-07-23",
-    "entityType": "supplier",
-    "supplierId": "gRFQtWbjOm4N84tSkTNs",
-    "sourceName": "مصرف الراجحي",
-    "reversedBy": "",
-    "createdByName": "النظام",
-    "targetName": "شركة جيلانى باك التجارية",
-    "accountName": "شر��ة جيلانى باك التجارية",
-    "isReversed": false,
-    "status": "posted",
-    "id": "sfnbOjt3CK7jwfsLpLY6",
-    "amount": 3512,
-    "type": "expense"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/sfnbOjt3CK7jwfsLpLY6",
+    "fields": {
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "targetName": {
+        "stringValue": "شركة جيلانى باك التجارية"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "amount": {
+        "integerValue": "3512"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "targetId": {
+        "stringValue": "gRFQtWbjOm4N84tSkTNs"
+      },
+      "entryNumber": {
+        "stringValue": "JE-000213"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "number": {
+        "stringValue": "SFNBOJ"
+      },
+      "sourceName": {
+        "stringValue": "مصرف الراجحي"
+      },
+      "supplierId": {
+        "stringValue": "gRFQtWbjOm4N84tSkTNs"
+      },
+      "accountName": {
+        "stringValue": "شركة جيلانى باك التجارية"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #SFNBOJ - حساب ف مشتروات"
+      },
+      "date": {
+        "stringValue": "2026-07-23"
+      },
+      "category": {
+        "stringValue": "حساب ف مشتروات"
+      },
+      "jeId": {
+        "stringValue": "kXG5fSN2XZInEp1B8Eab"
+      },
+      "id": {
+        "stringValue": "sfnbOjt3CK7jwfsLpLY6"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #SFNBOJ - حساب ف مشتروات"
+      }
+    },
+    "createTime": "2026-07-27T00:29:11.764569Z",
+    "updateTime": "2026-07-27T00:39:48.370660Z"
   },
   {
-    "_id": "trZvrVhw5eWGopSGdMu4",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/trZvrVhw5eWGopSGdMu4",
-    "amount": 10,
-    "createdAt": "2026-08-04T10:21:54.357Z",
-    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
-    "costCenterName": "سيارة المندوب مصطفى (ينبع والمسارات)",
-    "sourceName": "صندوق المندوب - مصطفى",
-    "accountName": "ضيافة واستقبال",
-    "updatedAt": "2026-08-04T10:21:54.357Z",
-    "date": "2026-08-03",
-    "entityType": "expense",
-    "notes": "شراء وصلة شاحن لشبكة مدى",
-    "costCenterId": "cc_301",
-    "method": "cash",
-    "targetId": "liAa3I6ItBjBcMqbTLQs"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/trZvrVhw5eWGopSGdMu4",
+    "fields": {
+      "notes": {
+        "stringValue": "شراء وصلة شاحن لشبكة مدى"
+      },
+      "date": {
+        "stringValue": "2026-08-03"
+      },
+      "accountName": {
+        "stringValue": "ضيافة واستقبال"
+      },
+      "sourceName": {
+        "stringValue": "صندوق المندوب - مصطفى"
+      },
+      "sourceId": {
+        "stringValue": "cashBox_Z8vkxuOfaumR63DMz7vA"
+      },
+      "targetId": {
+        "stringValue": "liAa3I6ItBjBcMqbTLQs"
+      },
+      "costCenterName": {
+        "stringValue": "سيارة المندوب مصطفى (ينبع والمسارات)"
+      },
+      "costCenterId": {
+        "stringValue": "cc_301"
+      },
+      "amount": {
+        "integerValue": "10"
+      },
+      "method": {
+        "stringValue": "cash"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-04T10:21:54.357Z"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-04T10:21:54.357Z"
+      },
+      "entityType": {
+        "stringValue": "expense"
+      }
+    },
+    "createTime": "2026-08-04T10:21:54.417296Z",
+    "updateTime": "2026-08-04T10:21:54.417296Z"
   },
   {
-    "_id": "xv2iB76p06jRZDVeweDo",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/xv2iB76p06jRZDVeweDo",
-    "method": "bank",
-    "targetId": "G9jkfr5Eym3JwP8KJpsZ",
-    "entryNumber": "JE-000007",
-    "notes": "سند صرف رقم #XV2IB7 - سداد فاتورة",
-    "category": "سداد فاتورة",
-    "accountName": "شركة الرفادة العربية التجارية",
-    "isReversed": false,
-    "reversedBy": "",
-    "sourceName": "مصرف ا��راجحي",
-    "createdByName": "النظام",
-    "targetName": "شركة الرفادة العربية التجارية",
-    "date": "2026-07-12",
-    "description": "سند صرف رقم #XV2IB7 - سداد فاتورة",
-    "supplierId": "G9jkfr5Eym3JwP8KJpsZ",
-    "entityType": "supplier",
-    "number": "XV2IB7",
-    "jeId": "84pmn3C9WSrimvWzCGXQ",
-    "type": "expense",
-    "id": "xv2iB76p06jRZDVeweDo",
-    "amount": 3229.2,
-    "status": "posted"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/xv2iB76p06jRZDVeweDo",
+    "fields": {
+      "jeId": {
+        "stringValue": "84pmn3C9WSrimvWzCGXQ"
+      },
+      "category": {
+        "stringValue": "سداد فاتورة"
+      },
+      "notes": {
+        "stringValue": "سند صرف رقم #XV2IB7 - سداد فاتورة"
+      },
+      "id": {
+        "stringValue": "xv2iB76p06jRZDVeweDo"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "supplierId": {
+        "stringValue": "G9jkfr5Eym3JwP8KJpsZ"
+      },
+      "accountName": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #XV2IB7 - سداد فاتورة"
+      },
+      "date": {
+        "stringValue": "2026-07-12"
+      },
+      "amount": {
+        "doubleValue": 3229.2
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "targetId": {
+        "stringValue": "G9jkfr5Eym3JwP8KJpsZ"
+      },
+      "sourceName": {
+        "stringValue": "مصرف الراجحي"
+      },
+      "number": {
+        "stringValue": "XV2IB7"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "entryNumber": {
+        "stringValue": "JE-000007"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      },
+      "targetName": {
+        "stringValue": "شركة الرفادة العربية التجارية"
+      }
+    },
+    "createTime": "2026-07-27T00:29:08.087782Z",
+    "updateTime": "2026-07-27T00:39:44.716784Z"
   },
   {
-    "_id": "xymDsqXKXknQztzF5LQj",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/xymDsqXKXknQztzF5LQj",
-    "entryNumber": "JE-000020",
-    "category": "تحويل قيمة بضاعة",
-    "notes": "سند صرف رقم #XYMDSQ - تحويل قيمة بضاعة",
-    "targetId": "WIDvPcdlldzkab5ZikBB",
-    "method": "bank",
-    "status": "posted",
-    "type": "expense",
-    "amount": 36891,
-    "id": "xymDsqXKXknQztzF5LQj",
-    "date": "2026-07-15",
-    "description": "سند صرف رقم #XYMDSQ - تحويل قيمة بضاعة",
-    "supplierId": "WIDvPcdlldzkab5ZikBB",
-    "entityType": "supplier",
-    "jeId": "Vx4w5pRJMaroj94eKzpj",
-    "number": "XYMDSQ",
-    "isReversed": false,
-    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
-    "targetName": "شركة محمد على العيسانى للمواد الغذائي�� المحدودة",
-    "createdByName": "النظام",
-    "sourceName": "مصرف الراجحي",
-    "reversedBy": ""
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/xymDsqXKXknQztzF5LQj",
+    "fields": {
+      "notes": {
+        "stringValue": "سند صرف رقم #XYMDSQ - تحويل قيمة بضاعة"
+      },
+      "id": {
+        "stringValue": "xymDsqXKXknQztzF5LQj"
+      },
+      "status": {
+        "stringValue": "posted"
+      },
+      "jeId": {
+        "stringValue": "Vx4w5pRJMaroj94eKzpj"
+      },
+      "category": {
+        "stringValue": "تحويل قيمة بضاعة"
+      },
+      "description": {
+        "stringValue": "سند صرف رقم #XYMDSQ - تحويل قيمة بضاعة"
+      },
+      "date": {
+        "stringValue": "2026-07-15"
+      },
+      "supplierId": {
+        "stringValue": "WIDvPcdlldzkab5ZikBB"
+      },
+      "accountName": {
+        "stringValue": "شركة محمد على العيسانى للمواد الغذائية المحدودة"
+      },
+      "targetId": {
+        "stringValue": "WIDvPcdlldzkab5ZikBB"
+      },
+      "sourceName": {
+        "stringValue": "مصرف الراجحي"
+      },
+      "number": {
+        "stringValue": "XYMDSQ"
+      },
+      "isReversed": {
+        "booleanValue": false
+      },
+      "entryNumber": {
+        "stringValue": "JE-000020"
+      },
+      "amount": {
+        "integerValue": "36891"
+      },
+      "createdByName": {
+        "stringValue": "النظام"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "type": {
+        "stringValue": "expense"
+      },
+      "targetName": {
+        "stringValue": "شركة محمد على العيسانى للمواد الغذائية المحدودة"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "reversedBy": {
+        "stringValue": ""
+      }
+    },
+    "createTime": "2026-07-27T00:29:10.888606Z",
+    "updateTime": "2026-07-27T00:39:47.670168Z"
   },
   {
-    "_id": "yaL7lA9dCdm1bDLX1ljq",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/yaL7lA9dCdm1bDLX1ljq",
-    "notes": "سداد فاتورة مشتروات",
-    "costCenterId": null,
-    "method": "bank",
-    "targetId": "gRFQtWbjOm4N84tSkTNs",
-    "sourceId": "bank-alrajhi",
-    "amount": 6500,
-    "createdAt": "2026-08-01T10:54:32.089Z",
-    "accountName": "شركة جيلانى باك التجارية",
-    "costCenterName": null,
-    "sourceName": "بنك الراجحي",
-    "date": "2026-08-01",
-    "entityType": "supplier",
-    "updatedAt": "2026-08-01T10:54:32.089Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/yaL7lA9dCdm1bDLX1ljq",
+    "fields": {
+      "accountName": {
+        "stringValue": "شركة جيلانى باك التجارية"
+      },
+      "date": {
+        "stringValue": "2026-08-01"
+      },
+      "notes": {
+        "stringValue": "سداد فاتورة مشتروات"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-01T10:54:32.089Z"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-01T10:54:32.089Z"
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "amount": {
+        "integerValue": "6500"
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "targetId": {
+        "stringValue": "gRFQtWbjOm4N84tSkTNs"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "sourceId": {
+        "stringValue": "bank-alrajhi"
+      },
+      "sourceName": {
+        "stringValue": "بنك الراجحي"
+      }
+    },
+    "createTime": "2026-08-01T10:53:51.800128Z",
+    "updateTime": "2026-08-01T10:54:32.135916Z"
   },
   {
-    "_id": "zUPFfv9NthlYnLKYrKr8",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/zUPFfv9NthlYnLKYrKr8",
-    "sourceId": "bank-alrajhi",
-    "createdAt": "2026-08-01T10:53:06.102Z",
-    "amount": 15157.69,
-    "date": "2026-08-01",
-    "entityType": "supplier",
-    "updatedAt": "2026-08-01T10:53:06.102Z",
-    "accountName": "الشامل بلاستيك",
-    "costCenterName": null,
-    "sourceName": "بنك الراجحي",
-    "notes": "سداد فاتورة المشتروات",
-    "targetId": "cgr0XDvjx5sG3Kv9Nys1",
-    "costCenterId": null,
-    "method": "bank"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/expenses/zUPFfv9NthlYnLKYrKr8",
+    "fields": {
+      "accountName": {
+        "stringValue": "الشامل بلاستيك"
+      },
+      "date": {
+        "stringValue": "2026-08-01"
+      },
+      "notes": {
+        "stringValue": "سداد فاتورة المشتروات"
+      },
+      "createdAt": {
+        "timestampValue": "2026-08-01T10:53:06.102Z"
+      },
+      "entityType": {
+        "stringValue": "supplier"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-08-01T10:53:06.102Z"
+      },
+      "amount": {
+        "doubleValue": 15157.69
+      },
+      "method": {
+        "stringValue": "bank"
+      },
+      "costCenterId": {
+        "nullValue": null
+      },
+      "targetId": {
+        "stringValue": "cgr0XDvjx5sG3Kv9Nys1"
+      },
+      "costCenterName": {
+        "nullValue": null
+      },
+      "sourceId": {
+        "stringValue": "bank-alrajhi"
+      },
+      "sourceName": {
+        "stringValue": "بنك الراجحي"
+      }
+    },
+    "createTime": "2026-08-01T10:53:06.150663Z",
+    "updateTime": "2026-08-01T10:53:06.150663Z"
   }
 ]

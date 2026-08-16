@@ -1,343 +1,870 @@
 [
   {
-    "_id": "baby",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/baby",
-    "code": "baby",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "velocity": "slow",
-    "icon": "👶",
-    "description": "أصناف تابعة لقسم أطفال وحفاضات",
-    "name": "أطفال وحفاضات"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/baby",
+    "fields": {
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم أطفال وحفاضات"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "أطفال وحفاضات"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "👶"
+      },
+      "code": {
+        "stringValue": "baby"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "bakery",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/bakery",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "code": "bakery",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "velocity": "medium",
-    "icon": "🥖",
-    "description": "أصناف تابعة لقسم مخبوزات وخبز",
-    "name": "مخبوزات وخبز"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/bakery",
+    "fields": {
+      "code": {
+        "stringValue": "bakery"
+      },
+      "icon": {
+        "stringValue": "🥖"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "مخبوزات وخبز"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم مخبوزات وخبز"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "beverages",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/beverages",
-    "code": "beverages",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "velocity": "fast",
-    "description": "أصناف تابعة لقسم مشروبات وعصائر",
-    "icon": "🧃",
-    "name": "مشروبات وعصائر"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/beverages",
+    "fields": {
+      "code": {
+        "stringValue": "beverages"
+      },
+      "icon": {
+        "stringValue": "🧃"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "مشروبات وعصائر"
+      },
+      "velocity": {
+        "stringValue": "fast"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم مشروبات وعصائر"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "biscuits",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/biscuits",
-    "name": "بسكويت وكيك",
-    "velocity": "medium",
-    "description": "أصناف تابعة لقسم بسكويت وكيك",
-    "icon": "🍪",
-    "code": "biscuits",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/biscuits",
+    "fields": {
+      "icon": {
+        "stringValue": "🍪"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "biscuits"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم بسكويت وكيك"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "بسكويت وكيك"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "canned",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/canned",
-    "code": "canned",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "velocity": "medium",
-    "description": "أصناف تابعة لقسم معلبات وصلصات",
-    "icon": "🥫",
-    "name": "معلبات وصلصات"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/canned",
+    "fields": {
+      "description": {
+        "stringValue": "أصناف تابعة لقسم معلبات وصلصات"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "name": {
+        "stringValue": "معلبات وصلصات"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🥫"
+      },
+      "code": {
+        "stringValue": "canned"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "cleaning",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/cleaning",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "cleaning",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "name": "منظفات ومعطرات",
-    "description": "أصناف تابعة لقسم منظفات ومعطرات",
-    "icon": "🧴",
-    "velocity": "slow"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/cleaning",
+    "fields": {
+      "icon": {
+        "stringValue": "🧴"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "cleaning"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم منظفات ومعطرات"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "name": {
+        "stringValue": "منظفات ومعطرات"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "coffee_tea",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/coffee_tea",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "coffee_tea",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "description": "أصناف تابعة لقسم قهوة وشاي",
-    "icon": "☕",
-    "velocity": "slow",
-    "name": "قهوة وشاي"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/coffee_tea",
+    "fields": {
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "☕"
+      },
+      "code": {
+        "stringValue": "coffee_tea"
+      },
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم قهوة وشاي"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "قهوة وشاي"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "confectionery",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/confectionery",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "confectionery",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "name": "حلويات وشوكولاتة",
-    "icon": "🍫",
-    "description": "أصناف تابعة لقسم حلويات وشوكولاتة",
-    "velocity": "medium"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/confectionery",
+    "fields": {
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم حلويات وشوكولاتة"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "name": {
+        "stringValue": "حلويات وشوكولاتة"
+      },
+      "icon": {
+        "stringValue": "🍫"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "confectionery"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "dairy",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/dairy",
-    "updatedAt": "2026-07-14T09:12:26.419Z",
-    "code": "dairy",
-    "createdAt": "2026-07-14T09:12:26.419Z",
-    "name": "ألبان ومنتجاتها",
-    "icon": "🥛",
-    "description": "أصناف تابعة لقسم ألبان ومنتجاتها",
-    "velocity": "fast"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/dairy",
+    "fields": {
+      "icon": {
+        "stringValue": "🥛"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.419Z"
+      },
+      "code": {
+        "stringValue": "dairy"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.419Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم ألبان ومنتجاتها"
+      },
+      "velocity": {
+        "stringValue": "fast"
+      },
+      "name": {
+        "stringValue": "ألبان ومنتجاتها"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "dates",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/dates",
-    "velocity": "medium",
-    "description": "أصناف تابعة لقسم تمور ومنتجاتها",
-    "icon": "🌴",
-    "name": "تمور ومنتجاتها",
-    "code": "dates",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/dates",
+    "fields": {
+      "icon": {
+        "stringValue": "🌴"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "dates"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم تمور ومنتجاتها"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "name": {
+        "stringValue": "تمور ومنتجاتها"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "disposables",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/disposables",
-    "code": "disposables",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "velocity": "medium",
-    "description": "أصناف تابعة لقسم أكواب ومستلزمات ضيافة",
-    "icon": "🥤",
-    "name": "أكواب ومستلزمات ضيافة"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/disposables",
+    "fields": {
+      "code": {
+        "stringValue": "disposables"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🥤"
+      },
+      "name": {
+        "stringValue": "أكواب ومستلزمات ضيافة"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم أكواب ومستلزمات ضيافة"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "dry_goods",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/dry_goods",
-    "code": "dry_goods",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "velocity": "fast",
-    "description": "أصناف تابعة لقسم سكر ودقيق ومعجنات",
-    "icon": "🍞",
-    "name": "سكر ودقيق ومعجنات"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/dry_goods",
+    "fields": {
+      "code": {
+        "stringValue": "dry_goods"
+      },
+      "icon": {
+        "stringValue": "🍞"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "سكر ودقيق ومعجنات"
+      },
+      "velocity": {
+        "stringValue": "fast"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم سكر ودقيق ومعجنات"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "egg",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/egg",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "code": "egg",
-    "icon": "🥚",
-    "description": "أصناف تابعة لقسم بيض طازج",
-    "velocity": "fast",
-    "name": "بيض طازج"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/egg",
+    "fields": {
+      "icon": {
+        "stringValue": "🥚"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "egg"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم بيض طازج"
+      },
+      "velocity": {
+        "stringValue": "fast"
+      },
+      "name": {
+        "stringValue": "بيض طازج"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "frozen",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/frozen",
-    "code": "frozen",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "velocity": "slow",
-    "icon": "🧊",
-    "description": "أصناف تابعة لقسم أغذية مجمدة",
-    "name": "أغذية مجمدة"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/frozen",
+    "fields": {
+      "description": {
+        "stringValue": "أصناف تابعة لقسم أغذية مجمدة"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "name": {
+        "stringValue": "أغذية مجمدة"
+      },
+      "icon": {
+        "stringValue": "🧊"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "frozen"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "frozen_veg",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/frozen_veg",
-    "name": "خضروات مجمدة",
-    "velocity": "medium",
-    "icon": "🥦",
-    "description": "أصناف تابعة لقسم خضروات مجمدة",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "code": "frozen_veg",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/frozen_veg",
+    "fields": {
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم خضروات مجمدة"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "name": {
+        "stringValue": "خضروات مجمدة"
+      },
+      "icon": {
+        "stringValue": "🥦"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "frozen_veg"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "honey_jam",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/honey_jam",
-    "code": "honey_jam",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "name": "عسل ومربيات وطحينة",
-    "velocity": "medium",
-    "icon": "🍯",
-    "description": "أصناف تابعة لقسم عسل ومربيات وطحينة"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/honey_jam",
+    "fields": {
+      "code": {
+        "stringValue": "honey_jam"
+      },
+      "icon": {
+        "stringValue": "🍯"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "عسل ومربيات وطحينة"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم عسل ومربيات وطحينة"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "ice_cream",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/ice_cream",
-    "code": "ice_cream",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "name": "آيس كريم وحلويات باردة",
-    "velocity": "medium",
-    "description": "أصناف تابعة لقسم آيس كريم وحلويات باردة",
-    "icon": "🍦"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/ice_cream",
+    "fields": {
+      "name": {
+        "stringValue": "آيس كريم وحلويات باردة"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم آيس كريم وحلويات باردة"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "ice_cream"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🍦"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "meat_poultry",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/meat_poultry",
-    "name": "لحوم ودواجن مجمدة",
-    "description": "أصناف تابعة لقسم لحوم ودواجن مجمدة",
-    "icon": "🍗",
-    "velocity": "slow",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "meat_poultry",
-    "createdAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/meat_poultry",
+    "fields": {
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم لحوم ودواجن مجمدة"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "لحوم ودواجن مجمدة"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🍗"
+      },
+      "code": {
+        "stringValue": "meat_poultry"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "nuts_seeds",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/nuts_seeds",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "nuts_seeds",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "description": "أصناف تابعة لقسم مكسرات وبذور",
-    "icon": "🌰",
-    "velocity": "medium",
-    "name": "مكسرات وبذور"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/nuts_seeds",
+    "fields": {
+      "code": {
+        "stringValue": "nuts_seeds"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🌰"
+      },
+      "name": {
+        "stringValue": "مكسرات وبذور"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم مكسرات وبذور"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "oils",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/oils",
-    "name": "زيوت وسمن",
-    "velocity": "fast",
-    "icon": "🌻",
-    "description": "أصناف تابعة لقسم زيوت وسمن",
-    "code": "oils",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/oils",
+    "fields": {
+      "icon": {
+        "stringValue": "🌻"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "oils"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم زيوت وسمن"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "velocity": {
+        "stringValue": "fast"
+      },
+      "name": {
+        "stringValue": "زيوت وسمن"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "personal_care",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/personal_care",
-    "velocity": "slow",
-    "icon": "🧻",
-    "description": "أصناف تابعة لقسم عناية شخصية وورقيات",
-    "name": "عناية شخصية وورقيات",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "code": "personal_care",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/personal_care",
+    "fields": {
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم عناية شخصية وورقيات"
+      },
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "name": {
+        "stringValue": "عناية شخصية وورقيات"
+      },
+      "icon": {
+        "stringValue": "🧻"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "personal_care"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "pickles",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/pickles",
-    "velocity": "medium",
-    "icon": "🥒",
-    "description": "أصناف تابعة لقسم مخللات وأجبان مكشوفة",
-    "name": "مخللات وأجبان مكشوفة",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "code": "pickles",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/pickles",
+    "fields": {
+      "code": {
+        "stringValue": "pickles"
+      },
+      "icon": {
+        "stringValue": "🥒"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "مخللات وأجبان مكشوفة"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم مخللات وأجبان مكشوفة"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "plastics",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/plastics",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "plastics",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "description": "أصناف تابعة لقسم بلاستيكيات ومستلزمات تغليف",
-    "icon": "🛍️",
-    "velocity": "medium",
-    "name": "بلاستيكيات ومستلزمات تغليف"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/plastics",
+    "fields": {
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم بلاستيكيات ومستلزمات تغليف"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "بلاستيكيات ومستلزمات تغليف"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🛍️"
+      },
+      "code": {
+        "stringValue": "plastics"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "rice_grains",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/rice_grains",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "code": "rice_grains",
-    "icon": "🌾",
-    "description": "أصناف تابعة لقسم أرز وحبوب",
-    "velocity": "fast",
-    "name": "أرز وحبوب"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/rice_grains",
+    "fields": {
+      "icon": {
+        "stringValue": "🌾"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "rice_grains"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم أرز وحبوب"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "velocity": {
+        "stringValue": "fast"
+      },
+      "name": {
+        "stringValue": "أرز وحبوب"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "sauces",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/sauces",
-    "velocity": "medium",
-    "icon": "🍯",
-    "description": "أصناف تابعة لقسم صلصات ومايونيز وتوابل سائلة",
-    "name": "صلصات ومايونيز وتوابل سائلة",
-    "code": "sauces",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/sauces",
+    "fields": {
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم صلصات ومايونيز وتوابل سائلة"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "name": {
+        "stringValue": "صلصات ومايونيز وتوابل سائلة"
+      },
+      "icon": {
+        "stringValue": "🍯"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "sauces"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "seafood",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/seafood",
-    "icon": "🐟",
-    "description": "أصناف تابعة لقسم أسماك ومأكولات بحرية",
-    "velocity": "slow",
-    "name": "أسماك ومأكولات بحرية",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "seafood",
-    "createdAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/seafood",
+    "fields": {
+      "name": {
+        "stringValue": "أسماك وم��كولات بحرية"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم أسماك ومأكولات بحرية"
+      },
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "code": {
+        "stringValue": "seafood"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🐟"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "snacks",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/snacks",
-    "velocity": "medium",
-    "icon": "🥜",
-    "description": "أصناف تابعة لقسم شيبس ومكسرات",
-    "name": "شيبس ومكسرات",
-    "code": "snacks",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/snacks",
+    "fields": {
+      "code": {
+        "stringValue": "snacks"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🥜"
+      },
+      "name": {
+        "stringValue": "شيبس ومكسرات"
+      },
+      "velocity": {
+        "stringValue": "medium"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم شيبس ومكسرات"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "spices",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/spices",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "spices",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "name": "توابل وبهارات",
-    "description": "أصناف تابعة لقسم توابل وبهارات",
-    "icon": "🧂",
-    "velocity": "slow"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/spices",
+    "fields": {
+      "name": {
+        "stringValue": "توابل وبهارات"
+      },
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم توابل وبهارات"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "code": {
+        "stringValue": "spices"
+      },
+      "icon": {
+        "stringValue": "🧂"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "tobacco",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/tobacco",
-    "velocity": "slow",
-    "description": "أصناف تابعة لقسم تبغ ومستلزمات تدخين",
-    "icon": "🚬",
-    "name": "تبغ ومستلزمات تدخين",
-    "code": "tobacco",
-    "createdAt": "2026-07-14T09:12:26.420Z",
-    "updatedAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/tobacco",
+    "fields": {
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "🚬"
+      },
+      "code": {
+        "stringValue": "tobacco"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم تبغ ومستلزمات تدخين"
+      },
+      "velocity": {
+        "stringValue": "slow"
+      },
+      "name": {
+        "stringValue": "تبغ ومستلزمات تدخين"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "veg_fruits",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/veg_fruits",
-    "name": "خضار وفواكه طازجة",
-    "description": "أصناف تابعة لقسم خضار وفواكه طازجة",
-    "icon": "🍅",
-    "velocity": "fast",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "veg_fruits",
-    "createdAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/veg_fruits",
+    "fields": {
+      "code": {
+        "stringValue": "veg_fruits"
+      },
+      "icon": {
+        "stringValue": "🍅"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "name": {
+        "stringValue": "خضار وفواكه طازجة"
+      },
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم خضار وفواكه طازجة"
+      },
+      "velocity": {
+        "stringValue": "fast"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   },
   {
-    "_id": "water",
-    "_path": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/water",
-    "description": "أصناف تابعة لقسم مياه معبأة",
-    "icon": "💧",
-    "velocity": "fast",
-    "name": "مياه معبأة",
-    "updatedAt": "2026-07-14T09:12:26.420Z",
-    "code": "water",
-    "createdAt": "2026-07-14T09:12:26.420Z"
+    "name": "projects/idham-foodstuffs-sa/databases/(default)/documents/companies/idham-main/categories/water",
+    "fields": {
+      "createdAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "description": {
+        "stringValue": "أصناف تابعة لقسم مياه معبأة"
+      },
+      "velocity": {
+        "stringValue": "fast"
+      },
+      "name": {
+        "stringValue": "مياه معبأة"
+      },
+      "updatedAt": {
+        "timestampValue": "2026-07-14T09:12:26.420Z"
+      },
+      "icon": {
+        "stringValue": "💧"
+      },
+      "code": {
+        "stringValue": "water"
+      }
+    },
+    "createTime": "2026-07-11T22:02:29.916483Z",
+    "updateTime": "2026-07-14T09:12:27.733660Z"
   }
 ]
