@@ -139,10 +139,8 @@ async function loadAllData() {
   ]);
   _products = products; _categories = categories;
   _warehouses = warehouses; _stockBalances = stockBalances;
-  const txSnap = await getDocs(query(COLS.stockTransactions(), orderBy("createdAt","desc"), limit(500)));
-  _stockTxs = txSnap.docs.map(d => ({id:d.id,...d.data()}));
-  const siSnap = await getDocs(query(COLS.salesInvoices(), orderBy("createdAt","desc"), limit(300)));
-  _salesInvoices = siSnap.docs.map(d => ({id:d.id,...d.data()}));
+  _stockTxs = await getAll(COLS.stockTransactions(), [orderBy("createdAt","desc"), limit(500)]);
+  _salesInvoices = await getAll(COLS.salesInvoices(), [orderBy("createdAt","desc"), limit(300)]);
 }
 
 // ── Render ─────────────────────────────────────────────────────

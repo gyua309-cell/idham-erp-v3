@@ -121,32 +121,29 @@ async function renderDashboardContent(fromStr, toStr) {
     </div>`;
 
   try {
-    const invQ = query(COLS.salesInvoices(), limit(5000));
-    const purQ = query(COLS.purchaseInvoices(), limit(5000));
-    const rcptQ = query(COLS.receipts(), limit(5000));
-    const colQ = query(collection(db, `companies/${COMPANY_ID}/collections`), limit(5000));
-    const jeQ = query(collection(db, `companies/${COMPANY_ID}/journalEntries`), where("status", "==", "posted"));
+    const colQ = collection(db, `companies/${COMPANY_ID}/collections`);
+    const jeQ = collection(db, `companies/${COMPANY_ID}/journalEntries`);
     const coaQ = collection(db, `companies/${COMPANY_ID}/chartOfAccounts`);
 
-    // Fetch concurrently to reduce load time
+    // Fetch concurrently to reduce load time using L1/L2 cache
     const [invSnap, purSnap, stockSnap, rcptSnap, jeSnap, coaSnap, colSnap, prodSnap] = await Promise.all([
-      getDocs(invQ).catch(e => { console.warn(e); return { docs: [] }; }),
-      getDocs(purQ).catch(e => { console.warn(e); return { docs: [] }; }),
+      getAll(COLS.salesInvoices(), [limit(5000)]).catch(e => { console.warn(e); return []; }),
+      getAll(COLS.purchaseInvoices(), [limit(5000)]).catch(e => { console.warn(e); return []; }),
       getAll(COLS.stockByWarehouse()).catch(e => { console.warn(e); return []; }),
-      getDocs(rcptQ).catch(e => { console.warn(e); return { docs: [] }; }),
-      getDocs(jeQ).catch(e => { console.warn(e); return { docs: [] }; }),
-      getDocs(coaQ).catch(e => { console.warn(e); return { docs: [] }; }),
-      getDocs(colQ).catch(e => { console.warn(e); return { docs: [] }; }),
+      getAll(COLS.receipts(), [limit(5000)]).catch(e => { console.warn(e); return []; }),
+      getAll(jeQ, [where("status", "==", "posted")]).catch(e => { console.warn(e); return []; }),
+      getAll(coaQ).catch(e => { console.warn(e); return []; }),
+      getAll(colQ, [limit(5000)]).catch(e => { console.warn(e); return []; }),
       getAll(COLS.products()).catch(e => { console.warn(e); return []; })
     ]);
 
-    invoices = invSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    purchases = purSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    receipts = rcptSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    collections = colSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    jes = jeSnap.docs.map(d => d.data());
-    accounts = coaSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    products = Array.isArray(prodSnap) ? prodSnap : (prodSnap.docs ? prodSnap.docs.map(d => ({ id: d.id, ...d.data() })) : []);
+    invoices = invSnap;
+    purchases = purSnap;
+    receipts = rcptSnap;
+    collections = colSnap;
+    jes = jeSnap;
+    accounts = coaSnap;
+    products = prodSnap;
     stockWarnings = stockSnap.filter(s => s.stockStatus === "out" || s.stockStatus === "low").slice(0, 10);
 
     // Filter in JS by selected date range
