@@ -129,13 +129,44 @@ export async function render(container, user) {
   window.viewDetailedStatement = (id, type) => {
     window._preselectedStatementEntity = { id, type };
     if (typeof window.navigate === "function") {
-      window.navigate("report-customer-statement");
+      window.navigate(type === "supplier" ? "supplier-statement" : "customer-statement");
     } else {
       console.error("navigate function not found on window");
     }
   };
 
   await loadConsolidatedBalances();
+}
+
+function normStr(str) {
+  if (!str) return "";
+  return str.toString().trim().toLowerCase()
+    .replace(/[أإآ]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/ى/g, "ي")
+    .replace(/\s+/g, " ");
+}
+
+function isManualJE(je) {
+  if (je.status === "cancelled" || je.isReversed) return false;
+  const st = (je.sourceType || "").toLowerCase();
+  if (st === "manual" || st === "opening" || st === "adjustment") return true;
+  if (je.auto === true) return false;
+
+  const rt = (je.refType || "").toLowerCase();
+  const desc = (je.description || "").toLowerCase();
+
+  const isAuto = (
+    st === "salesinvoice" || st === "sales" || st === "receipt" || st === "salesreturn" || 
+    st === "sales_return" || st === "salescogs" || st === "cogs" || st === "salesreturncogs" || 
+    st === "salesinvoice_cogs" || st === "collection" || st === "expense" || st === "supplierpayment" ||
+    st === "purchase" || st === "purchaseinvoice" || st === "purchasereturn" || st === "purchase_return" ||
+    rt.includes("sales") || rt.includes("receipt") || rt.includes("invoice") || rt.includes("return") || rt.includes("expense") ||
+    desc.includes("مبيعات") || desc.includes("فاتورة") || desc.includes("سند قبض") || desc.includes("سند صرف") ||
+    desc.includes("مرتجع") || desc.includes("إشعار دائن") || desc.includes("تصفية")
+  );
+
+  return !isAuto;
 }
 
 async function loadConsolidatedBalances() {
@@ -145,8 +176,8 @@ async function loadConsolidatedBalances() {
   if (periodLabel) periodLabel.textContent = `الفترة من ${fromDate} إلى ${toDate}`;
 
   try {
-    // 1. Fetch all required entities and transaction documents
-    const [custSnap, suppSnap, coaSnap, invSnap, rcptSnap, purSnap, expSnap, salesRetSnap, purRetSnap, colSnap] = await Promise.all([
+    // 1. Fetch all required entities and transaction documents including journal entries
+    const [custSnap, suppSnap, coaSnap, invSnap, rcptSnap, purSnap, expSnap, salesRetSnap, purRetSnap, colSnap, jeSnap] = await Promise.all([
       getDocs(collection(db, `companies/${COMPANY_ID}/customers`)),
       getDocs(collection(db, `companies/${COMPANY_ID}/suppliers`)),
       getDocs(collection(db, `companies/${COMPANY_ID}/chartOfAccounts`)),
@@ -157,18 +188,20 @@ async function loadConsolidatedBalances() {
       getDocs(collection(db, `companies/${COMPANY_ID}/salesReturns`)),
       getDocs(collection(db, `companies/${COMPANY_ID}/purchaseReturns`)),
       getDocs(collection(db, `companies/${COMPANY_ID}/collections`)),
+      getDocs(collection(db, `companies/${COMPANY_ID}/journalEntries`)),
     ]);
 
     const customers = custSnap.docs.map(d => ({ id: d.id, ...d.data(), entityType: "customer" }));
     const suppliers = suppSnap.docs.map(d => ({ id: d.id, ...d.data(), entityType: "supplier" }));
     const coaList = coaSnap.docs.map(d => ({ id: d.id, ...d.data() }));
     const salesInvoices = invSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(i => i.status !== "cancelled");
-    const receiptsList = rcptSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const receiptsList = rcptSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status !== "cancelled");
     const purchaseInvoices = purSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.status !== "cancelled");
-    const expensesList = expSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const expensesList = expSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(e => e.status !== "cancelled");
     const salesReturns = salesRetSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status !== "cancelled");
     const purchaseReturns = purRetSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status !== "cancelled");
-    const collectionsList = colSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const collectionsList = colSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(c => c.status !== "cancelled");
+    const manualJEs = jeSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(isManualJE);
 
     reportData = [];
 
@@ -176,12 +209,26 @@ async function loadConsolidatedBalances() {
     for (const c of customers) {
       if (!c.name || c.name === "undefined") continue;
 
+      const cNorm = normStr(c.name);
+      const cAccIds = new Set();
+      const cAccCodes = new Set();
+      if (c.id) cAccIds.add(c.id);
+      if (c.accountId) cAccIds.add(c.accountId);
+      if (c.accountCode) cAccCodes.add(c.accountCode);
+
+      coaList.forEach(a => {
+        if (a.sourceEntityId === c.id || (a.code && a.code === c.accountCode) || (a.name && normStr(a.name) === cNorm)) {
+          cAccIds.add(a.id);
+          if (a.code) cAccCodes.add(a.code);
+        }
+      });
+
       let openBalance = parseFloat(c.openingBalance || 0);
       let periodDebit = 0;
       let periodCredit = 0;
 
       // 2.1 Sales Invoices (+ Debit)
-      salesInvoices.filter(i => i.customerId === c.id).forEach(inv => {
+      salesInvoices.filter(i => i.customerId === c.id || (i.customerName && normStr(i.customerName) === cNorm)).forEach(inv => {
         const dt = inv.date || "";
         const val = parseFloat(inv.totalWithVat || inv.total || 0);
         if (dt < fromDate) {
@@ -192,7 +239,7 @@ async function loadConsolidatedBalances() {
       });
 
       // 2.2 Sales Returns (- Credit)
-      salesReturns.filter(r => r.customerId === c.id).forEach(ret => {
+      salesReturns.filter(r => r.customerId === c.id || (r.customerName && normStr(r.customerName) === cNorm)).forEach(ret => {
         const dt = ret.date || "";
         const val = parseFloat(ret.totalWithVat !== undefined ? ret.totalWithVat : (ret.total !== undefined ? ret.total : (ret.subtotal || 0)));
         if (dt < fromDate) {
@@ -203,7 +250,7 @@ async function loadConsolidatedBalances() {
       });
 
       // 2.3 Representative collections (- Credit)
-      collectionsList.filter(col => col.customerId === c.id).forEach(col => {
+      collectionsList.filter(col => col.customerId === c.id || (col.customerName && normStr(col.customerName) === cNorm)).forEach(col => {
         const dt = col.date || "";
         const val = parseFloat(col.amount || 0);
         if (dt < fromDate) {
@@ -214,7 +261,12 @@ async function loadConsolidatedBalances() {
       });
 
       // 2.4 Admin ERP receipts (- Credit)
-      receiptsList.filter(r => r.targetId === c.id && r.entityType === "customer").forEach(rcpt => {
+      receiptsList.filter(r => {
+        if (r.entityType === "supplier") return false;
+        return r.targetId === c.id || r.customerId === c.id ||
+               (r.customerName && normStr(r.customerName) === cNorm) ||
+               (r.accountName && normStr(r.accountName) === cNorm);
+      }).forEach(rcpt => {
         const dt = rcpt.date || "";
         const val = parseFloat(rcpt.amount || 0);
         if (dt < fromDate) {
@@ -224,11 +276,56 @@ async function loadConsolidatedBalances() {
         }
       });
 
+      // 2.4b Customer refund expenses (+ Debit)
+      expensesList.filter(e => {
+        if (e.entityType !== "customer") return false;
+        return e.targetId === c.id || e.customerId === c.id ||
+               (e.customerName && normStr(e.customerName) === cNorm) ||
+               (e.accountName && normStr(e.accountName) === cNorm);
+      }).forEach(exp => {
+        const dt = exp.date || "";
+        const val = parseFloat(exp.amount || 0);
+        if (dt < fromDate) {
+          openBalance += val;
+        } else if (dt <= toDate) {
+          periodDebit += val;
+        }
+      });
+
+      // 2.5 Manual Journal Entries (Debit increases customer debt, Credit decreases customer debt)
+      manualJEs.forEach(je => {
+        (je.lines || []).forEach(line => {
+          const lAccId = line.accountId;
+          const lAccCode = line.accountCode;
+          const lNorm = normStr(line.accountName);
+
+          const isMatch = (lAccId && cAccIds.has(lAccId)) ||
+                          (lAccCode && cAccCodes.has(lAccCode)) ||
+                          (cNorm && lNorm && (lNorm === cNorm || lNorm.includes(cNorm) || cNorm.includes(lNorm)));
+
+          if (isMatch) {
+            const dAmt = parseFloat(line.debit || 0);
+            const cAmt = parseFloat(line.credit || 0);
+            if (dAmt === 0 && cAmt === 0) return;
+
+            const dt = je.date || "";
+            const isOpening = (je.description || "").includes("افتتاحي") || (line.note || "").includes("افتتاحي") || je.sourceType === "opening" || je.refType === "opening";
+
+            if (isOpening || (dt && dt < fromDate)) {
+              openBalance += (dAmt - cAmt);
+            } else if (dt <= toDate) {
+              periodDebit += dAmt;
+              periodCredit += cAmt;
+            }
+          }
+        });
+      });
+
       let closingBalance = Math.round((openBalance + periodDebit - periodCredit) * 100) / 100;
 
       let cAcc = coaList.find(a => a.id === c.accountId || a.code === c.accountCode) ||
                  coaList.find(a => a.sourceEntityId === c.id && a.sourceModule === "customers") ||
-                 coaList.find(a => a.name && c.name && a.name.includes(c.name) && (a.code.startsWith("1-1-2-1") || a.code.startsWith("1-1-2-1-2")));
+                 coaList.find(a => a.name && c.name && normStr(a.name) === cNorm && (a.code.startsWith("1-1-2-1") || a.code.startsWith("1-1-2-1-2")));
 
       reportData.push({
         id: c.id,
@@ -247,12 +344,26 @@ async function loadConsolidatedBalances() {
     for (const s of suppliers) {
       if (!s.name || s.name === "undefined") continue;
 
+      const sNorm = normStr(s.name);
+      const sAccIds = new Set();
+      const sAccCodes = new Set();
+      if (s.id) sAccIds.add(s.id);
+      if (s.accountId) sAccIds.add(s.accountId);
+      if (s.accountCode) sAccCodes.add(s.accountCode);
+
+      coaList.forEach(a => {
+        if (a.sourceEntityId === s.id || (a.code && a.code === s.accountCode) || (a.name && normStr(a.name) === sNorm)) {
+          sAccIds.add(a.id);
+          if (a.code) sAccCodes.add(a.code);
+        }
+      });
+
       let openBalance = parseFloat(s.openingBalance || 0);
       let periodDebit = 0;
       let periodCredit = 0;
 
       // 3.1 Purchase Invoices (+ Credit)
-      purchaseInvoices.filter(p => p.supplierId === s.id).forEach(pur => {
+      purchaseInvoices.filter(p => p.supplierId === s.id || (p.supplierName && normStr(p.supplierName) === sNorm)).forEach(pur => {
         const dt = pur.date || "";
         const val = parseFloat(pur.totalWithVat || pur.total || 0);
         if (dt < fromDate) {
@@ -266,7 +377,7 @@ async function loadConsolidatedBalances() {
           const purDateStr = pur.date || "";
           const hasMatchingVoucher = expensesList.some(e => {
             const eDate = e.date || "";
-            return eDate === purDateStr && e.targetId === s.id && Math.abs((e.amount || 0) - pur.paidAmount) < 0.01;
+            return eDate === purDateStr && (e.targetId === s.id || e.supplierId === s.id) && Math.abs((e.amount || 0) - pur.paidAmount) < 0.01;
           });
 
           if (!hasMatchingVoucher) {
@@ -280,7 +391,7 @@ async function loadConsolidatedBalances() {
       });
 
       // 3.2 Purchase Returns (- Debit)
-      purchaseReturns.filter(r => r.supplierId === s.id).forEach(ret => {
+      purchaseReturns.filter(r => r.supplierId === s.id || (r.supplierName && normStr(r.supplierName) === sNorm)).forEach(ret => {
         const dt = ret.date || "";
         const val = parseFloat(ret.totalWithVat || 0);
         if (dt < fromDate) {
@@ -291,7 +402,12 @@ async function loadConsolidatedBalances() {
       });
 
       // 3.3 Payments and expenses (- Debit)
-      expensesList.filter(e => e.targetId === s.id && e.entityType === "supplier").forEach(exp => {
+      expensesList.filter(e => {
+        if (e.entityType === "customer") return false;
+        return e.targetId === s.id || e.supplierId === s.id ||
+               (e.supplierName && normStr(e.supplierName) === sNorm) ||
+               (e.accountName && normStr(e.accountName) === sNorm);
+      }).forEach(exp => {
         const dt = exp.date || "";
         const val = parseFloat(exp.amount || 0);
         if (dt < fromDate) {
@@ -301,11 +417,58 @@ async function loadConsolidatedBalances() {
         }
       });
 
+      // 3.3b Receipts / Refunds from supplier (+ Credit)
+      receiptsList.filter(r => {
+        if (r.entityType && r.entityType !== "supplier") return false;
+        return r.targetId === s.id || r.supplierId === s.id ||
+               (r.entityType === "supplier" && (
+                 (r.supplierName && normStr(r.supplierName) === sNorm) ||
+                 (r.accountName && normStr(r.accountName) === sNorm)
+               ));
+      }).forEach(rcpt => {
+        const dt = rcpt.date || "";
+        const val = parseFloat(rcpt.amount || 0);
+        if (dt < fromDate) {
+          openBalance += val;
+        } else if (dt <= toDate) {
+          periodCredit += val;
+        }
+      });
+
+      // 3.4 Manual Journal Entries (Credit increases supplier debt, Debit decreases supplier debt)
+      manualJEs.forEach(je => {
+        (je.lines || []).forEach(line => {
+          const lAccId = line.accountId;
+          const lAccCode = line.accountCode;
+          const lNorm = normStr(line.accountName);
+
+          const isMatch = (lAccId && sAccIds.has(lAccId)) ||
+                          (lAccCode && sAccCodes.has(lAccCode)) ||
+                          (sNorm && lNorm && (lNorm === sNorm || lNorm.includes(sNorm) || sNorm.includes(lNorm)));
+
+          if (isMatch) {
+            const dAmt = parseFloat(line.debit || 0);
+            const cAmt = parseFloat(line.credit || 0);
+            if (dAmt === 0 && cAmt === 0) return;
+
+            const dt = je.date || "";
+            const isOpening = (je.description || "").includes("افتتاحي") || (line.note || "").includes("افتتاحي") || je.sourceType === "opening" || je.refType === "opening";
+
+            if (isOpening || (dt && dt < fromDate)) {
+              openBalance += (cAmt - dAmt);
+            } else if (dt <= toDate) {
+              periodDebit += dAmt;
+              periodCredit += cAmt;
+            }
+          }
+        });
+      });
+
       let closingBalance = Math.round((openBalance + periodCredit - periodDebit) * 100) / 100;
 
       let sAcc = coaList.find(a => a.id === s.accountId || a.code === s.accountCode) ||
                  coaList.find(a => a.sourceEntityId === s.id && a.sourceModule === "suppliers") ||
-                 coaList.find(a => a.name && s.name && a.name.includes(s.name) && a.code.startsWith("2-1-1"));
+                 coaList.find(a => a.name && s.name && normStr(a.name) === sNorm && a.code.startsWith("2-1-1"));
 
       reportData.push({
         id: s.id,

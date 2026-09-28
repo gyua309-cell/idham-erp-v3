@@ -34,81 +34,88 @@ export async function render(container, user) {
 // SHELL
 // ══════════════════════════════════════════════════════════════
 function buildShell() { return `
-<div id="fa2" style="display:flex;flex-direction:column;height:100%;overflow:hidden;background:var(--bg-0)">
+<div id="fa2" style="display:flex;flex-direction:column;height:100%;overflow:hidden;background:var(--bg-0);color:var(--text-0);">
 
 <style>
 /* ── Header ── */
-#fa2 .fa-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;
-  background:linear-gradient(135deg,#0f172a,#1e1b4b);border-bottom:1px solid #312e81;flex-shrink:0;flex-wrap:wrap;gap:8px}
-#fa2 .fa-logo{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#6366f1,#8b5cf6);
-  display:flex;align-items:center;justify-content:center;font-size:18px;
-  box-shadow:0 0 20px rgba(99,102,241,.5),0 0 40px rgba(139,92,246,.2)}
-#fa2 .fa-htitle{font-size:17px;font-weight:900;color:#e0e7ff;margin:0}
-#fa2 .fa-hsub{font-size:10px;color:#818cf8;margin:2px 0 0}
-/* Period buttons */
-#fa2 .pgrp{display:flex;background:#1e1b4b;border-radius:8px;border:1px solid #312e81;overflow:hidden}
-#fa2 .pbtn{padding:5px 14px;border:none;background:transparent;color:#818cf8;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s}
-#fa2 .pbtn.on{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.4)}
-#fa2 .hbtn{padding:6px 12px;border-radius:8px;border:1px solid #312e81;background:#1e1b4b;color:#a5b4fc;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;transition:all .15s;white-space:nowrap}
-#fa2 .hbtn:hover{background:#312e81;color:#e0e7ff}
-#fa2 .hbtn.primary{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border-color:#6366f1}
+#fa2 .fa-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 20px;
+  background:var(--bg-card);border-bottom:1px solid var(--border-soft);flex-shrink:0;flex-wrap:wrap;gap:12px;box-shadow:0 2px 10px rgba(0,0,0,0.02)}
+#fa2 .fa-logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--brand),#8b5cf6);
+  display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;
+  box-shadow:0 4px 14px rgba(99,102,241,.3)}
+#fa2 .fa-htitle{font-size:18px;font-weight:900;color:var(--text-0);margin:0}
+#fa2 .fa-hsub{font-size:11px;color:var(--text-2);margin:2px 0 0}
+
+/* Period buttons & Inputs */
+#fa2 .pgrp{display:flex;background:var(--bg-2);border-radius:8px;border:1px solid var(--border-soft);overflow:hidden;padding:2px}
+#fa2 .pbtn{padding:5px 12px;border:none;background:transparent;color:var(--text-1);font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .15s;border-radius:6px}
+#fa2 .pbtn.on{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.3)}
+#fa2 .hbtn{padding:6px 14px;border-radius:8px;border:1px solid var(--border-soft);background:var(--bg-2);color:var(--text-1);font-size:11.5px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;transition:all .15s;white-space:nowrap}
+#fa2 .hbtn:hover{background:var(--bg-card);color:var(--text-0)}
+#fa2 .hbtn.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+
 /* Tabs */
-#fa2 .tabs{display:flex;padding:0 12px;background:#0f172a;border-bottom:2px solid #1e293b;flex-shrink:0;overflow-x:auto;scrollbar-width:none;gap:0}
-#fa2 .tab{padding:9px 16px;border:none;background:transparent;color:#64748b;cursor:pointer;font-size:11px;font-weight:800;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;letter-spacing:.3px}
-#fa2 .tab:hover{color:#94a3b8}
-#fa2 .tab.on{color:#818cf8;border-bottom-color:#6366f1;background:rgba(99,102,241,.08)}
+#fa2 .tabs{display:flex;padding:0 16px;background:var(--bg-card);border-bottom:2px solid var(--border-soft);flex-shrink:0;overflow-x:auto;scrollbar-width:none;gap:4px}
+#fa2 .tab{padding:10px 18px;border:none;background:transparent;color:var(--text-2);cursor:pointer;font-size:12px;font-weight:800;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:6px;border-bottom:2.5px solid transparent;margin-bottom:-2px;transition:all .15s;letter-spacing:.3px}
+#fa2 .tab:hover{color:var(--text-0)}
+#fa2 .tab.on{color:var(--brand);border-bottom-color:var(--brand);background:var(--bg-2);border-radius:8px 8px 0 0}
+
 /* Content */
-#fa2 .content{flex:1;overflow-y:auto;padding:12px}
+#fa2 .content{flex:1;overflow-y:auto;padding:16px;background:var(--bg-0)}
 /* Loading */
-#fa2 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:320px;gap:16px;color:#64748b}
-#fa2 .spinner{width:44px;height:44px;border:3px solid #1e293b;border-top-color:#6366f1;border-radius:50%;animation:spin .7s linear infinite}
+#fa2 .loading{display:flex;flex-direction:column;align-items:center;justify-content:center;height:320px;gap:16px;color:var(--text-2)}
+#fa2 .spinner{width:44px;height:44px;border:3px solid var(--border-soft);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
 /* KPI Grid */
-#fa2 .kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px}
-#fa2 .kcard{background:linear-gradient(145deg,#1e293b,#0f172a);border:1px solid #1e293b;border-radius:14px;padding:14px;position:relative;overflow:hidden;cursor:default;transition:transform .2s,box-shadow .2s}
-#fa2 .kcard:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,.4)}
-#fa2 .kcard::before{content:"";position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;filter:blur(20px);opacity:.3}
-#fa2 .kc-lbl{font-size:9px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-#fa2 .kc-val{font-size:20px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1;margin-bottom:4px}
-#fa2 .kc-sub{font-size:10px;color:#475569;margin-bottom:6px}
-#fa2 .kc-bar{height:3px;border-radius:2px;margin-top:6px;opacity:.6}
-#fa2 .kc-icon{position:absolute;top:10px;left:10px;font-size:26px;opacity:.08}
+#fa2 .kgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:16px}
+#fa2 .kcard{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:14px;padding:16px;position:relative;overflow:hidden;cursor:default;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 14px rgba(0,0,0,0.03)}
+#fa2 .kcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.06)}
+#fa2 .kcard::before{content:"";position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;filter:blur(20px);opacity:.15}
+#fa2 .kc-lbl{font-size:10px;font-weight:800;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+#fa2 .kc-val{font-size:20px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1;margin-bottom:4px;color:var(--text-0)}
+#fa2 .kc-sub{font-size:10.5px;color:var(--text-2);margin-bottom:6px}
+#fa2 .kc-bar{height:4px;border-radius:2px;margin-top:6px;opacity:.8}
+#fa2 .kc-icon{position:absolute;top:10px;left:10px;font-size:26px;opacity:.12}
 #fa2 .kc-trend{font-size:10px;font-weight:800;margin-top:2px}
+
 /* Chart cards */
-#fa2 .cgrid{display:grid;gap:12px;margin-bottom:14px}
+#fa2 .cgrid{display:grid;gap:14px;margin-bottom:16px}
 #fa2 .cgrid.c2{grid-template-columns:1fr 1fr}
 #fa2 .cgrid.c3{grid-template-columns:1fr 1fr 1fr}
 #fa2 .cgrid.c1{grid-template-columns:1fr}
 @media(max-width:950px){#fa2 .cgrid.c2,#fa2 .cgrid.c3{grid-template-columns:1fr}}
-#fa2 .ccard{background:linear-gradient(145deg,#1e293b,#0f172a);border:1px solid #1e293b;border-radius:14px;padding:16px;position:relative;overflow:hidden}
-#fa2 .ccard::after{content:"";position:absolute;top:-30px;left:-30px;width:80px;height:80px;border-radius:50%;opacity:.04;filter:blur(20px);background:#6366f1}
-#fa2 .cc-title{font-size:12px;font-weight:900;color:#e2e8f0;margin-bottom:2px;display:flex;align-items:center;gap:7px}
-#fa2 .cc-sub{font-size:9px;color:#475569;margin-bottom:12px}
-#fa2 .cc-badge{font-size:9px;padding:2px 8px;border-radius:10px;background:rgba(99,102,241,.2);color:#818cf8;font-weight:800;margin-right:auto}
+#fa2 .ccard{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:14px;padding:18px;position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,0.03)}
+#fa2 .cc-title{font-size:13px;font-weight:900;color:var(--text-0);margin-bottom:2px;display:flex;align-items:center;gap:7px}
+#fa2 .cc-sub{font-size:10px;color:var(--text-2);margin-bottom:12px}
+#fa2 .cc-badge{font-size:9.5px;padding:3px 9px;border-radius:10px;background:rgba(99,102,241,.12);color:var(--brand);font-weight:800;margin-right:auto}
+
 /* Ratio cards */
-#fa2 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-bottom:14px}
-#fa2 .rcard{background:linear-gradient(145deg,#1e293b,#0f172a);border:1px solid #1e293b;border-radius:12px;padding:14px}
+#fa2 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px;margin-bottom:16px}
+#fa2 .rcard{background:var(--bg-card);border:1px solid var(--border-soft);border-radius:14px;padding:16px;box-shadow:0 4px 14px rgba(0,0,0,0.03)}
 #fa2 .rc-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-#fa2 .rc-name{font-size:11px;font-weight:800;color:#94a3b8}
-#fa2 .rc-eng{font-size:9px;color:#475569;margin-top:1px}
-#fa2 .rc-val{font-size:28px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1}
+#fa2 .rc-name{font-size:12px;font-weight:800;color:var(--text-0)}
+#fa2 .rc-eng{font-size:9.5px;color:var(--text-2);margin-top:1px}
+#fa2 .rc-val{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;color:var(--text-0)}
 #fa2 .rc-unit{font-size:12px;font-weight:600;opacity:.6;margin-right:3px}
-#fa2 .rc-bar{height:6px;background:#0f172a;border-radius:4px;overflow:hidden;margin:8px 0}
+#fa2 .rc-bar{height:6px;background:var(--bg-2);border-radius:4px;overflow:hidden;margin:8px 0}
 #fa2 .rc-fill{height:100%;border-radius:4px;transition:width .8s cubic-bezier(.22,1,.36,1)}
-#fa2 .rc-bench{display:flex;justify-content:space-between;font-size:9px;color:#475569}
-#fa2 .badge{font-size:9px;font-weight:800;padding:2px 8px;border-radius:10px}
+#fa2 .rc-bench{display:flex;justify-content:space-between;font-size:9.5px;color:var(--text-2)}
+#fa2 .badge{font-size:9.5px;font-weight:800;padding:3px 9px;border-radius:10px}
 #fa2 .b-ex{background:rgba(16,185,129,.15);color:#10b981}
-#fa2 .b-gd{background:rgba(99,102,241,.15);color:#818cf8}
+#fa2 .b-gd{background:rgba(99,102,241,.15);color:#6366f1}
 #fa2 .b-wn{background:rgba(245,158,11,.15);color:#f59e0b}
 #fa2 .b-dn{background:rgba(239,68,68,.15);color:#ef4444}
+
 /* Section label */
-#fa2 .slbl{font-size:10px;font-weight:900;color:#475569;text-transform:uppercase;letter-spacing:.8px;
-  padding:6px 0 10px;display:flex;align-items:center;gap:7px;border-bottom:1px solid #1e293b;margin-bottom:12px}
-#fa2 .slbl span{color:#6366f1}
+#fa2 .slbl{font-size:11px;font-weight:900;color:var(--text-1);text-transform:uppercase;letter-spacing:.8px;
+  padding:8px 0 12px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(--border-soft);margin-bottom:14px}
+#fa2 .slbl span{color:var(--brand)}
+
 /* Waterfall */
 #fa2 .wf-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-#fa2 .wf-lbl{font-size:11px;color:#94a3b8;width:160px;flex-shrink:0;text-align:right}
-#fa2 .wf-bar-wrap{flex:1;height:26px;background:#0f172a;border-radius:6px;overflow:hidden;position:relative}
+#fa2 .wf-lbl{font-size:11px;color:var(--text-1);width:160px;flex-shrink:0;text-align:right}
+#fa2 .wf-bar-wrap{flex:1;height:26px;background:var(--bg-2);border-radius:6px;overflow:hidden;position:relative}
 #fa2 .wf-bar-fill{height:100%;border-radius:6px;position:absolute;display:flex;align-items:center;padding:0 8px;font-size:10px;font-weight:800;color:#fff;white-space:nowrap;transition:width .8s cubic-bezier(.22,1,.36,1)}
 </style>
 
@@ -118,15 +125,35 @@ function buildShell() { return `
     <div class="fa-logo">📊</div>
     <div>
       <div class="fa-htitle">التحليل المالي الشامل</div>
-      <div class="fa-hsub">30+ نسبة مالية • ECharts GL 3D • بيانات حية من Firestore</div>
+      <div class="fa-hsub">30+ نسبة مالية • ECharts GL 3D • بيانات حية ومطابقة للفترات</div>
     </div>
   </div>
-  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+
+  <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    
+    <!-- Date Range Inputs -->
+    <div style="display:flex;align-items:center;gap:8px;background:var(--bg-2);padding:4px 10px;border-radius:8px;border:1px solid var(--border-soft);">
+      <div style="display:flex;align-items:center;gap:5px;">
+        <label style="font-size:11px;font-weight:800;color:var(--text-2);">من:</label>
+        <input type="date" id="fa-from" class="mono font-bold" style="padding:4px 8px;font-size:11.5px;width:125px;border-radius:6px;border:1px solid var(--border-soft);background:var(--bg-card);color:var(--text-0);" onchange="window.setFaCustomDate()" />
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <label style="font-size:11px;font-weight:800;color:var(--text-2);">إلى:</label>
+        <input type="date" id="fa-to" class="mono font-bold" style="padding:4px 8px;font-size:11.5px;width:125px;border-radius:6px;border:1px solid var(--border-soft);background:var(--bg-card);color:var(--text-0);" onchange="window.setFaCustomDate()" />
+      </div>
+    </div>
+
+    <!-- Quick Period Buttons -->
     <div class="pgrp">
+      <button class="pbtn" data-p="all">كل الفترات</button>
+      <button class="pbtn" data-p="today">اليوم</button>
+      <button class="pbtn" data-p="this_week">آخر 7 أيام</button>
       <button class="pbtn on" data-p="month">هذا الشهر</button>
+      <button class="pbtn" data-p="last_month">الشهر الماضي</button>
       <button class="pbtn" data-p="quarter">الربع</button>
       <button class="pbtn" data-p="year">هذه السنة</button>
     </div>
+
     <button class="hbtn" onclick="window.fa2Export()">📄 PDF</button>
     <button class="hbtn primary" onclick="window.fa2Refresh()">🔄 تحديث</button>
   </div>
@@ -156,11 +183,18 @@ function setupPeriodBtns() {
   document.querySelectorAll("#fa2 .pbtn").forEach(b =>
     b.addEventListener("click", async () => {
       document.querySelectorAll("#fa2 .pbtn").forEach(x => x.classList.remove("on"));
-      b.classList.add("on"); _period = b.dataset.p;
+      b.classList.add("on");
+      _period = b.dataset.p;
       await refreshAll();
     })
   );
 }
+
+window.setFaCustomDate = () => {
+  _period = "custom";
+  document.querySelectorAll("#fa2 .pbtn").forEach(x => x.classList.remove("on"));
+  refreshAll();
+};
 
 window.fa2Tab = (tab) => {
   document.querySelectorAll("#fa2 .tab").forEach(t => t.classList.toggle("on", t.id === `t-${tab}`));
@@ -197,10 +231,45 @@ async function loadData(force = false) {
     return `${yr}-${mon}-${day}`;
   };
   const now = new Date(), y = now.getFullYear(), m = now.getMonth();
-  let fromDate = _period==="year"   ? new Date(y,0,1) :
-                 _period==="quarter"? new Date(y,Math.floor(m/3)*3,1) : new Date(y,m,1);
-  const from = formatLocalDate(fromDate);
-  const to   = formatLocalDate(now);
+
+  let from = document.getElementById("fa-from")?.value || "";
+  let to   = document.getElementById("fa-to")?.value || "";
+
+  if (_period !== "custom" || !from || !to) {
+    if (_period === "all") {
+      from = "2020-01-01";
+      to = formatLocalDate(now);
+    } else if (_period === "today") {
+      from = formatLocalDate(now);
+      to = formatLocalDate(now);
+    } else if (_period === "this_week") {
+      const w = new Date(now); w.setDate(w.getDate() - 7);
+      from = formatLocalDate(w);
+      to = formatLocalDate(now);
+    } else if (_period === "last_month") {
+      const lmStart = new Date(y, m - 1, 1);
+      const lmEnd = new Date(y, m, 0);
+      from = formatLocalDate(lmStart);
+      to = formatLocalDate(lmEnd);
+    } else if (_period === "quarter") {
+      from = formatLocalDate(new Date(y, Math.floor(m / 3) * 3, 1));
+      to = formatLocalDate(now);
+    } else if (_period === "year") {
+      from = formatLocalDate(new Date(y, 0, 1));
+      to = formatLocalDate(now);
+    } else { // default "month"
+      from = formatLocalDate(new Date(y, m, 1));
+      to = formatLocalDate(now);
+    }
+
+    const fromEl = document.getElementById("fa-from");
+    const toEl = document.getElementById("fa-to");
+    if (fromEl) fromEl.value = from;
+    if (toEl) toEl.value = to;
+  }
+
+  const sixMonthsAgoDate = new Date(now.getFullYear(), now.getMonth() - 5, 1);
+  const sixMonthsAgo = formatLocalDate(sixMonthsAgoDate);
 
   const { clearERPCache, COMPANY_ID } = await import("../utils/db.js");
   if (force) {
@@ -214,10 +283,10 @@ async function loadData(force = false) {
     clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
   }
 
-  // Load raw data in parallel using smart cache
-  const [SI, PI, ST, CU, SU, PRODS, ACCS, JES] = await Promise.all([
-    getAll(COLS.salesInvoices(),    [where("date",">=",from), where("date","<=",to)]),
-    getAll(COLS.purchaseInvoices(), [where("date",">=",from), where("date","<=",to)]),
+  // Fetch sales and purchase invoices from 6 months ago to support 6-month trend chart
+  const [SI_all, PI_all, ST, CU, SU, PRODS, ACCS, JES] = await Promise.all([
+    getAll(COLS.salesInvoices(),    [where("date",">=",sixMonthsAgo), where("date","<=",to)]),
+    getAll(COLS.purchaseInvoices(), [where("date",">=",sixMonthsAgo), where("date","<=",to)]),
     getAll(COLS.stockByWarehouse()),
     getAll(COLS.customers()),
     getAll(COLS.suppliers()),
@@ -225,6 +294,10 @@ async function loadData(force = false) {
     getAll(COLS.chartOfAccounts()),
     getAll(COLS.journalEntries()),
   ]);
+
+  // Filter invoices for current selected period
+  const SI = SI_all.filter(i => (i.date || "") >= from && (i.date || "") <= to);
+  const PI = PI_all.filter(i => (i.date || "") >= from && (i.date || "") <= to);
 
   // Build account lookup maps
   const accById   = {};
@@ -313,9 +386,18 @@ async function loadData(force = false) {
       if (isFixed) fixedAssets += bal;
       else {
         curAssets += bal;
-        if (acc.code?.startsWith("1-1-1")) cashVal      += bal;
-        if (acc.code?.startsWith("1-1-2")) receivables  += bal;
-        if (acc.code?.startsWith("1-1-4")) invVal       += bal;
+        // 1-1-1: Cash boxes, 1-1-2: Banks
+        if (acc.code?.startsWith("1-1-1") || acc.code?.startsWith("1-1-2") || acc.code?.startsWith("111") || acc.code?.startsWith("112") || acc.name?.includes("صندوق") || acc.name?.includes("بنك")) {
+          cashVal += bal;
+        }
+        // 1-1-3: Customer receivables
+        if (acc.code?.startsWith("1-1-3") || acc.code?.startsWith("113") || acc.name?.includes("عملاء") || acc.name?.includes("مدينة")) {
+          receivables += bal;
+        }
+        // 1-1-4: Inventory
+        if (acc.code?.startsWith("1-1-4") || acc.code?.startsWith("114") || acc.name?.includes("مخزون")) {
+          invVal += bal;
+        }
       }
     } else if (acc.type === "liability") {
       const val = -bal;
@@ -323,7 +405,9 @@ async function loadData(force = false) {
       if (isLT) longLiab += val;
       else {
         curLiab += val;
-        if (acc.code?.startsWith("2-1-1")) payables += val;
+        if (acc.code?.startsWith("2-1-1") || acc.code?.startsWith("211") || acc.name?.includes("موردين") || acc.name?.includes("دائنة")) {
+          payables += val;
+        }
       }
     }
   }
@@ -357,10 +441,10 @@ async function loadData(force = false) {
     const d = new Date(now.getFullYear(), now.getMonth()-5+i, 1);
     const lbl = d.toLocaleString("ar-SA",{month:"short"});
     const yr=d.getFullYear(), mn=d.getMonth();
-    const sRev = SI.filter(x=>{const dt=new Date(x.date||"");return dt.getFullYear()===yr&&dt.getMonth()===mn})
-                   .reduce((s,x)=>s+(x.totalWithVat||x.grandTotal||0),0);
-    const pCst = PI.filter(x=>{const dt=new Date(x.date||"");return dt.getFullYear()===yr&&dt.getMonth()===mn})
-                   .reduce((s,x)=>s+(x.total||x.grandTotal||0),0);
+    const sRev = SI_all.filter(x=>{const dt=new Date(x.date||"");return dt.getFullYear()===yr&&dt.getMonth()===mn})
+                       .reduce((s,x)=>s+(x.totalWithVat||x.grandTotal||0),0);
+    const pCst = PI_all.filter(x=>{const dt=new Date(x.date||"");return dt.getFullYear()===yr&&dt.getMonth()===mn})
+                       .reduce((s,x)=>s+(x.total||x.grandTotal||0),0);
     const gp   = grossProfit > 0 && revenue > 0 ? sRev * (grossProfit/revenue) : 0;
     return {lbl, rev:Math.round(sRev), cost:Math.round(pCst), gp:Math.round(gp)};
   });
@@ -492,16 +576,17 @@ function cCard(id,title,sub,h=300,badge="") {
 function mkChart(id, opt) {
   const el = document.getElementById(id);
   if (!el || !window.echarts) return null;
-  const c = echarts.init(el,"dark",{renderer:"canvas"});
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const c = echarts.init(el, isDark ? "dark" : null, {renderer:"canvas"});
   c.setOption(opt);
   _charts.push(c);
   return c;
 }
 
 // Premium axis style
-const axX = (data) => ({type:"category",data,axisLine:{lineStyle:{color:"#1e293b"}},axisTick:{show:false},axisLabel:{color:"#475569",fontSize:9}});
-const axY = (fmt) => ({type:"value",splitLine:{lineStyle:{color:"#1e293b",type:"dashed"}},axisLabel:{color:"#475569",fontSize:9,formatter:fmt||null}});
-const TOOLTIP = {backgroundColor:"#1e1b4b",borderColor:"#312e81",borderWidth:1,textStyle:{color:"#e2e8f0",fontSize:11}};
+const axX = (data) => ({type:"category",data,axisLine:{lineStyle:{color:"var(--border-soft)"}},axisTick:{show:false},axisLabel:{color:"var(--text-1)",fontSize:10}});
+const axY = (fmt) => ({type:"value",splitLine:{lineStyle:{color:"var(--border-soft)",type:"dashed"}},axisLabel:{color:"var(--text-1)",fontSize:10,formatter:fmt||null}});
+const TOOLTIP = {backgroundColor:"var(--bg-card)",borderColor:"var(--border-soft)",borderWidth:1,textStyle:{color:"var(--text-0)",fontSize:11},extraCssText:"box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-radius: 8px;"};
 
 // ══════════════════════════════════════════════════════════════
 // TAB BUILDER
@@ -757,8 +842,8 @@ function renderCharts(tab, d) {
     // Revenue Area Chart
     mk("ch-rev6",{
       backgroundColor:BG, tooltip:{...TOOLTIP,trigger:"axis"},
-      legend:{data:["مبيعات","تكاليف","إجمالي ربح"],bottom:0,textStyle:{color:"#475569",fontSize:10}},
-      grid:{left:60,right:16,top:20,bottom:40},
+      legend:{data:["مبيعات","تكاليف","إجمالي ربح"],bottom:0,textStyle:{color:"var(--text-1)",fontSize:10}},
+      grid:{left:20,right:20,top:25,bottom:40,containLabel:true},
       xAxis:axX(labels6), yAxis:axY(v=>fmtC(v)),
       series:[
         {name:"مبيعات",type:"line",smooth:true,data:months6.map(x=>x.rev),symbol:"circle",symbolSize:7,
@@ -856,32 +941,31 @@ function renderCharts(tab, d) {
     });
     mk("ch-liq-bars",{
       backgroundColor:BG, tooltip:{...TOOLTIP,trigger:"axis"},
-      legend:{data:["الأصول المتداولة","الخصوم المتداولة"],bottom:0,textStyle:{color:"#475569",fontSize:10}},
-      grid:{left:16,right:16,top:20,bottom:40},
-      xAxis:axX(["النقدية","الذمم المدينة","المخزون","المجموع","الخصوم المتداولة"]),
+      legend:{data:["النقدية","الذمم المدينة","المخزون","الخصوم المتداولة"],bottom:0,textStyle:{color:"var(--text-1)",fontSize:10}},
+      grid:{left:20,right:20,top:25,bottom:40,containLabel:true},
+      xAxis:axX(["النقدية","الذمم المدينة","المخزون","الخصوم المتداولة"]),
       yAxis:axY(v=>fmtC(v)),
       series:[{
-        type:"bar",barWidth:"55%",
+        type:"bar",barWidth:"45%",
         data:[
           {value:+d.cash.toFixed(0),        itemStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:C.green},{offset:1,color:C.green+"44"}]},borderRadius:[8,8,0,0],shadowColor:C.green+"44",shadowBlur:12}},
           {value:+d.receivables.toFixed(0),  itemStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:C.blue},{offset:1,color:C.blue+"44"}]},borderRadius:[8,8,0,0],shadowColor:C.blue+"44",shadowBlur:12}},
           {value:+d.invVal.toFixed(0),       itemStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:C.yellow},{offset:1,color:C.yellow+"44"}]},borderRadius:[8,8,0,0],shadowColor:C.yellow+"44",shadowBlur:12}},
-          {value:+d.curAssets.toFixed(0),    itemStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:C.indigo},{offset:1,color:C.indigo+"44"}]},borderRadius:[8,8,0,0],shadowColor:C.indigo+"44",shadowBlur:12}},
           {value:+d.curLiab.toFixed(0),      itemStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:C.red},{offset:1,color:C.red+"44"}]},borderRadius:[8,8,0,0],shadowColor:C.red+"44",shadowBlur:12}},
         ]
       }]
     });
     mk("ch-liq-waterfall",{
       backgroundColor:BG, tooltip:{...TOOLTIP,trigger:"axis"},
-      grid:{left:60,right:16,top:20,bottom:30},
+      grid:{left:20,right:20,top:25,bottom:30,containLabel:true},
       xAxis:axX(["الأصول المتداولة","الخصوم","رأس المال العامل"]),
       yAxis:axY(v=>fmtC(v)),
       series:[gradBar([+d.curAssets.toFixed(0),+d.curLiab.toFixed(0),+Math.max(0,R.workCap).toFixed(0)],C.teal)]
     });
     mk("ch-liq-trend",{
       backgroundColor:BG, tooltip:{...TOOLTIP,trigger:"axis"},
-      grid:{left:40,right:16,top:20,bottom:30},
-      legend:{data:["التداول","السريعة"],bottom:0,textStyle:{color:"#475569",fontSize:10}},
+      grid:{left:20,right:20,top:25,bottom:30,containLabel:true},
+      legend:{data:["التداول","السريعة"],bottom:0,textStyle:{color:"var(--text-1)",fontSize:10}},
       xAxis:axX(labels6), yAxis:axY(),
       series:[
         {name:"التداول",type:"line",smooth:true,symbol:"circle",symbolSize:6,

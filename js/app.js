@@ -101,45 +101,73 @@ import "./utils/archive-helper.js";
 const ROUTES = {
   "dashboard":                () => import("./modules/dashboard.js?v=39.2"),
   "expenses":                 () => import("./modules/expenses.js?v=39.6"),
-  "receipts":                 () => import("./modules/receipts.js?v=43.0"),
+  "receipts":                 () => import("./modules/receipts.js?v=44.0"),
   "payments":                 () => import("./modules/expenses.js?v=41.9"),
-  "products":                 () => import("./modules/products.js?v=41.2"),
+  "products":                 () => import("./modules/products.js?v=44.0"),
   "categories":               () => import("./modules/categories.js?v=39.2"),
   "warehouses":               () => import("./modules/warehouses.js?v=39.6"),
   "inventory-ops":            () => import("./modules/inventory-ops.js?v=41.0"),
   "inventory-closing":        () => import("./modules/inventory-closing.js?v=39.2"),
   "inventory-dashboard":      () => import("./modules/inventory-dashboard.js?v=39.2"),
-  "stock-transfer":           () => import("./modules/stock-transfer.js?v=45.0"),
-  "stock-card":               () => import("./modules/stock-card.js?v=50.0"),
+  "stock-transfer":           () => import("./modules/stock-transfer.js?v=45.3"),
+  "stock-card":               () => import("./modules/stock-card.js?v=51.0"),
   "inventory-locations":      () => import("./modules/inventory-locations.js?v=47.0"),
   "reorder-points":           () => import("./modules/reorder-points.js?v=39.2"),
   "expiry-tracking":          () => import("./modules/expiry-tracking.js?v=39.2"),
+  "van-loading-dispatch":     () => import("./modules/van-loading-dispatch.js?v=1.0"),
+  "barcode-label-printer":    () => import("./modules/barcode-label-printer.js?v=1.0"),
+  "product-bundles-kitting":  () => import("./modules/product-bundles-kitting.js?v=1.0"),
+  "inventory-waste-clearance":() => import("./modules/inventory-waste-clearance.js?v=2.6"),
+  "batch-traceability-report":() => import("./modules/batch-traceability-report.js?v=1.1"),
+  "product-profit-margins":   () => import("./modules/product-profit-margins.js?v=1.0"),
+  "stock-movement-balance":   () => import("./modules/stock-movement-balance.js?v=1.0"),
+  "inventory-replenishment":  () => import("./modules/inventory-replenishment.js?v=1.1"),
   "customers":                () => import("./modules/customers.js?v=42.0"),
-  "suppliers":                () => import("./modules/suppliers.js?v=39.2"),
+  "customer-crm":             () => import("./modules/customer-crm.js?v=1.0"),
+  "customer-segments":        () => import("./modules/customer-segments.js?v=1.0"),
+  "customer-complaints":      () => import("./modules/customer-complaints.js?v=1.0"),
+  "customer-loyalty":         () => import("./modules/customer-loyalty.js?v=1.0"),
+  "customer-contracts":       () => import("./modules/customer-contracts.js?v=1.0"),
+  "customer-statement":       () => import("./modules/customer-statement.js?v=2.0"),
+  "suppliers":                () => import("./modules/suppliers.js?v=40.0"),
+  "supplier-statement":       () => import("./modules/supplier-statement.js?v=3.0"),
+  "supplier-contracts":       () => import("./modules/supplier-contracts.js?v=1.0"),
+  "supplier-evaluations":     () => import("./modules/supplier-evaluations.js?v=1.0"),
+  "supplier-performance":     () => import("./modules/supplier-performance.js?v=1.1"),
+  "supplier-quotations":      () => import("./modules/supplier-quotations.js?v=1.0"),
+  "supplier-claims":          () => import("./modules/supplier-claims.js?v=1.0"),
+  "supplier-price-history":   () => import("./modules/supplier-price-history.js?v=1.0"),
+  "supplier-notes":           () => import("./modules/supplier-notes.js?v=1.0"),
+  "purchase-orders":          () => import("./modules/purchase-orders.js?v=1.0"),
+  "supplier-deliveries":      () => import("./modules/supplier-deliveries.js?v=1.0"),
+  "supplier-rebates":         () => import("./modules/supplier-rebates.js?v=1.0"),
   "price-lists":              () => import("./modules/price-lists.js?v=39.2"),
-  "sales-reps":               () => import("./modules/sales-reps.js?v=39.2"),
-  "rep-performance":          () => import("./modules/reports/rep-performance.js?v=43.0"),
-  "cash-boxes":               () => import("./modules/cash-boxes.js?v=39.2"),
+  "sales-reps":               () => import("./modules/sales-reps.js?v=41.0"),
+  "rep-performance":          () => import("./modules/reports/rep-performance.js?v=46.0"),
+  "rep-daily-journal":        () => import("./modules/reports/rep-daily-journal.js?v=7.1"),
+  "cash-boxes":               () => import("./modules/cash-boxes.js?v=39.3"),
   "bank-accounts":            () => import("./modules/bank-accounts.js?v=39.2"),
   "cheques":                  () => import("./modules/cheques.js?v=39.2"),
-  "sales-invoices":           () => import("./modules/sales-invoices.js?v=46.0"),
-  "quotations":               () => import("./modules/quotations.js?v=39.4"),
+  "promissory-notes":         () => import("./modules/promissory-notes.js?v=1.9"),
+  "sales-invoices":           () => import("./modules/sales-invoices.js?v=50.0"),
+  "sales-returns":            () => import("./modules/sales-returns.js?v=39.5"),
+  "quotations":               () => import("./modules/quotations.js?v=52.0"),
   "pos":                      () => import("./modules/pos.js?v=39.2"),
-  "sales-returns":            () => import("./modules/sales-returns.js?v=39.2"),
-  "purchase-invoices":        () => import("./modules/purchase-invoices.js?v=42.0"),
-  "purchase-returns":         () => import("./modules/purchase-returns.js?v=39.2"),
-  "chart-of-accounts":        () => import("./modules/chart-of-accounts.js?v=49.0"),
-  "journal-entries":          () => import("./modules/journal-entries.js?v=43.0"),
+  "purchase-invoices":        () => import("./modules/purchase-invoices.js?v=46.0"),
+  "purchase-returns":         () => import("./modules/purchase-returns.js?v=43.0"),
+  "chart-of-accounts":        () => import("./modules/chart-of-accounts.js?v=43.0"),
+  "journal-entries":          () => import("./modules/journal-entries.js?v=44.0"),
   "financial-reports":        () => import("./modules/financial-reports.js?v=43.1"),
   "report-sales-product":     () => import("./modules/reports/sales-by-product.js?v=39.2"),
   "report-sales-rep":         () => import("./modules/reports/sales-by-rep.js?v=39.2"),
   "report-sales-customer":    () => import("./modules/reports/sales-by-customer.js?v=39.2"),
   "report-stock":             () => import("./modules/reports/stock-report.js?v=39.2"),
-  "report-customer-statement":() => import("./modules/reports/customer-statement.js?v=39.2"),
-  "report-consolidated-balances":() => import("./modules/reports/consolidated-balances.js?v=44.0"),
+  "report-customer-statement":() => import("./modules/reports/customer-statement.js?v=40.0"),
+  "report-hierarchical-debt": () => import("./modules/reports/hierarchical-debt.js?v=1.0"),
+  "report-consolidated-balances":() => import("./modules/reports/consolidated-balances.js?v=46.0"),
   "report-warehouse-comparison":() => import("./modules/reports/warehouse-comparison.js?v=44.0"),
   "report-profit-loss":       () => import("./modules/reports/profit-loss.js?v=39.2"),
-  "report-expense-analysis":  () => import("./modules/reports/expense-analysis.js?v=42.0"),
+  "report-expense-analysis":  () => import("./modules/reports/expense-analysis.js?v=43.0"),
   "report-product-analytics": () => import("./modules/reports/product-analytics.js?v=42.0"),
   "report-expense-tracking":  () => import("./modules/reports/expense-tracking.js?v=42.0"),
   "settings-company":         () => import("./modules/settings-company.js?v=43.0"),
@@ -148,9 +176,10 @@ const ROUTES = {
   "hr-payroll":               () => import("./modules/hr-payroll.js?v=45.0"),
   "vat-zakat":                 () => import("./modules/vat-zakat.js?v=42.0"),
   "financial-analysis":       () => import("./modules/financial-analysis.js?v=43.0"),
+  "realtime-cogs":           () => import("./modules/reports/realtime-cogs.js?v=1.0"),
   "inventory-reports":        () => import("./modules/reports/inventory-reports.js?v=39.2"),
   "purchase-requests":        () => import("./modules/purchase-requests.js?v=39.5"),
-  "cost-centers":             () => import("./modules/cost-centers.js?v=49.0"),
+  "cost-centers":             () => import("./modules/cost-centers.js?v=50.0"),
   "data-reset":               () => import("./modules/data-reset.js?v=42.0"),
   "archive":                  () => import("./modules/archive.js?v=42.0"),
 };
@@ -172,14 +201,41 @@ const ROUTE_LABELS = {
   "inventory-locations":       "مواقع ورفوف وأدراج التخزين",
   "reorder-points":            "نقاط إعادة الطلب ومخزون الأمان",
   "expiry-tracking":           "تتبع تواريخ انتهاء الصلاحية",
-  "customers":                 "العملاء",
+  "van-loading-dispatch":      "تحميل وجرد سيارات التوزيع",
+  "barcode-label-printer":     "طباعة ملصقات الباركود والرفوف",
+  "product-bundles-kitting":   "عروض الباكجات وتجميع الوحدات",
+  "inventory-waste-clearance": "رادار الرواكد والتوالف وتصريف المخزون",
+  "batch-traceability-report": "تتبع اللوت والتشغيلات واستدعاء المنتجات",
+  "product-profit-margins":    "مصفوفة وهوامش ربحية الأصناف",
+  "stock-movement-balance":    "ميزان حركة المخزون العام",
+  "inventory-replenishment":   "محرك التنبؤ وإعادة تموين المخازن",
+  "customers":                 "دليل العملاء",
+  "customer-crm":              "متابعة العملاء CRM",
+  "customer-segments":         "شرائح العملاء",
+  "customer-complaints":       "شكاوى العملاء",
+  "customer-loyalty":          "نقاط الولاء",
+  "customer-contracts":        "العقود والاتفاقيات",
+  "customer-statement":        "كشف حساب عميل",
   "suppliers":                 "الموردين",
+  "supplier-statement":        "كشف حساب مورد تفصيلي",
+  "supplier-contracts":        "عقود واتفاقيات الموردين",
+  "supplier-evaluations":      "تقييم أداء وجودة الموردين",
+  "supplier-performance":      "أداء تصريف الموردين ومقارنة المشتريات بالمبيعات",
+  "supplier-quotations":       "مقارنة عروض أسعار الموردين",
+  "supplier-claims":           "مطالبات وتوالف الموردين",
+  "supplier-price-history":    "تتبع أسعار الشراء التاريخية",
+  "supplier-notes":            "الشروط البنكية وملاحظات الموردين",
+  "purchase-orders":           "أوامر الشراء الرسمية (PO)",
+  "supplier-deliveries":       "جدولة شحنات الموردين",
+  "supplier-rebates":          "حوافز وبونص الموردين السنوية",
   "price-lists":               "قوائم الأسعار",
   "sales-reps":                "المناديب",
   "rep-performance":           "أداء المناديب",
+  "rep-daily-journal":         "يومية المندوب",
   "cash-boxes":                "الصناديق النقدية",
   "bank-accounts":             "الحسابات البنكية",
   "cheques":                   "أوراق القبض والدفع (شيكات)",
+  "promissory-notes":          "سندات الأمر",
   "sales-invoices":            "فواتير المبيعات",
   "quotations":                "عروض الأسعار",
   "pos":                       "نقطة البيع السريعة",
@@ -195,6 +251,7 @@ const ROUTE_LABELS = {
   "report-sales-customer":     "مبيعات حسب العميل",
   "report-stock":              "تقرير المخزون",
   "report-customer-statement": "كشف الحساب الموحد (عميل / مورد / مندوب)",
+  "report-hierarchical-debt":  "تقرير المديونيات الهرمي الشجري (مبيعات وسدادات)",
   "report-consolidated-balances": "تقرير أرصدة العملاء والموردين المجمع",
   "report-warehouse-comparison": "تقرير مقارنة أرصدة المستودع الرئيسي وسيارة مصطفى",
   "report-profit-loss":        "أرباح وخسائر",
@@ -207,6 +264,7 @@ const ROUTE_LABELS = {
   "hr-payroll":                "الرواتب والموارد البشرية",
   "vat-zakat":                 "ضريبة القيمة المضافة والزكاة والدخل",
   "financial-analysis":       "التحليل المالي الشامل (30+ نسبة)",
+  "realtime-cogs":           "الشاشة اللحظية لتكلفة المبيعات ومجمل الربح",
   "inventory-reports":         "تقارير المخزون الاحترافية (70+ تقرير)",
   "cost-centers":              "مراكز التكلفة وسيارات التوزيع",
   "data-reset":                "تصفير البيانات",
@@ -237,40 +295,59 @@ async function hashCredentials(email, password) {
 
 // Check localStorage session on startup — deferred to after full module load
 setTimeout(() => {
-  const ensureMinimumLoadingTime = (callback) => {
-    const elapsed = Date.now() - APP_START_TIME;
-    const remaining = Math.max(0, 1200 - elapsed);
-    setTimeout(callback, remaining);
+  let authResolved = false;
+
+  const resolveAppOrAuth = (user) => {
+    if (authResolved) return;
+    authResolved = true;
+    hideLoading();
+    if (user) {
+      currentUser = user;
+      showApp(user);
+      navigateToHash();
+    } else {
+      showAuth();
+    }
   };
 
   try {
     const session = JSON.parse(localStorage.getItem("erp_session") || "null");
     if (session && session.email && session.exp > Date.now()) {
-      ensureMinimumLoadingTime(() => {
-        hideLoading();
-        currentUser = session;
-        showApp(session);
-        navigateToHash();
-      });
+      resolveAppOrAuth(session);
       return;
     }
   } catch {}
 
-  // No valid session — also check Firebase Auth as fallback
-  onAuthStateChanged(auth, (user) => {
-    if (document.getElementById("app")?.classList.contains("hidden") === false) return;
-    ensureMinimumLoadingTime(() => {
-      hideLoading();
-      if (user) {
-        currentUser = user;
-        showApp(user);
-        navigateToHash();
-      } else {
-        showAuth();
-      }
+  // Firebase Auth fallback
+  try {
+    onAuthStateChanged(auth, (user) => {
+      if (document.getElementById("app")?.classList.contains("hidden") === false) return;
+      resolveAppOrAuth(user);
     });
-  });
+  } catch (e) {
+    console.warn("Auth state listener error:", e);
+  }
+
+  // Bulletproof Fail-Safe: Always dismiss splash screen within max 1200ms
+  setTimeout(() => {
+    if (!authResolved) {
+      resolveAppOrAuth(null);
+    }
+  }, 1200);
 }, 0);
+
+window.toggleLoginPasswordVisibility = () => {
+  const pwd = document.getElementById("login-password");
+  const eye = document.getElementById("login-pwd-eye");
+  if (!pwd) return;
+  if (pwd.type === "password") {
+    pwd.type = "text";
+    if (eye) eye.textContent = "🙈";
+  } else {
+    pwd.type = "password";
+    if (eye) eye.textContent = "👁️";
+  }
+};
 
 // Login form
 document.getElementById("login-form").addEventListener("submit", async (e) => {
@@ -396,15 +473,51 @@ function hideLoading() {
   }
 }
 
+// ──────────────────────────────────────────
+// Nav Visibility — Role-Based Section Hiding
+// ──────────────────────────────────────────
+const _NAV_ROLE_SECTIONS = {
+  admin:        ["sales","purchases","inventory","finance","admin"],
+  accountant:   ["sales","purchases","inventory","finance"],
+  sales_rep:    ["sales"],
+  purchase_mgr: ["purchases","inventory"],
+  warehouse_mgr:["inventory"],
+};
+
+function _applyNavVisibility(role) {
+  const allowed = new Set(_NAV_ROLE_SECTIONS[role] || _NAV_ROLE_SECTIONS["admin"]);
+  document.querySelectorAll("[data-role-section]").forEach(el => {
+    el.style.display = allowed.has(el.getAttribute("data-role-section")) ? "" : "none";
+  });
+}
+
 function showApp(user) {
   document.getElementById("auth-page").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
+
+  // Apply sidebar layout
+  if (window.applySidebarLayout) {
+    window.applySidebarLayout(localStorage.getItem("idham_sidebar_layout") || "modular");
+  }
 
   // Set user info in sidebar
   const initial = user.displayName ? user.displayName[0] : user.email[0].toUpperCase();
   document.getElementById("user-avatar").textContent = initial;
   document.getElementById("user-name").textContent   = user.displayName || user.email;
-  document.getElementById("user-role").textContent   = user.email;
+
+  // Show role label (will be overridden by applyNavVisibility for known roles)
+  const roleLabels = {
+    admin:        "مدير النظام",
+    accountant:   "محاسب",
+    sales_rep:    "مندوب مبيعات",
+    purchase_mgr: "مدير مشتريات",
+    warehouse_mgr:"مدير مخازن",
+  };
+  const userRole = user.role || "admin";
+  document.getElementById("user-role").textContent = roleLabels[userRole] || user.email;
+
+  // Apply nav section visibility based on role
+  _applyNavVisibility(userRole);
 
   // Background preloader — starts immediately after UI shows
   setTimeout(() => {
@@ -453,18 +566,26 @@ function showApp(user) {
       }).catch(() => {});
     }).catch(() => {});
 
+    // 1.5 Stock Operations Health Check (Alert for pending/dropped deductions or transfers)
+    setTimeout(async () => {
+      try {
+        const { checkStockOperationsHealth } = await import("./utils/stock-health-checker.js?v=2.1");
+        await checkStockOperationsHealth();
+      } catch (_) {}
+    }, 2000);
+
     // 2. Pre-cache the most-used Firestore collections (background, no await)
-    import("./utils/db.js").then(({ getAll, COLS, orderBy }) => {
+    import("./utils/db.js").then(({ getAll, COLS }) => {
       // تحميل البيانات الأكثر استخداماً بشكل متوازٍ (parallel) لتسريع الـ warmup
       const warmupTasks = [
-        getAll(COLS.categories(),  [orderBy("name")]),
-        getAll(COLS.units(),       [orderBy("name")]),
-        getAll(COLS.suppliers(),   [orderBy("name")]),
-        getAll(COLS.customers(),   [orderBy("name")]),
-        getAll(COLS.warehouses(),  [orderBy("name")]),
-        getAll(COLS.salesReps(),   [orderBy("name")]),
-        getAll(COLS.priceLists(),  [orderBy("name")]),
-        getAll(COLS.products(),    [orderBy("name")]),  // الأصناف — مهمة للفواتير وPOS
+        getAll(COLS.categories()),
+        getAll(COLS.units()),
+        getAll(COLS.suppliers()),
+        getAll(COLS.customers()),
+        getAll(COLS.warehouses()),
+        getAll(COLS.salesReps()),
+        getAll(COLS.priceLists()),
+        getAll(COLS.products()),  // الأصناف — مهمة للفواتير وPOS
       ].map(p => p.catch(() => [])); // أي خطأ لا يوقف البقية
 
       Promise.all(warmupTasks).then(() => {
@@ -523,23 +644,11 @@ async function navigateToHash() {
 }
 
 // ──────────────────────────────────────────
-// Page DOM Cache — stores rendered pages in memory
+// Page DOM Cache — stores rendered pages in memory for 0ms navigation
 // ──────────────────────────────────────────
 const _pageCache = new Map();        // route → {node, unsub}
 const CACHE_BYPASS = new Set([
-  // صفحات تحتاج بيانات لحظية دائماً
-  "dashboard", "inventory-dashboard", "financial-analysis", "cost-centers", "data-reset",
-  // صفحات تحتاج تسجيل window.* جديد عند كل زيارة (مودالات تفاعلية)
-  "quotations", "sales-invoices", "purchase-invoices",
-  "sales-returns", "purchase-returns",
-  "journal-entries", "chart-of-accounts",
-  "cheques", "cash-boxes", "bank-accounts",
-  "stock-card", "stock-transfer", "inventory-ops",
-  "pos", "expenses", "hr-payroll",
-  "report-customer-statement",
-  "inventory-locations", "reorder-points", "expiry-tracking",
-  // ملاحظة: customers, suppliers, products أُزيلت من هنا — تعتمد الآن على getAll() Cache (5 دقائق)
-  // للتحديث اليدوي اضغط زر "🔄 تحديث" في كل صفحة
+  "data-reset" // فقط صفحة تصفير البيانات
 ]);
 
 window.navigate = async (route, pushState = true) => {
@@ -556,6 +665,10 @@ window.navigate = async (route, pushState = true) => {
 
   // Update URL hash
   if (pushState) history.pushState(null, "", "#" + route);
+
+  // Remove any stray active overlays or modals from screen
+  document.querySelectorAll(".modal-overlay.active, .f8-modal-overlay.active").forEach(m => m.classList.remove("active"));
+  document.getElementById("sidebar-overlay")?.classList.remove("visible");
 
   // Update active nav item
   document.querySelectorAll(".nav-item").forEach(el => {
@@ -624,6 +737,15 @@ window.navigate = async (route, pushState = true) => {
       // Cache the rendered node (only if still the active route)
       if (currentRoute === route && !CACHE_BYPASS.has(route)) {
         _pageCache.set(route, { node: pageNode, unsub });
+      }
+
+      if (["dashboard", "sales-invoices", "stock-transfer"].includes(route)) {
+        setTimeout(async () => {
+          try {
+            const { checkStockOperationsHealth } = await import("./utils/stock-health-checker.js?v=2.1");
+            await checkStockOperationsHealth();
+          } catch (_) {}
+        }, 800);
       }
     }
   } catch (err) {
@@ -760,13 +882,7 @@ if (toggleBtn) {
 // Mobile
 window.toggleMobileSidebar = () => {
   sidebar.classList.toggle("mobile-hidden");
-  document.getElementById("sidebar-overlay").classList.toggle("visible");
 };
-
-document.getElementById("sidebar-overlay").addEventListener("click", () => {
-  sidebar.classList.add("mobile-hidden");
-  document.getElementById("sidebar-overlay").classList.remove("visible");
-});
 
 // Detect mobile
 function checkMobile() {
@@ -803,6 +919,54 @@ try {
     if (el) el.classList.add("collapsed");
   });
 } catch {}
+
+// ──────────────────────────────────────────
+// Sidebar Layout Mode (Modular vs Classic Undo/Switch)
+// ──────────────────────────────────────────
+window.applySidebarLayout = (mode) => {
+  const modView = document.getElementById("layout-modular");
+  const clsView = document.getElementById("layout-classic");
+  const label = document.getElementById("sidebar-layout-label");
+  if (!modView || !clsView) return;
+
+  if (mode === "classic") {
+    modView.style.display = "none";
+    clsView.style.display = "block";
+    if (label) {
+      label.innerHTML = "🏛️ الترتيب السابق (كلاسيكي)";
+      label.style.color = "var(--text-2)";
+      label.style.background = "var(--bg-2)";
+    }
+  } else {
+    modView.style.display = "block";
+    clsView.style.display = "none";
+    if (label) {
+      label.innerHTML = "✨ القائمة المنظمة";
+      label.style.color = "var(--primary)";
+      label.style.background = "var(--primary-dim, rgba(99,102,241,0.12))";
+    }
+  }
+
+  // Refresh active route highlighting
+  const cur = window.currentRoute || location.hash.replace("#", "") || "dashboard";
+  document.querySelectorAll(".nav-item").forEach(el => {
+    el.classList.toggle("active", el.dataset.route === cur);
+  });
+};
+
+window.toggleSidebarLayoutMode = () => {
+  const current = localStorage.getItem("idham_sidebar_layout") || "modular";
+  const next = current === "modular" ? "classic" : "modular";
+  localStorage.setItem("idham_sidebar_layout", next);
+  window.applySidebarLayout(next);
+  window.showToast(next === "modular" ? "تم تفعيل القائمة المنظمة الحديثة ✨" : "تم التراجع إلى الترتيب السابق الكلاسيكي 🔄", "info");
+};
+
+// Auto-restore layout on script load
+setTimeout(() => {
+  const savedMode = localStorage.getItem("idham_sidebar_layout") || "modular";
+  window.applySidebarLayout(savedMode);
+}, 50);
 
 // ──────────────────────────────────────────
 // Toast System
@@ -1143,8 +1307,8 @@ initF8Search();
 
 window.getCompanyPrintHeaderHTML = (reportTitle, subtitle) => {
   let co = {
-    name: "مؤسسة إدهام للمواد الغذائية",
-    vatNumber: "", phone: "", email: "", logoBase64: "", crNumber: "", address: "", city: "", zip: "", country: ""
+    name: "شركة نظم الإمداد الحديثة",
+    vatNumber: "312448150500003", phone: "0549141648", email: "Nuzmalamdad@gmail.com", logoBase64: "", crNumber: "4700123180", address: "7480 — الشارع: عامر الشعبي", city: "ينبع", zip: "13315", country: "المملكة العربية السعودية"
   };
   try {
     const cached = JSON.parse(localStorage.getItem("idham_company") || "{}");
@@ -1154,27 +1318,26 @@ window.getCompanyPrintHeaderHTML = (reportTitle, subtitle) => {
   const fullAddress = [co.address, co.city, co.zip, co.country].filter(Boolean).join("، ");
   const logoSrc = co.logoUrl || co.logoBase64 || co.logo || "";
   const logoHtml = logoSrc
-    ? `<img src="${logoSrc}" alt="شعار الشركة" style="height:60px;max-width:150px;object-fit:contain;background:#fff;padding:3px;border-radius:6px;box-shadow:0 1px 3px rgba(0,0,0,0.1);" />`
-    : `<div style="width:50px;height:50px;background:#f1f5f9;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;">🏢</div>`;
+    ? `<img src="${logoSrc}" alt="شعار الشركة" style="height:55px;max-width:140px;object-fit:contain;background:#fff;padding:2px;border-radius:6px;" />`
+    : `<div style="width:48px;height:48px;background:#f1f5f9;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;">🏢</div>`;
 
   return `
-    <div class="report-print-header">
-      <div style="display:flex; align-items:center; gap:14px;">
+    <div class="report-print-header" style="display:flex; justify-content:space-between; align-items:center; width:100%; gap:16px; border-bottom:2px solid #5B5CEB; padding-bottom:12px; margin-bottom:18px;">
+      <div style="display:flex; align-items:center; gap:12px; flex:1;">
         ${logoHtml}
         <div>
-          <h2 style="font-size:16px; font-weight:800; color:#1e3a8a; margin:0 0 3px;">${co.name}</h2>
-          <div style="font-size:10px; color:#4b5563; display:flex; flex-wrap:wrap; gap:2px 10px; line-height:1.4;">
-            ${co.vatNumber ? `<span>الرقم الضريبي: <strong>${co.vatNumber}</strong></span>` : ""}
-            ${co.crNumber ? `<span>السجل التجاري: <strong>${co.crNumber}</strong></span>` : ""}
-            ${co.phone ? `<span>الهاتف: <strong>${co.phone}</strong></span>` : ""}
-            ${co.email ? `<span>البريد: <strong>${co.email}</strong></span>` : ""}
-            ${fullAddress ? `<span style="width:100%;">📍 العنوان: <strong>${fullAddress}</strong></span>` : ""}
+          <h2 style="font-size:16px; font-weight:800; color:#1e293b; margin:0 0 2px; line-height:1.2;">${co.name}</h2>
+          <div style="font-size:10px; color:#475569; display:flex; flex-wrap:wrap; gap:2px 8px; line-height:1.3;">
+            ${co.vatNumber ? `<span>ر.ض: <strong>${co.vatNumber}</strong></span>` : ""}
+            ${co.crNumber ? `<span>س.ت: <strong>${co.crNumber}</strong></span>` : ""}
+            ${co.phone ? `<span>هاتف: <strong>${co.phone}</strong></span>` : ""}
+            ${fullAddress ? `<span style="width:100%;">📍 ${fullAddress}</span>` : ""}
           </div>
         </div>
       </div>
-      <div style="text-align:left;">
-        <h1 style="font-size:18px; font-weight:800; color:#5B5CEB; margin:0 0 2px;">${reportTitle}</h1>
-        <p style="font-size:10px; color:#6b7280; margin:0;">${subtitle || ""}</p>
+      <div style="text-align:left; flex-shrink:0;">
+        <h1 style="font-size:17px; font-weight:900; color:#5B5CEB; margin:0 0 3px; white-space:nowrap;">${reportTitle}</h1>
+        <p style="font-size:11px; color:#64748b; font-weight:700; margin:0; white-space:nowrap;">${subtitle || ""}</p>
       </div>
     </div>
   `;

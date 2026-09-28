@@ -8,6 +8,7 @@ import { query, where, orderBy, limit, getDocs, doc, getDoc, serverTimestamp } f
 import { formatCurrency, formatQuantity, getStockStatus, getStockStatusBadge, debounce, generateSearchTokens } from "../utils/formatters.js";
 import { db, COMPANY_ID } from "../firebase-config.js";
 import { exportToExcel, importFromExcel, pickExcelFile, downloadTemplate } from "../utils/excel.js";
+import { syncProductCostsFromPurchaseInvoices } from "../utils/product-cost-sync.js";
 
 let allProducts = [];
 let currentPage = 0;
@@ -18,6 +19,27 @@ let filterCategory = "";
 let filterStatus = "";
 let warehouses = [];
 let categories = [];
+
+let sortFieldProd = "sku"; // Default sort by SKU
+let sortAscProd = true;   // Default ascending
+
+window.sortProdList = (field) => {
+  if (sortFieldProd === field) {
+    sortAscProd = !sortAscProd;
+  } else {
+    sortFieldProd = field;
+    sortAscProd = (field === "sku" || field === "name" || field === "category") ? true : false;
+  }
+  loadProducts();
+};
+
+function getSortArrowProd(field) {
+  if (sortFieldProd !== field) return `<span style="color:var(--text-3); font-size:10px; margin-right:4px;">⇅</span>`;
+  return sortAscProd 
+    ? `<span style="color:var(--brand); font-size:10px; margin-right:4px;">▲</span>` 
+    : `<span style="color:var(--brand); font-size:10px; margin-right:4px;">▼</span>`;
+}
+window.getSortArrowProd = getSortArrowProd;
 
 let cachedKPIs = null;
 let pricingSettings = null;
@@ -37,22 +59,34 @@ async function getPricingSettings() {
 
 function renderProductRowsHtml(docs) {
   if (docs.length === 0) {
-    return `<tr><td colspan="12" style="text-align:center;padding:32px;color:var(--text-2);">لا توجد أصناف مطابقة</td></tr>`;
+    return `<tr><td colspan="14" style="text-align:center;padding:32px;color:var(--text-2);">لا توجد أصناف مطابقة</td></tr>`;
   }
   return docs.map(p => {
     // Use _totalQty (from stockByWarehouse collection) as source of truth — even when 0
     const totalQty = Math.max(0,
       (p._totalQty !== undefined && p._totalQty !== null) ? p._totalQty :
-      (p.stockQty !== undefined ? p.stockQty : (p.totalQty || 0))
+      (p.totalQty !== undefined ? p.totalQty : (p.stockQty !== undefined ? p.stockQty : 0))
     );
     const status = getStockStatus(totalQty, p.reorderLevel || 0);
-    const costVal = p.costPrice || p.purchasePrice || 0;
+    const costVal     = p.costPrice || p.purchasePrice || 0;
+    const avgCostVal  = p.avgCostPrice || p.averageCost || costVal;   // المتوسط المرجح من الفواتير
+    const lastPurVal  = p.lastPurchasePrice || (p.lastPurchasePrice === 0 ? 0 : (p.avgCostPrice || (costVal > 0 ? costVal : null))); // آخر سعر شراء
     const saleVal = p.sellingPrice || p.salePrice || p.priceRetail || p.price || 0;
-    const margin = saleVal > 0 ? ((saleVal - costVal) / saleVal) * 100 : 0;
+    // الهامش يُحسب من آخر سعر شراء كأولوية لحماية الأرباح من التآكل
+    const effectiveCost = (lastPurVal && lastPurVal > 0) ? lastPurVal : (avgCostVal || costVal);
+    const margin = saleVal > 0 ? ((saleVal - effectiveCost) / saleVal) * 100 : 0;
     
     let marginClass = "low";
-    if (margin > 20) marginClass = "high";
-    else if (margin >= 10) marginClass = "medium";
+    let marginText = `${margin.toFixed(1)}%`;
+    if (margin >= 20) {
+      marginClass = "high";
+    } else if (margin >= 10) {
+      marginClass = "medium";
+    } else {
+      marginClass = "low";
+      if (margin <= 0) marginText = `⚠️ ${margin.toFixed(1)}%`;
+      else marginText = `${margin.toFixed(1)}%`;
+    }
 
     const skuCode = p.sku || p.code || "—";
 
@@ -72,19 +106,36 @@ function renderProductRowsHtml(docs) {
         <td class="dim">${p.categoryName || "—"}</td>
         <td>${translateUnit(p.unit || "Piece")}${p.altUnit ? ` (${translateUnit(p.altUnit)}: ${p.unitFactor} ${translateUnit(p.unit || "Piece")})` : ""}</td>
         
-        <td class="mono font-bold price-editable" style="text-align:left;" title="انقر مرتين للتعديل السريع"
+        <td class="mono price-editable" style="text-align:left; color:var(--text-2);" title="سعر التكلفة اليدوي — انقر مرتين للتعديل"
             ondblclick="inlineEditPrice(this, '${p.id}', 'costPrice', ${costVal})">
-          ${formatCurrency(costVal)}
+          ${costVal > 0 ? formatCurrency(costVal) : '<span class="dim">—</span>'}
+        </td>
+
+        <td class="mono font-bold" style="text-align:left;"
+            title="المتوسط المرجح المحسوب تلقائياً من فواتير الشراء">
+          ${p.avgCostPrice !== undefined && p.avgCostPrice !== null && p.avgCostPrice > 0
+            ? `<span style="color:var(--brand);">${formatCurrency(p.avgCostPrice)}</span>`
+            : (costVal > 0 ? `<span class="dim" style="font-size:11px;" title="التكلفة اليدوية">${formatCurrency(costVal)}</span>` : `<span class="dim" style="font-size:11px;">—</span>`)}
+        </td>
+
+        <td class="mono font-bold" style="text-align:left;"
+            title="${p.lastPurchaseDate ? 'تاريخ آخر شراء: ' + p.lastPurchaseDate + (p.lastSupplierName ? ' | المورد: ' + p.lastSupplierName : '') : (p.lastPurchasePrice ? 'آخر سعر شراء مسجل' : 'التكلفة المسجلة')}">
+          ${p.lastPurchasePrice !== undefined && p.lastPurchasePrice !== null && p.lastPurchasePrice > 0
+            ? `<span style="color:#059669; background:rgba(16,185,129,0.1); padding:2px 6px; border-radius:4px; border:1px solid rgba(16,185,129,0.25); display:inline-block;">${formatCurrency(p.lastPurchasePrice)}</span>${p.lastPurchaseDate ? `<div class="dim" style="font-size:10px; margin-top:2px;">${p.lastPurchaseDate}</div>` : ''}`
+            : (lastPurVal !== null && lastPurVal > 0
+                ? `<span style="color:var(--text-1);">${formatCurrency(lastPurVal)}</span>`
+                : (costVal > 0 ? `<span class="dim" style="font-size:11px;">${formatCurrency(costVal)}</span>` : `<span class="dim" style="font-size:11px;">—</span>`))}
         </td>
         
         <td class="mono font-bold price-editable" style="text-align:left;" title="انقر مرتين للتعديل السريع"
             ondblclick="inlineEditPrice(this, '${p.id}', 'salePrice', ${saleVal})">
-          <span class="profit-dot ${marginClass}" title="هامش الربح: ${margin.toFixed(1)}%"></span>
+          <span class="profit-dot ${marginClass}" title="هامش الربح الفعلي: ${margin.toFixed(1)}%"></span>
           ${formatCurrency(saleVal)}
         </td>
         
         <td style="text-align:center;">
-          <span class="margin-pct ${marginClass}">${margin.toFixed(1)}%</span>
+          <span class="margin-pct ${marginClass}" title="الهامش الفعلي المحسوب من آخر سعر شراء">${marginText}</span>
+          ${p.targetMarginPct ? `<div class="dim" style="font-size:9.5px; margin-top:2px;" title="نسبة الربح المستهدفة المسجلة">هدف: ${p.targetMarginPct}%</div>` : ''}
         </td>
         
         <td>${p.taxCategory === 'S' ? '15%' : '0%'}</td>
@@ -110,6 +161,7 @@ function renderProductRowsHtml(docs) {
     `;
   }).join("");
 }
+
 
 export async function render(container, user) {
   // Inject local styles for skeleton and inline edit once
@@ -170,7 +222,8 @@ export async function render(container, user) {
           <option value="out" ${filterStatus === 'out' ? 'selected' : ''}>نافد</option>
         </select>
       </div>
-      <div style="margin-right:auto;display:flex;gap:8px;flex-wrap:wrap;">
+      <div style="margin-right:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+        <button class="btn-export" style="background:#4F46E5;color:#fff;" onclick="syncAllProductPurchasePrices(this)" title="تحديث ومزامنة آخر أسعار الشراء ومتوسط التكلفة من كافة فواتير الشراء"><span>🔄</span> تحديث أسعار الشراء</button>
         <button class="btn-export" onclick="exportPagePDF('#prod-tbody','كتالوج_الأصناف')" title="تصدير PDF"><span>📄</span> PDF</button>
         <button class="btn-export excel" onclick="exportProductsExcel()" title="تصدير Excel - جميع البيانات"><span>📊</span> تصدير Excel</button>
         <button class="btn-export" style="background:var(--bg-2);border:1px solid var(--border-soft);color:var(--text-1);" onclick="downloadProductTemplate()" title="تنزيل نموذج استيراد"><span>📥</span> نموذج الاستيراد</button>
@@ -230,16 +283,18 @@ export async function render(container, user) {
           <table class="data-dense" id="prod-table">
             <thead>
               <tr>
-                <th>الكود</th>
-                <th>اسم الصنف (عربي/إنجليزي)</th>
+                <th onclick="sortProdList('sku')" style="cursor:pointer; user-select:none;">الكود ${getSortArrowProd('sku')}</th>
+                <th onclick="sortProdList('name')" style="cursor:pointer; user-select:none;">اسم الصنف (عربي/إنجليزي) ${getSortArrowProd('name')}</th>
                 <th>التتبع</th>
-                <th>الفئة</th>
+                <th onclick="sortProdList('category')" style="cursor:pointer; user-select:none;">الفئة ${getSortArrowProd('category')}</th>
                 <th>الوحدات والتحويل</th>
-                <th style="text-align:left;">التكلفة (المتوسط)</th>
-                <th style="text-align:left;">سعر البيع (جملة/تجزئة)</th>
-                <th style="text-align:center;">نسبة الربح</th>
+                <th onclick="sortProdList('costPrice')" style="cursor:pointer; user-select:none; text-align:left;">التكلفة (يدوي) ${getSortArrowProd('costPrice')}</th>
+                <th onclick="sortProdList('avgCostPrice')" style="cursor:pointer; user-select:none; text-align:left; color:var(--brand);">متوسط الشراء (تلقائي) ${getSortArrowProd('avgCostPrice')}</th>
+                <th onclick="sortProdList('lastPurchasePrice')" style="cursor:pointer; user-select:none; text-align:left;">آخر سعر شراء ${getSortArrowProd('lastPurchasePrice')}</th>
+                <th onclick="sortProdList('sellingPrice')" style="cursor:pointer; user-select:none; text-align:left;">سعر البيع (جملة/تجزئة) ${getSortArrowProd('sellingPrice')}</th>
+                <th onclick="sortProdList('profit')" style="cursor:pointer; user-select:none; text-align:center;">نسبة الربح ${getSortArrowProd('profit')}</th>
                 <th>الضريبة</th>
-                <th>المخزون الإجمالي</th>
+                <th onclick="sortProdList('totalQty')" style="cursor:pointer; user-select:none;">المخزون الإجمالي ${getSortArrowProd('totalQty')}</th>
                 <th>الحالة</th>
                 <th style="width:130px; text-align:center;">الخيارات والإجراءات</th>
               </tr>
@@ -441,6 +496,44 @@ export async function render(container, user) {
 
           <!-- Tab 3: Costing & Price Levels -->
           <div class="prod-form-tab-content hidden" id="content-prod-pricing">
+            
+            <!-- Smart Pricing Strategy Card (استراتيجية التسعير الذكي وآخر سعر شراء) -->
+            <div style="background:rgba(99,102,241,0.06); border:1.5px solid rgba(99,102,241,0.25); border-radius:12px; padding:14px 18px; margin-bottom:18px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; flex-wrap:wrap; gap:8px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="font-size:18px;">🎯</span>
+                  <strong style="font-size:13.5px; color:var(--text-0);">استراتيجية التسعير وهامش الربح المستهدف (Last Purchase Price Pricing)</strong>
+                </div>
+                <div style="font-size:11.5px; color:var(--text-2);">
+                  🛒 آخر سعر شراء مسجل: <b id="prod-last-purchase-display" class="mono font-bold" style="color:#059669;">—</b>
+                </div>
+              </div>
+
+              <div class="grid-3 gap-16">
+                <div class="form-group" style="margin:0;">
+                  <label style="font-size:11px; font-weight:700;">نسبة هامش الربح المستهدفة %</label>
+                  <div style="display:flex; gap:6px; align-items:center;">
+                    <input type="number" id="prod-target-margin-pct" class="input mono font-bold" placeholder="مثال: 20" min="0" max="500" step="0.5" oninput="onTargetMarginInput()" style="font-size:13px; font-weight:800; border-color:var(--brand);" />
+                    <span style="font-size:12px; font-weight:800; color:var(--brand);">%</span>
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin:0;">
+                  <label style="font-size:11px; font-weight:700;">طريقة احتساب الهامش</label>
+                  <select id="prod-margin-type" class="input font-bold" onchange="onTargetMarginInput()" style="font-size:11.5px; height:36px;">
+                    <option value="markup">إضافة على التكلفة (Markup %)</option>
+                    <option value="margin">هامش ربح من سعر البيع (Margin %)</option>
+                  </select>
+                </div>
+
+                <div class="form-group" style="margin:0; display:flex; flex-direction:column; justify-content:flex-end;">
+                  <button type="button" class="btn btn-secondary btn-sm" onclick="applyLastPurchasePricePricing()" style="height:36px; font-size:11px; font-weight:700; color:var(--brand); border-color:var(--brand);">
+                    ⚡ حساب الأسعار من آخر سعر شراء
+                  </button>
+                </div>
+              </div>
+            </div>
+
             <div class="grid-3 gap-16 mb-20">
               <div class="form-group">
                 <label>طريقة التقييم المالي (Valuation)</label>
@@ -452,7 +545,7 @@ export async function render(container, user) {
                 </select>
               </div>
               <div class="form-group">
-                <label>سعر الشراء الافتراضي (ر.س)</label>
+                <label>سعر التكلفة اليدوي الافتراضي (ر.س)</label>
                 <input type="number" id="prod-purchase-price" class="input mono" step="0.01" placeholder="0.00" oninput="onCostInput()" />
               </div>
               <div class="form-group">
@@ -637,15 +730,13 @@ export async function loadProducts(reset = false) {
   if (reset) {
     lastDocSnapshot = null;
     currentPage = 0;
-    categories = []; // Force reload categories
-    warehouses = [];  // Force reload warehouses
   }
   const tbody = document.getElementById("prod-tbody");
   if (!tbody) return;
 
   try {
     // ── 1. Load categories if not loaded yet ──────────────────────
-    if (categories.length === 0) {
+    if (!categories || categories.length === 0) {
       categories = await getAll(COLS.categories());
 
       const defaultCats = [
@@ -707,38 +798,40 @@ export async function loadProducts(reset = false) {
     }
 
     const catFilterEl = document.getElementById("prod-cat-filter");
-      if (catFilterEl) {
-        catFilterEl.innerHTML = '<option value="">كل الفئات</option>' +
-          categories.map(c => `<option value="${c.id}" ${filterCategory === c.id ? 'selected' : ''}>${c.name}</option>`).join("");
-      }
-      const prodCatEl = document.getElementById("prod-category");
-      if (prodCatEl) {
-        prodCatEl.innerHTML = '<option value="">اختر الفئة...</option>' +
-          categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
-      }
+    if (catFilterEl) {
+      catFilterEl.innerHTML = '<option value="">كل الفئات</option>' +
+        categories.map(c => `<option value="${c.id}" ${filterCategory === c.id ? 'selected' : ''}>${c.name}</option>`).join("");
+    }
+    const prodCatEl = document.getElementById("prod-category");
+    if (prodCatEl) {
+      prodCatEl.innerHTML = '<option value="">اختر الفئة...</option>' +
+        categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+    }
 
     // ── 2. Load warehouses if not loaded yet ─────────────────────
-    if (warehouses.length === 0) {
+    if (!warehouses || warehouses.length === 0) {
       warehouses = await getAll(COLS.warehouses());
     }
 
-    // ── 3. Fetch ALL products and fresh stock quantities ──────────────────
-    const snap = await getDocs(COLS.products());
-    let docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    // ── 3. Fetch ALL products and stock quantities ──────────────────
+    const { clearERPCache } = await import("../utils/db.js");
+    await clearERPCache(COLS.stockByWarehouse().path);
+    await clearERPCache(COLS.products().path);
+
+    let docs = await getAll(COLS.products());
     docs.sort((a, b) => (a.sku || "").localeCompare(b.sku || "", undefined, { numeric: true }));
 
-    // ── ALWAYS reload stock quantities fresh ─────────────────────────────
+    // ── Load live stock quantities from server ─────────────────────────────
     try {
-      const stockSnap = await getDocs(COLS.stockByWarehouse());
+      const stockDocs = await getAll(COLS.stockByWarehouse());
       const stockMap = {};
-      stockSnap.docs.forEach(s => {
-        const data = s.data();
+      stockDocs.forEach(data => {
         if (data.productId) {
           stockMap[data.productId] = (stockMap[data.productId] || 0) + (data.qty || 0);
         }
       });
       docs.forEach(p => {
-        p._totalQty = stockMap[p.id] !== undefined ? stockMap[p.id] : (p.stockQty || 0);
+        p._totalQty = stockMap[p.id] !== undefined ? stockMap[p.id] : (p.totalQty !== undefined ? p.totalQty : 0);
       });
     } catch (e) {
       console.warn("Stock balances unavailable:", e);
@@ -777,6 +870,51 @@ export async function loadProducts(reset = false) {
       );
     }
 
+    // Sort in-memory before pagination
+    if (sortFieldProd) {
+      filtered.sort((a, b) => {
+        let valA = a[sortFieldProd];
+        let valB = b[sortFieldProd];
+
+        if (sortFieldProd === "sku") {
+          valA = a.sku || "";
+          valB = b.sku || "";
+        } else if (sortFieldProd === "name") {
+          valA = a.name || "";
+          valB = b.name || "";
+        } else if (sortFieldProd === "category") {
+          valA = a.categoryName || a.category || "";
+          valB = b.categoryName || b.category || "";
+        } else if (sortFieldProd === "costPrice") {
+          valA = Number(a.costPrice || a.purchasePrice || 0);
+          valB = Number(b.costPrice || b.purchasePrice || 0);
+        } else if (sortFieldProd === "sellingPrice") {
+          valA = Number(a.sellingPrice || a.salePrice || a.priceRetail || a.price || 0);
+          valB = Number(b.sellingPrice || b.salePrice || b.priceRetail || b.price || 0);
+        } else if (sortFieldProd === "totalQty") {
+          valA = Number(a._totalQty || 0);
+          valB = Number(b._totalQty || 0);
+        } else if (sortFieldProd === "profit") {
+          const cA = Number(a.costPrice || a.purchasePrice || 0);
+          const sA = Number(a.sellingPrice || a.salePrice || a.priceRetail || a.price || 0);
+          const pA = sA > 0 ? ((sA - cA) / sA) * 100 : 0;
+
+          const cB = Number(b.costPrice || b.purchasePrice || 0);
+          const sB = Number(b.sellingPrice || b.salePrice || b.priceRetail || b.price || 0);
+          const pB = sB > 0 ? ((sB - cB) / sB) * 100 : 0;
+
+          valA = pA;
+          valB = pB;
+        }
+
+        if (typeof valA === "string") {
+          return sortAscProd ? valA.localeCompare(valB, undefined, { numeric: true }) : valB.localeCompare(valA, undefined, { numeric: true });
+        } else {
+          return sortAscProd ? valA - valB : valB - valA;
+        }
+      });
+    }
+
     // ── 5. Client-side pagination ─────────────────────────────────
     hasMore = filtered.length > (currentPage + 1) * PAGE_SIZE;
     const pageStart = currentPage * PAGE_SIZE;
@@ -786,7 +924,9 @@ export async function loadProducts(reset = false) {
     let totalValue = 0, totalCost = 0, profitSum = 0, lowStockCount = 0, pricedCount = 0;
     filtered.forEach(p => {
       const qty    = p._totalQty  || 0;
-      const cPrice = p.costPrice  || p.purchasePrice || 0;
+      // avgCostPrice = المتوسط المرجح المُحسَب من الفواتير (يتطابق مع شجرة الحسابات)
+      // إذا لم يُحسَب بعد، نرجع للـ costPrice اليدوي
+      const cPrice = p.avgCostPrice || p.costPrice  || p.purchasePrice || 0;
       const sPrice = p.sellingPrice || p.salePrice  || p.priceRetail || p.price || 0;
       totalValue += qty * sPrice;
       totalCost  += qty * cPrice;
@@ -795,6 +935,7 @@ export async function loadProducts(reset = false) {
     });
     const avgMargin = pricedCount > 0 ? (profitSum / pricedCount).toFixed(1) : "0.0";
     cachedKPIs = { totalValue, totalCost, avgMargin, lowStockCount };
+
 
     const kpiVal    = document.getElementById("kpi-total-val");
     const kpiCost   = document.getElementById("kpi-total-cost");
@@ -1118,6 +1259,21 @@ window.openProductModal = (prod = null) => {
   document.getElementById("prod-valuation").value = prod?.valuationMethod || "moving_average";
   document.getElementById("prod-purchase-price").value = prod?.costPrice || prod?.purchasePrice || "";
   document.getElementById("prod-std-cost").value = prod?.standardCost || "";
+
+  // Smart pricing and target margin
+  document.getElementById("prod-target-margin-pct").value = (prod?.targetMarginPct !== undefined && prod?.targetMarginPct !== null) ? prod.targetMarginPct : "";
+  document.getElementById("prod-margin-type").value = prod?.marginType || "markup";
+  
+  const lastPurDisplay = document.getElementById("prod-last-purchase-display");
+  if (lastPurDisplay) {
+    if (prod?.lastPurchasePrice !== undefined && prod?.lastPurchasePrice !== null && prod?.lastPurchasePrice > 0) {
+      lastPurDisplay.textContent = `${formatCurrency(prod.lastPurchasePrice)} ${prod.lastPurchaseDate ? `(تاريخ: ${prod.lastPurchaseDate})` : ''}`;
+    } else {
+      lastPurDisplay.textContent = "لا يوجد فواتير شراء مسجلة بعد";
+    }
+  }
+
+  window._currentEditingProduct = prod;
   
   const cost = parseFloat(prod?.costPrice || prod?.purchasePrice) || 0;
   const taxCat = prod?.taxCategory || "S";
@@ -1221,6 +1377,9 @@ window.saveProduct = async () => {
     if (val) locationsByWarehouse[whId] = val;
   });
 
+  const targetMarginVal = parseFloat(document.getElementById("prod-target-margin-pct").value);
+  const marginTypeVal = document.getElementById("prod-margin-type").value || "markup";
+
   const data = {
     sku,
     name: nameAr,
@@ -1253,6 +1412,9 @@ window.saveProduct = async () => {
     purchasePrice: parseFloat(document.getElementById("prod-purchase-price").value) || 0,
     standardCost: parseFloat(document.getElementById("prod-std-cost").value) || 0,
     
+    targetMarginPct: !isNaN(targetMarginVal) ? targetMarginVal : null,
+    marginType: marginTypeVal,
+
     salePrice: priceRetail,
     sellingPrice: priceRetail,
     priceRetail,
@@ -1365,6 +1527,10 @@ let currentProductName = null;
 let cachedStockBalances = [];
 let cachedStockTxs = [];
 let cachedBatches = [];
+let cachedPartyMap = new Map();
+let cachedDocMetaMap = new Map();
+let currentLedgerCalculated = [];
+let cachedLedgerSort = "desc"; // Default: newest first
 
 window.switchStockTab = async (tab) => {
   const btnBal = document.getElementById("tab-btn-balances");
@@ -1410,10 +1576,53 @@ window.switchStockTab = async (tab) => {
       renderBatches();
     } else {
       if (!cachedStockTxs.length) {
-        const q = query(COLS.stockTransactions(), where("productId", "==", currentProductId));
-        const snap = await getDocs(q);
-        cachedStockTxs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-        cachedStockTxs.sort((a,b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+        const [snap, siSnap, purSnap, transfersSnap, balSnap] = await Promise.all([
+          getDocs(query(COLS.stockTransactions(), where("productId", "==", currentProductId))),
+          getDocs(COLS.salesInvoices ? COLS.salesInvoices() : collection(db, `companies/${COMPANY_ID}/salesInvoices`)).catch(() => ({ docs: [] })),
+          getDocs(COLS.purchaseInvoices ? COLS.purchaseInvoices() : collection(db, `companies/${COMPANY_ID}/purchaseInvoices`)).catch(() => ({ docs: [] })),
+          getDocs(COLS.stockTransfers ? COLS.stockTransfers() : collection(db, `companies/${COMPANY_ID}/stockTransfers`)).catch(() => ({ docs: [] })),
+          getStockForProduct(currentProductId).catch(() => [])
+        ]);
+
+        cachedStockBalances = balSnap || [];
+        cachedPartyMap = new Map();
+        cachedDocMetaMap = new Map();
+
+        (siSnap.docs || []).forEach(d => {
+          const inv = d.data();
+          const p = inv.customerName || inv.clientName || "عميل نقدي";
+          const num = inv.invoiceNumber || inv.number || inv.code;
+          const data = { type: "sale", party: p, rep: inv.repName || "", status: inv.status, id: d.id, date: inv.date };
+          if (num) { cachedPartyMap.set(num, p); cachedDocMetaMap.set(num, data); }
+          if (d.id) { cachedPartyMap.set(d.id, p); cachedDocMetaMap.set(d.id, data); }
+        });
+
+        (purSnap.docs || []).forEach(d => {
+          const pur = d.data();
+          const p = pur.supplierName || pur.vendorName || "مورد معتمد";
+          const num = pur.invoiceNumber || pur.number || pur.code;
+          const data = { type: "purchase", party: p, status: pur.status, id: d.id, date: pur.date };
+          if (num) { cachedPartyMap.set(num, p); cachedDocMetaMap.set(num, data); }
+          if (d.id) { cachedPartyMap.set(d.id, p); cachedDocMetaMap.set(d.id, data); }
+        });
+
+        (transfersSnap.docs || []).forEach(d => {
+          const tr = d.data();
+          const num = tr.number || tr.code || tr.transferNumber;
+          const fromN = tr.fromWarehouseName || "المستودع الرئيسي";
+          const toN = tr.toWarehouseName || "المستودع";
+          const p = `${fromN} ⬅️ ${toN}`;
+          const data = { type: "transfer", party: p, fromN, toN, status: tr.status, id: d.id, date: tr.date };
+          if (num) { cachedPartyMap.set(num, p); cachedDocMetaMap.set(num, data); }
+          if (d.id) { cachedPartyMap.set(d.id, p); cachedDocMetaMap.set(d.id, data); }
+        });
+
+        cachedStockTxs = snap.docs.map(d => {
+          const data = d.data();
+          const docNum = data.documentNumber || data.docNum || data.docNo || data.refNo || data.refCode || data.invoiceNumber || data.number || (data.notes?.match(/(REP-\d+|INV-\d+|TR-[A-Z0-9]+|PUR-\d+)/i)?.[0]) || "";
+          const party = data.customerName || data.supplierName || cachedPartyMap.get(docNum) || cachedPartyMap.get(d.id) || "";
+          return { id: d.id, ...data, docNum, partyName: party };
+        });
       }
       renderItemLedgerCard();
     }
@@ -1421,6 +1630,7 @@ window.switchStockTab = async (tab) => {
     body.innerHTML = `<div class="alert bad">${err.message}</div>`;
   }
 };
+
 
 function renderStockBalances() {
   const body = document.getElementById("stock-modal-body");
@@ -1485,326 +1695,510 @@ function renderBatches() {
   }
 }
 
-function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWarehouse) {
+function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWarehouse, filterSimplified = false) {
   const body = document.getElementById("stock-modal-body");
   const warehouseMap = {};
   warehouses.forEach(w => warehouseMap[w.id] = w.name);
 
+  const prod = allProducts.find(p => p.id === currentProductId) || {};
+  const unitStr = prod.unit || "كرتون";
+
   const typeLabels = {
-    purchase_invoice: "فاتورة شراء", sales_invoice: "فاتورة بيع",
+    purchase_invoice: "فاتورة شراء", purchase_in: "فاتورة شراء",
+    sales_invoice: "فاتورة بيع", sale_out: "فاتورة بيع",
     transfer_out: "تحويل صادر", transfer_in: "تحويل وارد",
+    sales_return: "مرتجع مبيعات", return_in: "مرتجع مبيعات",
+    purchase_return: "مرتجع مشتريات", return_out: "مرتجع مشتريات",
     adjustment: "تسوية مخزنية", damage: "إهلاك تالف",
     donation: "تبرعات وهبات", expired: "إعدام صلاحية",
     "return-damaged": "مرتجع تالف للمورد", assembly: "تجميع", disassembly: "تفكيك",
     "spot-count": "جرد مفاجئ", "spot-count-reversal": "إلغاء جرد مفاجئ",
     adjustment_in: "تسوية إضافة", adjustment_out: "تسوية خصم",
-    adjustment_delete: "إلغاء تسوية", adjustment_reverse: "تعديل تسوية"
+    adjustment_delete: "إلغاء تسوية", adjustment_reverse: "تعديل تسوية",
+    opening: "رصيد افتتاحي", sale_cancel: "تعديل مبيعات"
   };
 
-  // ── Filter bar (always rendered at top) ────────────────────────────────────
+  const typeIcons = {
+    purchase_invoice: "🛒", purchase_in: "🛒",
+    sales_invoice: "💰", sale_out: "💰",
+    transfer_in: "📥", transfer_out: "📤",
+    sales_return: "↩️", return_in: "↩️",
+    purchase_return: "↩️", return_out: "↩️",
+    adjustment: "⚖️", adjustment_in: "➕", adjustment_out: "➖",
+    damage: "💔", expired: "🗑️", "spot-count": "🔢",
+    "return-damaged": "↩️", assembly: "🔧", disassembly: "🔩",
+    donation: "🎁", opening: "🏁", sale_cancel: "📝"
+  };
+
+  // ── 1. Live Warehouse Distribution Pills ────────────────────────────────────
+  let totalStockAllWh = 0;
+  const pillsHtml = (cachedStockBalances || []).map(s => {
+    const q = parseFloat(s.qty) || 0;
+    totalStockAllWh += q;
+    const wh = warehouses.find(w => w.id === s.warehouseId) || { name: s.warehouseName || s.warehouseId, type: "Main" };
+    const isVan = wh.type === "Vehicle" || wh.type === "Distribution" || (wh.name && (wh.name.includes("سيارة") || wh.name.includes("مندوب")));
+    const color = q > 0 ? (isVan ? "#2563EB" : "#059669") : "#64748B";
+    return `
+      <span style="display:inline-flex; align-items:center; gap:6px; padding:4px 10px; background:var(--bg-card, #fff); border:1px solid var(--border-soft); border-radius:20px; font-size:11.5px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+        <span>${isVan ? '🚐' : '🏢'}</span>
+        <span>${wh.name}:</span>
+        <b class="mono" style="color:${color}; font-weight:800;">${formatQuantity(q)} ${unitStr}</b>
+      </span>
+    `;
+  }).join("") || '<span class="dim" style="font-size:11px;">لا توجد أرصدة مسجلة بالمستودعات</span>';
+
+  // ── 2. Filter bar ──────────────────────────────────────────────────────────
   const warehouseOptions = warehouses.map(w =>
     `<option value="${w.id}" ${filterWarehouse === w.id ? 'selected' : ''}>${w.name}</option>`
   ).join("");
 
   const filterBarHtml = `
-    <div id="ledger-filter-bar" style="
-      display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;
-      padding:14px 20px;
-      background:linear-gradient(135deg, var(--bg-2) 0%, var(--bg-1) 100%);
-      border-bottom:2px solid var(--border-soft);
-    ">
+    <!-- Live Warehouse Distribution Banner -->
+    <div style="padding:10px 18px; background:var(--bg-2); border-bottom:1px solid var(--border-soft); display:flex; flex-direction:column; gap:8px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:16px;">📍</span>
+          <b style="font-size:12.5px; color:var(--text-0);">الأرصدة اللحظية المتوفرة بالمستودعات والسيارات:</b>
+        </div>
+        <div style="font-size:12.5px; font-weight:800; color:var(--brand);">
+          📦 إجمالي رصيد المؤسسة: <span class="mono" style="font-size:14px;">${formatQuantity(totalStockAllWh)}</span> ${unitStr}
+        </div>
+      </div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px;">
+        ${pillsHtml}
+      </div>
+    </div>
 
+    <!-- Filter Bar Inputs -->
+    <div id="ledger-filter-bar" style="
+      display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;
+      padding:12px 18px;
+      background:linear-gradient(135deg, var(--bg-2) 0%, var(--bg-1) 100%);
+      border-bottom:1px solid var(--border-soft);
+    ">
       <!-- Date From -->
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:10px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">📅 من تاريخ</label>
-        <input type="date" id="ledger-from" class="input"
-          style="padding:6px 10px;font-size:12px;width:145px;border-radius:8px;"
-          value="${filterDateFrom || ''}" />
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:10px;color:var(--text-2);font-weight:700;">📅 من تاريخ</label>
+        <input type="date" id="ledger-from" class="input" style="padding:5px 8px;font-size:11.5px;width:130px;border-radius:6px;" value="${filterDateFrom || ''}" />
       </div>
 
       <!-- Date To -->
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:10px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">📅 إلى تاريخ</label>
-        <input type="date" id="ledger-to" class="input"
-          style="padding:6px 10px;font-size:12px;width:145px;border-radius:8px;"
-          value="${filterDateTo || ''}" />
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:10px;color:var(--text-2);font-weight:700;">📅 إلى تاريخ</label>
+        <input type="date" id="ledger-to" class="input" style="padding:5px 8px;font-size:11.5px;width:130px;border-radius:6px;" value="${filterDateTo || ''}" />
       </div>
 
       <!-- Warehouse -->
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:10px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">🏭 المخزن</label>
-        <select id="ledger-warehouse" class="input" style="padding:6px 10px;font-size:12px;min-width:160px;border-radius:8px;">
-          <option value="">كل المخازن</option>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:10px;color:var(--text-2);font-weight:700;">🏭 المستودع / السيارة</label>
+        <select id="ledger-warehouse" class="input" style="padding:5px 8px;font-size:11.5px;min-width:160px;border-radius:6px;">
+          <option value="">🏢 كل المستودعات والسيارات</option>
           ${warehouseOptions}
         </select>
       </div>
 
       <!-- Movement Type -->
-      <div style="display:flex;flex-direction:column;gap:5px;">
-        <label style="font-size:10px;color:var(--text-2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;">🔄 نوع الحركة</label>
-        <select id="ledger-type" class="input" style="padding:6px 10px;font-size:12px;min-width:165px;border-radius:8px;">
-          <option value="">كل الأنواع</option>
-          <option value="purchase_invoice" ${filterType==='purchase_invoice'?'selected':''}>🛒 فاتورة شراء</option>
-          <option value="sales_invoice" ${filterType==='sales_invoice'?'selected':''}>💰 فاتورة بيع</option>
-          <option value="transfer_in" ${filterType==='transfer_in'?'selected':''}>📥 تحويل وارد</option>
-          <option value="transfer_out" ${filterType==='transfer_out'?'selected':''}>📤 تحويل صادر</option>
-          <option value="adjustment" ${filterType==='adjustment'?'selected':''}>⚖️ تسوية مخزنية</option>
-          <option value="adjustment_in" ${filterType==='adjustment_in'?'selected':''}>➕ تسوية إضافة</option>
-          <option value="adjustment_out" ${filterType==='adjustment_out'?'selected':''}>➖ تسوية خصم</option>
-          <option value="damage" ${filterType==='damage'?'selected':''}>💔 إهلاك تالف</option>
-          <option value="expired" ${filterType==='expired'?'selected':''}>🗑️ إعدام صلاحية</option>
-          <option value="spot-count" ${filterType==='spot-count'?'selected':''}>🔢 جرد مفاجئ</option>
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:10px;color:var(--text-2);font-weight:700;">🔄 نوع الحركة</label>
+        <select id="ledger-type" class="input" style="padding:5px 8px;font-size:11.5px;min-width:145px;border-radius:6px;">
+          <option value="">كل الحركات</option>
+          <option value="purchase_invoice" ${filterType==='purchase_invoice'?'selected':''}>🛒 مشتريات واردة</option>
+          <option value="sales_invoice" ${filterType==='sales_invoice'?'selected':''}>💰 مبيعات صادرة</option>
+          <option value="transfer_in" ${filterType==='transfer_in'?'selected':''}>📥 تحويلات واردة</option>
+          <option value="transfer_out" ${filterType==='transfer_out'?'selected':''}>📤 تحويلات صادرة</option>
+          <option value="adjustment" ${filterType==='adjustment'?'selected':''}>⚖️ تسويات جردية</option>
         </select>
       </div>
 
-      <!-- Buttons -->
-      <div style="display:flex;gap:8px;align-items:flex-end;padding-bottom:1px;">
-        <button class="btn btn-primary" style="padding:7px 18px;font-size:12px;border-radius:8px;font-weight:700;"
-          onclick="_applyLedgerFilters()">🔍 تطبيق</button>
-        <button class="btn btn-secondary" style="padding:7px 12px;font-size:12px;border-radius:8px;"
-          onclick="_resetLedgerFilters()">↺ إعادة</button>
+      <!-- Sorting Toggle -->
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:10px;color:var(--text-2);font-weight:700;">↕️ الترتيب</label>
+        <div style="display:flex;gap:4px;">
+          <button type="button" class="btn btn-sm ${cachedLedgerSort==='desc'?'btn-primary':'btn-secondary'}" style="padding:4px 9px;font-size:11px;border-radius:6px;" onclick="window.toggleProductModalSort('desc')" title="عرض أحدث العمليات في البداية">⬆️ الأحدث</button>
+          <button type="button" class="btn btn-sm ${cachedLedgerSort==='asc'?'btn-primary':'btn-secondary'}" style="padding:4px 9px;font-size:11px;border-radius:6px;" onclick="window.toggleProductModalSort('asc')" title="عرض تسلسلي دفتري من البداية">⬇️ الأقدم</button>
+        </div>
       </div>
 
-      <!-- Export Buttons -->
-      <div style="display:flex;gap:8px;align-items:flex-end;padding-bottom:1px;margin-right:8px;">
-        <button onclick="_exportLedgerExcel()" style="
-          display:inline-flex;align-items:center;gap:6px;
-          padding:7px 14px;font-size:12px;border-radius:8px;font-weight:700;
-          background:linear-gradient(135deg,#16a34a,#15803d);
-          color:#fff;border:none;cursor:pointer;
-          box-shadow:0 2px 8px rgba(22,163,74,.3);
-          transition:transform .15s,box-shadow .15s;"
-          onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(22,163,74,.4)'"
-          onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(22,163,74,.3)'">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          Excel
-        </button>
-        <button onclick="_exportLedgerPdf()" style="
-          display:inline-flex;align-items:center;gap:6px;
-          padding:7px 14px;font-size:12px;border-radius:8px;font-weight:700;
-          background:linear-gradient(135deg,#dc2626,#b91c1c);
-          color:#fff;border:none;cursor:pointer;
-          box-shadow:0 2px 8px rgba(220,38,38,.3);
-          transition:transform .15s,box-shadow .15s;"
-          onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(220,38,38,.4)'"
-          onmouseout="this.style.transform='';this.style.boxShadow='0 2px 8px rgba(220,38,38,.3)'">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-          PDF
-        </button>
+      <!-- Simplified Checkbox -->
+      <div style="display:inline-flex; align-items:center; gap:6px; padding-bottom:5px;">
+        <input type="checkbox" id="ledger-simplified" style="width:16px; height:16px; cursor:pointer;" ${filterSimplified ? 'checked' : ''} onchange="_applyLedgerFilters()" />
+        <label for="ledger-simplified" style="font-size:11px; font-weight:700; color:var(--text-1); cursor:pointer;">📊 تحميل وبيع فقط</label>
       </div>
 
-      <!-- Results badge -->
-      <div style="margin-right:auto;display:flex;align-items:flex-end;padding-bottom:3px;">
-        <span id="ledger-count-badge" style="
-          font-size:11px; font-weight:700;
-          background:var(--brand); color:#fff;
-          padding:3px 10px; border-radius:20px;
-          display:none;
-        "></span>
+      <!-- Action Buttons -->
+      <div style="display:flex;gap:6px;align-items:flex-end;margin-right:auto;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" style="padding:6px 14px;font-size:11.5px;border-radius:6px;font-weight:700;" onclick="_applyLedgerFilters()">🔍 تطبيق</button>
+        <button class="btn btn-secondary btn-sm" style="padding:6px 10px;font-size:11.5px;border-radius:6px;" onclick="_resetLedgerFilters()">↺ إعادة</button>
+        <button class="btn btn-sm" style="padding:6px 12px;font-size:11.5px;border-radius:6px;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border:none;cursor:pointer;font-weight:700;" onclick="window.printCustodyReconciliationFromProductModal()" title="طباعة محضر مطابقة وجرد رسمي للسيارة أو المستودع">📋 محضر العهدة</button>
+        <button class="btn btn-sm" style="padding:6px 10px;font-size:11.5px;border-radius:6px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;cursor:pointer;font-weight:700;" onclick="_exportLedgerExcel()">📊 Excel</button>
+        <button class="btn btn-sm" style="padding:6px 10px;font-size:11.5px;border-radius:6px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border:none;cursor:pointer;font-weight:700;" onclick="_exportLedgerPdf()">📄 PDF</button>
       </div>
     </div>`;
 
-  // ── Apply client-side filters on cachedStockTxs ────────────────────────────
-  let txs = [...cachedStockTxs];
-
-  if (filterDateFrom) {
-    txs = txs.filter(t => {
-      const d = t.createdAt?.toDate ? t.createdAt.toDate().toISOString().split("T")[0] : (t.date || "");
-      return d >= filterDateFrom;
-    });
-  }
-  if (filterDateTo) {
-    txs = txs.filter(t => {
-      const d = t.createdAt?.toDate ? t.createdAt.toDate().toISOString().split("T")[0] : (t.date || "");
-      return d <= filterDateTo;
-    });
-  }
-  if (filterType) {
-    txs = txs.filter(t => (t.type || t.refType || "adjustment") === filterType);
-  }
-  // Calculate live current stock for selected warehouse scope
-  let currentScopeStock = 0;
-  if (filterWarehouse) {
-    txs = txs.filter(t => t.warehouseId === filterWarehouse);
-    const match = cachedStockBalances.find(s => s.warehouseId === filterWarehouse);
-    currentScopeStock = Number(match ? match.qty : 0);
-  } else {
-    currentScopeStock = cachedStockBalances.reduce((s, r) => s + Number(r.qty || 0), 0);
-  }
-
-  // Calculate top-to-bottom reverse running balance for displayed txs
-  let reverseBalanceCounter = currentScopeStock;
-  const txsWithBal = txs.map(t => {
-    const qtyChange = t.qtyChange || 0;
-    const inQty = qtyChange > 0 ? qtyChange : 0;
-    const outQty = qtyChange < 0 ? Math.abs(qtyChange) : 0;
-    const rowBal = reverseBalanceCounter;
-    reverseBalanceCounter = reverseBalanceCounter - inQty + outQty;
-    return {
-      ...t,
-      inQty,
-      outQty,
-      calculatedQtyAfter: rowBal
-    };
-  });
-
-  const typeIcons = {
-    purchase_invoice: "🛒", sales_invoice: "💰",
-    transfer_in: "📥", transfer_out: "📤",
-    adjustment: "⚖️", adjustment_in: "➕", adjustment_out: "➖",
-    damage: "💔", expired: "🗑️", "spot-count": "🔢",
-    "return-damaged": "↩️", assembly: "🔧", disassembly: "🔩",
-    donation: "🎁"
+  // ── 3. Canonical Running Balance Calculation ────────────────────────────────
+  const getDateStr = (t) => {
+    if (t.date) return String(t.date).slice(0, 10);
+    let secs = t.createdAt?.seconds || t.createdAt?._seconds;
+    if (secs) return new Date(secs * 1000).toISOString().slice(0, 10);
+    if (t.createdAt?.toDate) return t.createdAt.toDate().toISOString().slice(0, 10);
+    if (typeof t.createdAt === "string") return t.createdAt.slice(0, 10);
+    return "2026-08-01";
   };
 
-  const tableHtml = txsWithBal.length === 0
+  const getTxTypePriority = (type) => {
+    if (type === "opening" || type === "purchase_in" || type === "purchase_invoice") return 1;
+    if (type === "sales_return" || type === "return_in") return 2;
+    if (type === "transfer_in" || type === "adjustment_in") return 3;
+    if (type === "sale_out" || type === "sales_invoice" || type === "pos_sale" || type === "pos_out") return 4;
+    if (type === "transfer_out") return 5;
+    if (type === "adjustment_out" || type === "damage" || type === "expired") return 6;
+    return 7;
+  };
+
+  // Sort chronological (oldest first) to compute running balances
+  let allTxs = [...cachedStockTxs].sort((a, b) => {
+    const dA = getDateStr(a);
+    const dB = getDateStr(b);
+    if (dA !== dB) return dA.localeCompare(dB);
+    const priDiff = getTxTypePriority(a.type) - getTxTypePriority(b.type);
+    if (priDiff !== 0) return priDiff;
+    const secA = a.createdAt?.seconds || a.createdAt?._seconds || (a.createdAt?.toMillis ? a.createdAt.toMillis() / 1000 : 0);
+    const secB = b.createdAt?.seconds || b.createdAt?._seconds || (b.createdAt?.toMillis ? b.createdAt.toMillis() / 1000 : 0);
+    return secA - secB;
+  });
+
+  const whRunningBalances = {};
+  warehouses.forEach(w => { whRunningBalances[w.id] = 0; });
+  let companyRunningBal = 0;
+
+  let periodIn = 0;
+  let periodOut = 0;
+  let openingBal = 0;
+
+  const txsCalculated = [];
+
+  for (let i = 0; i < allTxs.length; i++) {
+    const t = allTxs[i];
+    const wid = t.warehouseId || "main";
+    const dateStr = getDateStr(t);
+    const isBeforePeriod = filterDateFrom && dateStr < filterDateFrom;
+
+    const tType = t.type || "";
+    const isPur = ["purchase_invoice", "purchase_in", "purchase_return", "sales_return", "return_in"].includes(tType);
+    const isSale = ["sales_invoice", "sale_out", "pos_sale", "pos_out", "sale_cancel", "cancel_sale"].includes(tType);
+    const isTrans = ["transfer_out", "transfer_in", "transfer_cancel"].includes(tType);
+    const isAdj = ["adjustment", "damage", "assembly", "disassembly", "opening", "adjustment_in", "adjustment_out", "spot-count"].includes(tType);
+
+    // Document number
+    let docNum = t.docNum || t.documentNumber || t.refNo || t.refCode || t.invoiceNumber || t.number || "";
+    if (!docNum && t.notes) {
+      const m = t.notes.match(/(REP-\d+|INV-\d+|TR-[A-Z0-9]+|PUR-\d+)/i);
+      if (m) docNum = m[0];
+    }
+    if (!docNum) docNum = "—";
+
+    // Party Name (Customer, Supplier, or Transfer Route)
+    let partyName = t.partyName || cachedPartyMap.get(docNum) || cachedPartyMap.get(t.id) || "";
+    if (!partyName && isTrans) {
+      partyName = "🔄 تحويل بين المخازن";
+    }
+
+    // Extraction of qtyChange
+    let qtyChange = t.qtyChange;
+    if (qtyChange === undefined || qtyChange === null || isNaN(qtyChange)) {
+      const rawQ = Number(t.qty || t.quantity || t.qtyIn || t.qtyOut || 0);
+      const isOut = (tType === "sale_out" || tType === "sales_invoice" || tType === "transfer_out" || tType === "adjustment_out" || tType === "damage" || tType === "expired");
+      qtyChange = isOut ? -Math.abs(rawQ) : Math.abs(rawQ);
+    } else {
+      qtyChange = Number(qtyChange);
+    }
+
+    // Reversal artifact check (reconcile old edit cancellation artifacts on active invoices)
+    const isReversalArtifact = (tType === "sale_cancel" || tType === "cancel_sale") && 
+      (String(t.notes || "").includes("إرجاع كمية التعديل") || String(t.notes || "").includes("تعديل"));
+    
+    let isIgnoredReversal = false;
+    if (isReversalArtifact) {
+      const invMeta = cachedDocMetaMap.get(docNum) || cachedDocMetaMap.get(t.id);
+      if (invMeta && invMeta.status !== "cancelled") {
+        isIgnoredReversal = true;
+        qtyChange = 0;
+      }
+    }
+
+    whRunningBalances[wid] = (whRunningBalances[wid] || 0) + qtyChange;
+    if (!isTrans) {
+      companyRunningBal += qtyChange;
+    }
+
+    const currentBal = filterWarehouse ? (whRunningBalances[filterWarehouse] || 0) : companyRunningBal;
+
+    if (isBeforePeriod) {
+      if (!filterWarehouse || filterWarehouse === wid) {
+        openingBal = currentBal;
+      }
+      continue;
+    }
+
+    if (filterDateTo && dateStr > filterDateTo) continue;
+    if (filterWarehouse && wid !== filterWarehouse) continue;
+    if (filterSimplified && !isTrans && !isSale) continue;
+
+    let inQty = 0;
+    let outQty = 0;
+    if (!filterWarehouse && isTrans) {
+      inQty = qtyChange > 0 ? qtyChange : 0;
+      outQty = qtyChange < 0 ? Math.abs(qtyChange) : 0;
+    } else if (isIgnoredReversal) {
+      inQty = 0;
+      outQty = 0;
+    } else {
+      inQty = qtyChange > 0 ? qtyChange : 0;
+      outQty = qtyChange < 0 ? Math.abs(qtyChange) : 0;
+    }
+
+    if (inQty) periodIn += inQty;
+    if (outQty) periodOut += outQty;
+
+    if (filterType === "sales_invoice" && !isSale) continue;
+    if (filterType === "purchase_invoice" && !isPur) continue;
+    if (filterType === "transfer_in" && tType !== "transfer_in") continue;
+    if (filterType === "transfer_out" && tType !== "transfer_out") continue;
+    if (filterType === "adjustment" && !isAdj) continue;
+
+    const whName = warehouseMap[wid] || wid || "—";
+
+    txsCalculated.push({
+      ...t,
+      dateStr,
+      documentNumber: docNum,
+      partyName,
+      whName,
+      inQty,
+      outQty,
+      qtyChange,
+      balanceAfter: currentBal,
+      whBalance: whRunningBalances[wid],
+      companyBalance: companyRunningBal,
+      isIgnoredReversal,
+      isPur,
+      isSale,
+      isTrans,
+      isAdj
+    });
+  }
+
+  // Active Live Stock vs Running Balance
+  const activeBalance = filterWarehouse 
+    ? parseFloat(cachedStockBalances.find(s => s.warehouseId === filterWarehouse)?.qty || 0)
+    : totalStockAllWh;
+
+  const finalRunningBal = filterWarehouse 
+    ? (whRunningBalances[filterWarehouse] || 0)
+    : companyRunningBal;
+
+  const isMatch = Math.abs(finalRunningBal - activeBalance) < 0.001;
+
+  currentLedgerCalculated = txsCalculated;
+
+  // ── 4. Summary KPI Cards ───────────────────────────────────────────────────
+  const kpiHtml = `
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(170px, 1fr)); gap:10px; padding:12px 18px 4px 18px;">
+      <!-- Opening Balance -->
+      <div style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:10px; padding:10px 14px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; right:0; left:0; height:3px; background:#64748B;"></div>
+        <div style="font-size:10.5px; color:var(--text-2); font-weight:700;">رصيد أول المدة 📅</div>
+        <div class="mono font-bold" style="font-size:18px; color:var(--text-0); margin-top:2px;">${formatQuantity(openingBal)}</div>
+        <div style="font-size:9.5px; color:var(--text-2);">${filterDateFrom ? 'في ' + filterDateFrom : 'بداية الحركات (صفر)'}</div>
+      </div>
+
+      <!-- Total In -->
+      <div style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:10px; padding:10px 14px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; right:0; left:0; height:3px; background:#10B981;"></div>
+        <div style="font-size:10.5px; color:var(--text-2); font-weight:700;">إجمالي الوارد 📥</div>
+        <div class="mono font-bold text-good" style="font-size:18px; margin-top:2px;">+${formatQuantity(periodIn)}</div>
+        <div style="font-size:9.5px; color:var(--text-2);">${filterWarehouse ? 'شحنات مستلمة' : 'مشتريات ومرتجعات'}</div>
+      </div>
+
+      <!-- Total Out -->
+      <div style="background:var(--bg-card); border:1px solid var(--border-soft); border-radius:10px; padding:10px 14px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; right:0; left:0; height:3px; background:#EF4444;"></div>
+        <div style="font-size:10.5px; color:var(--text-2); font-weight:700;">إجمالي الصادر 📤</div>
+        <div class="mono font-bold text-bad" style="font-size:18px; margin-top:2px;">-${formatQuantity(periodOut)}</div>
+        <div style="font-size:9.5px; color:var(--text-2);">${filterWarehouse ? 'مبيعات مسلمة' : 'مبيعات وهالك'}</div>
+      </div>
+
+      <!-- Current Stock -->
+      <div style="background:rgba(16,185,129,0.04); border:1px solid rgba(16,185,129,0.25); border-radius:10px; padding:10px 14px; position:relative; overflow:hidden;">
+        <div style="position:absolute; top:0; right:0; left:0; height:3px; background:#10B981;"></div>
+        <div style="font-size:10.5px; color:#059669; font-weight:800;">الرصيد الفعلي الحالي 📦</div>
+        <div class="mono font-bold text-good" style="font-size:19px; margin-top:2px;">${formatQuantity(activeBalance)} ${unitStr}</div>
+        <div style="font-size:9.5px; color:var(--text-2);">${filterWarehouse ? 'بالمستودع المحدد' : 'شامل المؤسسة والسيارات'}</div>
+      </div>
+    </div>
+  `;
+
+  // ── 5. Audit Alert Banner ──────────────────────────────────────────────────
+  const auditAlertHtml = isMatch
+    ? `<div style="margin:8px 18px; padding:8px 14px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.3); border-radius:8px; color:#059669; font-size:12px; font-weight:700; display:flex; align-items:center; gap:8px;">
+        <span>✅</span>
+        <span><b>تدقيق مطابق 100%:</b> الرصيد التراكمي لدفتر الأستاذ (${formatQuantity(finalRunningBal)}) يطابق تماماً الرصيد الفعلي في المستودع (${formatQuantity(activeBalance)} ${unitStr}). لا يوجد أي عجز أو تضارب دفتري.</span>
+      </div>`
+    : `<div style="margin:8px 18px; padding:8px 14px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.3); border-radius:8px; color:#DC2626; font-size:12px; font-weight:700; display:flex; align-items:center; gap:8px;">
+        <span>⚠️</span>
+        <span><b>تنبيه تدقيق:</b> رصيد الدفتر التراكمي (${formatQuantity(finalRunningBal)}) والرصيد المسجل بالمستودع (${formatQuantity(activeBalance)} ${unitStr}). الفارق: ${formatQuantity(finalRunningBal - activeBalance)}.</span>
+      </div>`;
+
+  // ── 6. Display List based on sort order ────────────────────────────────────
+  const displayTxs = cachedLedgerSort === "desc" 
+    ? [...txsCalculated].reverse() 
+    : [...txsCalculated];
+
+  const tableHtml = displayTxs.length === 0
     ? `<div class="empty-state" style="padding:40px;"><div class="empty-icon">🔍</div><p>لا توجد حركات تطابق الفلاتر المحددة</p></div>`
     : `<div style="overflow-x:auto;">
-      <table style="width:100%; border-collapse:collapse; font-size:12.5px;">
+      <table style="width:100%; border-collapse:collapse; font-size:12px;">
         <thead>
           <tr style="background:var(--bg-2); position:sticky; top:0; z-index:2;">
-            <th style="padding:10px 14px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft); white-space:nowrap;">📅 التاريخ</th>
-            <th style="padding:10px 14px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">نوع الحركة</th>
-            <th style="padding:10px 14px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">رقم المستند</th>
-            <th style="padding:10px 14px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">المخزن</th>
-            <th style="padding:10px 14px; text-align:center; font-size:11px; font-weight:700; color:#10B981; border-bottom:2px solid var(--border-soft);">وارد ▲</th>
-            <th style="padding:10px 14px; text-align:center; font-size:11px; font-weight:700; color:#EF4444; border-bottom:2px solid var(--border-soft);">صادر ▼</th>
-            <th style="padding:10px 14px; text-align:center; font-size:11px; font-weight:700; color:var(--brand); border-bottom:2px solid var(--border-soft);">الرصيد بعد</th>
-            <th style="padding:10px 14px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">البيان</th>
+            <th style="padding:9px 10px; width:35px; text-align:center; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">#</th>
+            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft); white-space:nowrap;">📅 التاريخ</th>
+            <th style="padding:9px 12px; text-align:center; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">نوع الحركة</th>
+            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">رقم المستند</th>
+            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">👤 الطرف الثاني (العميل / المورد / المسار)</th>
+            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">المخزن / الموقع</th>
+            <th style="padding:9px 10px; text-align:center; font-size:11px; font-weight:700; color:#10B981; border-bottom:2px solid var(--border-soft);">وارد (+)</th>
+            <th style="padding:9px 10px; text-align:center; font-size:11px; font-weight:700; color:#EF4444; border-bottom:2px solid var(--border-soft);">صادر (-)</th>
+            <th style="padding:9px 12px; text-align:center; font-size:11px; font-weight:700; color:var(--brand); border-bottom:2px solid var(--border-soft);">الرصيد بعد 📦</th>
+            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">البيان والملاحظات</th>
           </tr>
         </thead>
         <tbody>
-          ${txsWithBal.map((t, idx) => {
-            const dateStr = t.createdAt?.toDate ? t.createdAt.toDate().toISOString().split("T")[0] : (t.date || "—");
-            const wName = warehouseMap[t.warehouseId] || t.warehouseId || "—";
-            const inQty = t.inQty;
-            const outQty = t.outQty;
+          ${displayTxs.map((t, idx) => {
             const rawType = t.type || t.refType || "adjustment";
             const labelText = typeLabels[rawType] || rawType;
             const icon = typeIcons[rawType] || "📋";
-            const noteText = t.note || t.notes || t.description || "—";
-            const isIn = inQty > 0;
             const rowBg = idx % 2 === 0 ? 'var(--bg-1)' : 'var(--bg-2)';
+            
+            const isIn = t.inQty > 0;
             const inBadge = isIn
-              ? `<span style="background:rgba(16,185,129,.12);color:#10B981;font-weight:800;padding:3px 10px;border-radius:6px;font-size:12px;">+${formatQuantity(inQty)}</span>`
+              ? `<span style="background:rgba(16,185,129,.12);color:#10B981;font-weight:800;padding:2px 8px;border-radius:6px;font-size:11.5px;">+${formatQuantity(t.inQty)}</span>`
               : `<span style="color:var(--text-3);">—</span>`;
-            const outBadge = !isIn && outQty > 0
-              ? `<span style="background:rgba(239,68,68,.1);color:#EF4444;font-weight:800;padding:3px 10px;border-radius:6px;font-size:12px;">-${formatQuantity(outQty)}</span>`
+            const outBadge = !isIn && t.outQty > 0
+              ? `<span style="background:rgba(239,68,68,.1);color:#EF4444;font-weight:800;padding:2px 8px;border-radius:6px;font-size:11.5px;">-${formatQuantity(t.outQty)}</span>`
               : `<span style="color:var(--text-3);">—</span>`;
-            const balBadge = `<span style="font-weight:700;color:var(--brand);font-family:var(--font-mono);">${formatQuantity(t.calculatedQtyAfter)}</span>`;
+
+            // Balance Display: show clean running balance
+            let balHtml = "";
+            if (filterWarehouse) {
+              balHtml = `<span style="font-weight:800; color:var(--brand); font-family:var(--font-mono); font-size:12.5px;">${formatQuantity(t.balanceAfter)}</span>`;
+            } else {
+              balHtml = `
+                <div style="font-weight:800; color:var(--brand); font-family:var(--font-mono); font-size:12.5px;">${formatQuantity(t.companyBalance)}</div>
+                <div style="font-size:9.5px; color:var(--text-3); font-family:var(--font-mono);">مخزن: ${formatQuantity(t.whBalance)}</div>
+              `;
+            }
+
+            // Party HTML with distinctive icons & colors
+            let partyHtml = `<span style="color:var(--text-3);">—</span>`;
+            if (t.partyName) {
+              let pColor = "#475569";
+              let pIcon = "👤";
+              if (t.isSale) { pColor = "#0284c7"; pIcon = "👤"; }
+              else if (t.isPur) { pColor = "#d97706"; pIcon = "🏭"; }
+              else if (t.isTrans) { pColor = "#6366f1"; pIcon = "🔄"; }
+              
+              partyHtml = `
+                <span style="display:inline-flex; align-items:center; gap:5px; font-weight:700; color:${pColor}; font-size:12px;">
+                  <span>${pIcon}</span>
+                  <span>${t.partyName}</span>
+                </span>
+              `;
+            }
+
+            // Commercial note
+            let noteStr = t.notes || t.note || t.description || "";
+            if (t.isIgnoredReversal) {
+              noteStr = "[حركة تعديل محاسبي دفتري — مسجلة لأغراض التدقيق بدون خصم مادي]";
+            } else if (!noteStr) {
+              if (t.isSale) noteStr = `فاتورة بيع للعميل: ${t.partyName || 'نقدي'}`;
+              else if (t.isPur) noteStr = `توريد مشتريات من المورد: ${t.partyName || 'معتمد'}`;
+              else if (t.isTrans) noteStr = `تحويل بضاعة: ${t.partyName || 'بين المستودعات'}`;
+              else noteStr = "—";
+            }
+
             return `
               <tr style="background:${rowBg}; border-bottom:1px solid var(--border-soft); transition:background .15s;"
                 onmouseover="this.style.background='rgba(91,127,255,.06)'"
                 onmouseout="this.style.background='${rowBg}'">
-                <td style="padding:9px 14px; white-space:nowrap; color:var(--text-2); font-family:var(--font-mono); font-size:11.5px;">${dateStr}</td>
-                <td style="padding:9px 14px; white-space:nowrap;">
+                <td style="padding:8px 10px; text-align:center; color:var(--text-3); font-family:var(--font-mono); font-size:11px;">${idx + 1}</td>
+                <td style="padding:8px 12px; white-space:nowrap; color:var(--text-2); font-family:var(--font-mono); font-size:11.5px;">${t.dateStr}</td>
+                <td style="padding:8px 12px; white-space:nowrap; text-align:center;">
                   <span style="
-                    display:inline-flex; align-items:center; gap:5px;
+                    display:inline-flex; align-items:center; gap:4px;
                     background:${isIn ? 'rgba(16,185,129,.1)' : 'rgba(239,68,68,.08)'};
                     color:${isIn ? '#059669' : '#DC2626'};
-                    padding:3px 9px; border-radius:20px; font-size:11px; font-weight:700;
+                    padding:2px 8px; border-radius:12px; font-size:11px; font-weight:700;
                   ">${icon} ${labelText}</span>
                 </td>
-                <td style="padding:9px 14px; font-family:var(--font-mono); font-weight:700; color:var(--brand); font-size:12px;">${t.documentNumber || t.invoiceNumber || "—"}</td>
-                <td style="padding:9px 14px; font-size:11.5px; color:var(--text-1);">${wName}</td>
-                <td style="padding:9px 14px; text-align:center;">${inBadge}</td>
-                <td style="padding:9px 14px; text-align:center;">${outBadge}</td>
-                <td style="padding:9px 14px; text-align:center;">${balBadge}</td>
-                <td style="padding:9px 14px; max-width:220px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-2); font-size:11.5px;"
-                  title="${noteText.replace(/"/g, '&quot;')}">${noteText}</td>
-              </tr>`;
+                <td style="padding:8px 12px; font-family:var(--font-mono); font-weight:700; color:var(--brand); font-size:12px;">${t.documentNumber || "—"}</td>
+                <td style="padding:8px 12px; white-space:nowrap;">${partyHtml}</td>
+                <td style="padding:8px 12px; font-size:11.5px; color:var(--text-1);">${t.whName}</td>
+                <td style="padding:8px 10px; text-align:center;">${inBadge}</td>
+                <td style="padding:8px 10px; text-align:center;">${outBadge}</td>
+                <td style="padding:8px 12px; text-align:center;">${balHtml}</td>
+                <td style="padding:8px 12px; max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-2); font-size:11.5px;"
+                  title="${noteStr.replace(/"/g, '&quot;')}">${noteStr}</td>
+              </tr>
+            `;
           }).join("")}
         </tbody>
-      </table></div>`;
+      </table>
+    </div>`;
 
-  body.innerHTML = filterBarHtml + tableHtml;
-
-  // Show count badge
-  const badge = document.getElementById("ledger-count-badge");
-  if (badge) {
-    badge.textContent = `${txs.length} / ${cachedStockTxs.length} حركة`;
-    badge.style.display = (txs.length < cachedStockTxs.length) ? 'inline-block' : 'none';
-  }
-
-  _wireLedgerFilterEvents();
+  body.innerHTML = filterBarHtml + kpiHtml + auditAlertHtml + tableHtml;
 }
 
-// ── Wire filter button events ────────────────────────────────────────────────
-function _wireLedgerFilterEvents() {
-  const applyBtn = document.querySelector("#ledger-filter-bar button");
-  // Already handled via onclick attributes; nothing extra needed.
-}
+// ── Toggle Sort Order in Modal ───────────────────────────────────────────────
+window.toggleProductModalSort = (dir) => {
+  cachedLedgerSort = dir;
+  _applyLedgerFilters();
+};
 
 window._applyLedgerFilters = () => {
   const from = document.getElementById("ledger-from")?.value      || "";
   const to   = document.getElementById("ledger-to")?.value        || "";
   const type = document.getElementById("ledger-type")?.value      || "";
   const wh   = document.getElementById("ledger-warehouse")?.value || "";
-  renderItemLedgerCard(from, to, type, wh);
+  const simp = document.getElementById("ledger-simplified")?.checked || false;
+  renderItemLedgerCard(from, to, type, wh, simp);
 };
 
 window._resetLedgerFilters = () => {
-  renderItemLedgerCard("", "", "", "");
+  renderItemLedgerCard("", "", "", "", false);
 };
 
-// ── Export helpers ───────────────────────────────────────────────
-
-/** Collect the currently-visible filtered transactions from the DOM */
-function _getLedgerExportData() {
-  const warehouseMap = {};
-  warehouses.forEach(w => warehouseMap[w.id] = w.name);
-  const typeLabels = {
-    purchase_invoice: "فاتورة شراء", sales_invoice: "فاتورة بيع",
-    transfer_out: "تحويل صادر", transfer_in: "تحويل وارد",
-    adjustment: "تسوية مخزنية", damage: "إهلاك تالف",
-    donation: "تبرعات", expired: "إعدام صلاحية",
-    "return-damaged": "مرتجع تالف", assembly: "تجميع", disassembly: "تفكيك",
-    "spot-count": "جرد مفاجئ", adjustment_in: "تسوية إضافة",
-    adjustment_out: "تسوية خصم", adjustment_delete: "إلغاء تسوية",
-    adjustment_reverse: "تعديل تسوية"
-  };
-
-  // Re-apply current filters to get the same set of rows
-  const from = document.getElementById("ledger-from")?.value      || "";
-  const to   = document.getElementById("ledger-to")?.value        || "";
-  const type = document.getElementById("ledger-type")?.value      || "";
-  const wh   = document.getElementById("ledger-warehouse")?.value || "";
-
-  let txs = [...cachedStockTxs];
-  if (from) txs = txs.filter(t => { const d = t.createdAt?.toDate ? t.createdAt.toDate().toISOString().split("T")[0] : (t.date||""); return d >= from; });
-  if (to)   txs = txs.filter(t => { const d = t.createdAt?.toDate ? t.createdAt.toDate().toISOString().split("T")[0] : (t.date||""); return d <= to; });
-  if (type) txs = txs.filter(t => (t.type||t.refType||"adjustment") === type);
-  if (wh)   txs = txs.filter(t => t.warehouseId === wh);
-
-  return { txs, warehouseMap, typeLabels };
-}
-
+// ── Export to Excel ──────────────────────────────────────────────────────────
 window._exportLedgerExcel = async () => {
   try {
-    const { txs, warehouseMap, typeLabels } = _getLedgerExportData();
-    if (txs.length === 0) { showToast("لا توجد بيانات للتصدير", "warning"); return; }
+    if (!currentLedgerCalculated || currentLedgerCalculated.length === 0) {
+      showToast("لا توجد بيانات للتصدير", "warning"); return;
+    }
+    const headers = ["م", "التاريخ", "نوع الحركة", "رقم المستند", "الطرف الثاني (العميل / المورد / المسار)", "المستودع", "وارد (+)", "صادر (-)", "الرصيد بعد", "البيان والملاحظات"];
+    const colWidths = [6, 12, 16, 16, 25, 18, 10, 10, 12, 35];
+    const rows = currentLedgerCalculated.map((t, idx) => [
+      idx + 1,
+      t.dateStr,
+      t.type || "حركة",
+      t.documentNumber || "—",
+      t.partyName || "—",
+      t.whName || "—",
+      t.inQty || "—",
+      t.outQty || "—",
+      t.balanceAfter !== undefined ? t.balanceAfter : 0,
+      t.notes || t.note || t.description || "—"
+    ]);
 
-    const headers = ["التاريخ", "نوع الحركة", "رقم المستند", "المخزن", "وارد (+)", "صادر (-)", "الرصيد بعد", "البيان"];
-    const colWidths = [14, 20, 18, 20, 10, 10, 12, 40];
-    const rows = txs.map(t => {
-      const dateStr = t.createdAt?.toDate ? t.createdAt.toDate().toISOString().split("T")[0] : (t.date || "-");
-      const qtyChange = t.qtyChange || 0;
-      const inQty  = qtyChange > 0 ? qtyChange : 0;
-      const outQty = qtyChange < 0 ? Math.abs(qtyChange) : 0;
-      const rawType = t.type || t.refType || "adjustment";
-      return [
-        dateStr,
-        typeLabels[rawType] || rawType,
-        t.documentNumber || t.invoiceNumber || "-",
-        warehouseMap[t.warehouseId] || t.warehouseId || "-",
-        inQty  || "-",
-        outQty || "-",
-        t.qtyAfter || 0,
-        t.note || t.notes || t.description || "-"
-      ];
-    });
-
-    const title = `دفتر حركة - ${currentProductName || "الصنف"}`;
+    const title = `دفتر_حركة_${currentProductName || "الصنف"}_${new Date().toISOString().slice(0,10)}`;
     await exportToExcel({ title, headers, rows, colWidths });
     showToast("تم تصدير Excel بنجاح ✅", "success");
   } catch (err) {
@@ -1812,9 +2206,11 @@ window._exportLedgerExcel = async () => {
   }
 };
 
+// ── Export to PDF ────────────────────────────────────────────────────────────
 window._exportLedgerPdf = () => {
-  const { txs, warehouseMap, typeLabels } = _getLedgerExportData();
-  if (txs.length === 0) { showToast("لا توجد بيانات للتصدير", "warning"); return; }
+  if (!currentLedgerCalculated || currentLedgerCalculated.length === 0) {
+    showToast("لا توجد بيانات للتصدير", "warning"); return;
+  }
 
   const dateRange = (() => {
     const from = document.getElementById("ledger-from")?.value || "";
@@ -1822,25 +2218,22 @@ window._exportLedgerPdf = () => {
     if (from && to) return `من ${from} إلى ${to}`;
     if (from) return `من ${from}`;
     if (to)   return `حتى ${to}`;
-    return "كل التواريخ";
+    return "كل الفترات";
   })();
 
-  const rows = txs.map((t, i) => {
-    const dateStr  = t.createdAt?.toDate ? t.createdAt.toDate().toISOString().split("T")[0] : (t.date || "-");
-    const qtyChange = t.qtyChange || 0;
-    const inQty    = qtyChange > 0 ? qtyChange : 0;
-    const outQty   = qtyChange < 0 ? Math.abs(qtyChange) : 0;
-    const rawType  = t.type || t.refType || "adjustment";
-    const isIn     = inQty > 0;
+  const rows = currentLedgerCalculated.map((t, i) => {
+    const isIn = t.inQty > 0;
     return `<tr style="background:${i%2===0?'#fff':'#f8fafc'}">
-      <td>${dateStr}</td>
-      <td><span style="background:${isIn?'#dcfce7':'#fee2e2'};color:${isIn?'#166534':'#991b1b'};padding:2px 8px;border-radius:12px;font-size:11px;white-space:nowrap;">${typeLabels[rawType]||rawType}</span></td>
-      <td style="font-weight:700;color:#1e3a8a;">${t.documentNumber||t.invoiceNumber||"-"}</td>
-      <td>${warehouseMap[t.warehouseId]||t.warehouseId||"-"}</td>
-      <td style="color:#16a34a;font-weight:700;text-align:center;">${inQty  ? "+"+formatQuantity(inQty)  : "—"}</td>
-      <td style="color:#dc2626;font-weight:700;text-align:center;">${outQty ? "-"+formatQuantity(outQty) : "—"}</td>
-      <td style="font-weight:700;color:#1d4ed8;text-align:center;">${formatQuantity(t.qtyAfter||0)}</td>
-      <td style="color:#6b7280;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${(t.note||t.notes||t.description||"").replace(/"/g,'&quot;')}">${t.note||t.notes||t.description||"—"}</td>
+      <td style="text-align:center;">${i+1}</td>
+      <td>${t.dateStr}</td>
+      <td><span style="background:${isIn?'#dcfce7':'#fee2e2'};color:${isIn?'#166534':'#991b1b'};padding:2px 6px;border-radius:10px;font-size:10px;">${t.type||""}</span></td>
+      <td style="font-weight:700;color:#1e3a8a;">${t.documentNumber||"—"}</td>
+      <td style="font-weight:700;">${t.partyName||"—"}</td>
+      <td>${t.whName||"—"}</td>
+      <td style="color:#16a34a;font-weight:700;text-align:center;">${t.inQty ? "+"+formatQuantity(t.inQty) : "—"}</td>
+      <td style="color:#dc2626;font-weight:700;text-align:center;">${t.outQty ? "-"+formatQuantity(t.outQty) : "—"}</td>
+      <td style="font-weight:700;color:#1d4ed8;text-align:center;">${formatQuantity(t.balanceAfter||0)}</td>
+      <td style="color:#64748b;font-size:10.5px;">${t.notes||t.note||t.description||"—"}</td>
     </tr>`;
   }).join("");
 
@@ -1849,26 +2242,20 @@ window._exportLedgerPdf = () => {
     <meta charset="UTF-8">
     <title>دفتر حركة - ${currentProductName||""}</title>
     <style>
-      @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500;700&display=swap');
       * { box-sizing:border-box; margin:0; padding:0; }
-      body { font-family:'Tajawal',sans-serif; direction:rtl; background:#fff; color:#1e293b; padding:20px; }
-      .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; padding-bottom:16px; border-bottom:3px solid #1e3a8a; }
-      .logo-title h1 { font-size:20px; font-weight:800; color:#1e3a8a; }
-      .logo-title p  { font-size:12px; color:#64748b; margin-top:4px; }
-      .meta { text-align:left; font-size:11px; color:#64748b; }
-      .meta strong { display:block; font-size:13px; color:#1e293b; }
-      .stats { display:flex; gap:16px; margin-bottom:16px; }
-      .stat { background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; padding:10px 18px; text-align:center; }
-      .stat .val { font-size:22px; font-weight:800; color:#1e3a8a; }
-      .stat .lbl { font-size:11px; color:#64748b; }
-      table { width:100%; border-collapse:collapse; font-size:12px; }
+      body { font-family:'Cairo',sans-serif; direction:rtl; background:#fff; color:#1e293b; padding:15px; font-size:11px; }
+      .mono { font-family:'IBM Plex Mono', monospace; }
+      .header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px; padding-bottom:10px; border-bottom:2.5px solid #1e3a8a; }
+      .logo-title h1 { font-size:18px; font-weight:800; color:#1e3a8a; }
+      .logo-title p  { font-size:11px; color:#64748b; margin-top:2px; }
+      .meta { text-align:left; font-size:10px; color:#64748b; }
+      table { width:100%; border-collapse:collapse; font-size:10.5px; }
       thead tr { background:#1e3a8a; color:#fff; }
-      thead th { padding:9px 10px; text-align:right; font-weight:700; white-space:nowrap; }
-      tbody td { padding:8px 10px; border-bottom:1px solid #e2e8f0; }
-      tfoot tr { background:#f1f5f9; font-weight:700; }
-      tfoot td { padding:9px 10px; }
+      thead th { padding:6px 8px; text-align:right; font-weight:700; white-space:nowrap; }
+      tbody td { padding:5px 8px; border-bottom:1px solid #e2e8f0; }
       @media print {
-        @page { size:A4 landscape; margin:10mm; }
+        @page { size:A4 landscape; margin:8mm; }
         button { display:none !important; }
       }
     </style>
@@ -1880,29 +2267,224 @@ window._exportLedgerPdf = () => {
       </div>
       <div class="meta">
         <strong>الفترة: ${dateRange}</strong>
-        تاريخ الطباعة: ${new Date().toLocaleString("ar-SA")}
+        <div>تاريخ الطباعة: ${new Date().toLocaleString("ar-SA")}</div>
       </div>
-    </div>
-    <div class="stats">
-      <div class="stat"><div class="val">${txs.length}</div><div class="lbl">عدد الحركات</div></div>
-      <div class="stat"><div class="val" style="color:#16a34a;">+${formatQuantity(txs.reduce((s,t)=>s+(t.qtyChange>0?t.qtyChange:0),0))}</div><div class="lbl">إجمالي الوارد</div></div>
-      <div class="stat"><div class="val" style="color:#dc2626;">-${formatQuantity(txs.reduce((s,t)=>s+(t.qtyChange<0?Math.abs(t.qtyChange):0),0))}</div><div class="lbl">إجمالي الصادر</div></div>
     </div>
     <table>
       <thead><tr>
-        <th>التاريخ</th><th>نوع الحركة</th><th>رقم المستند</th><th>المخزن</th>
+        <th style="width:25px;">#</th>
+        <th>التاريخ</th><th>نوع الحركة</th><th>رقم المستند</th><th>الطرف الثاني</th><th>المستودع</th>
         <th style="text-align:center;">وارد (+)</th><th style="text-align:center;">صادر (-)</th>
-        <th style="text-align:center;">الرصيد بعد</th><th>البيان</th>
+        <th style="text-align:center;">الرصيد بعد</th><th>البيان والملاحظات</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>
     <div style="margin-top:20px;text-align:center;">
-      <button onclick="window.print()" style="padding:10px 30px;background:#1e3a8a;color:#fff;border:none;border-radius:8px;font-family:Tajawal;font-size:14px;font-weight:700;cursor:pointer;">🖨️ طباعة / حفظ PDF</button>
+      <button onclick="window.print()" style="padding:8px 24px;background:#1e3a8a;color:#fff;border:none;border-radius:6px;font-size:13px;font-weight:700;cursor:pointer;">🖨️ طباعة / حفظ PDF</button>
     </div>
   </body></html>`);
   printWin.document.close();
   setTimeout(() => printWin.focus(), 300);
 };
+
+// ── Official Custody Handover & Reconciliation Printout ──────────────────────
+window.printCustodyReconciliationFromProductModal = () => {
+  if (!currentProductId) return;
+  const prod = allProducts.find(p => p.id === currentProductId) || { name: currentProductName, unit: "كرتون", sku: "—" };
+  const whId = document.getElementById("ledger-warehouse")?.value || "";
+  const whObj = warehouses.find(w => w.id === whId);
+  const whName = whObj?.name || "جميع المستودعات والسيارات";
+  
+  const inRows = currentLedgerCalculated.filter(t => t.inQty > 0);
+  const totalIn = inRows.reduce((sum, t) => sum + (t.inQty || 0), 0);
+  const outRows = currentLedgerCalculated.filter(t => t.outQty > 0);
+  const totalOut = outRows.reduce((sum, t) => sum + (t.outQty || 0), 0);
+  const endingBal = currentLedgerCalculated.length > 0 ? currentLedgerCalculated[currentLedgerCalculated.length - 1].balanceAfter : 0;
+  const unitStr = prod.unit || "كرتون";
+
+  const win = window.open("", "_blank", "width=920,height=800");
+  win.document.write(`<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>محضر مطابقة وجرد عهدة — ${prod.name || currentProductName} — ${whName}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#0f172a; background:#fff; padding:10px; font-size:11px; -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    .mono { font-family:'IBM Plex Mono', monospace; }
+    table { width:100%; border-collapse:collapse; margin-bottom:10px; }
+    th, td { border:1px solid #cbd5e1; padding:4px 6px; font-size:10.5px; }
+    th { background:#f1f5f9; font-weight:800; }
+    .header { border-bottom:2px solid #0f3d19; padding-bottom:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; }
+    .title-box { text-align:center; flex:1; }
+    .kpi-grid { display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin-bottom:12px; }
+    .kpi-box { border:1.5px solid #cbd5e1; border-radius:8px; padding:6px; text-align:center; background:#f8fafc; }
+    .kpi-val { font-size:15px; font-weight:900; margin-top:2px; }
+    .audit-box { border:2px dashed #0f3d19; border-radius:8px; padding:10px; margin:12px 0; background:#f0fdf4; }
+    .signatures { display:flex; justify-content:space-between; margin-top:24px; padding-top:8px; }
+    .sig-col { width:30%; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h2 style="font-size:15px; font-weight:900; color:#0f3d19;">شركة إدهام للمواد الغذائية</h2>
+      <div style="font-size:9.5px; color:#64748b;">إدارة سلاسل الإمداد والمستودعات</div>
+    </div>
+    <div class="title-box">
+      <h1 style="font-size:16px; font-weight:900; color:#0f172a;">محضر مطابقة وجرد عهدة سيارة / مخزن</h1>
+      <div style="font-size:10.5px; color:#0f3d19; font-weight:700;">كشف تفريغ حركة الصنف وتدقيق العهدة الميدانية</div>
+    </div>
+    <div style="text-align:left; font-size:9.5px; color:#64748b;">
+      <div>تاريخ الاستخراج: <b>${new Date().toISOString().slice(0,10)}</b></div>
+      <div>نظام IDHAM ERP</div>
+    </div>
+  </div>
+
+  <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:6px 12px; margin-bottom:10px; display:flex; justify-content:space-between; font-size:11px;">
+    <div><b>📦 الصنف:</b> <span style="font-weight:900; color:#0f3d19;">${prod.name || currentProductName}</span> (SKU: <span class="mono">${prod.sku || '—'}</span>)</div>
+    <div><b>🏢 الموقع / السيارة:</b> <span style="font-weight:900; color:#2563EB;">${whName}</span></div>
+    <div><b>الوحدة:</b> <span>${unitStr}</span></div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-box">
+      <div style="color:#64748b; font-size:9.5px;">إجمالي الوارد للعهدة 📥</div>
+      <div class="kpi-val mono" style="color:#059669;">+${formatQuantity(totalIn)}</div>
+    </div>
+    <div class="kpi-box">
+      <div style="color:#64748b; font-size:9.5px;">إجمالي الصادر / المبيعات 📤</div>
+      <div class="kpi-val mono" style="color:#dc2626;">-${formatQuantity(totalOut)}</div>
+    </div>
+    <div class="kpi-box" style="border-color:#2563EB; background:#eff6ff;">
+      <div style="color:#1d4ed8; font-size:9.5px; font-weight:700;">الرصيد الدفتري المطلوب 📦</div>
+      <div class="kpi-val mono" style="color:#1d4ed8;">${formatQuantity(endingBal)} ${unitStr}</div>
+    </div>
+    <div class="kpi-box">
+      <div style="color:#64748b; font-size:9.5px;">عدد العمليات الموثقة</div>
+      <div class="kpi-val mono">${currentLedgerCalculated.length} حركة</div>
+    </div>
+  </div>
+
+  <h4 style="font-size:11.5px; font-weight:800; color:#0f3d19; margin-bottom:4px;">1. بيان الشحنات والكميات المستلمة في العهدة (الوارد):</h4>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:28px;">#</th>
+        <th style="width:70px;">التاريخ</th>
+        <th style="width:90px;">رقم السند</th>
+        <th>مصدر الشحنة / المسار</th>
+        <th style="width:80px; text-align:center;">الكمية المستلمة</th>
+        <th style="width:75px; text-align:center;">الحالة</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${inRows.map((t, i) => `
+        <tr>
+          <td style="text-align:center;" class="mono">${i+1}</td>
+          <td class="mono">${t.dateStr}</td>
+          <td class="mono font-bold">${t.documentNumber || '—'}</td>
+          <td>${t.partyName || t.notes || 'استلام شحنة معتمدة'}</td>
+          <td style="text-align:center; font-weight:900; color:#059669;" class="mono">+${formatQuantity(t.inQty)}</td>
+          <td style="text-align:center; color:#059669; font-size:9.5px; font-weight:700;">مستلم ومؤكد ✅</td>
+        </tr>
+      `).join("") || '<tr><td colspan="6" style="text-align:center; color:#64748b;">لا توجد حركات وارد مسجلة</td></tr>'}
+      <tr style="background:#f1f5f9; font-weight:900;">
+        <td colspan="4" style="text-align:right;">إجمالي الكميات المستلمة بالسيارة / المستودع:</td>
+        <td style="text-align:center; color:#059669;" class="mono">+${formatQuantity(totalIn)}</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4 style="font-size:11.5px; font-weight:800; color:#0f3d19; margin-bottom:4px; margin-top:8px;">2. بيان المبيعات والتسليمات الموثقة للعملاء (الصادر):</h4>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:28px;">#</th>
+        <th style="width:70px;">التاريخ</th>
+        <th style="width:90px;">رقم الفاتورة</th>
+        <th>اسم العميل / المستلم</th>
+        <th style="width:80px; text-align:center;">الكمية المباعة</th>
+        <th style="width:75px; text-align:center;">حالة الفاتورة</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${outRows.map((t, i) => `
+        <tr>
+          <td style="text-align:center;" class="mono">${i+1}</td>
+          <td class="mono">${t.dateStr}</td>
+          <td class="mono font-bold">${t.documentNumber || '—'}</td>
+          <td><b>${t.partyName || 'عميل نقدي'}</b></td>
+          <td style="text-align:center; font-weight:900; color:#dc2626;" class="mono">-${formatQuantity(t.outQty)}</td>
+          <td style="text-align:center; font-size:9.5px; color:#1e293b;">مرحلة رسمياً</td>
+        </tr>
+      `).join("") || '<tr><td colspan="6" style="text-align:center; color:#64748b;">لا توجد حركات مبيعات مسجلة</td></tr>'}
+      <tr style="background:#f1f5f9; font-weight:900;">
+        <td colspan="4" style="text-align:right;">إجمالي الكميات المباعة والمسلمة للعملاء:</td>
+        <td style="text-align:center; color:#dc2626;" class="mono">-${formatQuantity(totalOut)}</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Physical Audit & Handover Box -->
+  <div class="audit-box">
+    <div style="font-size:11.5px; font-weight:900; color:#0f3d19; margin-bottom:4px;">📋 نتيجة الجرد الميداني للسيارة / المستودع:</div>
+    <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; flex-wrap:wrap; gap:10px;">
+      <div>الرصيد الدفتري المطلوب وجوده: <b class="mono" style="font-size:12.5px; color:#1e3a8a;">${formatQuantity(endingBal)} ${unitStr}</b></div>
+      <div>الرصيد الفعلي الموجود بالسيارة الآن: <b style="border-bottom:1.5px solid #000; display:inline-block; width:70px; text-align:center;">&nbsp;</b> ${unitStr}</div>
+      <div>الفارق (عجز / زيادة): <b style="border-bottom:1.5px solid #000; display:inline-block; width:70px; text-align:center;">&nbsp;</b> ${unitStr}</div>
+    </div>
+  </div>
+
+  <div class="signatures">
+    <div class="sig-col">
+      <div style="font-weight:700;">المندوب / المسؤول عن العهدة</div>
+      <div style="margin-top:22px; border-top:1px dashed #94a3b8; padding-top:4px;">التوقيع: ___________________</div>
+    </div>
+    <div class="sig-col">
+      <div style="font-weight:700;">أمين المستودع العام / الجارد</div>
+      <div style="margin-top:22px; border-top:1px dashed #94a3b8; padding-top:4px;">التوقيع: ___________________</div>
+    </div>
+    <div class="sig-col">
+      <div style="font-weight:700;">اعتماد الإدارة والتدقيق المالي</div>
+      <div style="margin-top:22px; border-top:1px dashed #94a3b8; padding-top:4px;">الختم: ___________________</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; font-size:8px; color:#94a3b8; margin-top:16px;">
+    وثيقة رسمية صادرة من نظام إدهام لإدارة الموارد — IDHAM ERP SCM • صالحة للتدقيق والمطابقة القانونية
+  </div>
+</body>
+</html>`);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); win.close(); }, 700);
+};
+
+// ── Reconcile Product Stock Action ───────────────────────────────────────────
+window.reconcileProductStock = async (productId, btn) => {
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = `⏳ جارٍ التدقيق…`;
+  }
+  try {
+    cachedStockTxs = [];
+    cachedStockBalances = [];
+    await switchStockTab("card");
+    showToast("تم تدقيق ومطابقة حركات الصنف بنجاح ✅", "success");
+  } catch (err) {
+    showToast("فشل التدقيق: " + err.message, "error");
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `⚖️ تدقيق ومطابقة الرصيد`;
+    }
+  }
+};
+
 
 window.viewStock = async (productId, productName = null) => {
   currentProductId = productId;
@@ -2399,4 +2981,84 @@ window.loadPrevPage = () => {
     loadProducts();
   }
 };
+
+window.onTargetMarginInput = () => {
+  const marginPct = parseFloat(document.getElementById("prod-target-margin-pct")?.value);
+  const marginType = document.getElementById("prod-margin-type")?.value || "markup";
+  
+  if (isNaN(marginPct) || marginPct < 0) return;
+
+  const cost = parseFloat(document.getElementById("prod-purchase-price")?.value) || 0;
+  const prod = window._currentEditingProduct || {};
+  const lastPur = parseFloat(prod.lastPurchasePrice) || 0;
+  const baseCost = lastPur > 0 ? lastPur : cost;
+
+  if (baseCost > 0) {
+    let retailPrice = 0;
+    if (marginType === "margin" && marginPct < 100) {
+      retailPrice = Math.round((baseCost / (1 - (marginPct / 100))) * 100) / 100;
+    } else {
+      retailPrice = Math.round((baseCost * (1 + (marginPct / 100))) * 100) / 100;
+    }
+
+    const priceRetailInput = document.getElementById("prod-price-retail");
+    if (priceRetailInput) {
+      priceRetailInput.value = retailPrice.toFixed(2);
+      window.onPriceInput("retail");
+    }
+
+    // Suggested wholesale (5% less margin) & distributor (10% less margin)
+    const wholesaleMargin = Math.max(0, marginPct - 5);
+    const distributorMargin = Math.max(0, marginPct - 10);
+
+    let wholesalePrice = 0;
+    let distributorPrice = 0;
+
+    if (marginType === "margin" && wholesaleMargin < 100) {
+      wholesalePrice = Math.round((baseCost / (1 - (wholesaleMargin / 100))) * 100) / 100;
+      distributorPrice = Math.round((baseCost / (1 - (distributorMargin / 100))) * 100) / 100;
+    } else {
+      wholesalePrice = Math.round((baseCost * (1 + (wholesaleMargin / 100))) * 100) / 100;
+      distributorPrice = Math.round((baseCost * (1 + (distributorMargin / 100))) * 100) / 100;
+    }
+
+    const priceWholesaleInput = document.getElementById("prod-price-wholesale");
+    if (priceWholesaleInput) {
+      priceWholesaleInput.value = wholesalePrice.toFixed(2);
+      window.onPriceInput("wholesale");
+    }
+
+    const priceDistributorInput = document.getElementById("prod-price-distributor");
+    if (priceDistributorInput) {
+      priceDistributorInput.value = distributorPrice.toFixed(2);
+      window.onPriceInput("distributor");
+    }
+  }
+};
+
+window.applyLastPurchasePricePricing = () => {
+  const prod = window._currentEditingProduct || {};
+  const lastPur = parseFloat(prod.lastPurchasePrice) || 0;
+  
+  if (lastPur <= 0) {
+    window.showToast?.("لا يوجد آخر سعر شراء مسجل لهذا الصنف بعد", "warn");
+    return;
+  }
+
+  const purchasePriceInput = document.getElementById("prod-purchase-price");
+  if (purchasePriceInput) {
+    purchasePriceInput.value = lastPur.toFixed(2);
+  }
+
+  const marginInput = document.getElementById("prod-target-margin-pct");
+  let margin = parseFloat(marginInput?.value);
+  if (isNaN(margin) || margin <= 0) {
+    margin = 15;
+    if (marginInput) marginInput.value = margin;
+  }
+
+  window.onTargetMarginInput();
+  window.showToast?.(`✅ تم تطبيق آخر سعر شراء (${formatCurrency(lastPur)}) وحساب أسعار البيع بهامش ${margin}%`, "success");
+};
+
 

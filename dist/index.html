@@ -90,25 +90,16 @@
   <!-- Barcode Generator -->
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
-  <!-- Nuclear PWA & Service Worker Cache Flush -->
+  <!-- High Performance PWA & Asset Cache Manager -->
   <script>
     (function() {
-      var FORCE_KEY = 'idham_nuclear_wipe_v20260727_021';
-      if (!localStorage.getItem(FORCE_KEY)) {
-        localStorage.clear();
-        sessionStorage.clear();
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.getRegistrations().then(function(regs) {
-            for (var r of regs) r.unregister();
-          });
-        }
-        if ('caches' in window) {
-          caches.keys().then(function(names) {
-            for (var n of names) caches.delete(n);
-          });
-        }
-        localStorage.setItem(FORCE_KEY, '1');
-        window.location.reload();
+      // Auto-update Service Worker for new assets without wiping user data or IndexedDB
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for (var reg of registrations) {
+            reg.update();
+          }
+        }).catch(function() {});
       }
     })();
   </script>
@@ -135,115 +126,305 @@
       } catch(e) {}
     })();
   </script>
-  <script type="module" crossorigin src="/assets/index-HrCilPJ3.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-BTgEPYae.css">
+  <script type="module" crossorigin src="/assets/index-DZSjEJ7g.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-Dq7oGj9k.css">
 </head>
 <body>
 
-  <!-- Loading Screen -->
-  <style>*,*::before,*::after{animation-duration:0.001ms!important;animation-iteration-count:1!important;transition-duration:0.001ms!important;}</style>
-  <div id="loading-screen" style="position:fixed;inset:0;background:linear-gradient(160deg,#071a0b 0%,#0d2b12 50%,#071a0b 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;font-family:'IBM Plex Sans Arabic',sans-serif;">
-    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(212,175,55,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;"></div>
-    <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:24px;position:relative;z-index:2;">
-      <div style="width:100px;height:100px;background:linear-gradient(145deg,#1a5c2a 0%,#0f3d19 100%);border-radius:28px;display:flex;align-items:center;justify-content:center;border:2px solid rgba(212,175,55,0.4);box-shadow:0 0 0 8px rgba(212,175,55,0.06),0 20px 50px rgba(0,0,0,0.5);">
-        <svg width="56" height="56" viewBox="0 0 56 56" fill="none">
-          <rect x="6" y="26" width="30" height="18" rx="3" fill="#D4AF37" opacity=".9"/>
-          <rect x="36" y="30" width="14" height="14" rx="3" fill="#D4AF37" opacity=".7"/>
-          <circle cx="14" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="1.5"/>
-          <circle cx="42" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="1.5"/>
-          <line x1="28" y1="22" x2="28" y2="10" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/>
-          <ellipse cx="28" cy="8" rx="3" ry="5" fill="#4ade80" opacity=".8"/>
-          <line x1="24" y1="20" x2="20" y2="12" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
-          <ellipse cx="19" cy="10" rx="2.5" ry="4" fill="#4ade80" opacity=".6" transform="rotate(-20 19 10)"/>
-          <line x1="32" y1="20" x2="36" y2="12" stroke="#4ade80" stroke-width="1.2" stroke-linecap="round"/>
-          <ellipse cx="37" cy="10" rx="2.5" ry="4" fill="#4ade80" opacity=".6" transform="rotate(20 37 10)"/>
-        </svg>
+  <!-- Loading Screen (Modern Ultra-Luxury Splash) -->
+  <div id="loading-screen" style="position:fixed;inset:0;background:radial-gradient(circle at 50% 30%, #0d2e15 0%, #06170a 60%, #020804 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;font-family:'IBM Plex Sans Arabic',sans-serif;color:#fff;overflow:hidden;">
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(212,175,55,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,.05) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;"></div>
+    <div style="position:absolute;width:400px;height:400px;background:radial-gradient(circle, rgba(212,175,55,0.12) 0%, transparent 70%);border-radius:50%;filter:blur(50px);pointer-events:none;"></div>
+    
+    <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:20px;position:relative;z-index:2;max-width:440px;padding:20px;">
+      <!-- Glowing 3D Emblem -->
+      <div style="position:relative;">
+        <div style="position:absolute;inset:-8px;background:radial-gradient(circle, rgba(74,222,128,0.3) 0%, transparent 70%);border-radius:36px;filter:blur(12px);animation:pulseGlow 2.5s infinite alternate;"></div>
+        <div style="width:104px;height:104px;background:linear-gradient(145deg, #1b632e 0%, #0c3314 100%);border-radius:30px;display:flex;align-items:center;justify-content:center;border:2px solid rgba(212,175,55,0.6);box-shadow:0 12px 35px rgba(0,0,0,0.6), inset 0 2px 6px rgba(255,255,255,0.2);position:relative;">
+          <svg width="60" height="60" viewBox="0 0 56 56" fill="none" style="filter:drop-shadow(0 4px 8px rgba(0,0,0,0.4));">
+            <rect x="6" y="26" width="30" height="18" rx="4" fill="#D4AF37"/>
+            <rect x="36" y="30" width="14" height="14" rx="3" fill="#F3E5AB"/>
+            <circle cx="14" cy="46" r="4.5" fill="#0c3314" stroke="#D4AF37" stroke-width="2"/>
+            <circle cx="42" cy="46" r="4.5" fill="#0c3314" stroke="#D4AF37" stroke-width="2"/>
+            <line x1="28" y1="22" x2="28" y2="10" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
+            <ellipse cx="28" cy="8" rx="3.5" ry="5.5" fill="#4ade80"/>
+            <line x1="24" y1="20" x2="20" y2="12" stroke="#4ade80" stroke-width="1.6" stroke-linecap="round"/>
+            <ellipse cx="19" cy="10" rx="2.5" ry="4" fill="#4ade80" opacity=".8" transform="rotate(-20 19 10)"/>
+            <line x1="32" y1="20" x2="36" y2="12" stroke="#4ade80" stroke-width="1.6" stroke-linecap="round"/>
+            <ellipse cx="37" cy="10" rx="2.5" ry="4" fill="#4ade80" opacity=".8" transform="rotate(20 37 10)"/>
+          </svg>
+        </div>
       </div>
+
+      <!-- Typography -->
       <div>
-        <div style="font-size:30px;font-weight:900;color:#D4AF37;letter-spacing:-0.5px;line-height:1.2;">&#x646;&#x638;&#x645; &#x627;&#x644;&#x627;&#x645;&#x62f;&#x627;&#x62f; &#x627;&#x644;&#x62d;&#x62f;&#x64a;&#x62b;&#x629;</div>
-        <div style="font-size:14px;font-weight:600;color:#4ade80;margin:6px 0 0 0;">&#x62a;&#x648;&#x632;&#x64a;&#x639; &#x627;&#x644;&#x645;&#x648;&#x627;&#x62f; &#x627;&#x644;&#x63a;&#x630;&#x627;&#x626;&#x64a;&#x629; &#x628;&#x627;&#x644;&#x62c;&#x645;&#x644;&#x629;</div>
-        <div style="width:120px;height:2px;background:linear-gradient(90deg,transparent,#D4AF37,transparent);margin:12px auto 0;"></div>
-        <div style="font-size:12px;color:#4b7a55;margin:10px 0 0 0;">&#x646;&#x638;&#x627;&#x645; &#x625;&#x62f;&#x627;&#x631;&#x629; &#x645;&#x648;&#x627;&#x631;&#x62f; &#x627;&#x644;&#x645;&#x624;&#x633;&#x633;&#x627;&#x62a;</div>
+        <div style="font-size:32px;font-weight:900;background:linear-gradient(135deg, #fff 0%, #f7df94 50%, #D4AF37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.5px;line-height:1.25;filter:drop-shadow(0 2px 10px rgba(212,175,55,0.2));">
+          نُظم الإمداد الحديثة
+        </div>
+        <div style="font-size:14px;font-weight:600;color:#4ade80;margin:6px 0 0 0;letter-spacing:0.2px;">
+          توزيع المواد الغذائية بالجملة — المنظومة السحابية المتكاملة
+        </div>
+        <div style="width:140px;height:2px;background:linear-gradient(90deg,transparent,#D4AF37,transparent);margin:14px auto 0;"></div>
       </div>
-      <div style="width:180px;height:3px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;">
-        <div id="splash-bar" style="height:100%;width:20%;background:linear-gradient(90deg,#D4AF37,#f5d76e);border-radius:10px;"></div>
+
+      <!-- Dynamic Progress -->
+      <div style="width:100%;max-width:240px;">
+        <div style="width:100%;height:5px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden;border:1px solid rgba(212,175,55,0.2);position:relative;">
+          <div id="splash-bar" style="height:100%;width:30%;background:linear-gradient(90deg, #10B981, #D4AF37, #F59E0B);border-radius:10px;transition:width 0.25s ease-out;box-shadow:0 0 10px rgba(212,175,55,0.8);"></div>
+        </div>
+        <div id="splash-status-text" style="font-size:12px;color:#94a3b8;margin-top:10px;font-weight:500;min-height:18px;">
+          ⚡ جاري تهيئة المحركات السحابية...
+        </div>
       </div>
+
+      <!-- Fail-safe Quick Access Button (appears if delay > 1.2s) -->
+      <button id="splash-bypass-btn" onclick="document.getElementById('loading-screen').style.opacity='0';setTimeout(()=>document.getElementById('loading-screen').classList.add('hidden'),400);document.getElementById('auth-page').classList.remove('hidden');" style="display:none;background:rgba(212,175,55,0.15);border:1px solid rgba(212,175,55,0.4);color:#D4AF37;padding:6px 16px;border-radius:20px;font-size:12px;cursor:pointer;font-weight:700;margin-top:8px;">
+        🚀 المتابعة إلى تسجيل الدخول
+      </button>
     </div>
   </div>
-  <script>(function(){var b=document.getElementById('splash-bar'),w=20;var t=setInterval(function(){w=Math.min(w+15,90);if(b)b.style.width=w+'%';if(w>=90)clearInterval(t);},200);})();</script>
 
-  <!-- Auth Page -->
+  <style>
+    @keyframes pulseGlow { 0% { opacity: 0.4; transform: scale(0.95); } 100% { opacity: 0.9; transform: scale(1.05); } }
+  </style>
+
+  <script>
+    (function(){
+      var b = document.getElementById('splash-bar');
+      var t = document.getElementById('splash-status-text');
+      var bypass = document.getElementById('splash-bypass-btn');
+      var w = 30;
+      var msgs = [
+        "⚡ جاري تهيئة بيئة العمل والمحركات السحابية...",
+        "🔒 التحقق من بروتوكول الأمان وشهادات ZATCA...",
+        "📦 مزامنة المخازن والحسابات والبيانات...",
+        "✨ جاهز للانطلاق..."
+      ];
+      var idx = 0;
+      var timer = setInterval(function(){
+        w = Math.min(w + 20, 95);
+        if (b) b.style.width = w + '%';
+        if (t && msgs[idx]) { t.textContent = msgs[idx]; idx++; }
+        if (w >= 95) clearInterval(timer);
+      }, 250);
+
+      // Show bypass button after 1.5 seconds if still loading
+      setTimeout(function(){
+        if (bypass) bypass.style.display = 'inline-block';
+      }, 1500);
+    })();
+  </script>
+
+  <!-- Auth Page (Ultra-Modern Glassmorphic Login) -->
   <div id="auth-page" class="auth-page hidden">
     <style>
-    .auth-page{position:fixed;inset:0;z-index:100;background:linear-gradient(160deg,#071a0b 0%,#0d2b12 50%,#071a0b 100%);display:flex;align-items:center;justify-content:center;font-family:"IBM Plex Sans Arabic",sans-serif;overflow:hidden;}
-    .auth-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(212,175,55,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(212,175,55,.04) 1px,transparent 1px);background-size:60px 60px;}
-    .auth-wrap{position:relative;z-index:10;display:grid;grid-template-columns:58% 42%;width:100%;max-width:1040px;min-height:580px;border-radius:24px;overflow:hidden;box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 1px rgba(212,175,55,.15);}
-    @media(max-width:700px){.auth-wrap{grid-template-columns:1fr;max-width:400px;}.auth-brand-panel{display:none;}}
-    .auth-brand-panel{background:linear-gradient(160deg,#0c2412 0%,#071a0b 100%);border-left:1px solid rgba(212,175,55,.2);padding:48px 44px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
-    .auth-feat{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.04);border:1px solid rgba(212,175,55,.12);border-radius:14px;padding:12px 16px;margin-bottom:10px;}
-    .auth-feat-icon{width:36px;height:36px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;background:linear-gradient(135deg,#1a5c2a,#0f3d19);border:1px solid rgba(212,175,55,.3);}
-    .auth-login-panel{background:#081507;border-left:1px solid rgba(212,175,55,.15);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;}
-    .auth-input{width:100%;box-sizing:border-box;background:rgba(212,175,55,.06);border:1.5px solid rgba(212,175,55,.2);border-radius:12px;padding:13px 16px;font-size:14px;color:#f1f5f9;font-family:"IBM Plex Sans Arabic",sans-serif;outline:none;margin-bottom:20px;}
-    .auth-input:focus{border-color:rgba(212,175,55,.8);background:rgba(212,175,55,.08);box-shadow:0 0 0 3px rgba(212,175,55,.15);}
-    .auth-submit{width:100%;padding:14px;border:1px solid rgba(212,175,55,.4);cursor:pointer;background:linear-gradient(135deg,#1a6b2a,#0f3d19);color:#D4AF37;font-size:15px;font-weight:800;font-family:"IBM Plex Sans Arabic",sans-serif;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.4);}
-    .auth-submit:disabled{opacity:.6;cursor:not-allowed;}
-    .auth-error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:10px 14px;font-size:13px;color:#fca5a5;margin-bottom:16px;display:none;}
-    .auth-error.show{display:block;}
+    .auth-page {
+      position: fixed; inset: 0; z-index: 100;
+      background: radial-gradient(circle at 20% 30%, #0f3619 0%, #071a0b 50%, #030a05 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-family: "IBM Plex Sans Arabic", sans-serif; overflow-y: auto; padding: 20px;
+    }
+    .auth-grid-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(212,175,55,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+    }
+    .auth-ambient-glow {
+      position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, rgba(212,175,55,0.06) 50%, transparent 70%);
+      border-radius: 50%; filter: blur(70px); pointer-events: none;
+    }
+    .auth-wrap {
+      position: relative; z-index: 10; display: grid; grid-template-columns: 55% 45%;
+      width: 100%; max-width: 1060px; min-height: 590px;
+      background: rgba(10, 26, 14, 0.75); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border-radius: 28px; overflow: hidden;
+      box-shadow: 0 40px 100px rgba(0,0,0,.8), 0 0 0 1px rgba(212,175,55,.2), inset 0 1px 1px rgba(255,255,255,0.1);
+    }
+    @media(max-width: 780px) {
+      .auth-wrap { grid-template-columns: 1fr; max-width: 440px; }
+      .auth-brand-panel { display: none; }
+    }
+    .auth-brand-panel {
+      background: linear-gradient(165deg, rgba(18, 54, 26, 0.85) 0%, rgba(6, 20, 10, 0.95) 100%);
+      border-left: 1px solid rgba(212,175,55,.2); padding: 44px;
+      display: flex; flex-direction: column; justify-content: space-between; position: relative;
+    }
+    .auth-feat-item {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,.04); border: 1px solid rgba(212,175,55,.15);
+      border-radius: 16px; padding: 13px 18px; margin-bottom: 12px;
+      transition: all 0.2s ease;
+    }
+    .auth-feat-item:hover {
+      background: rgba(255,255,255,.07); border-color: rgba(212,175,55,.35); transform: translateX(-3px);
+    }
+    .auth-feat-ico {
+      width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+      background: linear-gradient(135deg, #1b632e, #0d3815);
+      border: 1px solid rgba(212,175,55,.35); box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .auth-login-panel {
+      background: rgba(4, 13, 6, 0.95); padding: 44px 38px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .auth-input-group {
+      position: relative; margin-bottom: 18px;
+    }
+    .auth-input-field {
+      width: 100%; box-sizing: border-box;
+      background: rgba(212,175,55,.05); border: 1.5px solid rgba(212,175,55,.25);
+      border-radius: 14px; padding: 14px 44px 14px 16px;
+      font-size: 14.5px; color: #f8fafc; font-family: "IBM Plex Sans Arabic", sans-serif;
+      outline: none; transition: all 0.2s ease;
+    }
+    .auth-input-field:focus {
+      border-color: #D4AF37; background: rgba(212,175,55,.09);
+      box-shadow: 0 0 0 3.5px rgba(212,175,55,.18);
+    }
+    .auth-field-ico {
+      position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+      font-size: 17px; opacity: 0.6; pointer-events: none;
+    }
+    .auth-pwd-toggle {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      cursor: pointer; font-size: 16px; opacity: 0.7; background: none; border: none; padding: 0; color: #fff;
+    }
+    .auth-submit-btn {
+      width: 100%; padding: 15px; border: 1px solid rgba(212,175,55,.5);
+      cursor: pointer; background: linear-gradient(135deg, #1b632e 0%, #11421e 50%, #0d3815 100%);
+      color: #F7E096; font-size: 16px; font-weight: 800;
+      font-family: "IBM Plex Sans Arabic", sans-serif; border-radius: 14px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.5), inset 0 1px 1px rgba(255,255,255,0.2);
+      transition: all 0.25s ease; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .auth-submit-btn:hover {
+      background: linear-gradient(135deg, #227938 0%, #165627 50%, #10431a 100%);
+      box-shadow: 0 10px 30px rgba(27,99,46,0.6); transform: translateY(-1px);
+    }
+    .auth-submit-btn:active { transform: translateY(1px); }
+    .auth-submit-btn:disabled { opacity: .65; cursor: not-allowed; transform: none; }
     </style>
-    <div class="auth-grid"></div>
+
+    <div class="auth-grid-bg"></div>
+    <div class="auth-ambient-glow"></div>
+
     <div class="auth-wrap">
+      <!-- Left Info Panel -->
       <div class="auth-brand-panel">
         <div>
-          <div style="display:flex;align-items:center;gap:16px;margin-bottom:36px;">
-            <div style="width:66px;height:66px;border-radius:20px;background:linear-gradient(145deg,#1a5c2a,#0f3d19);display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(212,175,55,.5);box-shadow:0 8px 28px rgba(0,0,0,.4);flex-shrink:0;">
-              <svg width="38" height="38" viewBox="0 0 56 56" fill="none"><rect x="6" y="26" width="30" height="18" rx="3" fill="#D4AF37" opacity=".9"/><rect x="36" y="30" width="14" height="14" rx="3" fill="#D4AF37" opacity=".7"/><circle cx="14" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="1.5"/><circle cx="42" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="1.5"/><line x1="28" y1="22" x2="28" y2="10" stroke="#4ade80" stroke-width="1.5" stroke-linecap="round"/><ellipse cx="28" cy="8" rx="3" ry="5" fill="#4ade80" opacity=".8"/></svg>
+          <!-- Header Branding -->
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:30px;">
+            <div style="width:68px;height:68px;border-radius:22px;background:linear-gradient(145deg,#1b632e,#0c3314);display:flex;align-items:center;justify-content:center;border:1.5px solid rgba(212,175,55,.6);box-shadow:0 8px 25px rgba(0,0,0,.4);flex-shrink:0;">
+              <svg width="42" height="42" viewBox="0 0 56 56" fill="none">
+                <rect x="6" y="26" width="30" height="18" rx="4" fill="#D4AF37"/>
+                <rect x="36" y="30" width="14" height="14" rx="3" fill="#F3E5AB"/>
+                <circle cx="14" cy="46" r="4" fill="#0c3314" stroke="#D4AF37" stroke-width="2"/>
+                <circle cx="42" cy="46" r="4" fill="#0c3314" stroke="#D4AF37" stroke-width="2"/>
+                <line x1="28" y1="22" x2="28" y2="10" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="28" cy="8" rx="3.5" ry="5.5" fill="#4ade80"/>
+              </svg>
             </div>
             <div>
-              <div style="font-size:20px;font-weight:900;color:#D4AF37;">&#x646;&#x638;&#x645; &#x627;&#x644;&#x627;&#x645;&#x62f;&#x627;&#x62f; &#x627;&#x644;&#x62d;&#x62f;&#x64a;&#x62b;&#x629;</div>
-              <div style="font-size:11px;color:#4ade80;font-weight:600;margin-top:3px;">&#x62a;&#x648;&#x632;&#x64a;&#x639; &#x627;&#x644;&#x645;&#x648;&#x627;&#x62f; &#x627;&#x644;&#x63a;&#x630;&#x627;&#x626;&#x64a;&#x629; &#x628;&#x627;&#x644;&#x62c;&#x645;&#x644;&#x629;</div>
+              <div style="font-size:22px;font-weight:900;color:#D4AF37;letter-spacing:-0.3px;">نُظم الإمداد الحديثة</div>
+              <div style="font-size:12px;color:#4ade80;font-weight:600;margin-top:2px;">توزيع المواد الغذائية بالجملة</div>
             </div>
           </div>
-          <h1 style="font-size:26px;font-weight:900;color:#ffffff;line-height:1.45;margin-bottom:14px;">&#x646;&#x638;&#x627;&#x645; &#x645;&#x62a;&#x643;&#x627;&#x645;&#x644; &#x644;&#x625;&#x62f;&#x627;&#x631;&#x629;<br/><span style="color:#D4AF37;">&#x633;&#x644;&#x627;&#x633;&#x644; &#x627;&#x644;&#x625;&#x645;&#x62f;&#x627;&#x62f; &#x648;&#x627;&#x644;&#x62a;&#x648;&#x632;&#x64a;&#x639;</span></h1>
-          <p style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.75;margin-bottom:30px;">&#x645;&#x646;&#x635;&#x629; &#x633;&#x62d;&#x627;&#x628;&#x64a;&#x629; &#x645;&#x62a;&#x643;&#x627;&#x645;&#x644;&#x629; &#x644;&#x625;&#x62f;&#x627;&#x631;&#x629; &#x627;&#x644;&#x645;&#x62e;&#x627;&#x632;&#x646; &#x648;&#x627;&#x644;&#x641;&#x648;&#x627;&#x62a;&#x64a;&#x631; &#x645;&#x62a;&#x648;&#x627;&#x641;&#x642;&#x629; &#x645;&#x639; ZATCA.</p>
-          <div class="auth-feat"><div class="auth-feat-icon">&#x1F9FE;</div><div><div style="font-size:13px;color:#fff;font-weight:700;">&#x627;&#x644;&#x641;&#x627;&#x62a;&#x648;&#x631;&#x629; &#x627;&#x644;&#x625;&#x644;&#x643;&#x62a;&#x631;&#x648;&#x646;&#x64a;&#x629; ZATCA</div><div style="font-size:11px;color:#6b9e7a;">&#x641;&#x648;&#x627;&#x62a;&#x64a;&#x631; &#x645;&#x634;&#x641;&#x631;&#x629; &#x2014; &#x627;&#x644;&#x645;&#x631;&#x62d;&#x644;&#x629; &#x627;&#x644;&#x62b;&#x627;&#x646;&#x64a;&#x629;</div></div></div>
-          <div class="auth-feat"><div class="auth-feat-icon">&#x1F69B;</div><div><div style="font-size:13px;color:#fff;font-weight:700;">&#x625;&#x62f;&#x627;&#x631;&#x629; &#x627;&#x644;&#x645;&#x62e;&#x627;&#x632;&#x646; &#x648;&#x627;&#x644;&#x62a;&#x648;&#x632;&#x64a;&#x639;</div><div style="font-size:11px;color:#6b9e7a;">&#x62a;&#x62d;&#x645;&#x64a;&#x644; &#x627;&#x644;&#x633;&#x64a;&#x627;&#x631;&#x627;&#x62a;&#x60c; &#x646;&#x642;&#x644; &#x627;&#x644;&#x645;&#x62e;&#x632;&#x648;&#x646;</div></div></div>
-          <div class="auth-feat"><div class="auth-feat-icon">&#x1F4CA;</div><div><div style="font-size:13px;color:#fff;font-weight:700;">&#x627;&#x644;&#x645;&#x62d;&#x627;&#x633;&#x628;&#x629; &#x648;&#x627;&#x644;&#x62a;&#x642;&#x627;&#x631;&#x64a;&#x631; &#x627;&#x644;&#x645;&#x627;&#x644;&#x64a;&#x629;</div><div style="font-size:11px;color:#6b9e7a;">&#x645;&#x64a;&#x632;&#x627;&#x646; &#x627;&#x644;&#x645;&#x631;&#x627;&#x62c;&#x639;&#x629;&#x60c; &#x642;&#x64a;&#x648;&#x62f; &#x62a;&#x644;&#x642;&#x627;&#x626;&#x64a;&#x629;</div></div></div>
+
+          <h1 style="font-size:24px;font-weight:900;color:#ffffff;line-height:1.45;margin-bottom:12px;">
+            المنظومة السحابية المتكاملة<br/>
+            <span style="color:#D4AF37;">لإدارة المخازن والمبيعات والتوزيع</span>
+          </h1>
+          <p style="font-size:13px;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:24px;">
+            حلول رقمية متطورة للتحكم اللحظي في الأسطول، الفوترة الإلكترونية المعتمدة، والمحاسبة المالية التنفيذية.
+          </p>
+
+          <!-- 4 Features List -->
+          <div class="auth-feat-item">
+            <div class="auth-feat-ico">🧾</div>
+            <div>
+              <div style="font-size:13px;color:#fff;font-weight:700;">الفوترة الإلكترونية ZATCA</div>
+              <div style="font-size:11px;color:#86efac;">ربط وتشفير معتمد — المرحلة الثانية</div>
+            </div>
+          </div>
+
+          <div class="auth-feat-item">
+            <div class="auth-feat-ico">🚚</div>
+            <div>
+              <div style="font-size:13px;color:#fff;font-weight:700;">إدارة الأسطول وسيارات المناديب</div>
+              <div style="font-size:11px;color:#86efac;">صرف وتحميل، مبيعات ميدانية وجرد لحظي</div>
+            </div>
+          </div>
+
+          <div class="auth-feat-item">
+            <div class="auth-feat-ico">📊</div>
+            <div>
+              <div style="font-size:13px;color:#fff;font-weight:700;">المحاسبة وتحليل دوران المخزون</div>
+              <div style="font-size:11px;color:#86efac;">قيود تلقائية، ميزان مراجعة وتقارير FSN</div>
+            </div>
+          </div>
+
+          <div class="auth-feat-item">
+            <div class="auth-feat-ico">🛡️</div>
+            <div>
+              <div style="font-size:13px;color:#fff;font-weight:700;">أعلى معايير الأمان السحابي</div>
+              <div style="font-size:11px;color:#86efac;">حماية مشفرة، تحكم بالصلاحيات وتدقيق فوري</div>
+            </div>
+          </div>
         </div>
+
         <div>
-          <div style="height:3px;border-radius:2px;background:linear-gradient(90deg,#D4AF37,#f5d76e,rgba(212,175,55,.2));margin-top:30px;"></div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:16px;">
-            <div style="width:8px;height:8px;background:#16a34a;border-radius:50%;"></div>
-            <span style="font-size:11px;color:#4ade80;font-weight:700;">&#x627;&#x644;&#x646;&#x638;&#x627;&#x645; &#x64a;&#x639;&#x645;&#x644; &middot; ZATCA Compliant &middot; v44.x</span>
+          <div style="height:2px;border-radius:2px;background:linear-gradient(90deg,#D4AF37,#f5d76e,transparent);margin-top:20px;"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:14px;">
+            <div style="width:8px;height:8px;background:#22c55e;border-radius:50%;box-shadow:0 0 8px #22c55e;"></div>
+            <span style="font-size:11.5px;color:#86efac;font-weight:700;">الخادم السحابي متصل · ZATCA Compliant · v45.0</span>
           </div>
         </div>
       </div>
+
+      <!-- Right Login Form Panel -->
       <div class="auth-login-panel">
-        <div style="max-width:320px;width:100%;margin:0 auto">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid rgba(212,175,55,.12);">
-            <div style="width:40px;height:40px;background:linear-gradient(145deg,#1a5c2a,#0f3d19);border-radius:12px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(212,175,55,.4);">
-              <svg width="22" height="22" viewBox="0 0 56 56" fill="none"><rect x="6" y="26" width="30" height="18" rx="3" fill="#D4AF37"/><circle cx="14" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="2"/><circle cx="42" cy="46" r="4" fill="#0f3d19" stroke="#D4AF37" stroke-width="2"/><line x1="28" y1="22" x2="28" y2="12" stroke="#4ade80" stroke-width="2" stroke-linecap="round"/><ellipse cx="28" cy="9" rx="3" ry="5" fill="#4ade80"/></svg>
+        <div style="max-width:340px;width:100%;margin:0 auto">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid rgba(212,175,55,.15);">
+            <div style="width:42px;height:42px;background:linear-gradient(145deg,#1b632e,#0c3314);border-radius:14px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(212,175,55,.45);">
+              <span style="font-size:20px;">🔐</span>
             </div>
             <div>
-              <div style="font-size:13px;font-weight:900;color:#D4AF37;">&#x646;&#x638;&#x645; &#x627;&#x644;&#x627;&#x645;&#x62f;&#x627;&#x62f; &#x627;&#x644;&#x62d;&#x62f;&#x64a;&#x62b;&#x629;</div>
-              <div style="font-size:10px;color:#4b7a55;font-weight:600;">&#x646;&#x638;&#x627;&#x645; &#x625;&#x62f;&#x627;&#x631;&#x629; &#x645;&#x648;&#x627;&#x631;&#x62f; &#x627;&#x644;&#x645;&#x624;&#x633;&#x633;&#x627;&#x62a;</div>
+              <div style="font-size:14px;font-weight:900;color:#D4AF37;">نُظم الإمداد الحديثة</div>
+              <div style="font-size:11px;color:#4ade80;font-weight:600;">بوابة تسجيل الدخول الآمن</div>
             </div>
           </div>
-          <div style="font-size:26px;font-weight:900;color:#fff;margin-bottom:6px;">&#x1F44B; &#x645;&#x631;&#x62d;&#x628;&#x627;&#x64b; &#x628;&#x643;</div>
-          <div style="font-size:13px;color:#4b7a55;margin-bottom:32px;">&#x623;&#x62f;&#x62e;&#x644; &#x628;&#x64a;&#x627;&#x646;&#x627;&#x62a;&#x643; &#x644;&#x644;&#x648;&#x635;&#x648;&#x644; &#x625;&#x644;&#x649; &#x627;&#x644;&#x646;&#x638;&#x627;&#x645;</div>
+
+          <div style="font-size:24px;font-weight:900;color:#fff;margin-bottom:4px;">مرحباً بك 👋</div>
+          <div style="font-size:12.5px;color:#94a3b8;margin-bottom:24px;">أدخل بيانات حسابك للمتابعة إلى لوحة التحكم</div>
+
           <form id="login-form" novalidate onsubmit="return false">
-            <div style="font-size:11px;font-weight:800;color:#5a8a68;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">&#x627;&#x644;&#x628;&#x631;&#x64a;&#x62f; &#x627;&#x644;&#x625;&#x644;&#x643;&#x62a;&#x631;&#x648;&#x646;&#x64a;</div>
-            <input type="email" id="login-email" class="auth-input" value="alifayad18@gmail.com" required autocomplete="email" placeholder="example@company.com" />
-            <div style="font-size:11px;font-weight:800;color:#5a8a68;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;">&#x643;&#x644;&#x645;&#x629; &#x627;&#x644;&#x645;&#x631;&#x648;&#x631;</div>
-            <input type="password" id="login-password" class="auth-input" value="Aa121234" required autocomplete="current-password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" />
-            <div id="login-error" class="auth-error"></div>
-            <button type="submit" class="auth-submit" id="login-btn">
-              <span id="login-btn-text">&#x62a;&#x633;&#x62c;&#x64a;&#x644; &#x627;&#x644;&#x62f;&#x62e;&#x648;&#x644;</span>
-              <span id="login-spinner" style="display:none">&#x23F3;</span>
+            <div style="font-size:11px;font-weight:700;color:#D4AF37;margin-bottom:6px;">البريد الإلكتروني</div>
+            <div class="auth-input-group">
+              <span class="auth-field-ico">📧</span>
+              <input type="email" id="login-email" class="auth-input-field" value="alifayad18@gmail.com" required autocomplete="email" placeholder="example@company.com" />
+            </div>
+
+            <div style="font-size:11px;font-weight:700;color:#D4AF37;margin-bottom:6px;">كلمة المرور</div>
+            <div class="auth-input-group">
+              <span class="auth-field-ico">🔑</span>
+              <input type="password" id="login-password" class="auth-input-field" value="Aa121234" required autocomplete="current-password" placeholder="••••••••" />
+              <button type="button" class="auth-pwd-toggle" onclick="toggleLoginPasswordVisibility()" title="إظهار / إخفاء كلمة المرور">
+                <span id="login-pwd-eye">👁️</span>
+              </button>
+            </div>
+
+            <div id="login-error" class="auth-error" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:10px 14px;font-size:12.5px;color:#fca5a5;margin-bottom:16px;display:none;"></div>
+
+            <button type="submit" class="auth-submit-btn" id="login-btn">
+              <span id="login-btn-text">تسجيل الدخول إلى النظام 🚀</span>
+              <span id="login-spinner" style="display:none">⏳ جاري التحقق...</span>
             </button>
           </form>
-          <div style="margin-top:28px;padding-top:20px;border-top:1px solid rgba(212,175,55,.1);text-align:center;">
-            <p style="font-size:11px;color:#2d5a3a;margin:3px 0;">&#x646;&#x638;&#x627;&#x645; ERP &#x644;&#x634;&#x631;&#x643;&#x629; <span style="color:#D4AF37;font-weight:700;">&#x646;&#x638;&#x645; &#x627;&#x644;&#x627;&#x645;&#x62f;&#x627;&#x62f; &#x627;&#x644;&#x62d;&#x62f;&#x64a;&#x62b;&#x629;</span></p>
-            <p style="font-size:11px;color:#2d5a3a;margin-top:4px;">ZATCA Compliant &middot; Firebase Hosted &middot; <span style="color:#D4AF37;font-weight:700;">v44.x</span></p>
+
+          <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(212,175,55,.12);text-align:center;">
+            <p style="font-size:11px;color:#64748b;margin:3px 0;">نظام إدارة موارد المؤسسات (ERP) &middot; <span style="color:#D4AF37;font-weight:700;">نُظم الإمداد الحديثة</span></p>
+            <p style="font-size:10.5px;color:#475569;margin-top:3px;">محمي بتشفير 256-bit SSL &middot; متوافق مع هيئة الزكاة والضريبة</p>
           </div>
         </div>
       </div>
@@ -253,9 +434,6 @@
   <!-- Main App Shell -->
   <!-- ══════════════════════════════════════ -->
   <div id="app" class="hidden">
-
-    <!-- Sidebar Overlay (Mobile) -->
-    <div id="sidebar-overlay" class="sidebar-overlay"></div>
 
     <!-- ═══════ SIDEBAR ═══════ -->
     <nav id="sidebar" class="sidebar">
@@ -274,7 +452,17 @@
       <!-- Navigation -->
       <div class="sidebar-scroll">
 
-        <!-- Dashboard -->
+        <!-- ══ Layout Switcher Toolbar (Undo / Toggle anytime) ══ -->
+        <div style="padding:8px 12px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-soft); margin-bottom:8px; background:rgba(255,255,255,0.02);">
+          <span id="sidebar-layout-label" style="font-size:10.5px; font-weight:700; color:var(--primary); background:var(--primary-dim, rgba(99,102,241,0.12)); padding:2px 8px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+            ✨ القائمة المنظمة
+          </span>
+          <button type="button" onclick="toggleSidebarLayoutMode()" class="btn-ghost" style="font-size:10.5px; padding:3px 8px; border-radius:6px; cursor:pointer; color:var(--text-2); border:1px solid var(--border-soft); background:var(--bg-2); display:inline-flex; align-items:center; gap:4px;" title="التبديل بين الترتيب المنظم والترتيب السابق">
+            <span>🔄 تبديل النمط</span>
+          </button>
+        </div>
+
+        <!-- Dashboard (Common) -->
         <div class="nav-item-single">
           <a class="nav-item" data-route="dashboard" onclick="navigate('dashboard')">
             <span class="nav-icon">&#127968;</span>
@@ -282,272 +470,695 @@
           </a>
         </div>
 
-        <!-- Catalog & Inventory -->
-        <div class="nav-section" data-section="catalog">
-          <div class="nav-section-header" onclick="toggleSection('catalog')">
-            <span class="nav-section-icon">&#128230;</span>
-            <span class="nav-section-label">المخزون والكتالوج</span>
-            <span class="nav-section-arrow">&#9662;</span>
-          </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="products"        onclick="navigate('products')">
-              <span class="nav-icon">&#127991;&#65039;</span><span class="nav-label">الأصناف</span>
-            </a>
-            <a class="nav-item" data-route="categories"      onclick="navigate('categories')">
-              <span class="nav-icon">&#128194;</span><span class="nav-label">الفئات والوحدات</span>
-            </a>
-            <a class="nav-item" data-route="warehouses"      onclick="navigate('warehouses')">
-              <span class="nav-icon">&#127981;</span><span class="nav-label">المخازن</span>
-            </a>
-            <a class="nav-item" data-route="inventory-locations" onclick="navigate('inventory-locations')">
-              <span class="nav-icon">&#128205;</span><span class="nav-label">مواقع ورفوف التخزين</span>
-            </a>
-            <a class="nav-item" data-route="stock-card"      onclick="navigate('stock-card')">
-              <span class="nav-icon">&#128202;</span><span class="nav-label">كرت حركة الصنف التفصيلي</span>
-            </a>
-            <a class="nav-item" data-route="stock-transfer"  onclick="navigate('stock-transfer')">
-              <span class="nav-icon">&#128196;</span><span class="nav-label">تحويل بضاعة</span>
-            </a>
-            <a class="nav-item" data-route="inventory-ops"   onclick="navigate('inventory-ops')">
-              <span class="nav-icon">&#9881;&#65039;</span><span class="nav-label">العمليات اليومية وسلاسل الإمداد</span>
-            </a>
-            <a class="nav-item" data-route="reorder-points"  onclick="navigate('reorder-points')">
-              <span class="nav-icon">&#128276;</span><span class="nav-label">نقاط إعادة الطلب والأمان</span>
-            </a>
-            <a class="nav-item" data-route="expiry-tracking" onclick="navigate('expiry-tracking')">
-              <span class="nav-icon">&#9200;</span><span class="nav-label">متابعة تواريخ انتهاء الصلاحية</span>
-            </a>
-            <a class="nav-item" data-route="inventory-closing" onclick="navigate('inventory-closing')">
-              <span class="nav-icon">&#128274;</span><span class="nav-label">الجرد والقفلات المخزنية</span>
-            </a>
-            <a class="nav-item" data-route="inventory-dashboard" onclick="navigate('inventory-dashboard')">
-              <span class="nav-icon">&#128200;</span><span class="nav-label">تحليل وذكاء المخزون ABC/XYZ</span>
-            </a>
-            <a class="nav-item" data-route="inventory-reports" onclick="navigate('inventory-reports')">
-              <span class="nav-icon">&#128203;</span><span class="nav-label">تقارير المخزون (70+ تقرير)</span>
-            </a>
-          </div>
-        </div>
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!-- 🌟 1. MODULAR LAYOUT — الترتيب المنظم مع تقارير كل قسم تحته -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <div id="layout-modular" class="sidebar-layout-view">
 
-        <!-- Customers & Reps -->
-        <div class="nav-section" data-section="parties">
-          <div class="nav-section-header" onclick="toggleSection('parties')">
-            <span class="nav-section-icon">&#128101;</span>
-            <span class="nav-section-label">العملاء والمناديب</span>
-            <span class="nav-section-arrow">&#9662;</span>
-          </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="customers"       onclick="navigate('customers')">
-              <span class="nav-icon">&#128100;</span><span class="nav-label">العملاء</span>
-            </a>
-            <a class="nav-item" data-route="suppliers"       onclick="navigate('suppliers')">
-              <span class="nav-icon">&#127981;</span><span class="nav-label">الموردون</span>
-            </a>
-            <a class="nav-item" data-route="sales-reps"      onclick="navigate('sales-reps')">
-              <span class="nav-icon">&#128694;</span><span class="nav-label">المناديب</span>
-            </a>
-            <a class="nav-item" data-route="price-lists"     onclick="navigate('price-lists')">
-              <span class="nav-icon">&#128178;</span><span class="nav-label">قوائم الأسعار</span>
-            </a>
-          </div>
-        </div>
+          <!-- 1. المبيعات والعملاء -->
+          <div class="nav-section" data-section="mod-sales" data-role-section="sales">
+            <div class="nav-section-header" onclick="toggleSection('mod-sales')">
+              <span class="nav-section-icon">🛒</span>
+              <span class="nav-section-label">المبيعات والعملاء</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="sales-invoices" onclick="navigate('sales-invoices')">
+                <span class="nav-icon">&#128196;</span><span class="nav-label">فواتير المبيعات</span>
+              </a>
+              <a class="nav-item" data-route="quotations" onclick="navigate('quotations')">
+                <span class="nav-icon">&#128220;</span><span class="nav-label">عروض الأسعار</span>
+              </a>
+              <a class="nav-item" data-route="sales-returns" onclick="navigate('sales-returns')">
+                <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">مردودات البيع</span>
+              </a>
+              <a class="nav-item" data-route="pos" onclick="navigate('pos')">
+                <span class="nav-icon">&#128722;</span><span class="nav-label">نقطة البيع (POS)</span>
+              </a>
+              <a class="nav-item" data-route="customers" onclick="navigate('customers')">
+                <span class="nav-icon">&#128100;</span><span class="nav-label">العملاء</span>
+              </a>
+              <a class="nav-item" data-route="customer-crm" onclick="navigate('customer-crm')">
+                <span class="nav-icon">🎯</span><span class="nav-label">متابعة العملاء CRM</span>
+              </a>
+              <a class="nav-item" data-route="customer-segments" onclick="navigate('customer-segments')">
+                <span class="nav-icon">🏷️</span><span class="nav-label">شرائح العملاء</span>
+              </a>
+              <a class="nav-item" data-route="customer-complaints" onclick="navigate('customer-complaints')">
+                <span class="nav-icon">⚠️</span><span class="nav-label">شكاوى العملاء</span>
+              </a>
+              <a class="nav-item" data-route="customer-loyalty" onclick="navigate('customer-loyalty')">
+                <span class="nav-icon">🎁</span><span class="nav-label">نقاط الولاء</span>
+              </a>
+              <a class="nav-item" data-route="customer-contracts" onclick="navigate('customer-contracts')">
+                <span class="nav-icon">📜</span><span class="nav-label">العقود</span>
+              </a>
+              <a class="nav-item" data-route="customer-statement" onclick="navigate('customer-statement')">
+                <span class="nav-icon">📊</span><span class="nav-label">كشف حساب عميل</span>
+              </a>
+              <a class="nav-item" data-route="customer-notes" onclick="navigate('customer-notes')">
+                <span class="nav-icon">📝</span><span class="nav-label">ملاحظات العملاء</span>
+              </a>
+              <a class="nav-item" data-route="sales-reps" onclick="navigate('sales-reps')">
+                <span class="nav-icon">&#128694;</span><span class="nav-label">المناديب</span>
+              </a>
+              <a class="nav-item" data-route="rep-daily-journal" onclick="navigate('rep-daily-journal')" style="border-right:3px solid #6366f1;">
+                <span class="nav-icon">&#128203;</span><span class="nav-label">يومية المندوب</span>
+              </a>
+              <a class="nav-item" data-route="price-lists" onclick="navigate('price-lists')">
+                <span class="nav-icon">&#128178;</span><span class="nav-label">قوائم الأسعار</span>
+              </a>
 
-        <!-- Sales -->
-        <div class="nav-section" data-section="sales">
-          <div class="nav-section-header" onclick="toggleSection('sales')">
-            <span class="nav-section-icon">&#129534;</span>
-            <span class="nav-section-label">المبيعات</span>
-            <span class="nav-section-arrow">&#9662;</span>
+              <!-- تقارير المبيعات والعملاء -->
+              <div style="margin:10px 8px 4px; padding-top:6px; border-top:1px dashed var(--border-soft); font-size:10.5px; font-weight:800; color:var(--text-3); display:flex; align-items:center; gap:5px;">
+                <span>📈 تقارير المبيعات والعملاء</span>
+              </div>
+              <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports'); setTimeout(()=>window.switchFinTab&&window.switchFinTab('custperf'),400)" style="background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(139,92,246,.06));border:1px solid rgba(99,102,241,.2);border-radius:8px;margin:2px 0;">
+                <span class="nav-icon">🏆</span><span class="nav-label">أداء العملاء</span>
+              </a>
+              <a class="nav-item" data-route="rep-performance" onclick="navigate('rep-performance')">
+                <span class="nav-icon">&#127942;</span><span class="nav-label">أداء المناديب</span>
+              </a>
+              <a class="nav-item" data-route="rep-daily-journal" onclick="navigate('rep-daily-journal')">
+                <span class="nav-icon">📋</span><span class="nav-label">يومية المندوب</span>
+              </a>
+              <a class="nav-item" data-route="report-customer-statement" onclick="navigate('report-customer-statement')">
+                <span class="nav-icon">&#128196;</span><span class="nav-label">كشف الحساب الموحد</span>
+              </a>
+              <a class="nav-item" data-route="report-sales-customer" onclick="navigate('report-sales-customer')">
+                <span class="nav-icon">&#128100;</span><span class="nav-label">مبيعات حسب العميل</span>
+              </a>
+              <a class="nav-item" data-route="report-sales-rep" onclick="navigate('report-sales-rep')">
+                <span class="nav-icon">&#128694;</span><span class="nav-label">مبيعات حسب المندوب</span>
+              </a>
+              <a class="nav-item" data-route="report-hierarchical-debt" onclick="navigate('report-hierarchical-debt')" style="border-right:3px solid #3b82f6;">
+                <span class="nav-icon">📊</span><span class="nav-label">المديونيات الهرمي الشجري</span>
+              </a>
+              <a class="nav-item" data-route="report-consolidated-balances" onclick="navigate('report-consolidated-balances')">
+                <span class="nav-icon">⚖️</span><span class="nav-label">مجمع أرصدة المديونيات</span>
+              </a>
+            </div>
           </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="quotations"      onclick="navigate('quotations')">
-              <span class="nav-icon">&#128220;</span><span class="nav-label">عروض الأسعار</span>
-            </a>
-            <a class="nav-item" data-route="sales-invoices"  onclick="navigate('sales-invoices')">
-              <span class="nav-icon">&#128196;</span><span class="nav-label">فواتير المبيعات</span>
-            </a>
-            <a class="nav-item" data-route="pos"             onclick="navigate('pos')">
-              <span class="nav-icon">&#128722;</span><span class="nav-label">نقطة البيع (POS)</span>
-            </a>
-            <a class="nav-item" data-route="sales-returns"   onclick="navigate('sales-returns')">
-              <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">مردودات البيع</span>
-            </a>
-          </div>
-        </div>
 
-        <!-- Purchases -->
-        <div class="nav-section" data-section="purchases">
-          <div class="nav-section-header" onclick="toggleSection('purchases')">
-            <span class="nav-section-icon">&#128722;</span>
-            <span class="nav-section-label">المشتريات</span>
-            <span class="nav-section-arrow">&#9662;</span>
+          <!-- 2. المشتريات والموردين -->
+          <div class="nav-section" data-section="mod-purchases" data-role-section="purchases">
+            <div class="nav-section-header" onclick="toggleSection('mod-purchases')">
+              <span class="nav-section-icon">🛍️</span>
+              <span class="nav-section-label">المشتريات والموردين</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="purchase-invoices" onclick="navigate('purchase-invoices')">
+                <span class="nav-icon">&#128203;</span><span class="nav-label">فواتير الشراء</span>
+              </a>
+              <a class="nav-item" data-route="purchase-requests" onclick="navigate('purchase-requests')">
+                <span class="nav-icon">&#128196;</span><span class="nav-label">طلب أسعار من مورد</span>
+              </a>
+              <a class="nav-item" data-route="purchase-returns" onclick="navigate('purchase-returns')">
+                <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">مردودات الشراء</span>
+              </a>
+              <a class="nav-item" data-route="suppliers" onclick="navigate('suppliers')">
+                <span class="nav-icon">&#127981;</span><span class="nav-label">دليل الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-statement" onclick="navigate('supplier-statement')">
+                <span class="nav-icon">📊</span><span class="nav-label">كشف حساب مورد</span>
+              </a>
+              <a class="nav-item" data-route="supplier-contracts" onclick="navigate('supplier-contracts')">
+                <span class="nav-icon">📜</span><span class="nav-label">عقود الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-evaluations" onclick="navigate('supplier-evaluations')">
+                <span class="nav-icon">⭐</span><span class="nav-label">تقييم أداء الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-performance" onclick="navigate('supplier-performance')">
+                <span class="nav-icon">📊</span><span class="nav-label">تصريف الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-quotations" onclick="navigate('supplier-quotations')">
+                <span class="nav-icon">📑</span><span class="nav-label">مقارنة عروض الأسعار</span>
+              </a>
+              <a class="nav-item" data-route="supplier-claims" onclick="navigate('supplier-claims')">
+                <span class="nav-icon">🔍</span><span class="nav-label">مطالبات وتوالف الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-price-history" onclick="navigate('supplier-price-history')">
+                <span class="nav-icon">📈</span><span class="nav-label">تتبع أسعار الشراء</span>
+              </a>
+              <a class="nav-item" data-route="supplier-notes" onclick="navigate('supplier-notes')">
+                <span class="nav-icon">📝</span><span class="nav-label">الحسابات البنكية والملاحظات</span>
+              </a>
+              <a class="nav-item" data-route="purchase-orders" onclick="navigate('purchase-orders')">
+                <span class="nav-icon">📋</span><span class="nav-label">أوامر الشراء (PO)</span>
+              </a>
+              <a class="nav-item" data-route="supplier-deliveries" onclick="navigate('supplier-deliveries')">
+                <span class="nav-icon">🚚</span><span class="nav-label">جدولة شحنات الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-rebates" onclick="navigate('supplier-rebates')">
+                <span class="nav-icon">🎯</span><span class="nav-label">حوافز وبونص الموردين</span>
+              </a>
+            </div>
           </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="purchase-requests" onclick="navigate('purchase-requests')">
-              <span class="nav-icon">&#128196;</span><span class="nav-label">طلب أسعار من مورد</span>
-            </a>
-            <a class="nav-item" data-route="purchase-invoices" onclick="navigate('purchase-invoices')">
-              <span class="nav-icon">&#128203;</span><span class="nav-label">فواتير الشراء</span>
-            </a>
-            <a class="nav-item" data-route="purchase-returns"  onclick="navigate('purchase-returns')">
-              <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">مردودات الشراء</span>
-            </a>
-          </div>
-        </div>
 
-        <!-- Treasury -->
-        <div class="nav-section" data-section="treasury">
-          <div class="nav-section-header" onclick="toggleSection('treasury')">
-            <span class="nav-section-icon">&#128176;</span>
-            <span class="nav-section-label">الخزينة والبنوك</span>
-            <span class="nav-section-arrow">&#9662;</span>
-          </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="cash-boxes"      onclick="navigate('cash-boxes')">
-              <span class="nav-icon">&#128181;</span><span class="nav-label">الصناديق النقدية</span>
-            </a>
-            <a class="nav-item" data-route="bank-accounts"   onclick="navigate('bank-accounts')">
-              <span class="nav-icon">&#127974;</span><span class="nav-label">الحسابات البنكية</span>
-            </a>
-            <a class="nav-item" data-route="cheques"         onclick="navigate('cheques')">
-              <span class="nav-icon">&#128209;</span><span class="nav-label">أوراق القبض والدفع (شيكات)</span>
-            </a>
-            <a class="nav-item" data-route="expenses"        onclick="navigate('expenses')">
-              <span class="nav-icon">&#128184;</span><span class="nav-label">سندات الصرف</span>
-            </a>
-            <a class="nav-item" data-route="receipts"        onclick="navigate('receipts')">
-              <span class="nav-icon">&#128188;</span><span class="nav-label">سندات القبض</span>
-            </a>
-          </div>
-        </div>
+          <!-- 3. المخازن والمنتجات -->
+          <div class="nav-section" data-section="mod-inventory" data-role-section="inventory">
+            <div class="nav-section-header" onclick="toggleSection('mod-inventory')">
+              <span class="nav-section-icon">📦</span>
+              <span class="nav-section-label">المخازن والمنتجات</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="products" onclick="navigate('products')">
+                <span class="nav-icon">&#127991;&#65039;</span><span class="nav-label">الأصناف</span>
+              </a>
+              <a class="nav-item" data-route="categories" onclick="navigate('categories')">
+                <span class="nav-icon">&#128194;</span><span class="nav-label">الفئات والوحدات</span>
+              </a>
+              <a class="nav-item" data-route="warehouses" onclick="navigate('warehouses')">
+                <span class="nav-icon">&#127981;</span><span class="nav-label">المخازن</span>
+              </a>
+              <a class="nav-item" data-route="inventory-locations" onclick="navigate('inventory-locations')">
+                <span class="nav-icon">&#128205;</span><span class="nav-label">مواقع ورفوف التخزين</span>
+              </a>
+              <a class="nav-item" data-route="stock-card" onclick="navigate('stock-card')">
+                <span class="nav-icon">&#128202;</span><span class="nav-label">كرت حركة الصنف التفصيلي</span>
+              </a>
+              <a class="nav-item" data-route="stock-transfer" onclick="navigate('stock-transfer')">
+                <span class="nav-icon">&#128196;</span><span class="nav-label">تحويل بضاعة</span>
+              </a>
+              <a class="nav-item" data-route="inventory-ops" onclick="navigate('inventory-ops')">
+                <span class="nav-icon">&#9881;&#65039;</span><span class="nav-label">العمليات اليومية وسلاسل الإمداد</span>
+              </a>
+              <a class="nav-item" data-route="van-loading-dispatch" onclick="navigate('van-loading-dispatch')">
+                <span class="nav-icon">🚚</span><span class="nav-label">تحميل وجرد سيارات التوزيع</span>
+              </a>
+              <a class="nav-item" data-route="barcode-label-printer" onclick="navigate('barcode-label-printer')">
+                <span class="nav-icon">🏷️</span><span class="nav-label">طباعة باركود وملصقات الرفوف</span>
+              </a>
+              <a class="nav-item" data-route="product-bundles-kitting" onclick="navigate('product-bundles-kitting')">
+                <span class="nav-icon">🍱</span><span class="nav-label">عروض وتجميع الباكجات</span>
+              </a>
+              <a class="nav-item" data-route="inventory-waste-clearance" onclick="navigate('inventory-waste-clearance')">
+                <span class="nav-icon">⚠️</span><span class="nav-label">رادار الرواكد والتوالف</span>
+              </a>
+              <a class="nav-item" data-route="batch-traceability-report" onclick="navigate('batch-traceability-report')">
+                <span class="nav-icon">🔍</span><span class="nav-label">تتبع اللوت وسحب المنتجات</span>
+              </a>
+              <a class="nav-item" data-route="inventory-closing" onclick="navigate('inventory-closing')">
+                <span class="nav-icon">&#128274;</span><span class="nav-label">الجرد والقفلات المخزنية</span>
+              </a>
+              <a class="nav-item" data-route="reorder-points" onclick="navigate('reorder-points')">
+                <span class="nav-icon">&#128276;</span><span class="nav-label">نقاط إعادة الطلب والأمان</span>
+              </a>
+              <a class="nav-item" data-route="expiry-tracking" onclick="navigate('expiry-tracking')">
+                <span class="nav-icon">&#9200;</span><span class="nav-label">متابعة تواريخ الصلاحية</span>
+              </a>
 
-        <!-- Accounting -->
-        <div class="nav-section" data-section="accounting">
-          <div class="nav-section-header" onclick="toggleSection('accounting')">
-            <span class="nav-section-icon">&#128202;</span>
-            <span class="nav-section-label">المحاسبة</span>
-            <span class="nav-section-arrow">&#9662;</span>
+              <!-- تقارير المخزون والأصناف -->
+              <div style="margin:10px 8px 4px; padding-top:6px; border-top:1px dashed var(--border-soft); font-size:10.5px; font-weight:800; color:var(--text-3); display:flex; align-items:center; gap:5px;">
+                <span>📊 تقارير المخزون والربحية الذكية</span>
+              </div>
+              <a class="nav-item" data-route="product-profit-margins" onclick="navigate('product-profit-margins')">
+                <span class="nav-icon">🏆</span><span class="nav-label">مصفوفة ربحية وهوامش الأصناف</span>
+              </a>
+              <a class="nav-item" data-route="stock-movement-balance" onclick="navigate('stock-movement-balance')">
+                <span class="nav-icon">⚖️</span><span class="nav-label">ميزان حركة المخزون العام</span>
+              </a>
+              <a class="nav-item" data-route="inventory-replenishment" onclick="navigate('inventory-replenishment')">
+                <span class="nav-icon">📈</span><span class="nav-label">التنبؤ وإعادة تموين المخازن</span>
+              </a>
+              <a class="nav-item" data-route="report-stock" onclick="navigate('report-stock')">
+                <span class="nav-icon">&#127981;</span><span class="nav-label">تقرير المخزون العام</span>
+              </a>
+              <a class="nav-item" data-route="report-sales-product" onclick="navigate('report-sales-product')">
+                <span class="nav-icon">&#128230;</span><span class="nav-label">مبيعات حسب الصنف</span>
+              </a>
+              <a class="nav-item" data-route="report-product-analytics" onclick="navigate('report-product-analytics')">
+                <span class="nav-icon">⚡</span><span class="nav-label">دوران وربحية الأصناف</span>
+              </a>
+              <a class="nav-item" data-route="report-warehouse-comparison" onclick="navigate('report-warehouse-comparison')">
+                <span class="nav-icon">📊</span><span class="nav-label">مقارنة أرصدة المستودعات</span>
+              </a>
+              <a class="nav-item" data-route="inventory-dashboard" onclick="navigate('inventory-dashboard')">
+                <span class="nav-icon">&#128200;</span><span class="nav-label">تحليل وذكاء المخزون ABC/XYZ</span>
+              </a>
+              <a class="nav-item" data-route="inventory-reports" onclick="navigate('inventory-reports')">
+                <span class="nav-icon">&#128203;</span><span class="nav-label">مركز تقارير المخزون (22+ تقرير)</span>
+              </a>
+            </div>
           </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="chart-of-accounts" onclick="navigate('chart-of-accounts')">
-              <span class="nav-icon">&#127795;</span><span class="nav-label">شجرة الحسابات</span>
-            </a>
-            <a class="nav-item" data-route="journal-entries"   onclick="navigate('journal-entries')">
-              <span class="nav-icon">&#128209;</span><span class="nav-label">القيود اليومية</span>
-            </a>
-            <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports')">
-              <span class="nav-icon">&#128200;</span><span class="nav-label">القوائم المالية والتحليل</span>
-            </a>
-            <a class="nav-item" data-route="financial-analysis" onclick="navigate('financial-analysis')" style="background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.25);border-radius:8px;margin:2px 0;">
-              <span class="nav-icon">&#128293;</span><span class="nav-label" style="color:#a5b4fc;font-weight:800;">التحليل المالي الشامل ✦</span>
-            </a>
-            <a class="nav-item" data-route="vat-zakat" onclick="navigate('vat-zakat')">
-              <span class="nav-icon">&#127963;&#65039;</span><span class="nav-label">ضريبة VAT والزكاة والدخل</span>
-            </a>
-            <a class="nav-item" data-route="cost-centers" onclick="navigate('cost-centers')" style="background:linear-gradient(135deg,rgba(5,150,105,.15),rgba(16,185,129,.08));border:1px solid rgba(5,150,105,.3);border-radius:8px;margin:2px 0;">
-              <span class="nav-icon">🚐</span><span class="nav-label" style="color:#6ee7b7;font-weight:800;">مراكز التكلفة والسيارات ✦</span>
-            </a>
+
+          <!-- 4. الخزينة والمحاسبة -->
+          <div class="nav-section" data-section="mod-finance" data-role-section="finance">
+            <div class="nav-section-header" onclick="toggleSection('mod-finance')">
+              <span class="nav-section-icon">💰</span>
+              <span class="nav-section-label">الخزينة والمحاسبة</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="cash-boxes" onclick="navigate('cash-boxes')">
+                <span class="nav-icon">&#128181;</span><span class="nav-label">الصناديق النقدية</span>
+              </a>
+              <a class="nav-item" data-route="bank-accounts" onclick="navigate('bank-accounts')">
+                <span class="nav-icon">&#127974;</span><span class="nav-label">الحسابات البنكية</span>
+              </a>
+              <a class="nav-item" data-route="receipts" onclick="navigate('receipts')">
+                <span class="nav-icon">&#128188;</span><span class="nav-label">سندات القبض</span>
+              </a>
+              <a class="nav-item" data-route="expenses" onclick="navigate('expenses')">
+                <span class="nav-icon">&#128184;</span><span class="nav-label">سندات الصرف</span>
+              </a>
+              <a class="nav-item" data-route="cheques" onclick="navigate('cheques')">
+                <span class="nav-icon">&#128209;</span><span class="nav-label">أوراق القبض والدفع (شيكات)</span>
+              </a>
+              <a class="nav-item" data-route="promissory-notes" onclick="navigate('promissory-notes')">
+                <span class="nav-icon">📜</span><span class="nav-label">سندات الأمر</span>
+              </a>
+              <a class="nav-item" data-route="chart-of-accounts" onclick="navigate('chart-of-accounts')">
+                <span class="nav-icon">&#127795;</span><span class="nav-label">شجرة الحسابات</span>
+              </a>
+              <a class="nav-item" data-route="journal-entries" onclick="navigate('journal-entries')">
+                <span class="nav-icon">&#128209;</span><span class="nav-label">القيود اليومية</span>
+              </a>
+              <a class="nav-item" data-route="cost-centers" onclick="navigate('cost-centers')" style="background:linear-gradient(135deg,rgba(5,150,105,.15),rgba(16,185,129,.08));border:1px solid rgba(5,150,105,.3);border-radius:8px;margin:2px 0;">
+                <span class="nav-icon">🚐</span><span class="nav-label" style="color:#6ee7b7;font-weight:800;">مراكز التكلفة والسيارات ✦</span>
+              </a>
+              <a class="nav-item" data-route="vat-zakat" onclick="navigate('vat-zakat')">
+                <span class="nav-icon">&#127963;&#65039;</span><span class="nav-label">ضريبة VAT والزكاة والدخل</span>
+              </a>
+
+              <!-- التقارير والقوائم المالية -->
+              <div style="margin:10px 8px 4px; padding-top:6px; border-top:1px dashed var(--border-soft); font-size:10.5px; font-weight:800; color:var(--text-3); display:flex; align-items:center; gap:5px;">
+                <span>⚖️ التقارير والقوائم المالية</span>
+              </div>
+              <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports')">
+                <span class="nav-icon">&#128200;</span><span class="nav-label">القوائم المالية والتحليل</span>
+              </a>
+              <a class="nav-item" data-route="financial-analysis" onclick="navigate('financial-analysis')" style="background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.25);border-radius:8px;margin:2px 0;">
+                <span class="nav-icon">&#128293;</span><span class="nav-label" style="color:#a5b4fc;font-weight:800;">التحليل المالي الشامل ✦</span>
+              </a>
+              <a class="nav-item" data-route="realtime-cogs" onclick="navigate('realtime-cogs')" style="background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(217,119,6,.08));border:1px solid rgba(245,158,11,.3);border-radius:8px;margin:2px 0;">
+                <span class="nav-icon">⚡</span><span class="nav-label" style="color:#fcd34d;font-weight:800;">الشاشة اللحظية لتكلفة المبيعات ✦</span>
+              </a>
+              <a class="nav-item" data-route="report-profit-loss" onclick="navigate('report-profit-loss')">
+                <span class="nav-icon">&#128185;</span><span class="nav-label">أرباح وخسائر</span>
+              </a>
+              <a class="nav-item" data-route="report-expense-analysis" onclick="navigate('report-expense-analysis')">
+                <span class="nav-icon">💸</span><span class="nav-label">تحليل المصروفات</span>
+              </a>
+              <a class="nav-item" data-route="report-expense-tracking" onclick="navigate('report-expense-tracking')">
+                <span class="nav-icon">📋</span><span class="nav-label">تتبع المصروفات التفصيلي</span>
+              </a>
+            </div>
           </div>
-        </div>
+
+          <!-- 5. الإدارة والخدمات -->
+          <div class="nav-section" data-section="mod-admin" data-role-section="admin">
+            <div class="nav-section-header" onclick="toggleSection('mod-admin')">
+              <span class="nav-section-icon">⚙️</span>
+              <span class="nav-section-label">الإدارة والخدمات</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="hr-payroll" onclick="navigate('hr-payroll')">
+                <span class="nav-icon">&#128179;</span><span class="nav-label">شؤون الموظفين والرواتب</span>
+              </a>
+              <a class="nav-item" data-route="archive" onclick="navigate('archive')">
+                <span class="nav-icon">📂</span><span class="nav-label">مستندات وأرشيف الشركة</span>
+              </a>
+              <a class="nav-item" data-route="settings-company" onclick="navigate('settings-company')">
+                <span class="nav-icon">&#127970;</span><span class="nav-label">بيانات الشركة</span>
+              </a>
+              <a class="nav-item" data-route="settings-users" onclick="navigate('settings-users')">
+                <span class="nav-icon">&#128100;</span><span class="nav-label">المستخدمون</span>
+              </a>
+              <a class="nav-item" data-route="data-reset" onclick="navigate('data-reset')" style="color:var(--danger,#ef4444);">
+                <span class="nav-icon">🗑️</span><span class="nav-label">تصفير البيانات</span>
+              </a>
+            </div>
+          </div>
+
+        </div><!-- /layout-modular -->
 
 
-        <!-- Reports -->
-        <div class="nav-section" data-section="reports">
-          <div class="nav-section-header" onclick="toggleSection('reports')">
-            <span class="nav-section-icon">&#128200;</span>
-            <span class="nav-section-label">التقارير</span>
-            <span class="nav-section-arrow">&#9662;</span>
-          </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="report-sales-product"  onclick="navigate('report-sales-product')">
-              <span class="nav-icon">&#128230;</span><span class="nav-label">مبيعات حسب الصنف</span>
-            </a>
-            <a class="nav-item" data-route="report-sales-rep"      onclick="navigate('report-sales-rep')">
-              <span class="nav-icon">&#128694;</span><span class="nav-label">مبيعات حسب المندوب</span>
-            </a>
-            <a class="nav-item" data-route="report-sales-customer" onclick="navigate('report-sales-customer')">
-              <span class="nav-icon">&#128100;</span><span class="nav-label">مبيعات حسب العميل</span>
-            </a>
-            <a class="nav-item" data-route="report-stock"          onclick="navigate('report-stock')">
-              <span class="nav-icon">&#127981;</span><span class="nav-label">تقرير المخزون</span>
-            </a>
-            <a class="nav-item" data-route="inventory-reports"     onclick="navigate('inventory-reports')">
-              <span class="nav-icon">&#128202;</span><span class="nav-label">مركز التقارير (22+ تقرير)</span>
-            </a>
-            <a class="nav-item" data-route="report-customer-statement" onclick="navigate('report-customer-statement')">
-              <span class="nav-icon">&#128196;</span><span class="nav-label">كشف الحساب الموحد</span>
-            </a>
-            <a class="nav-item" data-route="rep-performance"       onclick="navigate('rep-performance')">
-              <span class="nav-icon">&#127942;</span><span class="nav-label">أداء المناديب</span>
-            </a>
-            <a class="nav-item" data-route="report-profit-loss"    onclick="navigate('report-profit-loss')">
-              <span class="nav-icon">&#128185;</span><span class="nav-label">أرباح وخسائر</span>
-            </a>
-            <a class="nav-item" data-route="report-expense-analysis" onclick="navigate('report-expense-analysis')">
-              <span class="nav-icon">💸</span><span class="nav-label">تحليل المصروفات</span>
-            </a>
-            <a class="nav-item" data-route="report-product-analytics" onclick="navigate('report-product-analytics')">
-              <span class="nav-icon">⚡</span><span class="nav-label">دوران وربحية الأصناف</span>
-            </a>
-            <a class="nav-item" data-route="report-expense-tracking" onclick="navigate('report-expense-tracking')">
-              <span class="nav-icon">📋</span><span class="nav-label">تتبع المصروفات التفصيلي</span>
-            </a>
-            <a class="nav-item" data-route="report-warehouse-comparison" onclick="navigate('report-warehouse-comparison')">
-              <span class="nav-icon">📊</span><span class="nav-label">مقارنة أرصدة المستودعات</span>
-            </a>
-            <a class="nav-item" data-route="report-consolidated-balances" onclick="navigate('report-consolidated-balances')">
-              <span class="nav-icon">⚖️</span><span class="nav-label">مجمع أرصدة المديونيات</span>
-            </a>
-          </div>
-        </div>
-        <!-- HR & Payroll -->
-        <div class="nav-section" data-section="hr">
-          <div class="nav-section-header" onclick="toggleSection('hr')">
-            <span class="nav-section-icon">&#128101;</span>
-            <span class="nav-section-label">الموارد البشرية</span>
-            <span class="nav-section-arrow">&#9662;</span>
-          </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="hr-payroll" onclick="navigate('hr-payroll')">
-              <span class="nav-icon">&#128179;</span><span class="nav-label">شؤون الموظفين والرواتب</span>
-            </a>
-          </div>
-        </div>
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <!-- 🏛️ 2. CLASSIC LAYOUT — الترتيب السابق الأصلي بالكامل -->
+        <!-- ══════════════════════════════════════════════════════════ -->
+        <div id="layout-classic" class="sidebar-layout-view" style="display:none;">
 
-        <!-- Cloud Archive -->
-        <div class="nav-section" data-section="archive">
-          <div class="nav-section-header" onclick="toggleSection('archive')">
-            <span class="nav-section-icon">📁</span>
-            <span class="nav-section-label">الأرشيف الرقمي</span>
-            <span class="nav-section-arrow">&#9662;</span>
+          <!-- Catalog & Inventory -->
+          <div class="nav-section" data-section="catalog" data-role-section="inventory">
+            <div class="nav-section-header" onclick="toggleSection('catalog')">
+              <span class="nav-section-icon">&#128230;</span>
+              <span class="nav-section-label">المخزون والكتالوج</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="products" onclick="navigate('products')">
+                <span class="nav-icon">&#127991;&#65039;</span><span class="nav-label">الأصناف</span>
+              </a>
+              <a class="nav-item" data-route="categories" onclick="navigate('categories')">
+                <span class="nav-icon">&#128194;</span><span class="nav-label">الفئات والوحدات</span>
+              </a>
+              <a class="nav-item" data-route="warehouses" onclick="navigate('warehouses')">
+                <span class="nav-icon">&#127981;</span><span class="nav-label">المخازن</span>
+              </a>
+              <a class="nav-item" data-route="inventory-locations" onclick="navigate('inventory-locations')">
+                <span class="nav-icon">&#128205;</span><span class="nav-label">مواقع ورفوف التخزين</span>
+              </a>
+              <a class="nav-item" data-route="stock-card" onclick="navigate('stock-card')">
+                <span class="nav-icon">&#128202;</span><span class="nav-label">كرت حركة الصنف التفصيلي</span>
+              </a>
+              <a class="nav-item" data-route="stock-transfer" onclick="navigate('stock-transfer')">
+                <span class="nav-icon">&#128196;</span><span class="nav-label">تحويل بضاعة</span>
+              </a>
+              <a class="nav-item" data-route="inventory-ops" onclick="navigate('inventory-ops')">
+                <span class="nav-icon">&#9881;&#65039;</span><span class="nav-label">العمليات اليومية وسلاسل الإمداد</span>
+              </a>
+              <a class="nav-item" data-route="van-loading-dispatch" onclick="navigate('van-loading-dispatch')">
+                <span class="nav-icon">🚚</span><span class="nav-label">تحميل وجرد سيارات التوزيع</span>
+              </a>
+              <a class="nav-item" data-route="barcode-label-printer" onclick="navigate('barcode-label-printer')">
+                <span class="nav-icon">🏷️</span><span class="nav-label">طباعة باركود وملصقات الرفوف</span>
+              </a>
+              <a class="nav-item" data-route="product-bundles-kitting" onclick="navigate('product-bundles-kitting')">
+                <span class="nav-icon">🍱</span><span class="nav-label">عروض وتجميع الباكجات</span>
+              </a>
+              <a class="nav-item" data-route="inventory-waste-clearance" onclick="navigate('inventory-waste-clearance')">
+                <span class="nav-icon">⚠️</span><span class="nav-label">رادار الرواكد والتوالف</span>
+              </a>
+              <a class="nav-item" data-route="batch-traceability-report" onclick="navigate('batch-traceability-report')">
+                <span class="nav-icon">🔍</span><span class="nav-label">تتبع اللوت وسحب المنتجات</span>
+              </a>
+              <a class="nav-item" data-route="product-profit-margins" onclick="navigate('product-profit-margins')">
+                <span class="nav-icon">🏆</span><span class="nav-label">مصفوفة ربحية وهوامش الأصناف</span>
+              </a>
+              <a class="nav-item" data-route="stock-movement-balance" onclick="navigate('stock-movement-balance')">
+                <span class="nav-icon">⚖️</span><span class="nav-label">ميزان حركة المخزون العام</span>
+              </a>
+              <a class="nav-item" data-route="inventory-replenishment" onclick="navigate('inventory-replenishment')">
+                <span class="nav-icon">📈</span><span class="nav-label">التنبؤ وإعادة تموين المخازن</span>
+              </a>
+              <a class="nav-item" data-route="reorder-points" onclick="navigate('reorder-points')">
+                <span class="nav-icon">&#128276;</span><span class="nav-label">نقاط إعادة الطلب والأمان</span>
+              </a>
+              <a class="nav-item" data-route="expiry-tracking" onclick="navigate('expiry-tracking')">
+                <span class="nav-icon">&#9200;</span><span class="nav-label">متابعة تواريخ انتهاء الصلاحية</span>
+              </a>
+              <a class="nav-item" data-route="inventory-closing" onclick="navigate('inventory-closing')">
+                <span class="nav-icon">&#128274;</span><span class="nav-label">الجرد والقفلات المخزنية</span>
+              </a>
+              <a class="nav-item" data-route="inventory-dashboard" onclick="navigate('inventory-dashboard')">
+                <span class="nav-icon">&#128200;</span><span class="nav-label">تحليل وذكاء المخزون ABC/XYZ</span>
+              </a>
+              <a class="nav-item" data-route="inventory-reports" onclick="navigate('inventory-reports')">
+                <span class="nav-icon">&#128203;</span><span class="nav-label">تقارير المخزون (70+ تقرير)</span>
+              </a>
+            </div>
           </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="archive" onclick="navigate('archive')">
-              <span class="nav-icon">📂</span><span class="nav-label">مستندات وأرشيف الشركة</span>
-            </a>
-          </div>
-        </div>
 
-        <!-- Settings -->
-        <div class="nav-section" data-section="settings">
-          <div class="nav-section-header" onclick="toggleSection('settings')">
-            <span class="nav-section-icon">&#9881;&#65039;</span>
-            <span class="nav-section-label">الإعدادات</span>
-            <span class="nav-section-arrow">&#9662;</span>
+          <!-- Customers & Reps -->
+          <div class="nav-section" data-section="parties" data-role-section="sales">
+            <div class="nav-section-header" onclick="toggleSection('parties')">
+              <span class="nav-section-icon">&#128101;</span>
+              <span class="nav-section-label">العملاء والمناديب</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="customers" onclick="navigate('customers')">
+                <span class="nav-icon">&#128100;</span><span class="nav-label">العملاء</span>
+              </a>
+              <a class="nav-item" data-route="customer-crm" onclick="navigate('customer-crm')">
+                <span class="nav-icon">🎯</span><span class="nav-label">متابعة العملاء CRM</span>
+              </a>
+              <a class="nav-item" data-route="customer-segments" onclick="navigate('customer-segments')">
+                <span class="nav-icon">🏷️</span><span class="nav-label">شرائح العملاء</span>
+              </a>
+              <a class="nav-item" data-route="customer-complaints" onclick="navigate('customer-complaints')">
+                <span class="nav-icon">⚠️</span><span class="nav-label">شكاوى العملاء</span>
+              </a>
+              <a class="nav-item" data-route="customer-loyalty" onclick="navigate('customer-loyalty')">
+                <span class="nav-icon">🎁</span><span class="nav-label">نقاط الولاء</span>
+              </a>
+              <a class="nav-item" data-route="customer-contracts" onclick="navigate('customer-contracts')">
+                <span class="nav-icon">📜</span><span class="nav-label">العقود</span>
+              </a>
+              <a class="nav-item" data-route="customer-statement" onclick="navigate('customer-statement')">
+                <span class="nav-icon">📊</span><span class="nav-label">كشف حساب عميل</span>
+              </a>
+              <a class="nav-item" data-route="customer-notes" onclick="navigate('customer-notes')">
+                <span class="nav-icon">📝</span><span class="nav-label">ملاحظات العملاء</span>
+              </a>
+              <a class="nav-item" data-route="suppliers" onclick="navigate('suppliers')">
+                <span class="nav-icon">&#127981;</span><span class="nav-label">دليل الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-statement" onclick="navigate('supplier-statement')">
+                <span class="nav-icon">📊</span><span class="nav-label">كشف حساب مورد</span>
+              </a>
+              <a class="nav-item" data-route="supplier-contracts" onclick="navigate('supplier-contracts')">
+                <span class="nav-icon">📜</span><span class="nav-label">عقود الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-evaluations" onclick="navigate('supplier-evaluations')">
+                <span class="nav-icon">⭐</span><span class="nav-label">تقييم أداء الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-performance" onclick="navigate('supplier-performance')">
+                <span class="nav-icon">📊</span><span class="nav-label">تصريف الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-quotations" onclick="navigate('supplier-quotations')">
+                <span class="nav-icon">📑</span><span class="nav-label">مقارنة عروض الأسعار</span>
+              </a>
+              <a class="nav-item" data-route="supplier-claims" onclick="navigate('supplier-claims')">
+                <span class="nav-icon">🔍</span><span class="nav-label">مطالبات وتوالف الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-price-history" onclick="navigate('supplier-price-history')">
+                <span class="nav-icon">📈</span><span class="nav-label">تتبع أسعار الشراء</span>
+              </a>
+              <a class="nav-item" data-route="supplier-notes" onclick="navigate('supplier-notes')">
+                <span class="nav-icon">📝</span><span class="nav-label">الحسابات البنكية والملاحظات</span>
+              </a>
+              <a class="nav-item" data-route="purchase-orders" onclick="navigate('purchase-orders')">
+                <span class="nav-icon">📋</span><span class="nav-label">أوامر الشراء (PO)</span>
+              </a>
+              <a class="nav-item" data-route="supplier-deliveries" onclick="navigate('supplier-deliveries')">
+                <span class="nav-icon">🚚</span><span class="nav-label">جدولة شحنات الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-rebates" onclick="navigate('supplier-rebates')">
+                <span class="nav-icon">🎯</span><span class="nav-label">حوافز وبونص الموردين</span>
+              </a>
+              <a class="nav-item" data-route="sales-reps" onclick="navigate('sales-reps')">
+                <span class="nav-icon">&#128694;</span><span class="nav-label">المناديب</span>
+              </a>
+              <a class="nav-item" data-route="price-lists" onclick="navigate('price-lists')">
+                <span class="nav-icon">&#128178;</span><span class="nav-label">قوائم الأسعار</span>
+              </a>
+            </div>
           </div>
-          <div class="nav-section-body">
-            <a class="nav-item" data-route="settings-company" onclick="navigate('settings-company')">
-              <span class="nav-icon">&#127970;</span><span class="nav-label">بيانات الشركة</span>
-            </a>
-            <a class="nav-item" data-route="settings-users"   onclick="navigate('settings-users')">
-              <span class="nav-icon">&#128100;</span><span class="nav-label">المستخدمون</span>
-            </a>
-            <a class="nav-item" data-route="data-reset" onclick="navigate('data-reset')"
-               style="color:var(--danger,#ef4444);">
-              <span class="nav-icon">🗑️</span><span class="nav-label">تصفير البيانات</span>
-            </a>
+
+          <!-- Sales -->
+          <div class="nav-section" data-section="sales" data-role-section="sales">
+            <div class="nav-section-header" onclick="toggleSection('sales')">
+              <span class="nav-section-icon">&#129534;</span>
+              <span class="nav-section-label">المبيعات</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="quotations" onclick="navigate('quotations')">
+                <span class="nav-icon">&#128220;</span><span class="nav-label">عروض الأسعار</span>
+              </a>
+              <a class="nav-item" data-route="sales-invoices" onclick="navigate('sales-invoices')">
+                <span class="nav-icon">&#128196;</span><span class="nav-label">فواتير المبيعات</span>
+              </a>
+              <a class="nav-item" data-route="pos" onclick="navigate('pos')">
+                <span class="nav-icon">&#128722;</span><span class="nav-label">نقطة البيع (POS)</span>
+              </a>
+              <a class="nav-item" data-route="sales-returns" onclick="navigate('sales-returns')">
+                <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">مردودات البيع</span>
+              </a>
+            </div>
           </div>
-        </div>
+
+          <!-- Purchases -->
+          <div class="nav-section" data-section="purchases" data-role-section="purchases">
+            <div class="nav-section-header" onclick="toggleSection('purchases')">
+              <span class="nav-section-icon">&#128722;</span>
+              <span class="nav-section-label">المشتريات</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="purchase-requests" onclick="navigate('purchase-requests')">
+                <span class="nav-icon">&#128196;</span><span class="nav-label">طلب أسعار من مورد</span>
+              </a>
+              <a class="nav-item" data-route="purchase-invoices" onclick="navigate('purchase-invoices')">
+                <span class="nav-icon">&#128203;</span><span class="nav-label">فواتير الشراء</span>
+              </a>
+              <a class="nav-item" data-route="purchase-returns" onclick="navigate('purchase-returns')">
+                <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">مردودات الشراء</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Treasury -->
+          <div class="nav-section" data-section="treasury" data-role-section="finance">
+            <div class="nav-section-header" onclick="toggleSection('treasury')">
+              <span class="nav-section-icon">&#128176;</span>
+              <span class="nav-section-label">الخزينة والبنوك</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="cash-boxes" onclick="navigate('cash-boxes')">
+                <span class="nav-icon">&#128181;</span><span class="nav-label">الصناديق النقدية</span>
+              </a>
+              <a class="nav-item" data-route="bank-accounts" onclick="navigate('bank-accounts')">
+                <span class="nav-icon">&#127974;</span><span class="nav-label">الحسابات البنكية</span>
+              </a>
+              <a class="nav-item" data-route="cheques" onclick="navigate('cheques')">
+                <span class="nav-icon">&#128209;</span><span class="nav-label">أوراق القبض والدفع (شيكات)</span>
+              </a>
+              <a class="nav-item" data-route="promissory-notes" onclick="navigate('promissory-notes')">
+                <span class="nav-icon">📜</span><span class="nav-label">سندات الأمر</span>
+              </a>
+              <a class="nav-item" data-route="expenses" onclick="navigate('expenses')">
+                <span class="nav-icon">&#128184;</span><span class="nav-label">سندات الصرف</span>
+              </a>
+              <a class="nav-item" data-route="receipts" onclick="navigate('receipts')">
+                <span class="nav-icon">&#128188;</span><span class="nav-label">سندات القبض</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Accounting -->
+          <div class="nav-section" data-section="accounting" data-role-section="finance">
+            <div class="nav-section-header" onclick="toggleSection('accounting')">
+              <span class="nav-section-icon">&#128202;</span>
+              <span class="nav-section-label">المحاسبة</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="chart-of-accounts" onclick="navigate('chart-of-accounts')">
+                <span class="nav-icon">&#127795;</span><span class="nav-label">شجرة الحسابات</span>
+              </a>
+              <a class="nav-item" data-route="journal-entries" onclick="navigate('journal-entries')">
+                <span class="nav-icon">&#128209;</span><span class="nav-label">القيود اليومية</span>
+              </a>
+              <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports')">
+                <span class="nav-icon">&#128200;</span><span class="nav-label">القوائم المالية والتحليل</span>
+              </a>
+              <a class="nav-item" data-route="financial-analysis" onclick="navigate('financial-analysis')" style="background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.25);border-radius:8px;margin:2px 0;">
+                <span class="nav-icon">&#128293;</span><span class="nav-label" style="color:#a5b4fc;font-weight:800;">التحليل المالي الشامل ✦</span>
+              </a>
+              <a class="nav-item" data-route="vat-zakat" onclick="navigate('vat-zakat')">
+                <span class="nav-icon">&#127963;&#65039;</span><span class="nav-label">ضريبة VAT والزكاة والدخل</span>
+              </a>
+              <a class="nav-item" data-route="cost-centers" onclick="navigate('cost-centers')" style="background:linear-gradient(135deg,rgba(5,150,105,.15),rgba(16,185,129,.08));border:1px solid rgba(5,150,105,.3);border-radius:8px;margin:2px 0;">
+                <span class="nav-icon">🚐</span><span class="nav-label" style="color:#6ee7b7;font-weight:800;">مراكز التكلفة والسيارات ✦</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Reports -->
+          <div class="nav-section" data-section="reports" data-role-section="finance">
+            <div class="nav-section-header" onclick="toggleSection('reports')">
+              <span class="nav-section-icon">&#128200;</span>
+              <span class="nav-section-label">التقارير</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="report-sales-product" onclick="navigate('report-sales-product')">
+                <span class="nav-icon">&#128230;</span><span class="nav-label">مبيعات حسب الصنف</span>
+              </a>
+              <a class="nav-item" data-route="report-sales-rep" onclick="navigate('report-sales-rep')">
+                <span class="nav-icon">&#128694;</span><span class="nav-label">مبيعات حسب المندوب</span>
+              </a>
+              <a class="nav-item" data-route="report-sales-customer" onclick="navigate('report-sales-customer')">
+                <span class="nav-icon">&#128100;</span><span class="nav-label">مبيعات حسب العميل</span>
+              </a>
+              <a class="nav-item" data-route="report-stock" onclick="navigate('report-stock')">
+                <span class="nav-icon">&#127981;</span><span class="nav-label">تقرير المخزون</span>
+              </a>
+              <a class="nav-item" data-route="inventory-reports" onclick="navigate('inventory-reports')">
+                <span class="nav-icon">&#128202;</span><span class="nav-label">مركز التقارير (22+ تقرير)</span>
+              </a>
+              <a class="nav-item" data-route="report-customer-statement" onclick="navigate('report-customer-statement')">
+                <span class="nav-icon">&#128196;</span><span class="nav-label">كشف الحساب الموحد</span>
+              </a>
+              <a class="nav-item" data-route="rep-performance" onclick="navigate('rep-performance')">
+                <span class="nav-icon">&#127942;</span><span class="nav-label">أداء المناديب</span>
+              </a>
+              <a class="nav-item" data-route="rep-daily-journal" onclick="navigate('rep-daily-journal')">
+                <span class="nav-icon">📋</span><span class="nav-label">يومية المندوب</span>
+              </a>
+              <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports'); setTimeout(()=>window.switchFinTab&&window.switchFinTab('custperf'),400)" style="background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(139,92,246,.06));border:1px solid rgba(99,102,241,.2);border-radius:8px;margin:2px 0;">
+                <span class="nav-icon">🏆</span><span class="nav-label">أداء العملاء</span>
+              </a>
+              <a class="nav-item" data-route="report-profit-loss" onclick="navigate('report-profit-loss')">
+                <span class="nav-icon">&#128185;</span><span class="nav-label">أرباح وخسائر</span>
+              </a>
+              <a class="nav-item" data-route="report-expense-analysis" onclick="navigate('report-expense-analysis')">
+                <span class="nav-icon">💸</span><span class="nav-label">تحليل المصروفات</span>
+              </a>
+              <a class="nav-item" data-route="report-product-analytics" onclick="navigate('report-product-analytics')">
+                <span class="nav-icon">⚡</span><span class="nav-label">دوران وربحية الأصناف</span>
+              </a>
+              <a class="nav-item" data-route="report-expense-tracking" onclick="navigate('report-expense-tracking')">
+                <span class="nav-icon">📋</span><span class="nav-label">تتبع المصروفات التفصيلي</span>
+              </a>
+              <a class="nav-item" data-route="report-warehouse-comparison" onclick="navigate('report-warehouse-comparison')">
+                <span class="nav-icon">📊</span><span class="nav-label">مقارنة أرصدة المستودعات</span>
+              </a>
+              <a class="nav-item" data-route="report-hierarchical-debt" onclick="navigate('report-hierarchical-debt')" style="background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(59,130,246,.06));border:1px solid rgba(37,99,235,.2);border-radius:8px;margin:2px 0;">
+                <span class="nav-icon">📊</span><span class="nav-label">المديونيات الهرمي الشجري</span>
+              </a>
+              <a class="nav-item" data-route="report-consolidated-balances" onclick="navigate('report-consolidated-balances')">
+                <span class="nav-icon">⚖️</span><span class="nav-label">مجمع أرصدة المديونيات</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- HR & Payroll -->
+          <div class="nav-section" data-section="hr" data-role-section="admin">
+            <div class="nav-section-header" onclick="toggleSection('hr')">
+              <span class="nav-section-icon">&#128101;</span>
+              <span class="nav-section-label">الموارد البشرية</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="hr-payroll" onclick="navigate('hr-payroll')">
+                <span class="nav-icon">&#128179;</span><span class="nav-label">شؤون الموظفين والرواتب</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Cloud Archive -->
+          <div class="nav-section" data-section="archive" data-role-section="admin">
+            <div class="nav-section-header" onclick="toggleSection('archive')">
+              <span class="nav-section-icon">📁</span>
+              <span class="nav-section-label">الأرشيف الرقمي</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="archive" onclick="navigate('archive')">
+                <span class="nav-icon">📂</span><span class="nav-label">مستندات وأرشيف الشركة</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Settings -->
+          <div class="nav-section" data-section="settings" data-role-section="admin">
+            <div class="nav-section-header" onclick="toggleSection('settings')">
+              <span class="nav-section-icon">&#9881;&#65039;</span>
+              <span class="nav-section-label">الإعدادات</span>
+              <span class="nav-section-arrow">&#9662;</span>
+            </div>
+            <div class="nav-section-body">
+              <a class="nav-item" data-route="settings-company" onclick="navigate('settings-company')">
+                <span class="nav-icon">&#127970;</span><span class="nav-label">بيانات الشركة</span>
+              </a>
+              <a class="nav-item" data-route="settings-users" onclick="navigate('settings-users')">
+                <span class="nav-icon">&#128100;</span><span class="nav-label">المستخدمون</span>
+              </a>
+              <a class="nav-item" data-route="data-reset" onclick="navigate('data-reset')" style="color:var(--danger,#ef4444);">
+                <span class="nav-icon">🗑️</span><span class="nav-label">تصفير البيانات</span>
+              </a>
+            </div>
+          </div>
+
+        </div><!-- /layout-classic -->
 
       </div><!-- /sidebar-scroll -->
 
@@ -608,16 +1219,21 @@
             </button>
           </div>
 
-          <!-- Theme Toggle -->
-          <button class="theme-toggle" onclick="toggleTheme()" title="تبديل الوضع (ليلي/نهاري)">
-            <span id="theme-icon">&#9728;&#65039;</span>
-          </button>
+          <!-- Theme Picker Dropdown Container -->
+          <div class="dropdown-container" style="position:relative; cursor:pointer;">
+            <button class="theme-toggle" id="theme-btn" onclick="togglePortalDropdown('theme-btn','theme-dropdown-portal')" title="اختيار الثيم" style="display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:20px;font-size:13px;cursor:pointer;">
+              <span id="theme-icon">🌌</span>
+              <span style="font-size:10px;color:var(--text-dim);font-weight:600;">ثيم</span>
+            </button>
+          </div>
 
-          <!-- Notifications -->
-          <button class="notif-btn" onclick="toggleNotifications()" title="الإشعارات">
-            <span style="font-size:17px;">&#128276;</span>
-            <span class="notif-badge">3</span>
-          </button>
+          <!-- Notifications Dropdown Container -->
+          <div class="dropdown-container" style="position:relative; cursor:pointer;">
+            <button class="notif-btn" id="notif-btn" onclick="togglePortalDropdown('notif-btn','notif-dropdown-portal'); window.loadLiveNotifications();" title="الإشعارات" style="cursor:pointer; position:relative;">
+              <span style="font-size:17px;">&#128276;</span>
+              <span class="notif-badge">0</span>
+            </button>
+          </div>
 
           <!-- User Profile -->
           <div class="dropdown-container" style="position:relative; cursor:pointer;">
@@ -636,6 +1252,9 @@
           </button>
         </div>
       </header>
+
+      <!-- Stock Operations Health & Alert Banner -->
+      <div id="stock-operations-alert-banner" style="display:none; margin: 12px 24px 0 24px; padding: 12px 18px; border-radius: 10px;"></div>
 
       <!-- Page Router Outlet -->
       <main id="page-router-outlet">
@@ -833,6 +1452,55 @@
     <button class="btn btn-ghost text-bad" style="text-align:right; font-size:13px; padding:8px 10px; width:100%;" onclick="signOutUser()">&#9199;&#65039; تسجيل الخروج</button>
   </div>
 
+  <div id="theme-dropdown-portal" class="dropdown-portal" style="width:320px; padding:16px;">
+    <div class="tp-title">🎨 اختر ثيم النظام</div>
+
+    <div class="tp-group-label">🌙 ثيمات داكنة</div>
+    <div class="tp-grid">
+      <div class="tp-swatch" data-theme="dark" onclick="applyTheme('dark'); closeAllPortalDropdowns()">
+        <div class="tp-dot" style="background:linear-gradient(135deg,#060813,#6366f1)"></div>
+        <div class="tp-label">🌌 Dark Space</div>
+      </div>
+      <div class="tp-swatch" data-theme="dark-cyan" onclick="applyTheme('dark-cyan'); closeAllPortalDropdowns()">
+        <div class="tp-dot" style="background:linear-gradient(135deg,#020c18,#06b6d4)"></div>
+        <div class="tp-label">🌊 Ocean Depth</div>
+      </div>
+      <div class="tp-swatch" data-theme="dark-gold" onclick="applyTheme('dark-gold'); closeAllPortalDropdowns()">
+        <div class="tp-dot" style="background:linear-gradient(135deg,#09090b,#f59e0b)"></div>
+        <div class="tp-label">✨ Premium Gold</div>
+      </div>
+    </div>
+
+    <div class="tp-group-label">☀️ ثيمات فاتحة</div>
+    <div class="tp-grid">
+      <div class="tp-swatch" data-theme="light" onclick="applyTheme('light'); closeAllPortalDropdowns()">
+        <div class="tp-dot" style="background:linear-gradient(135deg,#eef2f7,#4f46e5)"></div>
+        <div class="tp-label">☀️ Classic Light</div>
+      </div>
+      <div class="tp-swatch" data-theme="light-blue" onclick="applyTheme('light-blue'); closeAllPortalDropdowns()">
+        <div class="tp-dot" style="background:linear-gradient(135deg,#eef2ff,#1d4ed8)"></div>
+        <div class="tp-label">🔵 Clear Sky</div>
+      </div>
+      <div class="tp-swatch" data-theme="light-green" onclick="applyTheme('light-green'); closeAllPortalDropdowns()">
+        <div class="tp-dot" style="background:linear-gradient(135deg,#f0fdf4,#059669)"></div>
+        <div class="tp-label">🌿 Fresh Emerald</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="notif-dropdown-portal" class="dropdown-portal" style="width:360px; padding:16px;">
+    <div class="notif-header" style="display:flex; align-items:center; justify-content:space-between; padding-bottom:10px; border-bottom:1px solid var(--border-soft); font-size:13px; color:var(--text-1);">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span style="font-size:16px;">🔔</span>
+        <strong style="font-family:var(--font-heading); font-size:13px;">مركز التنبيهات التشغيلية</strong>
+      </div>
+      <span class="notif-count-badge" id="notif-total-badge" style="background:#EF4444; color:#fff; font-size:11px; font-weight:800; padding:2px 8px; border-radius:10px;">0</span>
+    </div>
+    <div class="notif-list" id="notif-items-container" style="display:flex; flex-direction:column; gap:8px; overflow-y:auto; max-height:380px; margin-top:10px;">
+      <div class="notif-loading" style="text-align:center; padding:16px; color:var(--text-dim); font-size:12px;">جارٍ جلب التنبيهات...</div>
+    </div>
+  </div>
+
   <script>
   // Portal Dropdown Engine
   let _activePortal = null;
@@ -872,6 +1540,212 @@
       closeAllPortalDropdowns();
     }
   });
+  </script>
+
+  <!-- Quick Actions Floating Button (Speed Dial RTL) Styles -->
+  <style>
+  .quick-fab-container {
+    position: fixed;
+    bottom: 24px;
+    left: 24px; /* Bottom-left corner to not conflict with Right Sidebar */
+    z-index: 9999;
+    direction: rtl;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 10px;
+    pointer-events: none;
+  }
+
+  .quick-fab-btn {
+    pointer-events: auto;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand, #3b82f6), var(--indigo, #6366f1));
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #fff;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.25s, box-shadow 0.25s;
+  }
+
+  .quick-fab-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
+  }
+
+  .quick-fab-btn:active {
+    transform: scale(0.95);
+  }
+
+  /* Open state main button rotation */
+  .quick-fab-container.open .quick-fab-btn {
+    transform: rotate(135deg);
+    background: var(--bad, #ef4444);
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.35);
+  }
+
+  .quick-fab-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(15px) scale(0.92);
+    transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-left: 2px;
+  }
+
+  .quick-fab-container.open .quick-fab-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+
+  .quick-fab-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    border: none;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    width: fit-content;
+  }
+
+  .quick-fab-item-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--bg-1, #1e1e2d);
+    border: 1px solid var(--border-soft, rgba(255,255,255,0.08));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    color: var(--text-1, #fff);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    transition: transform 0.15s, background 0.15s, border-color 0.15s;
+  }
+
+  .quick-fab-item:hover .quick-fab-item-btn {
+    transform: scale(1.08);
+    background: var(--bg-2, #2a2a3c);
+    border-color: rgba(99, 102, 241, 0.35);
+  }
+
+  .quick-fab-item-label {
+    background: rgba(30, 30, 45, 0.9);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 5px 12px;
+    border-radius: 16px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    pointer-events: none;
+    opacity: 0.95;
+    transition: opacity 0.15s, transform 0.15s;
+  }
+
+  .quick-fab-item:hover .quick-fab-item-label {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+  </style>
+
+  <!-- FAB HTML Structure -->
+  <div class="quick-fab-container" id="quick-actions-fab">
+    <button class="quick-fab-btn" onclick="toggleQuickActionsFab(event)" title="الوصول السريع">⚡</button>
+    <div class="quick-fab-menu">
+      <button class="quick-fab-item" onclick="triggerQuickAction('sales-invoices', 'openNewInvoice')">
+        <span class="quick-fab-item-btn">📄</span>
+        <span class="quick-fab-item-label">فاتورة مبيعات جديدة</span>
+      </button>
+      <button class="quick-fab-item" onclick="triggerQuickAction('purchase-invoices', 'openPurchaseModal')">
+        <span class="quick-fab-item-btn">🛒</span>
+        <span class="quick-fab-item-label">فاتورة مشتريات جديدة</span>
+      </button>
+      <button class="quick-fab-item" onclick="triggerQuickAction('journal-entries', 'openJournalModal')">
+        <span class="quick-fab-item-btn">📝</span>
+        <span class="quick-fab-item-label">إنشاء قيد يومية</span>
+      </button>
+      <button class="quick-fab-item" onclick="triggerQuickAction('receipts', 'openReceiptModal')">
+        <span class="quick-fab-item-btn">💵</span>
+        <span class="quick-fab-item-label">سند قبض جديد</span>
+      </button>
+      <button class="quick-fab-item" onclick="triggerQuickAction('expenses', 'openExpenseModal')">
+        <span class="quick-fab-item-btn">💸</span>
+        <span class="quick-fab-item-label">سند صرف جديد</span>
+      </button>
+      <button class="quick-fab-item" onclick="triggerQuickReport('custperf')">
+        <span class="quick-fab-item-btn">🏆</span>
+        <span class="quick-fab-item-label">أداء العملاء</span>
+      </button>
+      <button class="quick-fab-item" onclick="triggerQuickReport('reps')">
+        <span class="quick-fab-item-btn">📊</span>
+        <span class="quick-fab-item-label">أداء المناديب</span>
+      </button>
+    </div>
+  </div>
+
+  <script>
+  function toggleQuickActionsFab(e) {
+    e.stopPropagation();
+    document.getElementById('quick-actions-fab').classList.toggle('open');
+  }
+
+  function closeQuickActionsFab() {
+    document.getElementById('quick-actions-fab').classList.remove('open');
+  }
+
+  // Close on outside click
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#quick-actions-fab')) {
+      closeQuickActionsFab();
+    }
+  });
+
+  async function triggerQuickAction(route, modalFnName) {
+    closeQuickActionsFab();
+    if (window.navigate) {
+      await window.navigate(route);
+      
+      // Allow DOM and scripts to initialize before calling modal
+      setTimeout(() => {
+        if (window[modalFnName]) {
+          window[modalFnName]();
+        } else {
+          console.warn(`[QuickAction] Modal handler ${modalFnName} is not loaded/registered yet.`);
+        }
+      }, 350);
+    }
+  }
+
+  async function triggerQuickReport(reportType) {
+    closeQuickActionsFab();
+    if (reportType === 'custperf') {
+      if (window.navigate) {
+        await window.navigate('financial-reports');
+        setTimeout(() => {
+          if (window.switchFinTab) window.switchFinTab('custperf');
+        }, 400);
+      }
+    } else if (reportType === 'reps') {
+      if (window.navigate) {
+        await window.navigate('rep-performance');
+      }
+    }
+  }
   </script>
 </body>
 </html>

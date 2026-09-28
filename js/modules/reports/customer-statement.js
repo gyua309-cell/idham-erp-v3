@@ -10,25 +10,35 @@ import { db, COMPANY_ID } from "../../firebase-config.js";
 export async function render(container, user) {
   container.innerHTML = `
     <div class="filterbar no-print">
-      <!-- Entity Type Selector -->
-      <div class="filter-select-group" style="min-width:160px;">
+      <!-- نوع الحساب -->
+      <div class="filter-select-group" style="min-width:150px;">
         <label>نوع الحساب</label>
         <select id="stmt-type-select" onchange="onStatementTypeChange()">
-          <option value="customer">عميل (Customer)</option>
-          <option value="supplier">مورد (Supplier)</option>
-          <option value="rep">مندوب مبيعات (Sales Rep)</option>
+          <option value="customer">عميل</option>
+          <option value="supplier">مورد</option>
+          <option value="rep">مندوب مبيعات</option>
         </select>
       </div>
-      
-      <!-- Entity Selector -->
-      <div class="filter-select-group" style="min-width:240px;">
-        <label id="stmt-entity-label">اختر العميل</label>
-        <select id="stmt-entity-select" onchange="loadStatement()">
-          <option value="">اختر...</option>
-        </select>
+
+      <!-- بحث بالاسم / الكود / الهاتف -->
+      <div style="position:relative; min-width:300px; flex:1; max-width:420px;">
+        <label id="stmt-entity-label" style="font-size:11px; font-weight:700; color:var(--text-2); display:block; margin-bottom:4px;">🔍 ابحث بالاسم أو الهاتف أو الكود</label>
+        <input type="text" id="stmt-entity-search"
+          class="input"
+          placeholder="اكتب للبحث..."
+          autocomplete="off"
+          style="width:100%; padding-left:14px;"
+          oninput="onStmtSearchInput()" />
+        <div id="stmt-entity-results"
+          style="position:absolute; top:100%; right:0; left:0; z-index:9999; max-height:280px; overflow-y:auto;
+                 background:var(--bg-card); border:1px solid var(--border); border-radius:10px;
+                 box-shadow:0 8px 32px rgba(0,0,0,.15); display:none;">
+        </div>
+        <!-- hidden value holder -->
+        <input type="hidden" id="stmt-entity-id" value="" />
       </div>
-      
-      <!-- Date Range Filters -->
+
+      <!-- تواريخ -->
       <div class="date-range-group">
         <label>من</label>
         <input type="date" id="stmt-from" value="${startOfMonth()}" onchange="loadStatement()" />
@@ -37,46 +47,130 @@ export async function render(container, user) {
         <label>إلى</label>
         <input type="date" id="stmt-to" value="${todayString()}" onchange="loadStatement()" />
       </div>
-      
-      <!-- Export Buttons -->
-      <div style="margin-right:auto;display:flex;gap:8px;">
-        <button class="btn-export" onclick="exportStatementPDF()" title="تصدير PDF"><span>📄</span> PDF</button>
+
+      <!-- أزرار التصدير -->
+      <div style="margin-right:auto; display:flex; gap:8px;">
+        <button class="btn-export" onclick="exportStatementPDF()" title="طباعة / PDF"><span>📄</span> PDF</button>
         <button class="btn-export excel" onclick="exportStatementExcel()" title="تصدير Excel"><span>📊</span> Excel</button>
-        <button class="btn-export print" onclick="window.print()" title="طباعة كشف الحساب"><span>🖨️</span> طباعة</button>
+        <button class="btn-export print" onclick="exportStatementPDF()" title="طباعة كشف الحساب"><span>🖨️</span> طباعة</button>
       </div>
     </div>
 
+
+    <style>
+      /* ── كروت المدين/الدائن/الرصيد ─────────────── */
+      .stmt-kpi-card {
+        border-radius: 14px;
+        padding: 18px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        border: 1px solid transparent;
+        position: relative;
+        overflow: hidden;
+      }
+      .stmt-kpi-card::before {
+        content: "";
+        position: absolute;
+        top: 0; right: 0;
+        width: 60px; height: 60px;
+        border-radius: 50%;
+        opacity: .08;
+      }
+      .stmt-kpi-card .kpi-icon { font-size: 22px; }
+      .stmt-kpi-card .kpi-label { font-size: 11.5px; font-weight: 700; opacity: .75; }
+      .stmt-kpi-card .kpi-value { font-size: 24px; font-weight: 900; font-family: monospace; }
+
+      /* الهيدر الملكي الأزرق */
+      #stmt-header-card {
+        background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #2563eb 100%) !important;
+        border: none !important;
+        border-radius: 16px !important;
+        box-shadow: 0 8px 32px rgba(29,78,216,.35) !important;
+      }
+      #stmt-entity-name  { color: #fff !important; font-size: 22px !important; font-weight: 900 !important; }
+      #stmt-entity-details { color: rgba(255,255,255,.75) !important; }
+      #stmt-closing-status { background: rgba(255,255,255,.18) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.3) !important; }
+      #stmt-closing-status-box { display: block !important; }
+
+      @media print {
+        /* إخفاء الهيدر الأخضر العام عند طباعة كشف الحساب */
+        .print-header,
+        .company-header,
+        header.main-header,
+        .sidebar,
+        .topbar,
+        .app-topbar,
+        .filterbar,
+        .no-print,
+        .btn,
+        .btn-export,
+        nav { display: none !important; }
+
+        /* ظهور الهيدر الأزرق الملكي في الطباعة */
+        #stmt-header-card {
+          background: linear-gradient(135deg, #1e3a8a, #2563eb) !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          border-radius: 12px !important;
+          padding: 16px 24px !important;
+          margin-bottom: 12px !important;
+        }
+        #stmt-entity-name   { color: #fff !important; font-size: 18px !important; }
+        #stmt-entity-details { color: rgba(255,255,255,.8) !important; font-size: 11px !important; }
+        #stmt-closing-status { background: rgba(255,255,255,.15) !important; color: #fff !important; }
+
+        /* كروت الـ KPI في الطباعة */
+        .stmt-kpi-card {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+
+        /* الجدول */
+        table { font-size: 11px !important; }
+        .page-content { padding: 0 !important; }
+        body { margin: 0 !important; }
+      }
+    </style>
+
+
     <div class="page-content">
-      <!-- Summary stat cards banner -->
-      <div class="grid-3 gap-16 mb-20" id="stmt-summary-cards">
-        <!-- Stat 1: Total Debit -->
-        <div class="card" style="padding:16px;">
-          <div class="text-2 mb-4" style="font-size:12px;">إجمالي المدين (+)</div>
-          <div class="mono font-bold text-indigo" style="font-size:22px;" id="stmt-total-debit">0.00 ر.س</div>
+
+      <!-- ── كروت KPI المدين / الدائن / الرصيد ── -->
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-bottom:20px;" id="stmt-summary-cards">
+
+        <!-- المدين -->
+        <div class="stmt-kpi-card" style="background:linear-gradient(135deg,rgba(29,78,216,.08),rgba(29,78,216,.03)); border-color:rgba(29,78,216,.2);">
+          <div class="kpi-icon">📤</div>
+          <div class="kpi-label" style="color:#1d4ed8;">إجمالي المدين (+)</div>
+          <div class="kpi-value" id="stmt-total-debit" style="color:#1d4ed8;">0.00 ر.س</div>
         </div>
-        <!-- Stat 2: Total Credit -->
-        <div class="card" style="padding:16px;">
-          <div class="text-2 mb-4" style="font-size:12px;">إجمالي الدائن (-)</div>
-          <div class="mono font-bold text-good" style="font-size:22px;" id="stmt-total-credit">0.00 ر.س</div>
+
+        <!-- الدائن -->
+        <div class="stmt-kpi-card" style="background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(16,185,129,.03)); border-color:rgba(16,185,129,.2);">
+          <div class="kpi-icon">📥</div>
+          <div class="kpi-label" style="color:#059669;">إجمالي الدائن (-)</div>
+          <div class="kpi-value" id="stmt-total-credit" style="color:#059669;">0.00 ر.س</div>
         </div>
-        <!-- Stat 3: Closing Balance -->
-        <div class="card" style="padding:16px;">
-          <div class="text-2 mb-4" style="font-size:12px;">الرصيد النهائي (الصافي)</div>
-          <div class="mono font-bold text-bad" style="font-size:22px;" id="stmt-closing-balance">0.00 ر.س</div>
+
+        <!-- الرصيد -->
+        <div class="stmt-kpi-card" style="background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(239,68,68,.03)); border-color:rgba(239,68,68,.2);">
+          <div class="kpi-icon">⚖️</div>
+          <div class="kpi-label" style="color:#dc2626;">الرصيد النهائي (الصافي)</div>
+          <div class="kpi-value" id="stmt-closing-balance" style="color:#dc2626;">0.00 ر.س</div>
         </div>
+
       </div>
 
-      <!-- Header Banner -->
-      <div class="card mb-20" id="stmt-header-card">
-        <div class="card-body" style="padding:24px;">
-          <div class="flex justify-between items-center">
-            <div>
-              <h2 style="font-family:var(--font-heading);font-size:20px;margin-bottom:4px;" id="stmt-entity-name">كشف حساب موحد</h2>
-              <div class="text-2" style="font-size:12px;" id="stmt-entity-details">حدد نوع الحساب والكيان لعرض الحركة التفصيلية</div>
-            </div>
-            <div class="text-left" style="display:none;" id="stmt-closing-status-box">
-              <span class="badge" id="stmt-closing-status" style="font-size:13px; padding:6px 14px;">—</span>
-            </div>
+      <!-- ── الهيدر الملكي الأزرق ── -->
+      <div class="mb-20" id="stmt-header-card" style="border-radius:16px; padding:22px 28px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <h2 style="margin:0 0 4px;" id="stmt-entity-name">كشف حساب موحد</h2>
+            <div id="stmt-entity-details">حدد نوع الحساب والكيان لعرض الحركة التفصيلية</div>
+          </div>
+          <div id="stmt-closing-status-box" style="display:none;">
+            <span class="badge" id="stmt-closing-status" style="font-size:13px; padding:6px 14px;">—</span>
           </div>
         </div>
       </div>
@@ -141,15 +235,18 @@ export async function render(container, user) {
       </div>
     </div>`;
 
-  await initDropdowns();
+  await initData();
 }
 
 let customersList = [];
 let suppliersList = [];
-let repsList = [];
+let repsList     = [];
 let statementRows = [];
+let _currentEntityId = "";
+let _currentEntityType = "customer";
 
-async function initDropdowns() {
+// ── تحميل البيانات ─────────────────────────────────────────────
+async function initData() {
   try {
     const [custs, sups, reps] = await Promise.all([
       getAll(COLS.customers(), [orderBy("name")]),
@@ -158,83 +255,140 @@ async function initDropdowns() {
     ]);
     customersList = custs;
     suppliersList = sups;
-    repsList = reps;
+    repsList      = reps;
 
+    // إذا في كيان محدد مسبقاً (من نافذة العميل)
     if (window._preselectedStatementEntity) {
       const pre = window._preselectedStatementEntity;
-      window._preselectedStatementEntity = null; // consume
-      
+      window._preselectedStatementEntity = null;
       const typeSel = document.getElementById("stmt-type-select");
-      if (typeSel) {
-        typeSel.value = pre.type;
-        await onStatementTypeChange();
-        const entSel = document.getElementById("stmt-entity-select");
-        if (entSel) {
-          entSel.value = pre.id;
-          await loadStatement();
-        }
+      if (typeSel) typeSel.value = pre.type;
+      _currentEntityType = pre.type;
+      const list = pre.type === "customer" ? customersList
+                 : pre.type === "supplier" ? suppliersList
+                 : repsList;
+      const ent = list.find(x => x.id === pre.id);
+      if (ent) {
+        const inp = document.getElementById("stmt-entity-search");
+        const hid = document.getElementById("stmt-entity-id");
+        if (inp) inp.value = ent.name;
+        if (hid) hid.value = ent.id;
+        _currentEntityId = ent.id;
+        await loadStatement();
       }
-    } else {
-      await onStatementTypeChange();
     }
+
+    // إغلاق نتائج البحث عند النقر خارجه
+    document.addEventListener("click", (e) => {
+      const res = document.getElementById("stmt-entity-results");
+      const inp = document.getElementById("stmt-entity-search");
+      if (res && !res.contains(e.target) && e.target !== inp) {
+        res.style.display = "none";
+      }
+    });
   } catch (err) {
     console.error("Statement init error:", err);
   }
 }
 
-window.onStatementTypeChange = async () => {
-  const type = document.getElementById("stmt-type-select").value;
+// ── تغيير نوع الحساب ───────────────────────────────────────────
+window.onStatementTypeChange = () => {
+  _currentEntityType = document.getElementById("stmt-type-select")?.value || "customer";
+  _currentEntityId = "";
   const label = document.getElementById("stmt-entity-label");
-  const select = document.getElementById("stmt-entity-select");
-  const perfPanel = document.getElementById("stmt-rep-perf-panel");
+  const inp   = document.getElementById("stmt-entity-search");
+  const hid   = document.getElementById("stmt-entity-id");
+  const res   = document.getElementById("stmt-entity-results");
+  if (inp) inp.value = "";
+  if (hid) hid.value = "";
+  if (res) res.style.display = "none";
+  if (label) label.textContent = _currentEntityType === "customer" ? "🔍 ابحث عن العميل"
+                                : _currentEntityType === "supplier" ? "🔍 ابحث عن المورد"
+                                : "🔍 ابحث عن المندوب";
 
-  if (!select || !label) return;
-
-  select.innerHTML = '<option value="">اختر...</option>';
-  perfPanel?.classList.add("hidden");
-
-  if (type === "customer") {
-    label.textContent = "اختر العميل";
-    customersList.forEach(c => {
-      select.innerHTML += `<option value="${c.id}">${c.name} (${c.phone || "بلا هاتف"})</option>`;
-    });
-  } else if (type === "supplier") {
-    label.textContent = "اختر المورد";
-    suppliersList.forEach(s => {
-      select.innerHTML += `<option value="${s.id}">${s.name} (${s.phone || "بلا هاتف"})</option>`;
-    });
-  } else if (type === "rep") {
-    label.textContent = "اختر المندوب";
-    repsList.forEach(r => {
-      select.innerHTML += `<option value="${r.id}">${r.name} (${r.zone || "بلا مسار"})</option>`;
-    });
-  }
-
+  document.getElementById("stmt-rep-perf-panel")?.classList.add("hidden");
   const tbody = document.getElementById("stmt-tbody");
   if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-2);">حدد الكيان لعرض كشف الحساب</td></tr>`;
-  
-  document.getElementById("stmt-total-debit").textContent = "0.00 ر.س";
-  document.getElementById("stmt-total-credit").textContent = "0.00 ر.س";
+  document.getElementById("stmt-total-debit").textContent    = "0.00 ر.س";
+  document.getElementById("stmt-total-credit").textContent   = "0.00 ر.س";
   document.getElementById("stmt-closing-balance").textContent = "0.00 ر.س";
   document.getElementById("stmt-closing-status-box").style.display = "none";
-  document.getElementById("stmt-entity-name").textContent = "كشف حساب موحد";
+  document.getElementById("stmt-entity-name").textContent    = "كشف حساب موحد";
   document.getElementById("stmt-entity-details").textContent = "حدد نوع الحساب والكيان لعرض الحركة التفصيلية";
 };
 
+// ── Autocomplete Search ─────────────────────────────────────────
+window.onStmtSearchInput = () => {
+  const q   = (document.getElementById("stmt-entity-search")?.value || "").trim().toLowerCase();
+  const res = document.getElementById("stmt-entity-results");
+  if (!res) return;
+  if (!q) { res.style.display = "none"; return; }
+
+  const list = _currentEntityType === "customer" ? customersList
+             : _currentEntityType === "supplier" ? suppliersList
+             : repsList;
+
+  const matches = list.filter(x =>
+    (x.name  || "").toLowerCase().includes(q) ||
+    (x.code  || "").toLowerCase().includes(q) ||
+    (x.phone || "").includes(q)
+  ).slice(0, 15);
+
+  if (!matches.length) {
+    res.innerHTML = `<div style="padding:12px;text-align:center;color:var(--text-2);font-size:12px;">لا توجد نتائج</div>`;
+    res.style.display = "block";
+    return;
+  }
+
+  res.innerHTML = matches.map(x => `
+    <div onclick="selectStmtEntity('${x.id}')"
+      style="padding:10px 14px; border-bottom:1px solid var(--border-soft); cursor:pointer;
+             display:flex; justify-content:space-between; align-items:center;
+             transition:background .15s;"
+      onmouseover="this.style.background='var(--bg-hover)'"
+      onmouseout="this.style.background=''">
+      <div>
+        <div style="font-weight:700; font-size:13px; color:var(--text-0);">${x.name}</div>
+        <div style="font-size:11px; color:var(--text-2);">${x.phone || "—"} ${x.code ? "• " + x.code : ""}</div>
+      </div>
+      <div style="font-size:11px; color:var(--brand); font-weight:700;">
+        ${_currentEntityType === "rep" ? (x.zone || "") : (x.phone || "")}
+      </div>
+    </div>
+  `).join("");
+  res.style.display = "block";
+};
+
+window.selectStmtEntity = async (id) => {
+  _currentEntityId = id;
+  const list = _currentEntityType === "customer" ? customersList
+             : _currentEntityType === "supplier" ? suppliersList
+             : repsList;
+  const ent = list.find(x => x.id === id);
+  const inp = document.getElementById("stmt-entity-search");
+  const hid = document.getElementById("stmt-entity-id");
+  const res = document.getElementById("stmt-entity-results");
+  if (inp && ent) inp.value = ent.name;
+  if (hid) hid.value = id;
+  if (res) res.style.display = "none";
+  await loadStatement();
+};
+
+// ── تحميل الكشف ────────────────────────────────────────────────
 window.loadStatement = async () => {
-  const type = document.getElementById("stmt-type-select")?.value;
-  const entityId = document.getElementById("stmt-entity-select")?.value;
-  const tbody = document.getElementById("stmt-tbody");
-  const from = document.getElementById("stmt-from")?.value;
-  const to = document.getElementById("stmt-to")?.value;
+  const type     = document.getElementById("stmt-type-select")?.value || _currentEntityType;
+  const entityId = _currentEntityId || document.getElementById("stmt-entity-id")?.value;
+  const tbody    = document.getElementById("stmt-tbody");
+  const from     = document.getElementById("stmt-from")?.value;
+  const to       = document.getElementById("stmt-to")?.value;
 
   if (!entityId) {
     if (tbody) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--text-2);">حدد الكيان لعرض كشف الحساب</td></tr>`;
-    document.getElementById("stmt-total-debit").textContent = "0.00 ر.س";
-    document.getElementById("stmt-total-credit").textContent = "0.00 ر.س";
+    document.getElementById("stmt-total-debit").textContent    = "0.00 ر.س";
+    document.getElementById("stmt-total-credit").textContent   = "0.00 ر.س";
     document.getElementById("stmt-closing-balance").textContent = "0.00 ر.س";
     document.getElementById("stmt-closing-status-box").style.display = "none";
-    document.getElementById("stmt-entity-name").textContent = "كشف حساب موحد";
+    document.getElementById("stmt-entity-name").textContent    = "كشف حساب موحد";
     return;
   }
 
@@ -310,7 +464,7 @@ async function loadCustomerStatement(custId, from, to) {
     const creditVal = parseFloat(ret.totalWithVat !== undefined ? ret.totalWithVat : (ret.total !== undefined ? ret.total : (ret.subtotal || 0)));
     ledger.push({
       date: ret.date || (ret.createdAt?.toDate ? ret.createdAt.toDate().toISOString().split("T")[0] : ""),
-      type: "إشعار دائن (مرتجع)",
+      type: "إشعار دائن (مرتجع شامل الضريبة)",
       docNum: docNum,
       notes: `مردودات فاتورة ${originalInv} — ${ret.reason || ""}`,
       debit: 0,
@@ -362,6 +516,10 @@ async function loadSupplierStatement(supId, from, to) {
   const expSnap = await getDocs(expQ);
   const expenses = expSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(e => e.entityType === "supplier");
 
+  const rcptQ = query(collection(db, `companies/${COMPANY_ID}/receipts`), where("targetId", "==", supId), limit(500));
+  const rcptSnap = await getDocs(rcptQ);
+  const receipts = rcptSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status !== "cancelled" && (!r.entityType || r.entityType === "supplier"));
+
   let ledger = [];
 
   invoices.forEach(pur => {
@@ -409,6 +567,7 @@ async function loadSupplierStatement(supId, from, to) {
   });
 
   expenses.forEach(exp => {
+    if (exp.status === "cancelled") return;
     ledger.push({
       date: exp.date || (exp.createdAt?.toDate ? exp.createdAt.toDate().toISOString().split("T")[0] : ""),
       type: "سند صرف للمورد",
@@ -416,6 +575,17 @@ async function loadSupplierStatement(supId, from, to) {
       notes: `سند صرف — طريقة الدفع: ${exp.method === 'cash' ? 'نقدي' : 'تحويل بنكي'} — بيان: ${exp.notes || ""}`,
       debit: exp.amount || 0,
       credit: 0,
+    });
+  });
+
+  receipts.forEach(rcpt => {
+    ledger.push({
+      date: rcpt.date || (rcpt.createdAt?.toDate ? rcpt.createdAt.toDate().toISOString().split("T")[0] : ""),
+      type: "سند قبض من مورد (استرداد)",
+      docNum: rcpt.number || rcpt.code || `RV-${rcpt.id.substring(0,6).toUpperCase()}`,
+      notes: `سند قبض من مورد — طريقة الاستلام: ${rcpt.method === 'cash' ? 'نقدي' : 'تحويل بنكي'} — بيان: ${rcpt.notes || ""}`,
+      debit: 0,
+      credit: rcpt.amount || 0,
     });
   });
 
@@ -569,9 +739,32 @@ function renderLedger(ledger, from, to, balanceMode) {
     return { ...l, balance: runningBalance };
   });
 
-  document.getElementById("stmt-total-debit").textContent = formatCurrency(totalDebit);
+  document.getElementById("stmt-total-debit").textContent  = formatCurrency(totalDebit);
   document.getElementById("stmt-total-credit").textContent = formatCurrency(totalCredit);
-  document.getElementById("stmt-closing-balance").textContent = formatCurrency(runningBalance);
+
+  // لوّن الرصيد ديناميكياً
+  const balEl = document.getElementById("stmt-closing-balance");
+  balEl.textContent = formatCurrency(runningBalance);
+  const balCard = balEl.closest(".stmt-kpi-card");
+  if (balCard) {
+    if (runningBalance > 0) {
+      balCard.style.background = "linear-gradient(135deg,rgba(239,68,68,.1),rgba(239,68,68,.04))";
+      balCard.style.borderColor = "rgba(239,68,68,.3)";
+      balEl.style.color = "#dc2626";
+      balCard.querySelector(".kpi-label").style.color = "#dc2626";
+    } else if (runningBalance < 0) {
+      balCard.style.background = "linear-gradient(135deg,rgba(16,185,129,.1),rgba(16,185,129,.04))";
+      balCard.style.borderColor = "rgba(16,185,129,.3)";
+      balEl.style.color = "#059669";
+      balCard.querySelector(".kpi-label").style.color = "#059669";
+    } else {
+      balCard.style.background = "linear-gradient(135deg,rgba(100,116,139,.08),rgba(100,116,139,.03))";
+      balCard.style.borderColor = "rgba(100,116,139,.2)";
+      balEl.style.color = "#475569";
+      balCard.querySelector(".kpi-label").style.color = "#475569";
+    }
+  }
+
 
   const statusBox = document.getElementById("stmt-closing-status-box");
   const statusBadge = document.getElementById("stmt-closing-status");
@@ -633,33 +826,182 @@ window.exportStatement = () => {
   showToast("تم تصدير كشف الحساب بنجاح", "success");
 };
 
-// ── New: PDF export for statement ─────────────────────────────
+// ── طباعة كشف الحساب بهيدر ملكي أزرق ────────────────────────
 window.exportStatementPDF = () => {
   if (!statementRows || statementRows.length === 0) {
-    showToast("لا توجد بيانات لتصديرها", "warning"); return;
+    showToast("لا توجد بيانات للطباعة", "warning"); return;
   }
-  const entityName = document.getElementById("stmt-entity-name")?.textContent || "";
-  const totalDebit  = parseFloat(document.getElementById("stmt-total-debit")?.textContent) || 0;
-  const totalCredit = parseFloat(document.getElementById("stmt-total-credit")?.textContent) || 0;
-  const finalBal    = document.getElementById("stmt-final-balance")?.textContent || "";
 
-  const headers = ["التاريخ", "نوع الحركة", "رقم المستند", "البيان", "مدين (+)", "دائن (-)", "الرصيد"];
-  const rows = statementRows.map(r => [
-    formatDate(r.date), r.type, r.docNum, r.notes,
-    r.debit  > 0 ? formatCurrency(r.debit)  : "—",
-    r.credit > 0 ? formatCurrency(r.credit) : "—",
-    formatCurrency(r.balance)
-  ]);
+  const entityName  = document.getElementById("stmt-entity-name")?.textContent  || "";
+  const entitySub   = document.getElementById("stmt-entity-details")?.textContent || "";
+  const totalDebit  = document.getElementById("stmt-total-debit")?.textContent   || "0.00 ر.س";
+  const totalCredit = document.getElementById("stmt-total-credit")?.textContent  || "0.00 ر.س";
+  const finalBal    = document.getElementById("stmt-closing-balance")?.textContent || "0.00 ر.س";
+  const statusBadge = document.getElementById("stmt-closing-status")?.textContent || "";
+  const from        = document.getElementById("stmt-from")?.value || "";
+  const to          = document.getElementById("stmt-to")?.value   || "";
+  const co          = window.ERP_COMPANY || {};
+  const coName      = co.name  || "مؤسسة إدهام للمواد الغذائية";
+  const coPhone     = co.phone || "";
+  const coEmail     = co.email || "";
+  const coAddress   = co.address || "";
+  const coVAT       = co.vatNumber || "";
+  const coLogo      = co.logo || "";
+  const now         = new Date();
+  const dateStr     = now.toLocaleDateString("ar-SA");
+  const timeStr     = now.toLocaleTimeString("ar-SA");
 
-  window.exportPDF({
-    title: `كشف حساب: ${entityName}`,
-    subtitle: `${document.getElementById("stmt-from")?.value || ""} — ${document.getElementById("stmt-to")?.value || ""}`,
-    headers, rows,
-    filename: `كشف_حساب_${(entityName || "").replace(/\s+/g,"_")}`,
-    summary: { "إجمالي المدين": formatCurrency(totalDebit), "إجمالي الدائن": formatCurrency(totalCredit), "الرصيد الختامي": finalBal },
-    orientation: "landscape",
-  });
+  // بناء صفوف الجدول
+  const tableRows = statementRows.map(r => `
+    <tr>
+      <td>${formatDate(r.date)}</td>
+      <td><span class="badge-type ${r.debit > 0 ? 'db' : 'cr'}">${r.type}</span></td>
+      <td class="mono">${r.docNum || "—"}</td>
+      <td>${r.notes || ""}</td>
+      <td class="mono amt ${r.debit > 0 ? 'clr-db' : 'dim'}">${r.debit > 0 ? r.debit.toFixed(2) : "—"}</td>
+      <td class="mono amt ${r.credit > 0 ? 'clr-cr' : 'dim'}">${r.credit > 0 ? r.credit.toFixed(2) : "—"}</td>
+      <td class="mono amt bold ${r.balance > 0 ? 'clr-neg' : r.balance < 0 ? 'clr-pos' : ''}">${r.balance.toFixed(2)}</td>
+    </tr>`).join("");
+
+  const html = `<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>كشف حساب: ${entityName}</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    @page{size:A4 landscape;margin:8mm 10mm}
+    body{font-family:'IBM Plex Sans Arabic',Tahoma,sans-serif;font-size:9.5px;color:#111;direction:rtl;
+         -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+    /* ── هيدر الشركة الأزرق الملكي ── */
+    .co-header{
+      background:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 55%,#2563eb 100%);
+      color:#fff;padding:14px 18px;border-radius:10px 10px 0 0;
+      display:flex;justify-content:space-between;align-items:flex-start;
+    }
+    .co-left{display:flex;align-items:center;gap:12px}
+    .co-logo{max-height:54px;max-width:100px;object-fit:contain;background:#fff;padding:4px;border-radius:6px}
+    .co-name{font-size:17px;font-weight:800;margin-bottom:4px}
+    .co-line{font-size:8.5px;color:rgba(255,255,255,.8);margin-bottom:2px}
+    .co-date{text-align:left;font-size:8.5px;color:rgba(255,255,255,.8)}
+    .co-date strong{font-size:11px;color:#fff;display:block;margin-bottom:2px}
+
+    /* ── شريط كشف الحساب ── */
+    .stmt-strip{background:#1a1a2e;color:#fff;padding:9px 18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .stmt-strip h2{font-size:13px;font-weight:800}
+    .stmt-strip .sub{font-size:8px;color:rgba(255,255,255,.7);margin-top:2px}
+    .stmt-strip .period{font-size:8.5px;color:rgba(255,255,255,.75)}
+
+    /* ── كروت المدين / الدائن / الرصيد ── */
+    .kpi-row{display:flex;gap:8px;margin-bottom:10px}
+    .kpi-card{flex:1;padding:8px 12px;border-radius:8px;border:1px solid transparent}
+    .kpi-card .lbl{font-size:8px;font-weight:700;margin-bottom:3px}
+    .kpi-card .val{font-size:14px;font-weight:900;font-family:monospace}
+    .kpi-db{background:rgba(29,78,216,.08);border-color:rgba(29,78,216,.2)}
+    .kpi-db .lbl,.kpi-db .val{color:#1d4ed8}
+    .kpi-cr{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2)}
+    .kpi-cr .lbl,.kpi-cr .val{color:#059669}
+    .kpi-bal-neg{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.2)}
+    .kpi-bal-neg .lbl,.kpi-bal-neg .val{color:#dc2626}
+    .kpi-bal-pos{background:rgba(16,185,129,.08);border-color:rgba(16,185,129,.2)}
+    .kpi-bal-pos .lbl,.kpi-bal-pos .val{color:#059669}
+    .kpi-bal-zero{background:rgba(100,116,139,.08);border-color:rgba(100,116,139,.2)}
+    .kpi-bal-zero .lbl,.kpi-bal-zero .val{color:#475569}
+
+    /* ── الجدول ── */
+    table{width:100%;border-collapse:collapse}
+    thead th{background:#1a1a2e;color:#fff;padding:6px 8px;font-size:8.5px;font-weight:700;text-align:right;white-space:nowrap}
+    tbody td{padding:5px 8px;font-size:8.5px;border-bottom:1px solid #eee;text-align:right}
+    tbody tr:nth-child(even){background:#f8f9ff}
+    .mono{font-variant-numeric:tabular-nums;direction:ltr;text-align:left}
+    .amt{text-align:left}
+    .bold{font-weight:700}
+    .dim{color:#94a3b8}
+    .clr-db{color:#1d4ed8;font-weight:700}
+    .clr-cr{color:#059669;font-weight:700}
+    .clr-neg{color:#dc2626}
+    .clr-pos{color:#059669}
+    .badge-type{display:inline-block;padding:2px 6px;border-radius:4px;font-size:8px;font-weight:700}
+    .badge-type.db{background:rgba(29,78,216,.1);color:#1d4ed8}
+    .badge-type.cr{background:rgba(16,185,129,.1);color:#059669}
+
+    /* ── فوتر ── */
+    .ftr{margin-top:12px;padding-top:8px;border-top:2px solid #1d4ed8;display:flex;justify-content:space-between;font-size:8px;color:#666}
+  </style>
+</head>
+<body>
+
+  <!-- هيدر الشركة الأزرق -->
+  <div class="co-header">
+    <div class="co-left">
+      ${coLogo ? `<img class="co-logo" src="${coLogo}" alt="">` : ""}
+      <div>
+        <div class="co-name">${coName}</div>
+        ${coAddress ? `<div class="co-line">📍 ${coAddress}</div>` : ""}
+        ${coPhone   ? `<div class="co-line">📞 ${coPhone}</div>` : ""}
+        ${coEmail   ? `<div class="co-line">✉️ ${coEmail}</div>` : ""}
+        ${coVAT     ? `<div class="co-line">🔢 الرقم الضريبي: ${coVAT}</div>` : ""}
+      </div>
+    </div>
+    <div class="co-date"><strong>${dateStr}</strong>${timeStr}</div>
+  </div>
+
+  <!-- شريط كشف الحساب -->
+  <div class="stmt-strip">
+    <div>
+      <h2>كشف حساب: ${entityName}</h2>
+      <div class="sub">${entitySub}</div>
+    </div>
+    <div class="period">الفترة: ${from} — ${to} &nbsp;|&nbsp; ${statusBadge}</div>
+  </div>
+
+  <!-- كروت المدين / الدائن / الرصيد -->
+  <div class="kpi-row">
+    <div class="kpi-card kpi-db">
+      <div class="lbl">📤 إجمالي المدين (+)</div>
+      <div class="val">${totalDebit}</div>
+    </div>
+    <div class="kpi-card kpi-cr">
+      <div class="lbl">📥 إجمالي الدائن (-)</div>
+      <div class="val">${totalCredit}</div>
+    </div>
+    <div class="kpi-card ${statementRows.length && statementRows[statementRows.length-1].balance > 0 ? 'kpi-bal-neg' : statementRows.length && statementRows[statementRows.length-1].balance < 0 ? 'kpi-bal-pos' : 'kpi-bal-zero'}">
+      <div class="lbl">⚖️ الرصيد النهائي</div>
+      <div class="val">${finalBal}</div>
+    </div>
+  </div>
+
+  <!-- الجدول -->
+  <table>
+    <thead>
+      <tr>
+        <th>التاريخ</th>
+        <th>نوع الحركة</th>
+        <th>رقم المستند</th>
+        <th>البيان / ملاحظات</th>
+        <th>مدين (+)</th>
+        <th>دائن (-)</th>
+        <th>الرصيد المترتب</th>
+      </tr>
+    </thead>
+    <tbody>${tableRows}</tbody>
+  </table>
+
+  <div class="ftr">
+    <span>${coName}</span>
+    <span>طُبع بتاريخ: ${dateStr} ${timeStr} — عدد الحركات: ${statementRows.length}</span>
+  </div>
+
+  <script>window.onload = () => { window.print(); }<\/script>
+</body></html>`;
+
+  const w = window.open("", "_blank");
+  w.document.write(html);
+  w.document.close();
 };
+
 
 // ── New: Excel (XLSX) export for statement ────────────────────
 window.exportStatementExcel = () => {

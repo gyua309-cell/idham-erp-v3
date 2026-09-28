@@ -1,4 +1,4 @@
-import { COLS, create, update, remove, getAll, query, orderBy, limit, getDocs, createJournalEntry, isPeriodClosed, clearERPCache } from "../utils/db.js";
+import { COLS, create, update, remove, getAll, query, orderBy, limit, getDocs, createJournalEntry, deleteJournalEntry, isPeriodClosed, clearERPCache } from "../utils/db.js";
 import { formatCurrency, todayString, startOfMonth } from "../utils/formatters.js";
 import { db, COMPANY_ID } from "../firebase-config.js";
 import {
@@ -80,6 +80,8 @@ export async function render(container, user) {
       <div style="margin-right:auto;display:flex;gap:8px;">
         <button class="btn btn-secondary btn-sm" onclick="exportPagePDF('.data-dense','سندات_القبض')" title="تصدير PDF">📄 PDF</button>
         <button class="btn btn-secondary btn-sm" onclick="exportPageExcel('.data-dense','سندات_القبض')" title="تصدير Excel">📊 Excel</button>
+        <button class="btn btn-secondary btn-sm" onclick="printAllReceiptVouchers()" title="طباعة جميع السندات المعروضة">🖨️ طباعة الكل</button>
+        <button class="btn btn-secondary btn-sm" onclick="printBlankReceiptVoucher()" title="طباعة سند قبض فارغ للتعبئة اليدوية" style="background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.4);color:#b45309;">📝 سند فارغ</button>
         <button class="btn btn-primary" onclick="openReceiptModal()">+ سند قبض جديد</button>
       </div>
     </div>
@@ -364,24 +366,40 @@ window.filterReceiptTargetEntity = () => {
 };
 
 window.toggleReceiptPaySource = () => {
-  const method = document.getElementById("rcpt-pay-method").value;
+  const method = document.getElementById("rcpt-pay-method")?.value || "cash";
   const label  = document.getElementById("rcpt-source-label");
   const sel    = document.getElementById("rcpt-source");
+  if (!sel) return;
   sel.innerHTML = '<option value="">اختر...</option>';
 
   if (method === "cash") {
-    label.textContent = "صندوق الاستلام *";
-    sel.innerHTML += cashBoxes.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+    if (label) label.textContent = "صندوق الاستلام *";
+    let list = (cashBoxes && cashBoxes.length > 0) ? cashBoxes : [];
+    if (list.length === 0 && allAccounts && allAccounts.length > 0) {
+      list = allAccounts.filter(a => a.code?.startsWith("1-1-1-1") || a.code?.startsWith("1-1-1-2") || a.name?.includes("صندوق") || a.code === "1-1-1-1-3");
+    }
+    sel.innerHTML += list.map(c => `<option value="${c.id}">${c.name || c.accountName || c.code}</option>`).join("");
   } else {
-    label.textContent = "الحساب البنكي المودع به *";
-    sel.innerHTML += bankAccounts.map(b => `<option value="${b.id}">${b.name || "بنك"} - ${b.accountNumber || ""}</option>`).join("");
+    if (label) label.textContent = "الحساب البنكي المودع به *";
+    let list = (bankAccounts && bankAccounts.length > 0) ? bankAccounts : [];
+    if (list.length === 0 && allAccounts && allAccounts.length > 0) {
+      list = allAccounts.filter(a => a.code?.startsWith("1-1-1-3") || a.name?.includes("بنك") || a.name?.includes("الراجح") || a.name?.includes("الجزير"));
+    }
+    sel.innerHTML += list.map(b => {
+      const bName = b.name || b.bankName || b.accountName || "حساب بنكي";
+      const bAcc = b.accountNumber ? ` (${b.accountNumber})` : (b.accountCode ? ` [${b.accountCode}]` : '');
+      return `<option value="${b.id}">${bName}${bAcc}</option>`;
+    }).join("");
   }
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Open Modal: NEW or EDIT
 // ─────────────────────────────────────────────────────────────────────────────
-window.openReceiptModal = (receiptData = null) => {
+window.openReceiptModal = async (receiptData = null) => {
+  if (!cashBoxes.length || !bankAccounts.length || !allAccounts.length) {
+    await loadReceiptReferenceData();
+  }
   _editingId = receiptData ? receiptData.id : null;
   const titleEl = document.getElementById("rcpt-modal-title");
   const fileGroup = document.getElementById("rcpt-file-group");
@@ -403,21 +421,17 @@ window.openReceiptModal = (receiptData = null) => {
   entityTypeEl.value = receiptData?.entityType || "customer";
   onReceiptEntityTypeChange();
 
-  setTimeout(() => {
-    const targetEl = document.getElementById("rcpt-target-entity");
-    if (receiptData?.targetId) targetEl.value = receiptData.targetId;
+  const targetEl = document.getElementById("rcpt-target-entity");
+  if (receiptData?.targetId) targetEl.value = receiptData.targetId;
 
-    const methodEl = document.getElementById("rcpt-pay-method");
-    methodEl.value = receiptData?.method || "cash";
-    toggleReceiptPaySource();
+  const methodEl = document.getElementById("rcpt-pay-method");
+  methodEl.value = receiptData?.method || "cash";
+  toggleReceiptPaySource();
 
-    setTimeout(() => {
-      const sourceEl = document.getElementById("rcpt-source");
-      if (receiptData?.sourceId) sourceEl.value = receiptData.sourceId;
-      const ccSel = document.getElementById("rcpt-cc-sel");
-      if (ccSel && receiptData?.costCenterId) ccSel.value = receiptData.costCenterId;
-    }, 50);
-  }, 50);
+  const sourceEl = document.getElementById("rcpt-source");
+  if (receiptData?.sourceId) sourceEl.value = receiptData.sourceId;
+  const ccSel = document.getElementById("rcpt-cc-sel");
+  if (ccSel && receiptData?.costCenterId) ccSel.value = receiptData.costCenterId;
 
   document.getElementById("rcpt-error").classList.add("hidden");
   openModal("receipt-modal");
@@ -498,15 +512,17 @@ window.saveReceipt = async () => {
       showToast("تم حفظ سند القبض واعتماده", "success");
     }
 
+    if (entityType === "customer") await recalculateCustomerBalance(targetId).catch(() => {});
+    else if (entityType === "supplier") await recalculateSupplierBalance(targetId).catch(() => {});
+
     clearERPCache(`companies/${COMPANY_ID}/receipts`);
     clearERPCache(`companies/${COMPANY_ID}/chartOfAccounts`);
     clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
+    clearERPCache(`companies/${COMPANY_ID}/customers`);
+    clearERPCache(`companies/${COMPANY_ID}/suppliers`);
 
     closeModal("receipt-modal");
     await loadReceipts();
-
-    if (entityType === "customer") recalculateCustomerBalance(targetId).catch(() => {});
-    else if (entityType === "supplier") recalculateSupplierBalance(targetId).catch(() => {});
 
   } catch (err) {
     errEl.textContent = err.message;
@@ -553,8 +569,8 @@ async function _createReceipt(p) {
       : `companies/${COMPANY_ID}/bankTransactions`;
     const txRef = fsDoc(collection(db, txColl));
     const txData = p.method === "cash"
-      ? { cashBoxId: p.sourceId, type: "in", amount: p.amount, balanceAfter, sourceType: "receipt", sourceId: rcptId, notes: `سند قبض — ${p.notes}`, createdAt: serverTimestamp() }
-      : { bankAccountId: p.sourceId, type: "in", amount: p.amount, balanceAfter, sourceType: "receipt", sourceId: rcptId, refNumber: `RV-${rcptId.substring(0,6).toUpperCase()}`, notes: `سند قبض — ${p.notes}`, createdAt: serverTimestamp() };
+      ? { cashBoxId: p.sourceId, type: "in", amount: p.amount, balanceAfter, sourceType: "receipt", sourceId: rcptId, date: p.date, notes: `سند قبض — ${p.notes}`, userName: "النظام", createdAt: serverTimestamp() }
+      : { bankAccountId: p.sourceId, type: "in", amount: p.amount, balanceAfter, sourceType: "receipt", sourceId: rcptId, date: p.date, refNumber: `RV-${rcptId.substring(0,6).toUpperCase()}`, notes: `سند قبض — ${p.notes}`, userName: "النظام", createdAt: serverTimestamp() };
     tx.set(txRef, txData);
   });
 
@@ -587,6 +603,7 @@ async function _updateReceipt(p) {
   const newSourceRef  = fsDoc(db, `companies/${COMPANY_ID}/${newSourceColl}`, p.sourceId);
 
   // 3. Atomic transaction: reverse old balance + apply new balance + update receipt
+  let newCalculatedBal = 0;
   await runTransaction(db, async (tx) => {
     const oldSourceSnap = await tx.get(oldSourceRef);
     const oldBal        = parseFloat(oldSourceSnap.data()?.balance || 0);
@@ -596,12 +613,15 @@ async function _updateReceipt(p) {
       // Same source: reverse old amount, add new amount
       newBal = oldBal - old.amount + p.amount;
       tx.update(oldSourceRef, { balance: newBal, updatedAt: serverTimestamp() });
+      newCalculatedBal = newBal;
     } else {
       // Different source: restore old source, deduct from new source
       const newSourceSnap = await tx.get(newSourceRef);
       const newSrcBal     = parseFloat(newSourceSnap.data()?.balance || 0);
       tx.update(oldSourceRef, { balance: oldBal - old.amount, updatedAt: serverTimestamp() });
-      tx.update(newSourceRef, { balance: newSrcBal + p.amount, updatedAt: serverTimestamp() });
+      newBal = newSrcBal + p.amount;
+      tx.update(newSourceRef, { balance: newBal, updatedAt: serverTimestamp() });
+      newCalculatedBal = newBal;
     }
 
     // Update receipt document in place
@@ -621,7 +641,7 @@ async function _updateReceipt(p) {
   // 5. Write new journal entry
   await createJournalEntry({
     date: p.date,
-    description: `سند قبض (معدّل) #${p.id.substring(0,6).toUpperCase()} - ${p.notes}`,
+    description: `سند قبض رقم #${p.id.substring(0,6).toUpperCase()} - ${p.notes}`,
     sourceType: "receipt", sourceId: p.id,
     lines: [
       { accountId: p.debitAccId,  accountCode: p.debitAccCode,  accountName: p.debitAccName,  debit: p.amount, credit: 0,        note: p.notes, costCenterId: p.ccId },
@@ -635,8 +655,8 @@ async function _updateReceipt(p) {
     : `companies/${COMPANY_ID}/bankTransactions`;
   const newTxRef  = fsDoc(collection(db, newTxColl));
   const newTxData = p.method === "cash"
-    ? { cashBoxId: p.sourceId, type: "in", amount: p.amount, sourceType: "receipt", sourceId: p.id, notes: `سند قبض (معدّل) — ${p.notes}`, createdAt: serverTimestamp() }
-    : { bankAccountId: p.sourceId, type: "in", amount: p.amount, sourceType: "receipt", sourceId: p.id, refNumber: `RV-${p.id.substring(0,6).toUpperCase()}`, notes: `سند قبض (معدّل) — ${p.notes}`, createdAt: serverTimestamp() };
+    ? { cashBoxId: p.sourceId, type: "in", amount: p.amount, balanceAfter: newCalculatedBal, sourceType: "receipt", sourceId: p.id, date: p.date, notes: `سند قبض — ${p.notes}`, userName: "النظام", createdAt: serverTimestamp() }
+    : { bankAccountId: p.sourceId, type: "in", amount: p.amount, balanceAfter: newCalculatedBal, sourceType: "receipt", sourceId: p.id, date: p.date, refNumber: `RV-${p.id.substring(0,6).toUpperCase()}`, notes: `سند قبض — ${p.notes}`, userName: "النظام", createdAt: serverTimestamp() };
   // Use direct add (not in transaction as balances already handled)
   const { addDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
   await addDoc(collection(db, newTxColl), newTxData);
@@ -692,12 +712,14 @@ window.confirmDeleteReceipt = async () => {
     // 3. Cascade delete cash/bank transactions
     await _deleteCashBankTxBySource(_pendingDeleteId, old.method);
 
+    if (old.entityType === "customer") await recalculateCustomerBalance(old.targetId).catch(() => {});
+    else if (old.entityType === "supplier") await recalculateSupplierBalance(old.targetId).catch(() => {});
+
     clearERPCache(`companies/${COMPANY_ID}/receipts`);
     clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
     clearERPCache(`companies/${COMPANY_ID}/chartOfAccounts`);
-
-    if (old.entityType === "customer") recalculateCustomerBalance(old.targetId).catch(() => {});
-    else if (old.entityType === "supplier") recalculateSupplierBalance(old.targetId).catch(() => {});
+    clearERPCache(`companies/${COMPANY_ID}/customers`);
+    clearERPCache(`companies/${COMPANY_ID}/suppliers`);
 
     showToast("تم حذف السند وجميع القيود والحركات المرتبطة به", "success");
     closeModal("rcpt-delete-modal");
@@ -789,9 +811,10 @@ window.printReceiptVoucher = () => {
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; padding:20px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     @media print {
-      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; padding:0; }
+      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
       .header-container { background:linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0369a1 100%) !important; }
     }
   </style>
@@ -817,7 +840,7 @@ function _buildReceiptHTML(r, id, company) {
   const coPhone   = company.phone   || company.mobile || "0549141648";
   const coEmail   = company.email   || "";
   const coVat     = company.vatNumber || company.vat || company.taxNumber || "312448150500003";
-  const coCr      = company.crNumber || company.cr  || "4700012345";
+  const coCr      = company.crNumber || company.cr  || "4700123180";
   const coLogo    = company.logoUrl  || company.logoBase64 || company.logo || "";
 
   return `
@@ -986,10 +1009,223 @@ window.printSingleReceiptVoucher = async (id) => {
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; padding:20px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     @media print {
-      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; padding:0; }
-      .header-container { background:linear-gradient(135deg, #064e3b 0%, #0f172a 45%, #1e3a8a 100%) !important; }
+      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      .header-container { background:linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0369a1 100%) !important; }
+    }
+  </style>
+</head>
+<body>${html}</body>
+</html>`);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); win.close(); }, 600);
+};
+
+window.printAllReceiptVouchers = async () => {
+  const vouchers = (typeof _loadedReceipts !== "undefined" ? _loadedReceipts : []);
+  if (!vouchers.length) { showToast("لا توجد سندات قبض للطباعة في القائمة الحالية", "warning"); return; }
+
+  let company = {};
+  try {
+    const [compSnap, logoSnap] = await Promise.all([
+      getDoc(fsDoc(db, `companies/${COMPANY_ID}/settings`, "company")),
+      getDoc(fsDoc(db, `companies/${COMPANY_ID}/settings`, "logo"))
+    ]);
+    if (compSnap.exists()) company = compSnap.data();
+    if (logoSnap.exists() && logoSnap.data().dataUrl) company.logoUrl = logoSnap.data().dataUrl;
+  } catch (_) {}
+
+  const allHtml = vouchers.map((r, i) => {
+    const isLast = i === vouchers.length - 1;
+    return `<div style="${isLast ? '' : 'page-break-after:always;'}">${_buildReceiptHTML(r, r.id, company)}</div>`;
+  }).join("");
+
+  const win = window.open("", "_blank", "width=900,height=700");
+  win.document.write(`<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>طباعة جميع سندات القبض (${vouchers.length} سند)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @media print {
+      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      .header-container { background:linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0369a1 100%) !important; }
+    }
+  </style>
+</head>
+<body>${allHtml}</body>
+</html>`);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); win.close(); }, 800);
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Blank Receipt Voucher (for manual filling by sales reps)
+// ─────────────────────────────────────────────────────────────────────────────
+window.printBlankReceiptVoucher = async () => {
+  let company = {};
+  try {
+    const [compSnap, logoSnap] = await Promise.all([
+      getDoc(fsDoc(db, `companies/${COMPANY_ID}/settings`, "company")),
+      getDoc(fsDoc(db, `companies/${COMPANY_ID}/settings`, "logo"))
+    ]);
+    if (compSnap.exists()) company = compSnap.data();
+    if (logoSnap.exists() && logoSnap.data().dataUrl) company.logoUrl = logoSnap.data().dataUrl;
+  } catch (_) {}
+
+  const coName    = company.name    || company.companyName || "شركة نظم الإمداد الحديثة";
+  const coAddress = [company.address, company.city, company.zip, company.country].filter(Boolean).join("، ") || "ينبع، المملكة العربية السعودية";
+  const coPhone   = company.phone   || company.mobile || "";
+  const coVat     = company.vatNumber || company.vat || company.taxNumber || "";
+  const coCr      = company.crNumber || company.cr  || "";
+  const coLogo    = company.logoUrl  || company.logoBase64 || company.logo || "";
+
+  const blankLine = `<div style="border-bottom:1.5px solid #94a3b8;min-width:220px;height:28px;display:inline-block;"></div>`;
+  const dottedBox = (h="48px") => `<div style="border:1.5px dashed #94a3b8;border-radius:8px;height:${h};width:100%;"></div>`;
+
+  const html = `
+  <div style="font-family:'Cairo',Arial,sans-serif;direction:rtl;max-width:820px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.08);border:1px solid #cbd5e1;">
+
+    <!-- ═══ ROYAL HEADER ═══ -->
+    <div class="header-container" style="background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 50%,#0369a1 100%) !important;padding:20px 30px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          ${coLogo
+            ? `<img src="${coLogo}" style="height:70px;width:70px;object-fit:contain;background:#fff;border-radius:12px;padding:5px;box-shadow:0 3px 10px rgba(0,0,0,0.2);" />`
+            : `<div style="width:70px;height:70px;background:rgba(255,255,255,0.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;">🏢</div>`
+          }
+          <div>
+            <div style="font-size:22px;font-weight:900;color:#fff !important;margin-bottom:5px;text-shadow:0 1px 2px rgba(0,0,0,0.3);">${coName}</div>
+            <div style="font-size:11.5px;color:rgba(255,255,255,0.9) !important;margin-bottom:5px;">📍 ${coAddress}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px 8px;font-size:11px;color:rgba(255,255,255,0.95) !important;">
+              ${coVat  ? `<span style="background:rgba(255,255,255,0.15) !important;padding:2px 9px;border-radius:7px;border:1px solid rgba(255,255,255,0.25);font-weight:700;">🔢 الرقم الضريبي: <span dir="ltr">${coVat}</span></span>` : ""}
+              ${coCr   ? `<span style="background:rgba(255,255,255,0.15) !important;padding:2px 9px;border-radius:7px;border:1px solid rgba(255,255,255,0.25);font-weight:700;">📋 السجل التجاري: <span dir="ltr">${coCr}</span></span>` : ""}
+              ${coPhone? `<span style="background:rgba(255,255,255,0.15) !important;padding:2px 9px;border-radius:7px;border:1px solid rgba(255,255,255,0.25);font-weight:700;">📞 <span dir="ltr">${coPhone}</span></span>` : ""}
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <div style="background:rgba(255,255,255,0.15) !important;border:2px solid rgba(255,255,255,0.4) !important;border-radius:14px;padding:12px 24px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;">
+            <div style="font-size:26px;font-weight:900;color:#fff !important;letter-spacing:1.5px;">سـنـد قـبـض</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.85) !important;letter-spacing:3px;font-weight:800;margin-top:4px;text-transform:uppercase;">RECEIPT VOUCHER</div>
+          </div>
+        </div>
+      </div>
+      <div style="height:4px;background:linear-gradient(90deg,#b45309 0%,#f59e0b 50%,#b45309 100%) !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;margin-top:14px;border-radius:3px;"></div>
+    </div>
+
+    <!-- ═══ META BAR (رقم السند + التاريخ + طريقة القبض) ═══ -->
+    <div style="background:#f8fafc;border-bottom:1.5px solid #e2e8f0;padding:14px 30px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:center;">
+      <div style="text-align:center;border-left:1.5px solid #cbd5e1;padding-left:10px;">
+        <div style="font-size:10.5px;color:#64748b;font-weight:800;margin-bottom:6px;text-transform:uppercase;">رقم السند</div>
+        <div style="background:#e0e7ff;border-radius:8px;border:1px solid #c7d2fe;padding:4px 10px;font-size:18px;font-weight:900;color:#1e3a8a;font-family:monospace;min-width:130px;min-height:32px;display:inline-block;"></div>
+      </div>
+      <div style="text-align:center;border-left:1.5px solid #cbd5e1;padding-left:10px;">
+        <div style="font-size:10.5px;color:#64748b;font-weight:800;margin-bottom:6px;">التاريخ</div>
+        <div style="font-size:14px;font-weight:900;color:#0f172a;"> &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="border-bottom:1.5px solid #94a3b8;width:140px;margin:4px auto 0;"></div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:10.5px;color:#64748b;font-weight:800;margin-bottom:6px;">طريقة القبض</div>
+        <div style="display:flex;justify-content:center;gap:14px;font-size:13px;font-weight:800;color:#334155;">
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;"><span style="width:15px;height:15px;border:2px solid #64748b;border-radius:3px;display:inline-block;"></span> نقدي</label>
+          <label style="display:flex;align-items:center;gap:4px;cursor:pointer;"><span style="width:15px;height:15px;border:2px solid #64748b;border-radius:3px;display:inline-block;"></span> تحويل بنكي</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ AMOUNT BOX ═══ -->
+    <div style="padding:18px 30px 14px;">
+      <div style="background:linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%);border:2px solid #059669;border-radius:14px;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;">
+        <div style="flex:0 0 auto;">
+          <div style="font-size:11px;color:#065f46;font-weight:800;margin-bottom:6px;">💰 المبلغ بالأرقام (ر.س)</div>
+          <div style="border-bottom:2px solid #059669;width:190px;height:38px;font-size:26px;font-weight:900;color:#064e3b;font-family:monospace;"></div>
+        </div>
+        <div style="flex:1;background:#fff;border:1.5px solid #6ee7b7;border-radius:10px;padding:12px 18px;">
+          <div style="font-size:10.5px;color:#047857;font-weight:800;margin-bottom:8px;">المبلغ كتابةً (تفقيط)</div>
+          <div style="font-size:13px;color:#064e3b;font-weight:700;">فقط ${dottedBox("24px")} لا غير</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ DETAILS TABLE ═══ -->
+    <div style="padding:0 30px 16px;">
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border:1.5px solid #cbd5e1;border-radius:12px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;">
+            <th style="padding:11px 16px;font-size:12px;color:#334155;font-weight:800;border-bottom:1.5px solid #cbd5e1;text-align:right;">استلمنا من (جهة القبض / الحساب الدائن)</th>
+            <th style="padding:11px 16px;font-size:12px;color:#334155;font-weight:800;border-bottom:1.5px solid #cbd5e1;border-right:1.5px solid #cbd5e1;text-align:right;width:130px;">نوع الجهة</th>
+            <th style="padding:11px 16px;font-size:12px;color:#334155;font-weight:800;border-bottom:1.5px solid #cbd5e1;border-right:1.5px solid #cbd5e1;text-align:right;width:180px;">مركز التكلفة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:14px 16px;">${dottedBox("32px")}</td>
+            <td style="padding:14px 16px;border-right:1.5px solid #cbd5e1;">
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#334155;">
+                <label style="display:flex;align-items:center;gap:5px;"><span style="width:13px;height:13px;border:1.5px solid #64748b;border-radius:50%;display:inline-block;"></span> عميل</label>
+                <label style="display:flex;align-items:center;gap:5px;"><span style="width:13px;height:13px;border:1.5px solid #64748b;border-radius:50%;display:inline-block;"></span> مورد</label>
+                <label style="display:flex;align-items:center;gap:5px;"><span style="width:13px;height:13px;border:1.5px solid #64748b;border-radius:50%;display:inline-block;"></span> إيراد مباشر</label>
+              </div>
+            </td>
+            <td style="padding:14px 16px;border-right:1.5px solid #cbd5e1;">${dottedBox("32px")}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Notes -->
+      <div style="margin-top:14px;background:#f8fafc;border:1.5px dashed #94a3b8;border-radius:12px;padding:14px 20px;">
+        <div style="font-size:10.5px;color:#64748b;font-weight:800;margin-bottom:8px;">البيان / ملاحظات وسبب القبض</div>
+        ${dottedBox("36px")}
+      </div>
+    </div>
+
+    <!-- ═══ SIGNATURES ═══ -->
+    <div style="border-top:1.5px solid #e2e8f0;padding:20px 30px 24px;background:#fafafa;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;">
+        <div style="text-align:center;">
+          <div style="font-size:11.5px;font-weight:800;color:#334155;margin-bottom:50px;">توقيع المستلم (الجهة الدائنة)</div>
+          <div style="border-top:1.5px dashed #94a3b8;width:160px;margin:0 auto;color:#64748b;font-size:10px;padding-top:5px;">التوقيع / الإسم</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11.5px;font-weight:800;color:#334155;margin-bottom:50px;">توقيع المحاسب / الأمين</div>
+          <div style="border-top:1.5px dashed #94a3b8;width:160px;margin:0 auto;color:#64748b;font-size:10px;padding-top:5px;">التوقيع والختم الرسمى</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11.5px;font-weight:800;color:#334155;margin-bottom:50px;">اعتماد المدير المالي</div>
+          <div style="border-top:1.5px dashed #94a3b8;width:160px;margin:0 auto;color:#64748b;font-size:10px;padding-top:5px;">التوقيع والاعتماد</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <div style="background:#f1f5f9;border-top:1.5px solid #cbd5e1;padding:10px 30px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:10.5px;color:#64748b;font-weight:700;">نموذج سند قبض — ${coName}</div>
+      <div style="font-size:10.5px;color:#94a3b8;font-family:monospace;">BLANK RECEIPT VOUCHER TEMPLATE</div>
+    </div>
+
+  </div>`;
+
+  const win = window.open("", "_blank", "width=900,height=700");
+  win.document.write(`<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>سند قبض فارغ — ${coName}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @media print {
+      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      .header-container { background:linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0369a1 100%) !important; }
     }
   </style>
 </head>
@@ -1003,6 +1239,7 @@ window.printSingleReceiptVoucher = async (id) => {
 // Load Receipts Table
 // ─────────────────────────────────────────────────────────────────────────────
 let _loadedReceipts = [];
+
 
 async function loadReceipts() {
   const fromEl  = document.getElementById("rcpt-from");
@@ -1171,9 +1408,9 @@ async function _deleteJournalEntriesBySource(sourceId) {
   const q    = fsQuery(collection(db, `companies/${COMPANY_ID}/journalEntries`), where("sourceId", "==", sourceId));
   const snap = await fsGetDocs(q);
   if (snap.empty) return;
-  const batch = writeBatch(db);
-  snap.docs.forEach(d => batch.delete(d.ref));
-  await batch.commit();
+  for (const d of snap.docs) {
+    await deleteJournalEntry(d.id);
+  }
 }
 
 async function _deleteCashBankTxBySource(sourceId, method) {
@@ -1228,23 +1465,32 @@ function resolveDebit(method, sourceId) {
   if (method === "cash") {
     const cb = cashBoxes.find(c => c.id === sourceId);
     debitAccId = cb?.accountId || null;
-    const acc = allAccounts.find(a => a.id === cb?.accountId);
-    debitAccCode = acc?.code || cb?.code || null;
+    const acc = allAccounts.find(a => a.id === cb?.accountId || (cb?.accountCode && a.code === cb.accountCode) || a.id === sourceId || a.code === sourceId);
+    debitAccId = debitAccId || acc?.id || null;
+    debitAccCode = acc?.code || cb?.accountCode || cb?.code || null;
     debitAccName = acc?.name || cb?.name || null;
     sourceDocRef = fsDoc(db, `companies/${COMPANY_ID}/cashBoxes`, sourceId);
   } else {
     const ba = bankAccounts.find(b => b.id === sourceId);
     debitAccId = ba?.accountId || null;
-    const acc = allAccounts.find(a => a.id === ba?.accountId);
-    debitAccCode = acc?.code || ba?.code || null;
+    let acc = allAccounts.find(a => a.id === ba?.accountId || (ba?.accountCode && a.code === ba.accountCode) || a.id === sourceId || a.code === sourceId);
+    if (!acc && ba?.name) {
+      const baClean = ba.name.replace(/[\s\-_]/g, '').toLowerCase();
+      acc = allAccounts.find(a => a.parentCode === "1-1-1-3" && (
+        a.name?.replace(/[\s\-_]/g, '').toLowerCase().includes(baClean) ||
+        baClean.includes((a.name || '').replace(/[\s\-_]/g, '').toLowerCase())
+      ));
+    }
+    debitAccId = debitAccId || acc?.id || null;
+    debitAccCode = acc?.code || ba?.accountCode || ba?.code || null;
     debitAccName = acc?.name || ba?.name || null;
     sourceDocRef = fsDoc(db, `companies/${COMPANY_ID}/bankAccounts`, sourceId);
   }
 
   if (!debitAccId) {
-    const fallback = allAccounts.find(a => a.code === (method === "cash" ? "1-1-1-1-3" : "1-1-1-3-2"))
-                  || (method !== "cash" && allAccounts.find(a => a.parentCode === "1-1-1-3"))  // أي حساب بنكي
-                  || allAccounts.find(a => a.code === "1-1-1-1-3");  // fallback نهائي: الصندوق
+    const fallback = allAccounts.find(a => a.code === (method === "cash" ? "1-1-1-1-3" : "1-1-1-3-02"))
+                  || (method !== "cash" && allAccounts.find(a => a.code?.startsWith("1-1-1-3")))
+                  || allAccounts.find(a => a.code === "1-1-1-1-3");
     debitAccId = fallback?.id || null;
     debitAccCode = fallback?.code || null;
     debitAccName = fallback?.name || null;

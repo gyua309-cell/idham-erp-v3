@@ -121,6 +121,9 @@ export async function syncCustomerNameEverywhere(customerId, newName) {
 export async function syncCustomerBalanceToCoa(customerId) {
   if (!customerId) return;
   try {
+    // جلب رصيد العميل
+    const custSnap = await getDocs(query(col("customers"), where("__name__", "==", doc(col("customers"), customerId).path.split("/").pop())));
+    // استخدام getDoc مباشرة أسرع — لكن نستخدم getDocs للتوافق
     const custRef  = doc(db, `companies/${COMPANY_ID}/customers`, customerId);
     const { getDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
     const custDoc  = await getDoc(custRef);
@@ -133,22 +136,10 @@ export async function syncCustomerBalanceToCoa(customerId) {
 
     const batch = writeBatch(db);
     for (const coaDoc of coaSnap.docs) {
-      const data = coaDoc.data();
-      const isCredit = data.normalBalance === 'credit' || ['liability', 'equity', 'revenue'].includes(data.type);
-      const dr = isCredit ? 0 : balance;
-      const cr = isCredit ? balance : 0;
-      batch.update(coaDoc.ref, { 
-        balance, 
-        totalDebit: dr >= 0 ? dr : 0,
-        totalCredit: cr >= 0 ? cr : 0,
-        rebuiltAt: new Date().toISOString() 
-      });
+      batch.update(coaDoc.ref, { balance, rebuiltAt: new Date().toISOString() });
     }
     await batch.commit();
     console.log(`[SyncEngine] ✅ COA balance synced for customer ${customerId}: ${balance}`);
-    
-    // تشغيل التجميع التلقائي لتحديث الآباء
-    await recalculateCoaRollup();
   } catch (err) {
     console.error("[SyncEngine] syncCustomerBalanceToCoa error:", err.message);
   }
@@ -177,6 +168,15 @@ export async function syncSupplierNameEverywhere(supplierId, newName) {
     // expenses (payment vouchers)
     const expSnap = await getDocs(query(col("expenses"), where("targetId", "==", supplierId)));
     for (const d of expSnap.docs) {
+      if (d.data().entityType === "supplier" && d.data().accountName !== newName) {
+        batch.update(d.ref, { accountName: newName, targetName: newName }); ops++;
+        if (ops >= 400) await flush();
+      }
+    }
+
+    // receipts (refunds from supplier)
+    const recSnap = await getDocs(query(col("receipts"), where("targetId", "==", supplierId)));
+    for (const d of recSnap.docs) {
       if (d.data().entityType === "supplier" && d.data().accountName !== newName) {
         batch.update(d.ref, { accountName: newName, targetName: newName }); ops++;
         if (ops >= 400) await flush();
@@ -222,22 +222,10 @@ export async function syncSupplierBalanceToCoa(supplierId) {
 
     const batch = writeBatch(db);
     for (const coaDoc of coaSnap.docs) {
-      const data = coaDoc.data();
-      const isCredit = data.normalBalance === 'credit' || ['liability', 'equity', 'revenue'].includes(data.type);
-      const dr = isCredit ? 0 : balance;
-      const cr = isCredit ? balance : 0;
-      batch.update(coaDoc.ref, { 
-        balance, 
-        totalDebit: dr >= 0 ? dr : 0,
-        totalCredit: cr >= 0 ? cr : 0,
-        rebuiltAt: new Date().toISOString() 
-      });
+      batch.update(coaDoc.ref, { balance, rebuiltAt: new Date().toISOString() });
     }
     await batch.commit();
     console.log(`[SyncEngine] ✅ COA balance synced for supplier ${supplierId}: ${balance}`);
-    
-    // تشغيل التجميع التلقائي لتحديث الآباء
-    await recalculateCoaRollup();
   } catch (err) {
     console.error("[SyncEngine] syncSupplierBalanceToCoa error:", err.message);
   }
@@ -353,111 +341,5 @@ export async function updateCoaAfterJE(lines, reverse = false) {
     console.log(`[SyncEngine] ✅ COA updated after JE (${ops} accounts, reverse=${reverse})`);
   } catch (err) {
     console.error("[SyncEngine] updateCoaAfterJE error:", err.message);
-  }
-}
-
-// ──────────────────────────────────────────
-// 8. تجميع أرصدة الحسابات الأب تلقائياً (COA Rollup)
-// ──────────────────────────────────────────
-export async function recalculateCoaRollup() {
-  try {
-    // 1. قراءة جميع القيود المحاسبية المرحّلة
-    const jeSnap = await getDocs(col("journalEntries"));
-    const debitByCode = {};
-    const creditByCode = {};
-
-    jeSnap.docs.forEach(doc => {
-      const je = doc.data();
-      if (je.status && je.status !== "posted") return;
-      const lines = je.lines || [];
-      for (const line of lines) {
-        const code = line.accountCode;
-        if (!code) continue;
-        const dr = parseFloat(line.debit || 0);
-        const cr = parseFloat(line.credit || 0);
-        debitByCode[code] = (debitByCode[code] || 0) + dr;
-        creditByCode[code] = (creditByCode[code] || 0) + cr;
-      }
-    });
-
-    // 2. قراءة شجرة الحسابات
-    const coaSnap = await getDocs(col("chartOfAccounts"));
-    const coaMap = {};
-    
-    // تحديد حسابات الآباء ديناميكياً
-    const parentCodes = new Set();
-    coaSnap.docs.forEach(d => {
-      const pc = d.data().parentCode;
-      if (pc) parentCodes.add(pc);
-    });
-
-    coaSnap.docs.forEach(d => {
-      const data = d.data();
-      const code = data.code;
-      if (!code) return;
-      
-      const isParent = parentCodes.has(code);
-      coaMap[code] = {
-        ref: d.ref,
-        id: d.id,
-        code,
-        name: data.name,
-        type: data.type,
-        parentCode: data.parentCode || null,
-        isParent: isParent,
-        normalBalance: data.normalBalance || (["asset", "expense"].includes(data.type) ? "debit" : "credit"),
-        // يأخذ كل حساب حركاته المباشرة من القيود (حتى لو كان أباً ولديه أبناء غير مستخدمين مثل 4-1-1)
-        totalDebit: debitByCode[code] || 0,
-        totalCredit: creditByCode[code] || 0,
-        balance: 0,
-      };
-    });
-
-    // 3. التجميع من المستويات الأعمق للأبناء وصولاً للأعلى
-    const sortedCodes = Object.keys(coaMap).sort((a, b) => {
-      return (b.match(/-/g) || []).length - (a.match(/-/g) || []).length;
-    });
-
-    const r2 = n => Math.round((n || 0) * 100) / 100;
-
-    for (const code of sortedCodes) {
-      const acc = coaMap[code];
-      const pCode = acc.parentCode;
-      if (pCode && coaMap[pCode]) {
-        coaMap[pCode].totalDebit  = r2(coaMap[pCode].totalDebit  + acc.totalDebit);
-        coaMap[pCode].totalCredit = r2(coaMap[pCode].totalCredit + acc.totalCredit);
-      }
-    }
-
-    // 4. احتساب الرصيد النهائي بناءً على طبيعة الحساب والمدين والدائن المجمعين
-    for (const acc of Object.values(coaMap)) {
-      const delta = acc.totalDebit - acc.totalCredit;
-      const isCredit = acc.normalBalance === "credit" || ["liability", "equity", "revenue"].includes(acc.type);
-      acc.balance = r2(isCredit ? -delta : delta);
-    }
-
-    // 5. كتابة التحديثات في دفعات
-    let batch = writeBatch(db);
-    let ops = 0;
-    for (const acc of Object.values(coaMap)) {
-      batch.update(acc.ref, {
-        balance: acc.balance,
-        totalDebit: acc.totalDebit,
-        totalCredit: acc.totalCredit,
-        rebuiltAt: new Date().toISOString()
-      });
-      ops++;
-      if (ops >= 400) {
-        await batch.commit();
-        batch = writeBatch(db);
-        ops = 0;
-      }
-    }
-    if (ops > 0) {
-      await batch.commit();
-    }
-    console.log(`[SyncEngine] ✅ COA Rollup complete (${Object.keys(coaMap).length} accounts updated)`);
-  } catch (err) {
-    console.error("[SyncEngine] recalculateCoaRollup error:", err.message);
   }
 }
