@@ -1,0 +1,1 @@
+import"./index-C8cvrlnW.js";async function w(n,o="تأكيد"){return typeof window<"u"&&typeof window.showConfirm=="function"?await window.showConfirm(n,o):typeof window<"u"?window.confirm(n):!0}export{w as s};
