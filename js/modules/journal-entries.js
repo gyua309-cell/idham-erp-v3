@@ -850,12 +850,11 @@ window.loadJournalEntries = async (forceRefresh = false) => {
       clearERPCache();
     }
 
-    // جلب القيود من الـ Cache (15 دقيقة) — بدلاً من Firestore في كل زيارة
-    let entries = await getAll(COLS.journalEntries(), [orderBy("createdAt","desc"), limit(500)]);
+    // جلب كل القيود من الـ Cache أو السيرفر بدون تحديد limit مجتزأ
+    let entries = await getAll(COLS.journalEntries());
 
     // Client-side sort by date desc (avoids composite index requirement)
     entries.sort((a,b) => (b.date||"").localeCompare(a.date||""));
-
 
     if (from)    entries = entries.filter(e => (e.date||"") >= from);
     if (to)      entries = entries.filter(e => (e.date||"") <= to);
@@ -863,31 +862,56 @@ window.loadJournalEntries = async (forceRefresh = false) => {
     if (statusF) entries = entries.filter(e => (e.status||"posted") === statusF);
 
     _allEntries = entries;
-    renderJETable(entries);
 
-    // KPIs — احسب من بنود القيد إذا لم تكن الحقول المجمّعة محسوبة
-    const totalDr  = entries.reduce((s,e) => {
-      const fromField = parseFloat(e.totalDebit || 0) || 0;
-      const fromLines = (e.lines||[]).reduce((a,l) => a + (parseFloat(l.debit || 0) || 0), 0);
-      return s + Math.max(fromField, fromLines);
-    }, 0);
-    const totalCr  = entries.reduce((s,e) => {
-      const fromField = parseFloat(e.totalCredit || 0) || 0;
-      const fromLines = (e.lines||[]).reduce((a,l) => a + (parseFloat(l.credit || 0) || 0), 0);
-      return s + Math.max(fromField, fromLines);
-    }, 0);
-    const posted   = entries.filter(e => e.status === "posted").length;
-    const balanced = Math.abs(totalDr - totalCr) < 0.01;
-
-    document.getElementById("kpi-total-dr").textContent = formatCurrency(totalDr);
-    document.getElementById("kpi-total-cr").textContent = formatCurrency(totalCr);
-    document.getElementById("kpi-balance").textContent  = balanced ? "✓ متوازن" : formatCurrency(Math.abs(totalDr - totalCr));
-    document.getElementById("kpi-count").textContent    = entries.length;
-    document.getElementById("kpi-posted").textContent   = posted;
+    const searchVal = document.getElementById("je-search")?.value;
+    if (searchVal && searchVal.trim()) {
+      filterJETable(searchVal);
+    } else {
+      renderJETable(entries);
+      updateJEKPIs(entries);
+    }
   } catch(err) {
     tbody.innerHTML = `<tr><td colspan="9"><div class="alert bad" style="margin:8px">${err.message}</div></td></tr>`;
   }
 };
+
+function normAr(str) {
+  if (!str) return "";
+  return String(str)
+    .toLowerCase()
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/ى/g, "ي")
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, "")
+    .trim();
+}
+
+function updateJEKPIs(entries) {
+  const totalDr  = (entries || []).reduce((s,e) => {
+    const fromField = parseFloat(e.totalDebit || 0) || 0;
+    const fromLines = (e.lines||[]).reduce((a,l) => a + (parseFloat(l.debit || 0) || 0), 0);
+    return s + Math.max(fromField, fromLines);
+  }, 0);
+  const totalCr  = (entries || []).reduce((s,e) => {
+    const fromField = parseFloat(e.totalCredit || 0) || 0;
+    const fromLines = (e.lines||[]).reduce((a,l) => a + (parseFloat(l.credit || 0) || 0), 0);
+    return s + Math.max(fromField, fromLines);
+  }, 0);
+  const posted   = (entries || []).filter(e => (e.status||"posted") === "posted").length;
+  const balanced = Math.abs(totalDr - totalCr) < 0.01;
+
+  const elDr = document.getElementById("kpi-total-dr");
+  const elCr = document.getElementById("kpi-total-cr");
+  const elBal = document.getElementById("kpi-balance");
+  const elCnt = document.getElementById("kpi-count");
+  const elPost = document.getElementById("kpi-posted");
+
+  if (elDr) elDr.textContent = formatCurrency(totalDr);
+  if (elCr) elCr.textContent = formatCurrency(totalCr);
+  if (elBal) elBal.textContent = balanced ? "✓ متوازن" : formatCurrency(Math.abs(totalDr - totalCr));
+  if (elCnt) elCnt.textContent = entries.length;
+  if (elPost) elPost.textContent = posted;
+}
 
 function renderJETable(entries) {
   const tbody = document.getElementById("je-tbody");
@@ -961,13 +985,34 @@ function renderJETable(entries) {
 }
 
 window.filterJETable = val => {
-  const q = val.trim().toLowerCase();
-  if (!q) { renderJETable(_allEntries); return; }
-  renderJETable(_allEntries.filter(e =>
-    (e.entryNumber||"").toLowerCase().includes(q) ||
-    (e.code||"").toLowerCase().includes(q) ||
-    (e.description||"").toLowerCase().includes(q)
-  ));
+  const q = normAr(val);
+  if (!q) {
+    renderJETable(_allEntries);
+    updateJEKPIs(_allEntries);
+    return;
+  }
+
+  const tokens = q.split(/\s+/).filter(Boolean);
+  const typeLabels = {
+    manual:"يدوي", salesInvoice:"مبيعات", purchaseInvoice:"مشتريات",
+    salesReturn:"مردود بيع", purchaseReturn:"مردود شراء", reversing:"عكسي", pos:"POS",
+    salesCOGS:"تكلفة البضاعة", cogs:"تكلفة مبيعات", receipt:"سند قبض",
+    stockTransfer:"تحويل مخزون", physical_count:"جرد"
+  };
+
+  const filtered = _allEntries.filter(e => {
+    const linesStr = (e.lines || []).map(l => 
+      `${l.accountCode || ''} ${l.accountName || ''} ${l.note || ''} ${l.costCenterName || ''}`
+    ).join(' ');
+
+    const blob = `${e.entryNumber || ''} ${e.code || ''} ${e.description || ''} ${e.reference || ''} ${e.createdByName || ''} ${typeLabels[e.sourceType] || ''} ${linesStr}`;
+    const normBlob = normAr(blob);
+
+    return tokens.every(tok => normBlob.includes(tok));
+  });
+
+  renderJETable(filtered);
+  updateJEKPIs(filtered);
 };
 
 // ──────────────────────────────────────────
@@ -1946,9 +1991,8 @@ window.loadLedger = async () => {
   content.innerHTML = `<div style="text-align:center;padding:40px"><i class="fas fa-spinner fa-spin"></i></div>`;
 
   try {
-    const q    = query(COLS.journalEntries(), orderBy("createdAt"), limit(1000));
-    const snap = await getDocs(q);
-    const entries = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    const rawEntries = await getAll(COLS.journalEntries());
+    const entries = rawEntries
       .filter(e => !e.status || e.status === "posted")
       .sort((a,b) => (a.date||"").localeCompare(b.date||""));
 
