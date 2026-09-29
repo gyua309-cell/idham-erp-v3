@@ -95,21 +95,21 @@ export async function render(container, user) {
         <label style="font-weight:700; font-size:12px; color:var(--text-2);">⚡ ترتيب الجدول والمصفوفة</label>
         <select id="cmm-sort-select" onchange="window.onCmmSortChange(this.value)" style="min-width:210px; padding:6px 10px; border:1px solid var(--brand); border-radius:8px; background:var(--bg-card); color:var(--brand); font-size:12px; font-weight:700;">
           <optgroup label="ترتيب سنوي عام">
-            <option value="total_sales_desc" selected>الأعلى مبيعات في السنة كلها 🏆</option>
-            <option value="total_sales_asc">الأقل مبيعات في السنة كلها</option>
+            <option value="total_sales_desc" selected>الأعلى صافي مبيعات في السنة كلها 🏆</option>
+            <option value="total_sales_asc">الأقل صافي مبيعات في السنة كلها 📉</option>
             <option value="total_col_desc">الأعلى تحصيلاً في السنة كلها 💵</option>
-            <option value="total_col_asc">الأقل تحصيلاً في السنة كلها</option>
+            <option value="total_col_asc">الأقل تحصيلاً في السنة كلها ⚠️</option>
             <option value="balance_desc">الأعلى مديونية (رصيد كشف الحساب) ⚠️</option>
             <option value="name_asc">أبجدياً (اسم العميل أ - ي)</option>
           </optgroup>
-          <optgroup label="ترتيب حسب أعلى مبيعات شهر معين">
-            ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_sales_desc">الأعلى مبيعات شهر ${m} 🛒</option>`).join("")}
+          <optgroup label="ترتيب حسب أعلى صافي مبيعات شهر معين">
+            ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_sales_desc">الأعلى صافي مبيعات شهر ${m} 🛒</option>`).join("")}
           </optgroup>
           <optgroup label="ترتيب حسب أعلى تحصيلات شهر معين">
             ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_col_desc">الأعلى تحصيلاً شهر ${m} 📥</option>`).join("")}
           </optgroup>
-          <optgroup label="ترتيب حسب الأقل مبيعات أو تحصيلاً">
-            ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_sales_asc">الأقل مبيعات شهر ${m} 📉</option>`).join("")}
+          <optgroup label="ترتيب حسب الأقل صافي مبيعات أو تحصيلاً">
+            ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_sales_asc">الأقل صافي مبيعات شهر ${m} 📉</option>`).join("")}
             ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_col_asc">الأقل تحصيلاً شهر ${m} ⚠️</option>`).join("")}
           </optgroup>
         </select>
@@ -160,7 +160,7 @@ export async function render(container, user) {
         
         <div class="card" style="padding:14px 18px; background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(99,102,241,0.02)); border:1px solid rgba(99,102,241,0.25); border-radius:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:11.5px; font-weight:700; color:var(--indigo);">💳 إجمالي مبيعات السنة (${_selectedYear})</span>
+            <span style="font-size:11.5px; font-weight:700; color:var(--indigo);">✨ صافي مبيعات السنة (${_selectedYear})</span>
             <span style="font-size:18px;">📈</span>
           </div>
           <div class="mono font-bold" id="cmm-kpi-sales" style="font-size:20px; color:var(--indigo); margin-top:6px;">0.00 ر.س</div>
@@ -206,10 +206,10 @@ export async function render(container, user) {
               <h3 style="font-size:15px; font-weight:800; color:var(--text-0); margin:0; display:flex; align-items:center; gap:8px;">
                 <span id="cmm-chart-title">📊 منحنى المبيعات والتحصيلات عبر أشهر السنة</span>
               </h3>
-              <p style="font-size:11px; color:var(--text-2); margin:3px 0 0;" id="cmm-chart-subtitle">مقارنة بصرية ديناميكية بين مسحوبات المبيعات والتدفقات النقدية المحصلة</p>
+              <p style="font-size:11px; color:var(--text-2); margin:3px 0 0;" id="cmm-chart-subtitle">مقارنة بصرية ديناميكية بين صافي مسحوبات المبيعات والتدفقات النقدية المحصلة</p>
             </div>
             <div style="display:flex; align-items:center; gap:14px; font-size:11.5px; font-weight:700;">
-              <span style="display:inline-flex; align-items:center; gap:5px; color:#4F46E5;"><span style="width:12px; height:12px; border-radius:3px; background:#4F46E5; display:inline-block;"></span> 🧾 مبيعات</span>
+              <span style="display:inline-flex; align-items:center; gap:5px; color:#4F46E5;"><span style="width:12px; height:12px; border-radius:3px; background:#4F46E5; display:inline-block;"></span> ✨ صافي المبيعات</span>
               <span style="display:inline-flex; align-items:center; gap:5px; color:#10B981;"><span style="width:12px; height:12px; border-radius:3px; background:#10B981; display:inline-block;"></span> 📥 تحصيلات</span>
               <span style="display:inline-flex; align-items:center; gap:5px; color:#EF4444;"><span style="width:12px; height:12px; border-radius:3px; background:#EF4444; display:inline-block;"></span> ↩️ مردودات</span>
             </div>
@@ -239,9 +239,9 @@ export async function render(container, user) {
       <div class="card mb-12" style="padding:10px 18px; background:linear-gradient(135deg, var(--bg-card), rgba(99,102,241,0.03)); border:1px solid var(--border-soft); border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:11.5px;">
         <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
           <span style="font-weight:800; color:var(--brand);">💡 دليل قراءة الخلايا:</span>
-          <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:var(--text-0);">السطر العلوي:</b> 🧾 قيمة فواتير المبيعات الصادرة في الشهر</span>
+          <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:var(--text-0);">السطر العلوي:</b> ✨ صافي مبيعات الشهر (المبيعات − المردودات)</span>
           <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:#10B981;">السطر السفلي:</b> 📥 المبالغ المحصلة والمقبوضة فعلياً في الشهر</span>
-          <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:var(--indigo);">⚖️ رصيد كشف الحساب:</b> ناتج (إجمالي المبيعات التاريخية - المردودات - إجمالي التحصيلات)</span>
+          <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:var(--indigo);">⚖️ رصيد كشف الحساب:</b> ناتج (الرصيد الافتتاحي + إجمالي المبيعات − المردودات − إجمالي التحصيلات)</span>
         </div>
         <div style="display:flex; align-items:center; gap:10px;">
           <!-- View Switcher -->
@@ -257,7 +257,7 @@ export async function render(container, user) {
             </button>
           </div>
           <span class="badge" id="cmm-active-sort-badge" style="background:rgba(99,102,241,0.12); color:var(--brand); font-weight:800; font-size:11px; padding:4px 10px; border:1px solid rgba(99,102,241,0.25);">
-            ⚡ الترتيب الحالي: الأعلى مبيعات
+            ⚡ الترتيب الحالي: الأعلى صافي مبيعات
           </span>
           <div style="font-weight:700; color:var(--text-2);" id="cmm-table-rows-count">
             عرض 0 عميل
@@ -320,7 +320,7 @@ export async function render(container, user) {
                   🏢 بيانات العملاء والرصيد
                 </th>
                 <th colspan="12" style="text-align:center; padding:7px 10px; font-size:12.5px; font-weight:900; color:var(--brand); background:linear-gradient(90deg, rgba(99,102,241,0.08), rgba(16,185,129,0.08)); border-left:1px solid var(--border);">
-                  📅 عمود الأشهر (${_selectedYear}) — مبيعات وتحصيلات الـ 12 شهراً
+                  📅 عمود الأشهر (${_selectedYear}) — صافي المبيعات والتحصيلات
                 </th>
                 <th colspan="5" style="text-align:center; padding:7px 10px; font-size:12px; font-weight:800; color:var(--text-1); background:var(--bg-1);">
                   📊 الإجماليات ومؤشرات الأداء السنوية
@@ -349,8 +349,8 @@ export async function render(container, user) {
                     <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
                       <span style="font-size:11.5px; font-weight:800; color:var(--text-0);">${idx + 1} - ${m}</span>
                       <div style="display:flex; gap:3px; align-items:center;">
-                        <button class="btn btn-ghost btn-icon sm" title="ترتيب حسب مبيعات ${m}" onclick="window.setMonthQuickSort(${idx}, 'sales')" style="padding:2px 4px; font-size:9px; height:18px; border-radius:4px; background:rgba(99,102,241,0.08); color:var(--brand);">
-                          🧾 مبيعات
+                        <button class="btn btn-ghost btn-icon sm" title="ترتيب حسب صافي مبيعات ${m}" onclick="window.setMonthQuickSort(${idx}, 'sales')" style="padding:2px 4px; font-size:9px; height:18px; border-radius:4px; background:rgba(99,102,241,0.08); color:var(--brand);">
+                          🛒 مبيعات
                         </button>
                         <button class="btn btn-ghost btn-icon sm" title="ترتيب حسب تحصيلات ${m}" onclick="window.setMonthQuickSort(${idx}, 'col')" style="padding:2px 4px; font-size:9px; height:18px; border-radius:4px; background:rgba(16,185,129,0.08); color:#10B981;">
                           📥 تحصيل
@@ -362,7 +362,7 @@ export async function render(container, user) {
 
                 <th style="min-width:120px; text-align:left; background:rgba(99,102,241,0.08); color:var(--indigo); cursor:pointer;" onclick="window.toggleCmmHeaderSort('total_sales')">
                   <div style="display:flex; align-items:center; justify-content:space-between;">
-                    <span id="cmm-th-total-sales-label">مبيعات ${_selectedYear}</span>
+                    <span id="cmm-th-total-sales-label">✨ صافي مبيعات ${_selectedYear}</span>
                     <span style="font-size:10px;">⇅</span>
                   </div>
                 </th>
@@ -559,23 +559,32 @@ async function setupGlobalCmmHandlers() {
 
   window.exportCmmExcel = () => {
     if (!_matrixData.length) return;
+    const isNoVat = _taxMode === "no_vat";
     const rows = [];
     const headers = [
       "كود العميل", "اسم العميل", "المنطقة", "المندوب", "رصيد كشف الحساب الفعلي",
-      ...MONTH_NAMES_AR,
-      `إجمالي مبيعات ${_selectedYear}`, `إجمالي تحصيلات ${_selectedYear}`, "نسبة التحصيل %", "اتجاه النمو"
+      ...MONTH_NAMES_AR.map(m => `صافي ${m}`),
+      `إجمالي المبيعات ${_selectedYear}`, `إجمالي المردودات ${_selectedYear}`, `صافي المبيعات ${_selectedYear}`, `إجمالي التحصيلات ${_selectedYear}`, "فجوة التحصيل", "نسبة التحصيل %", "اتجاه النمو"
     ];
 
     _matrixData.forEach(row => {
+      const grossSales = isNoVat ? row.totalSalesSubtotal : row.totalSales;
+      const returns = isNoVat ? row.totalReturnsSubtotal : row.totalReturns;
+      const netSales = isNoVat ? row.totalNetSalesSubtotal : row.totalNetSales;
+      const gap = netSales - row.totalCollections;
+
       const r = [
         row.customer.code || "",
         row.customer.name || "",
         row.customer.zone || "",
         row.customer.repName || "",
         row.actualStatementBalance,
-        ...row.monthlySales.map(m => m.sales),
-        row.totalSales,
+        ...row.monthlySales.map(m => (isNoVat ? m.netSalesSubtotal : m.netSales)),
+        grossSales,
+        returns,
+        netSales,
         row.totalCollections,
+        gap,
         row.collectionRate.toFixed(1) + "%",
         row.trendLabel
       ];
@@ -583,7 +592,7 @@ async function setupGlobalCmmHandlers() {
     });
 
     window.exportXLSX({
-      filename: `مصفوفة_مبيعات_العملاء_${_selectedYear}_${todayString()}`,
+      filename: `مصفوفة_صافي_مبيعات_العملاء_${_selectedYear}_${todayString()}`,
       headers,
       rows,
       sheetName: `مبيعات_${_selectedYear}`
@@ -611,12 +620,14 @@ function applySorting() {
     }
   });
 
+  const getNetSales = (row) => _taxMode === "no_vat" ? row.totalNetSalesSubtotal : row.totalNetSales;
+
   if (key === "total_sales_desc") {
-    _matrixData.sort((a, b) => b.totalSales - a.totalSales);
-    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأعلى مبيعات في السنة كلها 🏆`;
+    _matrixData.sort((a, b) => getNetSales(b) - getNetSales(a));
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأعلى صافي مبيعات في السنة كلها 🏆`;
   } else if (key === "total_sales_asc") {
-    _matrixData.sort((a, b) => a.totalSales - b.totalSales);
-    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأقل مبيعات في السنة كلها 📉`;
+    _matrixData.sort((a, b) => getNetSales(a) - getNetSales(b));
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأقل صافي مبيعات في السنة كلها 📉`;
   } else if (key === "total_col_desc") {
     _matrixData.sort((a, b) => b.totalCollections - a.totalCollections);
     if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأعلى تحصيلاً في السنة كلها 💵`;
@@ -649,13 +660,17 @@ function applySorting() {
     }
 
     _matrixData.sort((a, b) => {
-      const aVal = type === "sales" ? a.monthlySales[mIdx].sales : a.monthlySales[mIdx].collections;
-      const bVal = type === "sales" ? b.monthlySales[mIdx].sales : b.monthlySales[mIdx].collections;
+      const aVal = type === "sales"
+        ? (_taxMode === "no_vat" ? a.monthlySales[mIdx].netSalesSubtotal : a.monthlySales[mIdx].netSales)
+        : a.monthlySales[mIdx].collections;
+      const bVal = type === "sales"
+        ? (_taxMode === "no_vat" ? b.monthlySales[mIdx].netSalesSubtotal : b.monthlySales[mIdx].netSales)
+        : b.monthlySales[mIdx].collections;
       return dir === "desc" ? (bVal - aVal) : (aVal - bVal);
     });
 
     if (badgeEl) {
-      badgeEl.textContent = `⚡ الترتيب الحالي: ${dir === 'desc' ? 'الأعلى' : 'الأقل'} ${type === 'sales' ? 'مبيعات' : 'تحصيلاً'} لشهر (${mName}) ${dir === 'desc' ? '▾' : '▴'}`;
+      badgeEl.textContent = `⚡ الترتيب الحالي: ${dir === 'desc' ? 'الأعلى' : 'الأقل'} ${type === 'sales' ? 'صافي مبيعات' : 'تحصيلاً'} لشهر (${mName}) ${dir === 'desc' ? '▾' : '▴'}`;
     }
   }
 }
@@ -934,26 +949,31 @@ function updateKPICards() {
   const totalSubtotal = targetData.reduce((sum, d) => sum + d.totalSalesSubtotal, 0);
   const totalVat = targetData.reduce((sum, d) => sum + d.totalSalesVat, 0);
   const totalReturns = targetData.reduce((sum, d) => sum + d.totalReturns, 0);
+  const totalReturnsSubtotal = targetData.reduce((sum, d) => sum + d.totalReturnsSubtotal, 0);
   const totalNetSales = targetData.reduce((sum, d) => sum + d.totalNetSales, 0);
+  const totalNetSalesSubtotal = targetData.reduce((sum, d) => sum + d.totalNetSalesSubtotal, 0);
   const totalCollections = targetData.reduce((sum, d) => sum + d.totalCollections, 0);
   const totalGap = totalNetSales - totalCollections;
-  const colRate = totalNetSales > 0 ? (totalCollections / totalNetSales) * 100 : 0;
+  const colRate = totalNetSales > 0 ? (totalCollections / totalNetSales) * 100 : (totalSales > 0 ? (totalCollections / totalSales) * 100 : 0);
   const totalActualBalances = targetData.reduce((sum, d) => sum + d.actualStatementBalance, 0);
 
-  const displaySales = _taxMode === "no_vat" ? totalSubtotal : totalSales;
-  document.getElementById("cmm-kpi-sales").textContent = formatCurrency(displaySales);
+  const displayNetSales = _taxMode === "no_vat" ? totalNetSalesSubtotal : totalNetSales;
+  const displayGrossSales = _taxMode === "no_vat" ? totalSubtotal : totalSales;
+  const displayReturns = _taxMode === "no_vat" ? totalReturnsSubtotal : totalReturns;
+
+  document.getElementById("cmm-kpi-sales").textContent = formatCurrency(displayNetSales);
   document.getElementById("cmm-kpi-sales-avg").textContent = _taxMode === "no_vat"
-    ? `شامل الضريبة: ${formatCurrency(totalSales)} | الضريبة: ${formatCurrency(totalVat)}`
-    : `قبل الضريبة: ${formatCurrency(totalSubtotal)} | الضريبة (15%): ${formatCurrency(totalVat)}`;
+    ? `فواتير: ${formatCurrency(displayGrossSales)} | مردودات: ${formatCurrency(displayReturns)}`
+    : `فواتير: ${formatCurrency(displayGrossSales)} | مردودات: ${formatCurrency(displayReturns)} (الضريبة: ${formatCurrency(totalVat)})`;
 
   document.getElementById("cmm-kpi-collections").textContent = formatCurrency(totalCollections);
-  document.getElementById("cmm-kpi-col-avg").textContent = `صافي المبيعات: ${formatCurrency(totalNetSales)} | مردودات: ${formatCurrency(totalReturns)}`;
+  document.getElementById("cmm-kpi-col-avg").textContent = `متوسط شهري: ${formatCurrency(totalCollections / 12)}`;
 
   const rateEl = document.getElementById("cmm-kpi-rate");
   rateEl.textContent = `${colRate.toFixed(1)}%`;
   rateEl.style.color = colRate >= 90 ? "#10B981" : colRate >= 70 ? "#F59E0B" : "#EF4444";
 
-  document.getElementById("cmm-kpi-gap").textContent = `فجوة التحصيل: ${formatCurrency(totalGap)}`;
+  document.getElementById("cmm-kpi-gap").textContent = `فجوة التحصيل: ${formatCurrency(totalGap)} (صافي المستحق - المقبوض)`;
 
   const balEl = document.getElementById("cmm-kpi-total-balance");
   balEl.textContent = formatCurrency(totalActualBalances);
@@ -982,7 +1002,7 @@ function updateFocusBanner() {
 
   banner.style.display = "none";
   document.getElementById("cmm-chart-title").textContent = `📊 منحنى المبيعات والتحصيلات المجمعة لسنة ${_selectedYear}`;
-  document.getElementById("cmm-chart-subtitle").textContent = `مقارنة بصرية ديناميكية بين مسحوبات المبيعات والتدفقات النقدية المحصلة`;
+  document.getElementById("cmm-chart-subtitle").textContent = `مقارنة بصرية ديناميكية بين صافي مسحوبات المبيعات والتدفقات النقدية المحصلة`;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -993,7 +1013,7 @@ function renderTrendChart() {
   if (!canvas || typeof Chart === "undefined") return;
 
   // Aggregate monthly values
-  const monthlySalesTotals = Array(12).fill(0);
+  const monthlyNetSalesTotals = Array(12).fill(0);
   const monthlyCollectionsTotals = Array(12).fill(0);
   const monthlyReturnsTotals = Array(12).fill(0);
 
@@ -1003,9 +1023,11 @@ function renderTrendChart() {
 
   targetData.forEach(row => {
     row.monthlySales.forEach((m, idx) => {
-      monthlySalesTotals[idx] += m.sales;
+      const netVal = _taxMode === "no_vat" ? m.netSalesSubtotal : m.netSales;
+      const retVal = _taxMode === "no_vat" ? m.returnsSubtotal : m.returns;
+      monthlyNetSalesTotals[idx] += netVal;
       monthlyCollectionsTotals[idx] += m.collections;
-      monthlyReturnsTotals[idx] += m.returns;
+      monthlyReturnsTotals[idx] += retVal;
     });
   });
 
@@ -1030,8 +1052,8 @@ function renderTrendChart() {
       labels: MONTH_NAMES_AR,
       datasets: [
         {
-          label: "المبيعات (ر.س)",
-          data: monthlySalesTotals,
+          label: "صافي المبيعات (المبيعات − المردودات)",
+          data: monthlyNetSalesTotals,
           borderColor: "#4F46E5",
           backgroundColor: salesGrad,
           borderWidth: 3.5,
@@ -1044,7 +1066,7 @@ function renderTrendChart() {
           fill: true
         },
         {
-          label: "التحصيلات (ر.س)",
+          label: "التحصيلات المقبوضة",
           data: monthlyCollectionsTotals,
           borderColor: "#10B981",
           backgroundColor: colGrad,
@@ -1059,12 +1081,12 @@ function renderTrendChart() {
           fill: true
         },
         {
-          label: "المردودات (ر.س)",
+          label: "المردودات المسترجعة",
           data: monthlyReturnsTotals,
           borderColor: "#EF4444",
           backgroundColor: "rgba(239, 68, 68, 0.1)",
           borderWidth: 2,
-          borderDash: [2, 2],
+          borderDash: [3, 3],
           tension: 0.3,
           pointRadius: 4,
           pointBackgroundColor: "#EF4444",
@@ -1097,10 +1119,10 @@ function renderTrendChart() {
               return `  ${context.dataset.label}: ${formatCurrency(val)}`;
             },
             afterBody: function (context) {
-              const sVal = context[0]?.raw || 0;
-              const cVal = context[1]?.raw || 0;
-              const gap = sVal - cVal;
-              return `  ⚖️ فجوة الشهر: ${formatCurrency(gap)}`;
+              const netVal = context[0]?.raw || 0;
+              const colVal = context[1]?.raw || 0;
+              const gap = netVal - colVal;
+              return `  ⚖️ فجوة التحصيل (صافي − مقبوض): ${formatCurrency(gap)}`;
             }
           }
         }
@@ -1146,15 +1168,19 @@ function renderDonutChart() {
     if (item) {
       if (subTitleEl) subTitleEl.textContent = `هيكل حساب ${item.customer.name}`;
       labels = ["صافي المبيعات", "التحصيلات", "المردودات"];
-      dataVals = [item.totalNetSales, item.totalCollections, item.totalReturns];
+      dataVals = [
+        _taxMode === "no_vat" ? item.totalNetSalesSubtotal : item.totalNetSales,
+        item.totalCollections,
+        _taxMode === "no_vat" ? item.totalReturnsSubtotal : item.totalReturns
+      ];
     }
   } else {
-    if (subTitleEl) subTitleEl.textContent = `أعلى 5 مساهمات في مبيعات ${_selectedYear}`;
+    if (subTitleEl) subTitleEl.textContent = `أعلى 5 مساهمات في صافي مبيعات ${_selectedYear}`;
     const top5 = _matrixData.slice(0, 5);
     labels = top5.map(d => d.customer.name);
-    dataVals = top5.map(d => d.totalSales);
+    dataVals = top5.map(d => (_taxMode === "no_vat" ? d.totalNetSalesSubtotal : d.totalNetSales));
 
-    const otherSum = _matrixData.slice(5).reduce((s, d) => s + d.totalSales, 0);
+    const otherSum = _matrixData.slice(5).reduce((s, d) => s + (_taxMode === "no_vat" ? d.totalNetSalesSubtotal : d.totalNetSales), 0);
     if (otherSum > 0) {
       labels.push("باقي العملاء");
       dataVals.push(otherSum);
@@ -1234,7 +1260,7 @@ function renderMatrixTable() {
 
   const thSalesLabel = document.getElementById("cmm-th-total-sales-label");
   if (thSalesLabel) {
-    thSalesLabel.textContent = _taxMode === "no_vat" ? `مبيعات ${_selectedYear} (قبل الضريبة)` : `مبيعات ${_selectedYear} (شامل الضريبة)`;
+    thSalesLabel.textContent = _taxMode === "no_vat" ? `✨ صافي مبيعات ${_selectedYear} (قبل الضريبة)` : `✨ صافي مبيعات ${_selectedYear} (شامل الضريبة)`;
   }
 
   if (!displayList.length) {
@@ -1243,15 +1269,15 @@ function renderMatrixTable() {
     return;
   }
 
-  // Find max sales cell value for heatmap calculation
+  // Find max cell value for heatmap calculation based on net sales
   let maxCellVal = 1;
   displayList.forEach(row => {
     row.monthlySales.forEach(m => {
       const salesVal = _taxMode === "no_vat" ? m.salesSubtotal : m.sales;
       const netVal = _taxMode === "no_vat" ? m.netSalesSubtotal : m.netSales;
       const val = _selectedMetric === "collections" ? m.collections
-        : _selectedMetric === "net_sales" ? netVal
-        : salesVal;
+        : _selectedMetric === "sales" ? salesVal
+        : netVal;
       if (val > maxCellVal) maxCellVal = val;
     });
   });
@@ -1264,10 +1290,11 @@ function renderMatrixTable() {
     // Monthly cell values
     const monthCellsHTML = row.monthlySales.map((m, mIdx) => {
       const salesVal = _taxMode === "no_vat" ? m.salesSubtotal : m.sales;
+      const returnsVal = _taxMode === "no_vat" ? m.returnsSubtotal : m.returns;
       const netVal = _taxMode === "no_vat" ? m.netSalesSubtotal : m.netSales;
       const val = _selectedMetric === "collections" ? m.collections
-        : _selectedMetric === "net_sales" ? netVal
-        : salesVal;
+        : _selectedMetric === "sales" ? salesVal
+        : netVal;
 
       const isMonthSorted = _activeSortKey.startsWith(`month_${mIdx}_`);
       const intensity = val > 0 ? Math.min(0.28, Math.max(0.04, (val / maxCellVal) * 0.35)) : 0;
@@ -1279,11 +1306,16 @@ function renderMatrixTable() {
       if (_selectedMetric === "both") {
         return `
           <td style="${bgStyle} text-align:center; padding:6px 6px; border-left:1px solid var(--border-soft); font-size:11px;">
-            ${salesVal > 0 ? `
+            ${(salesVal > 0 || returnsVal > 0) ? `
               <div style="display:flex; justify-content:space-between; align-items:center; gap:2px;">
-                <span style="font-size:9.5px; color:var(--text-2);">🧾</span>
-                <span class="mono font-bold" style="color:var(--text-0);">${formatCurrency(salesVal)}</span>
+                <span style="font-size:9.5px; color:var(--text-2);" title="صافي المبيعات بعد خصم المردودات">✨</span>
+                <span class="mono font-bold" style="color:${netVal < 0 ? 'var(--bad)' : 'var(--text-0)'};">${formatCurrency(netVal)}</span>
               </div>
+              ${returnsVal > 0 ? `
+                <div style="font-size:8.5px; color:var(--bad); text-align:left; line-height:1; margin-top:1px;" title="مردودات مخصومة: ${formatCurrency(returnsVal)}">
+                  ↩️ -${formatCurrency(returnsVal)}
+                </div>
+              ` : ""}
             ` : `<div style="color:var(--text-3); font-size:10px;">—</div>`}
             ${m.collections > 0 ? `
               <div style="display:flex; justify-content:space-between; align-items:center; gap:2px; margin-top:2px;">
@@ -1298,7 +1330,7 @@ function renderMatrixTable() {
       return `
         <td style="${bgStyle} text-align:center; padding:8px 4px; border-left:1px solid var(--border-soft);">
           <span class="mono ${val > 0 ? 'font-bold' : 'dim'}" style="font-size:11.5px; color:${val > 0 ? 'var(--text-0)' : 'var(--text-3)'};">
-            ${val > 0 ? formatCurrency(val) : "—"}
+            ${val !== 0 ? formatCurrency(val) : "—"}
           </span>
         </td>
       `;
@@ -1307,7 +1339,8 @@ function renderMatrixTable() {
     const bal = row.actualStatementBalance;
     const isDebtor = bal > 0;
     const isCreditor = bal < 0;
-    const rowDisplaySales = _taxMode === "no_vat" ? row.totalSalesSubtotal : row.totalSales;
+    const rowDisplayNetSales = _taxMode === "no_vat" ? row.totalNetSalesSubtotal : row.totalNetSales;
+    const rowDisplayReturns = _taxMode === "no_vat" ? row.totalReturnsSubtotal : row.totalReturns;
 
     return `
       <tr onclick="window.focusCmmCustomer('${c.id}')"
@@ -1337,9 +1370,14 @@ function renderMatrixTable() {
         <!-- 12 Month Cells -->
         ${monthCellsHTML}
 
-        <!-- Total Sales of Year -->
+        <!-- Total Net Sales of Year -->
         <td class="mono font-bold" style="text-align:left; color:var(--indigo); background:rgba(99,102,241,0.04); font-size:12px;">
-          ${formatCurrency(rowDisplaySales)}
+          <div>${formatCurrency(rowDisplayNetSales)}</div>
+          ${row.totalReturns > 0 ? `
+            <div style="font-size:9px; font-weight:normal; color:var(--bad);" title="إجمالي مردودات السنة المسترجعة">
+              ↩️ مردود: ${formatCurrency(rowDisplayReturns)}
+            </div>
+          ` : ""}
         </td>
 
         <!-- Total Collections of Year -->
@@ -1381,14 +1419,14 @@ function renderMatrixTable() {
       row.monthlySales.forEach((m, idx) => {
         const salesVal = _taxMode === "no_vat" ? m.salesSubtotal : m.sales;
         const netVal = _taxMode === "no_vat" ? m.netSalesSubtotal : m.netSales;
-        colMonthTotals[idx] += (_selectedMetric === "collections" ? m.collections : _selectedMetric === "net_sales" ? netVal : salesVal);
+        colMonthTotals[idx] += (_selectedMetric === "collections" ? m.collections : _selectedMetric === "sales" ? salesVal : netVal);
         colMonthCollections[idx] += m.collections;
       });
     });
 
-    const grandTotalSales = displayList.reduce((s, r) => s + (_taxMode === "no_vat" ? r.totalSalesSubtotal : r.totalSales), 0);
+    const grandTotalNetSales = displayList.reduce((s, r) => s + (_taxMode === "no_vat" ? r.totalNetSalesSubtotal : r.totalNetSales), 0);
     const grandTotalCol = displayList.reduce((s, r) => s + r.totalCollections, 0);
-    const grandRate = grandTotalSales > 0 ? (grandTotalCol / grandTotalSales) * 100 : 0;
+    const grandRate = grandTotalNetSales > 0 ? (grandTotalCol / grandTotalNetSales) * 100 : 0;
     const grandBalance = displayList.reduce((s, r) => s + r.actualStatementBalance, 0);
 
     tfoot.innerHTML = `
@@ -1401,11 +1439,11 @@ function renderMatrixTable() {
         </td>
         ${colMonthTotals.map(val => `
           <td class="mono font-bold" style="text-align:center; font-size:11.5px; color:var(--text-0); padding:8px 4px;">
-            ${val > 0 ? formatCurrency(val) : "0.00"}
+            ${val !== 0 ? formatCurrency(val) : "0.00"}
           </td>
         `).join("")}
         <td class="mono font-bold" style="text-align:left; color:var(--indigo); font-size:12.5px;">
-          ${formatCurrency(grandTotalSales)}
+          ${formatCurrency(grandTotalNetSales)}
         </td>
         <td class="mono font-bold" style="text-align:left; color:#10B981; font-size:12.5px;">
           ${formatCurrency(grandTotalCol)}
@@ -1461,12 +1499,13 @@ function renderMonthlyBreakdownTable() {
       netSalesSubtotal += m.netSalesSubtotal;
       collections += m.collections;
 
-      if (m.sales > 0 || m.collections > 0) {
+      if (m.sales > 0 || m.collections > 0 || m.returns > 0) {
         activeCusts++;
       }
 
-      if (m.sales > topBuyer.amount) {
-        topBuyer = { name: row.customer.name, amount: m.sales };
+      const custMonthNet = _taxMode === "no_vat" ? m.netSalesSubtotal : m.netSales;
+      if (custMonthNet > topBuyer.amount) {
+        topBuyer = { name: row.customer.name, amount: custMonthNet };
       }
       if (m.collections > topPayer.amount) {
         topPayer = { name: row.customer.name, amount: m.collections };
