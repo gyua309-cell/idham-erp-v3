@@ -161,7 +161,7 @@ const ROUTES = {
   "report-sales-product":     () => import("./modules/reports/sales-by-product.js?v=39.2"),
   "report-sales-rep":         () => import("./modules/reports/sales-by-rep.js?v=39.2"),
   "report-sales-customer":    () => import("./modules/reports/sales-by-customer.js?v=39.2"),
-  "report-customer-matrix":   () => import("./modules/reports/customer-monthly-matrix.js?v=1.0"),
+  "report-customer-matrix":   () => import("./modules/reports/customer-monthly-matrix.js?v=1.1"),
   "report-stock":             () => import("./modules/reports/stock-report.js?v=39.2"),
   "report-customer-statement":() => import("./modules/reports/customer-statement.js?v=40.0"),
   "report-hierarchical-debt": () => import("./modules/reports/hierarchical-debt.js?v=1.0"),

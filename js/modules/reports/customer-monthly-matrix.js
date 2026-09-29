@@ -25,6 +25,7 @@ let _selectedRepId = "all";
 let _selectedZone = "all";
 let _selectedMetric = "both"; // "both", "sales", "collections", "net_sales"
 let _searchQuery = "";
+let _activeSortKey = "total_sales_desc"; // e.g. "total_sales_desc", "month_8_sales_desc", etc.
 let _selectedCustomerId = null; // null = all / aggregate
 let _chartInstance = null;
 let _donutChartInstance = null;
@@ -34,6 +35,7 @@ export async function render(container, user) {
   _selectedYear = new Date().getFullYear();
   _selectedCustomerId = null;
   _searchQuery = "";
+  _activeSortKey = "total_sales_desc";
 
   container.innerHTML = `
     <!-- Top Filter Bar -->
@@ -42,7 +44,7 @@ export async function render(container, user) {
       <!-- Year Selector -->
       <div class="filter-select-group">
         <label style="font-weight:700; font-size:12px; color:var(--text-2);">📅 السنة المالية</label>
-        <select id="cmm-year-select" onchange="window.onCmmYearChange(this.value)" style="min-width:110px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12.5px; font-weight:700;">
+        <select id="cmm-year-select" onchange="window.onCmmYearChange(this.value)" style="min-width:105px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12.5px; font-weight:700;">
           <option value="2026" ${_selectedYear === 2026 ? "selected" : ""}>2026</option>
           <option value="2025" ${_selectedYear === 2025 ? "selected" : ""}>2025</option>
           <option value="2024" ${_selectedYear === 2024 ? "selected" : ""}>2024</option>
@@ -53,7 +55,7 @@ export async function render(container, user) {
       <!-- Sales Rep Filter -->
       <div class="filter-select-group">
         <label style="font-weight:700; font-size:12px; color:var(--text-2);">👔 المندوب</label>
-        <select id="cmm-rep-select" onchange="window.onCmmRepChange(this.value)" style="min-width:170px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px; font-weight:600;">
+        <select id="cmm-rep-select" onchange="window.onCmmRepChange(this.value)" style="min-width:165px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px; font-weight:600;">
           <option value="all">كل المناديب (مجمع)</option>
         </select>
       </div>
@@ -61,7 +63,7 @@ export async function render(container, user) {
       <!-- Zone Filter -->
       <div class="filter-select-group">
         <label style="font-weight:700; font-size:12px; color:var(--text-2);">📍 المنطقة / المسار</label>
-        <select id="cmm-zone-select" onchange="window.onCmmZoneChange(this.value)" style="min-width:140px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px;">
+        <select id="cmm-zone-select" onchange="window.onCmmZoneChange(this.value)" style="min-width:130px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px;">
           <option value="all">كل المناطق</option>
         </select>
       </div>
@@ -69,18 +71,43 @@ export async function render(container, user) {
       <!-- Metric View Toggle -->
       <div class="filter-select-group">
         <label style="font-weight:700; font-size:12px; color:var(--text-2);">👁️ نمط العرض في الخلايا</label>
-        <select id="cmm-metric-select" onchange="window.onCmmMetricChange(this.value)" style="min-width:210px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px; font-weight:700;">
-          <option value="both" selected>المبيعات والتحصيلات معاً (سطرين)</option>
+        <select id="cmm-metric-select" onchange="window.onCmmMetricChange(this.value)" style="min-width:190px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px; font-weight:700;">
+          <option value="both" selected>المبيعات والتحصيلات معاً</option>
           <option value="sales">المبيعات فقط (Sales)</option>
           <option value="collections">التحصيلات فقط (Collections)</option>
-          <option value="net_sales">صافي المبيعات (بعد خصم المردودات)</option>
+          <option value="net_sales">صافي المبيعات (بعد المردودات)</option>
+        </select>
+      </div>
+
+      <!-- Sort Filter Dropdown -->
+      <div class="filter-select-group">
+        <label style="font-weight:700; font-size:12px; color:var(--text-2);">⚡ ترتيب الجدول والمصفوفة</label>
+        <select id="cmm-sort-select" onchange="window.onCmmSortChange(this.value)" style="min-width:210px; padding:6px 10px; border:1px solid var(--brand); border-radius:8px; background:var(--bg-card); color:var(--brand); font-size:12px; font-weight:700;">
+          <optgroup label="ترتيب سنوي عام">
+            <option value="total_sales_desc" selected>الأعلى مبيعات في السنة كلها 🏆</option>
+            <option value="total_sales_asc">الأقل مبيعات في السنة كلها</option>
+            <option value="total_col_desc">الأعلى تحصيلاً في السنة كلها 💵</option>
+            <option value="total_col_asc">الأقل تحصيلاً في السنة كلها</option>
+            <option value="balance_desc">الأعلى مديونية (رصيد كشف الحساب) ⚠️</option>
+            <option value="name_asc">أبجدياً (اسم العميل أ - ي)</option>
+          </optgroup>
+          <optgroup label="ترتيب حسب أعلى مبيعات شهر معين">
+            ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_sales_desc">الأعلى مبيعات شهر ${m} 🛒</option>`).join("")}
+          </optgroup>
+          <optgroup label="ترتيب حسب أعلى تحصيلات شهر معين">
+            ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_col_desc">الأعلى تحصيلاً شهر ${m} 📥</option>`).join("")}
+          </optgroup>
+          <optgroup label="ترتيب حسب الأقل مبيعات أو تحصيلاً">
+            ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_sales_asc">الأقل مبيعات شهر ${m} 📉</option>`).join("")}
+            ${MONTH_NAMES_AR.map((m, idx) => `<option value="month_${idx}_col_asc">الأقل تحصيلاً شهر ${m} ⚠️</option>`).join("")}
+          </optgroup>
         </select>
       </div>
 
       <!-- Search Input -->
-      <div style="flex:1; min-width:200px; max-width:320px;">
-        <label style="font-weight:700; font-size:12px; color:var(--text-2);">🔍 بحث فوري عن عميل</label>
-        <input type="text" id="cmm-search-input" placeholder="اكتب اسم العميل أو الكود..." oninput="window.onCmmSearchInput(this.value)" style="width:100%; padding:6px 12px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px;" />
+      <div style="flex:1; min-width:180px; max-width:280px;">
+        <label style="font-weight:700; font-size:12px; color:var(--text-2);">🔍 بحث فوري</label>
+        <input type="text" id="cmm-search-input" placeholder="اسم العميل أو الكود..." oninput="window.onCmmSearchInput(this.value)" style="width:100%; padding:6px 12px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px;" />
       </div>
 
       <!-- Export & Print Actions -->
@@ -197,7 +224,7 @@ export async function render(container, user) {
 
       </div>
 
-      <!-- Explanatory Guide & Key Legend Strip -->
+      <!-- Explanatory Guide & Key Legend Strip with Current Active Sort Badge -->
       <div class="card mb-12" style="padding:10px 18px; background:linear-gradient(135deg, var(--bg-card), rgba(99,102,241,0.03)); border:1px solid var(--border-soft); border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:11.5px;">
         <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
           <span style="font-weight:800; color:var(--brand);">💡 دليل قراءة الخلايا:</span>
@@ -205,27 +232,135 @@ export async function render(container, user) {
           <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:#10B981;">السطر السفلي:</b> 📥 المبالغ المحصلة والمقبوضة فعلياً في الشهر</span>
           <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:var(--indigo);">⚖️ رصيد كشف الحساب:</b> ناتج (إجمالي المبيعات التاريخية - المردودات - إجمالي التحصيلات)</span>
         </div>
-        <div style="font-weight:700; color:var(--text-2);" id="cmm-table-rows-count">
-          عرض 0 عميل
+        <div style="display:flex; align-items:center; gap:10px;">
+          <!-- View Switcher -->
+          <div style="display:inline-flex; background:var(--bg-1); padding:2px; border-radius:8px; border:1px solid var(--border-soft);">
+            <button class="btn btn-sm btn-ghost" id="cmm-view-both-btn" onclick="window.setCmmView('both')" style="padding:4px 10px; font-size:11px; font-weight:700; border-radius:6px; background:var(--brand); color:#fff;">
+              📊 العرض المتكامل
+            </button>
+            <button class="btn btn-sm btn-ghost" id="cmm-view-matrix-btn" onclick="window.setCmmView('matrix')" style="padding:4px 10px; font-size:11px; font-weight:700; border-radius:6px; color:var(--text-2);">
+              📑 مصفوفة العملاء
+            </button>
+            <button class="btn btn-sm btn-ghost" id="cmm-view-months-btn" onclick="window.setCmmView('months')" style="padding:4px 10px; font-size:11px; font-weight:700; border-radius:6px; color:var(--text-2);">
+              📅 جدول تحليل الأشهر
+            </button>
+          </div>
+          <span class="badge" id="cmm-active-sort-badge" style="background:rgba(99,102,241,0.12); color:var(--brand); font-weight:800; font-size:11px; padding:4px 10px; border:1px solid rgba(99,102,241,0.25);">
+            ⚡ الترتيب الحالي: الأعلى مبيعات
+          </span>
+          <div style="font-weight:700; color:var(--text-2);" id="cmm-table-rows-count">
+            عرض 0 عميل
+          </div>
         </div>
       </div>
 
-      <!-- Customer Monthly Matrix Table -->
-      <div class="card" style="border-radius:14px; background:var(--bg-card); border:1px solid var(--border-soft); overflow:hidden;">
-        <div class="table-container" style="max-height:720px; overflow:auto;">
-          <table class="data-dense" id="cmm-matrix-table" style="width:100%; border-collapse:collapse; min-width:1380px;">
-            <thead style="position:sticky; top:0; z-index:10; background:var(--bg-1);">
+      <!-- Dedicated Monthly Analysis Breakdown Table Card (جدول تحليل الأشهر ومؤشرات الأداء) -->
+      <div id="cmm-months-table-card" class="card mb-16" style="border-radius:14px; background:var(--bg-card); border:1px solid var(--border-soft); overflow:hidden;">
+        <div style="padding:12px 18px; background:linear-gradient(90deg, rgba(99,102,241,0.06), rgba(16,185,129,0.06)); border-bottom:1px solid var(--border-soft); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:18px;">📅</span>
+            <div>
+              <h3 style="margin:0; font-size:14px; font-weight:800; color:var(--text-0);">جدول التحليل المالي للأشهر (${_selectedYear})</h3>
+              <p style="margin:2px 0 0; font-size:11px; color:var(--text-2);">توزيع أداء المبيعات والمردودات وصافي التدفقات والتحصيلات وأفضل العملاء شهراً بشهر</p>
+            </div>
+          </div>
+          <div style="font-size:11.5px; font-weight:700; color:var(--brand);">
+            💡 انقر على زر "فرز المصفوفة" لأي شهر لترتيب جدول العملاء مباشرة حسب ذلك الشهر
+          </div>
+        </div>
+        <div class="table-container" style="overflow:auto;">
+          <table class="data-dense" id="cmm-monthly-breakdown-table" style="width:100%; border-collapse:collapse; min-width:1150px;">
+            <thead style="background:var(--bg-1);">
               <tr>
-                <th style="min-width:220px; position:sticky; right:0; z-index:11; background:var(--bg-1); box-shadow:-2px 0 6px rgba(0,0,0,0.06); padding:10px 12px;">
-                  العميل / المندوب / المسار
+                <th style="width:120px; text-align:right; padding:10px 12px; font-weight:800;">📅 عمود الشهر</th>
+                <th style="min-width:110px; text-align:left; color:var(--indigo);">🧾 إجمالي المبيعات</th>
+                <th style="min-width:95px; text-align:left; color:var(--bad);">↩️ المردودات</th>
+                <th style="min-width:110px; text-align:left; color:var(--text-0);">✨ صافي المبيعات</th>
+                <th style="min-width:110px; text-align:left; color:#10B981;">📥 التحصيلات المقبوضة</th>
+                <th style="min-width:110px; text-align:left; color:var(--text-1);">⚖️ فجوة الشهر</th>
+                <th style="width:95px; text-align:center;">🎯 نسبة التحصيل</th>
+                <th style="width:90px; text-align:center;">📊 حصة السنة %</th>
+                <th style="width:90px; text-align:center;">👥 عملاء نشطون</th>
+                <th style="min-width:160px; text-align:right;">🥇 أعلى عميل مبيعات</th>
+                <th style="min-width:160px; text-align:right;">💵 أعلى عميل تحصيلاً</th>
+                <th style="width:110px; text-align:center;" class="no-print">⚡ فرز المصفوفة</th>
+              </tr>
+            </thead>
+            <tbody id="cmm-monthly-breakdown-tbody">
+              <!-- Rendered Dynamically -->
+            </tbody>
+            <tfoot id="cmm-monthly-breakdown-tfoot" style="background:var(--bg-2); font-weight:900; border-top:2px solid var(--border);">
+              <!-- Rendered Dynamically -->
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Customer Monthly Matrix Table (مصفوفة العملاء في صفوف والأشهر في أعمدة) -->
+      <div id="cmm-matrix-table-card" class="card" style="border-radius:14px; background:var(--bg-card); border:1px solid var(--border-soft); overflow:hidden;">
+        <div class="table-container" style="max-height:720px; overflow:auto;">
+          <table class="data-dense" id="cmm-matrix-table" style="width:100%; border-collapse:collapse; min-width:1450px;">
+            <thead style="position:sticky; top:0; z-index:10; background:var(--bg-1);">
+              <!-- Top Tier: Explicit Group Header Categorization -->
+              <tr style="border-bottom:1px solid var(--border-soft);">
+                <th colspan="2" style="position:sticky; right:0; z-index:12; background:var(--bg-1); text-align:center; padding:7px 10px; font-size:12px; font-weight:800; color:var(--text-1); border-left:1px solid var(--border);">
+                  🏢 بيانات العملاء والرصيد
                 </th>
-                <th style="min-width:125px; text-align:left; background:rgba(99,102,241,0.04);">
-                  <div>⚖️ رصيد كشف الحساب</div>
+                <th colspan="12" style="text-align:center; padding:7px 10px; font-size:12.5px; font-weight:900; color:var(--brand); background:linear-gradient(90deg, rgba(99,102,241,0.08), rgba(16,185,129,0.08)); border-left:1px solid var(--border);">
+                  📅 عمود الأشهر (${_selectedYear}) — مبيعات وتحصيلات الـ 12 شهراً
+                </th>
+                <th colspan="5" style="text-align:center; padding:7px 10px; font-size:12px; font-weight:800; color:var(--text-1); background:var(--bg-1);">
+                  📊 الإجماليات ومؤشرات الأداء السنوية
+                </th>
+              </tr>
+
+              <!-- Second Tier: Detailed Columns -->
+              <tr>
+                <th style="min-width:220px; position:sticky; right:0; z-index:11; background:var(--bg-1); box-shadow:-2px 0 6px rgba(0,0,0,0.06); padding:10px 12px; cursor:pointer;" onclick="window.toggleCmmHeaderSort('name')">
+                  <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span>العميل / المندوب / المسار</span>
+                    <span style="font-size:10px; color:var(--text-2);">⇅</span>
+                  </div>
+                </th>
+
+                <th style="min-width:125px; text-align:left; background:rgba(99,102,241,0.04); cursor:pointer;" onclick="window.toggleCmmHeaderSort('balance')">
+                  <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span>⚖️ رصيد كشف الحساب</span>
+                    <span style="font-size:10px; color:var(--text-2);">⇅</span>
+                  </div>
                   <div style="font-size:9.5px; font-weight:normal; color:var(--text-2);">(الصافي الفعلي التراكمي)</div>
                 </th>
-                ${MONTH_NAMES_AR.map(m => `<th style="min-width:100px; text-align:center;">${m}</th>`).join("")}
-                <th style="min-width:115px; text-align:left; background:rgba(99,102,241,0.08); color:var(--indigo);">مبيعات ${_selectedYear}</th>
-                <th style="min-width:115px; text-align:left; background:rgba(16,185,129,0.08); color:#10B981;">تحصيلات ${_selectedYear}</th>
+
+                ${MONTH_NAMES_AR.map((m, idx) => `
+                  <th style="min-width:105px; text-align:center; padding:8px 4px; user-select:none;" id="th-month-${idx}">
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
+                      <span style="font-size:11.5px; font-weight:800; color:var(--text-0);">${idx + 1} - ${m}</span>
+                      <div style="display:flex; gap:3px; align-items:center;">
+                        <button class="btn btn-ghost btn-icon sm" title="ترتيب حسب مبيعات ${m}" onclick="window.setMonthQuickSort(${idx}, 'sales')" style="padding:2px 4px; font-size:9px; height:18px; border-radius:4px; background:rgba(99,102,241,0.08); color:var(--brand);">
+                          🧾 مبيعات
+                        </button>
+                        <button class="btn btn-ghost btn-icon sm" title="ترتيب حسب تحصيلات ${m}" onclick="window.setMonthQuickSort(${idx}, 'col')" style="padding:2px 4px; font-size:9px; height:18px; border-radius:4px; background:rgba(16,185,129,0.08); color:#10B981;">
+                          📥 تحصيل
+                        </button>
+                      </div>
+                    </div>
+                  </th>
+                `).join("")}
+
+                <th style="min-width:115px; text-align:left; background:rgba(99,102,241,0.08); color:var(--indigo); cursor:pointer;" onclick="window.toggleCmmHeaderSort('total_sales')">
+                  <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span>مبيعات ${_selectedYear}</span>
+                    <span style="font-size:10px;">⇅</span>
+                  </div>
+                </th>
+
+                <th style="min-width:115px; text-align:left; background:rgba(16,185,129,0.08); color:#10B981; cursor:pointer;" onclick="window.toggleCmmHeaderSort('total_col')">
+                  <div style="display:flex; align-items:center; justify-content:space-between;">
+                    <span>تحصيلات ${_selectedYear}</span>
+                    <span style="font-size:10px;">⇅</span>
+                  </div>
+                </th>
+
                 <th style="width:85px; text-align:center;">التغطية %</th>
                 <th style="width:95px; text-align:center;">الاتجاه</th>
                 <th style="width:80px; text-align:center;" class="no-print">إجراءات</th>
@@ -277,6 +412,97 @@ async function setupGlobalCmmHandlers() {
     renderMatrixTable();
   };
 
+  window.onCmmSortChange = (sortKey) => {
+    _activeSortKey = sortKey;
+    applySorting();
+    renderMatrixTable();
+  };
+
+  window.setMonthQuickSort = (mIdx, type) => {
+    const currentKey = _activeSortKey;
+    const descKey = `month_${mIdx}_${type}_desc`;
+    const ascKey = `month_${mIdx}_${type}_asc`;
+
+    // Toggle between desc and asc if clicking same
+    if (currentKey === descKey) {
+      _activeSortKey = ascKey;
+    } else {
+      _activeSortKey = descKey;
+    }
+
+    const sortSelect = document.getElementById("cmm-sort-select");
+    if (sortSelect) sortSelect.value = _activeSortKey;
+
+    applySorting();
+    renderMatrixTable();
+  };
+
+  window.toggleCmmHeaderSort = (field) => {
+    if (field === "total_sales") {
+      _activeSortKey = _activeSortKey === "total_sales_desc" ? "total_sales_asc" : "total_sales_desc";
+    } else if (field === "total_col") {
+      _activeSortKey = _activeSortKey === "total_col_desc" ? "total_col_asc" : "total_col_desc";
+    } else if (field === "balance") {
+      _activeSortKey = _activeSortKey === "balance_desc" ? "balance_asc" : "balance_desc";
+    } else if (field === "name") {
+      _activeSortKey = _activeSortKey === "name_asc" ? "name_desc" : "name_asc";
+    }
+
+    const sortSelect = document.getElementById("cmm-sort-select");
+    if (sortSelect) sortSelect.value = _activeSortKey;
+
+    applySorting();
+    renderMatrixTable();
+  };
+
+  window.setCmmView = (view) => {
+    const monthsCard = document.getElementById("cmm-months-table-card");
+    const matrixCard = document.getElementById("cmm-matrix-table-card");
+    const bothBtn = document.getElementById("cmm-view-both-btn");
+    const matrixBtn = document.getElementById("cmm-view-matrix-btn");
+    const monthsBtn = document.getElementById("cmm-view-months-btn");
+
+    [bothBtn, matrixBtn, monthsBtn].forEach(b => {
+      if (b) {
+        b.style.background = "transparent";
+        b.style.color = "var(--text-2)";
+      }
+    });
+
+    if (view === "both") {
+      if (monthsCard) monthsCard.style.display = "block";
+      if (matrixCard) matrixCard.style.display = "block";
+      if (bothBtn) {
+        bothBtn.style.background = "var(--brand)";
+        bothBtn.style.color = "#fff";
+      }
+    } else if (view === "matrix") {
+      if (monthsCard) monthsCard.style.display = "none";
+      if (matrixCard) matrixCard.style.display = "block";
+      if (matrixBtn) {
+        matrixBtn.style.background = "var(--brand)";
+        matrixBtn.style.color = "#fff";
+      }
+    } else if (view === "months") {
+      if (monthsCard) monthsCard.style.display = "block";
+      if (matrixCard) matrixCard.style.display = "none";
+      if (monthsBtn) {
+        monthsBtn.style.background = "var(--brand)";
+        monthsBtn.style.color = "#fff";
+      }
+    }
+  };
+
+  window.scrollCmmToMatrix = () => {
+    const matrixCard = document.getElementById("cmm-matrix-table-card");
+    if (matrixCard) {
+      if (matrixCard.style.display === "none") {
+        window.setCmmView("both");
+      }
+      matrixCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   window.onCmmSearchInput = debounce((query) => {
     _searchQuery = (query || "").trim().toLowerCase();
     renderMatrixTable();
@@ -287,6 +513,7 @@ async function setupGlobalCmmHandlers() {
     updateFocusBanner();
     renderTrendChart();
     renderDonutChart();
+    renderMonthlyBreakdownTable();
     renderMatrixTable();
   };
 
@@ -295,6 +522,7 @@ async function setupGlobalCmmHandlers() {
     updateFocusBanner();
     renderTrendChart();
     renderDonutChart();
+    renderMonthlyBreakdownTable();
     renderMatrixTable();
   };
 
@@ -342,6 +570,71 @@ async function setupGlobalCmmHandlers() {
   window.printCmmReport = () => {
     window.print();
   };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Apply Sorting to Matrix Data
+// ─────────────────────────────────────────────────────────────────────────────
+function applySorting() {
+  const key = _activeSortKey || "total_sales_desc";
+  const badgeEl = document.getElementById("cmm-active-sort-badge");
+
+  // Reset highlight styling on month headers
+  MONTH_NAMES_AR.forEach((_, idx) => {
+    const th = document.getElementById(`th-month-${idx}`);
+    if (th) {
+      th.style.background = "";
+      th.style.boxShadow = "";
+    }
+  });
+
+  if (key === "total_sales_desc") {
+    _matrixData.sort((a, b) => b.totalSales - a.totalSales);
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأعلى مبيعات في السنة كلها 🏆`;
+  } else if (key === "total_sales_asc") {
+    _matrixData.sort((a, b) => a.totalSales - b.totalSales);
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأقل مبيعات في السنة كلها 📉`;
+  } else if (key === "total_col_desc") {
+    _matrixData.sort((a, b) => b.totalCollections - a.totalCollections);
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأعلى تحصيلاً في السنة كلها 💵`;
+  } else if (key === "total_col_asc") {
+    _matrixData.sort((a, b) => a.totalCollections - b.totalCollections);
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأقل تحصيلاً في السنة كلها ⚠️`;
+  } else if (key === "balance_desc") {
+    _matrixData.sort((a, b) => b.actualStatementBalance - a.actualStatementBalance);
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأعلى مديونية (رصيد كشف الحساب) ⚠️`;
+  } else if (key === "balance_asc") {
+    _matrixData.sort((a, b) => a.actualStatementBalance - b.actualStatementBalance);
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: الأقل مديونية / دائن 🟢`;
+  } else if (key === "name_asc") {
+    _matrixData.sort((a, b) => (a.customer.name || "").localeCompare(b.customer.name || "", "ar"));
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: أبجدياً (أ - ي)`;
+  } else if (key === "name_desc") {
+    _matrixData.sort((a, b) => (b.customer.name || "").localeCompare(a.customer.name || "", "ar"));
+    if (badgeEl) badgeEl.textContent = `⚡ الترتيب الحالي: أبجدياً (ي - أ)`;
+  } else if (key.startsWith("month_")) {
+    const parts = key.split("_");
+    const mIdx = parseInt(parts[1], 10);
+    const type = parts[2]; // "sales" or "col"
+    const dir = parts[3]; // "desc" or "asc"
+    const mName = MONTH_NAMES_AR[mIdx] || "";
+
+    const th = document.getElementById(`th-month-${mIdx}`);
+    if (th) {
+      th.style.background = type === "sales" ? "rgba(99,102,241,0.16)" : "rgba(16,185,129,0.16)";
+      th.style.boxShadow = "inset 0 0 0 1.5px var(--brand)";
+    }
+
+    _matrixData.sort((a, b) => {
+      const aVal = type === "sales" ? a.monthlySales[mIdx].sales : a.monthlySales[mIdx].collections;
+      const bVal = type === "sales" ? b.monthlySales[mIdx].sales : b.monthlySales[mIdx].collections;
+      return dir === "desc" ? (bVal - aVal) : (aVal - bVal);
+    });
+
+    if (badgeEl) {
+      badgeEl.textContent = `⚡ الترتيب الحالي: ${dir === 'desc' ? 'الأعلى' : 'الأقل'} ${type === 'sales' ? 'مبيعات' : 'تحصيلاً'} لشهر (${mName}) ${dir === 'desc' ? '▾' : '▴'}`;
+    }
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -561,13 +854,12 @@ function processAndRenderMatrix() {
     };
   });
 
-  // Sort by Total Sales Descending
-  _matrixData.sort((a, b) => b.totalSales - a.totalSales);
-
+  applySorting();
   updateKPICards();
   updateFocusBanner();
   renderTrendChart();
   renderDonutChart();
+  renderMonthlyBreakdownTable();
   renderMatrixTable();
 }
 
@@ -892,18 +1184,22 @@ function renderMatrixTable() {
   });
 
   // Render Rows
-  tbody.innerHTML = displayList.map(row => {
+  tbody.innerHTML = displayList.map((row, rowIdx) => {
     const c = row.customer;
     const isSelected = _selectedCustomerId === c.id;
 
     // Monthly cell values
-    const monthCellsHTML = row.monthlySales.map(m => {
+    const monthCellsHTML = row.monthlySales.map((m, mIdx) => {
       const val = _selectedMetric === "collections" ? m.collections
         : _selectedMetric === "net_sales" ? m.netSales
         : m.sales;
 
+      const isMonthSorted = _activeSortKey.startsWith(`month_${mIdx}_`);
       const intensity = val > 0 ? Math.min(0.28, Math.max(0.04, (val / maxCellVal) * 0.35)) : 0;
-      const bgStyle = val > 0 ? `background: rgba(79, 70, 229, ${intensity});` : "";
+      let bgStyle = val > 0 ? `background: rgba(79, 70, 229, ${intensity});` : "";
+      if (isMonthSorted) {
+        bgStyle = val > 0 ? `background: rgba(99, 102, 241, ${Math.max(0.12, intensity + 0.08)});` : "background: rgba(99, 102, 241, 0.03);";
+      }
 
       if (_selectedMetric === "both") {
         return `
@@ -944,7 +1240,10 @@ function renderMatrixTable() {
         
         <!-- Sticky Customer Column -->
         <td style="position:sticky; right:0; z-index:5; background:${isSelected ? 'var(--bg-card)' : 'var(--bg-card)'}; box-shadow:-2px 0 6px rgba(0,0,0,0.06); padding:8px 12px;">
-          <div style="font-weight:800; font-size:12.5px; color:${isSelected ? 'var(--brand)' : 'var(--text-0)'};">${c.name}</div>
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <div style="font-weight:800; font-size:12.5px; color:${isSelected ? 'var(--brand)' : 'var(--text-0)'};">${c.name}</div>
+            ${rowIdx < 3 && _activeSortKey.includes("desc") ? `<span style="font-size:13px;">${rowIdx === 0 ? '🥇' : rowIdx === 1 ? '🥈' : '🥉'}</span>` : ""}
+          </div>
           <div style="font-size:10.5px; color:var(--text-2); margin-top:2px; display:flex; gap:6px; align-items:center;">
             <span>${c.code ? `[${c.code}]` : ""}</span>
             <span>👔 ${c.repName || "—"}</span>
@@ -1041,3 +1340,172 @@ function renderMatrixTable() {
     `;
   }
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Render Dedicated Monthly Analysis Breakdown Table (جدول تحليل الأشهر ومؤشرات الأداء)
+// ─────────────────────────────────────────────────────────────────────────────
+function renderMonthlyBreakdownTable() {
+  const tbody = document.getElementById("cmm-monthly-breakdown-tbody");
+  const tfoot = document.getElementById("cmm-monthly-breakdown-tfoot");
+  if (!tbody) return;
+
+  const targetData = _selectedCustomerId
+    ? _matrixData.filter(d => d.customer.id === _selectedCustomerId)
+    : _matrixData;
+
+  const grandTotalSales = targetData.reduce((s, d) => s + d.totalSales, 0);
+
+  const monthlyStats = Array(12).fill(0).map((_, mIdx) => {
+    let sales = 0;
+    let returns = 0;
+    let netSales = 0;
+    let collections = 0;
+    let activeCusts = 0;
+    let topBuyer = { name: "—", amount: 0 };
+    let topPayer = { name: "—", amount: 0 };
+
+    targetData.forEach(row => {
+      const m = row.monthlySales[mIdx];
+      sales += m.sales;
+      returns += m.returns;
+      netSales += m.netSales;
+      collections += m.collections;
+
+      if (m.sales > 0 || m.collections > 0) {
+        activeCusts++;
+      }
+
+      if (m.sales > topBuyer.amount) {
+        topBuyer = { name: row.customer.name, amount: m.sales };
+      }
+      if (m.collections > topPayer.amount) {
+        topPayer = { name: row.customer.name, amount: m.collections };
+      }
+    });
+
+    const gap = netSales - collections;
+    const rate = sales > 0 ? (collections / sales) * 100 : (collections > 0 ? 100 : 0);
+    const share = grandTotalSales > 0 ? (sales / grandTotalSales) * 100 : 0;
+
+    return {
+      mIdx,
+      monthName: MONTH_NAMES_AR[mIdx],
+      sales,
+      returns,
+      netSales,
+      collections,
+      gap,
+      rate,
+      share,
+      activeCusts,
+      topBuyer,
+      topPayer
+    };
+  });
+
+  tbody.innerHTML = monthlyStats.map(stat => {
+    const isSortedThisMonth = _activeSortKey.startsWith(`month_${stat.mIdx}_`);
+    const rateBadgeClass = stat.rate >= 95 ? "good" : stat.rate >= 70 ? "warn" : stat.sales === 0 ? "neutral" : "bad";
+    const gapColor = stat.gap > 0 ? "var(--bad)" : stat.gap < 0 ? "#10B981" : "var(--text-2)";
+
+    return `
+      <tr style="transition:background 0.15s; ${isSortedThisMonth ? 'background:rgba(99,102,241,0.08); font-weight:700;' : ''}">
+        <td style="padding:10px 12px; font-weight:800; color:var(--text-0);">
+          <span style="display:inline-flex; align-items:center; gap:6px;">
+            <span class="badge" style="background:var(--bg-1); color:var(--brand); font-size:10px; font-weight:900; border:1px solid var(--border-soft); width:26px; text-align:center;">
+              ${String(stat.mIdx + 1).padStart(2, "0")}
+            </span>
+            <span style="font-size:12.5px;">${stat.monthName}</span>
+          </span>
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:var(--indigo);">
+          ${formatCurrency(stat.sales)}
+        </td>
+        <td class="mono" style="text-align:left; color:${stat.returns > 0 ? 'var(--bad)' : 'var(--text-3)'};">
+          ${stat.returns > 0 ? formatCurrency(stat.returns) : "0.00"}
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:var(--text-0);">
+          ${formatCurrency(stat.netSales)}
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:#10B981;">
+          ${formatCurrency(stat.collections)}
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:${gapColor};">
+          ${stat.gap > 0 ? formatCurrency(stat.gap) : stat.gap < 0 ? `(${formatCurrency(Math.abs(stat.gap))}) فائض` : "0.00"}
+        </td>
+        <td style="text-align:center;">
+          <span class="badge ${rateBadgeClass}" style="font-size:10.5px; font-weight:800;">
+            ${stat.rate.toFixed(0)}%
+          </span>
+        </td>
+        <td style="text-align:center;" class="mono">
+          <span style="font-size:11.5px; color:var(--text-1); font-weight:700;">${stat.share.toFixed(1)}%</span>
+        </td>
+        <td style="text-align:center;" class="mono">
+          <span class="badge neutral" style="font-size:10.5px;">${stat.activeCusts}</span>
+        </td>
+        <td style="text-align:right; font-size:11px;">
+          ${stat.topBuyer.amount > 0 ? `
+            <div style="font-weight:700; color:var(--text-0); max-width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${stat.topBuyer.name}</div>
+            <div class="mono" style="font-size:10px; color:var(--indigo);">${formatCurrency(stat.topBuyer.amount)}</div>
+          ` : `<span style="color:var(--text-3);">—</span>`}
+        </td>
+        <td style="text-align:right; font-size:11px;">
+          ${stat.topPayer.amount > 0 ? `
+            <div style="font-weight:700; color:var(--text-0); max-width:160px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${stat.topPayer.name}</div>
+            <div class="mono" style="font-size:10px; color:#10B981;">${formatCurrency(stat.topPayer.amount)}</div>
+          ` : `<span style="color:var(--text-3);">—</span>`}
+        </td>
+        <td style="text-align:center;" class="no-print">
+          <div style="display:flex; gap:4px; justify-content:center;">
+            <button class="btn btn-ghost btn-sm" title="فرز مصفوفة العملاء حسب مبيعات ${stat.monthName}" onclick="window.setMonthQuickSort(${stat.mIdx}, 'sales'); window.scrollCmmToMatrix();" style="padding:2px 6px; font-size:10.5px; font-weight:700; border-radius:6px; background:rgba(99,102,241,0.08); color:var(--brand);">
+              🛒 مبيعات
+            </button>
+            <button class="btn btn-ghost btn-sm" title="فرز مصفوفة العملاء حسب تحصيلات ${stat.monthName}" onclick="window.setMonthQuickSort(${stat.mIdx}, 'col'); window.scrollCmmToMatrix();" style="padding:2px 6px; font-size:10.5px; font-weight:700; border-radius:6px; background:rgba(16,185,129,0.08); color:#10B981;">
+              📥 تحصيل
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  if (tfoot) {
+    const totSales = monthlyStats.reduce((s, m) => s + m.sales, 0);
+    const totReturns = monthlyStats.reduce((s, m) => s + m.returns, 0);
+    const totNet = monthlyStats.reduce((s, m) => s + m.netSales, 0);
+    const totCol = monthlyStats.reduce((s, m) => s + m.collections, 0);
+    const totGap = totNet - totCol;
+    const totRate = totSales > 0 ? (totCol / totSales) * 100 : 0;
+
+    tfoot.innerHTML = `
+      <tr>
+        <td style="padding:10px 12px; font-size:12px; color:var(--text-0);">
+          الإجمالي العام (${_selectedYear})
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:var(--indigo); font-size:12.5px;">
+          ${formatCurrency(totSales)}
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:var(--bad); font-size:12px;">
+          ${formatCurrency(totReturns)}
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:var(--text-0); font-size:12.5px;">
+          ${formatCurrency(totNet)}
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:#10B981; font-size:12.5px;">
+          ${formatCurrency(totCol)}
+        </td>
+        <td class="mono font-bold" style="text-align:left; color:${totGap > 0 ? 'var(--bad)' : '#10B981'}; font-size:12.5px;">
+          ${totGap > 0 ? formatCurrency(totGap) : `(${formatCurrency(Math.abs(totGap))}) فائض`}
+        </td>
+        <td style="text-align:center; font-size:12px;">
+          ${totRate.toFixed(0)}%
+        </td>
+        <td style="text-align:center; font-size:12px;" class="mono">100%</td>
+        <td style="text-align:center; font-size:12px;" class="mono">${targetData.length}</td>
+        <td colspan="3"></td>
+      </tr>
+    `;
+  }
+}
+
