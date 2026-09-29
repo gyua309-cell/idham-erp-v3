@@ -65,12 +65,88 @@ function buildLayout() {
   return `
 <div class="je-root">
 
+  <!-- ═══════ HERO HEADER ═══════ -->
+  <div class="je-hero">
+    <div class="je-hero-bg"></div>
+    <div class="je-hero-content">
+      <div class="je-hero-right">
+        <div class="je-hero-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <div>
+          <h1 class="je-hero-title">القيود اليومية</h1>
+          <p class="je-hero-sub">دفتر اليومية — تسجيل وترحيل القيود المحاسبية</p>
+        </div>
+      </div>
+      <div class="je-hero-left">
+        <button class="je-btn je-btn-hero-ghost" onclick="loadJournalEntries(true)">
+          <i class="fas fa-sync-alt"></i> تحديث
+        </button>
+        <button class="je-btn je-btn-hero-ghost" onclick="exportPagePDF('.je-log-table','دفتر_اليومية')">
+          <i class="fas fa-file-pdf"></i> PDF
+        </button>
+        <button class="je-btn je-btn-hero-ghost" onclick="exportPageExcel('.je-log-table','دفتر_اليومية')">
+          <i class="fas fa-file-excel"></i> Excel
+        </button>
+        <button class="je-btn je-btn-hero-ghost" onclick="printJournalLogReport()">
+          <i class="fas fa-print"></i> طباعة
+        </button>
+        <button class="je-btn je-btn-hero-primary" onclick="openJournalModal()">
+          <i class="fas fa-plus"></i> قيد يدوي جديد
+        </button>
+      </div>
+    </div>
+
+    <!-- KPI Chips داخل الهيدر -->
+    <div class="je-hero-kpis">
+      <div class="je-hkpi">
+        <div class="je-hkpi-icon hk-blue"><i class="fas fa-arrow-down"></i></div>
+        <div>
+          <div class="je-hkpi-lbl">إجمالي المدين</div>
+          <div class="je-hkpi-val" id="kpi-total-dr">—</div>
+        </div>
+      </div>
+      <div class="je-hkpi-sep"></div>
+      <div class="je-hkpi">
+        <div class="je-hkpi-icon hk-green"><i class="fas fa-arrow-up"></i></div>
+        <div>
+          <div class="je-hkpi-lbl">إجمالي الدائن</div>
+          <div class="je-hkpi-val" id="kpi-total-cr">—</div>
+        </div>
+      </div>
+      <div class="je-hkpi-sep"></div>
+      <div class="je-hkpi">
+        <div class="je-hkpi-icon hk-indigo"><i class="fas fa-balance-scale"></i></div>
+        <div>
+          <div class="je-hkpi-lbl">ميزان الفترة</div>
+          <div class="je-hkpi-val" id="kpi-balance">—</div>
+        </div>
+      </div>
+      <div class="je-hkpi-sep"></div>
+      <div class="je-hkpi">
+        <div class="je-hkpi-icon hk-amber"><i class="fas fa-receipt"></i></div>
+        <div>
+          <div class="je-hkpi-lbl">عدد القيود</div>
+          <div class="je-hkpi-val" id="kpi-count">—</div>
+        </div>
+      </div>
+      <div class="je-hkpi-sep"></div>
+      <div class="je-hkpi">
+        <div class="je-hkpi-icon hk-teal"><i class="fas fa-check-circle"></i></div>
+        <div>
+          <div class="je-hkpi-lbl">مرحّلة</div>
+          <div class="je-hkpi-val" id="kpi-posted">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ─── Page Tabs ─── -->
   <div class="je-tabs">
-    <button class="je-tab active" id="tab-log"    onclick="switchTab('log')">
+    <button class="je-tab active" id="tab-log" onclick="switchTab('log')">
       <i class="fas fa-book"></i> دفتر اليومية
     </button>
-    <button class="je-tab"        id="tab-ledger" onclick="switchTab('ledger')">
+    <button class="je-tab" id="tab-ledger" onclick="switchTab('ledger')">
       <i class="fas fa-list-alt"></i> دفتر الأستاذ
     </button>
   </div>
@@ -108,6 +184,7 @@ function buildLayout() {
           <option value="salesCOGS">تكلفة البضاعة</option>
           <option value="cogs">تكلفة مبيعات</option>
           <option value="receipt">سند قبض</option>
+          <option value="stockTransfer">تحويل مخزني</option>
           <option value="reversing">عكسي</option>
         </select>
       </div>
@@ -117,52 +194,7 @@ function buildLayout() {
           <i class="fas fa-search"></i>
           <input type="text" id="je-search" placeholder="رقم القيد / البيان..." oninput="filterJETable(this.value)" />
         </div>
-      </div>
-      <div style="margin-right:auto;display:flex;gap:6px;align-items:center;">
-        <button class="je-btn je-btn-ghost" onclick="loadJournalEntries(true)" title="إعادة تحميل القيود من السيرفر">
-          <i class="fas fa-sync-alt"></i> تحديث
-        </button>
-        <button class="je-btn je-btn-ghost" onclick="exportPagePDF('.je-log-table','دفتر_اليومية')">
-          <i class="fas fa-file-pdf"></i> PDF
-        </button>
-        <button class="je-btn je-btn-ghost" onclick="exportPageExcel('.je-log-table','دفتر_اليومية')">
-          <i class="fas fa-file-excel"></i> Excel
-        </button>
-        <button class="je-btn je-btn-ghost" onclick="printJournalLogReport()" title="طباعة دفتر اليومية">
-          <i class="fas fa-print"></i> طباعة
-        </button>
-        <button class="je-btn je-btn-primary" onclick="openJournalModal()">
-          <i class="fas fa-plus"></i> قيد يدوي جديد
-        </button>
-      </div>
-    </div>
 
-    <!-- KPIs -->
-    <div class="je-kpis">
-      <div class="je-kpi kpi-blue">
-        <div class="je-kpi-icon"><i class="fas fa-arrow-down"></i></div>
-        <div><div class="je-kpi-label">إجمالي المدين</div>
-             <div class="je-kpi-val" id="kpi-total-dr">—</div></div>
-      </div>
-      <div class="je-kpi kpi-green">
-        <div class="je-kpi-icon"><i class="fas fa-arrow-up"></i></div>
-        <div><div class="je-kpi-label">إجمالي الدائن</div>
-             <div class="je-kpi-val" id="kpi-total-cr">—</div></div>
-      </div>
-      <div class="je-kpi kpi-indigo">
-        <div class="je-kpi-icon"><i class="fas fa-balance-scale"></i></div>
-        <div><div class="je-kpi-label">ميزان الفترة</div>
-             <div class="je-kpi-val" id="kpi-balance">—</div></div>
-      </div>
-      <div class="je-kpi kpi-amber">
-        <div class="je-kpi-icon"><i class="fas fa-receipt"></i></div>
-        <div><div class="je-kpi-label">عدد القيود</div>
-             <div class="je-kpi-val" id="kpi-count">—</div></div>
-      </div>
-      <div class="je-kpi kpi-teal">
-        <div class="je-kpi-icon"><i class="fas fa-check-circle"></i></div>
-        <div><div class="je-kpi-label">مرحّلة</div>
-             <div class="je-kpi-val" id="kpi-posted">—</div></div>
       </div>
     </div>
 
@@ -250,6 +282,29 @@ function buildLayout() {
     </div>
     <div class="modal-body" style="padding:20px;">
       <input type="hidden" id="je-edit-id" />
+
+      <!-- Quick Accrual & Recurring Templates Bar -->
+      <div style="background:var(--bg-2);border:1px solid var(--border-soft);border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:12.5px;font-weight:800;color:var(--brand);display:flex;align-items:center;gap:5px;">
+            <i class="fas fa-magic"></i> نماذج استحقاق دورية:
+          </span>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;">
+            <button type="button" class="btn btn-sm btn-ghost" onclick="applyJETemplate('depreciation')" style="font-size:11.5px;padding:3px 8px;border:1px solid var(--border-soft);" title="قيد إهلاك الأصول الثابتة">📉 إهلاك الأصول</button>
+            <button type="button" class="btn btn-sm btn-ghost" onclick="applyJETemplate('rent')" style="font-size:11.5px;padding:3px 8px;border:1px solid var(--border-soft);" title="قيد استحقاق الإيجار الشهري">🏢 استحقاق الإيجار</button>
+            <button type="button" class="btn btn-sm btn-ghost" onclick="applyJETemplate('payroll')" style="font-size:11.5px;padding:3px 8px;border:1px solid var(--border-soft);" title="قيد استحقاق الرواتب والأجور">👥 استحقاق الرواتب</button>
+            <button type="button" class="btn btn-sm btn-ghost" onclick="applyJETemplate('prepaid')" style="font-size:11.5px;padding:3px 8px;border:1px solid var(--border-soft);" title="قيد إطفاء مصروفات مدفوعة مقدماً / تأمين">🛡️ إطفاء مدفوع مقدماً</button>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button type="button" class="btn btn-sm btn-ghost" onclick="saveCurrentAsCustomTemplate()" style="font-size:11px;padding:3px 8px;color:var(--text-1);border:1px dashed var(--border-soft);" title="حفظ سطور القيد الحالي كنموذج دوري خاص لاستدعائه كل شهر">
+            💾 حفظ كقالب مخصص
+          </button>
+          <select id="je-custom-templates" onchange="applyCustomJETemplate(this.value)" class="input" style="font-size:11px;padding:2px 8px;height:28px;max-width:140px;display:none;">
+            <option value="">📂 قوالبي المحفوظة</option>
+          </select>
+        </div>
+      </div>
 
       <!-- Header Fields -->
       <div style="display:grid;grid-template-columns:140px 1fr 1fr 180px;gap:12px;margin-bottom:16px;">
@@ -355,6 +410,84 @@ function buildLayout() {
 
 /* ────── Root ────── */
 .je-root { display:flex; flex-direction:column; height:100%; overflow:hidden; font-family:inherit; }
+
+/* ────── Hero Header ────── */
+.je-hero {
+  position: relative; flex-shrink: 0; overflow: hidden;
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 40%, #4338ca 75%, #4f46e5 100%);
+  padding: 0;
+}
+.je-hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 10% 50%, rgba(99,102,241,.25) 0%, transparent 60%),
+    radial-gradient(ellipse at 90% 20%, rgba(139,92,246,.20) 0%, transparent 50%);
+}
+.je-hero-content {
+  position: relative; z-index: 1;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 24px 14px;
+  gap: 16px; flex-wrap: wrap;
+}
+.je-hero-right { display: flex; align-items: center; gap: 16px; }
+.je-hero-icon {
+  width: 52px; height: 52px; border-radius: 14px; flex-shrink: 0;
+  background: rgba(255,255,255,.15); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: #fff;
+  box-shadow: 0 4px 16px rgba(0,0,0,.2);
+}
+.je-hero-title {
+  font-size: 22px; font-weight: 900; color: #fff; margin: 0 0 3px;
+  letter-spacing: -.3px;
+}
+.je-hero-sub {
+  font-size: 11.5px; color: rgba(255,255,255,.65); margin: 0;
+}
+.je-hero-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.je-btn-hero-ghost {
+  padding: 8px 14px; border-radius: 9px; border: 1.5px solid rgba(255,255,255,.25);
+  background: rgba(255,255,255,.1); color: #fff; cursor: pointer;
+  font-size: 12px; font-weight: 700; font-family: inherit;
+  display: flex; align-items: center; gap: 6px; transition: all .18s;
+  backdrop-filter: blur(4px);
+}
+.je-btn-hero-ghost:hover { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.4); }
+.je-btn-hero-primary {
+  padding: 8px 16px; border-radius: 9px; border: none;
+  background: rgba(255,255,255,.95); color: #4338ca; cursor: pointer;
+  font-size: 12px; font-weight: 800; font-family: inherit;
+  display: flex; align-items: center; gap: 6px; transition: all .18s;
+  box-shadow: 0 3px 12px rgba(0,0,0,.2);
+}
+.je-btn-hero-primary:hover { background: #fff; transform: translateY(-1px); box-shadow: 0 5px 18px rgba(0,0,0,.3); }
+
+/* Hero KPI Chips */
+.je-hero-kpis {
+  position: relative; z-index: 1;
+  display: flex; align-items: center; gap: 0;
+  padding: 0 24px 16px; overflow-x: auto;
+}
+.je-hkpi {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 20px; flex-shrink: 0;
+}
+.je-hkpi-sep {
+  width: 1px; height: 32px; background: rgba(255,255,255,.15); flex-shrink: 0;
+}
+.je-hkpi-icon {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+}
+.hk-blue   { background: rgba(129,140,248,.25); color: #c7d2fe; }
+.hk-green  { background: rgba(52,211,153,.25);  color: #6ee7b7; }
+.hk-indigo { background: rgba(167,139,250,.25); color: #ddd6fe; }
+.hk-amber  { background: rgba(251,191,36,.25);  color: #fde68a; }
+.hk-teal   { background: rgba(45,212,191,.25);  color: #99f6e4; }
+.je-hkpi-lbl { font-size: 9.5px; font-weight: 700; color: rgba(255,255,255,.55); margin-bottom: 2px; }
+.je-hkpi-val { font-size: 14px; font-weight: 900; color: #fff; font-variant-numeric: tabular-nums; }
 
 /* ────── Tabs ────── */
 .je-tabs {
@@ -562,6 +695,7 @@ function buildLayout() {
 .je-row-action:hover { border-color:var(--brand); color:var(--brand); background:rgba(99,102,241,.1); transform:scale(1.08); }
 .je-row-action.danger:hover { border-color:#ef4444; color:#ef4444; background:rgba(239,68,68,.1); }
 .je-row-action.success:hover { border-color:#10b981; color:#10b981; background:rgba(16,185,129,.1); }
+.je-row-action.warning:hover { border-color:#f59e0b; color:#f59e0b; background:rgba(245,158,11,.1); }
 
 /* ────── Modal Lines ────── */
 .je-lines-header {
@@ -733,13 +867,13 @@ window.loadJournalEntries = async (forceRefresh = false) => {
 
     // KPIs — احسب من بنود القيد إذا لم تكن الحقول المجمّعة محسوبة
     const totalDr  = entries.reduce((s,e) => {
-      const fromField = e.totalDebit || 0;
-      const fromLines = (e.lines||[]).reduce((a,l) => a + (l.debit||0), 0);
+      const fromField = parseFloat(e.totalDebit || 0) || 0;
+      const fromLines = (e.lines||[]).reduce((a,l) => a + (parseFloat(l.debit || 0) || 0), 0);
       return s + Math.max(fromField, fromLines);
     }, 0);
     const totalCr  = entries.reduce((s,e) => {
-      const fromField = e.totalCredit || 0;
-      const fromLines = (e.lines||[]).reduce((a,l) => a + (l.credit||0), 0);
+      const fromField = parseFloat(e.totalCredit || 0) || 0;
+      const fromLines = (e.lines||[]).reduce((a,l) => a + (parseFloat(l.credit || 0) || 0), 0);
       return s + Math.max(fromField, fromLines);
     }, 0);
     const posted   = entries.filter(e => e.status === "posted").length;
@@ -784,12 +918,12 @@ function renderJETable(entries) {
     const isRev    = e.isReversed;
     const srcType  = e.sourceType || "manual";
     const typeKey  = typeColors[srcType] || "manual";
-    const dr = Math.max(e.totalDebit  || 0, (e.lines||[]).reduce((a,l)=>a+(l.debit||0),  0));
-    const cr = Math.max(e.totalCredit || 0, (e.lines||[]).reduce((a,l)=>a+(l.credit||0), 0));
+    const dr = Math.max(parseFloat(e.totalDebit || 0) || 0, (e.lines||[]).reduce((a,l)=>a+(parseFloat(l.debit || 0) || 0),  0));
+    const cr = Math.max(parseFloat(e.totalCredit || 0) || 0, (e.lines||[]).reduce((a,l)=>a+(parseFloat(l.credit || 0) || 0), 0));
 
     return `<tr class="status-${status} je-row-${typeKey}" onclick="viewJEEntry('${e.id}')">
       <td class="mono" style="font-size:11px;color:var(--text-2);white-space:nowrap">${e.date || ""}</td>
-      <td class="mono" style="color:var(--brand);font-weight:900;font-size:12px;white-space:nowrap">${e.entryNumber && e.entryNumber !== 'undefined' ? e.entryNumber : 'JE-' + e.id.slice(-6).toUpperCase()}</td>
+      <td class="mono" style="color:var(--brand);font-weight:900;font-size:12px;white-space:nowrap">${e.entryNumber && e.entryNumber !== 'undefined' ? e.entryNumber : (e.code || 'JE-' + e.id.slice(-6).toUpperCase())}</td>
       <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-1);font-size:12px" title="${(e.description||'').replace(/"/g,'&quot;')}">${e.description||"—"}</td>
       <td><span class="badge-type btype-${typeKey}">${typeLabels[srcType]||srcType||"يدوي"}</span></td>
       <td class="mono" style="text-align:right;color:#a5b4fc;font-weight:700;font-size:13px">${formatCurrency(dr)}</td>
@@ -804,6 +938,9 @@ function renderJETable(entries) {
         <div style="display:flex;gap:5px;justify-content:flex-end;align-items:center">
           <button class="je-row-action info" title="طباعة سند القيد" onclick="printSingleJournalVoucher('${e.id}')">
             <i class="fas fa-print"></i>
+          </button>
+          <button class="je-row-action warning" title="نسخ وتكرار القيد لشهر جديد" onclick="duplicateEntry('${e.id}')">
+            <i class="fas fa-copy"></i>
           </button>
           ${!isRev ? `
             <button class="je-row-action" title="تعديل القيد" onclick="openJournalModal('${e.id}')">
@@ -828,6 +965,7 @@ window.filterJETable = val => {
   if (!q) { renderJETable(_allEntries); return; }
   renderJETable(_allEntries.filter(e =>
     (e.entryNumber||"").toLowerCase().includes(q) ||
+    (e.code||"").toLowerCase().includes(q) ||
     (e.description||"").toLowerCase().includes(q)
   ));
 };
@@ -841,6 +979,7 @@ window.openJournalModal = async (id = "") => {
   document.getElementById("je-form-error").classList.add("hidden");
   
   await loadCostCentersDropdown();
+  loadCustomJETemplatesDropdown();
   const ccSel = document.getElementById("je-cost-center");
 
   if (id && typeof id === "string") {
@@ -908,7 +1047,36 @@ async function loadCostCentersDropdown() {
 // ──────────────────────────────────────────
 // Lines Management
 // ──────────────────────────────────────────
+// Line Items Synchronization & Rendering
+// ──────────────────────────────────────────
+function syncDOMToLines() {
+  const tbody = document.getElementById("je-lines-tbody");
+  if (!tbody) return;
+  const rows = tbody.querySelectorAll("tr[data-line]");
+  rows.forEach(tr => {
+    const idx = parseInt(tr.getAttribute("data-line"), 10);
+    if (isNaN(idx) || !jLines[idx]) return;
+    const noteInp = tr.querySelector(".je-note-input");
+    const spInp = tr.querySelector("input[placeholder*='مورد الخدمة']");
+    const taxInp = tr.querySelector("input[placeholder*='الرقم الضريبي']");
+    const refInp = tr.querySelector("input[placeholder*='رقم الفاتورة']");
+    const amtInps = tr.querySelectorAll(".je-amt-input");
+
+    if (noteInp) jLines[idx].note = noteInp.value;
+    if (spInp) jLines[idx].serviceProvider = spInp.value.trim();
+    if (taxInp) jLines[idx].taxNumber = taxInp.value.trim();
+    if (refInp) jLines[idx].invoiceRef = refInp.value.trim();
+    if (amtInps.length >= 2) {
+      const drVal = parseFloat(amtInps[0].value) || 0;
+      const crVal = parseFloat(amtInps[1].value) || 0;
+      jLines[idx].debit = drVal;
+      jLines[idx].credit = crVal;
+    }
+  });
+}
+
 window.addJELine = () => {
+  syncDOMToLines();
   jLines.push({ accountId:"", accountCode:"", accountName:"", accountType:"", note:"", debit:0, credit:0, serviceProvider:"", taxNumber:"", invoiceRef:"" });
   renderJELines();
   updateJETotals();
@@ -941,17 +1109,17 @@ function renderJELines() {
       <!-- Note & Tax info -->
       <td style="padding:4px 6px; display:flex; flex-direction:column; gap:4px;">
         <input type="text" class="je-note-input" placeholder="البيان الفرعي..."
-               value="${l.note || ''}" onchange="jLines[${i}].note=this.value" />
+               value="${l.note || ''}" oninput="jLines[${i}].note=this.value" />
         <div style="display:flex; gap:4px; align-items:center;">
           <input type="text" class="je-sub-input" placeholder="مورد الخدمة..."
                  style="font-size:10px; padding:2px 4px; border:1px solid var(--border-soft); border-radius:4px; background:var(--bg-1); color:var(--text-0); width:120px;"
-                 value="${l.serviceProvider || ''}" onchange="jLines[${i}].serviceProvider=this.value" />
+                 value="${l.serviceProvider || ''}" oninput="jLines[${i}].serviceProvider=this.value" />
           <input type="text" class="je-sub-input" placeholder="الرقم الضريبي..."
                  style="font-size:10px; padding:2px 4px; border:1px solid var(--border-soft); border-radius:4px; background:var(--bg-1); color:var(--text-0); width:120px;"
-                 value="${l.taxNumber || ''}" onchange="jLines[${i}].taxNumber=this.value" />
+                 value="${l.taxNumber || ''}" oninput="jLines[${i}].taxNumber=this.value" />
           <input type="text" class="je-sub-input" placeholder="رقم الفاتورة..."
                  style="font-size:10px; padding:2px 4px; border:1px solid var(--border-soft); border-radius:4px; background:var(--bg-1); color:var(--text-0); width:100px;"
-                 value="${l.invoiceRef || ''}" onchange="jLines[${i}].invoiceRef=this.value" />
+                 value="${l.invoiceRef || ''}" oninput="jLines[${i}].invoiceRef=this.value" />
         </div>
       </td>
 
@@ -1020,6 +1188,7 @@ window.accLineSearch = (i, val) => {
 };
 
 window.selectAccLine = (i, id, code, name, type) => {
+  syncDOMToLines();
   jLines[i].accountId   = id;
   jLines[i].accountCode = code;
   jLines[i].accountName = name;
@@ -1059,7 +1228,7 @@ window.updateJEAmt = (i, field, inp) => {
   updateJETotals();
 };
 
-window.removeJELine = i => { jLines.splice(i,1); renderJELines(); updateJETotals(); };
+window.removeJELine = i => { syncDOMToLines(); jLines.splice(i,1); renderJELines(); updateJETotals(); };
 
 function updateJETotals() {
   const totalDr = jLines.reduce((s,l) => s + (l.debit||0), 0);
@@ -1094,6 +1263,7 @@ function updateJETotals() {
 // Save Journal Entry
 // ──────────────────────────────────────────
 window.saveJournal = async (status = "posted") => {
+  syncDOMToLines();
   const errEl = document.getElementById("je-form-error");
   errEl.classList.add("hidden");
 
@@ -1172,6 +1342,12 @@ window.saveJournal = async (status = "posted") => {
       });
       window.showToast?.(`تم ${status === "posted" ? "ترحيل" : "حفظ"} القيد ${entryNumber}`, "success");
     }
+    
+    // Auto-sync supplier & customer balances in real-time
+    if (status === "posted") {
+      syncBalancesForJournalLines(validLines).catch(() => {});
+    }
+
     closeModal("journal-modal");
     jLines = [];
     _nextNum = null;
@@ -1185,13 +1361,75 @@ window.saveJournal = async (status = "posted") => {
 };
 
 // ──────────────────────────────────────────
+// Helper: Auto-sync Balances for Journal Lines
+// ──────────────────────────────────────────
+async function syncBalancesForJournalLines(lines = []) {
+  if (!lines || !lines.length) return;
+  try {
+    const { recalculateSupplierBalance, recalculateCustomerBalance } = await import("../utils/balance-sync.js");
+    const { getAll, COLS } = await import("../utils/db.js");
+    const [allSuppliers, allCustomers, coa] = await Promise.all([
+      getAll(COLS.suppliers()).catch(() => []),
+      getAll(COLS.customers()).catch(() => []),
+      getAll(COLS.chartOfAccounts()).catch(() => [])
+    ]);
+
+    const supIdSet = new Set();
+    const custIdSet = new Set();
+
+    lines.forEach(l => {
+      const accId = l.accountId;
+      const accCode = l.accountCode;
+      const accName = (l.accountName || "").trim().toLowerCase();
+
+      // Match in COA
+      const coaMatch = (coa || []).find(a => a.id === accId || a.code === accCode || (a.name && a.name.trim().toLowerCase() === accName));
+      if (coaMatch && coaMatch.sourceEntityId) {
+        if (coaMatch.sourceModule === "suppliers" || (allSuppliers || []).some(s => s.id === coaMatch.sourceEntityId)) {
+          supIdSet.add(coaMatch.sourceEntityId);
+        } else if (coaMatch.sourceModule === "customers" || (allCustomers || []).some(c => c.id === coaMatch.sourceEntityId)) {
+          custIdSet.add(coaMatch.sourceEntityId);
+        }
+      }
+
+      // Match by supplier name
+      const matchedSup = (allSuppliers || []).find(s => {
+        const sName = (s.name || "").trim().toLowerCase();
+        return sName && (sName === accName || accName.includes(sName) || sName.includes(accName));
+      });
+      if (matchedSup) supIdSet.add(matchedSup.id);
+
+      // Match by customer name
+      const matchedCust = (allCustomers || []).find(c => {
+        const cName = (c.name || "").trim().toLowerCase();
+        return cName && (cName === accName || accName.includes(cName) || cName.includes(accName));
+      });
+      if (matchedCust) custIdSet.add(matchedCust.id);
+    });
+
+    for (const sId of supIdSet) {
+      await recalculateSupplierBalance(sId).catch(() => {});
+    }
+    for (const cId of custIdSet) {
+      await recalculateCustomerBalance(cId).catch(() => {});
+    }
+  } catch(e) {
+    console.warn("[JournalEntries] Error auto-syncing balances for journal lines:", e);
+  }
+}
+
+// ──────────────────────────────────────────
 // Post Draft Entry
 // ──────────────────────────────────────────
 window.postEntry = async (id) => {
   if (!await window.showConfirm?.("ترحيل هذا القيد؟ لن يمكن تعديله بعد الترحيل.", "ترحيل القيد")) return;
   try {
-    const { updateDoc, doc: fsDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+    const { updateDoc, getDoc, doc: fsDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+    const snap = await getDoc(fsDoc(db, `companies/${COMPANY_ID}/journalEntries`, id));
     await updateDoc(fsDoc(db, `companies/${COMPANY_ID}/journalEntries`, id), { status: "posted" });
+    if (snap.exists()) {
+      syncBalancesForJournalLines(snap.data().lines || []).catch(() => {});
+    }
     window.showToast?.("تم ترحيل القيد", "success");
     await loadJournalEntries();
   } catch(err) { window.showToast?.(err.message, "error"); }
@@ -1238,11 +1476,299 @@ window.reverseEntry = async (id, entryNum) => {
       isReversed: true, reversedBy: revNumber
     });
 
+    syncBalancesForJournalLines(reversedLines).catch(() => {});
+
     window.showToast?.(`تم إنشاء القيد العكسي ${revNumber}`, "success");
     await loadJournalEntries();
   } catch(err) {
     console.error(err);
     window.showToast?.(err.message, "error");
+  }
+};
+
+// ──────────────────────────────────────────
+// Duplicate / Clone Journal Entry (نسخ وتكرار القيد)
+// ──────────────────────────────────────────
+window.duplicateEntry = async (id) => {
+  if (!id) return;
+  try {
+    let je = _allEntries.find(x => x.id === id);
+    if (!je) {
+      const { getDoc, doc: fsDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+      const snap = await getDoc(fsDoc(db, `companies/${COMPANY_ID}/journalEntries`, id));
+      if (snap.exists()) je = { id: snap.id, ...snap.data() };
+    }
+    if (!je) {
+      window.showToast?.("تعذر العثور على القيد المطلوب نسخه", "error");
+      return;
+    }
+
+    jLines = [];
+    _acSearch = {};
+    document.getElementById("je-form-error")?.classList.add("hidden");
+    
+    await loadCostCentersDropdown();
+    loadCustomJETemplatesDropdown();
+
+    const ccSel = document.getElementById("je-cost-center");
+
+    // Create mode for duplicate
+    document.getElementById("je-edit-id").value = "";
+    document.getElementById("je-desc").value    = je.description || "";
+    document.getElementById("je-ref").value     = je.reference ? `${je.reference} (مكرر)` : `مكرر من ${je.entryNumber || ''}`;
+    document.getElementById("je-date").value    = todayString();
+    if (ccSel) ccSel.value                      = je.costCenterId || "";
+
+    const nextNum = await getNextEntryNumber();
+    _nextNum = nextNum;
+    document.getElementById("je-modal-title").textContent   = `نسخ وتكرار قيد: ${je.entryNumber || ''}`;
+    document.getElementById("je-entry-num-label").textContent = `رقم القيد الجديد: ${nextNum}`;
+
+    if (je.lines && je.lines.length) {
+      jLines = je.lines.map(l => ({
+        accountId:   l.accountId || "",
+        accountCode: l.accountCode || "",
+        accountName: l.accountName || "",
+        accountType: l.accountType || "",
+        note:        l.note || "",
+        debit:       parseFloat(l.debit) || 0,
+        credit:      parseFloat(l.credit) || 0,
+        costCenterId: l.costCenterId || null,
+        serviceProvider: l.serviceProvider || "",
+        taxNumber:   l.taxNumber || "",
+        invoiceRef:  l.invoiceRef || ""
+      }));
+    } else {
+      addJELine(); addJELine();
+    }
+
+    renderJELines();
+    updateJETotals();
+    openModal("journal-modal");
+    window.showToast?.(`تم نسخ سطور القيد ${je.entryNumber || ''} بنجاح. يمكنك تعديل المبالغ والتاريخ وترحيله فوراً`, "info");
+  } catch(err) {
+    console.error("Duplicate Entry error:", err);
+    window.showToast?.("حدث خطأ أثناء نسخ القيد: " + err.message, "error");
+  }
+};
+
+// ──────────────────────────────────────────
+// Predefined Accrual & Recurring Templates (قوالب الاستحقاق)
+// ──────────────────────────────────────────
+window.applyJETemplate = (type) => {
+  if (!accounts || !accounts.length) return;
+  jLines = [];
+  _acSearch = {};
+
+  const findAcc = (codePrefix, nameKeyword) => {
+    return accounts.find(a => (a.code && a.code.startsWith(codePrefix)) || (a.name && a.name.includes(nameKeyword))) ||
+           accounts.find(a => a.name && a.name.includes(nameKeyword)) || null;
+  };
+
+  const currentMonthName = new Date().toLocaleDateString('ar-SA', { month: 'long', year: 'numeric' });
+
+  if (type === 'depreciation') {
+    document.getElementById("je-desc").value = `قيد إهلاك الأصول الثابتة لشهر ${currentMonthName}`;
+    document.getElementById("je-ref").value = `إهلاك دوري - ${todayString().slice(0,7)}`;
+    
+    // Find Depreciation Expenses (5-6) & Accumulated Depreciation (1-2)
+    const depVehicles = findAcc("5-6-1", "إهلاك السيارات") || findAcc("5-6", "إهلاك");
+    const accVehicles = findAcc("1-2-1-2", "مجمع إهلاك السيارات") || findAcc("1-2-1", "مجمع إهلاك");
+    
+    const depEquip = findAcc("5-6-2", "إهلاك المعدات");
+    const accEquip = findAcc("1-2-2-2", "مجمع إهلاك المعدات");
+
+    if (depVehicles && accVehicles) {
+      jLines.push({
+        accountId: depVehicles.id, accountCode: depVehicles.code, accountName: depVehicles.name,
+        accountType: depVehicles.accountType || depVehicles.type || 'expense',
+        note: "مصروف إهلاك السيارات والمركبات", debit: 0, credit: 0
+      });
+      jLines.push({
+        accountId: accVehicles.id, accountCode: accVehicles.code, accountName: accVehicles.name,
+        accountType: accVehicles.accountType || accVehicles.type || 'asset',
+        note: "مجمع إهلاك السيارات والمركبات", debit: 0, credit: 0
+      });
+    }
+    if (depEquip && accEquip) {
+      jLines.push({
+        accountId: depEquip.id, accountCode: depEquip.code, accountName: depEquip.name,
+        accountType: depEquip.accountType || depEquip.type || 'expense',
+        note: "مصروف إهلاك المعدات والآلات", debit: 0, credit: 0
+      });
+      jLines.push({
+        accountId: accEquip.id, accountCode: accEquip.code, accountName: accEquip.name,
+        accountType: accEquip.accountType || accEquip.type || 'asset',
+        note: "مجمع إهلاك المعدات والآلات", debit: 0, credit: 0
+      });
+    }
+    if (!jLines.length) { addJELine(); addJELine(); }
+
+    window.showToast?.("تم تجهيز نموذج قيد إهلاك الأصول. أدخل مبالغ الإهلاك الدورية", "info");
+  } 
+  else if (type === 'rent') {
+    document.getElementById("je-desc").value = `قيد استحقاق مصروف الإيجار لشهر ${currentMonthName}`;
+    document.getElementById("je-ref").value = `استحقاق إيجار - ${todayString().slice(0,7)}`;
+
+    const rentExp = findAcc("5-4-1-1", "ايجار المستودع") || findAcc("5-4-1", "الإيجار");
+    const rentAccruedOrPrepaid = findAcc("1-1-3-1", "ايجار مدفوع مقدما") || findAcc("2-1-4-1", "ايجار سكن مستحق") || findAcc("2-1-4", "مستحقة");
+
+    if (rentExp) {
+      jLines.push({
+        accountId: rentExp.id, accountCode: rentExp.code, accountName: rentExp.name,
+        accountType: rentExp.accountType || rentExp.type || 'expense',
+        note: "إثبات استحقاق مصروف الإيجار الشهري", debit: 0, credit: 0
+      });
+    }
+    if (rentAccruedOrPrepaid) {
+      jLines.push({
+        accountId: rentAccruedOrPrepaid.id, accountCode: rentAccruedOrPrepaid.code, accountName: rentAccruedOrPrepaid.name,
+        accountType: rentAccruedOrPrepaid.accountType || rentAccruedOrPrepaid.type || 'liability',
+        note: "تسوية الإيجار (المستحق / المدفوع مقدماً)", debit: 0, credit: 0
+      });
+    }
+    if (jLines.length < 2) { addJELine(); }
+    window.showToast?.("تم تجهيز نموذج استحقاق الإيجار. حدد المبلغ والمراكز", "info");
+  }
+  else if (type === 'payroll') {
+    document.getElementById("je-desc").value = `قيد استحقاق مسير رواتب الموظفين والمناديب لشهر ${currentMonthName}`;
+    document.getElementById("je-ref").value = `مسير رواتب - ${todayString().slice(0,7)}`;
+
+    const salExp = findAcc("5-2-6", "رواتب واجور") || findAcc("5-2-1", "رواتب") || findAcc("5-2", "الرواتب");
+    const salPayable = findAcc("2-1-5", "مستحقات الموظفين") || findAcc("2-1-4", "مستحقة");
+
+    if (salExp) {
+      jLines.push({
+        accountId: salExp.id, accountCode: salExp.code, accountName: salExp.name,
+        accountType: salExp.accountType || salExp.type || 'expense',
+        note: "إجمالي استحقاق الرواتب والأجور والبدلات", debit: 0, credit: 0
+      });
+    }
+    if (salPayable) {
+      jLines.push({
+        accountId: salPayable.id, accountCode: salPayable.code, accountName: salPayable.name,
+        accountType: salPayable.accountType || salPayable.type || 'liability',
+        note: "مستحقات الرواتب للموظفين والمناديب", debit: 0, credit: 0
+      });
+    }
+    if (jLines.length < 2) { addJELine(); }
+    window.showToast?.("تم تجهيز نموذج استحقاق الرواتب", "info");
+  }
+  else if (type === 'prepaid') {
+    document.getElementById("je-desc").value = `قيد إطفاء مصروفات وتأمينات مدفوعة مقدماً لشهر ${currentMonthName}`;
+    document.getElementById("je-ref").value = `إطفاء دوري - ${todayString().slice(0,7)}`;
+
+    const prepaidAsset = findAcc("1-1-5-1", "مصروفات مدفوعة مقدماً") || findAcc("1-1-3", "مدفوع مقدما");
+    const genExp = findAcc("5-4", "تشغيلية") || findAcc("5-1", "مصروف");
+
+    if (genExp) {
+      jLines.push({
+        accountId: genExp.id, accountCode: genExp.code, accountName: genExp.name,
+        accountType: genExp.accountType || genExp.type || 'expense',
+        note: "مصروف الفترة المحمل من المدفوع مقدماً", debit: 0, credit: 0
+      });
+    }
+    if (prepaidAsset) {
+      jLines.push({
+        accountId: prepaidAsset.id, accountCode: prepaidAsset.code, accountName: prepaidAsset.name,
+        accountType: prepaidAsset.accountType || prepaidAsset.type || 'asset',
+        note: "إطفاء / تخفيض رصيد المصروفات المدفوعة مقدماً", debit: 0, credit: 0
+      });
+    }
+    if (jLines.length < 2) { addJELine(); }
+    window.showToast?.("تم تجهيز نموذج إطفاء المصروفات المدفوعة مقدماً", "info");
+  }
+
+  renderJELines();
+  updateJETotals();
+};
+
+// ──────────────────────────────────────────
+// Custom User Templates (حفظ واستدعاء القوالب المخصصة)
+// ──────────────────────────────────────────
+window.saveCurrentAsCustomTemplate = () => {
+  syncDOMToLines();
+  const validLines = jLines.filter(l => l.accountId);
+  if (!validLines.length) {
+    window.showToast?.("يرجى اختيار حسابات في سطور القيد أولاً لحفظها كنموذج", "warning");
+    return;
+  }
+  const defaultName = document.getElementById("je-desc")?.value.trim() || "قيد دوري مخصص";
+  const name = prompt("أدخل اسماً لهذا النموذج المحاسبي (مثال: قيد إيجار ينبع الشهري):", defaultName);
+  if (!name || !name.trim()) return;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem("idham_je_custom_templates") || "[]");
+    const template = {
+      id: "tpl_" + Date.now(),
+      name: name.trim(),
+      description: document.getElementById("je-desc")?.value.trim() || "",
+      costCenterId: document.getElementById("je-cost-center")?.value || null,
+      lines: validLines.map(l => ({
+        accountId: l.accountId,
+        accountCode: l.accountCode,
+        accountName: l.accountName,
+        accountType: l.accountType,
+        note: l.note,
+        debit: l.debit || 0,
+        credit: l.credit || 0
+      }))
+    };
+    saved.push(template);
+    localStorage.setItem("idham_je_custom_templates", JSON.stringify(saved));
+    loadCustomJETemplatesDropdown();
+    window.showToast?.(`تم حفظ النموذج "${name}" بنجاح`, "success");
+  } catch(e) {
+    console.error(e);
+  }
+};
+
+window.loadCustomJETemplatesDropdown = () => {
+  const sel = document.getElementById("je-custom-templates");
+  if (!sel) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem("idham_je_custom_templates") || "[]");
+    if (!saved.length) {
+      sel.style.display = "none";
+      return;
+    }
+    sel.style.display = "inline-block";
+    sel.innerHTML = '<option value="">📂 قوالبي المحفوظة (' + saved.length + ')</option>' +
+      saved.map(t => `<option value="${t.id}">${t.name}</option>`).join("");
+  } catch(e) {
+    sel.style.display = "none";
+  }
+};
+
+window.applyCustomJETemplate = (templateId) => {
+  if (!templateId) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem("idham_je_custom_templates") || "[]");
+    const tpl = saved.find(t => t.id === templateId);
+    if (!tpl) return;
+
+    if (tpl.description) document.getElementById("je-desc").value = tpl.description;
+    if (tpl.costCenterId) {
+      const ccSel = document.getElementById("je-cost-center");
+      if (ccSel) ccSel.value = tpl.costCenterId;
+    }
+
+    jLines = (tpl.lines || []).map(l => ({
+      accountId: l.accountId,
+      accountCode: l.accountCode,
+      accountName: l.accountName,
+      accountType: l.accountType,
+      note: l.note,
+      debit: l.debit || 0,
+      credit: l.credit || 0
+    }));
+
+    renderJELines();
+    updateJETotals();
+    window.showToast?.(`تم استدعاء نموذج "${tpl.name}"`, "info");
+    document.getElementById("je-custom-templates").value = "";
+  } catch(e) {
+    console.error(e);
   }
 };
 
@@ -1338,6 +1864,9 @@ window.viewJEEntry = async (id) => {
         <button class="btn btn-ghost" onclick="closeModal('je-detail-modal')">إغلاق</button>
         <button class="btn btn-secondary" onclick="printSingleJournalVoucher('${id}')">
           <i class="fas fa-print"></i> طباعة سند القيد
+        </button>
+        <button class="btn btn-primary" onclick="closeModal('je-detail-modal'); duplicateEntry('${id}')">
+          <i class="fas fa-copy"></i> نسخ وتكرار القيد
         </button>
       `;
     }
@@ -1551,16 +2080,32 @@ function bindGlobalHandlers() {
 // ──────────────────────────────────────────
 
 async function fetchCompanyDetails() {
-  let company = {};
+  let company = {
+    name: "شركة نظم الإمداد الحديثة",
+    nameEn: "Modern Supply Systems Co.",
+    crNumber: "4700123180",
+    vatNumber: "312448150500003",
+    phone: "0549141648",
+    email: "Nuzmalamdad@gmail.com",
+    address: "7480 — الشارع: عامر الشعبي — ينبع — 13315",
+    logoUrl: ""
+  };
   try {
     const cached = localStorage.getItem("idham_company");
-    if (cached) company = JSON.parse(cached);
+    if (cached) Object.assign(company, JSON.parse(cached));
   } catch(e) {}
 
   try {
     const compSnap = await getDoc(fsDoc(db, `companies/${COMPANY_ID}/settings`, "company"));
     if (compSnap.exists()) {
-      company = { ...company, ...compSnap.data() };
+      const cd = compSnap.data();
+      company.name = cd.name || cd.companyName || company.name;
+      company.nameEn = cd.nameEn || cd.legalName || company.nameEn;
+      company.crNumber = cd.crNumber || cd.cr || company.crNumber;
+      company.vatNumber = cd.vatNumber || cd.vat || company.vatNumber;
+      company.phone = cd.phone || company.phone;
+      company.email = cd.email || company.email;
+      company.address = cd.address ? (cd.city ? `${cd.address} — ${cd.city}` : cd.address) : company.address;
     }
     const logoSnap = await getDoc(fsDoc(db, `companies/${COMPANY_ID}/settings`, "logo"));
     if (logoSnap.exists()) {
@@ -1579,32 +2124,62 @@ function _buildJournalVoucherHTML(je, company) {
     stockTransfer: "تحويل مخزني", salesCOGS: "تكلفة مبيعات"
   };
 
-  const coName    = company.name || company.companyName || "مؤسسة إدهام للمواد الغذائية";
-  const coAddress = [company.address, company.city, company.zip, company.country].filter(Boolean).join("، ") || "ينبع، المملكة العربية السعودية";
-  const coPhone   = company.phone || "";
-  const coEmail   = company.email || "";
-  const coVat     = company.vatNumber || company.vat || company.taxNumber || "";
-  const coCr      = company.crNumber || company.cr || "";
-  const coLogo    = company.logoUrl || company.logoBase64 || company.logo || "";
+  const coName    = company.name || "شركة نظم الإمداد الحديثة";
+  const coNameEn  = company.nameEn || "Modern Supply Systems Co.";
+  const coAddress = company.address || "7480 — الشارع: عامر الشعبي — ينبع — 13315";
+  const coPhone   = company.phone || "0549141648";
+  const coEmail   = company.email || "Nuzmalamdad@gmail.com";
+  const coVat     = company.vatNumber || "312448150500003";
+  const coCr      = company.crNumber || "4700123180";
+  const coLogo    = company.logoUrl || "";
 
   const totalDr = (je.lines || []).reduce((sum, l) => sum + (l.debit || 0), 0);
   const totalCr = (je.lines || []).reduce((sum, l) => sum + (l.credit || 0), 0);
   const isPost  = (je.status || "posted") === "posted";
   const isBal   = Math.abs(totalDr - totalCr) < 0.01;
 
+  // ─── Extract Tax & Supplier Information ───
+  const linesWithTax = (je.lines || []).filter(l => l.serviceProvider || l.taxNumber || l.invoiceRef);
+  const spName = linesWithTax.reduce((n, l) => n || (l.serviceProvider || "").trim(), "")
+                 || (je.supplierName || je.vendorName || je.entityName || "").trim();
+  const spTax  = linesWithTax.reduce((n, l) => n || (l.taxNumber || "").trim(), "")
+                 || (je.taxNumber || je.supplierVatNumber || "").trim();
+  const spRef  = linesWithTax.reduce((n, l) => n || (l.invoiceRef || "").trim(), "")
+                 || (je.taxInvoiceNumber || je.reference || "").trim();
+
+  // Detect VAT input line
+  const vatInputLine = (je.lines || []).find(l =>
+    (l.debit || 0) > 0 && (
+      l.accountCode === "2-1-1-2" ||
+      l.accountCode === "2-1-3-2" ||
+      l.accountCode === "2-2-1-2" ||
+      l.accountCode === "2-2-2" ||
+      (l.accountName && (l.accountName.includes("المدخلات") || l.accountName.includes("القيمة المضافة")))
+    )
+  );
+
+  const vatAmt = vatInputLine ? (vatInputLine.debit || 0) : 0;
+  const baseLine = (je.lines || []).find(l =>
+    l !== vatInputLine &&
+    (l.debit || 0) > 0
+  );
+  const baseAmt = baseLine ? (baseLine.debit || 0) : (vatAmt > 0 ? Math.round((vatAmt / 0.15) * 100) / 100 : (totalDr - vatAmt));
+  const totalWithVat = totalDr;
+  const isTaxEntry = !!(spName || spTax || spRef || vatInputLine);
+
   return `
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <title>سند قيد محاسبي — ${je.entryNumber || je.id}</title>
+  <title>${isTaxEntry ? "سند قيد ضريبي وفاتورة معتمدة" : "سند قيد محاسبي"} — ${je.entryNumber || je.id}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Cairo', Arial, sans-serif;
       direction: rtl;
-      color: #1e293b;
+      color: #0f172a;
       background: #fff;
       padding: 24px;
       -webkit-print-color-adjust: exact !important;
@@ -1612,11 +2187,11 @@ function _buildJournalVoucherHTML(je, company) {
     }
     @media print {
       body { padding: 0; }
-      @page { size: A4 portrait; margin: 10mm; }
+      @page { size: A4 portrait; margin: 8mm; }
       .no-print { display: none !important; }
     }
     .v-container {
-      max-width: 840px;
+      max-width: 860px;
       margin: 0 auto;
       border: 1px solid #cbd5e1;
       border-radius: 14px;
@@ -1625,8 +2200,8 @@ function _buildJournalVoucherHTML(je, company) {
     }
     /* Header */
     .v-header {
-      background: linear-gradient(135deg, #0f2460 0%, #1d4ed8 60%, #2563eb 100%) !important;
-      padding: 22px 30px;
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%) !important;
+      padding: 20px 26px;
       color: #fff !important;
     }
     .v-header-gold {
@@ -1637,60 +2212,102 @@ function _buildJournalVoucherHTML(je, company) {
       background: rgba(255,255,255,0.18) !important;
       border: 1px solid rgba(255,255,255,0.3) !important;
       border-radius: 12px;
-      padding: 8px 20px;
+      padding: 8px 18px;
       text-align: center;
     }
     /* Metadata Grid */
     .v-meta-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      gap: 10px;
       background: #f8fafc;
       border-bottom: 1px solid #e2e8f0;
-      padding: 16px 24px;
+      padding: 12px 20px;
     }
     .v-meta-card {
       background: #fff;
       border: 1px solid #e2e8f0;
       border-radius: 8px;
-      padding: 8px 12px;
+      padding: 8px 10px;
       text-align: center;
     }
     .v-meta-label { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
     .v-meta-val { font-size: 13px; font-weight: 800; color: #0f172a; }
+
+    /* Tax / Supplier Box */
+    .v-tax-box {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-right: 4px solid #16a34a;
+      border-radius: 8px;
+      margin: 14px 20px;
+      padding: 12px 16px;
+    }
+    .v-tax-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1.2fr 1.2fr 1fr;
+      gap: 12px;
+    }
+    .v-tax-item-label { font-size: 10.5px; color: #166534; font-weight: 700; margin-bottom: 2px; }
+    .v-tax-item-val { font-size: 12.5px; font-weight: 800; color: #0f172a; }
+
+    /* Tax Breakdown Strip */
+    .v-tax-summary-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 0 20px 14px 20px;
+    }
+    .v-tax-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .v-tax-card.base { border-top: 3px solid #6366f1; }
+    .v-tax-card.vat { border-top: 3px solid #16a34a; background: #f0fdf4; }
+    .v-tax-card.total { border-top: 3px solid #1e40af; background: #eff6ff; }
+    .v-tax-card .lbl { font-size: 10px; color: #64748b; font-weight: 700; margin-bottom: 2px; }
+    .v-tax-card .val { font-size: 14px; font-weight: 900; font-family: monospace; }
+    .v-tax-card.vat .val { color: #15803d; }
+    .v-tax-card.total .val { color: #1e3a8a; }
+
     /* Description Bar */
     .v-desc-bar {
-      padding: 12px 24px;
+      padding: 10px 20px;
       background: #eff6ff;
       border-bottom: 1px solid #dbeafe;
-      font-size: 12.5px;
+      font-size: 12px;
       color: #1e40af;
       line-height: 1.5;
     }
+
     /* Lines Table */
     .v-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
+      font-size: 11.5px;
     }
     .v-table th {
-      background: #f1f5f9 !important;
-      color: #334155;
+      background: #1e3a8a !important;
+      color: #fff !important;
       font-weight: 800;
-      padding: 10px 12px;
-      border-bottom: 2px solid #cbd5e1;
+      padding: 8px 10px;
+      border: 1px solid #1e3a8a;
       text-align: right;
     }
     .v-table td {
-      padding: 10px 12px;
-      border-bottom: 1px solid #e2e8f0;
+      padding: 8px 10px;
+      border: 1px solid #e2e8f0;
       color: #1e293b;
+      vertical-align: middle;
     }
     .v-table tr:nth-child(even) td { background: #fafafa; }
     .v-totals-row td {
       background: #f8fafc !important;
       font-weight: 900;
-      font-size: 13px;
+      font-size: 12.5px;
       border-top: 2px solid #94a3b8;
       border-bottom: 2px solid #94a3b8;
     }
@@ -1698,22 +2315,23 @@ function _buildJournalVoucherHTML(je, company) {
     .v-sigs {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      padding: 24px;
+      gap: 16px;
+      padding: 20px;
       background: #fff;
       border-top: 1px solid #e2e8f0;
+      page-break-inside: avoid;
     }
     .v-sig-box {
       border: 1px dashed #cbd5e1;
       border-radius: 8px;
-      padding: 14px;
+      padding: 12px;
       text-align: center;
     }
-    .v-sig-title { font-size: 11px; font-weight: 700; color: #64748b; margin-bottom: 30px; }
-    .v-sig-line { border-top: 1px solid #94a3b8; width: 80%; margin: 0 auto; padding-top: 4px; font-size: 11px; color: #334155; font-weight: 700; }
+    .v-sig-title { font-size: 10.5px; font-weight: 700; color: #64748b; margin-bottom: 30px; }
+    .v-sig-line { border-top: 1px solid #94a3b8; width: 80%; margin: 0 auto; padding-top: 4px; font-size: 10.5px; color: #334155; font-weight: 700; }
     .v-footer {
       background: #f8fafc;
-      padding: 8px 24px;
+      padding: 8px 20px;
       border-top: 1px solid #e2e8f0;
       font-size: 10px;
       color: #94a3b8;
@@ -1732,18 +2350,22 @@ function _buildJournalVoucherHTML(je, company) {
         <div style="display:flex; align-items:center; gap:14px;">
           ${coLogo ? `<img src="${coLogo}" style="height:64px;width:64px;object-fit:contain;background:#fff;border-radius:8px;padding:4px;box-shadow:0 2px 4px rgba(0,0,0,0.1);" />` : `<div style="width:60px;height:60px;background:rgba(255,255,255,0.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;">🏢</div>`}
           <div>
-            <div style="font-size:20px;font-weight:900;color:#fff !important;line-height:1.2;">${coName}</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.9) !important;margin-top:3px;">📍 ${coAddress}</div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.85) !important;margin-top:2px;display:flex;gap:12px;">
-              ${coPhone ? `<span>📞 الهاتف: ${coPhone}</span>` : ""}
-              ${coVat ? `<span>🔢 الرقم الضريبي: <strong>${coVat}</strong></span>` : ""}
+            <div style="font-size:19px;font-weight:900;color:#fff !important;line-height:1.2;">${coName}</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.9) !important;margin-top:2px;">${coNameEn} | 📍 ${coAddress}</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.95) !important;margin-top:4px;display:flex;flex-wrap:wrap;gap:14px;">
+              ${coPhone ? `<span>📞 الهاتف: <strong>${coPhone}</strong></span>` : ""}
+              ${coVat ? `<span>🧾 الرقم الضريبي: <strong>${coVat}</strong></span>` : ""}
               ${coCr ? `<span>📋 سجل تجاري: <strong>${coCr}</strong></span>` : ""}
             </div>
           </div>
         </div>
         <div class="v-badge-box">
-          <div style="font-size:22px;font-weight:900;color:#fff !important;">سند قيد محاسبي</div>
-          <div style="font-size:11px;color:rgba(255,255,255,0.85) !important;letter-spacing:1px;">JOURNAL VOUCHER</div>
+          <div style="font-size:18px;font-weight:900;color:#fff !important;">
+            ${isTaxEntry ? "سند قيد ضريبي معتمد" : "سند قيد محاسبي"}
+          </div>
+          <div style="font-size:10.5px;color:rgba(255,255,255,0.9) !important;letter-spacing:0.5px;">
+            ${isTaxEntry ? "TAX JOURNAL VOUCHER (ZATCA)" : "JOURNAL VOUCHER"}
+          </div>
         </div>
       </div>
     </div>
@@ -1761,13 +2383,56 @@ function _buildJournalVoucherHTML(je, company) {
       </div>
       <div class="v-meta-card">
         <div class="v-meta-label">نوع القيد</div>
-        <div class="v-meta-val">${typeMap[je.sourceType] || je.sourceType || "يدوي"}</div>
+        <div class="v-meta-val">${isTaxEntry ? "قيد ضريبي / خدمات" : (typeMap[je.sourceType] || je.sourceType || "يدوي")}</div>
       </div>
       <div class="v-meta-card">
-        <div class="v-meta-label">حالة القيد</div>
-        <div class="v-meta-val" style="color:${isPost ? '#059669' : '#d97706'}">${isPost ? "مرحّل ✓" : "مسودة"}</div>
+        <div class="v-meta-label">حالة الترحيل</div>
+        <div class="v-meta-val" style="color:${isPost ? '#059669' : '#d97706'}">${isPost ? "مرحّل نظامياً ✓" : "مسودة"}</div>
       </div>
     </div>
+
+    <!-- Prominent Supplier & Tax Details Card -->
+    ${isTaxEntry ? `
+      <div class="v-tax-box">
+        <div style="font-size:11px;font-weight:800;color:#166534;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+          <span>📋 بيانات المورد والفاتورة الضريبية المرجعية (ZATCA Tax Reference):</span>
+        </div>
+        <div class="v-tax-grid">
+          <div>
+            <div class="v-tax-item-label">🏢 اسم المورد / مقدم الخدمة</div>
+            <div class="v-tax-item-val">${spName || "مورد خدمات"}</div>
+          </div>
+          <div>
+            <div class="v-tax-item-label">🧾 الرقم الضريبي للمورد</div>
+            <div class="v-tax-item-val" style="font-family:monospace;color:#1e3a8a;">${spTax || "—"}</div>
+          </div>
+          <div>
+            <div class="v-tax-item-label">📄 رقم فاتورة المورد الضريبية</div>
+            <div class="v-tax-item-val" style="font-family:monospace;color:#4338ca;">${spRef || je.reference || "—"}</div>
+          </div>
+          <div>
+            <div class="v-tax-item-label">📅 تاريخ الفاتورة</div>
+            <div class="v-tax-item-val">${je.date || "—"}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ZATCA Tax Breakdown Summary Strip -->
+      <div class="v-tax-summary-strip">
+        <div class="v-tax-card base">
+          <div class="lbl">المبلغ الخاضع للضريبة (قبل الضريبة)</div>
+          <div class="val">${formatCurrency(baseAmt)} ر.س</div>
+        </div>
+        <div class="v-tax-card vat">
+          <div class="lbl">ضريبة القيمة المضافة 15% (مدخلات مستردة)</div>
+          <div class="val">${formatCurrency(vatAmt > 0 ? vatAmt : Math.round(baseAmt * 0.15 * 100)/100)} ر.س</div>
+        </div>
+        <div class="v-tax-card total">
+          <div class="lbl">الإجمالي شامل الضريبة</div>
+          <div class="val">${formatCurrency(totalWithVat)} ر.س</div>
+        </div>
+      </div>
+    ` : ""}
 
     <!-- General Description -->
     <div class="v-desc-bar">
@@ -1779,47 +2444,52 @@ function _buildJournalVoucherHTML(je, company) {
     <table class="v-table">
       <thead>
         <tr>
-          <th style="width:36px;text-align:center;">#</th>
-          <th style="width:110px;">كود الحساب</th>
-          <th>اسم الحساب</th>
-          <th>البيان الفرعي والتفاصيل</th>
-          <th style="width:125px;text-align:right;color:#1d4ed8;">مدين (ر.س)</th>
-          <th style="width:125px;text-align:right;color:#059669;">دائن (ر.س)</th>
+          <th style="width:34px;text-align:center;">#</th>
+          <th style="width:105px;">كود الحساب</th>
+          <th style="min-width:180px;">اسم الحساب المحاسبي</th>
+          <th>البيان والتفاصيل المحاسبية</th>
+          <th style="width:120px;text-align:right;">مدين (ر.س)</th>
+          <th style="width:120px;text-align:right;">دائن (ر.س)</th>
         </tr>
       </thead>
       <tbody>
-        ${(je.lines || []).map((l, idx) => `
+        ${(je.lines || []).map((l, idx) => {
+          const isLineVat = l.accountCode === "2-1-1-2" || l.accountCode === "2-1-3-2" || l.accountCode === "2-2-1-2" || l.accountCode === "2-2-2" || (l.accountName && l.accountName.includes("المدخلات"));
+          return `
           <tr>
             <td style="text-align:center;color:#64748b;font-size:11px;">${idx + 1}</td>
             <td style="font-family:monospace;font-weight:700;color:#1d4ed8;">${l.accountCode || "—"}</td>
-            <td style="font-weight:700;">${l.accountName || "—"}</td>
+            <td style="font-weight:700;">
+              ${l.accountName || "—"}
+              ${isLineVat ? `<span style="background:#dcfce7;color:#15803d;font-size:9.5px;padding:2px 6px;border-radius:4px;font-weight:800;margin-right:6px;">🏷️ ضريبة مدخلات 15%</span>` : ""}
+            </td>
             <td>
-              <div>${l.note || "—"}</div>
+              <div style="font-weight:600;color:#0f172a;">${l.note || je.description || "—"}</div>
               ${(l.serviceProvider || l.taxNumber || l.invoiceRef) ? `
-                <div style="font-size:10.5px;color:#475569;margin-top:2px;background:#f1f5f9;padding:2px 6px;border-radius:4px;display:inline-block;">
-                  ${l.serviceProvider ? `مورد: ${l.serviceProvider} ` : ""}
-                  ${l.taxNumber ? `| ضريبي: ${l.taxNumber} ` : ""}
-                  ${l.invoiceRef ? `| فاتورة: ${l.invoiceRef}` : ""}
+                <div style="font-size:10px;color:#334155;margin-top:3px;background:#f1f5f9;padding:2px 6px;border-radius:4px;display:inline-block;border:1px dashed #cbd5e1;">
+                  ${l.serviceProvider ? `مورد: <strong>${l.serviceProvider}</strong> ` : ""}
+                  ${l.taxNumber ? `| ضريبي: <strong>${l.taxNumber}</strong> ` : ""}
+                  ${l.invoiceRef ? `| فاتورة: <strong>${l.invoiceRef}</strong>` : ""}
                 </div>
               ` : ""}
             </td>
-            <td style="text-align:right;font-family:monospace;font-weight:${l.debit ? '800' : '400'};color:${l.debit ? '#1e40af' : '#94a3b8'};">
-              ${l.debit ? formatCurrency(l.debit) : "—"}
+            <td style="text-align:right;font-family:monospace;font-weight:${l.debit ? '800' : '400'};color:${l.debit ? '#dc2626' : '#94a3b8'};">
+              ${l.debit ? formatCurrency(l.debit) + " ر.س" : "—"}
             </td>
-            <td style="text-align:right;font-family:monospace;font-weight:${l.credit ? '800' : '400'};color:${l.credit ? '#047857' : '#94a3b8'};">
-              ${l.credit ? formatCurrency(l.credit) : "—"}
+            <td style="text-align:right;font-family:monospace;font-weight:${l.credit ? '800' : '400'};color:${l.credit ? '#16a34a' : '#94a3b8'};">
+              ${l.credit ? formatCurrency(l.credit) + " ر.س" : "—"}
             </td>
           </tr>
-        `).join("")}
+        `;}).join("")}
         <tr class="v-totals-row">
-          <td colspan="4" style="text-align:right;padding:12px;">
+          <td colspan="4" style="text-align:right;padding:10px;">
             الإجمالي الكلي للقيد المحاسبي
             <span style="font-size:11px;font-weight:700;color:${isBal ? '#059669' : '#dc2626'};margin-right:12px;">
-              (${isBal ? '✓ القيد متوازن ومطابق' : '⚠️ غير متوازن'})
+              (${isBal ? '✓ القيد متوازن ومطابق نظامياً' : '⚠️ غير متوازن'})
             </span>
           </td>
-          <td style="text-align:right;color:#1e40af;font-family:monospace;">${formatCurrency(totalDr)}</td>
-          <td style="text-align:right;color:#047857;font-family:monospace;">${formatCurrency(totalCr)}</td>
+          <td style="text-align:right;color:#dc2626;font-family:monospace;font-weight:900;">${formatCurrency(totalDr)} ر.س</td>
+          <td style="text-align:right;color:#16a34a;font-family:monospace;font-weight:900;">${formatCurrency(totalCr)} ر.س</td>
         </tr>
       </tbody>
     </table>
@@ -1827,22 +2497,22 @@ function _buildJournalVoucherHTML(je, company) {
     <!-- Signatures Block -->
     <div class="v-sigs">
       <div class="v-sig-box">
-        <div class="v-sig-title">إعداد المحاسب المنشئ</div>
+        <div class="v-sig-title">إعداد المحاسب المسؤول</div>
         <div class="v-sig-line">${je.createdByName || "المحاسب المسؤول"}</div>
       </div>
       <div class="v-sig-box">
-        <div class="v-sig-title">المراجعة المحاسبية</div>
+        <div class="v-sig-title">المراجعة والتدقيق المالي</div>
         <div class="v-sig-line">إدارة الحسابات</div>
       </div>
       <div class="v-sig-box">
-        <div class="v-sig-title">الاعتماد والترخيص</div>
-        <div class="v-sig-line">المدير المالي / العام</div>
+        <div class="v-sig-title">الاعتماد والختم الرسمي</div>
+        <div class="v-sig-line">${coName}</div>
       </div>
     </div>
 
     <!-- Footer -->
     <div class="v-footer">
-      <span>طُبع بواسطة: <strong>نظام إدهام للمواد الغذائية ERP</strong></span>
+      <span>طُبع بواسطة: <strong>نظام إدهام للمواد الغذائية ERP — ${coName}</strong></span>
       <span>تاريخ الطباعة: <strong>${new Date().toLocaleString("ar-SA")}</strong></span>
     </div>
 
@@ -1853,20 +2523,21 @@ function _buildJournalVoucherHTML(je, company) {
 }
 
 function _buildJournalLogReportHTML(entries, company, filters) {
-  const coName    = company.name || company.companyName || "مؤسسة إدهام للمواد الغذائية";
-  const coAddress = [company.address, company.city, company.zip, company.country].filter(Boolean).join("، ") || "ينبع، المملكة العربية السعودية";
-  const coPhone   = company.phone || "";
-  const coVat     = company.vatNumber || company.vat || company.taxNumber || "";
-  const coCr      = company.crNumber || company.cr || "";
-  const coLogo    = company.logoUrl || company.logoBase64 || company.logo || "";
+  const coName    = company.name || "شركة نظم الإمداد الحديثة";
+  const coNameEn  = company.nameEn || "Modern Supply Systems Co.";
+  const coAddress = company.address || "7480 — الشارع: عامر الشعبي — ينبع — 13315";
+  const coPhone   = company.phone || "0549141648";
+  const coVat     = company.vatNumber || "312448150500003";
+  const coCr      = company.crNumber || "4700123180";
+  const coLogo    = company.logoUrl || "";
 
   const typeLabels = {
     manual: "يدوي", salesInvoice: "مبيعات", purchaseInvoice: "مشتريات",
     salesReturn: "مردود بيع", purchaseReturn: "مردود شراء", reversing: "عكسي", pos: "POS"
   };
 
-  const totalDr = entries.reduce((s, e) => s + Math.max(e.totalDebit || 0, (e.lines || []).reduce((a, l) => a + (l.debit || 0), 0)), 0);
-  const totalCr = entries.reduce((s, e) => s + Math.max(e.totalCredit || 0, (e.lines || []).reduce((a, l) => a + (l.credit || 0), 0)), 0);
+  const totalDr = entries.reduce((s, e) => s + Math.max(parseFloat(e.totalDebit || 0) || 0, (e.lines || []).reduce((a, l) => a + (parseFloat(l.debit || 0) || 0), 0)), 0);
+  const totalCr = entries.reduce((s, e) => s + Math.max(parseFloat(e.totalCredit || 0) || 0, (e.lines || []).reduce((a, l) => a + (parseFloat(l.credit || 0) || 0), 0)), 0);
 
   return `
 <!DOCTYPE html>
@@ -1984,8 +2655,8 @@ function _buildJournalLogReportHTML(entries, company, filters) {
       </thead>
       <tbody>
         ${entries.map((e, idx) => {
-          const dr = Math.max(e.totalDebit || 0, (e.lines || []).reduce((a, l) => a + (l.debit || 0), 0));
-          const cr = Math.max(e.totalCredit || 0, (e.lines || []).reduce((a, l) => a + (l.credit || 0), 0));
+          const dr = Math.max(parseFloat(e.totalDebit || 0) || 0, (e.lines || []).reduce((a, l) => a + (parseFloat(l.debit || 0) || 0), 0));
+          const cr = Math.max(parseFloat(e.totalCredit || 0) || 0, (e.lines || []).reduce((a, l) => a + (parseFloat(l.credit || 0) || 0), 0));
           return `
             <tr>
               <td style="text-align:center;color:#64748b;font-size:10.5px;">${idx + 1}</td>
