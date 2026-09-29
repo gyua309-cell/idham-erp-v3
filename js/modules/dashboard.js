@@ -255,27 +255,13 @@ async function renderDashboardContent(fromStr, toStr) {
   const grossMargin = netSalesSubtotal > 0 ? (grossProfit / netSalesSubtotal * 100).toFixed(1) : "0.0";
 
   // ──────── 3. Collections & Receipts Calculations ────────
+  // تعتمد التحصيلات حصرياً على سندات القبض الرسمية ليتطابق الرقم 100% مع شاشة سندات القبض
   const customerReceipts = receipts.filter(r => r.entityType === "customer" || !r.entityType || r.type === "receipt");
   let totalCollected = customerReceipts.reduce((s, r) => s + parseFloat(r.amount || 0), 0);
 
   // Collections collection docs
   collections.forEach(c => {
     totalCollected += parseFloat(c.amount || 0);
-  });
-
-  // Include cash / direct paid amounts on invoices without separate receipt doc
-  activeInvoices.forEach(inv => {
-    const pm = (inv.paymentMethod || "").toLowerCase();
-    if (pm === "cash" || pm === "نقدي" || pm === "paid" || pm === "partial" || pm === "جزئي") {
-      const paid = parseFloat(inv.paidAmount || (pm === "cash" || pm === "نقدي" || pm === "paid" ? (inv.totalWithVat || inv.total || 0) : 0));
-      if (paid > 0) {
-        const hasReceipt = customerReceipts.some(r => r.invoiceId === inv.id || r.invoiceNumber === inv.invoiceNumber) ||
-                           collections.some(c => c.invoiceId === inv.id);
-        if (!hasReceipt) {
-          totalCollected += paid;
-        }
-      }
-    }
   });
 
   const totalOutstanding = Math.max(0, netSalesWithVat - totalCollected);
@@ -298,6 +284,7 @@ async function renderDashboardContent(fromStr, toStr) {
       id: r.id,
       name: r.name || "مندوب",
       zone: r.zone || "مسار ميداني",
+      costCenterId: r.costCenterId || null,
       target: parseFloat(r.monthlyTarget || 0),
       salesWithVat: 0,
       salesSubtotal: 0,
@@ -317,6 +304,7 @@ async function renderDashboardContent(fromStr, toStr) {
     id: DIRECT_KEY,
     name: "المستودع الرئيسي (مبيعات مباشرة)",
     zone: "إدارة المبيعات المركزية",
+    costCenterId: null,
     target: 0,
     salesWithVat: 0,
     salesSubtotal: 0,
@@ -337,6 +325,11 @@ async function renderDashboardContent(fromStr, toStr) {
     if (doc.repName) {
       const match = reps.find(r => r.name === doc.repName || r.id === doc.repName);
       if (match) return match.id;
+    }
+    // Check by costCenterId
+    if (doc.costCenterId) {
+      const matchCc = reps.find(r => r.costCenterId === doc.costCenterId || (r.name && doc.costCenterName && doc.costCenterName.includes(r.name)));
+      if (matchCc) return matchCc.id;
     }
     // Check customer mapping
     const custId = doc.customerId || doc.targetId;
@@ -386,7 +379,7 @@ async function renderDashboardContent(fromStr, toStr) {
     repStats[key].returnCount += 1;
   });
 
-  // Map Receipts to Reps
+  // Map Receipts to Reps (سندات القبض المباشرة)
   customerReceipts.forEach(rcpt => {
     const key = resolveRepKey(rcpt);
     if (repStats[key]) {
@@ -399,24 +392,6 @@ async function renderDashboardContent(fromStr, toStr) {
     const key = resolveRepKey(col);
     if (repStats[key]) {
       repStats[key].collections += parseFloat(col.amount || 0);
-    }
-  });
-
-  // Map Direct Cash Invoices to Rep Collections
-  activeInvoices.forEach(inv => {
-    const pm = (inv.paymentMethod || "").toLowerCase();
-    if (pm === "cash" || pm === "نقدي" || pm === "paid" || pm === "partial" || pm === "جزئي") {
-      const paid = parseFloat(inv.paidAmount || (pm === "cash" || pm === "نقدي" || pm === "paid" ? (inv.totalWithVat || inv.total || 0) : 0));
-      if (paid > 0) {
-        const hasReceipt = customerReceipts.some(r => r.invoiceId === inv.id || r.invoiceNumber === inv.invoiceNumber) ||
-                           collections.some(c => c.invoiceId === inv.id);
-        if (!hasReceipt) {
-          const key = resolveRepKey(inv);
-          if (repStats[key]) {
-            repStats[key].collections += paid;
-          }
-        }
-      }
     }
   });
 
@@ -728,21 +703,6 @@ function renderSalesChart(invoices, receipts, salesReturns, fromStr, toStr) {
     const key = rcpt.createdAt?.toDate ? rcpt.createdAt.toDate().toISOString().split("T")[0] : (rcpt.date || "");
     if (daysReceipts[key] !== undefined) {
       daysReceipts[key] += parseFloat(rcpt.amount || 0);
-    }
-  });
-
-  // Cash invoices on that day
-  invoices.forEach(inv => {
-    const pm = (inv.paymentMethod || "").toLowerCase();
-    if (pm === "cash" || pm === "نقدي" || pm === "paid") {
-      const key = inv.createdAt?.toDate ? inv.createdAt.toDate().toISOString().split("T")[0] : (inv.date || "");
-      if (daysReceipts[key] !== undefined) {
-        const amt = parseFloat(inv.paidAmount || inv.totalWithVat || inv.total || 0);
-        const hasReceipt = receipts.some(r => r.invoiceId === inv.id);
-        if (!hasReceipt) {
-          daysReceipts[key] += amt;
-        }
-      }
     }
   });
 
