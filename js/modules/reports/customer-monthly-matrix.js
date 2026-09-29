@@ -68,12 +68,12 @@ export async function render(container, user) {
 
       <!-- Metric View Toggle -->
       <div class="filter-select-group">
-        <label style="font-weight:700; font-size:12px; color:var(--text-2);">👁️ نوع العرض في الجدول</label>
-        <select id="cmm-metric-select" onchange="window.onCmmMetricChange(this.value)" style="min-width:190px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px; font-weight:700;">
-          <option value="both" selected>المبيعات والتحصيلات معاً</option>
+        <label style="font-weight:700; font-size:12px; color:var(--text-2);">👁️ نمط العرض في الخلايا</label>
+        <select id="cmm-metric-select" onchange="window.onCmmMetricChange(this.value)" style="min-width:210px; padding:6px 10px; border:1px solid var(--border); border-radius:8px; background:var(--bg-card); color:var(--text-1); font-size:12px; font-weight:700;">
+          <option value="both" selected>المبيعات والتحصيلات معاً (سطرين)</option>
           <option value="sales">المبيعات فقط (Sales)</option>
           <option value="collections">التحصيلات فقط (Collections)</option>
-          <option value="net_sales">صافي المبيعات (بعد المردودات)</option>
+          <option value="net_sales">صافي المبيعات (بعد خصم المردودات)</option>
         </select>
       </div>
 
@@ -101,18 +101,18 @@ export async function render(container, user) {
     <div class="page-content" style="padding:0 4px;">
       
       <!-- Selected Focus Header Alert (When single customer is selected) -->
-      <div id="cmm-focus-banner" class="card mb-16" style="display:none; padding:12px 18px; background:linear-gradient(135deg, rgba(99,102,241,0.12), rgba(16,185,129,0.08)); border:1.5px solid var(--brand); border-radius:12px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:24px;">👤</span>
+      <div id="cmm-focus-banner" class="card mb-16" style="display:none; padding:14px 20px; background:linear-gradient(135deg, rgba(99,102,241,0.15), rgba(16,185,129,0.1)); border:1.5px solid var(--brand); border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.06);">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:28px;">👤</span>
             <div>
-              <div style="font-size:15px; font-weight:900; color:var(--brand);" id="cmm-focus-name">اسم العميل</div>
-              <div style="font-size:11.5px; color:var(--text-2);" id="cmm-focus-details">كود العميل | المندوب | الرصيد الحالي</div>
+              <div style="font-size:17px; font-weight:900; color:var(--brand);" id="cmm-focus-name">اسم العميل</div>
+              <div style="font-size:12px; color:var(--text-2); margin-top:2px;" id="cmm-focus-details">كود العميل | المندوب | رصيد كشف الحساب الفعلي</div>
             </div>
           </div>
-          <div style="display:flex; align-items:center; gap:8px;">
-            <button class="btn btn-secondary btn-sm" id="cmm-focus-stmt-btn" onclick="window.openCmmCustomerStatement()">📊 كشف الحساب التفصيلي</button>
-            <button class="btn btn-primary btn-sm" onclick="window.resetCmmCustomerFocus()" style="background:#4F46E5; border-color:#4F46E5;">🔙 عرض كل العملاء (مجمع)</button>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <button class="btn btn-secondary btn-sm" id="cmm-focus-stmt-btn" onclick="window.openCmmCustomerStatement()" style="font-weight:700; font-size:12px;">📊 كشف الحساب التفصيلي للعميل</button>
+            <button class="btn btn-primary btn-sm" onclick="window.resetCmmCustomerFocus()" style="background:#4F46E5; border-color:#4F46E5; font-weight:700; font-size:12px;">🔙 العودة للمنحنى الإجمالي (كل العملاء)</button>
           </div>
         </div>
       </div>
@@ -122,7 +122,7 @@ export async function render(container, user) {
         
         <div class="card" style="padding:14px 18px; background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(99,102,241,0.02)); border:1px solid rgba(99,102,241,0.25); border-radius:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:11.5px; font-weight:700; color:var(--indigo);">💳 إجمالي المبيعات السنوية</span>
+            <span style="font-size:11.5px; font-weight:700; color:var(--indigo);">💳 إجمالي مبيعات السنة (${_selectedYear})</span>
             <span style="font-size:18px;">📈</span>
           </div>
           <div class="mono font-bold" id="cmm-kpi-sales" style="font-size:20px; color:var(--indigo); margin-top:6px;">0.00 ر.س</div>
@@ -131,7 +131,7 @@ export async function render(container, user) {
 
         <div class="card" style="padding:14px 18px; background:linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.02)); border:1px solid rgba(16,185,129,0.25); border-radius:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:11.5px; font-weight:700; color:#10B981;">💵 إجمالي التحصيلات السنوية</span>
+            <span style="font-size:11.5px; font-weight:700; color:#10B981;">💵 إجمالي التحصيلات المقبوضة</span>
             <span style="font-size:18px;">📥</span>
           </div>
           <div class="mono font-bold" id="cmm-kpi-collections" style="font-size:20px; color:#10B981; margin-top:6px;">0.00 ر.س</div>
@@ -140,20 +140,20 @@ export async function render(container, user) {
 
         <div class="card" style="padding:14px 18px; background:linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.02)); border:1px solid rgba(245,158,11,0.25); border-radius:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:11.5px; font-weight:700; color:#F59E0B;">🎯 نسبة كفاءة التحصيل</span>
+            <span style="font-size:11.5px; font-weight:700; color:#F59E0B;">🎯 نسبة كفاءة التحصيل والتغطية</span>
             <span style="font-size:18px;">⚖️</span>
           </div>
           <div class="mono font-bold" id="cmm-kpi-rate" style="font-size:20px; color:#F59E0B; margin-top:6px;">0.0%</div>
-          <div style="font-size:11px; color:var(--text-2); margin-top:4px;" id="cmm-kpi-gap">الفجوة: 0.00 ر.س</div>
+          <div style="font-size:11px; color:var(--text-2); margin-top:4px;" id="cmm-kpi-gap">فجوة التحصيل: 0.00 ر.س</div>
         </div>
 
         <div class="card" style="padding:14px 18px; background:linear-gradient(135deg, rgba(139,92,246,0.08), rgba(139,92,246,0.02)); border:1px solid rgba(139,92,246,0.25); border-radius:12px;">
           <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:11.5px; font-weight:700; color:#8B5CF6;">👥 العملاء المشمولين</span>
+            <span style="font-size:11.5px; font-weight:700; color:#8B5CF6;">👥 إجمالي الذمم والمديونيات الفعلية</span>
             <span style="font-size:18px;">🏢</span>
           </div>
-          <div class="mono font-bold" id="cmm-kpi-cust-count" style="font-size:20px; color:#8B5CF6; margin-top:6px;">0 عميل</div>
-          <div style="font-size:11px; color:var(--text-2); margin-top:4px;" id="cmm-kpi-active-info">النشطين خلال السنة: 0</div>
+          <div class="mono font-bold" id="cmm-kpi-total-balance" style="font-size:20px; color:#8B5CF6; margin-top:6px;">0.00 ر.س</div>
+          <div style="font-size:11px; color:var(--text-2); margin-top:4px;" id="cmm-kpi-active-info">حسابات مطابقة لكشف الحسابات</div>
         </div>
 
       </div>
@@ -162,30 +162,30 @@ export async function render(container, user) {
       <div style="display:grid; grid-template-columns: 2.2fr 1fr; gap:14px; margin-bottom:18px;" id="cmm-charts-grid">
         
         <!-- Main Line & Bar Trend Chart -->
-        <div class="card" style="padding:18px 20px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border-soft); display:flex; flex-direction:column; min-height:360px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+        <div class="card" style="padding:18px 20px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border-soft); display:flex; flex-direction:column; min-height:370px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
             <div>
               <h3 style="font-size:15px; font-weight:800; color:var(--text-0); margin:0; display:flex; align-items:center; gap:8px;">
                 <span id="cmm-chart-title">📊 منحنى المبيعات والتحصيلات عبر أشهر السنة</span>
               </h3>
               <p style="font-size:11px; color:var(--text-2); margin:3px 0 0;" id="cmm-chart-subtitle">مقارنة بصرية ديناميكية بين مسحوبات المبيعات والتدفقات النقدية المحصلة</p>
             </div>
-            <div style="display:flex; align-items:center; gap:12px; font-size:11.5px; font-weight:700;">
-              <span style="display:inline-flex; align-items:center; gap:5px; color:#4F46E5;"><span style="width:10px; height:10px; border-radius:2px; background:#4F46E5; display:inline-block;"></span> مبيعات</span>
-              <span style="display:inline-flex; align-items:center; gap:5px; color:#10B981;"><span style="width:10px; height:10px; border-radius:2px; background:#10B981; display:inline-block;"></span> تحصيلات</span>
-              <span style="display:inline-flex; align-items:center; gap:5px; color:#EF4444;"><span style="width:10px; height:10px; border-radius:2px; background:#EF4444; display:inline-block;"></span> مردودات</span>
+            <div style="display:flex; align-items:center; gap:14px; font-size:11.5px; font-weight:700;">
+              <span style="display:inline-flex; align-items:center; gap:5px; color:#4F46E5;"><span style="width:12px; height:12px; border-radius:3px; background:#4F46E5; display:inline-block;"></span> 🧾 مبيعات</span>
+              <span style="display:inline-flex; align-items:center; gap:5px; color:#10B981;"><span style="width:12px; height:12px; border-radius:3px; background:#10B981; display:inline-block;"></span> 📥 تحصيلات</span>
+              <span style="display:inline-flex; align-items:center; gap:5px; color:#EF4444;"><span style="width:12px; height:12px; border-radius:3px; background:#EF4444; display:inline-block;"></span> ↩️ مردودات</span>
             </div>
           </div>
-          <div style="flex:1; position:relative; min-height:270px; width:100%;">
+          <div style="flex:1; position:relative; min-height:280px; width:100%;">
             <canvas id="cmm-trend-canvas"></canvas>
           </div>
         </div>
 
         <!-- Secondary Performance Breakdown Donut Chart -->
-        <div class="card" style="padding:18px 20px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border-soft); display:flex; flex-direction:column; min-height:360px;">
+        <div class="card" style="padding:18px 20px; border-radius:14px; background:var(--bg-card); border:1px solid var(--border-soft); display:flex; flex-direction:column; min-height:370px;">
           <div style="margin-bottom:12px;">
             <h3 style="font-size:15px; font-weight:800; color:var(--text-0); margin:0;">
-              🥧 توزيع الحصص والأنشطة
+              🥧 تحليل المساهمات والحصص
             </h3>
             <p style="font-size:11px; color:var(--text-2); margin:3px 0 0;" id="cmm-donut-subtitle">أعلى المساهمات الإجمالية</p>
           </div>
@@ -197,31 +197,35 @@ export async function render(container, user) {
 
       </div>
 
+      <!-- Explanatory Guide & Key Legend Strip -->
+      <div class="card mb-12" style="padding:10px 18px; background:linear-gradient(135deg, var(--bg-card), rgba(99,102,241,0.03)); border:1px solid var(--border-soft); border-radius:12px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:11.5px;">
+        <div style="display:flex; align-items:center; gap:14px; flex-wrap:wrap;">
+          <span style="font-weight:800; color:var(--brand);">💡 دليل قراءة الخلايا:</span>
+          <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:var(--text-0);">السطر العلوي:</b> 🧾 قيمة فواتير المبيعات الصادرة في الشهر</span>
+          <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:#10B981;">السطر السفلي:</b> 📥 المبالغ المحصلة والمقبوضة فعلياً في الشهر</span>
+          <span style="display:inline-flex; align-items:center; gap:5px;"><b style="color:var(--indigo);">⚖️ رصيد كشف الحساب:</b> ناتج (إجمالي المبيعات التاريخية - المردودات - إجمالي التحصيلات)</span>
+        </div>
+        <div style="font-weight:700; color:var(--text-2);" id="cmm-table-rows-count">
+          عرض 0 عميل
+        </div>
+      </div>
+
       <!-- Customer Monthly Matrix Table -->
       <div class="card" style="border-radius:14px; background:var(--bg-card); border:1px solid var(--border-soft); overflow:hidden;">
-        <div class="card-header" style="padding:14px 20px; border-bottom:1px solid var(--border-soft); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-          <div>
-            <h3 style="font-size:15px; font-weight:800; color:var(--text-0); margin:0;">
-              📋 مصفوفة المبيعات الشهرية للعملاء (Customer Monthly Matrix)
-            </h3>
-            <p style="font-size:11px; color:var(--text-2); margin:2px 0 0;">
-              💡 انقر على أي صف عميل لتخصيص المنحنى البياني ومقارنته فوراً بمفرده
-            </p>
-          </div>
-          <div style="font-size:12px; color:var(--text-2); font-weight:700;" id="cmm-table-rows-count">
-            عرض 0 عميل
-          </div>
-        </div>
-
-        <div class="table-container" style="max-height:680px; overflow:auto;">
-          <table class="data-dense" id="cmm-matrix-table" style="width:100%; border-collapse:collapse; min-width:1300px;">
+        <div class="table-container" style="max-height:720px; overflow:auto;">
+          <table class="data-dense" id="cmm-matrix-table" style="width:100%; border-collapse:collapse; min-width:1380px;">
             <thead style="position:sticky; top:0; z-index:10; background:var(--bg-1);">
               <tr>
-                <th style="min-width:210px; position:sticky; right:0; z-index:11; background:var(--bg-1); box-shadow:-2px 0 6px rgba(0,0,0,0.06);">العميل / المندوب</th>
-                <th style="width:100px; text-align:left;">الرصيد الحالي</th>
-                ${MONTH_NAMES_AR.map(m => `<th style="min-width:90px; text-align:center;">${m}</th>`).join("")}
-                <th style="min-width:115px; text-align:left; background:rgba(99,102,241,0.08); color:var(--indigo);">إجمالي المبيعات</th>
-                <th style="min-width:115px; text-align:left; background:rgba(16,185,129,0.08); color:#10B981;">إجمالي التحصيل</th>
+                <th style="min-width:220px; position:sticky; right:0; z-index:11; background:var(--bg-1); box-shadow:-2px 0 6px rgba(0,0,0,0.06); padding:10px 12px;">
+                  العميل / المندوب / المسار
+                </th>
+                <th style="min-width:125px; text-align:left; background:rgba(99,102,241,0.04);">
+                  <div>⚖️ رصيد كشف الحساب</div>
+                  <div style="font-size:9.5px; font-weight:normal; color:var(--text-2);">(الصافي الفعلي التراكمي)</div>
+                </th>
+                ${MONTH_NAMES_AR.map(m => `<th style="min-width:100px; text-align:center;">${m}</th>`).join("")}
+                <th style="min-width:115px; text-align:left; background:rgba(99,102,241,0.08); color:var(--indigo);">مبيعات ${_selectedYear}</th>
+                <th style="min-width:115px; text-align:left; background:rgba(16,185,129,0.08); color:#10B981;">تحصيلات ${_selectedYear}</th>
                 <th style="width:85px; text-align:center;">التغطية %</th>
                 <th style="width:95px; text-align:center;">الاتجاه</th>
                 <th style="width:80px; text-align:center;" class="no-print">إجراءات</th>
@@ -231,7 +235,7 @@ export async function render(container, user) {
               <tr>
                 <td colspan="19" style="text-align:center; padding:50px; color:var(--text-2);">
                   <div class="loading-spinner" style="margin-bottom:8px;"></div>
-                  <div>جاري تجميع مصفوفة الشهور والتحليلات البيعية...</div>
+                  <div>جاري تجميع مصفوفة الشهور والتحليلات البيعية وحساب الأرصدة الفعلية...</div>
                 </td>
               </tr>
             </tbody>
@@ -306,9 +310,9 @@ async function setupGlobalCmmHandlers() {
     if (!_matrixData.length) return;
     const rows = [];
     const headers = [
-      "كود العميل", "اسم العميل", "المنطقة", "المندوب", "الرصيد المدين الحالي",
+      "كود العميل", "اسم العميل", "المنطقة", "المندوب", "رصيد كشف الحساب الفعلي",
       ...MONTH_NAMES_AR,
-      "إجمالي المبيعات", "إجمالي التحصيلات", "نسبة التحصيل %", "اتجاه النمو"
+      `إجمالي مبيعات ${_selectedYear}`, `إجمالي تحصيلات ${_selectedYear}`, "نسبة التحصيل %", "اتجاه النمو"
     ];
 
     _matrixData.forEach(row => {
@@ -317,7 +321,7 @@ async function setupGlobalCmmHandlers() {
         row.customer.name || "",
         row.customer.zone || "",
         row.customer.repName || "",
-        row.customer.balance || 0,
+        row.actualStatementBalance,
         ...row.monthlySales.map(m => m.sales),
         row.totalSales,
         row.totalCollections,
@@ -346,7 +350,7 @@ async function setupGlobalCmmHandlers() {
 window.loadCmmData = async function loadCmmData() {
   const tbody = document.getElementById("cmm-tbody");
   if (tbody) {
-    tbody.innerHTML = `<tr><td colspan="19" style="text-align:center; padding:50px; color:var(--text-2);"><div class="loading-spinner" style="margin-bottom:8px;"></div><div>جاري جلب البيانات من السيرفر...</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="19" style="text-align:center; padding:50px; color:var(--text-2);"><div class="loading-spinner" style="margin-bottom:8px;"></div><div>جاري جلب البيانات وحساب الأرصدة من كشوف الحسابات...</div></td></tr>`;
   }
 
   try {
@@ -399,7 +403,7 @@ function populateFilters() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Core Processing: Build Pivot Matrix
+// Core Processing: Build Pivot Matrix & Exact Statement Balance
 // ─────────────────────────────────────────────────────────────────────────────
 function processAndRenderMatrix() {
   const yrStr = String(_selectedYear);
@@ -407,7 +411,6 @@ function processAndRenderMatrix() {
   // Filter Customers based on Rep & Zone
   let filteredCusts = _customers.filter(c => {
     if (_selectedRepId !== "all" && c.repId !== _selectedRepId) {
-      // Check if repName matches
       const repObj = _salesReps.find(r => r.id === _selectedRepId);
       if (!repObj || c.repName !== repObj.name) return false;
     }
@@ -419,49 +422,100 @@ function processAndRenderMatrix() {
   _matrixData = filteredCusts.map(cust => {
     const monthlySales = Array(12).fill(0).map(() => ({ sales: 0, returns: 0, netSales: 0, collections: 0 }));
 
-    // 1. Invoices for this customer in selected year
+    let allTimeSales = 0;
+    let allTimeReturns = 0;
+    let allTimeCollections = 0;
+    let allTimeReceipts = 0;
+    let allTimeAutoPaid = 0;
+
+    const custNorm = (cust.name || "").trim().toLowerCase();
+
+    // 1. Invoices (Selected Year + All Time)
     _invoices.forEach(inv => {
-      if (inv.customerId !== cust.id && inv.customerName !== cust.name) return;
+      const isMatch = (inv.customerId === cust.id) || (inv.customerName && inv.customerName.trim().toLowerCase() === custNorm);
+      if (!isMatch) return;
+
+      const totalVal = parseFloat(inv.totalWithVat || inv.total || 0);
+      allTimeSales += totalVal;
+
       const dStr = inv.date || (inv.createdAt?.toDate ? inv.createdAt.toDate().toISOString().split("T")[0] : "");
-      if (!dStr.startsWith(yrStr)) return;
-      const mIdx = parseInt(dStr.slice(5, 7), 10) - 1;
-      if (mIdx >= 0 && mIdx < 12) {
-        monthlySales[mIdx].sales += (parseFloat(inv.totalWithVat || inv.total || 0));
+      if (dStr.startsWith(yrStr)) {
+        const mIdx = parseInt(dStr.slice(5, 7), 10) - 1;
+        if (mIdx >= 0 && mIdx < 12) {
+          monthlySales[mIdx].sales += totalVal;
+        }
+      }
+
+      // Check auto payments
+      if (inv.paidAmount > 0) {
+        const hasMatchingVoucher = _receipts.some(r => {
+          const rDate = r.date || (r.createdAt?.toDate ? r.createdAt.toDate().toISOString().split("T")[0] : "");
+          return rDate === dStr && (r.targetId === cust.id || (r.customerName && r.customerName.trim().toLowerCase() === custNorm)) && Math.abs((r.amount || 0) - inv.paidAmount) < 0.01;
+        }) || _collections.some(c => {
+          const cDate = c.date || (c.createdAt?.toDate ? c.createdAt.toDate().toISOString().split("T")[0] : "");
+          return cDate === dStr && (c.customerId === cust.id || (c.customerName && c.customerName.trim().toLowerCase() === custNorm)) && Math.abs((c.amount || 0) - inv.paidAmount) < 0.01;
+        });
+
+        if (!hasMatchingVoucher) {
+          allTimeAutoPaid += parseFloat(inv.paidAmount || 0);
+        }
       }
     });
 
-    // 2. Returns for this customer
+    // 2. Returns (Selected Year + All Time)
     _returns.forEach(ret => {
-      if (ret.customerId !== cust.id && ret.customerName !== cust.name) return;
+      const isMatch = (ret.customerId === cust.id) || (ret.customerName && ret.customerName.trim().toLowerCase() === custNorm);
+      if (!isMatch) return;
+
+      const retVal = parseFloat(ret.totalWithVat !== undefined ? ret.totalWithVat : (ret.total || 0));
+      allTimeReturns += retVal;
+
       const dStr = ret.date || (ret.createdAt?.toDate ? ret.createdAt.toDate().toISOString().split("T")[0] : "");
-      if (!dStr.startsWith(yrStr)) return;
-      const mIdx = parseInt(dStr.slice(5, 7), 10) - 1;
-      if (mIdx >= 0 && mIdx < 12) {
-        monthlySales[mIdx].returns += (parseFloat(ret.totalWithVat !== undefined ? ret.totalWithVat : (ret.total || 0)));
+      if (dStr.startsWith(yrStr)) {
+        const mIdx = parseInt(dStr.slice(5, 7), 10) - 1;
+        if (mIdx >= 0 && mIdx < 12) {
+          monthlySales[mIdx].returns += retVal;
+        }
       }
     });
 
     // 3. Representative Collections
     _collections.forEach(col => {
-      if (col.customerId !== cust.id && col.customerName !== cust.name) return;
+      const isMatch = (col.customerId === cust.id) || (col.customerName && col.customerName.trim().toLowerCase() === custNorm);
+      if (!isMatch) return;
+
+      const colAmt = parseFloat(col.amount || 0);
+      allTimeCollections += colAmt;
+
       const dStr = col.date || (col.createdAt?.toDate ? col.createdAt.toDate().toISOString().split("T")[0] : "");
-      if (!dStr.startsWith(yrStr)) return;
-      const mIdx = parseInt(dStr.slice(5, 7), 10) - 1;
-      if (mIdx >= 0 && mIdx < 12) {
-        monthlySales[mIdx].collections += (parseFloat(col.amount || 0));
+      if (dStr.startsWith(yrStr)) {
+        const mIdx = parseInt(dStr.slice(5, 7), 10) - 1;
+        if (mIdx >= 0 && mIdx < 12) {
+          monthlySales[mIdx].collections += colAmt;
+        }
       }
     });
 
     // 4. Admin ERP Receipts
     _receipts.forEach(rcpt => {
-      if (rcpt.targetId !== cust.id && rcpt.customerId !== cust.id && rcpt.customerName !== cust.name) return;
+      const isMatch = (rcpt.targetId === cust.id) || (rcpt.customerId === cust.id) || (rcpt.customerName && rcpt.customerName.trim().toLowerCase() === custNorm);
+      if (!isMatch) return;
+
+      const rcptAmt = parseFloat(rcpt.amount || 0);
+      allTimeReceipts += rcptAmt;
+
       const dStr = rcpt.date || (rcpt.createdAt?.toDate ? rcpt.createdAt.toDate().toISOString().split("T")[0] : "");
-      if (!dStr.startsWith(yrStr)) return;
-      const mIdx = parseInt(dStr.slice(5, 7), 10) - 1;
-      if (mIdx >= 0 && mIdx < 12) {
-        monthlySales[mIdx].collections += (parseFloat(rcpt.amount || 0));
+      if (dStr.startsWith(yrStr)) {
+        const mIdx = parseInt(dStr.slice(5, 7), 10) - 1;
+        if (mIdx >= 0 && mIdx < 12) {
+          monthlySales[mIdx].collections += rcptAmt;
+        }
       }
     });
+
+    // Compute Exact Statement Balance dynamically from transactions
+    const openBal = parseFloat(cust.openingBalance || 0);
+    const actualStatementBalance = Math.round((openBal + allTimeSales - allTimeReturns - allTimeCollections - allTimeReceipts - allTimeAutoPaid) * 100) / 100;
 
     // Compute Net Sales per month
     monthlySales.forEach(m => {
@@ -474,7 +528,7 @@ function processAndRenderMatrix() {
     const totalCollections = monthlySales.reduce((sum, m) => sum + m.collections, 0);
     const collectionRate = totalSales > 0 ? (totalCollections / totalSales) * 100 : (totalCollections > 0 ? 100 : 0);
 
-    // Calculate growth trajectory (last active quarters comparison)
+    // Calculate growth trajectory
     const h1Sales = monthlySales.slice(0, 6).reduce((s, m) => s + m.sales, 0);
     const h2Sales = monthlySales.slice(6, 12).reduce((s, m) => s + m.sales, 0);
     let trendLabel = "🟢 مستقر";
@@ -502,7 +556,8 @@ function processAndRenderMatrix() {
       totalCollections,
       collectionRate,
       trendLabel,
-      trendClass
+      trendClass,
+      actualStatementBalance
     };
   });
 
@@ -528,7 +583,7 @@ function updateKPICards() {
   const totalCollections = targetData.reduce((sum, d) => sum + d.totalCollections, 0);
   const totalGap = totalSales - totalCollections;
   const colRate = totalSales > 0 ? (totalCollections / totalSales) * 100 : (totalCollections > 0 ? 100 : 0);
-  const activeCustCount = targetData.filter(d => d.totalSales > 0).length;
+  const totalActualBalances = targetData.reduce((sum, d) => sum + d.actualStatementBalance, 0);
 
   document.getElementById("cmm-kpi-sales").textContent = formatCurrency(totalSales);
   document.getElementById("cmm-kpi-sales-avg").textContent = `متوسط شهري: ${formatCurrency(totalSales / 12)}`;
@@ -540,10 +595,11 @@ function updateKPICards() {
   rateEl.textContent = `${colRate.toFixed(1)}%`;
   rateEl.style.color = colRate >= 90 ? "#10B981" : colRate >= 70 ? "#F59E0B" : "#EF4444";
 
-  document.getElementById("cmm-kpi-gap").textContent = `الفجوة: ${formatCurrency(totalGap)}`;
+  document.getElementById("cmm-kpi-gap").textContent = `فجوة التحصيل: ${formatCurrency(totalGap)}`;
 
-  document.getElementById("cmm-kpi-cust-count").textContent = `${targetData.length} عميل`;
-  document.getElementById("cmm-kpi-active-info").textContent = `المشترين في ${_selectedYear}: ${activeCustCount} عميل`;
+  const balEl = document.getElementById("cmm-kpi-total-balance");
+  balEl.textContent = formatCurrency(totalActualBalances);
+  balEl.style.color = totalActualBalances > 0 ? "#EF4444" : totalActualBalances < 0 ? "#10B981" : "#8B5CF6";
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -558,7 +614,7 @@ function updateFocusBanner() {
     if (item) {
       const c = item.customer;
       document.getElementById("cmm-focus-name").textContent = `${c.name}`;
-      document.getElementById("cmm-focus-details").textContent = `كود: ${c.code || "—"} | المندوب: ${c.repName || "—"} | المنطقة: ${c.zone || "—"} | الرصيد الحالي: ${formatCurrency(c.balance || 0)}`;
+      document.getElementById("cmm-focus-details").textContent = `كود: ${c.code || "—"} | المندوب: ${c.repName || "—"} | المنطقة: ${c.zone || "—"} | رصيد كشف الحساب الفعلي الصافي: ${formatCurrency(item.actualStatementBalance)}`;
       banner.style.display = "block";
       document.getElementById("cmm-chart-title").textContent = `👤 منحنى أداء العميل: ${c.name} (${_selectedYear})`;
       document.getElementById("cmm-chart-subtitle").textContent = `تحليل تفصيلي لمشتريات وتحصيلات العميل على مدار أشهر السنة`;
@@ -602,12 +658,12 @@ function renderTrendChart() {
   const ctx = canvas.getContext("2d");
 
   // Create Gradients
-  const salesGrad = ctx.createLinearGradient(0, 0, 0, 300);
-  salesGrad.addColorStop(0, "rgba(79, 70, 229, 0.35)");
+  const salesGrad = ctx.createLinearGradient(0, 0, 0, 320);
+  salesGrad.addColorStop(0, "rgba(79, 70, 229, 0.40)");
   salesGrad.addColorStop(1, "rgba(79, 70, 229, 0.0)");
 
-  const colGrad = ctx.createLinearGradient(0, 0, 0, 300);
-  colGrad.addColorStop(0, "rgba(16, 185, 129, 0.25)");
+  const colGrad = ctx.createLinearGradient(0, 0, 0, 320);
+  colGrad.addColorStop(0, "rgba(16, 185, 129, 0.30)");
   colGrad.addColorStop(1, "rgba(16, 185, 129, 0.0)");
 
   _chartInstance = new Chart(canvas, {
@@ -620,13 +676,13 @@ function renderTrendChart() {
           data: monthlySalesTotals,
           borderColor: "#4F46E5",
           backgroundColor: salesGrad,
-          borderWidth: 3,
+          borderWidth: 3.5,
           tension: 0.38,
-          pointRadius: 5,
-          pointHoverRadius: 8,
+          pointRadius: 5.5,
+          pointHoverRadius: 9,
           pointBackgroundColor: "#4F46E5",
           pointBorderColor: "#FFFFFF",
-          pointBorderWidth: 2,
+          pointBorderWidth: 2.5,
           fill: true
         },
         {
@@ -634,14 +690,14 @@ function renderTrendChart() {
           data: monthlyCollectionsTotals,
           borderColor: "#10B981",
           backgroundColor: colGrad,
-          borderWidth: 3,
-          borderDash: [5, 4],
+          borderWidth: 3.5,
+          borderDash: [6, 4],
           tension: 0.38,
-          pointRadius: 5,
-          pointHoverRadius: 8,
+          pointRadius: 5.5,
+          pointHoverRadius: 9,
           pointBackgroundColor: "#10B981",
           pointBorderColor: "#FFFFFF",
-          pointBorderWidth: 2,
+          pointBorderWidth: 2.5,
           fill: true
         },
         {
@@ -649,10 +705,10 @@ function renderTrendChart() {
           data: monthlyReturnsTotals,
           borderColor: "#EF4444",
           backgroundColor: "rgba(239, 68, 68, 0.1)",
-          borderWidth: 1.5,
+          borderWidth: 2,
           borderDash: [2, 2],
           tension: 0.3,
-          pointRadius: 3,
+          pointRadius: 4,
           pointBackgroundColor: "#EF4444",
           fill: false
         }
@@ -672,15 +728,21 @@ function renderTrendChart() {
         tooltip: {
           backgroundColor: "rgba(15, 23, 42, 0.95)",
           titleFont: { family: "IBM Plex Sans Arabic", size: 13, weight: "bold" },
-          bodyFont: { family: "IBM Plex Mono", size: 13 },
+          bodyFont: { family: "IBM Plex Mono", size: 12.5 },
           padding: 14,
           cornerRadius: 10,
-          borderColor: "rgba(255, 255, 255, 0.1)",
+          borderColor: "rgba(255, 255, 255, 0.12)",
           borderWidth: 1,
           callbacks: {
             label: function (context) {
               const val = context.raw || 0;
               return `  ${context.dataset.label}: ${formatCurrency(val)}`;
+            },
+            afterBody: function (context) {
+              const sVal = context[0]?.raw || 0;
+              const cVal = context[1]?.raw || 0;
+              const gap = sVal - cVal;
+              return `  ⚖️ فجوة الشهر: ${formatCurrency(gap)}`;
             }
           }
         }
@@ -688,7 +750,7 @@ function renderTrendChart() {
       scales: {
         x: {
           grid: { color: "rgba(150, 150, 150, 0.08)" },
-          ticks: { font: { family: "IBM Plex Sans Arabic", size: 11, weight: "600" }, color: "var(--text-2)" }
+          ticks: { font: { family: "IBM Plex Sans Arabic", size: 11.5, weight: "600" }, color: "var(--text-2)" }
         },
         y: {
           grid: { color: "rgba(150, 150, 150, 0.08)" },
@@ -722,7 +784,6 @@ function renderDonutChart() {
   const colors = ["#4F46E5", "#10B981", "#F59E0B", "#EC4899", "#8B5CF6", "#06B6D4", "#64748B"];
 
   if (_selectedCustomerId) {
-    // Breakdown of selected customer: Cash vs Invoices vs Returns vs Payments
     const item = _matrixData.find(d => d.customer.id === _selectedCustomerId);
     if (item) {
       if (subTitleEl) subTitleEl.textContent = `هيكل حساب ${item.customer.name}`;
@@ -730,7 +791,6 @@ function renderDonutChart() {
       dataVals = [item.totalNetSales, item.totalCollections, item.totalReturns];
     }
   } else {
-    // Top 5 Customers or Top Reps
     if (subTitleEl) subTitleEl.textContent = `أعلى 5 مساهمات في مبيعات ${_selectedYear}`;
     const top5 = _matrixData.slice(0, 5);
     labels = top5.map(d => d.customer.name);
@@ -842,15 +902,24 @@ function renderMatrixTable() {
         : _selectedMetric === "net_sales" ? m.netSales
         : m.sales;
 
-      // Heatmap alpha
       const intensity = val > 0 ? Math.min(0.28, Math.max(0.04, (val / maxCellVal) * 0.35)) : 0;
       const bgStyle = val > 0 ? `background: rgba(79, 70, 229, ${intensity});` : "";
 
       if (_selectedMetric === "both") {
         return `
-          <td style="${bgStyle} text-align:center; padding:6px 4px; border-left:1px solid var(--border-soft); font-size:11px;">
-            ${m.sales > 0 ? `<div class="mono font-bold" style="color:var(--text-0);">${formatCurrency(m.sales)}</div>` : `<div style="color:var(--text-3); font-size:10px;">—</div>`}
-            ${m.collections > 0 ? `<div class="mono" style="color:#10B981; font-size:10px; margin-top:2px;">📥 ${formatCurrency(m.collections)}</div>` : ""}
+          <td style="${bgStyle} text-align:center; padding:6px 6px; border-left:1px solid var(--border-soft); font-size:11px;">
+            ${m.sales > 0 ? `
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:2px;">
+                <span style="font-size:9.5px; color:var(--text-2);">🧾</span>
+                <span class="mono font-bold" style="color:var(--text-0);">${formatCurrency(m.sales)}</span>
+              </div>
+            ` : `<div style="color:var(--text-3); font-size:10px;">—</div>`}
+            ${m.collections > 0 ? `
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:2px; margin-top:2px;">
+                <span style="font-size:9.5px; color:#10B981;">📥</span>
+                <span class="mono font-bold" style="color:#10B981;">${formatCurrency(m.collections)}</span>
+              </div>
+            ` : ""}
           </td>
         `;
       }
@@ -864,7 +933,7 @@ function renderMatrixTable() {
       `;
     }).join("");
 
-    const bal = c.balance || 0;
+    const bal = row.actualStatementBalance;
     const isDebtor = bal > 0;
     const isCreditor = bal < 0;
 
@@ -883,22 +952,22 @@ function renderMatrixTable() {
           </div>
         </td>
 
-        <!-- Current Debt Balance -->
-        <td style="text-align:left; font-size:11.5px;">
-          <span class="mono font-bold" style="color:${isDebtor ? 'var(--bad)' : isCreditor ? '#10B981' : 'var(--text-2)'};">
-            ${formatCurrency(bal)}
+        <!-- Exact Statement Balance (Calculated Dynamically) -->
+        <td style="text-align:left; font-size:11.5px; background:rgba(99,102,241,0.03);">
+          <span class="mono font-bold" style="color:${isDebtor ? 'var(--bad)' : isCreditor ? '#10B981' : 'var(--text-2)'}; font-size:12px;">
+            ${isDebtor ? formatCurrency(bal) : isCreditor ? `(${formatCurrency(Math.abs(bal))}) دائن` : "0.00"}
           </span>
         </td>
 
         <!-- 12 Month Cells -->
         ${monthCellsHTML}
 
-        <!-- Total Sales -->
+        <!-- Total Sales of Year -->
         <td class="mono font-bold" style="text-align:left; color:var(--indigo); background:rgba(99,102,241,0.04); font-size:12px;">
           ${formatCurrency(row.totalSales)}
         </td>
 
-        <!-- Total Collections -->
+        <!-- Total Collections of Year -->
         <td class="mono font-bold" style="text-align:left; color:#10B981; background:rgba(16,185,129,0.04); font-size:12px;">
           ${formatCurrency(row.totalCollections)}
         </td>
@@ -943,7 +1012,7 @@ function renderMatrixTable() {
     const grandTotalSales = displayList.reduce((s, r) => s + r.totalSales, 0);
     const grandTotalCol = displayList.reduce((s, r) => s + r.totalCollections, 0);
     const grandRate = grandTotalSales > 0 ? (grandTotalCol / grandTotalSales) * 100 : 0;
-    const grandBalance = displayList.reduce((s, r) => s + (r.customer.balance || 0), 0);
+    const grandBalance = displayList.reduce((s, r) => s + r.actualStatementBalance, 0);
 
     tfoot.innerHTML = `
       <tr>
