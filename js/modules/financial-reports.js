@@ -2,8 +2,9 @@
 // IDHAM ERP — Unified Financial Reports & Analysis
 // دفتر الأستاذ، ميزان المراجعة، قائمة الدخل، الميزانية، التدفقات، حقوق الملكية، والتحليل المالي
 // ============================================================
-import { COLS, getAll, query, orderBy, getDocs } from "../utils/db.js";
+import { COLS, getAll, query, orderBy, getDocs, doc, getDoc, db, COMPANY_ID } from "../utils/db.js";
 import { formatCurrency, todayString, startOfMonth } from "../utils/formatters.js";
+import { exportToExcel } from "../utils/excel.js";
 
 let accounts = [];
 let journalEntries = [];
@@ -29,7 +30,7 @@ export async function render(container, user) {
       <!-- Extra Filters Area (Trial Balance Levels) -->
       <div id="fin-extra-filters" style="display:flex; gap:16px; align-items:center;"></div>
       <div style="margin-right:auto; display:flex; gap:8px;">
-        <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة التقرير</button>
+        <button class="btn btn-secondary" onclick="printActiveReportPDF()" style="font-weight:700; background:linear-gradient(135deg,#5b3ec2,#4338ca); color:#fff; border:none; box-shadow:0 2px 6px rgba(91,62,194,0.3);">📑 تصدير PDF / طباعة التقرير</button>
         <button class="btn btn-primary btn-sm" onclick="loadDataAndRender(true)">🔄 تحديث</button>
       </div>
     </div>
@@ -42,6 +43,7 @@ export async function render(container, user) {
       <button class="tab-btn" id="btn-tab-balance"  onclick="switchFinTab('balance')"  style="padding:14px 16px; border:none; background:none; cursor:pointer; font-weight:bold; color:var(--text-2); border-bottom:2px solid transparent; white-space:nowrap;">🏛️ المركز المالي</button>
       <button class="tab-btn" id="btn-tab-cashflow" onclick="switchFinTab('cashflow')" style="padding:14px 16px; border:none; background:none; cursor:pointer; font-weight:bold; color:var(--text-2); border-bottom:2px solid transparent; white-space:nowrap;">💧 التدفقات النقدية</button>
       <button class="tab-btn" id="btn-tab-equity"   onclick="switchFinTab('equity')"   style="padding:14px 16px; border:none; background:none; cursor:pointer; font-weight:bold; color:var(--text-2); border-bottom:2px solid transparent; white-space:nowrap;">🏦 التغير في الملكية</button>
+      <button class="tab-btn" id="btn-tab-breakeven" onclick="switchFinTab('breakeven')" style="padding:14px 16px; border:none; background:none; cursor:pointer; font-weight:bold; color:var(--text-2); border-bottom:2px solid transparent; white-space:nowrap;">🎯 نقطة التعادل CVP</button>
       <button class="tab-btn" id="btn-tab-analysis" onclick="switchFinTab('analysis')" style="padding:14px 16px; border:none; background:none; cursor:pointer; font-weight:bold; color:var(--text-2); border-bottom:2px solid transparent; white-space:nowrap;">📈 التحليل المالي والنسب</button>
       <button class="tab-btn" id="btn-tab-aging"    onclick="switchFinTab('aging')"    style="padding:14px 16px; border:none; background:none; cursor:pointer; font-weight:bold; color:var(--text-2); border-bottom:2px solid transparent; white-space:nowrap;">⏳ أعمار الديون</button>
       <button class="tab-btn" id="btn-tab-custperf" onclick="switchFinTab('custperf')" style="padding:14px 16px; border:none; background:none; cursor:pointer; font-weight:bold; color:var(--text-2); border-bottom:2px solid transparent; white-space:nowrap;">🏆 أداء العملاء</button>
@@ -71,24 +73,18 @@ function matchLineToAcc(line) {
 // Helper: classify account category
 // ──────────────────────────────────────────
 function isCOGSAccount(acc) {
-  // حساب COGS: الكود الجديد 5-1-8 أو القديم 5-1-2-1، ومصروفات النقل للداخل 5-1-7
-  return acc.type === "expense" && (
-    acc.code === "5-1-8"   ||
-    acc.code === "5-1-2-1" ||   // كود قديم للبيانات التاريخية
-    acc.code === "5-1-7"   ||   // مصروفات نقل بضاعة (للداخل)
+  // حسابات تكلفة المبيعات والتكلفة المباشرة فقط (COGS)
+  const code = acc.code || "";
+  if (code.startsWith("5-1-1")) return false; // استبعاد أي حسابات مشتريات دورية
+  return code === "5-1-8" || code === "5-1-7" || code === "5-1-9" || code === "5-1-3" ||
+    (code.startsWith("5-1-") && !code.startsWith("5-1-1")) || code === "4-2-4" ||
     acc.name?.includes("تكلفة البضاعة المباعة") ||
     acc.name?.includes("تكلفة مبيعات") ||
-    acc.name?.includes("نقل بضاعة (للداخل)")
-  );
-}
-
-function isPurchaseAccount(acc) {
-  // حسابات المشتريات (5-1-1-x) — تكلفة مشتريات الفترة
-  return acc.type === "expense" && acc.code?.startsWith("5-1-1");
+    acc.name?.includes("نقل بضاعة");
 }
 
 function isCOGSOrPurchase(acc) {
-  return isCOGSAccount(acc) || isPurchaseAccount(acc);
+  return isCOGSAccount(acc);
 }
 
 // ──────────────────────────────────────────
@@ -130,9 +126,13 @@ window.loadDataAndRender = async function(force = true) {
   container.innerHTML = `<div class="page-loading"><div class="loading-spinner"></div><span>جارٍ تحميل البيانات المحاسبية…</span></div>`;
 
   try {
-    const { clearERPCache, COMPANY_ID } = await import("../utils/db.js");
-    clearERPCache(`companies/${COMPANY_ID}/chartOfAccounts`);
-    clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
+    const { clearERPCache, COLS } = await import("../utils/db.js");
+    clearERPCache(COLS.chartOfAccounts().path);
+    clearERPCache(COLS.journalEntries().path);
+    clearERPCache(COLS.salesInvoices().path);
+    clearERPCache(COLS.receipts().path);
+    _salesInvoicesCache = null;
+    _receiptsCache = null;
 
     accounts = await getAll(COLS.chartOfAccounts(), [orderBy("code")]);
     _accById = {}; _accByCode = {};
@@ -227,6 +227,21 @@ function renderActiveTab() {
             <option value="daily" ${window.custperfSort === "daily" ? "selected" : ""}>المعدل اليومي</option>
           </select>
         </div>
+        <div style="display:flex; gap:8px; align-items:flex-end; flex-wrap:wrap;">
+          <div style="position:relative; display:inline-block;">
+            <button id="btn-custperf-cols" class="btn btn-secondary" onclick="toggleCustPerfColMenu(event)" style="white-space:nowrap; min-height:38px; display:inline-flex; align-items:center; gap:6px; background:var(--bg-1); border:1px solid var(--border); cursor:pointer;">
+              ⚙️ تخصيص الأعمدة ▾
+            </button>
+            <div id="custperf-col-dropdown" class="card shadow-lg" style="display:none; position:absolute; top:calc(100% + 6px); left:0; min-width:280px; z-index:1050; padding:12px; border-radius:10px; border:1px solid var(--border); background:var(--bg-card, var(--bg-1)); box-shadow:0 12px 30px rgba(0,0,0,0.35);">
+            </div>
+          </div>
+          <button class="btn btn-secondary" onclick="exportCustPerfExcel()" style="white-space:nowrap; min-height:38px; display:inline-flex; align-items:center; gap:6px;">
+            📥 تصدير Excel
+          </button>
+          <button class="btn btn-primary" onclick="exportCustPerfPDF()" style="white-space:nowrap; min-height:38px; display:inline-flex; align-items:center; gap:6px;">
+            🖨️ طباعة / PDF
+          </button>
+        </div>
       `;
       document.getElementById("custperf-rep")?.addEventListener("change", (e) => {
         window.custperfRep = e.target.value;
@@ -248,6 +263,7 @@ function renderActiveTab() {
     balance:  renderBalanceSheet,
     cashflow: renderCashFlows,
     equity:   renderChangesInEquity,
+    breakeven: renderBreakEvenAnalysis,
     analysis: renderFinancialAnalysis,
     aging:    renderAgedReceivables,
     custperf: renderCustomerAnalytics,
@@ -1028,8 +1044,7 @@ function _calcIncomeData(from, to) {
   const revItems = [], cogsItems = [], expItems = [];
 
   for (const acc of accounts) {
-    if (acc.nodeType === "header") continue;
-
+    if (acc.isGroup || acc.isHeader || acc.nodeType === 'header' || acc.nodeType === 'group') continue;
     let balance = 0;
     for (const entry of journalEntries) {
       const d = entry.date || "";
@@ -1043,36 +1058,37 @@ function _calcIncomeData(from, to) {
       }
     }
 
-    // إذا كان رصيد شجرة الحسابات المعتمد للـ Revenue / Expense أكبر، نعتمد رصيد الشجرة المحسب لضمان المطابقة 100%
-    const isCreditNormal = ["2", "3", "4"].includes(acc.code ? acc.code.trim().charAt(0) : "1");
-    const docBalance = acc.balance !== undefined ? (isCreditNormal ? acc.balance : -acc.balance) : 0;
+    if (Math.abs(balance) < 0.01) continue;
 
     if (acc.type === "revenue") {
-      const finalRev = Math.max(balance, docBalance, acc.balance || 0);
-      if (Math.abs(finalRev) > 0.01) {
-        revenueTotal += finalRev;
-        revItems.push({ name: acc.name, code: acc.code, balance: finalRev });
+      // إيرادات الفترة المحددة
+      const revVal = balance;
+      if (Math.abs(revVal) > 0.01) {
+        revenueTotal += revVal;
+        revItems.push({ name: acc.name, code: acc.code, balance: revVal });
       }
     } else if (acc.type === "expense") {
-      const val = Math.max(Math.abs(balance), Math.abs(docBalance), Math.abs(acc.balance || 0));
-      if (val < 0.01) continue;
+      // استبعاد أي حسابات مشتريات دورية (الجرد المستمر يعتمد على المخزون 1-1-4 و COGS 5-1-8)
+      if (acc.code?.startsWith("5-1-1") || acc.name?.includes("مشتريات البضاعة")) continue;
+
+      // مصروفات وتكلفة الفترة المحددة (Normal Debit: Debit - Credit)
+      const expVal = -balance; // لأن balance = credit - debit
+      if (Math.abs(expVal) < 0.01) continue;
 
       if (isCOGSAccount(acc)) {
-        cogsTotal += val;
-        cogsItems.push({ name: acc.name, code: acc.code, balance: val });
-      } else if (isPurchaseAccount(acc)) {
-        if (cogsTotal === 0) {
-          cogsTotal += val;
-          cogsItems.push({ name: acc.name + " (مشتريات)", code: acc.code, balance: val });
-        }
+        cogsTotal += expVal;
+        cogsItems.push({ name: acc.name, code: acc.code, balance: expVal });
       } else {
-        opExpTotal += val;
-        expItems.push({ name: acc.name, code: acc.code, balance: val });
+        opExpTotal += expVal;
+        expItems.push({ name: acc.name, code: acc.code, balance: expVal });
       }
     }
   }
 
+  const grossRevenue = revItems.filter(i => i.balance > 0).reduce((s, i) => s + i.balance, 0) || revenueTotal;
+
   return {
+    grossRevenue,
     revenueTotal, cogsTotal, opExpTotal,
     revItems, cogsItems, expItems,
     grossProfit: revenueTotal - cogsTotal,
@@ -1091,108 +1107,639 @@ function _getPrevPeriod(from, to) {
   return { prevFrom: fmt(pFrom), prevTo: fmt(pTo) };
 }
 
-function renderIncomeStatement(container, from, to) {
+window.printActiveReportPDF = () => {
+  const from = document.getElementById("fin-from")?.value || startOfMonth();
+  const to = document.getElementById("fin-to")?.value || todayString();
+  if (activeTab === "income") {
+    window.printIncomeStatementPDF(from, to);
+  } else if (activeTab === "breakeven") {
+    window.printBreakEvenPDF(from, to);
+  } else {
+    window.print();
+  }
+};
+
+window.printIncomeStatementPDF = async (from, to) => {
   const cur = _calcIncomeData(from, to);
-  const { revenueTotal, cogsTotal, opExpTotal, revItems, cogsItems, expItems, grossProfit, netProfit } = cur;
+  const { grossRevenue, revenueTotal, cogsTotal, opExpTotal, revItems, cogsItems, expItems, grossProfit, netProfit } = cur;
   const margin      = revenueTotal > 0 ? (netProfit   / revenueTotal * 100).toFixed(1) : "0.0";
   const grossMargin = revenueTotal > 0 ? (grossProfit / revenueTotal * 100).toFixed(1) : "0.0";
+
+  revItems.sort((a, b) => (a.code || '').localeCompare(b.code || ''));
+  cogsItems.sort((a, b) => (a.code || '').localeCompare(b.code || ''));
+  expItems.sort((a, b) => (a.code || '').localeCompare(b.code || ''));
+
+  // Company details
+  let co = {
+    name: "شركة نظم الإمداد الحديثة",
+    vatNumber: "312448150500003",
+    crNumber: "4700123180",
+    phone: "0549141648",
+    email: "Nuzmalamdad@gmail.com",
+    address: "7480 - الشارع: عامر الشعبي، ينبع",
+    logoUrl: ""
+  };
+  // 1. Check local storage cache
+  try {
+    const cached = JSON.parse(localStorage.getItem("idham_company") || "{}");
+    if (cached.name) Object.assign(co, cached);
+    if (cached.cr) co.crNumber = cached.cr;
+    if (cached.crNumber) co.crNumber = cached.crNumber;
+    if (cached.logoBase64) co.logoUrl = cached.logoBase64;
+    if (cached.logoUrl) co.logoUrl = cached.logoUrl;
+  } catch (_) {}
+
+  // 2. Fetch fresh logo and company info from Firestore
+  try {
+    const [compSnap, logoSnap] = await Promise.all([
+      getDoc(doc(db, `companies/${COMPANY_ID}/settings`, "company")),
+      getDoc(doc(db, `companies/${COMPANY_ID}/settings`, "logo"))
+    ]);
+    if (compSnap.exists()) {
+      const d = compSnap.data();
+      const rawCr = d.crNumber || d.cr || d.commercialRegistration || "";
+      d.crNumber = (rawCr && rawCr.startsWith("47")) ? rawCr : "4700123180";
+      d.vatNumber = d.vatNumber || "312448150500003";
+      d.name = d.name || "شركة نظم الإمداد الحديثة";
+      Object.assign(co, d);
+    }
+    if (logoSnap.exists()) {
+      const ld = logoSnap.data();
+      const imgData = ld.dataUrl || ld.logoBase64 || ld.url || ld.logoUrl || "";
+      if (imgData) {
+        co.logoUrl = imgData;
+        try {
+          const c2 = JSON.parse(localStorage.getItem("idham_company") || "{}");
+          localStorage.setItem("idham_company", JSON.stringify({ ...c2, logoBase64: imgData, logoUrl: imgData }));
+        } catch (_) {}
+      }
+    }
+  } catch (e) {
+    console.warn("Could not load fresh logo from Firestore:", e);
+  }
+
+  const logoHtml = co.logoUrl
+    ? `<div class="logo-circle"><img src="${co.logoUrl}" alt="Logo" /></div>`
+    : `<div class="logo-circle"><span class="default-logo">🏢</span></div>`;
+
+  const isLoss = netProfit < 0;
+
+  const win = window.open("", "_blank");
+  win.document.write(`<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>قائمة الدخل والأرباح والخسائر — ${from} إلى ${to}</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: rtl; color: #1f2937; background: #f8fafc; padding: 12px; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    
+    .no-print { background: #1f2937; padding: 10px; display: flex; gap: 12px; justify-content: center; margin-bottom: 12px; border-radius: 8px; }
+    .btn { padding: 8px 20px; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; font-size: 13px; font-family: inherit; }
+    
+    .report-container { background: #fff; max-width: 210mm; margin: 0 auto; padding: 18px 22px; border: 1.5px solid #5b3ec2; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    
+    /* Top Title */
+    .top-title { text-align: center; margin-bottom: 12px; }
+    .top-title h1 { font-size: 20px; color: #5b3ec2; font-weight: 800; margin-bottom: 2px; }
+    .top-title h2 { font-size: 10px; color: #5b3ec2; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    
+    /* Purple Company Banner */
+    .company-banner { background: #5b3ec2 !important; color: #fff !important; border-radius: 8px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .banner-left { text-align: right; font-size: 11.5px; font-weight: 500; line-height: 1.5; color: #fff !important; }
+    .banner-left div { color: #fff !important; }
+    .banner-left strong { color: #fff !important; }
+    .banner-right { text-align: left; line-height: 1.4; color: #fff !important; }
+    .banner-right h2 { font-size: 16px; font-weight: 800; margin-bottom: 3px; color: #fff !important; }
+    .banner-right div { font-size: 11.5px; color: #fff !important; }
+    .banner-right strong { color: #fff !important; }
+    .logo-circle { width: 68px; height: 68px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 4px; border: 1.5px solid #5b3ec2; box-shadow: 0 2px 6px rgba(0,0,0,0.12); flex-shrink: 0; }
+    .logo-circle img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .logo-circle .default-logo { font-size: 28px; }
+    
+    /* Info Strip */
+    .info-strip { border: 1px solid #5b3ec2; border-radius: 6px; padding: 6px 12px; font-size: 10.5px; background: #fdfcff; margin-bottom: 14px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .info-strip span { color: #1f2937; }
+    .info-strip strong { color: #5b3ec2; }
+    
+    /* KPI Strip */
+    .kpi-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 14px; }
+    .kpi-box { border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 14px; background: #f8fafc; text-align: center; }
+    .kpi-box.blue { border-color: #3b82f6; background: #eff6ff; }
+    .kpi-box.indigo { border-color: #6366f1; background: #eef2ff; }
+    .kpi-box.loss { border-color: #ef4444; background: #fef2f2; }
+    .kpi-box.profit { border-color: #22c55e; background: #f0fdf4; }
+    .kpi-box .lbl { font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; }
+    .kpi-box .val { font-size: 16px; font-weight: 900; font-family: 'IBM Plex Mono', monospace; }
+    .kpi-box.blue .val { color: #1d4ed8; }
+    .kpi-box.indigo .val { color: #4338ca; }
+    .kpi-box.loss .val { color: #b91c1c; }
+    .kpi-box.profit .val { color: #15803d; }
+    
+    /* Section Head */
+    .sec-head { background: #5b3ec2 !important; color: #fff !important; font-size: 12px; font-weight: 800; padding: 7px 12px; border-radius: 6px 6px 0 0; margin-top: 14px; display: flex; justify-content: space-between; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .sec-head span { color: #fff !important; }
+    
+    /* Accounting Table */
+    .acc-table { width: 100%; border-collapse: collapse; margin-bottom: 4px; border: 1px solid #5b3ec2; border-top: none; }
+    .acc-table thead tr { background: #f1f5f9; border-bottom: 1px solid #cbd5e1; }
+    .acc-table thead th { font-size: 10.5px; font-weight: 700; padding: 6px 8px; color: #334155; text-align: right; }
+    .acc-table tbody tr { border-bottom: 1px solid #e2e8f0; }
+    .acc-table tbody tr:nth-child(even) { background: #fcfcfd; }
+    .acc-table tbody td { padding: 6px 8px; font-size: 11px; color: #1f2937; }
+    .acc-table tbody td.mono { font-family: 'IBM Plex Mono', monospace; font-weight: 700; text-align: left; }
+    
+    .subtotal-row { background: #f8fafc; border: 1px solid #cbd5e1; border-top: none; padding: 7px 10px; display: flex; justify-content: space-between; font-weight: 800; font-size: 11.5px; margin-bottom: 12px; border-radius: 0 0 6px 6px; }
+    .gross-profit-box { background: #eef2ff !important; border: 1.5px solid #6366f1; border-radius: 8px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; font-weight: 900; margin-bottom: 14px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .gross-profit-box .val { font-family: 'IBM Plex Mono', monospace; font-size: 15px; color: #4338ca; }
+    
+    /* Grand Summary Box */
+    .grand-summary { border-radius: 8px; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; margin-top: 18px; margin-bottom: 18px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .grand-summary.loss { background: #991b1b !important; color: #fff !important; border: 2px solid #ef4444; }
+    .grand-summary.profit { background: #166534 !important; color: #fff !important; border: 2px solid #22c55e; }
+    .grand-summary h3 { font-size: 16px; font-weight: 900; color: #fff !important; }
+    .grand-summary p { font-size: 11px; opacity: 0.9; color: #fff !important; }
+    .grand-summary .val { font-size: 22px; font-weight: 900; font-family: 'IBM Plex Mono', monospace; color: #fff !important; }
+    
+    /* Signatures */
+    .signatures { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 25px; padding-top: 15px; border-top: 1px dashed #5b3ec2; text-align: center; }
+    .signatures .role { font-size: 11px; font-weight: 800; color: #334155; margin-bottom: 35px; }
+    .signatures .line { border-top: 1px dotted #94a3b8; width: 110px; margin: 0 auto; font-size: 10px; color: #64748b; padding-top: 3px; }
+    
+    @page {
+      size: A4;
+      margin: 8mm 10mm 8mm 10mm;
+    }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .no-print { display: none !important; }
+      .report-container { max-width: 100%; box-shadow: none; border-radius: 0; border: 1px solid #5b3ec2; padding: 10px; }
+      .company-banner { background: #5b3ec2 !important; color: #fff !important; }
+      .sec-head { background: #5b3ec2 !important; color: #fff !important; }
+      .grand-summary.loss { background: #991b1b !important; color: #fff !important; }
+      .grand-summary.profit { background: #166534 !important; color: #fff !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <button class="btn" style="background:#5b3ec2;color:#fff;" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+    <button class="btn" style="background:#374151;color:#fff;" onclick="window.close()">✕ إغلاق</button>
+  </div>
+
+  <div class="report-container">
+    <!-- Top Title -->
+    <div class="top-title">
+      <h1>قائمة الدخل والأرباح والخسائر</h1>
+      <h2>INCOME STATEMENT & COMPREHENSIVE PROFIT / LOSS REPORT</h2>
+    </div>
+
+    <!-- Purple Company Banner -->
+    <div class="company-banner">
+      <div class="banner-left">
+        <div>الفترة المالية: <strong>من ${from} إلى ${to}</strong></div>
+        <div>تاريخ الإصدار: <strong>${new Date().toLocaleDateString('ar-SA')}</strong></div>
+        <div>العملة: <strong>ريال سعودي (SAR)</strong></div>
+      </div>
+      ${logoHtml}
+      <div class="banner-right">
+        <h2>${co.name}</h2>
+        ${co.vatNumber ? `<div>الرقم الضريبي: <strong>${co.vatNumber}</strong></div>` : ""}
+        ${co.crNumber ? `<div>السجل التجاري: <strong>${co.crNumber}</strong></div>` : ""}
+        ${co.phone ? `<div>الهاتف: <strong>${co.phone}</strong></div>` : ""}
+      </div>
+    </div>
+
+    <!-- Info Strip -->
+    <div class="info-strip">
+      <span><strong>بيانات المنشأة:</strong> ${co.name}</span>
+      <span><strong>الرقم الضريبي:</strong> ${co.vatNumber || "—"}</span>
+      <span><strong>السجل التجاري:</strong> ${co.crNumber || "—"}</span>
+      <span><strong>العنوان:</strong> ${co.address || "المملكة العربية السعودية"}</span>
+    </div>
+
+    <!-- KPI Summary Strip -->
+    <div class="kpi-strip">
+      <div class="kpi-box blue">
+        <div class="lbl">صافي الإيرادات والمبيعات</div>
+        <div class="val" dir="ltr">${formatCurrency(revenueTotal)}</div>
+      </div>
+      <div class="kpi-box indigo">
+        <div class="lbl">مجمل الربح (هامش ${grossMargin}%)</div>
+        <div class="val" dir="ltr">${formatCurrency(grossProfit)}</div>
+      </div>
+      <div class="kpi-box ${isLoss ? 'loss' : 'profit'}">
+        <div class="lbl">${isLoss ? 'صافي الخسارة' : 'صافي الربح'} (هامش ${margin}%)</div>
+        <div class="val" dir="ltr">${formatCurrency(netProfit)}</div>
+      </div>
+    </div>
+
+    <!-- 1. Revenues -->
+    <div class="sec-head">
+      <span>أولاً: الإيرادات التشغيلية والمبيعات (Revenues)</span>
+      <span>100.0%</span>
+    </div>
+    <table class="acc-table">
+      <thead>
+        <tr>
+          <th style="width:130px;">كود الحساب</th>
+          <th>اسم الحساب والبيان</th>
+          <th style="width:140px; text-align:left;">المبلغ (ر.س)</th>
+          <th style="width:70px; text-align:center;">النسبة</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${revItems.length ? revItems.map(item => `
+          <tr>
+            <td style="font-family:'IBM Plex Mono',monospace; font-weight:700;">${item.code}</td>
+            <td style="font-weight:700;">${item.name}</td>
+            <td class="mono" dir="ltr">${formatCurrency(item.balance)}</td>
+            <td style="text-align:center; font-size:10.5px;">${grossRevenue > 0 ? (item.balance / grossRevenue * 100).toFixed(1) : 0}%</td>
+          </tr>
+        `).join("") : `<tr><td colspan="4" style="text-align:center; padding:10px;">لا توجد إيرادات مسجلة</td></tr>`}
+      </tbody>
+    </table>
+    <div class="subtotal-row">
+      <span style="color:#1d4ed8;">صافي الإيرادات التشغيلية:</span>
+      <span class="mono" style="color:#1d4ed8;" dir="ltr">${formatCurrency(revenueTotal)} (${grossRevenue > 0 ? (revenueTotal / grossRevenue * 100).toFixed(1) : 100}%)</span>
+    </div>
+
+    <!-- 2. COGS -->
+    <div class="sec-head">
+      <span>ثانياً: تكلفة البضاعة المباعة (COGS)</span>
+      <span>تكلفة مباشرة</span>
+    </div>
+    <table class="acc-table">
+      <thead>
+        <tr>
+          <th style="width:130px;">كود الحساب</th>
+          <th>اسم الحساب والبيان</th>
+          <th style="width:140px; text-align:left;">المبلغ (ر.س)</th>
+          <th style="width:70px; text-align:center;">النسبة</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${cogsItems.length ? cogsItems.map(item => `
+          <tr>
+            <td style="font-family:'IBM Plex Mono',monospace; font-weight:700;">${item.code}</td>
+            <td style="font-weight:700;">${item.name}</td>
+            <td class="mono" style="color:#b45309;" dir="ltr">(${formatCurrency(item.balance)})</td>
+            <td style="text-align:center; font-size:10.5px;">${revenueTotal > 0 ? (item.balance / revenueTotal * 100).toFixed(1) : 0}%</td>
+          </tr>
+        `).join("") : `<tr><td colspan="4" style="text-align:center; padding:10px;">لا توجد تكلفة مباشرة مسجلة</td></tr>`}
+      </tbody>
+    </table>
+    <div class="subtotal-row">
+      <span style="color:#b45309;">يخصم: إجمالي تكلفة البضاعة المباعة:</span>
+      <span class="mono" style="color:#b45309;" dir="ltr">(${formatCurrency(cogsTotal)})</span>
+    </div>
+
+    <div class="gross-profit-box">
+      <div>🏷️ مجمل الربح التشغيلي (Gross Profit) — هامش: ${grossMargin}%</div>
+      <div class="val" dir="ltr">${formatCurrency(grossProfit)}</div>
+    </div>
+
+    <!-- 3. Operating Expenses -->
+    <div class="sec-head">
+      <span>ثالثاً: المصروفات التشغيلية والعمومية والإدارية (Operating Expenses)</span>
+      <span>مصروفات تشغيلية</span>
+    </div>
+    <table class="acc-table">
+      <thead>
+        <tr>
+          <th style="width:130px;">كود الحساب</th>
+          <th>اسم الحساب والبيان</th>
+          <th style="width:140px; text-align:left;">المبلغ (ر.س)</th>
+          <th style="width:70px; text-align:center;">النسبة</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${expItems.length ? expItems.map(item => `
+          <tr>
+            <td style="font-family:'IBM Plex Mono',monospace; font-weight:700;">${item.code}</td>
+            <td style="font-weight:700;">${item.name}</td>
+            <td class="mono" style="color:#dc2626;" dir="ltr">(${formatCurrency(item.balance)})</td>
+            <td style="text-align:center; font-size:10.5px;">${opExpTotal > 0 ? (item.balance / opExpTotal * 100).toFixed(1) : 0}%</td>
+          </tr>
+        `).join("") : `<tr><td colspan="4" style="text-align:center; padding:10px;">لا توجد مصروفات تشغيلية مسجلة</td></tr>`}
+      </tbody>
+    </table>
+    <div class="subtotal-row">
+      <span style="color:#dc2626;">إجمالي المصروفات التشغيلية والإدارية:</span>
+      <span class="mono" style="color:#dc2626;" dir="ltr">(${formatCurrency(opExpTotal)})</span>
+    </div>
+
+    <!-- Grand Summary Banner -->
+    <div class="grand-summary ${isLoss ? 'loss' : 'profit'}">
+      <div>
+        <h3>${isLoss ? '⚠️ صافي الخسارة للفترة (Net Loss)' : '🎉 صافي الربح للفترة (Net Profit)'}</h3>
+        <p>نسبة صافي ${isLoss ? 'الخسارة' : 'الربح'} من الإيراد: ${margin}% | تم احتساب كافة الإيرادات والتكاليف والمصروفات</p>
+      </div>
+      <div class="val" dir="ltr">${formatCurrency(netProfit)}</div>
+    </div>
+
+    <!-- Signatures -->
+    <div class="signatures">
+      <div>
+        <div class="role">إعداد / المحاسب المالي</div>
+        <div class="line">التوقيع</div>
+      </div>
+      <div>
+        <div class="role">مراجعة / الإدارة المالية</div>
+        <div class="line">التوقيع</div>
+      </div>
+      <div>
+        <div class="role">اعتماد / المدير العام</div>
+        <div class="line">الختم والتوقيع</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    window.onload = function() {
+      setTimeout(function() { window.print(); }, 400);
+    };
+  </script>
+</body>
+</html>`);
+  win.document.close();
+};
+
+window.exportIncomeStatementExcel = (from, to) => {
+  const cur = _calcIncomeData(from, to);
+  const rows = [];
+  rows.push(["قائمة الدخل والأرباح والخسائر — شركة نظم الإمداد الحديثة"]);
+  rows.push([`للفترة من: ${from} إلى: ${to}`]);
+  rows.push([]);
+  rows.push(["القسم", "كود الحساب", "اسم الحساب", "المبلغ (ر.س)"]);
+  
+  (cur.revItems || []).forEach(r => rows.push(["الإيرادات", r.code, r.name, r.balance]));
+  rows.push(["الإيرادات", "", "إجمالي الإيرادات", cur.revenueTotal]);
+  rows.push([]);
+  
+  (cur.cogsItems || []).forEach(c => rows.push(["تكلفة المبيعات", c.code, c.name, -c.balance]));
+  rows.push(["تكلفة المبيعات", "", "إجمالي تكلفة المبيعات", -cur.cogsTotal]);
+  rows.push(["مجمل الربح", "", "مجمل الربح (Gross Profit)", cur.grossProfit]);
+  rows.push([]);
+  
+  (cur.expItems || []).forEach(e => rows.push(["المصروفات التشغيلية", e.code, e.name, -e.balance]));
+  rows.push(["المصروفات التشغيلية", "", "إجمالي المصروفات التشغيلية", -cur.opExpTotal]);
+  rows.push([]);
+  rows.push(["النتيجة النهائية", "", "صافي الربح / (الخسارة)", cur.netProfit]);
+  
+  exportToExcel(rows, `قائمة_الدخل_${from}_${to}`);
+};
+
+function renderIncomeStatement(container, from, to) {
+  const cur = _calcIncomeData(from, to);
+  const { grossRevenue, revenueTotal, cogsTotal, opExpTotal, revItems, cogsItems, expItems, grossProfit, netProfit } = cur;
+  const margin      = revenueTotal > 0 ? (netProfit   / revenueTotal * 100).toFixed(1) : "0.0";
+  const grossMargin = revenueTotal > 0 ? (grossProfit / revenueTotal * 100).toFixed(1) : "0.0";
+  
+  // Sort items by code
+  revItems.sort((a, b) => (a.code || '').localeCompare(b.code || ''));
+  cogsItems.sort((a, b) => (a.code || '').localeCompare(b.code || ''));
+  expItems.sort((a, b) => (a.code || '').localeCompare(b.code || ''));
+
   // مقارنة بالفترة السابقة
   const { prevFrom, prevTo } = _getPrevPeriod(from, to);
   const prev = _calcIncomeData(prevFrom, prevTo);
   const _trend = (cv, pv) => {
-    if (!pv || pv < 0.01) return "";
-    const pct = ((cv - pv) / pv * 100).toFixed(1);
+    if (!pv || Math.abs(pv) < 0.01) return "";
+    const pct = ((cv - pv) / Math.abs(pv) * 100).toFixed(1);
     const up  = parseFloat(pct) >= 0;
-    return `<span style="font-size:11px; color:${up ? '#22c55e' : '#ef4444'}; margin-right:4px;">${up ? '▲' : '▼'}${Math.abs(pct)}%</span>`;
+    return `<span style="font-size:11px; font-weight:700; color:${up ? '#16a34a' : '#dc2626'}; margin-right:4px;">${up ? '▲' : '▼'} ${Math.abs(pct)}%</span>`;
   };
 
+  const isLoss = netProfit < 0;
+
   container.innerHTML = `
-    <div class="report-print-header" style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #5B5CEB; padding-bottom:12px; margin-bottom:20px; direction:rtl; text-align:right;">
-      ${window.getCompanyPrintHeaderHTML ? window.getCompanyPrintHeaderHTML("تقرير الأرباح والخسائر (Income Statement)", `الفترة من ${from} إلى ${to}`) : ""}
-    </div>
-    <div class="print-header no-print" style="text-align:center; margin-bottom:24px;">
-      <h2>قائمة الدخل والدخل الشامل (Income Statement)</h2>
-      <p class="dim">للفترة من ${from} إلى ${to}</p>
+    <!-- Top Print Header (Visible in Print) -->
+    <div class="report-print-header" style="border-bottom:2px solid #3b82f6; padding-bottom:12px; margin-bottom:18px;">
+      ${window.getCompanyPrintHeaderHTML ? window.getCompanyPrintHeaderHTML("قائمة الدخل والأرباح والخسائر (Income Statement)", `للفترة المالية من: ${from} إلى: ${to}`) : ""}
     </div>
 
-    <div style="max-width:800px; margin:0 auto;">
-    <div class="no-print" style="text-align:center; margin-bottom:16px;">
-      <p class="dim" style="margin:0; font-size:12px;">مقارنة بالفترة السابقة: ${prevFrom} → ${prevTo}</p>
+    <!-- On-screen Action Toolbar -->
+    <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:var(--bg-1); padding:12px 18px; border-radius:12px; border:1px solid var(--border-soft); box-shadow:var(--shadow-sm);">
+      <div style="font-size:13px; font-weight:700; color:var(--text-2);">
+        📊 <strong style="color:var(--text-1);">قائمة الأرباح والخسائر الشاملة</strong> | مقارنة بالفترة السابقة (${prevFrom} → ${prevTo})
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-secondary btn-sm" onclick="exportIncomeStatementExcel('${from}', '${to}')" style="font-weight:700;">📊 تصدير Excel</button>
+        <button class="btn btn-primary btn-sm" onclick="printIncomeStatementPDF('${from}', '${to}')" style="font-weight:700; background:linear-gradient(135deg, #5b3ec2, #4338ca); border:none; box-shadow:0 2px 6px rgba(91,62,194,0.3);">📑 تصدير PDF المطور (الهيدر الملون الرسمي)</button>
+      </div>
     </div>
-      <!-- KPI row -->
-      <div class="grid-3 gap-16 mb-24">
-        <div class="kpi-card">
-          <div class="status-bar good"></div>
-          <div class="kpi-content">
-            <div class="kpi-label">صافي الربح</div>
-            <div class="kpi-value ${netProfit >= 0 ? "text-good" : "text-bad"}">${formatCurrency(netProfit)} ${_trend(netProfit, prev.netProfit)}</div>
-            <div class="dim" style="font-size:11px;">هامش ${margin}% | السابق: ${formatCurrency(prev.netProfit)}</div>
+
+    <div class="income-statement-doc" style="max-width:920px; margin:0 auto;">
+      
+      <!-- ═══ KPI SUMMARY CARDS ═══ -->
+      <div class="grid-3 gap-16 mb-24 kpi-row" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:20px;">
+        
+        <!-- Total Revenues -->
+        <div class="kpi-card" style="background:linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02)); border:1.5px solid rgba(59,130,246,0.3); border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:#1d4ed8;">💰 صافي الإيرادات والمبيعات</span>
+            <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; background:rgba(59,130,246,0.15); color:#1d4ed8;">صافي الإيراد 📈</span>
           </div>
-        </div>
-        <div class="kpi-card">
-          <div class="status-bar indigo"></div>
-          <div class="kpi-content">
-            <div class="kpi-label">مجمل الربح</div>
-            <div class="kpi-value text-indigo">${formatCurrency(grossProfit)} ${_trend(grossProfit, prev.grossProfit)}</div>
-            <div class="dim" style="font-size:11px;">هامش ${grossMargin}% | السابق: ${formatCurrency(prev.grossProfit)}</div>
+          <div style="font-size:20px; font-weight:900; color:#1d4ed8; font-family:'IBM Plex Mono', monospace;">
+            ${formatCurrency(revenueTotal)} ${_trend(revenueTotal, prev.revenueTotal)}
           </div>
+          <div style="font-size:11px; color:var(--text-3); margin-top:4px;">إجمالي المبيعات قبل المردود: <strong class="mono">${formatCurrency(grossRevenue)}</strong></div>
         </div>
-        <div class="kpi-card">
-          <div class="status-bar warn"></div>
-          <div class="kpi-content">
-            <div class="kpi-label">إجمالي الإيرادات</div>
-            <div class="kpi-value">${formatCurrency(revenueTotal)} ${_trend(revenueTotal, prev.revenueTotal)}</div>
-            <div class="dim" style="font-size:11px;">السابق: ${formatCurrency(prev.revenueTotal)}</div>
+
+        <!-- Gross Profit -->
+        <div class="kpi-card" style="background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(99,102,241,0.02)); border:1.5px solid rgba(99,102,241,0.3); border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:#4338ca;">🏷️ مجمل الربح (Gross Profit)</span>
+            <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; background:rgba(99,102,241,0.15); color:#4338ca;">هامش ${grossMargin}%</span>
           </div>
+          <div style="font-size:20px; font-weight:900; color:#4338ca; font-family:'IBM Plex Mono', monospace;">
+            ${formatCurrency(grossProfit)} ${_trend(grossProfit, prev.grossProfit)}
+          </div>
+          <div style="font-size:11px; color:var(--text-3); margin-top:4px;">السابق: <strong class="mono">${formatCurrency(prev.grossProfit)}</strong></div>
         </div>
+
+        <!-- Net Profit / Loss -->
+        <div class="kpi-card" style="background:${isLoss ? "linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.02))" : "linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.02))"}; border:1.5px solid ${isLoss ? "rgba(239,68,68,0.4)" : "rgba(16,185,129,0.4)"}; border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:${isLoss ? "#b91c1c" : "#047857"};">${isLoss ? "⚠️ صافي الخسارة" : "🏆 صافي الربح"}</span>
+            <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; background:${isLoss ? "rgba(239,68,68,0.15)" : "rgba(16,185,129,0.15)"}; color:${isLoss ? "#b91c1c" : "#047857"};">${margin}%</span>
+          </div>
+          <div style="font-size:20px; font-weight:900; color:${isLoss ? "#b91c1c" : "#047857"}; font-family:'IBM Plex Mono', monospace;">
+            ${formatCurrency(netProfit)} ${_trend(netProfit, prev.netProfit)}
+          </div>
+          <div style="font-size:11px; color:var(--text-3); margin-top:4px;">السابق: <strong class="mono">${formatCurrency(prev.netProfit)}</strong></div>
+        </div>
+
       </div>
 
-      <div class="card" style="padding:28px;">
-        <!-- Revenues -->
-        <h4 style="color:var(--brand); border-bottom:2px solid var(--brand); padding-bottom:8px; margin-bottom:16px;">أولاً: الإيرادات والمبيعات</h4>
-        ${revItems.length ? revItems.map(item => `
-          <div class="flex justify-between mb-8" style="font-size:14px;">
-            <span class="dim">${item.code} — ${item.name}</span>
-            <span class="mono">${formatCurrency(item.balance)}</span>
-          </div>`).join("") : `<p class="dim" style="font-size:13px;">لا توجد إيرادات مسجلة في هذه الفترة</p>`}
-        <div class="flex justify-between font-bold" style="background:var(--bg-2); padding:10px 12px; border-radius:8px; margin:12px 0 28px;">
-          <span>إجمالي الإيرادات</span>
-          <span class="mono text-good">${formatCurrency(revenueTotal)}</span>
+      <!-- ═══ MAIN STATEMENT REPORT CARD ═══ -->
+      <div class="card income-report-body" style="border-radius:16px; border:1px solid var(--border-soft); box-shadow:var(--shadow-sm); overflow:hidden; padding:24px; background:var(--bg-1);">
+        
+        <!-- SECTION 1: REVENUES -->
+        <div class="income-sec mb-24" style="page-break-inside:avoid; break-inside:avoid; margin-bottom:24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #2563eb; padding-bottom:8px; margin-bottom:12px;">
+            <h4 style="margin:0; font-size:15px; font-weight:900; color:#1d4ed8;">أولاً: الإيرادات التشغيلية والمبيعات (Revenues)</h4>
+            <span style="font-size:11px; font-weight:700; color:#1d4ed8; background:rgba(37,99,235,0.1); padding:2px 8px; border-radius:6px;">حسابات الإيراد</span>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom:8px;">
+            <thead>
+              <tr style="background:var(--bg-2); color:var(--text-2); font-size:11.5px; border-bottom:1px solid var(--border-soft);">
+                <th style="text-align:right; padding:6px 10px; width:130px;">كود الحساب</th>
+                <th style="text-align:right; padding:6px 10px;">اسم الحساب / البند</th>
+                <th style="text-align:left; padding:6px 10px; width:140px;">المبلغ (ر.س)</th>
+                <th style="text-align:center; padding:6px 10px; width:80px;">النسبة</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${revItems.length ? revItems.map((item, idx) => {
+                const itemPct = grossRevenue > 0 ? (item.balance / grossRevenue * 100).toFixed(1) : "0.0";
+                return `
+                <tr style="border-bottom:1px solid var(--border-soft); background:${idx % 2 === 1 ? 'rgba(0,0,0,0.015)' : 'transparent'};">
+                  <td style="padding:8px 10px; font-family:'IBM Plex Mono',monospace; font-weight:700; color:var(--text-3);">${item.code}</td>
+                  <td style="padding:8px 10px; font-weight:700; color:var(--text-1);">${item.name}</td>
+                  <td style="padding:8px 10px; text-align:left; font-family:'IBM Plex Mono',monospace; font-weight:700; color:${item.balance >= 0 ? '#1e293b' : '#dc2626'};" dir="ltr">${formatCurrency(item.balance)}</td>
+                  <td style="padding:8px 10px; text-align:center; font-size:11px; color:var(--text-3); font-weight:600;">${itemPct}%</td>
+                </tr>`;
+              }).join("") : `<tr><td colspan="4" style="text-align:center; padding:12px; color:var(--text-3);">لا توجد إيرادات مسجلة في هذه الفترة</td></tr>`}
+            </tbody>
+          </table>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(90deg, rgba(37,99,235,0.12), rgba(37,99,235,0.04)); padding:10px 14px; border-radius:8px; border:1px solid rgba(37,99,235,0.25); font-weight:800;">
+            <span style="color:#1d4ed8; font-size:14px;">صافي الإيرادات التشغيلية (بعد خصم المردودات)</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:16px; color:#1d4ed8;" dir="ltr">${formatCurrency(revenueTotal)}</span>
+          </div>
         </div>
 
-        <!-- COGS -->
-        <h4 style="color:var(--warn); border-bottom:2px solid var(--warn); padding-bottom:8px; margin-bottom:16px;">ثانياً: تكلفة البضاعة المباعة (COGS)</h4>
-        ${cogsItems.length ? cogsItems.map(item => `
-          <div class="flex justify-between mb-8" style="font-size:14px;">
-            <span class="dim">${item.code} — ${item.name}</span>
-            <span class="mono text-bad">(${formatCurrency(item.balance)})</span>
-          </div>`).join("") : `<p class="dim" style="font-size:13px;">لا توجد تكلفة مباعة في هذه الفترة</p>`}
-        <div class="flex justify-between font-bold" style="background:var(--bg-2); padding:10px 12px; border-radius:8px; margin:12px 0 8px;">
-          <span>يخصم: تكلفة البضاعة المباعة</span>
-          <span class="mono text-bad">(${formatCurrency(cogsTotal)})</span>
-        </div>
-        <div class="flex justify-between font-bold" style="padding:10px 12px; margin-bottom:28px; border-bottom:1px solid var(--border);">
-          <span>مجمل الربح (Gross Profit)</span>
-          <span class="mono text-indigo">${formatCurrency(grossProfit)}</span>
+        <!-- SECTION 2: COGS & GROSS PROFIT -->
+        <div class="income-sec mb-24" style="page-break-inside:avoid; break-inside:avoid; margin-bottom:24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #d97706; padding-bottom:8px; margin-bottom:12px;">
+            <h4 style="margin:0; font-size:15px; font-weight:900; color:#b45309;">ثانياً: تكلفة البضاعة المباعة (Cost of Goods Sold - COGS)</h4>
+            <span style="font-size:11px; font-weight:700; color:#b45309; background:rgba(217,119,6,0.1); padding:2px 8px; border-radius:6px;">تكلفة مباشرة</span>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom:8px;">
+            <thead>
+              <tr style="background:var(--bg-2); color:var(--text-2); font-size:11.5px; border-bottom:1px solid var(--border-soft);">
+                <th style="text-align:right; padding:6px 10px; width:130px;">كود الحساب</th>
+                <th style="text-align:right; padding:6px 10px;">اسم الحساب / البند</th>
+                <th style="text-align:left; padding:6px 10px; width:140px;">المبلغ (ر.س)</th>
+                <th style="text-align:center; padding:6px 10px; width:80px;">النسبة</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${cogsItems.length ? cogsItems.map((item, idx) => {
+                const itemPct = revenueTotal > 0 ? (item.balance / revenueTotal * 100).toFixed(1) : "0.0";
+                return `
+                <tr style="border-bottom:1px solid var(--border-soft); background:${idx % 2 === 1 ? 'rgba(0,0,0,0.015)' : 'transparent'};">
+                  <td style="padding:8px 10px; font-family:'IBM Plex Mono',monospace; font-weight:700; color:var(--text-3);">${item.code}</td>
+                  <td style="padding:8px 10px; font-weight:700; color:var(--text-1);">${item.name}</td>
+                  <td style="padding:8px 10px; text-align:left; font-family:'IBM Plex Mono',monospace; font-weight:700; color:#b45309;" dir="ltr">(${formatCurrency(item.balance)})</td>
+                  <td style="padding:8px 10px; text-align:center; font-size:11px; color:var(--text-3);">${itemPct}%</td>
+                </tr>`;
+              }).join("") : `<tr><td colspan="4" style="text-align:center; padding:12px; color:var(--text-3);">لا توجد تكلفة مباعة مسجلة</td></tr>`}
+            </tbody>
+          </table>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(90deg, rgba(217,119,6,0.12), rgba(217,119,6,0.04)); padding:10px 14px; border-radius:8px; border:1px solid rgba(217,119,6,0.25); font-weight:800; margin-bottom:12px;">
+            <span style="color:#b45309; font-size:14px;">يخصم: إجمالي تكلفة البضاعة المباعة</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:16px; color:#b45309;" dir="ltr">(${formatCurrency(cogsTotal)})</span>
+          </div>
+
+          <!-- GROSS PROFIT HIGHLIGHT -->
+          <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(135deg, rgba(99,102,241,0.15), rgba(99,102,241,0.06)); padding:12px 16px; border-radius:10px; border:1.5px solid #6366f1; font-weight:900;">
+            <div>
+              <span style="font-size:15px; color:#4338ca;">🏷️ مجمل الربح التشغيلي (Gross Profit)</span>
+              <span style="font-size:11px; color:#6366f1; margin-right:8px;">[هامش الربح الإجمالي: ${grossMargin}%]</span>
+            </div>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:18px; color:#4338ca;" dir="ltr">${formatCurrency(grossProfit)}</span>
+          </div>
         </div>
 
-        <!-- Operating Expenses -->
-        <h4 style="color:var(--text-bad, #ef4444); border-bottom:2px solid var(--text-bad, #ef4444); padding-bottom:8px; margin-bottom:16px;">ثالثاً: المصروفات التشغيلية والإدارية</h4>
-        ${expItems.length ? expItems.map(item => `
-          <div class="flex justify-between mb-8" style="font-size:14px;">
-            <span class="dim">${item.code} — ${item.name}</span>
-            <span class="mono text-bad">(${formatCurrency(item.balance)})</span>
-          </div>`).join("") : `<p class="dim" style="font-size:13px;">لا توجد مصروفات تشغيلية مسجلة</p>`}
-        <div class="flex justify-between font-bold" style="background:var(--bg-2); padding:10px 12px; border-radius:8px; margin:12px 0 28px;">
-          <span>إجمالي المصروفات التشغيلية</span>
-          <span class="mono text-bad">(${formatCurrency(opExpTotal)})</span>
+        <!-- SECTION 3: OPERATING EXPENSES -->
+        <div class="income-sec mb-24" style="page-break-inside:avoid; break-inside:avoid; margin-bottom:24px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #dc2626; padding-bottom:8px; margin-bottom:12px;">
+            <h4 style="margin:0; font-size:15px; font-weight:900; color:#dc2626;">ثالثاً: المصروفات التشغيلية والعمومية والإدارية (Operating Expenses)</h4>
+            <span style="font-size:11px; font-weight:700; color:#dc2626; background:rgba(220,38,38,0.1); padding:2px 8px; border-radius:6px;">مصروفات عامة</span>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:13px; margin-bottom:8px;">
+            <thead>
+              <tr style="background:var(--bg-2); color:var(--text-2); font-size:11.5px; border-bottom:1px solid var(--border-soft);">
+                <th style="text-align:right; padding:6px 10px; width:130px;">كود الحساب</th>
+                <th style="text-align:right; padding:6px 10px;">اسم الحساب / البند</th>
+                <th style="text-align:left; padding:6px 10px; width:140px;">المبلغ (ر.س)</th>
+                <th style="text-align:center; padding:6px 10px; width:80px;">النسبة</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${expItems.length ? expItems.map((item, idx) => {
+                const itemPct = opExpTotal > 0 ? (item.balance / opExpTotal * 100).toFixed(1) : "0.0";
+                return `
+                <tr style="border-bottom:1px solid var(--border-soft); background:${idx % 2 === 1 ? 'rgba(0,0,0,0.015)' : 'transparent'};">
+                  <td style="padding:8px 10px; font-family:'IBM Plex Mono',monospace; font-weight:700; color:var(--text-3);">${item.code}</td>
+                  <td style="padding:8px 10px; font-weight:700; color:var(--text-1);">${item.name}</td>
+                  <td style="padding:8px 10px; text-align:left; font-family:'IBM Plex Mono',monospace; font-weight:700; color:#dc2626;" dir="ltr">(${formatCurrency(item.balance)})</td>
+                  <td style="padding:8px 10px; text-align:center; font-size:11px; color:var(--text-3);">${itemPct}%</td>
+                </tr>`;
+              }).join("") : `<tr><td colspan="4" style="text-align:center; padding:12px; color:var(--text-3);">لا توجد مصروفات تشغيلية مسجلة</td></tr>`}
+            </tbody>
+          </table>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:linear-gradient(90deg, rgba(220,38,38,0.12), rgba(220,38,38,0.04)); padding:10px 14px; border-radius:8px; border:1px solid rgba(220,38,38,0.25); font-weight:800;">
+            <span style="color:#dc2626; font-size:14px;">إجمالي المصروفات التشغيلية والإدارية</span>
+            <span style="font-family:'IBM Plex Mono',monospace; font-size:16px; color:#dc2626;" dir="ltr">(${formatCurrency(opExpTotal)})</span>
+          </div>
         </div>
 
-        <!-- Net Profit -->
-        <div class="flex justify-between font-bold" style="background:${netProfit >= 0 ? "linear-gradient(135deg, #1e3a2f, #14532d)" : "linear-gradient(135deg, #3b1f1f, #7f1d1d)"}; color:#fff; padding:16px 20px; border-radius:12px; font-size:18px;">
-          <span>صافي الربح / (الخسارة) للفترة</span>
-          <span class="mono">${formatCurrency(netProfit)}</span>
+        <!-- ═══ GRAND NET PROFIT / LOSS BANNER (ULTRA HIGH CONTRAST) ═══ -->
+        <div class="grand-summary-box" style="page-break-inside:avoid; break-inside:avoid; margin-top:20px;">
+          ${isLoss ? `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#991b1b !important; color:#ffffff !important; padding:18px 24px; border-radius:14px; border:2px solid #ef4444 !important; box-shadow:0 6px 16px rgba(220,38,38,0.3); -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important;">
+            <div>
+              <div style="font-size:18px; font-weight:900; color:#ffffff !important; display:flex; align-items:center; gap:8px;">
+                <span>⚠️</span>
+                <span style="color:#ffffff !important;">صافي الخسارة للفترة (Net Loss)</span>
+              </div>
+              <div style="font-size:12px; color:#fecaca !important; font-weight:700; margin-top:3px;">
+                نسبة صافي الخسارة من الإيراد: ${margin}% | تم احتساب كافة الإيرادات والتكاليف والمصروفات
+              </div>
+            </div>
+            <div style="font-size:24px; font-weight:900; font-family:'IBM Plex Mono',monospace; color:#ffffff !important; text-shadow:0 1px 3px rgba(0,0,0,0.5);" dir="ltr">
+              ${formatCurrency(netProfit)}
+            </div>
+          </div>
+          ` : `
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#166534 !important; color:#ffffff !important; padding:18px 24px; border-radius:14px; border:2px solid #22c55e !important; box-shadow:0 6px 16px rgba(22,163,74,0.3); -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important;">
+            <div>
+              <div style="font-size:18px; font-weight:900; color:#ffffff !important; display:flex; align-items:center; gap:8px;">
+                <span>🎉</span>
+                <span style="color:#ffffff !important;">صافي الربح للفترة (Net Profit)</span>
+              </div>
+              <div style="font-size:12px; color:#bbf7d0 !important; font-weight:700; margin-top:3px;">
+                هامش صافي الربح: ${margin}% | تم احتساب كافة الإيرادات والتكاليف والمصروفات
+              </div>
+            </div>
+            <div style="font-size:24px; font-weight:900; font-family:'IBM Plex Mono',monospace; color:#ffffff !important; text-shadow:0 1px 3px rgba(0,0,0,0.5);" dir="ltr">
+              ${formatCurrency(netProfit)}
+            </div>
+          </div>
+          `}
         </div>
+
+        <!-- ═══ AUDIT & SIGNATURES FOOTER (PRINT ONLY) ═══ -->
+        <div class="print-signatures" style="margin-top:35px; border-top:1.5px dashed #94a3b8; padding-top:20px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:20px; text-align:center;">
+          <div>
+            <div style="font-size:12px; font-weight:800; color:#334155; margin-bottom:40px;">إعداد / المحاسب المالي</div>
+            <div style="font-size:11px; color:#64748b; border-top:1px dotted #94a3b8; width:130px; margin:0 auto; padding-top:4px;">التوقيع</div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:800; color:#334155; margin-bottom:40px;">مراجعة / الإدارة المالية</div>
+            <div style="font-size:11px; color:#64748b; border-top:1px dotted #94a3b8; width:130px; margin:0 auto; padding-top:4px;">التوقيع</div>
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:800; color:#334155; margin-bottom:40px;">اعتماد / المدير العام</div>
+            <div style="font-size:11px; color:#64748b; border-top:1px dotted #94a3b8; width:130px; margin:0 auto; padding-top:4px;">الختم والتوقيع</div>
+          </div>
+        </div>
+
       </div>
     </div>
   `;
@@ -1728,187 +2275,1540 @@ function renderFinancialAnalysis(container, from, to) {
 }
 
 // ──────────────────────────────────────────
-// 8. Aged Receivables (تقرير أعمار الديون)
+// 7. Break-Even & CVP Analysis (تقرير نقطة التعادل)
 // ──────────────────────────────────────────
-async function renderAgedReceivables(container, from, to) {
-  container.innerHTML = `<div style="text-align:center;padding:40px"><i class="fas fa-spinner fa-spin fa-2x"></i><div style="margin-top:10px;">جاري تحميل الفواتير والعملاء واحتساب أعمار الديون…</div></div>`;
-  
-  try {
-    const { collection, getDocs, query, where } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
-    const { db, COMPANY_ID } = await import("../utils/db.js");
-    
-    // Load all customers
-    const custs = await getAll(COLS.customers());
-    
-    // Load all credit invoices with remainingAmount > 0
-    const invoicesRef = collection(db, `companies/${COMPANY_ID}/salesInvoices`);
-    const q = query(
-      invoicesRef,
-      where("payment", "==", "credit"),
-      where("status", "in", ["pending", "posted", "partial"])
-    );
-    const qSnap = await getDocs(q);
-    
-    const invoices = [];
-    qSnap.forEach(docSnap => {
-      invoices.push({ id: docSnap.id, ...docSnap.data() });
-    });
-    
-    // Group by customer
-    const customerAging = {};
-    custs.forEach(c => {
-      customerAging[c.id] = {
-        name: c.name,
-        code: c.code || "",
-        repName: c.repName || "بدون مندوب",
-        creditLimit: c.creditLimit || 0,
-        creditDays: c.creditDays || 0,
-        balance: c.balance || 0,
-        current: 0,   // within terms (not overdue)
-        aging1_30: 0, // overdue 1-30 days
-        aging31_60: 0,
-        aging61_90: 0,
-        agingOver90: 0,
-        totalRemaining: 0
-      };
-    });
-    
-    const today = new Date();
-    
-    invoices.forEach(inv => {
-      const cId = inv.customerId;
-      if (!cId) return;
-      if (!customerAging[cId]) {
-        customerAging[cId] = {
-          name: inv.customerName || "عميل مجهول",
-          code: "",
-          repName: inv.repName || "بدون مندوب",
-          creditLimit: 0,
-          creditDays: 0,
-          balance: 0,
-          current: 0,
-          aging1_30: 0,
-          aging31_60: 0,
-          aging61_90: 0,
-          agingOver90: 0,
-          totalRemaining: 0
-        };
-      }
-      
-      const rem = inv.remainingAmount || 0;
-      if (rem <= 0) return;
-      
-      const entryAging = customerAging[cId];
-      entryAging.totalRemaining += rem;
-      
-      const invDate = new Date(inv.date || today);
-      const diffTime = today - invDate;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      
-      const allowedDays = entryAging.creditDays || 0;
-      const overdueDays = diffDays - allowedDays;
-      
-      if (overdueDays <= 0) {
-        entryAging.current += rem;
-      } else if (overdueDays <= 30) {
-        entryAging.aging1_30 += rem;
-      } else if (overdueDays <= 60) {
-        entryAging.aging31_60 += rem;
-      } else if (overdueDays <= 90) {
-        entryAging.aging61_90 += rem;
-      } else {
-        entryAging.agingOver90 += rem;
-      }
-    });
-    
-    const rows = Object.values(customerAging).filter(r => r.balance > 0 || r.totalRemaining > 0);
-    rows.sort((a,b) => a.name.localeCompare(b.name, "ar"));
-    
-    const totals = {
-      balance: 0,
-      current: 0,
-      aging1_30: 0,
-      aging31_60: 0,
-      aging61_90: 0,
-      agingOver90: 0,
-      totalRemaining: 0
+// ──────────────────────────────────────────
+// 7. Break-Even & CVP Analysis (تقرير نقطة التعادل وتحليل الأرباح المستهدفة)
+// ──────────────────────────────────────────
+
+function _classifyExpenseAccount(code, name) {
+  const c = String(code || '');
+  if (c.startsWith('5-2-6') || c.startsWith('5-2-1') || c.startsWith('5-2-2') || c.startsWith('5-2-3')) {
+    return { type: 'fixed_salary', label: '🛡️ ثابتة (أجور ورواتب)', isCoreFixed: true, isCash: true, badgeBg: 'rgba(59,130,246,0.12)', badgeColor: '#1d4ed8' };
+  }
+  if (c.startsWith('5-4-1')) {
+    return { type: 'fixed_rent', label: '🛡️ ثابتة (إيجارات)', isCoreFixed: true, isCash: true, badgeBg: 'rgba(59,130,246,0.12)', badgeColor: '#1d4ed8' };
+  }
+  if (c.startsWith('5-6')) {
+    return { type: 'depreciation', label: '📉 ثابتة دفترياً (إهلاكات)', isCoreFixed: true, isCash: false, badgeBg: 'rgba(100,116,139,0.15)', badgeColor: '#475569' };
+  }
+  if (c.startsWith('5-3-3')) {
+    return { type: 'mixed_fuel', label: '⚡ شبه متغيرة (ديزل ومحروقات)', isCoreFixed: false, isCash: true, badgeBg: 'rgba(245,158,11,0.12)', badgeColor: '#b45309' };
+  }
+  if (c.startsWith('5-3-2')) {
+    return { type: 'mixed_maint', label: '⚡ شبه متغيرة (صيانة وإصلاح)', isCoreFixed: false, isCash: true, badgeBg: 'rgba(245,158,11,0.12)', badgeColor: '#b45309' };
+  }
+  if (c.startsWith('5-4-7') || c.startsWith('5-4-8') || c.startsWith('5-4-3')) {
+    return { type: 'amortized', label: '📅 دورية سنوية (إقامات ورخص)', isCoreFixed: false, isCash: true, badgeBg: 'rgba(168,85,247,0.12)', badgeColor: '#7e22ce' };
+  }
+  return { type: 'operating', label: '🏷️ مصاريف تشغيلية', isCoreFixed: false, isCash: true, badgeBg: 'rgba(15,23,42,0.08)', badgeColor: 'var(--text-2)' };
+}
+
+function _calcBreakEvenData(from, to, selectedAccountCodes = null) {
+  const inc = _calcIncomeData(from, to);
+  const { grossRevenue, revenueTotal, cogsTotal, opExpTotal, revItems, cogsItems, expItems, grossProfit, netProfit } = inc;
+
+  const f = new Date(from + 'T00:00:00');
+  const t = new Date(to   + 'T00:00:00');
+  const days = Math.max(1, Math.round((t - f) / 86400000) + 1);
+
+  // هامش المساهمة ونسبته
+  const contributionMargin = grossProfit; // Revenue - COGS
+  const cmRatio = revenueTotal > 0 ? (contributionMargin / revenueTotal) : 0;
+  const cmPct   = cmRatio * 100;
+
+  // إذا لم يتم تمرير مصفوفة تحديد، نعتبر جميع المصروفات محددة افتراضياً
+  const selectedSet = selectedAccountCodes ? new Set(selectedAccountCodes) : null;
+
+  // تفكيك وتصنيف المصروفات
+  const allExpWithMeta = (expItems || []).map(item => {
+    const meta = _classifyExpenseAccount(item.code, item.name);
+    const isSelected = selectedSet ? selectedSet.has(item.code) : true;
+    return {
+      ...item,
+      ...meta,
+      isSelected
     };
-    
-    rows.forEach(r => {
-      totals.balance += r.balance;
-      totals.current += r.current;
-      totals.aging1_30 += r.aging1_30;
-      totals.aging31_60 += r.aging31_60;
-      totals.aging61_90 += r.aging61_90;
-      totals.agingOver90 += r.agingOver90;
-      totals.totalRemaining += r.totalRemaining;
+  });
+
+  // حساب التكاليف الثابتة بناءً على المصروفات المحددة فقط
+  const selectedExpenses = allExpWithMeta.filter(x => x.isSelected);
+  const fixedCosts = selectedExpenses.reduce((sum, x) => sum + (x.balance || 0), 0);
+  const unselectedCosts = opExpTotal - fixedCosts;
+
+  // نقطة التعادل بالريال للتكاليف المحددة
+  const breakEvenSales = cmRatio > 0 ? (fixedCosts / cmRatio) : 0;
+  const dailyBreakEven = days > 0 ? (breakEvenSales / days) : 0;
+  const dailyActual    = days > 0 ? (revenueTotal / days) : 0;
+
+  // هامش الأمان
+  const marginOfSafetyVal = revenueTotal - breakEvenSales;
+  const marginOfSafetyPct = revenueTotal > 0 ? ((revenueTotal - breakEvenSales) / revenueTotal * 100) : 0;
+
+  // يوم تحقيق التعادل في الفترة
+  const breakEvenDay = dailyActual > 0 ? Math.round(breakEvenSales / dailyActual) : null;
+
+  // ترتيب المصروفات تنازلياً مع احتساب المبيعات اللازمة لتغطية كل مصروف
+  const sortedExp = [...allExpWithMeta].sort((a, b) => b.balance - a.balance).map(item => {
+    const pctOfSelected = fixedCosts > 0 && item.isSelected ? (item.balance / fixedCosts * 100) : 0;
+    const pctOfTotal = opExpTotal > 0 ? (item.balance / opExpTotal * 100) : 0;
+    const salesNeeded = cmRatio > 0 ? (item.balance / cmRatio) : 0;
+    return {
+      ...item,
+      pctOfSelected,
+      pctOfTotal,
+      salesNeeded
+    };
+  });
+
+  return {
+    from, to, days,
+    grossRevenue, revenueTotal, cogsTotal, opExpTotal,
+    grossProfit, netProfit,
+    contributionMargin, cmRatio, cmPct,
+    fixedCosts, unselectedCosts,
+    selectedCount: selectedExpenses.length,
+    totalCount: allExpWithMeta.length,
+    breakEvenSales, dailyBreakEven, dailyActual,
+    marginOfSafetyVal, marginOfSafetyPct,
+    breakEvenDay,
+    sortedExp
+  };
+}
+
+window.exportBreakEvenExcel = (from, to) => {
+  const be = _calcBreakEvenData(from, to, window._beSelectedExpenseCodes);
+  const rows = [];
+  rows.push(["تقرير تحليل نقطة التعادل والتحليل الحجمي (CVP) وسيناريوهات الأرباح ونسب الهوامش — شركة نظم الإمداد الحديثة"]);
+  rows.push([`الفترة من: ${from} إلى: ${to} (${be.days} يوماً)`]);
+  rows.push([]);
+  
+  rows.push(["المؤشر المالي", "القيمة", "الوحدة / النسبة"]);
+  rows.push(["صافي الإيرادات والمبيعات الفعلية", be.revenueTotal, "ر.س"]);
+  rows.push(["تكلفة البضاعة المباعة (التكلفة المتغيرة)", be.cogsTotal, "ر.س"]);
+  rows.push(["هامش المساهمة (مجمل الربح)", be.grossProfit, "ر.س"]);
+  rows.push(["نسبة هامش المساهمة الفعلي (Contribution Margin %)", be.cmPct.toFixed(2) + "%", "%"]);
+  rows.push(["المصروفات المحددة للتعادل", be.fixedCosts, "ر.س"]);
+  rows.push(["إجمالي المصروفات الكلية بالدفاتر", be.opExpTotal, "ر.س"]);
+  rows.push(["نقطة التعادل بالمبيعات (Break-Even Sales)", be.breakEvenSales, "ر.س"]);
+  rows.push(["المعدل اليومي المطلوب للتعادل", be.dailyBreakEven, "ر.س / يوم"]);
+  rows.push(["المعدل اليومي الفعلي للمبيعات", be.dailyActual, "ر.س / يوم"]);
+  rows.push(["هامش الأمان (Margin of Safety)", be.marginOfSafetyVal, "ر.س"]);
+  rows.push(["نسبة هامش الأمان", be.marginOfSafetyPct.toFixed(2) + "%", "%"]);
+  rows.push(["صافي الربح الفعلي بالفترة", be.netProfit, "ر.س"]);
+  rows.push([]);
+
+  // 2D Cross Matrix in Excel
+  const margins = [
+    { label: `الفعلي (${be.cmPct.toFixed(1)}%)`, val: be.cmRatio },
+    { label: "8.0%", val: 0.08 },
+    { label: "10.0%", val: 0.10 },
+    { label: "12.0%", val: 0.12 },
+    { label: "15.0%", val: 0.15 },
+    { label: "18.0%", val: 0.18 },
+    { label: "20.0%", val: 0.20 },
+    { label: "25.0%", val: 0.25 }
+  ];
+
+  rows.push(["مصفوفة المبيعات المطلوبة عند مختلف الأرباح ونسب هوامش الربح:"]);
+  rows.push(["صافي الربح المستهدف", ...margins.map(m => `عند هامش ${m.label}`)]);
+  
+  [0, 5000, 10000, 15000, 20000, 25000, 30000, 40000, 50000, 75000, 100000].forEach(tp => {
+    const row = [tp === 0 ? "0 (نقطة التعادل)" : tp];
+    margins.forEach(m => {
+      const s = m.val > 0 ? ((be.fixedCosts + tp) / m.val) : 0;
+      row.push(s);
     });
-    
-    container.innerHTML = `
-      <div style="text-align:center;margin-bottom:20px;">
-        <h2 style="margin:0;color:var(--brand);">تقرير أعمار الديون والمستحقات للعملاء</h2>
-        <div style="font-size:12px;color:var(--text-2);margin-top:6px;">تاريخ التقرير: ${new Date().toLocaleDateString("ar-SA")}</div>
+    rows.push(row);
+  });
+  rows.push([]);
+
+  rows.push(["تفكيك المصروفات وحالة التحديد:", "كود الحساب", "اسم المصروف", "التصنيف", "المبلغ (ر.س)", "حالة التحديد", "المبيعات اللازمة لتغطيته"]);
+  be.sortedExp.forEach(e => {
+    rows.push(["مصروف", e.code, e.name, e.label, e.balance, e.isSelected ? "محدد ومدرج" : "مستبعد", e.salesNeeded]);
+  });
+
+  exportToExcel(rows, `نقطة_التعادل_${from}_${to}`);
+};
+
+window.printBreakEvenPDF = async (from, to) => {
+  const be = _calcBreakEvenData(from, to, window._beSelectedExpenseCodes);
+  const { revenueTotal, cogsTotal, fixedCosts, opExpTotal, grossProfit, netProfit, cmPct, cmRatio, breakEvenSales, dailyBreakEven, dailyActual, marginOfSafetyPct, marginOfSafetyVal, sortedExp, days, selectedCount, totalCount } = be;
+
+  let co = {
+    name: "شركة نظم الإمداد الحديثة",
+    vatNumber: "312448150500003",
+    crNumber: "4700123180",
+    phone: "0549141648",
+    email: "Nuzmalamdad@gmail.com",
+    address: "7480 - الشارع: عامر الشعبي، ينبع",
+    logoUrl: ""
+  };
+  try {
+    const cached = JSON.parse(localStorage.getItem("idham_company") || "{}");
+    if (cached.name) Object.assign(co, cached);
+    if (cached.logoBase64) co.logoUrl = cached.logoBase64;
+  } catch (_) {}
+
+  const isProfitable = netProfit >= 0;
+
+  const margins = [
+    { label: `الفعلي (${cmPct.toFixed(1)}%)`, val: cmRatio },
+    { label: "10%", val: 0.10 },
+    { label: "15%", val: 0.15 },
+    { label: "20%", val: 0.20 },
+    { label: "25%", val: 0.25 }
+  ];
+
+  const win = window.open("", "_blank");
+  if (!win) { showToast("يرجى السماح بالنوافذ المنبثقة للطباعة", "warn"); return; }
+
+  win.document.write(`<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>تقرير تحليل نقطة التعادل والأرباح المستهدفة CVP — ${from} إلى ${to}</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: rtl; color: #1e293b; background: #f8fafc; padding: 12px; }
+    .no-print { background: #1e293b; padding: 10px; display: flex; gap: 10px; justify-content: center; margin-bottom: 12px; border-radius: 8px; }
+    .btn { padding: 8px 18px; border-radius: 6px; cursor: pointer; border: none; font-family: inherit; font-size: 13px; font-weight: 700; }
+    .report-container { background: #fff; max-width: 210mm; margin: 0 auto; padding: 18px 22px; border: 1.5px solid #5b3ec2; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .company-banner { background: #5b3ec2 !important; color: #fff !important; border-radius: 8px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .banner-left { font-size: 11.5px; line-height: 1.5; color: #fff !important; }
+    .banner-right h2 { font-size: 16px; font-weight: 800; margin-bottom: 3px; color: #fff !important; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+    .kpi-box { border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; text-align: center; background: #f8fafc; }
+    .kpi-box .lbl { font-size: 11px; font-weight: 700; color: #475569; margin-bottom: 4px; }
+    .kpi-box .val { font-size: 15px; font-weight: 900; font-family: 'IBM Plex Mono', monospace; }
+    .sec-title { background: #5b3ec2 !important; color: #fff !important; font-size: 12px; font-weight: 800; padding: 6px 12px; border-radius: 6px 6px 0 0; margin-top: 14px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 11px; border: 1px solid #5b3ec2; border-top: none; }
+    thead tr { background: #f1f5f9; border-bottom: 1px solid #cbd5e1; }
+    thead th { padding: 6px 8px; font-weight: 700; color: #334155; text-align: right; }
+    tbody tr { border-bottom: 1px solid #e2e8f0; }
+    tbody tr:nth-child(even) { background: #fcfcfd; }
+    tbody td { padding: 6px 8px; color: #1e293b; }
+    .signatures { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 25px; padding-top: 15px; border-top: 1px dashed #5b3ec2; text-align: center; }
+    .signatures .role { font-size: 11px; font-weight: 800; color: #334155; margin-bottom: 35px; }
+    .signatures .line { border-top: 1px dotted #94a3b8; width: 110px; margin: 0 auto; font-size: 10px; color: #64748b; padding-top: 3px; }
+    @page { size: A4; margin: 8mm 10mm 8mm 10mm; }
+    @media print {
+      body { background: #fff; padding: 0; }
+      .no-print { display: none !important; }
+      .report-container { max-width: 100%; box-shadow: none; border: none; padding: 0; }
+      .company-banner { background: #5b3ec2 !important; color: #fff !important; }
+      .sec-title { background: #5b3ec2 !important; color: #fff !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="no-print">
+    <button class="btn" style="background:#5b3ec2;color:#fff;" onclick="window.print()">🖨️ طباعة التقرير</button>
+    <button class="btn" style="background:#475569;color:#fff;" onclick="window.close()">✕ إغلاق</button>
+  </div>
+
+  <div class="report-container">
+    <div style="text-align:center; margin-bottom:12px;">
+      <h1 style="font-size:20px; color:#5b3ec2; font-weight:800;">تقرير تحليل نقطة التعادل والتحليل الحجمي للأرباح (CVP)</h1>
+      <h2 style="font-size:10px; color:#5b3ec2; font-weight:700; letter-spacing:1px; text-transform:uppercase;">BREAK-EVEN POINT & PROFIT MARGIN SENSITIVITY</h2>
+    </div>
+
+    <div class="company-banner">
+      <div class="banner-left">
+        <div>الفترة المالية: <strong>من ${from} إلى ${to} (${days} يوماً)</strong></div>
+        <div>تاريخ الإصدار: <strong>${new Date().toLocaleDateString('ar-SA')}</strong></div>
+        <div>نقطة التعادل للمصروفات المحددة: <strong>${formatCurrency(breakEvenSales)}</strong></div>
       </div>
-      
-      <div class="card" style="padding:16px;">
+      <div class="banner-right">
+        <h2>${co.name}</h2>
+        <div>الرقم الضريبي: <strong>${co.vatNumber}</strong></div>
+        <div>السجل التجاري: <strong>${co.crNumber}</strong></div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-box" style="border-color:#3b82f6; background:#eff6ff;">
+        <div class="lbl">مبيعات نقطة التعادل</div>
+        <div class="val" style="color:#1d4ed8;" dir="ltr">${formatCurrency(breakEvenSales)}</div>
+      </div>
+      <div class="kpi-box" style="border-color:#6366f1; background:#eef2ff;">
+        <div class="lbl">الهدف اليومي للتعادل</div>
+        <div class="val" style="color:#4338ca;" dir="ltr">${formatCurrency(dailyBreakEven)}</div>
+      </div>
+      <div class="kpi-box" style="border-color:#f59e0b; background:#fefce8;">
+        <div class="lbl">نسبة هامش المساهمة</div>
+        <div class="val" style="color:#b45309;" dir="ltr">${cmPct.toFixed(1)}%</div>
+      </div>
+      <div class="kpi-box" style="border-color:${isProfitable ? '#22c55e' : '#ef4444'}; background:${isProfitable ? '#f0fdf4' : '#fef2f2'};">
+        <div class="lbl">هامش الأمان فوق التعادل</div>
+        <div class="val" style="color:${isProfitable ? '#15803d' : '#b91c1c'};" dir="ltr">${marginOfSafetyPct.toFixed(1)}%</div>
+      </div>
+    </div>
+
+    <!-- CVP Summary Table -->
+    <div class="sec-title">أولاً: ملخص معادلة التعادل للفترة (CVP Summary)</div>
+    <table>
+      <thead>
+        <tr>
+          <th>البند المالي</th>
+          <th style="width:130px; text-align:left;">المبلغ (ر.س)</th>
+          <th style="width:90px; text-align:center;">النسبة</th>
+          <th>ملاحظات وتفسير إداري</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>صافي المبيعات والإيرادات</strong></td>
+          <td style="font-family:'IBM Plex Mono',monospace; font-weight:700; text-align:left;" dir="ltr">${formatCurrency(revenueTotal)}</td>
+          <td style="text-align:center; font-weight:700;">100.0%</td>
+          <td style="font-size:10.5px; color:#475569;">إجمالي الإيرادات بعد خصم المردودات</td>
+        </tr>
+        <tr>
+          <td><strong>يخصم: التكاليف المتغيرة المباشرة (COGS)</strong></td>
+          <td style="font-family:'IBM Plex Mono',monospace; font-weight:700; text-align:left; color:#b45309;" dir="ltr">(${formatCurrency(cogsTotal)})</td>
+          <td style="text-align:center; font-weight:700; color:#b45309;">${revenueTotal > 0 ? (cogsTotal / revenueTotal * 100).toFixed(1) : 0}%</td>
+          <td style="font-size:10.5px; color:#475569;">تكلفة شراء البضاعة المباعة فقط</td>
+        </tr>
+        <tr style="background:#eef2ff; font-weight:800;">
+          <td style="color:#4338ca;"><strong>هامش المساهمة (مجمل الربح)</strong></td>
+          <td style="font-family:'IBM Plex Mono',monospace; text-align:left; color:#4338ca;" dir="ltr">${formatCurrency(grossProfit)}</td>
+          <td style="text-align:center; color:#4338ca;">${cmPct.toFixed(1)}%</td>
+          <td style="font-size:10.5px; color:#4338ca;">المبلغ المتاح لتغطية المصروفات الثابتة والأرباح</td>
+        </tr>
+        <tr>
+          <td><strong>يخصم: المصروفات المحددة في الحسبة</strong></td>
+          <td style="font-family:'IBM Plex Mono',monospace; font-weight:700; text-align:left; color:#dc2626;" dir="ltr">(${formatCurrency(fixedCosts)})</td>
+          <td style="text-align:center; font-weight:700; color:#dc2626;">${revenueTotal > 0 ? (fixedCosts / revenueTotal * 100).toFixed(1) : 0}%</td>
+          <td style="font-size:10.5px; color:#475569;">المحدد: ${selectedCount} من أصل ${totalCount} بند مصروف</td>
+        </tr>
+        <tr style="background:${isProfitable ? '#f0fdf4' : '#fef2f2'}; font-weight:900;">
+          <td style="color:${isProfitable ? '#15803d' : '#b91c1c'};"><strong>النتيجة النهائية للفترة</strong></td>
+          <td style="font-family:'IBM Plex Mono',monospace; text-align:left; color:${isProfitable ? '#15803d' : '#b91c1c'};" dir="ltr">${formatCurrency(netProfit)}</td>
+          <td style="text-align:center; color:${isProfitable ? '#15803d' : '#b91c1c'};">${revenueTotal > 0 ? (netProfit / revenueTotal * 100).toFixed(1) : 0}%</td>
+          <td style="font-size:10.5px; color:${isProfitable ? '#15803d' : '#b91c1c'};">${isProfitable ? 'تحقيق أرباح تفوق نقطة التعادل' : 'عجز دون نقطة التعادل بالفترة'}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 2D Cross Sensitivity Matrix Table -->
+    <div class="sec-title">ثانياً: مصفوفة المبيعات المطلوبة عند مختلف الأرباح وهوامش الربح (2D Sensitivity Matrix)</div>
+    <table>
+      <thead>
+        <tr>
+          <th>صافي الربح المستهدف</th>
+          ${margins.map(m => `<th style="text-align:left;">هامش ${m.label}</th>`).join('')}
+        </tr>
+      </thead>
+      <tbody>
+        ${[
+          { label: '0 ر.س (نقطة التعادل)', profit: 0 },
+          { label: '10,000 ر.س', profit: 10000 },
+          { label: '20,000 ر.س', profit: 20000 },
+          { label: '30,000 ر.س', profit: 30000 },
+          { label: '50,000 ر.س', profit: 50000 },
+          { label: '100,000 ر.س', profit: 100000 },
+        ].map(row => `
+          <tr>
+            <td><strong>${row.label}</strong></td>
+            ${margins.map(m => {
+              const req = m.val > 0 ? ((fixedCosts + row.profit) / m.val) : 0;
+              return `<td style="font-family:'IBM Plex Mono',monospace; font-weight:700; text-align:left;" dir="ltr">${formatCurrency(req)}</td>`;
+            }).join('')}
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+
+    <!-- Expense Breakdown Table -->
+    <div class="sec-title">ثالثاً: تفكيك المصروفات وحالة التحديد</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px; text-align:center;">الحالة</th>
+          <th style="width:90px;">كود الحساب</th>
+          <th>اسم المصروف</th>
+          <th style="width:120px;">التصنيف</th>
+          <th style="width:110px; text-align:left;">المبلغ الفعلي</th>
+          <th style="width:130px; text-align:left;">المبيعات لتغطيته</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${sortedExp.map(e => `
+          <tr style="${e.isSelected ? '' : 'opacity:0.6; background:#f8fafc;'}">
+            <td style="text-align:center; font-weight:bold;">${e.isSelected ? '☑️' : '◻️'}</td>
+            <td style="font-family:'IBM Plex Mono',monospace; font-weight:700; color:#64748b;">${e.code}</td>
+            <td style="font-weight:700;">${e.name} ${e.isSelected ? '' : '<span style="font-size:9.5px; color:#94a3b8;">(مستبعد)</span>'}</td>
+            <td style="font-size:10px; color:#475569;">${e.label}</td>
+            <td style="font-family:'IBM Plex Mono',monospace; text-align:left; color:#dc2626;" dir="ltr">${formatCurrency(e.balance)}</td>
+            <td style="font-family:'IBM Plex Mono',monospace; text-align:left; font-weight:700; color:#4338ca;" dir="ltr">${formatCurrency(e.salesNeeded)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+
+    <!-- Signatures -->
+    <div class="signatures">
+      <div>
+        <div class="role">إعداد / التحليل المالي</div>
+        <div class="line">التوقيع</div>
+      </div>
+      <div>
+        <div class="role">مراجعة / الإدارة المالية</div>
+        <div class="line">التوقيع</div>
+      </div>
+      <div>
+        <div class="role">اعتماد / المدير العام</div>
+        <div class="line">الختم والتوقيع</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`);
+  win.document.close();
+};
+
+function renderBreakEvenAnalysis(container, from, to) {
+  // حفظ المراجع العامة
+  window._beCurrentContainer = container;
+  window._beCurrentFrom = from;
+  window._beCurrentTo = to;
+
+  // جلب البيانات الأساسية لمعرفة جميع بنود المصروفات
+  const initialData = _calcBreakEvenData(from, to, null);
+
+  // إذا لم يتم تحديد مصفوفة المصروفات بعد، نحدد الكل افتراضياً
+  if (!window._beSelectedExpenseCodes || !(window._beSelectedExpenseCodes instanceof Set)) {
+    window._beSelectedExpenseCodes = new Set((initialData.sortedExp || []).map(e => e.code));
+  }
+
+  // حساب البيانات النهائية بناءً على التحديد الحالي
+  const be = _calcBreakEvenData(from, to, window._beSelectedExpenseCodes);
+  const { revenueTotal, cogsTotal, fixedCosts, unselectedCosts, opExpTotal, grossProfit, netProfit, cmPct, cmRatio, breakEvenSales, dailyBreakEven, dailyActual, marginOfSafetyPct, marginOfSafetyVal, sortedExp, days, selectedCount, totalCount } = be;
+
+  const isProfitable = netProfit >= 0;
+  const isAboveBreakEven = revenueTotal >= breakEvenSales;
+
+  // القيم الافتراضية للربح المستهدف ونسبة الهامش المفترضة
+  if (typeof window._beTargetProfitVal === "undefined") {
+    window._beTargetProfitVal = 20000;
+  }
+  if (typeof window._beTargetMarginVal === "undefined") {
+    window._beTargetMarginVal = parseFloat(cmPct.toFixed(1)) || 15.0;
+  }
+
+  const crossMargins = [
+    { label: `الفعلي (${cmPct.toFixed(1)}%)`, val: cmRatio, isActual: true },
+    { label: "8.0%", val: 0.08 },
+    { label: "10.0%", val: 0.10 },
+    { label: "12.0%", val: 0.12 },
+    { label: "15.0%", val: 0.15 },
+    { label: "18.0%", val: 0.18 },
+    { label: "20.0%", val: 0.20 },
+    { label: "25.0%", val: 0.25 },
+  ];
+
+  container.innerHTML = `
+    <!-- Top Action Toolbar -->
+    <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; background:var(--bg-1); padding:12px 18px; border-radius:12px; border:1px solid var(--border-soft); box-shadow:var(--shadow-sm); flex-wrap:wrap; gap:10px;">
+      <div style="font-size:13px; font-weight:700; color:var(--text-2);">
+        🎯 <strong style="color:var(--text-1);">تحليل نقطة التعادل والتحليل الحجمي للأرباح والتكاليف (CVP)</strong> | الفترة: <strong>${from}</strong> → <strong>${to}</strong> (${days} يوماً)
+      </div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn btn-secondary btn-sm" onclick="exportBreakEvenExcel('${from}', '${to}')" style="font-weight:700;">📊 تصدير Excel</button>
+        <button class="btn btn-primary btn-sm" onclick="printBreakEvenPDF('${from}', '${to}')" style="font-weight:700; background:linear-gradient(135deg, #5b3ec2, #4338ca); border:none; box-shadow:0 2px 6px rgba(91,62,194,0.3);">📑 تصدير PDF التقرير التنفيذي للتعادل</button>
+      </div>
+    </div>
+
+    <div class="breakeven-doc" style="max-width:1150px; margin:0 auto;">
+
+      <!-- ═══ 4 TOP KPI CARDS ═══ -->
+      <div class="grid-4 gap-16 mb-24" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:16px; margin-bottom:24px;">
+        
+        <!-- Break-Even Sales -->
+        <div class="kpi-card" style="background:linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02)); border:1.5px solid rgba(59,130,246,0.3); border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:#1d4ed8;">🎯 مبيعات نقطة التعادل</span>
+            <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; background:rgba(59,130,246,0.15); color:#1d4ed8;">Break-Even</span>
+          </div>
+          <div style="font-size:22px; font-weight:900; color:#1d4ed8; font-family:'IBM Plex Mono', monospace;" dir="ltr">
+            ${formatCurrency(breakEvenSales)}
+          </div>
+          <div style="font-size:11px; color:var(--text-3); margin-top:4px;">لتغطية المصروفات المحددة (<strong class="mono">${formatCurrency(fixedCosts)}</strong>)</div>
+        </div>
+
+        <!-- Daily Target -->
+        <div class="kpi-card" style="background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(99,102,241,0.02)); border:1.5px solid rgba(99,102,241,0.3); border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:#4338ca;">📅 الهدف اليومي للتعادل</span>
+            <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; background:rgba(99,102,241,0.15); color:#4338ca;">Daily Target</span>
+          </div>
+          <div style="font-size:22px; font-weight:900; color:#4338ca; font-family:'IBM Plex Mono', monospace;" dir="ltr">
+            ${formatCurrency(dailyBreakEven)}
+          </div>
+          <div style="font-size:11px; color:var(--text-3); margin-top:4px;">الفعلي اليومي: <strong class="mono" dir="ltr">${formatCurrency(dailyActual)}</strong></div>
+        </div>
+
+        <!-- Contribution Margin % -->
+        <div class="kpi-card" style="background:linear-gradient(135deg, rgba(217,119,6,0.08), rgba(217,119,6,0.02)); border:1.5px solid rgba(217,119,6,0.3); border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:#b45309;">📈 نسبة هامش المساهمة</span>
+            <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; background:rgba(217,119,6,0.15); color:#b45309;">CM Ratio</span>
+          </div>
+          <div style="font-size:22px; font-weight:900; color:#b45309; font-family:'IBM Plex Mono', monospace;" dir="ltr">
+            ${cmPct.toFixed(1)}%
+          </div>
+          <div style="font-size:11px; color:var(--text-3); margin-top:4px;">مجمل الربح: <strong class="mono" dir="ltr">${formatCurrency(grossProfit)}</strong></div>
+        </div>
+
+        <!-- Margin of Safety -->
+        <div class="kpi-card" style="background:${isAboveBreakEven ? "linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.02))" : "linear-gradient(135deg, rgba(239,68,68,0.1), rgba(239,68,68,0.02))"}; border:1.5px solid ${isAboveBreakEven ? "rgba(16,185,129,0.4)" : "rgba(239,68,68,0.4)"}; border-radius:14px; padding:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:${isAboveBreakEven ? "#047857" : "#b91c1c"};">🛡️ هامش الأمان (Safety)</span>
+            <span style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; background:${isAboveBreakEven ? "rgba(16,185,129,0.15)" : "rgba(239,68,68,0.15)"}; color:${isAboveBreakEven ? "#047857" : "#b91c1c"};">${marginOfSafetyPct.toFixed(1)}%</span>
+          </div>
+          <div style="font-size:22px; font-weight:900; color:${isAboveBreakEven ? "#047857" : "#b91c1c"}; font-family:'IBM Plex Mono', monospace;" dir="ltr">
+            ${formatCurrency(marginOfSafetyVal)}
+          </div>
+          <div style="font-size:11px; color:var(--text-3); margin-top:4px;">${isAboveBreakEven ? 'فائض أمان فوق التعادل' : 'عجز دون نقطة التعادل'}</div>
+        </div>
+
+      </div>
+
+      <!-- ═══ EXECUTIVE SUMMARY STRIP ═══ -->
+      <div class="card mb-24" style="border-radius:14px; padding:18px 24px; background:linear-gradient(135deg, rgba(91,62,194,0.08), rgba(91,62,194,0.02)); border:1.5px solid rgba(91,62,194,0.25); margin-bottom:24px;">
+        <h4 style="color:#5b3ec2; margin-bottom:8px; font-size:15px; font-weight:900;">📋 التقرير والتشخيص التنفيذي:</h4>
+        <div style="font-size:13px; line-height:1.7; color:var(--text-1);">
+          • إجمالي المصروفات المحددة في الحسبة: <strong style="color:#dc2626;">${formatCurrency(fixedCosts)}</strong> (تم تحديد <strong>${selectedCount}</strong> من أصل <strong>${totalCount}</strong> بند مصروف).<br>
+          • نسبة هامش الربح الإجمالي الفعلي (هامش المساهمة) تمثل <strong>${cmPct.toFixed(1)}%</strong> من قيمة المبيعات.<br>
+          • بناءً على ذلك، نقطة التعادل المطلوبة لتغطية المصروفات المحددة هي <strong style="color:#1d4ed8;">${formatCurrency(breakEvenSales)}</strong> (بمعدل <strong>${formatCurrency(dailyBreakEven)}</strong> يومياً).<br>
+          • ${isAboveBreakEven 
+              ? `<span style="color:#16a34a; font-weight:700;">✅ المبيعات الحالية (${formatCurrency(revenueTotal)}) تجاوزت نقطة التعادل بفائض قدره ${formatCurrency(marginOfSafetyVal)} (هامش أمان ${marginOfSafetyPct.toFixed(1)}%).</span>` 
+              : `<span style="color:#dc2626; font-weight:700;">⚠️ المبيعات الحالية (${formatCurrency(revenueTotal)}) دون نقطة التعادل بفارق ${formatCurrency(Math.abs(marginOfSafetyVal))}. لتحقيق الربحية ينصح برفع هامش الربح أو زيادة حجم التوزيع أو تقسيط المصروفات السنوية.</span>`}
+        </div>
+      </div>
+
+      <!-- ═══ 1. TARGET PROFIT & MARGIN SENSITIVITY (قسم الأرباح ونسب الهوامش المستهدفة) ═══ -->
+      <div class="card mb-24" style="border-radius:16px; border:1.5px solid #0284c7; box-shadow:0 4px 14px rgba(2,132,199,0.12); padding:24px; background:var(--bg-1); margin-bottom:24px;">
+        
+        <div style="border-bottom:2px solid #0284c7; padding-bottom:12px; margin-bottom:18px;">
+          <h4 style="margin:0; font-size:17px; font-weight:900; color:#0284c7;">🎯 حاسبة وسيناريوهات تحقيق الأرباح عند مختلف نسب هوامش الربح</h4>
+          <p style="margin:3px 0 0; font-size:12px; color:var(--text-3);">جرب تغيير صافي الربح المطلوب ونسبة هامش الربح لمشاهدة تأثيرهما المباشر على المبيعات المطلوبة والهدف اليومي</p>
+        </div>
+
+        <!-- 2 Controls: Target Profit & Assumed Margin % -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
+          
+          <!-- Control 1: Target Net Profit -->
+          <div style="background:rgba(2,132,199,0.04); padding:16px; border-radius:12px; border:1px solid rgba(2,132,199,0.2);">
+            <label style="font-size:12.5px; font-weight:800; color:#0369a1; display:block; margin-bottom:6px;">💰 صافي الربح المستهدف للفترة (ر.س):</label>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <input type="number" id="be-target-profit-input" class="input mono font-bold" value="${window._beTargetProfitVal}" step="1000" min="0" oninput="updateTargetProfitCalc()" style="font-size:18px; color:#0369a1; height:40px; width:100%; border:2px solid #0284c7; border-radius:8px; padding:0 12px;" />
+              <span style="font-weight:800; font-size:13px; color:var(--text-2);">ر.س</span>
+            </div>
+            
+            <!-- Quick Profit Presets -->
+            <div style="display:flex; gap:4px; flex-wrap:wrap;">
+              <button class="btn btn-sm btn-ghost" onclick="setTargetProfitPreset(0)" style="font-size:10.5px; padding:2px 6px;">0 (تعادل)</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetProfitPreset(5000)" style="font-size:10.5px; padding:2px 6px;">+5K</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetProfitPreset(10000)" style="font-size:10.5px; padding:2px 6px;">+10K</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetProfitPreset(20000)" style="font-size:10.5px; padding:2px 6px; color:#0284c7; font-weight:800; border:1px solid #0284c7;">⭐ +20K</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetProfitPreset(30000)" style="font-size:10.5px; padding:2px 6px; color:#0284c7; font-weight:800; border:1px solid #0284c7;">⭐ +30K</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetProfitPreset(50000)" style="font-size:10.5px; padding:2px 6px;">+50K</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetProfitPreset(100000)" style="font-size:10.5px; padding:2px 6px;">+100K</button>
+            </div>
+          </div>
+
+          <!-- Control 2: Assumed Profit Margin % -->
+          <div style="background:rgba(217,119,6,0.04); padding:16px; border-radius:12px; border:1px solid rgba(217,119,6,0.25);">
+            <label style="font-size:12.5px; font-weight:800; color:#b45309; display:block; margin-bottom:6px;">📈 نسبة مجمل الربح المفترضة (Gross Margin %):</label>
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+              <input type="number" id="be-target-margin-input" class="input mono font-bold" value="${window._beTargetMarginVal}" step="0.5" min="1" max="99" oninput="updateTargetProfitCalc()" style="font-size:18px; color:#b45309; height:40px; width:100%; border:2px solid #d97706; border-radius:8px; padding:0 12px;" />
+              <span style="font-weight:800; font-size:15px; color:#b45309;">%</span>
+            </div>
+            
+            <!-- Quick Margin Presets -->
+            <div style="display:flex; gap:4px; flex-wrap:wrap;">
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(${cmPct.toFixed(1)})" style="font-size:10.5px; padding:2px 6px; color:#5b3ec2; font-weight:800; border:1px solid #5b3ec2;">الفعلي (${cmPct.toFixed(1)}%)</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(8)" style="font-size:10.5px; padding:2px 6px;">8%</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(10)" style="font-size:10.5px; padding:2px 6px;">10%</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(12)" style="font-size:10.5px; padding:2px 6px;">12%</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(15)" style="font-size:10.5px; padding:2px 6px;">15%</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(18)" style="font-size:10.5px; padding:2px 6px;">18%</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(20)" style="font-size:10.5px; padding:2px 6px;">20%</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(25)" style="font-size:10.5px; padding:2px 6px;">25%</button>
+              <button class="btn btn-sm btn-ghost" onclick="setTargetMarginPreset(30)" style="font-size:10.5px; padding:2px 6px;">30%</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dynamic Output Metrics Grid -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:20px;">
+          
+          <div style="background:var(--bg-2); padding:14px; border-radius:10px; border:1px solid var(--border-soft); box-shadow:var(--shadow-sm);">
+            <div style="font-size:11px; font-weight:700; color:var(--text-3);">🚀 المبيعات الإجمالية المطلوبة:</div>
+            <div class="mono font-bold" id="tp-res-sales" style="font-size:19px; color:#0284c7; margin:3px 0;" dir="ltr">0.00 ر.س</div>
+            <div style="font-size:11px; color:var(--text-3);" id="tp-res-daily">0.00 ر.س / يومياً</div>
+          </div>
+
+          <div style="background:var(--bg-2); padding:14px; border-radius:10px; border:1px solid var(--border-soft); box-shadow:var(--shadow-sm);">
+            <div style="font-size:11px; font-weight:700; color:var(--text-3);">⚖️ الفجوة عن المبيعات الحالية:</div>
+            <div class="mono font-bold" id="tp-res-gap" style="font-size:19px; margin:3px 0;" dir="ltr">0.00 ر.س</div>
+            <div style="font-size:11px; font-weight:700;" id="tp-res-status">جاري الاحتساب...</div>
+          </div>
+
+          <div style="background:var(--bg-2); padding:14px; border-radius:10px; border:1px solid var(--border-soft); box-shadow:var(--shadow-sm);">
+            <div style="font-size:11px; font-weight:700; color:var(--text-3);">📈 نمو المبيعات المطلوب:</div>
+            <div class="mono font-bold" id="tp-res-growth" style="font-size:19px; color:#4338ca; margin:3px 0;" dir="ltr">0%</div>
+            <div style="font-size:11px; color:var(--text-3);" id="tp-res-net-margin">صافي الهامش: 0%</div>
+          </div>
+
+        </div>
+
+        <!-- 2D Cross Matrix Table (الأرباح المستهدفة × نسب هوامش الربح المختلفة) -->
+        <div style="margin-top:14px;">
+          <div style="font-size:13px; font-weight:800; color:var(--text-1); margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+            <span>🧭 <strong>مصفوفة السيناريوهات المتقاطعة (الأرباح المستهدفة × نسب هوامش الربح):</strong></span>
+            <span style="font-size:11px; color:var(--text-3);">توضح كيف تنخفض المبيعات المطلوبة بشدة كلما زادت نسبة هامش الربح</span>
+          </div>
+
+          <div class="table-container" style="max-height:320px; overflow:auto; border:1px solid var(--border-soft); border-radius:10px;">
+            <table class="data-dense" style="width:100%; font-size:11.5px; border-collapse:collapse;">
+              <thead>
+                <tr style="background:var(--bg-2); position:sticky; top:0; z-index:2; border-bottom:1.5px solid var(--border-soft);">
+                  <th style="min-width:130px; position:sticky; right:0; background:var(--bg-2); z-index:3;">صافي الربح المستهدف</th>
+                  ${crossMargins.map(m => `
+                    <th style="text-align:left; min-width:115px; ${m.isActual ? 'background:rgba(91,62,194,0.12); color:#4338ca; font-weight:900;' : ''}">
+                      هامش ${m.label}
+                    </th>
+                  `).join('')}
+                </tr>
+              </thead>
+              <tbody>
+                ${[
+                  { profit: 0, label: '0 ر.س (نقطة التعادل)' },
+                  { profit: 5000, label: '5,000 ر.س' },
+                  { profit: 10000, label: '10,000 ر.س' },
+                  { profit: 15000, label: '15,000 ر.س' },
+                  { profit: 20000, label: '20,000 ر.س', isHighlight: true },
+                  { profit: 25000, label: '25,000 ر.س' },
+                  { profit: 30000, label: '30,000 ر.س', isHighlight: true },
+                  { profit: 40000, label: '40,000 ر.س' },
+                  { profit: 50000, label: '50,000 ر.س' },
+                  { profit: 75000, label: '75,000 ر.س' },
+                  { profit: 100000, label: '100,000 ر.س' },
+                ].map(sc => {
+                  const isCurrentTarget = window._beTargetProfitVal === sc.profit;
+
+                  return `
+                    <tr style="border-bottom:1px solid var(--border-soft); ${isCurrentTarget ? 'background:rgba(2,132,199,0.08); font-weight:800;' : sc.isHighlight ? 'background:rgba(91,62,194,0.03);' : ''}">
+                      <td style="position:sticky; right:0; background:${isCurrentTarget ? '#f0f9ff' : 'var(--bg-1)'}; z-index:1; font-weight:800;">
+                        ${sc.label}
+                        ${sc.isHighlight ? '<span style="font-size:9px; background:#5b3ec2; color:#fff; padding:1px 4px; border-radius:3px; margin-right:3px;">شائع</span>' : ''}
+                      </td>
+                      ${crossMargins.map(m => {
+                        const reqSales = m.val > 0 ? ((fixedCosts + sc.profit) / m.val) : 0;
+                        const isAchieved = revenueTotal >= reqSales && reqSales > 0;
+                        const isMatchCurrent = isCurrentTarget && Math.abs((m.val * 100) - window._beTargetMarginVal) < 0.2;
+
+                        return `
+                          <td class="mono" style="text-align:left; ${m.isActual ? 'background:rgba(91,62,194,0.05); font-weight:800;' : ''} ${isMatchCurrent ? 'outline:2px solid #0284c7; background:rgba(2,132,199,0.15); font-weight:900;' : ''}" dir="ltr">
+                            <span style="color:${isAchieved ? '#15803d' : '#1e293b'}; font-weight:${isAchieved ? '800' : '600'};">
+                              ${formatCurrency(reqSales)}
+                            </span>
+                            ${isAchieved ? '<span style="color:#15803d; font-size:10px;"> ✅</span>' : ''}
+                          </td>
+                        `;
+                      }).join('')}
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ 2. INTERACTIVE EXPENSES CHECKLIST TABLE (جدول تحديد المصروفات) ═══ -->
+      <div class="card mb-24" style="border-radius:16px; border:1px solid var(--border-soft); box-shadow:var(--shadow-sm); padding:24px; background:var(--bg-1); margin-bottom:24px;">
+        
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #dc2626; padding-bottom:12px; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <h4 style="margin:0; font-size:16px; font-weight:900; color:#dc2626;">📊 تحديد وتفكيك المصروفات واحتساب نقطة التعادل</h4>
+            <p style="margin:2px 0 0; font-size:11.5px; color:var(--text-3);">حدد بالمربعات ☑️ المصروفات التي ترغب بإدراجها في الحسبة (أو استبعد أي مصروف)، وسيقوم النظام فوراً بإعادة احتساب نقطة التعادل</p>
+          </div>
+          
+          <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span style="font-size:11.5px; font-weight:800; color:#dc2626; background:rgba(220,38,38,0.1); padding:4px 10px; border-radius:8px;">
+              المحدد: ${selectedCount} من ${totalCount} بند | الإجمالي: ${formatCurrency(fixedCosts)}
+            </span>
+            ${unselectedCosts > 0 ? `
+              <span style="font-size:11.5px; font-weight:700; color:var(--text-3); background:var(--bg-2); padding:4px 8px; border-radius:8px;">
+                مستبعد: ${formatCurrency(unselectedCosts)}
+              </span>
+            ` : ''}
+          </div>
+        </div>
+
+        <!-- Quick Filter Preset Buttons Bar -->
+        <div style="display:flex; gap:8px; align-items:center; margin-bottom:14px; background:var(--bg-2); padding:10px 14px; border-radius:10px; border:1px solid var(--border-soft); flex-wrap:wrap;">
+          <span style="font-size:12px; font-weight:800; color:var(--text-1); margin-left:6px;">🔘 فلاتر وتحديدات سريعة:</span>
+          <button class="btn btn-sm" onclick="setBEPreset('all')" style="font-size:11.5px; font-weight:700; background:var(--bg-1); border:1px solid var(--border); cursor:pointer;">
+            ☑️ تحديد الكل (الوضع الشامل)
+          </button>
+          <button class="btn btn-sm" onclick="setBEPreset('core_fixed')" style="font-size:11.5px; font-weight:700; background:rgba(59,130,246,0.1); color:#1d4ed8; border:1px solid rgba(59,130,246,0.3); cursor:pointer;">
+            🛡️ المصروفات الثابتة فقط (رواتب + إيجارات + إهلاكات)
+          </button>
+          <button class="btn btn-sm" onclick="setBEPreset('cash_only')" style="font-size:11.5px; font-weight:700; background:rgba(16,185,129,0.1); color:#047857; border:1px solid rgba(16,185,129,0.3); cursor:pointer;">
+            💵 المصروفات النقدية التشغيلية (بدون إهلاك)
+          </button>
+          <button class="btn btn-sm" onclick="setBEPreset('none')" style="font-size:11.5px; font-weight:700; background:var(--bg-1); color:#dc2626; border:1px solid var(--border); cursor:pointer;">
+            ◻️ إلغاء التحديد
+          </button>
+        </div>
+
         <div class="table-container">
-          <table class="data-dense" style="width:100%;border-collapse:collapse;font-size:12px;">
+          <table class="data-dense" style="width:100%; font-size:12.5px;">
             <thead>
-              <tr style="background:var(--bg-2);">
-                <th style="padding:10px 8px;text-align:right;">العميل</th>
-                <th style="padding:10px 8px;text-align:right;">المندوب</th>
-                <th style="padding:10px 8px;text-align:center;width:60px;">المهلة</th>
-                <th style="padding:10px 8px;text-align:right;color:var(--brand);">الرصيد الدفتري</th>
-                <th style="padding:10px 8px;text-align:right;color:#10b981;">غير مستحق</th>
-                <th style="padding:10px 8px;text-align:right;color:#f59e0b;">متأخر (1-30 يوم)</th>
-                <th style="padding:10px 8px;text-align:right;color:#d97706;">متأخر (31-60 يوم)</th>
-                <th style="padding:10px 8px;text-align:right;color:#dc2626;">متأخر (61-90 يوم)</th>
-                <th style="padding:10px 8px;text-align:right;color:#b91c1c;font-weight:900;">متأخر (>90 يوم)</th>
-                <th style="padding:10px 8px;text-align:right;font-weight:bold;">مجموع المتبقي</th>
+              <tr style="background:var(--bg-2); border-bottom:1.5px solid var(--border-soft);">
+                <th style="width:45px; text-align:center;">
+                  <input type="checkbox" id="be-master-check" ${selectedCount === totalCount ? 'checked' : ''} onchange="toggleBEMasterCheck(this.checked)" style="cursor:pointer; width:16px; height:16px;" title="تحديد/إلغاء تحديد الكل" />
+                </th>
+                <th style="width:110px;">كود الحساب</th>
+                <th>اسم المصروف / البند</th>
+                <th style="width:180px;">التصنيف المحاسبي</th>
+                <th style="width:130px; text-align:left;">المبلغ الفعلي (ر.س)</th>
+                <th style="width:85px; text-align:center;">النسبة</th>
+                <th style="width:160px; text-align:left;">المبيعات المطلوبة لتغطيته</th>
+                <th style="width:130px; text-align:left;">المعدل اليومي</th>
               </tr>
             </thead>
             <tbody>
-              ${rows.length === 0 ? `<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--text-2);">لا توجد مديونيات مستحقة على العملاء حالياً</td></tr>` : 
-                rows.map(r => `
-                  <tr style="border-bottom:1px solid rgba(255,255,255,0.03);">
-                    <td style="padding:10px 8px;">
-                      <div style="font-weight:bold;">${r.name}</div>
-                      ${r.code ? `<div style="font-size:10px;color:var(--text-3);">${r.code}</div>` : ""}
-                    </td>
-                    <td style="padding:10px 8px;color:var(--text-2);">${r.repName}</td>
-                    <td style="padding:10px 8px;text-align:center;color:var(--text-2);font-family:monospace;">${r.creditDays ? `${r.creditDays} ي` : "—"}</td>
-                    <td style="padding:10px 8px;text-align:right;font-family:monospace;font-weight:600;">${formatCurrency(r.balance)}</td>
-                    <td style="padding:10px 8px;text-align:right;font-family:monospace;color:${r.current ? '#10b981' : 'var(--text-3)'};">${r.current ? formatCurrency(r.current) : "—"}</td>
-                    <td style="padding:10px 8px;text-align:right;font-family:monospace;color:${r.aging1_30 ? '#f59e0b' : 'var(--text-3)'};">${r.aging1_30 ? formatCurrency(r.aging1_30) : "—"}</td>
-                    <td style="padding:10px 8px;text-align:right;font-family:monospace;color:${r.aging31_60 ? '#d97706' : 'var(--text-3)'};">${r.aging31_60 ? formatCurrency(r.aging31_60) : "—"}</td>
-                    <td style="padding:10px 8px;text-align:right;font-family:monospace;color:${r.aging61_90 ? '#dc2626' : 'var(--text-3)'};">${r.aging61_90 ? formatCurrency(r.aging61_90) : "—"}</td>
-                    <td style="padding:10px 8px;text-align:right;font-family:monospace;font-weight:bold;color:${r.agingOver90 ? '#b91c1c' : 'var(--text-3)'};">${r.agingOver90 ? formatCurrency(r.agingOver90) : "—"}</td>
-                    <td style="padding:10px 8px;text-align:right;font-family:monospace;font-weight:bold;background:rgba(255,255,255,0.01);">${formatCurrency(r.totalRemaining)}</td>
-                  </tr>
-                `).join("")}
+              ${sortedExp.map((e, idx) => `
+                <tr style="border-bottom:1px solid var(--border-soft); ${e.isSelected ? (idx % 2 === 1 ? 'background:rgba(0,0,0,0.015);' : '') : 'opacity:0.5; background:var(--bg-2);'}">
+                  <td style="text-align:center;">
+                    <input type="checkbox" class="be-item-check" data-code="${e.code}" ${e.isSelected ? 'checked' : ''} onchange="toggleBEExpenseItem('${e.code}')" style="cursor:pointer; width:16px; height:16px;" />
+                  </td>
+                  <td class="mono font-bold" style="color:var(--text-3);">${e.code}</td>
+                  <td style="font-weight:700; color:var(--text-1);">
+                    ${e.name}
+                    ${!e.isSelected ? '<span style="font-size:10px; color:#dc2626; margin-right:4px;">(مستبعد)</span>' : ''}
+                  </td>
+                  <td>
+                    <span style="font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:6px; background:${e.badgeBg}; color:${e.badgeColor};">
+                      ${e.label}
+                    </span>
+                  </td>
+                  <td class="mono font-bold" style="text-align:left; color:#dc2626;" dir="ltr">${formatCurrency(e.balance)}</td>
+                  <td style="text-align:center; font-weight:700; color:var(--text-2); font-size:11.5px;">
+                    ${e.isSelected ? e.pctOfSelected.toFixed(1) + '%' : '—'}
+                  </td>
+                  <td class="mono font-bold" style="text-align:left; color:${e.isSelected ? '#4338ca' : 'var(--text-3)'};" dir="ltr">
+                    ${e.isSelected ? formatCurrency(e.salesNeeded) : '—'}
+                  </td>
+                  <td class="mono dim" style="text-align:left; font-size:11.5px;" dir="ltr">
+                    ${e.isSelected ? formatCurrency(e.salesNeeded / days) : '—'}
+                  </td>
+                </tr>
+              `).join("")}
             </tbody>
             <tfoot>
-              <tr style="background:var(--bg-2);border-top:2px solid var(--border-soft);font-weight:bold;font-size:12px;">
-                <td colspan="3" style="padding:12px 8px;font-weight:900;">الإجمالي العام</td>
-                <td style="padding:12px 8px;text-align:right;font-family:monospace;color:var(--brand);">${formatCurrency(totals.balance)}</td>
-                <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#10b981;">${formatCurrency(totals.current)}</td>
-                <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#f59e0b;">${formatCurrency(totals.current ? totals.aging1_30 : 0)}</td>
-                <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#d97706;">${formatCurrency(totals.aging31_60)}</td>
-                <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#dc2626;">${formatCurrency(totals.aging61_90)}</td>
-                <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#b91c1c;">${formatCurrency(totals.agingOver90)}</td>
-                <td style="padding:12px 8px;text-align:right;font-family:monospace;font-weight:900;background:rgba(255,255,255,0.02);">${formatCurrency(totals.totalRemaining)}</td>
+              <tr style="background:var(--bg-2); font-weight:900; border-top:2px solid var(--border);">
+                <td style="text-align:center;">☑️</td>
+                <td colspan="3">إجمالي المصروفات المحددة في نقطة التعادل</td>
+                <td class="mono" style="text-align:left; color:#dc2626;" dir="ltr">${formatCurrency(fixedCosts)}</td>
+                <td style="text-align:center;">100.0%</td>
+                <td class="mono" style="text-align:left; color:#4338ca;" dir="ltr">${formatCurrency(breakEvenSales)}</td>
+                <td class="mono" style="text-align:left; color:#4338ca;" dir="ltr">${formatCurrency(dailyBreakEven)}</td>
               </tr>
             </tfoot>
           </table>
         </div>
       </div>
-    `;
+
+      <!-- ═══ 3. INTERACTIVE DECISION & WHAT-IF SIMULATOR ═══ -->
+      <div class="card mb-24" style="border-radius:16px; border:1px solid var(--border-soft); box-shadow:var(--shadow-sm); padding:24px; background:var(--bg-1); margin-bottom:24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #5b3ec2; padding-bottom:10px; margin-bottom:18px;">
+          <div>
+            <h4 style="margin:0; font-size:16px; font-weight:900; color:#5b3ec2;">🎛️ محاكي القرارات الإدارية وتوقعات التعادل (What-If Simulator)</h4>
+            <p style="margin:2px 0 0; font-size:11.5px; color:var(--text-3);">جرب تغيير الهوامش والمصروفات لمشاهدة تأثيرها الفوري على نقطة التعادل والأرباح المتوقعة</p>
+          </div>
+          <button class="btn btn-sm btn-ghost" onclick="resetBESimulator()" style="font-size:11px;">🔄 إعادة ضبط</button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:20px; margin-bottom:20px;">
+          
+          <!-- Slider 1: Margin % -->
+          <div style="background:var(--bg-2); padding:14px; border-radius:10px; border:1px solid var(--border-soft);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label style="font-weight:800; font-size:12px; color:var(--text-1);">هامش الربح المتوقع (CM %)</label>
+              <span class="mono font-bold" id="sim-cm-val" style="color:#b45309; font-size:14px;">${cmPct.toFixed(1)}%</span>
+            </div>
+            <input type="range" id="sim-cm-slider" min="3" max="40" step="0.5" value="${cmPct.toFixed(1)}" oninput="updateBESimulator()" style="width:100%; cursor:pointer;" />
+            <div style="font-size:10px; color:var(--text-3); display:flex; justify-content:space-between; margin-top:2px;">
+              <span>3%</span><span>15%</span><span>25%</span><span>40%</span>
+            </div>
+          </div>
+
+          <!-- Slider 2: Fixed Cost Adj % -->
+          <div style="background:var(--bg-2); padding:14px; border-radius:10px; border:1px solid var(--border-soft);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+              <label style="font-weight:800; font-size:12px; color:var(--text-1);">تعديل المصاريف المحددة</label>
+              <span class="mono font-bold" id="sim-exp-adj-val" style="color:#dc2626; font-size:14px;">0%</span>
+            </div>
+            <input type="range" id="sim-exp-slider" min="-50" max="50" step="5" value="0" oninput="updateBESimulator()" style="width:100%; cursor:pointer;" />
+            <div style="font-size:10px; color:var(--text-3); display:flex; justify-content:space-between; margin-top:2px;">
+              <span>-50% (ترشيد)</span><span>0% (الحالي)</span><span>+50% (توسع)</span>
+            </div>
+          </div>
+
+          <!-- Input 3: Target Profit Simulator -->
+          <div style="background:var(--bg-2); padding:14px; border-radius:10px; border:1px solid var(--border-soft);">
+            <label style="font-weight:800; font-size:12px; color:var(--text-1); display:block; margin-bottom:6px;">صافي الربح المستهدف (ر.س)</label>
+            <input type="number" id="sim-target-profit" class="input mono font-bold" value="${window._beTargetProfitVal}" step="1000" min="0" oninput="updateBESimulator()" style="width:100%; height:34px;" />
+            <div style="font-size:10px; color:var(--text-3); margin-top:4px;">حدد الربح المطلوب لمعرفة المبيعات اللازمة</div>
+          </div>
+
+        </div>
+
+        <!-- Simulator Result Cards -->
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; background:linear-gradient(135deg, rgba(91,62,194,0.12), rgba(91,62,194,0.03)); padding:18px; border-radius:12px; border:1.5px solid #5b3ec2;">
+          
+          <div>
+            <div style="font-size:11.5px; font-weight:700; color:#5b3ec2; margin-bottom:4px;">🎯 نقطة التعادل المحاكاة:</div>
+            <div class="mono font-bold" id="sim-res-be" style="font-size:20px; color:#1d4ed8;" dir="ltr">${formatCurrency(breakEvenSales)}</div>
+            <div style="font-size:11px; color:var(--text-3);" id="sim-res-be-daily">${formatCurrency(dailyBreakEven)} / يومياً</div>
+          </div>
+
+          <div>
+            <div style="font-size:11.5px; font-weight:700; color:#5b3ec2; margin-bottom:4px;">🚀 المبيعات لتحقيق الربح المستهدف:</div>
+            <div class="mono font-bold" id="sim-res-target-sales" style="font-size:20px; color:#4338ca;" dir="ltr">0.00 ر.س</div>
+            <div style="font-size:11px; color:var(--text-3);" id="sim-res-target-daily">0.00 ر.س / يومياً</div>
+          </div>
+
+          <div>
+            <div style="font-size:11.5px; font-weight:700; color:#5b3ec2; margin-bottom:4px;">🏆 الربح المتوقع عند المبيعات الحالية:</div>
+            <div class="mono font-bold" id="sim-res-profit" style="font-size:20px; color:#15803d;" dir="ltr">${formatCurrency(netProfit)}</div>
+            <div style="font-size:11px; color:var(--text-3);" id="sim-res-profit-margin">هامش صافي: 0%</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  // حفظ البيانات الحالية في window للاستخدام في الدوال التفاعلية
+  window._beCurrentData = be;
+
+  // ── دوال التفاعل مع مربعات الاختيار والفلاتر ──
+  window.toggleBEExpenseItem = (code) => {
+    if (!window._beSelectedExpenseCodes) {
+      window._beSelectedExpenseCodes = new Set();
+    }
+    if (window._beSelectedExpenseCodes.has(code)) {
+      window._beSelectedExpenseCodes.delete(code);
+    } else {
+      window._beSelectedExpenseCodes.add(code);
+    }
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    renderBreakEvenAnalysis(window._beCurrentContainer, window._beCurrentFrom, window._beCurrentTo);
+    window.scrollTo(0, scrollTop);
+  };
+
+  window.toggleBEMasterCheck = (isChecked) => {
+    if (!window._beSelectedExpenseCodes) window._beSelectedExpenseCodes = new Set();
+    if (isChecked) {
+      window._beCurrentData.sortedExp.forEach(e => window._beSelectedExpenseCodes.add(e.code));
+    } else {
+      window._beSelectedExpenseCodes.clear();
+    }
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    renderBreakEvenAnalysis(window._beCurrentContainer, window._beCurrentFrom, window._beCurrentTo);
+    window.scrollTo(0, scrollTop);
+  };
+
+  window.setBEPreset = (type) => {
+    if (!window._beSelectedExpenseCodes) window._beSelectedExpenseCodes = new Set();
+    window._beSelectedExpenseCodes.clear();
+
+    const allExp = window._beCurrentData.sortedExp;
+    if (type === 'all') {
+      allExp.forEach(e => window._beSelectedExpenseCodes.add(e.code));
+    } else if (type === 'core_fixed') {
+      allExp.filter(e => e.isCoreFixed).forEach(e => window._beSelectedExpenseCodes.add(e.code));
+    } else if (type === 'cash_only') {
+      allExp.filter(e => e.isCash).forEach(e => window._beSelectedExpenseCodes.add(e.code));
+    } else if (type === 'none') {
+      // already cleared
+    }
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    renderBreakEvenAnalysis(window._beCurrentContainer, window._beCurrentFrom, window._beCurrentTo);
+    window.scrollTo(0, scrollTop);
+  };
+
+  // ── دوال حاسبة الأرباح ونسب الهوامش المستهدفة ──
+  window.setTargetProfitPreset = (val) => {
+    window._beTargetProfitVal = parseFloat(val) || 0;
+    const input = document.getElementById("be-target-profit-input");
+    if (input) input.value = window._beTargetProfitVal;
+    
+    // تحديث المحاكي أيضاً
+    const simInput = document.getElementById("sim-target-profit");
+    if (simInput) simInput.value = window._beTargetProfitVal;
+
+    window.updateTargetProfitCalc();
+    window.updateBESimulator();
+  };
+
+  window.setTargetMarginPreset = (val) => {
+    window._beTargetMarginVal = parseFloat(val) || 15.0;
+    const input = document.getElementById("be-target-margin-input");
+    if (input) input.value = window._beTargetMarginVal;
+
+    // تحديث شريط المحاكي
+    const simCm = document.getElementById("sim-cm-slider");
+    if (simCm) simCm.value = window._beTargetMarginVal;
+
+    window.updateTargetProfitCalc();
+    window.updateBESimulator();
+  };
+
+  window.updateTargetProfitCalc = () => {
+    const data = window._beCurrentData;
+    if (!data) return;
+
+    const profitInput = document.getElementById("be-target-profit-input");
+    const targetProfit = parseFloat(profitInput?.value ?? window._beTargetProfitVal ?? 0);
+    window._beTargetProfitVal = targetProfit;
+
+    const marginInput = document.getElementById("be-target-margin-input");
+    const targetMarginPct = parseFloat(marginInput?.value ?? window._beTargetMarginVal ?? data.cmPct);
+    window._beTargetMarginVal = targetMarginPct;
+
+    const targetMarginRatio = targetMarginPct / 100;
+
+    const reqSales = targetMarginRatio > 0 ? ((data.fixedCosts + targetProfit) / targetMarginRatio) : 0;
+    const reqDaily = data.days > 0 ? (reqSales / data.days) : 0;
+    const gap = data.revenueTotal - reqSales;
+    const isDone = gap >= 0 && reqSales > 0;
+    const growthNeeded = data.revenueTotal > 0 && reqSales > data.revenueTotal 
+      ? (((reqSales - data.revenueTotal) / data.revenueTotal) * 100).toFixed(1) + '%' 
+      : '0%';
+    const netMargin = reqSales > 0 ? (targetProfit / reqSales * 100).toFixed(1) + '%' : '0%';
+
+    const salesEl = document.getElementById("tp-res-sales");
+    const dailyEl = document.getElementById("tp-res-daily");
+    const gapEl   = document.getElementById("tp-res-gap");
+    const statEl  = document.getElementById("tp-res-status");
+    const grwEl   = document.getElementById("tp-res-growth");
+    const nmgEl   = document.getElementById("tp-res-net-margin");
+
+    if (salesEl) salesEl.textContent = formatCurrency(reqSales);
+    if (dailyEl) dailyEl.textContent = formatCurrency(reqDaily) + " / يومياً";
+
+    if (gapEl) {
+      gapEl.textContent = (isDone ? "+" : "-") + formatCurrency(Math.abs(gap));
+      gapEl.style.color = isDone ? "#15803d" : "#dc2626";
+    }
+    if (statEl) {
+      statEl.textContent = isDone 
+        ? `✅ تم تجاوز هذا الربح بفائض قدره ${formatCurrency(gap)}` 
+        : `⏳ متبقي مبيعات إضافية قدرها ${formatCurrency(Math.abs(gap))} لتحقيق الهدف`;
+      statEl.style.color = isDone ? "#15803d" : "#dc2626";
+    }
+    if (grwEl) {
+      grwEl.textContent = isDone ? "✅ محقق بالفعل" : `+${growthNeeded}`;
+      grwEl.style.color = isDone ? "#15803d" : "#4338ca";
+    }
+    if (nmgEl) {
+      nmgEl.textContent = "هامش صافي من المبيعات: " + netMargin;
+    }
+  };
+
+  // ── دوال محاكي القرارات الإدارية (What-If) ──
+  window.updateBESimulator = () => {
+    const data = window._beCurrentData;
+    if (!data) return;
+
+    const cmInput = parseFloat(document.getElementById("sim-cm-slider")?.value || data.cmPct);
+    const expAdj = parseFloat(document.getElementById("sim-exp-slider")?.value || 0);
+    const targetProfit = parseFloat(document.getElementById("sim-target-profit")?.value || window._beTargetProfitVal || 0);
+
+    const cmValEl = document.getElementById("sim-cm-val");
+    const expAdjValEl = document.getElementById("sim-exp-adj-val");
+    if (cmValEl) cmValEl.textContent = cmInput.toFixed(1) + "%";
+    if (expAdjValEl) expAdjValEl.textContent = (expAdj >= 0 ? "+" : "") + expAdj + "%";
+
+    const simCmRatio = cmInput / 100;
+    const simFixed = data.fixedCosts * (1 + expAdj / 100);
+
+    const simBE = simCmRatio > 0 ? (simFixed / simCmRatio) : 0;
+    const simBEDaily = data.days > 0 ? (simBE / data.days) : 0;
+
+    const simTargetSales = simCmRatio > 0 ? ((simFixed + targetProfit) / simCmRatio) : 0;
+    const simTargetDaily = data.days > 0 ? (simTargetSales / data.days) : 0;
+
+    const simProfitAtCurrent = (data.revenueTotal * simCmRatio) - simFixed;
+    const simProfitMargin = data.revenueTotal > 0 ? (simProfitAtCurrent / data.revenueTotal * 100) : 0;
+
+    const resBeEl = document.getElementById("sim-res-be");
+    const resBeDailyEl = document.getElementById("sim-res-be-daily");
+    const resTargetSalesEl = document.getElementById("sim-res-target-sales");
+    const resTargetDailyEl = document.getElementById("sim-res-target-daily");
+    const resProfitEl = document.getElementById("sim-res-profit");
+    const resProfitMarginEl = document.getElementById("sim-res-profit-margin");
+
+    if (resBeEl) resBeEl.textContent = formatCurrency(simBE);
+    if (resBeDailyEl) resBeDailyEl.textContent = formatCurrency(simBEDaily) + " / يومياً";
+
+    if (resTargetSalesEl) resTargetSalesEl.textContent = formatCurrency(simTargetSales);
+    if (resTargetDailyEl) resTargetDailyEl.textContent = formatCurrency(simTargetDaily) + " / يومياً";
+
+    if (resProfitEl) {
+      resProfitEl.textContent = formatCurrency(simProfitAtCurrent);
+      resProfitEl.style.color = simProfitAtCurrent >= 0 ? "#15803d" : "#b91c1c";
+    }
+    if (resProfitMarginEl) resProfitMarginEl.textContent = "هامش صافي: " + simProfitMargin.toFixed(1) + "%";
+  };
+
+  window.resetBESimulator = () => {
+    const data = window._beCurrentData;
+    if (!data) return;
+    const s1 = document.getElementById("sim-cm-slider");
+    const s2 = document.getElementById("sim-exp-slider");
+    const p  = document.getElementById("sim-target-profit");
+    if (s1) s1.value = data.cmPct.toFixed(1);
+    if (s2) s2.value = 0;
+    if (p)  p.value = window._beTargetProfitVal || 20000;
+    window.updateBESimulator();
+  };
+
+  // تشغيل الحسابات الفورية فور اكتمال الرسم
+  setTimeout(() => {
+    window.updateTargetProfitCalc();
+    window.updateBESimulator();
+  }, 40);
+}
+
+// ──────────────────────────────────────────
+// 8. Aged Receivables (تقرير أعمار الديون والمستحقات للعملاء)
+// ──────────────────────────────────────────
+let _allAgedReceivables = [];
+let _filteredAgedReceivables = [];
+let _arSortKey = "balance";
+let _arSortDir = "desc";
+let _arRepsList = [];
+
+async function renderAgedReceivables(container, from, to) {
+  container.innerHTML = `<div style="text-align:center;padding:40px"><i class="fas fa-spinner fa-spin fa-2x" style="color:var(--brand);"></i><div style="margin-top:10px;font-weight:700;color:var(--text-1);">جاري مطابقة فواتير وسندات ومديونيات العملاء واحتساب أعمار الديون بدقة…</div></div>`;
+  
+  try {
+    const [custs, allInvoices] = await Promise.all([
+      getAll(COLS.customers()),
+      getAll(COLS.salesInvoices())
+    ]);
+
+    // Group invoices by customerId
+    const invoicesByCustomer = {};
+    (allInvoices || []).forEach(inv => {
+      if (inv.status === 'cancelled') return;
+      const cId = inv.customerId;
+      if (!cId) return;
+      if (!invoicesByCustomer[cId]) invoicesByCustomer[cId] = [];
+      invoicesByCustomer[cId].push(inv);
+    });
+
+    // Sort customer invoices newest first for exact debt allocation
+    Object.values(invoicesByCustomer).forEach(list => {
+      list.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+    });
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const rows = [];
+    const repSet = new Set();
+
+    (custs || []).forEach(c => {
+      const bal = parseFloat(c.balance || 0);
+      if (bal <= 0) return; // Only customers with positive debt
+
+      const rep = (c.repName || c.salesRepName || "بدون مندوب").trim();
+      if (rep && rep !== "بدون مندوب") repSet.add(rep);
+      const creditDays = parseInt(c.creditDays || 0, 10);
+
+      let current = 0;
+      let aging1_30 = 0;
+      let aging31_60 = 0;
+      let aging61_90 = 0;
+      let agingOver90 = 0;
+
+      let remainingToAllocate = bal;
+      const custInvoices = invoicesByCustomer[c.id] || [];
+
+      for (const inv of custInvoices) {
+        if (remainingToAllocate <= 0) break;
+
+        const invTotal = parseFloat(inv.totalWithVat || inv.total || 0);
+        if (invTotal <= 0) continue;
+
+        const alloc = Math.min(remainingToAllocate, invTotal);
+        remainingToAllocate -= alloc;
+
+        const invDate = inv.date ? new Date(inv.date) : today;
+        const diffDays = Math.max(0, Math.floor((today - invDate) / (1000 * 60 * 60 * 24)));
+        const overdueDays = diffDays - creditDays;
+
+        if (overdueDays <= 0) {
+          current += alloc;
+        } else if (overdueDays <= 30) {
+          aging1_30 += alloc;
+        } else if (overdueDays <= 60) {
+          aging31_60 += alloc;
+        } else if (overdueDays <= 90) {
+          aging61_90 += alloc;
+        } else {
+          agingOver90 += alloc;
+        }
+      }
+
+      // Any remaining unallocated debt (e.g. old opening balance) belongs to >90 days
+      if (remainingToAllocate > 0) {
+        agingOver90 += remainingToAllocate;
+      }
+
+      rows.push({
+        id: c.id,
+        name: c.name || "عميل مجهول",
+        code: c.code || "",
+        phone: c.phone || "",
+        repName: rep || "بدون مندوب",
+        creditLimit: parseFloat(c.creditLimit || 0),
+        creditDays: creditDays,
+        balance: bal,
+        current: current,
+        aging1_30: aging1_30,
+        aging31_60: aging31_60,
+        aging61_90: aging61_90,
+        agingOver90: agingOver90,
+        totalRemaining: bal // 100% matches ledger balance
+      });
+    });
+
+    _allAgedReceivables = rows;
+    _arRepsList = Array.from(repSet).sort();
+    
+    renderAgedReceivablesLayout(container);
   } catch (err) {
-    container.innerHTML = `<div class="alert bad">${err.message}</div>`;
+    container.innerHTML = `<div class="alert bad">خطأ في احتساب أعمار الديون: ${err.message}</div>`;
   }
 }
 
-// ──────────────────────────────────────────────────────────────
+function renderAgedReceivablesLayout(container) {
+  container.innerHTML = `
+    <!-- Header & Action Buttons -->
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:16px;">
+      <div>
+        <h2 style="margin:0;color:var(--brand);font-size:18px;display:flex;align-items:center;gap:8px;">
+          <span>⏳ تقرير مديونيات وأعمار ديون العملاء</span>
+        </h2>
+        <div style="font-size:12px;color:var(--text-2);margin-top:4px;">
+          تاريخ التقرير: ${new Date().toLocaleDateString("ar-SA-u-nu-latn")} • مطابق 100% لأرصدة كشوف الحسابات ودفاتر الأستاذ
+        </div>
+      </div>
+      <div class="no-print" style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="btn btn-secondary" onclick="window.exportAgedReceivablesExcel()" style="white-space:nowrap; display:inline-flex; align-items:center; gap:6px;">
+          📥 تصدير Excel
+        </button>
+        <button class="btn btn-primary" onclick="window.exportAgedReceivablesPDF()" style="white-space:nowrap; display:inline-flex; align-items:center; gap:6px;">
+          🖨️ طباعة / PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Live KPI Summary Strip -->
+    <div class="grid-4 gap-12 mb-16" id="ar-kpi-strip" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));">
+      <div style="background:var(--bg-card); padding:12px 14px; border-radius:10px; border:1px solid rgba(99,102,241,0.25);">
+        <div style="font-size:11px; color:var(--text-2); font-weight:700;">💰 إجمالي المديونيات المستحقة</div>
+        <div class="mono" id="ar-kpi-total" style="font-size:17px; font-weight:900; color:var(--brand); margin-top:4px;">0.00 ر.س</div>
+      </div>
+      <div style="background:var(--bg-card); padding:12px 14px; border-radius:10px; border:1px solid rgba(16,185,129,0.25);">
+        <div style="font-size:11px; color:#10B981; font-weight:700;">🟢 غير مستحق (خلال المهلة)</div>
+        <div class="mono" id="ar-kpi-current" style="font-size:17px; font-weight:900; color:#10B981; margin-top:4px;">0.00 ر.س</div>
+      </div>
+      <div style="background:var(--bg-card); padding:12px 14px; border-radius:10px; border:1px solid rgba(245,158,11,0.25);">
+        <div style="font-size:11px; color:#F59E0B; font-weight:700;">🟡 متأخر (1 - 30 يوم)</div>
+        <div class="mono" id="ar-kpi-30" style="font-size:17px; font-weight:900; color:#F59E0B; margin-top:4px;">0.00 ر.س</div>
+      </div>
+      <div style="background:var(--bg-card); padding:12px 14px; border-radius:10px; border:1px solid rgba(249,115,22,0.25);">
+        <div style="font-size:11px; color:#F97316; font-weight:700;">🟠 متأخر (31 - 60 يوم)</div>
+        <div class="mono" id="ar-kpi-60" style="font-size:17px; font-weight:900; color:#F97316; margin-top:4px;">0.00 ر.س</div>
+      </div>
+      <div style="background:var(--bg-card); padding:12px 14px; border-radius:10px; border:1px solid rgba(220,38,38,0.25);">
+        <div style="font-size:11px; color:#DC2626; font-weight:700;">🔴 متأخر (61 - 90 يوم)</div>
+        <div class="mono" id="ar-kpi-90" style="font-size:17px; font-weight:900; color:#DC2626; margin-top:4px;">0.00 ر.س</div>
+      </div>
+      <div style="background:var(--bg-card); padding:12px 14px; border-radius:10px; border:1px solid rgba(185,28,28,0.35); background:linear-gradient(135deg, var(--bg-card), rgba(185,28,28,0.05));">
+        <div style="font-size:11px; color:#B91C1C; font-weight:800;">⛔ متعثر حرج (+90 يوم)</div>
+        <div class="mono" id="ar-kpi-over90" style="font-size:17px; font-weight:900; color:#B91C1C; margin-top:4px;">0.00 ر.س</div>
+      </div>
+      <div style="background:var(--bg-card); padding:12px 14px; border-radius:10px; border:1px solid var(--border-soft);">
+        <div style="font-size:11px; color:var(--text-2); font-weight:700;">👥 عدد العملاء المدينين</div>
+        <div class="mono" id="ar-kpi-count" style="font-size:17px; font-weight:900; color:var(--text-0); margin-top:4px;">0 عميل</div>
+      </div>
+    </div>
+
+    <!-- Filter Control Bar -->
+    <div class="card mb-16 no-print" style="padding:12px 16px; background:var(--bg-card); border:1px solid var(--border-soft);">
+      <div style="display:flex; align-items:center; flex-wrap:wrap; gap:12px;">
+        
+        <!-- Rep Filter -->
+        <div style="display:flex; align-items:center; gap:6px; min-width:180px;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-2); white-space:nowrap;">👤 المندوب:</label>
+          <select id="ar-rep-filter" class="input" style="padding:6px 10px; font-size:12px;" onchange="window.filterAgedReceivables()">
+            <option value="">جميع المناديب</option>
+            ${_arRepsList.map(r => `<option value="${r}">${r}</option>`).join("")}
+          </select>
+        </div>
+
+        <!-- Overdue Risk Filter -->
+        <div style="display:flex; align-items:center; gap:6px; min-width:180px;">
+          <label style="font-size:12px; font-weight:700; color:var(--text-2); white-space:nowrap;">⏳ فئة التأخير:</label>
+          <select id="ar-risk-filter" class="input" style="padding:6px 10px; font-size:12px;" onchange="window.filterAgedReceivables()">
+            <option value="all">جميع المديونيات</option>
+            <option value="over90">🔴 متعثرة حرجة (+90 يوم)</option>
+            <option value="over60">🟠 متأخرة (+60 يوم فما فوق)</option>
+            <option value="over30">🟡 متأخرة (+30 يوم فما فوق)</option>
+            <option value="current">🟢 جارية / غير متأخرة فقط</option>
+          </select>
+        </div>
+
+        <!-- Search Input -->
+        <div style="position:relative; flex:1; min-width:200px; max-width:320px;">
+          <input type="text" id="ar-search-input" class="input" placeholder="🔍 بحث باسم العميل أو الكود..." style="padding:6px 12px; font-size:12px; width:100%;" oninput="window.filterAgedReceivables()" />
+        </div>
+
+        <!-- Quick Sort Presets -->
+        <div style="margin-right:auto; display:flex; gap:6px; align-items:center;">
+          <span style="font-size:11.5px; color:var(--text-2); font-weight:700;">ترتيب سريع:</span>
+          <button class="btn btn-secondary btn-sm" onclick="window.sortAgedReceivables('balance')" title="ترتيب حسب إجمالي المديونية">
+            💰 المبلغ ${_arSortKey === 'balance' ? (_arSortDir === 'desc' ? '▼' : '▲') : ''}
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="window.sortAgedReceivables('agingOver90')" title="ترتيب حسب الأكثر تعثراً (+90 يوم)">
+            ⛔ الأكثر تعثراً ${_arSortKey === 'agingOver90' ? (_arSortDir === 'desc' ? '▼' : '▲') : ''}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card" style="padding:0; overflow:hidden;">
+      <div class="table-container" style="overflow-x:auto;">
+        <table class="data-dense" style="width:100%; border-collapse:collapse; font-size:12px; margin:0;" id="ar-table">
+          <thead>
+            <tr style="background:var(--bg-2); border-bottom:2px solid var(--border);">
+              <th style="padding:10px 8px; text-align:center; width:35px;">#</th>
+              <th style="padding:10px 8px; text-align:right; cursor:pointer;" onclick="window.sortAgedReceivables('name')" title="انقر للترتيب حسب اسم العميل">
+                العميل ${_arSortKey === 'name' ? (_arSortDir === 'desc' ? '▼' : '▲') : '<span style="opacity:0.3;">↕</span>'}
+              </th>
+              <th style="padding:10px 8px; text-align:right; cursor:pointer;" onclick="window.sortAgedReceivables('repName')" title="انقر للترتيب حسب المندوب">
+                المندوب ${_arSortKey === 'repName' ? (_arSortDir === 'desc' ? '▼' : '▲') : '<span style="opacity:0.3;">↕</span>'}
+              </th>
+              <th style="padding:10px 8px; text-align:center; width:55px;">المهلة</th>
+              <th style="padding:10px 8px; text-align:left; color:var(--brand); cursor:pointer; font-weight:800;" onclick="window.sortAgedReceivables('balance')" title="انقر للترتيب حسب إجمالي المديونية">
+                إجمالي المديونية ${_arSortKey === 'balance' ? (_arSortDir === 'desc' ? '▼' : '▲') : '<span style="opacity:0.3;">↕</span>'}
+              </th>
+              <th style="padding:10px 8px; text-align:left; color:#10B981; cursor:pointer;" onclick="window.sortAgedReceivables('current')" title="انقر للترتيب">
+                غير مستحق ${_arSortKey === 'current' ? (_arSortDir === 'desc' ? '▼' : '▲') : '<span style="opacity:0.3;">↕</span>'}
+              </th>
+              <th style="padding:10px 8px; text-align:left; color:#F59E0B; cursor:pointer;" onclick="window.sortAgedReceivables('aging1_30')" title="انقر للترتيب">
+                متأخر (1-30) ${_arSortKey === 'aging1_30' ? (_arSortDir === 'desc' ? '▼' : '▲') : '<span style="opacity:0.3;">↕</span>'}
+              </th>
+              <th style="padding:10px 8px; text-align:left; color:#F97316; cursor:pointer;" onclick="window.sortAgedReceivables('aging31_60')" title="انقر للترتيب">
+                متأخر (31-60) ${_arSortKey === 'aging31_60' ? (_arSortDir === 'desc' ? '▼' : '▲') : '<span style="opacity:0.3;">↕</span>'}
+              </th>
+              <th style="padding:10px 8px; text-align:left; color:#DC2626; cursor:pointer;" onclick="window.sortAgedReceivables('aging61_90')" title="انقر للترتيب">
+                متأخر (61-90) ${_arSortKey === 'aging61_90' ? (_arSortDir === 'desc' ? '▼' : '▲') : '<span style="opacity:0.3;">↕</span>'}
+              </th>
+              <th style="padding:10px 8px; text-align:left; color:#B91C1C; font-weight:900; cursor:pointer;" onclick="window.sortAgedReceivables('agingOver90')" title="انقر للترتيب حسب الأكثر تعثراً">
+                متعثر (+90 يوم) ${_arSortKey === 'agingOver90' ? (_arSortDir === 'desc' ? '▼' : '▲') : '<span style="opacity:0.3;">↕</span>'}
+              </th>
+              <th style="padding:10px 8px; text-align:center; width:85px;" class="no-print">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="ar-tbody"></tbody>
+          <tfoot id="ar-tfoot"></tfoot>
+        </table>
+      </div>
+    </div>
+  `;
+
+  window.filterAgedReceivables();
+}
+
+window.filterAgedReceivables = () => {
+  const rep = document.getElementById("ar-rep-filter")?.value || "";
+  const risk = document.getElementById("ar-risk-filter")?.value || "all";
+  const search = (document.getElementById("ar-search-input")?.value || "").trim().toLowerCase();
+
+  let filtered = [..._allAgedReceivables];
+
+  if (rep) {
+    filtered = filtered.filter(r => r.repName === rep);
+  }
+
+  if (risk === "over90") {
+    filtered = filtered.filter(r => r.agingOver90 > 0);
+  } else if (risk === "over60") {
+    filtered = filtered.filter(r => (r.agingOver90 + r.aging61_90) > 0);
+  } else if (risk === "over30") {
+    filtered = filtered.filter(r => (r.agingOver90 + r.aging61_90 + r.aging31_60) > 0);
+  } else if (risk === "current") {
+    filtered = filtered.filter(r => r.current > 0 && r.aging1_30 === 0 && r.aging31_60 === 0 && r.aging61_90 === 0 && r.agingOver90 === 0);
+  }
+
+  if (search) {
+    filtered = filtered.filter(r => 
+      (r.name || "").toLowerCase().includes(search) ||
+      (r.code || "").toLowerCase().includes(search) ||
+      (r.phone || "").includes(search) ||
+      (r.repName || "").toLowerCase().includes(search)
+    );
+  }
+
+  // Sort
+  filtered.sort((a, b) => {
+    let vA = a[_arSortKey];
+    let vB = b[_arSortKey];
+
+    if (typeof vA === "string") {
+      return _arSortDir === "asc" ? vA.localeCompare(vB) : vB.localeCompare(vA);
+    }
+    vA = parseFloat(vA || 0);
+    vB = parseFloat(vB || 0);
+    return _arSortDir === "asc" ? vA - vB : vB - vA;
+  });
+
+  _filteredAgedReceivables = filtered;
+
+  // Calculate Totals for filtered set
+  const totals = {
+    balance: 0,
+    current: 0,
+    aging1_30: 0,
+    aging31_60: 0,
+    aging61_90: 0,
+    agingOver90: 0
+  };
+
+  filtered.forEach(r => {
+    totals.balance += r.balance;
+    totals.current += r.current;
+    totals.aging1_30 += r.aging1_30;
+    totals.aging31_60 += r.aging31_60;
+    totals.aging61_90 += r.aging61_90;
+    totals.agingOver90 += r.agingOver90;
+  });
+
+  window._agedReceivablesRows = filtered;
+  window._agedReceivablesTotals = totals;
+
+  // Update KPI Cards
+  const setEl = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+  setEl("ar-kpi-total", formatCurrency(totals.balance));
+  setEl("ar-kpi-current", formatCurrency(totals.current));
+  setEl("ar-kpi-30", formatCurrency(totals.aging1_30));
+  setEl("ar-kpi-60", formatCurrency(totals.aging31_60));
+  setEl("ar-kpi-90", formatCurrency(totals.aging61_90));
+  setEl("ar-kpi-over90", formatCurrency(totals.agingOver90));
+  setEl("ar-kpi-count", `${filtered.length} عميل`);
+
+  // Render Table Body
+  const tbody = document.getElementById("ar-tbody");
+  const tfoot = document.getElementById("ar-tfoot");
+  if (!tbody || !tfoot) return;
+
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center; padding:36px; color:var(--text-2);">لا توجد مديونيات مطابقة لمعايير الفلترة المحددة</td></tr>`;
+    tfoot.innerHTML = "";
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((r, idx) => `
+    <tr style="border-bottom:1px solid var(--border-soft); transition:background .15s;" onmouseover="this.style.background='rgba(99,102,241,0.03)'" onmouseout="this.style.background=''">
+      <td style="padding:10px 8px; text-align:center; color:var(--text-2); font-size:11px;">${idx + 1}</td>
+      <td style="padding:10px 8px;">
+        <div style="font-weight:700; color:var(--text-0); cursor:pointer; display:inline-block;" onclick="window.openCustomerStatementFromAging('${r.id}')" title="انقر لفتح كشف الحساب">
+          ${r.name}
+        </div>
+        ${r.code ? `<div style="font-size:10.5px; color:var(--text-2); font-family:monospace;">كود: ${r.code}</div>` : ""}
+      </td>
+      <td style="padding:10px 8px; color:var(--text-1);">${r.repName}</td>
+      <td style="padding:10px 8px; text-align:center; color:var(--text-2); font-family:monospace;">${r.creditDays ? `${r.creditDays} ي` : "—"}</td>
+      <td class="mono font-bold" style="padding:10px 8px; text-align:left; color:var(--brand); font-size:13px;">${formatCurrency(r.balance)}</td>
+      <td class="mono" style="padding:10px 8px; text-align:left; color:${r.current ? '#10B981' : 'var(--text-dim)'}; font-weight:${r.current ? '700' : 'normal'};">${r.current ? formatCurrency(r.current) : "—"}</td>
+      <td class="mono" style="padding:10px 8px; text-align:left; color:${r.aging1_30 ? '#F59E0B' : 'var(--text-dim)'}; font-weight:${r.aging1_30 ? '700' : 'normal'};">${r.aging1_30 ? formatCurrency(r.aging1_30) : "—"}</td>
+      <td class="mono" style="padding:10px 8px; text-align:left; color:${r.aging31_60 ? '#F97316' : 'var(--text-dim)'}; font-weight:${r.aging31_60 ? '700' : 'normal'};">${r.aging31_60 ? formatCurrency(r.aging31_60) : "—"}</td>
+      <td class="mono" style="padding:10px 8px; text-align:left; color:${r.aging61_90 ? '#DC2626' : 'var(--text-dim)'}; font-weight:${r.aging61_90 ? '700' : 'normal'};">${r.aging61_90 ? formatCurrency(r.aging61_90) : "—"}</td>
+      <td class="mono font-bold" style="padding:10px 8px; text-align:left; color:${r.agingOver90 ? '#B91C1C' : 'var(--text-dim)'}; font-size:${r.agingOver90 ? '13px' : '12px'}; background:${r.agingOver90 ? 'rgba(185,28,28,0.05)' : 'transparent'};">${r.agingOver90 ? formatCurrency(r.agingOver90) : "—"}</td>
+      <td style="padding:6px 8px; text-align:center; white-space:nowrap;" class="no-print">
+        <div style="display:inline-flex; gap:4px; align-items:center;">
+          <button class="btn btn-icon sm btn-ghost" onclick="window.openCustomerStatementFromAging('${r.id}')" title="عرض كشف حساب العميل">
+            📊
+          </button>
+          ${r.phone ? `
+            <button class="btn btn-icon sm btn-ghost" onclick="window.sendCustomerDebtWhatsApp('${r.id}')" title="إرسال تذكير سداد عبر واتساب" style="color:#25D366;">
+              💬
+            </button>
+          ` : ''}
+        </div>
+      </td>
+    </tr>
+  `).join("");
+
+  tfoot.innerHTML = `
+    <tr style="background:var(--bg-2); border-top:2px solid var(--border); font-weight:bold; font-size:12px;">
+      <td colspan="4" style="padding:12px 8px; font-weight:900;">الإجمالي العام (${filtered.length} عميل)</td>
+      <td class="mono font-bold" style="padding:12px 8px; text-align:left; color:var(--brand); font-size:13.5px;">${formatCurrency(totals.balance)}</td>
+      <td class="mono font-bold" style="padding:12px 8px; text-align:left; color:#10B981;">${formatCurrency(totals.current)}</td>
+      <td class="mono font-bold" style="padding:12px 8px; text-align:left; color:#F59E0B;">${formatCurrency(totals.aging1_30)}</td>
+      <td class="mono font-bold" style="padding:12px 8px; text-align:left; color:#F97316;">${formatCurrency(totals.aging31_60)}</td>
+      <td class="mono font-bold" style="padding:12px 8px; text-align:left; color:#DC2626;">${formatCurrency(totals.aging61_90)}</td>
+      <td class="mono font-bold" style="padding:12px 8px; text-align:left; color:#B91C1C; font-size:13px; background:rgba(185,28,28,0.06);">${formatCurrency(totals.agingOver90)}</td>
+      <td class="no-print"></td>
+    </tr>
+  `;
+};
+
+window.sortAgedReceivables = (key) => {
+  if (_arSortKey === key) {
+    _arSortDir = _arSortDir === "desc" ? "asc" : "desc";
+  } else {
+    _arSortKey = key;
+    _arSortDir = (key === "name" || key === "repName") ? "asc" : "desc";
+  }
+  
+  const container = document.getElementById("fin-report-body");
+  if (container) renderAgedReceivablesLayout(container);
+};
+
+window.openCustomerStatementFromAging = (cId) => {
+  if (typeof window.navigate === "function") {
+    window.navigate("customer-statement");
+    setTimeout(() => {
+      if (typeof window.selectStmtCustomer === "function") {
+        window.selectStmtCustomer(cId);
+      }
+    }, 250);
+  }
+};
+
+window.sendCustomerDebtWhatsApp = (cId) => {
+  const r = _allAgedReceivables.find(x => x.id === cId);
+  if (!r) return;
+  const phone = (r.phone || "").replace(/[^0-9]/g, "");
+  if (!phone) {
+    if (window.showToast) window.showToast("رقم جوال العميل غير مسجل", "warning");
+    return;
+  }
+  const cleanPhone = phone.startsWith("0") ? "966" + phone.slice(1) : (phone.startsWith("966") ? phone : "966" + phone);
+  const coName = window.ERP_COMPANY?.name || "مؤسسة إدهام للمواد الغذائية";
+  
+  const msg = `مرحباً ${r.name}،\nتحية طيبة من ${coName}.\nنود تذكيركم بأن إجمالي الرصيد المستحق على حسابكم هو: *${formatCurrency(r.balance)}*.\n` +
+    (r.agingOver90 > 0 ? `⛔ مبالغ متأخرة أكثر من 90 يوم: *${formatCurrency(r.agingOver90)}*\n` : '') +
+    (r.aging61_90 > 0 ? `⚠️ مبالغ متأخرة (61-90 يوم): *${formatCurrency(r.aging61_90)}*\n` : '') +
+    `يرجى التكرم بالترتيب لسداد المبلغ، شاكرين ومقدرين حسن تعاونكم الدائم معنا!`;
+
+  window.open(`https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`, "_blank");
+};
+
+// ── تصدير أعمار الديون إلى Excel ──
+window.exportAgedReceivablesExcel = async () => {
+  const rows = window._agedReceivablesRows;
+  const totals = window._agedReceivablesTotals;
+  if (!rows || rows.length === 0) {
+    if (window.showToast) window.showToast("لا توجد بيانات لتصديرها", "warning");
+    else alert("لا توجد بيانات لتصديرها");
+    return;
+  }
+
+  const title = `تقرير مديونيات وأعمار ديون العملاء - ${new Date().toLocaleDateString("ar-SA-u-nu-latn")}`;
+  const headers = [
+    "#",
+    "العميل",
+    "الكود",
+    "المندوب",
+    "الهاتف",
+    "مهلة الائتمان (أيام)",
+    "إجمالي المديونية (الرصيد)",
+    "غير مستحق (خلال المهلة)",
+    "متأخر (1-30 يوم)",
+    "متأخر (31-60 يوم)",
+    "متأخر (61-90 يوم)",
+    "متعثر (+90 يوم)"
+  ];
+
+  const excelRows = rows.map((r, idx) => [
+    idx + 1,
+    r.name,
+    r.code || "—",
+    r.repName,
+    r.phone || "—",
+    r.creditDays || 0,
+    Math.round(r.balance * 100) / 100,
+    Math.round(r.current * 100) / 100,
+    Math.round(r.aging1_30 * 100) / 100,
+    Math.round(r.aging31_60 * 100) / 100,
+    Math.round(r.aging61_90 * 100) / 100,
+    Math.round(r.agingOver90 * 100) / 100
+  ]);
+
+  if (totals) {
+    excelRows.push([
+      "الإجمالي العام",
+      `عدد العملاء: ${rows.length}`,
+      "",
+      "",
+      "",
+      "",
+      Math.round(totals.balance * 100) / 100,
+      Math.round(totals.current * 100) / 100,
+      Math.round(totals.aging1_30 * 100) / 100,
+      Math.round(totals.aging31_60 * 100) / 100,
+      Math.round(totals.aging61_90 * 100) / 100,
+      Math.round(totals.agingOver90 * 100) / 100
+    ]);
+  }
+
+  const colWidths = [6, 32, 14, 20, 16, 16, 20, 20, 18, 18, 18, 20];
+
+  try {
+    await exportToExcel({
+      title,
+      headers,
+      rows: excelRows,
+      colWidths
+    });
+  } catch (err) {
+    console.error("Export Aged Receivables Excel error:", err);
+    alert("حدث خطأ أثناء التصدير: " + err.message);
+  }
+};
+
+// ── طباعة وتصدير أعمار الديون إلى PDF ──
+window.exportAgedReceivablesPDF = () => {
+  if (!window._agedReceivablesRows || window._agedReceivablesRows.length === 0) {
+    if (window.showToast) window.showToast("لا توجد بيانات للطباعة", "warning");
+    else alert("لا توجد بيانات للطباعة");
+    return;
+  }
+  window.print();
+};
+
 // 9. Customer Performance Analytics (تقرير أداء العملاء)
 // ──────────────────────────────────────────────────────────────
 async function renderCustomerAnalytics(container, from, to) {
@@ -2066,7 +3966,168 @@ function renderAnalyticsUI(container, from, to, daysDiff, selectedRep) {
   updateAnalyticsComponents(tableContainer, kpiContainer, champsContainer);
 }
 
+// ── Customer Performance Columns Visibility & Settings ──
+const CUSTPERF_DEFAULT_COLS = {
+  lastInvoiceDate: true,  // آخر فاتورة
+  lastReceiptDate: true,  // آخر تحصيل
+  invoiceCount:    true,  // الفواتير
+  totalSales:      true,  // المبيعات
+  totalCost:       true,  // التكلفة
+  profit:          true,  // الربح / %
+  collected:       true,  // المحصل
+  remainingAmount: true,  // المتبقي
+  collectionPct:   true,  // نسبة التحصيل
+  dailyAvg:        true,  // معدل يومي
+  avgInvoice:      true,  // متوسط الفاتورة
+  profitKpi:       true   // كروت الأرباح العلوية
+};
+
+function getCustPerfColSettings() {
+  try {
+    const saved = localStorage.getItem("idham_custperf_cols");
+    if (saved) return { ...CUSTPERF_DEFAULT_COLS, ...JSON.parse(saved) };
+  } catch(e) {}
+  return { ...CUSTPERF_DEFAULT_COLS };
+}
+
+function saveCustPerfColSettings(cols) {
+  try {
+    localStorage.setItem("idham_custperf_cols", JSON.stringify(cols));
+  } catch(e) {}
+}
+
+window.custperfCols = getCustPerfColSettings();
+
+window.toggleCustPerfCol = (key) => {
+  window.custperfCols[key] = !window.custperfCols[key];
+  saveCustPerfColSettings(window.custperfCols);
+  renderCustPerfColMenu();
+  const tableContainer = document.getElementById("custperf-table-wrapper");
+  const kpiContainer = document.getElementById("custperf-kpi-wrapper");
+  const champsContainer = document.getElementById("custperf-champs-wrapper");
+  if (tableContainer && kpiContainer && champsContainer) {
+    updateAnalyticsComponents(tableContainer, kpiContainer, champsContainer);
+  }
+};
+
+window.setCustPerfPreset = (preset) => {
+  if (preset === 'rep') {
+    // 🛡️ وضع عرض المندوب: إخفاء التكلفة والأرباح وكروت الأرباح
+    window.custperfCols.totalCost = false;
+    window.custperfCols.profit = false;
+    window.custperfCols.profitKpi = false;
+    window.custperfCols.lastInvoiceDate = true;
+    window.custperfCols.lastReceiptDate = true;
+    window.custperfCols.invoiceCount = true;
+    window.custperfCols.totalSales = true;
+    window.custperfCols.collected = true;
+    window.custperfCols.remainingAmount = true;
+    window.custperfCols.collectionPct = true;
+    window.custperfCols.dailyAvg = true;
+    window.custperfCols.avgInvoice = true;
+  } else if (preset === 'all') {
+    // 📊 عرض الكل
+    Object.keys(window.custperfCols).forEach(k => window.custperfCols[k] = true);
+  } else if (preset === 'minimal') {
+    // ⚡ الأساسي
+    window.custperfCols.lastInvoiceDate = false;
+    window.custperfCols.lastReceiptDate = false;
+    window.custperfCols.invoiceCount = true;
+    window.custperfCols.totalSales = true;
+    window.custperfCols.totalCost = false;
+    window.custperfCols.profit = false;
+    window.custperfCols.profitKpi = false;
+    window.custperfCols.collected = true;
+    window.custperfCols.remainingAmount = true;
+    window.custperfCols.collectionPct = true;
+    window.custperfCols.dailyAvg = false;
+    window.custperfCols.avgInvoice = false;
+  }
+  saveCustPerfColSettings(window.custperfCols);
+  renderCustPerfColMenu();
+  const tableContainer = document.getElementById("custperf-table-wrapper");
+  const kpiContainer = document.getElementById("custperf-kpi-wrapper");
+  const champsContainer = document.getElementById("custperf-champs-wrapper");
+  if (tableContainer && kpiContainer && champsContainer) {
+    updateAnalyticsComponents(tableContainer, kpiContainer, champsContainer);
+  }
+};
+
+window.toggleCustPerfColMenu = (e) => {
+  if (e) e.stopPropagation();
+  const menu = document.getElementById("custperf-col-dropdown");
+  if (!menu) return;
+  const isVisible = menu.style.display === "block";
+  if (isVisible) {
+    menu.style.display = "none";
+  } else {
+    renderCustPerfColMenu();
+    menu.style.display = "block";
+  }
+};
+
+function renderCustPerfColMenu() {
+  const menu = document.getElementById("custperf-col-dropdown");
+  if (!menu) return;
+  const cols = window.custperfCols;
+
+  const colList = [
+    { key: "totalSales",      label: "المبيعات (شامل)", icon: "💵" },
+    { key: "collected",       label: "المحصّل", icon: "✅" },
+    { key: "remainingAmount", label: "المتبقي (الذمم)", icon: "⏳" },
+    { key: "collectionPct",   label: "نسبة التحصيل", icon: "📊" },
+    { key: "invoiceCount",    label: "عدد الفواتير", icon: "📄" },
+    { key: "lastInvoiceDate", label: "تاريخ آخر فاتورة", icon: "📅" },
+    { key: "lastReceiptDate", label: "تاريخ آخر تحصيل", icon: "💰" },
+    { key: "dailyAvg",        label: "المعدل اليومي", icon: "📈" },
+    { key: "avgInvoice",      label: "متوسط الفاتورة", icon: "🧾" },
+    { key: "totalCost",       label: "التكلفة (خاص)", icon: "🔒" },
+    { key: "profit",          label: "الربح وهامش الربح (خاص)", icon: "🔒" },
+    { key: "profitKpi",       label: "كروت الأرباح العلوية (خاص)", icon: "🔒" }
+  ];
+
+  menu.innerHTML = `
+    <div style="font-weight:bold; font-size:13px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+      <span>⚙️ تخصيص أعمدة العرض</span>
+      <span style="font-size:10px; color:var(--text-3);">اختر ما ترغب بإظهاره</span>
+    </div>
+    <div style="display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap;">
+      <button type="button" class="btn btn-sm" onclick="setCustPerfPreset('rep')" style="font-size:11px; padding:4px 8px; background:#6366f1; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+        🛡️ وضع المندوب
+      </button>
+      <button type="button" class="btn btn-sm" onclick="setCustPerfPreset('all')" style="font-size:11px; padding:4px 8px; background:var(--bg-2); border:1px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">
+        عرض الكل
+      </button>
+      <button type="button" class="btn btn-sm" onclick="setCustPerfPreset('minimal')" style="font-size:11px; padding:4px 8px; background:var(--bg-2); border:1px solid var(--border); border-radius:6px; font-weight:bold; cursor:pointer;">
+        الأساسي
+      </button>
+    </div>
+    <div style="border-top:1px solid var(--border); padding-top:8px; display:grid; grid-template-columns:1fr; gap:6px; max-height:260px; overflow-y:auto;">
+      ${colList.map(c => `
+        <label style="display:flex; align-items:center; gap:8px; font-size:12px; cursor:pointer; padding:4px 6px; border-radius:4px; transition:background .15s;" onmouseover="this.style.background='var(--bg-2)'" onmouseout="this.style.background=''">
+          <input type="checkbox" ${cols[c.key] ? 'checked' : ''} onchange="toggleCustPerfCol('${c.key}')" style="cursor:pointer;" />
+          <span>${c.icon} ${c.label}</span>
+        </label>
+      `).join('')}
+    </div>
+  `;
+}
+
+if (!window._custperfClickListenerAdded) {
+  document.addEventListener("click", (e) => {
+    const menu = document.getElementById("custperf-col-dropdown");
+    const btn = document.getElementById("btn-custperf-cols");
+    if (menu && menu.style.display === "block") {
+      if (!menu.contains(e.target) && !btn?.contains(e.target)) {
+        menu.style.display = "none";
+      }
+    }
+  });
+  window._custperfClickListenerAdded = true;
+}
+
 function updateAnalyticsComponents(tableContainer, kpiContainer, champsContainer) {
+  const cols = window.custperfCols || CUSTPERF_DEFAULT_COLS;
   const tot = _custperfRows.reduce((acc,r)=>{ acc.sales+=r.totalSales; acc.netRevenue+=r.netRevenue; acc.cost+=r.totalCost; acc.profit+=r.profit; acc.collected+=r.collected; acc.remaining+=r.remainingAmount; acc.invoices+=r.invoiceCount; return acc; }, {sales:0,netRevenue:0,cost:0,profit:0,collected:0,remaining:0,invoices:0});
   const totProfitPct     = tot.netRevenue > 0 ? (tot.profit / tot.netRevenue * 100) : 0;
   const totCollectionPct = tot.sales > 0 ? Math.min(100, tot.collected / tot.sales * 100) : 0;
@@ -2092,17 +4153,17 @@ function updateAnalyticsComponents(tableContainer, kpiContainer, champsContainer
   kpiContainer.innerHTML = `
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:20px;">
       <div class="card" style="padding:16px;text-align:center;border-top:3px solid #6366f1;"><div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">إجمالي المبيعات (شامل الضريبة)</div><div style="font-size:17px;font-weight:900;font-family:monospace;color:#6366f1;">${formatCurrency(tot.sales)}</div><div style="font-size:10px;color:var(--text-3);margin-top:4px;">${tot.invoices} فاتورة • ${_custperfRows.length} عميل</div></div>
-      <div class="card" style="padding:16px;text-align:center;border-top:3px solid #10b981;"><div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">إجمالي الأرباح (صافي المبيعات)</div><div style="font-size:17px;font-weight:900;font-family:monospace;color:#10b981;">${formatCurrency(tot.profit)}</div><div style="font-size:10px;color:var(--text-3);margin-top:4px;">هامش ربح ${p2(totProfitPct)}%</div></div>
+      ${cols.profitKpi ? `<div class="card" style="padding:16px;text-align:center;border-top:3px solid #10b981;"><div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">إجمالي الأرباح (صافي المبيعات)</div><div style="font-size:17px;font-weight:900;font-family:monospace;color:#10b981;">${formatCurrency(tot.profit)}</div><div style="font-size:10px;color:var(--text-3);margin-top:4px;">هامش ربح ${p2(totProfitPct)}%</div></div>` : ''}
       <div class="card" style="padding:16px;text-align:center;border-top:3px solid #3b82f6;"><div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">إجمالي التحصيل</div><div style="font-size:17px;font-weight:900;font-family:monospace;color:#3b82f6;">${formatCurrency(tot.collected)}</div><div style="font-size:10px;color:var(--text-3);margin-top:4px;">نسبة ${p2(totCollectionPct)}%</div></div>
       <div class="card" style="padding:16px;text-align:center;border-top:3px solid #f59e0b;"><div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">إجمالي المتبقي</div><div style="font-size:17px;font-weight:900;font-family:monospace;color:#f59e0b;">${formatCurrency(tot.remaining)}</div><div style="font-size:10px;color:var(--text-3);margin-top:4px;">ذمم متبقية</div></div>
       <div class="card" style="padding:16px;text-align:center;border-top:3px solid #8b5cf6;"><div style="font-size:10px;color:var(--text-3);margin-bottom:4px;">المعدل اليومي</div><div style="font-size:17px;font-weight:900;font-family:monospace;color:#8b5cf6;">${formatCurrency(totDailyAvg)}</div><div style="font-size:10px;color:var(--text-3);margin-top:4px;">ر.س / يوم</div></div>
     </div>
   `;
 
-  champsContainer.innerHTML = (bestSales || bestProfit || bestCollection) ? `
+  champsContainer.innerHTML = (bestSales || (cols.profitKpi && bestProfit) || bestCollection) ? `
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px;">
       ${bestSales && bestSales.totalSales > 0 ? `<div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(99,102,241,.3);"><span style="font-size:28px;">🥇</span><div><div style="font-size:10px;color:#6366f1;font-weight:700;margin-bottom:2px;">الأعلى مبيعاً</div><div style="font-weight:700;font-size:13px;">${bestSales.name}</div><div style="font-size:11px;color:var(--text-2);">${formatCurrency(bestSales.totalSales)}</div></div></div>` : ''}
-      ${bestProfit && bestProfit.profit > 0 ? `<div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(16,185,129,.3);"><span style="font-size:28px;">💰</span><div><div style="font-size:10px;color:#10b981;font-weight:700;margin-bottom:2px;">الأعلى ربحاً (صافي)</div><div style="font-weight:700;font-size:13px;">${bestProfit.name}</div><div style="font-size:11px;color:var(--text-2);">${formatCurrency(bestProfit.profit)} (${p2(bestProfit.profitPct)}%)</div></div></div>` : ''}
+      ${cols.profitKpi && bestProfit && bestProfit.profit > 0 ? `<div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(16,185,129,.3);"><span style="font-size:28px;">💰</span><div><div style="font-size:10px;color:#10b981;font-weight:700;margin-bottom:2px;">الأعلى ربحاً (صافي)</div><div style="font-weight:700;font-size:13px;">${bestProfit.name}</div><div style="font-size:11px;color:var(--text-2);">${formatCurrency(bestProfit.profit)} (${p2(bestProfit.profitPct)}%)</div></div></div>` : ''}
       ${bestCollection && bestCollection.collectionPct > 0 ? `<div class="card" style="padding:12px 16px;display:flex;align-items:center;gap:12px;border:1px solid rgba(59,130,246,.3);"><span style="font-size:28px;">🏅</span><div><div style="font-size:10px;color:#3b82f6;font-weight:700;margin-bottom:2px;">الأفضل تحصيلاً</div><div style="font-weight:700;font-size:13px;">${bestCollection.name}</div><div style="font-size:11px;color:var(--text-2);">${p2(bestCollection.collectionPct)}%</div></div></div>` : ''}
     </div>
   ` : '';
@@ -2117,26 +4178,30 @@ function updateAnalyticsComponents(tableContainer, kpiContainer, champsContainer
     return `<tr style="border-bottom:1px solid rgba(255,255,255,.04); transition:background .15s;" onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="this.style.background=''">
       <td style="padding:10px 8px;text-align:center;color:var(--text-3);">${idx+1}</td>
       <td style="padding:10px 8px;"><div style="font-weight:700;font-size:13px;">${r.name}</div><div style="font-size:10px;color:var(--text-3);margin-top:2px;">مندوب: ${r.repName}</div></td>
-      <td style="padding:10px 8px;text-align:center;color:var(--text-2);white-space:nowrap;">${fd(r.lastInvoiceDate)}</td>
-      <td style="padding:10px 8px;text-align:center;color:var(--text-2);white-space:nowrap;">${fd(r.lastReceiptDate)}</td>
-      <td style="padding:10px 8px;text-align:center;color:var(--text-2);">${r.invoiceCount}</td>
-      <td style="padding:10px 8px;text-align:right;font-family:monospace;font-weight:700;">${formatCurrency(r.totalSales)}</td>
-      <td style="padding:10px 8px;text-align:right;font-family:monospace;color:var(--text-2);">${formatCurrency(r.totalCost)}</td>
+      ${cols.lastInvoiceDate ? `<td style="padding:10px 8px;text-align:center;color:var(--text-2);white-space:nowrap;">${fd(r.lastInvoiceDate)}</td>` : ''}
+      ${cols.lastReceiptDate ? `<td style="padding:10px 8px;text-align:center;color:var(--text-2);white-space:nowrap;">${fd(r.lastReceiptDate)}</td>` : ''}
+      ${cols.invoiceCount ? `<td style="padding:10px 8px;text-align:center;color:var(--text-2);">${r.invoiceCount}</td>` : ''}
+      ${cols.totalSales ? `<td style="padding:10px 8px;text-align:right;font-family:monospace;font-weight:700;">${formatCurrency(r.totalSales)}</td>` : ''}
+      ${cols.totalCost ? `<td style="padding:10px 8px;text-align:right;font-family:monospace;color:var(--text-2);">${formatCurrency(r.totalCost)}</td>` : ''}
+      ${cols.profit ? `
       <td style="padding:10px 8px;text-align:right;font-family:monospace;color:${r.profit>=0?'#10b981':'#ef4444'};font-weight:700;">
         ${formatCurrency(r.profit)}
         <div style="font-size:10px;font-weight:400;opacity:0.8;">${p2(r.profitPct)}%</div>
-      </td>
-      <td style="padding:10px 8px;text-align:right;font-family:monospace;">${formatCurrency(r.collected)}</td>
-      <td style="padding:10px 8px;text-align:right;font-family:monospace;color:${r.remainingAmount>0?'#f59e0b':'var(--text-3)'};">${r.remainingAmount>0?formatCurrency(r.remainingAmount):'—'}</td>
+      </td>` : ''}
+      ${cols.collected ? `<td style="padding:10px 8px;text-align:right;font-family:monospace;">${formatCurrency(r.collected)}</td>` : ''}
+      ${cols.remainingAmount ? `<td style="padding:10px 8px;text-align:right;font-family:monospace;color:${r.remainingAmount>0?'#f59e0b':'var(--text-3)'};">${r.remainingAmount>0?formatCurrency(r.remainingAmount):'—'}</td>` : ''}
+      ${cols.collectionPct ? `
       <td style="padding:10px 8px;text-align:center;">
         <div style="display:inline-flex;align-items:center;gap:5px;background:${cb.bg};color:${cb.color};padding:4px 10px;border-radius:20px;font-weight:700;font-size:12px;">
           ${cb.icon} ${p2(r.collectionPct)}%
         </div>
-      </td>
-      <td style="padding:10px 8px;text-align:right;font-family:monospace;color:var(--text-2);">${formatCurrency(r.dailyAvg)}</td>
-      <td style="padding:10px 8px;text-align:right;font-family:monospace;color:var(--text-2);">${formatCurrency(r.avgInvoice)}</td>
+      </td>` : ''}
+      ${cols.dailyAvg ? `<td style="padding:10px 8px;text-align:right;font-family:monospace;color:var(--text-2);">${formatCurrency(r.dailyAvg)}</td>` : ''}
+      ${cols.avgInvoice ? `<td style="padding:10px 8px;text-align:right;font-family:monospace;color:var(--text-2);">${formatCurrency(r.avgInvoice)}</td>` : ''}
     </tr>`;
   }).join('');
+
+  const leadColSpan = 2 + (cols.lastInvoiceDate ? 1 : 0) + (cols.lastReceiptDate ? 1 : 0);
 
   tableContainer.innerHTML = `
     <div class="table-container" style="overflow-x:auto;">
@@ -2145,34 +4210,34 @@ function updateAnalyticsComponents(tableContainer, kpiContainer, champsContainer
           <tr style="background:var(--bg-2);border-bottom:2px solid var(--border);user-select:none;">
             <th style="padding:10px 8px;text-align:center;">#</th>
             <th onclick="toggleCustPerfSort('name')" style="padding:10px 8px;text-align:right;cursor:pointer;">العميل${renderSortArrow('name')}</th>
-            <th onclick="toggleCustPerfSort('lastInvoiceDate')" style="padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;">آخر فاتورة${renderSortArrow('lastInvoiceDate')}</th>
-            <th onclick="toggleCustPerfSort('lastReceiptDate')" style="padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;">آخر تحصيل${renderSortArrow('lastReceiptDate')}</th>
-            <th onclick="toggleCustPerfSort('invoiceCount')" style="padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;">الفواتير${renderSortArrow('invoiceCount')}</th>
-            <th onclick="toggleCustPerfSort('totalSales')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">المبيعات${renderSortArrow('totalSales')}</th>
-            <th onclick="toggleCustPerfSort('totalCost')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">التكلفة${renderSortArrow('totalCost')}</th>
-            <th onclick="toggleCustPerfSort('profit')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">الربح / %${renderSortArrow('profit')}</th>
-            <th onclick="toggleCustPerfSort('collected')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">المحصّل${renderSortArrow('collected')}</th>
-            <th onclick="toggleCustPerfSort('remainingAmount')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">المتبقي${renderSortArrow('remainingAmount')}</th>
-            <th onclick="toggleCustPerfSort('collectionPct')" style="padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;">نسبة التحصيل${renderSortArrow('collectionPct')}</th>
-            <th onclick="toggleCustPerfSort('dailyAvg')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">معدل يومي${renderSortArrow('dailyAvg')}</th>
-            <th onclick="toggleCustPerfSort('avgInvoice')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">متوسط الفاتورة${renderSortArrow('avgInvoice')}</th>
+            ${cols.lastInvoiceDate ? `<th onclick="toggleCustPerfSort('lastInvoiceDate')" style="padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;">آخر فاتورة${renderSortArrow('lastInvoiceDate')}</th>` : ''}
+            ${cols.lastReceiptDate ? `<th onclick="toggleCustPerfSort('lastReceiptDate')" style="padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;">آخر تحصيل${renderSortArrow('lastReceiptDate')}</th>` : ''}
+            ${cols.invoiceCount ? `<th onclick="toggleCustPerfSort('invoiceCount')" style="padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;">الفواتير${renderSortArrow('invoiceCount')}</th>` : ''}
+            ${cols.totalSales ? `<th onclick="toggleCustPerfSort('totalSales')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">المبيعات${renderSortArrow('totalSales')}</th>` : ''}
+            ${cols.totalCost ? `<th onclick="toggleCustPerfSort('totalCost')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">التكلفة${renderSortArrow('totalCost')}</th>` : ''}
+            ${cols.profit ? `<th onclick="toggleCustPerfSort('profit')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">الربح / %${renderSortArrow('profit')}</th>` : ''}
+            ${cols.collected ? `<th onclick="toggleCustPerfSort('collected')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">المحصّل${renderSortArrow('collected')}</th>` : ''}
+            ${cols.remainingAmount ? `<th onclick="toggleCustPerfSort('remainingAmount')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">المتبقي${renderSortArrow('remainingAmount')}</th>` : ''}
+            ${cols.collectionPct ? `<th onclick="toggleCustPerfSort('collectionPct')" style="padding:10px 8px;text-align:center;cursor:pointer;white-space:nowrap;">نسبة التحصيل${renderSortArrow('collectionPct')}</th>` : ''}
+            ${cols.dailyAvg ? `<th onclick="toggleCustPerfSort('dailyAvg')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">معدل يومي${renderSortArrow('dailyAvg')}</th>` : ''}
+            ${cols.avgInvoice ? `<th onclick="toggleCustPerfSort('avgInvoice')" style="padding:10px 8px;text-align:right;cursor:pointer;white-space:nowrap;">متوسط الفاتورة${renderSortArrow('avgInvoice')}</th>` : ''}
           </tr>
         </thead>
         <tbody>
-          ${_custperfRows.length === 0 ? `<tr><td colspan="13" style="text-align:center;padding:40px;color:var(--text-2);">لا توجد بيانات للفترة المختارة</td></tr>` : rowsHTML}
+          ${_custperfRows.length === 0 ? `<tr><td colspan="15" style="text-align:center;padding:40px;color:var(--text-2);">لا توجد بيانات للفترة المختارة</td></tr>` : rowsHTML}
         </tbody>
         <tfoot>
           <tr style="background:var(--bg-2);border-top:2px solid var(--border);font-weight:900;">
-            <td colspan="4" style="padding:12px 8px;">الإجمالي (${_custperfRows.length} عميل)</td>
-            <td style="padding:12px 8px;text-align:center;">${tot.invoices}</td>
-            <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#6366f1;">${formatCurrency(tot.sales)}</td>
-            <td style="padding:12px 8px;text-align:right;font-family:monospace;">${formatCurrency(tot.cost)}</td>
-            <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#10b981;">${formatCurrency(tot.profit)} <span style="font-size:10px;font-weight:400;">(${p2(totProfitPct)}%)</span></td>
-            <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#3b82f6;">${formatCurrency(tot.collected)}</td>
-            <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#f59e0b;">${formatCurrency(tot.remaining)}</td>
-            <td style="padding:12px 8px;text-align:center;font-weight:900;color:${totCollectionPct >= 80 ? '#10b981' : totCollectionPct >= 50 ? '#f59e0b' : '#ef4444'};">${p2(totCollectionPct)}%</td>
-            <td style="padding:12px 8px;text-align:right;font-family:monospace;color:#8b5cf6;">${formatCurrency(totDailyAvg)}</td>
-            <td style="padding:12px 8px;text-align:right;font-family:monospace;">${formatCurrency(tot.invoices > 0 ? tot.sales / tot.invoices : 0)}</td>
+            <td colspan="${leadColSpan}" style="padding:12px 8px;">الإجمالي (${_custperfRows.length} عميل)</td>
+            ${cols.invoiceCount ? `<td style="padding:12px 8px;text-align:center;">${tot.invoices}</td>` : ''}
+            ${cols.totalSales ? `<td style="padding:12px 8px;text-align:right;font-family:monospace;color:#6366f1;">${formatCurrency(tot.sales)}</td>` : ''}
+            ${cols.totalCost ? `<td style="padding:12px 8px;text-align:right;font-family:monospace;">${formatCurrency(tot.cost)}</td>` : ''}
+            ${cols.profit ? `<td style="padding:12px 8px;text-align:right;font-family:monospace;color:#10b981;">${formatCurrency(tot.profit)} <span style="font-size:10px;font-weight:400;">(${p2(totProfitPct)}%)</span></td>` : ''}
+            ${cols.collected ? `<td style="padding:12px 8px;text-align:right;font-family:monospace;color:#3b82f6;">${formatCurrency(tot.collected)}</td>` : ''}
+            ${cols.remainingAmount ? `<td style="padding:12px 8px;text-align:right;font-family:monospace;color:#f59e0b;">${formatCurrency(tot.remaining)}</td>` : ''}
+            ${cols.collectionPct ? `<td style="padding:12px 8px;text-align:center;font-weight:900;color:${totCollectionPct >= 80 ? '#10b981' : totCollectionPct >= 50 ? '#f59e0b' : '#ef4444'};">${p2(totCollectionPct)}%</td>` : ''}
+            ${cols.dailyAvg ? `<td style="padding:12px 8px;text-align:right;font-family:monospace;color:#8b5cf6;">${formatCurrency(totDailyAvg)}</td>` : ''}
+            ${cols.avgInvoice ? `<td style="padding:12px 8px;text-align:right;font-family:monospace;">${formatCurrency(tot.invoices > 0 ? tot.sales / tot.invoices : 0)}</td>` : ''}
           </tr>
         </tfoot>
       </table>
@@ -2182,3 +4247,99 @@ function updateAnalyticsComponents(tableContainer, kpiContainer, champsContainer
     </div>
   `;
 }
+
+// ── تصدير تقرير أداء العملاء إلى Excel ──
+window.exportCustPerfExcel = async () => {
+  if (!_custperfRows || _custperfRows.length === 0) {
+    alert("لا توجد بيانات لتصديرها");
+    return;
+  }
+
+  const cols = window.custperfCols || CUSTPERF_DEFAULT_COLS;
+  const from = document.getElementById("fin-from")?.value || "";
+  const to = document.getElementById("fin-to")?.value || "";
+  const selectedRep = window.custperfRep ? ` (مندوب: ${window.custperfRep})` : "";
+  const title = `تقرير أداء العملاء للفترة من ${from} إلى ${to}${selectedRep}`;
+
+  const headers = ["#", "اسم العميل", "المندوب"];
+  const colWidths = [6, 32, 20];
+
+  if (cols.lastInvoiceDate) { headers.push("آخر فاتورة"); colWidths.push(14); }
+  if (cols.lastReceiptDate) { headers.push("آخر تحصيل"); colWidths.push(14); }
+  if (cols.invoiceCount)    { headers.push("عدد الفواتير"); colWidths.push(12); }
+  if (cols.totalSales)      { headers.push("المبيعات (شامل)"); colWidths.push(20); }
+  if (cols.totalCost)       { headers.push("التكلفة"); colWidths.push(18); }
+  if (cols.profit)          { headers.push("صافي الربح", "نسبة الربح %"); colWidths.push(18, 14); }
+  if (cols.collected)       { headers.push("المحصل"); colWidths.push(18); }
+  if (cols.remainingAmount) { headers.push("المتبقي (الذمم)"); colWidths.push(18); }
+  if (cols.collectionPct)   { headers.push("نسبة التحصيل %"); colWidths.push(16); }
+  if (cols.dailyAvg)        { headers.push("المعدل اليومي"); colWidths.push(16); }
+  if (cols.avgInvoice)      { headers.push("متوسط الفاتورة"); colWidths.push(16); }
+
+  const rows = _custperfRows.map((r, idx) => {
+    const row = [idx + 1, r.name, r.repName];
+    if (cols.lastInvoiceDate) row.push(r.lastInvoiceDate || "—");
+    if (cols.lastReceiptDate) row.push(r.lastReceiptDate || "—");
+    if (cols.invoiceCount)    row.push(r.invoiceCount);
+    if (cols.totalSales)      row.push(Math.round(r.totalSales * 100) / 100);
+    if (cols.totalCost)       row.push(Math.round(r.totalCost * 100) / 100);
+    if (cols.profit)          row.push(Math.round(r.profit * 100) / 100, `${(Math.round(r.profitPct * 100) / 100).toFixed(2)}%`);
+    if (cols.collected)       row.push(Math.round(r.collected * 100) / 100);
+    if (cols.remainingAmount) row.push(Math.round(r.remainingAmount * 100) / 100);
+    if (cols.collectionPct)   row.push(`${(Math.round(r.collectionPct * 100) / 100).toFixed(2)}%`);
+    if (cols.dailyAvg)        row.push(Math.round(r.dailyAvg * 100) / 100);
+    if (cols.avgInvoice)      row.push(Math.round(r.avgInvoice * 100) / 100);
+    return row;
+  });
+
+  // Add Totals row
+  const tot = _custperfRows.reduce((acc, r) => {
+    acc.sales += r.totalSales;
+    acc.cost += r.totalCost;
+    acc.profit += r.profit;
+    acc.collected += r.collected;
+    acc.remaining += r.remainingAmount;
+    acc.invoices += r.invoiceCount;
+    return acc;
+  }, { sales: 0, cost: 0, profit: 0, collected: 0, remaining: 0, invoices: 0 });
+
+  const totProfitPct = tot.sales > 0 ? (tot.profit / (tot.sales / 1.15) * 100) : 0;
+  const totCollectionPct = tot.sales > 0 ? Math.min(100, tot.collected / tot.sales * 100) : 0;
+
+  const totalRow = ["الإجمالي", `عدد العملاء: ${_custperfRows.length}`, ""];
+  if (cols.lastInvoiceDate) totalRow.push("");
+  if (cols.lastReceiptDate) totalRow.push("");
+  if (cols.invoiceCount)    totalRow.push(tot.invoices);
+  if (cols.totalSales)      totalRow.push(Math.round(tot.sales * 100) / 100);
+  if (cols.totalCost)       totalRow.push(Math.round(tot.cost * 100) / 100);
+  if (cols.profit)          totalRow.push(Math.round(tot.profit * 100) / 100, `${totProfitPct.toFixed(2)}%`);
+  if (cols.collected)       totalRow.push(Math.round(tot.collected * 100) / 100);
+  if (cols.remainingAmount) totalRow.push(Math.round(tot.remaining * 100) / 100);
+  if (cols.collectionPct)   totalRow.push(`${totCollectionPct.toFixed(2)}%`);
+  if (cols.dailyAvg)        totalRow.push("");
+  if (cols.avgInvoice)      totalRow.push("");
+  rows.push(totalRow);
+
+  try {
+    await exportToExcel({
+      title,
+      headers,
+      rows,
+      colWidths
+    });
+  } catch (err) {
+    console.error("Export Excel error:", err);
+    alert("حدث خطأ أثناء تصدير ملف Excel: " + err.message);
+  }
+};
+
+// ── طباعة وتصدير تقرير أداء العملاء إلى PDF ──
+window.exportCustPerfPDF = () => {
+  if (!_custperfRows || _custperfRows.length === 0) {
+    alert("لا توجد بيانات للطباعة");
+    return;
+  }
+  window.print();
+};
+
+
