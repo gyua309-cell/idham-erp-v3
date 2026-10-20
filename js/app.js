@@ -95,22 +95,36 @@ import {
 import { initF8Search } from "./utils/f8-search.js?v=39.1";
 import "./utils/archive-helper.js";
 
+// Global Trust Receipt & Debt Ack helpers
+window.openTrustReceiptModal = async (cust, opts) => {
+  const { openTrustReceiptModal } = await import("./modules/trust-receipts.js?v=2.6");
+  return openTrustReceiptModal(cust, opts);
+};
+window.openDebtAcknowledgmentModal = async (cust, opts) => {
+  const { openDebtAcknowledgmentModal } = await import("./modules/debt-acknowledgment.js?v=2.2");
+  return openDebtAcknowledgmentModal(cust, opts);
+};
+window.openGoodsReceiptAckModal = async (opts) => {
+  const { openGoodsReceiptAckModal } = await import("./modules/goods-receipt-ack.js?v=2.3");
+  return openGoodsReceiptAckModal(opts);
+};
+
 // ──────────────────────────────────────────
 // Modules (lazy imports)
 // ──────────────────────────────────────────
 const ROUTES = {
   "dashboard":                () => import("./modules/dashboard.js?v=39.2"),
-  "expenses":                 () => import("./modules/expenses.js?v=39.6"),
-  "receipts":                 () => import("./modules/receipts.js?v=44.0"),
-  "payments":                 () => import("./modules/expenses.js?v=41.9"),
-  "products":                 () => import("./modules/products.js?v=44.0"),
-  "categories":               () => import("./modules/categories.js?v=39.2"),
+  "expenses":                 () => import("./modules/expenses.js?v=42.0"),
+  "receipts":                 () => import("./modules/receipts.js?v=45.0"),
+  "payments":                 () => import("./modules/expenses.js?v=42.0"),
+  "products":                 () => import("./modules/products.js?v=48.0"),
+  "categories":               () => import("./modules/categories.js?v=40.0"),
   "warehouses":               () => import("./modules/warehouses.js?v=39.6"),
-  "inventory-ops":            () => import("./modules/inventory-ops.js?v=41.0"),
+  "inventory-ops":            () => import("./modules/inventory-ops.js?v=41.1"),
   "inventory-closing":        () => import("./modules/inventory-closing.js?v=39.2"),
   "inventory-dashboard":      () => import("./modules/inventory-dashboard.js?v=39.2"),
   "stock-transfer":           () => import("./modules/stock-transfer.js?v=45.3"),
-  "stock-card":               () => import("./modules/stock-card.js?v=51.0"),
+  "stock-card":               () => import("./modules/stock-card.js?v=55.1"),
   "inventory-locations":      () => import("./modules/inventory-locations.js?v=47.0"),
   "reorder-points":           () => import("./modules/reorder-points.js?v=39.2"),
   "expiry-tracking":          () => import("./modules/expiry-tracking.js?v=39.2"),
@@ -122,49 +136,53 @@ const ROUTES = {
   "product-profit-margins":   () => import("./modules/product-profit-margins.js?v=1.0"),
   "stock-movement-balance":   () => import("./modules/stock-movement-balance.js?v=1.0"),
   "inventory-replenishment":  () => import("./modules/inventory-replenishment.js?v=1.1"),
-  "customers":                () => import("./modules/customers.js?v=42.0"),
+  "customers":                () => import("./modules/customers.js?v=47.0"),
   "customer-crm":             () => import("./modules/customer-crm.js?v=1.0"),
   "customer-segments":        () => import("./modules/customer-segments.js?v=1.0"),
   "customer-complaints":      () => import("./modules/customer-complaints.js?v=1.0"),
   "customer-loyalty":         () => import("./modules/customer-loyalty.js?v=1.0"),
   "customer-contracts":       () => import("./modules/customer-contracts.js?v=1.0"),
-  "customer-statement":       () => import("./modules/customer-statement.js?v=2.0"),
-  "suppliers":                () => import("./modules/suppliers.js?v=40.0"),
+  "customer-statement":       () => import("./modules/customer-statement.js?v=2.2"),
+  "suppliers":                () => import("./modules/suppliers.js?v=41.0"),
   "supplier-statement":       () => import("./modules/supplier-statement.js?v=3.0"),
   "supplier-contracts":       () => import("./modules/supplier-contracts.js?v=1.0"),
   "supplier-evaluations":     () => import("./modules/supplier-evaluations.js?v=1.0"),
   "supplier-performance":     () => import("./modules/supplier-performance.js?v=1.1"),
   "supplier-quotations":      () => import("./modules/supplier-quotations.js?v=1.0"),
   "supplier-claims":          () => import("./modules/supplier-claims.js?v=1.0"),
-  "supplier-price-history":   () => import("./modules/supplier-price-history.js?v=1.0"),
+  "supplier-price-history":   () => import("./modules/supplier-price-history.js?v=3.9"),
   "supplier-notes":           () => import("./modules/supplier-notes.js?v=1.0"),
   "purchase-orders":          () => import("./modules/purchase-orders.js?v=1.0"),
   "supplier-deliveries":      () => import("./modules/supplier-deliveries.js?v=1.0"),
   "supplier-rebates":         () => import("./modules/supplier-rebates.js?v=1.0"),
   "price-lists":              () => import("./modules/price-lists.js?v=39.2"),
   "sales-reps":               () => import("./modules/sales-reps.js?v=41.0"),
-  "rep-performance":          () => import("./modules/reports/rep-performance.js?v=46.0"),
-  "rep-daily-journal":        () => import("./modules/reports/rep-daily-journal.js?v=7.1"),
-  "cash-boxes":               () => import("./modules/cash-boxes.js?v=39.3"),
-  "bank-accounts":            () => import("./modules/bank-accounts.js?v=39.2"),
+  "rep-performance":          () => import("./modules/reports/rep-performance.js?v=47.0"),
+  "rep-daily-journal":        () => import("./modules/reports/rep-daily-journal.js?v=15.0"),
+  "cash-boxes":               () => import("./modules/cash-boxes.js?v=46.0"),
+  "bank-accounts":            () => import("./modules/bank-accounts.js?v=41.0"),
   "cheques":                  () => import("./modules/cheques.js?v=39.2"),
-  "promissory-notes":         () => import("./modules/promissory-notes.js?v=1.9"),
-  "sales-invoices":           () => import("./modules/sales-invoices.js?v=50.0"),
+  "promissory-notes":         () => import("./modules/promissory-notes.js?v=2.4"),
+  "trust-receipts":           () => import("./modules/trust-receipts.js?v=2.6"),
+  "goods-receipt-ack":        () => import("./modules/goods-receipt-ack.js?v=2.3"),
+  "sales-invoices":           () => import("./modules/sales-invoices.js?v=59.0"),
+  "broker-statement":         () => import("./modules/broker-statement.js?v=1.0"),
+  "delivery-notes":           () => import("./modules/delivery-notes.js?v=2.3"),
   "sales-returns":            () => import("./modules/sales-returns.js?v=39.5"),
-  "quotations":               () => import("./modules/quotations.js?v=52.0"),
+  "quotations":               () => import("./modules/quotations.js?v=68.0"),
   "pos":                      () => import("./modules/pos.js?v=39.2"),
-  "purchase-invoices":        () => import("./modules/purchase-invoices.js?v=46.0"),
-  "purchase-returns":         () => import("./modules/purchase-returns.js?v=43.0"),
-  "chart-of-accounts":        () => import("./modules/chart-of-accounts.js?v=43.0"),
-  "journal-entries":          () => import("./modules/journal-entries.js?v=44.0"),
-  "financial-reports":        () => import("./modules/financial-reports.js?v=43.1"),
+  "purchase-invoices":        () => import("./modules/purchase-invoices.js?v=49.0"),
+  "purchase-returns":         () => import("./modules/purchase-returns.js?v=44.0"),
+  "chart-of-accounts":        () => import("./modules/chart-of-accounts.js?v=43.1"),
+  "journal-entries":          () => import("./modules/journal-entries.js?v=52.0"),
+  "financial-reports":        () => import("./modules/financial-reports.js?v=43.2"),
   "report-sales-product":     () => import("./modules/reports/sales-by-product.js?v=39.2"),
   "report-sales-rep":         () => import("./modules/reports/sales-by-rep.js?v=39.2"),
   "report-sales-customer":    () => import("./modules/reports/sales-by-customer.js?v=39.2"),
   "report-customer-matrix":   () => import("./modules/reports/customer-monthly-matrix.js?v=1.1"),
   "report-stock":             () => import("./modules/reports/stock-report.js?v=39.2"),
-  "report-customer-statement":() => import("./modules/reports/customer-statement.js?v=40.0"),
-  "report-hierarchical-debt": () => import("./modules/reports/hierarchical-debt.js?v=1.0"),
+  "report-customer-statement":() => import("./modules/reports/customer-statement.js?v=41.1"),
+  "report-hierarchical-debt": () => import("./modules/reports/hierarchical-debt.js?v=1.2"),
   "report-consolidated-balances":() => import("./modules/reports/consolidated-balances.js?v=46.0"),
   "report-warehouse-comparison":() => import("./modules/reports/warehouse-comparison.js?v=44.0"),
   "report-profit-loss":       () => import("./modules/reports/profit-loss.js?v=39.2"),
@@ -179,7 +197,7 @@ const ROUTES = {
   "financial-analysis":       () => import("./modules/financial-analysis.js?v=43.0"),
   "realtime-cogs":           () => import("./modules/reports/realtime-cogs.js?v=1.0"),
   "inventory-reports":        () => import("./modules/reports/inventory-reports.js?v=39.2"),
-  "purchase-requests":        () => import("./modules/purchase-requests.js?v=39.5"),
+  "purchase-requests":        () => import("./modules/purchase-requests.js?v=39.7"),
   "cost-centers":             () => import("./modules/cost-centers.js?v=50.0"),
   "data-reset":               () => import("./modules/data-reset.js?v=42.0"),
   "archive":                  () => import("./modules/archive.js?v=42.0"),
@@ -217,6 +235,7 @@ const ROUTE_LABELS = {
   "customer-loyalty":          "نقاط الولاء",
   "customer-contracts":        "العقود والاتفاقيات",
   "customer-statement":        "كشف حساب عميل",
+  "broker-statement":          "كشف حساب ومستحقات الوسيط (زياد)",
   "suppliers":                 "الموردين",
   "supplier-statement":        "كشف حساب مورد تفصيلي",
   "supplier-contracts":        "عقود واتفاقيات الموردين",
@@ -224,7 +243,7 @@ const ROUTE_LABELS = {
   "supplier-performance":      "أداء تصريف الموردين ومقارنة المشتريات بالمبيعات",
   "supplier-quotations":       "مقارنة عروض أسعار الموردين",
   "supplier-claims":           "مطالبات وتوالف الموردين",
-  "supplier-price-history":    "تتبع أسعار الشراء التاريخية",
+  "supplier-price-history":    "تقرير مشتريات وتقلبات أسعار الموردين",
   "supplier-notes":            "الشروط البنكية وملاحظات الموردين",
   "purchase-orders":           "أوامر الشراء الرسمية (PO)",
   "supplier-deliveries":       "جدولة شحنات الموردين",
@@ -237,7 +256,9 @@ const ROUTE_LABELS = {
   "bank-accounts":             "الحسابات البنكية",
   "cheques":                   "أوراق القبض والدفع (شيكات)",
   "promissory-notes":          "سندات الأمر",
+  "trust-receipts":            "سندات الأمانة والعهدة المالية",
   "sales-invoices":            "فواتير المبيعات",
+  "delivery-notes":            "سندات تسليم البضاعة (أذون تسليم مبيعات)",
   "quotations":                "عروض الأسعار",
   "pos":                       "نقطة البيع السريعة",
   "sales-returns":             "مردودات البيع والخصوم",
@@ -523,6 +544,13 @@ function showApp(user) {
 
   // Background preloader — starts immediately after UI shows
   setTimeout(() => {
+    // 0. Automatic Cache Invalidation on Version Bump
+    const APP_CACHE_VERSION = "55.0";
+    if (localStorage.getItem("idham_erp_cache_version") !== APP_CACHE_VERSION) {
+      localStorage.setItem("idham_erp_cache_version", APP_CACHE_VERSION);
+      import("./utils/db.js").then(m => m.clearERPCache()).catch(() => {});
+    }
+
     // 1. Load company settings into localStorage (for export functions)
     import("./firebase-config.js").then(({ db, COMPANY_ID }) => {
       import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js").then(({ doc, getDoc }) => {
@@ -646,6 +674,32 @@ async function navigateToHash() {
 }
 
 // ──────────────────────────────────────────
+// Top Progress Bar for Seamless Feedback
+// ──────────────────────────────────────────
+function startProgressBar() {
+  const bar = document.getElementById("top-progress-bar");
+  if (!bar) return;
+  bar.style.transition = "width 0.22s ease-out, opacity 0.15s ease";
+  bar.style.opacity = "1";
+  bar.style.width = "35%";
+  setTimeout(() => {
+    if (bar && bar.style.opacity === "1") bar.style.width = "75%";
+  }, 100);
+}
+
+function completeProgressBar() {
+  const bar = document.getElementById("top-progress-bar");
+  if (!bar) return;
+  bar.style.width = "100%";
+  setTimeout(() => {
+    bar.style.opacity = "0";
+    setTimeout(() => {
+      bar.style.width = "0%";
+    }, 250);
+  }, 180);
+}
+
+// ──────────────────────────────────────────
 // Page DOM Cache — stores rendered pages in memory for 0ms navigation
 // ──────────────────────────────────────────
 const _pageCache = new Map();        // route → {node, unsub}
@@ -656,8 +710,11 @@ const CACHE_BYPASS = new Set([
 window.navigate = async (route, pushState = true) => {
   if (!ROUTES[route]) { route = "dashboard"; }
 
+  startProgressBar();
+
   // Don't re-navigate to the same route
   if (route === currentRoute && _pageCache.has(route)) {
+    completeProgressBar();
     return;
   }
 
@@ -706,6 +763,7 @@ window.navigate = async (route, pushState = true) => {
       }
     }
 
+    completeProgressBar();
     return;
   }
 
@@ -723,7 +781,7 @@ window.navigate = async (route, pushState = true) => {
       module = await ROUTES[route]();
     } catch (importErr) {
       console.warn(`[Router] Initial module import for '${route}' failed, retrying with cache buster...`, importErr);
-      const fileUrl = `./modules/${route}.js?t=${Date.now()}`;
+      const fileUrl = `./js/modules/${route}.js?t=${Date.now()}`;
       module = await import(fileUrl);
     }
     if (module && module.render) {
@@ -741,6 +799,8 @@ window.navigate = async (route, pushState = true) => {
         _pageCache.set(route, { node: pageNode, unsub });
       }
 
+      completeProgressBar();
+
       if (["dashboard", "sales-invoices", "stock-transfer"].includes(route)) {
         setTimeout(async () => {
           try {
@@ -749,8 +809,11 @@ window.navigate = async (route, pushState = true) => {
           } catch (_) {}
         }, 800);
       }
+    } else {
+      completeProgressBar();
     }
   } catch (err) {
+    completeProgressBar();
     console.error("Route error:", err);
     const stackInfo = (err.stack || err.message || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     outlet.innerHTML = `
@@ -831,7 +894,7 @@ function _buildSkeleton(route) {
   if (["products","categories","customers","suppliers","warehouses"].includes(route)) {
     return skHeader() + skKPIs(4) + skTable(12, 8) + end;
   }
-  if (["sales-invoices","purchase-invoices","sales-returns","purchase-returns"].includes(route)) {
+  if (["sales-invoices","purchase-invoices","sales-returns","purchase-returns","trust-receipts","promissory-notes"].includes(route)) {
     return skHeader() + skKPIs(3) + skTable(9, 10) + end;
   }
   if (["inventory-dashboard"].includes(route)) {
@@ -1309,8 +1372,8 @@ initF8Search();
 
 window.getCompanyPrintHeaderHTML = (reportTitle, subtitle) => {
   let co = {
-    name: "شركة نظم الإمداد الحديثة",
-    vatNumber: "312448150500003", phone: "0549141648", email: "Nuzmalamdad@gmail.com", logoBase64: "", crNumber: "4700123180", address: "7480 — الشارع: عامر الشعبي", city: "ينبع", zip: "13315", country: "المملكة العربية السعودية"
+    name: "شركة نظم الإمداد المتطورة",
+    vatNumber: "314996148100003", phone: "0549141648", email: "Nuzmalamdad@gmail.com", logoBase64: "", crNumber: "7054969006", address: "ينبع الصناعية 2179", city: "ينبع", zip: "46414", country: "المملكة العربية السعودية"
   };
   try {
     const cached = JSON.parse(localStorage.getItem("idham_company") || "{}");
