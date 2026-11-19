@@ -226,76 +226,108 @@ export function generateMasterAgreementHtml(d, co = null, stampSrc = "") {
       overflow: hidden !important;
     }
 
-    /* ── 1. الهيدر والشعار (منسق بدقة متناهية لمنع انكسار الكلمات نهائياً) ── */
+    /* ── 1. الهيدر والشعار (محمي 100% من أي تداخل أو انكسار في الكلمات) ── */
     .hdr-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1.8px solid #004d80;
-      padding-bottom: 2px;
-      margin-bottom: 2px;
-      gap: 4px;
+      padding-bottom: 2.5px;
+      margin-bottom: 2.5px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .hdr-col-right {
       text-align: right;
-      flex: 1.0;
-      min-width: 0;
+      width: 33%;
+      min-width: 60mm;
+      max-width: 35%;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .hdr-company-name {
+      font-size: 11pt;
+      font-weight: 900;
+      color: #004d80;
+      line-height: 1.2;
       white-space: nowrap;
     }
-    .hdr-company-name { font-size: 11.5pt; font-weight: 900; color: #004d80; line-height: 1.15; white-space: nowrap; }
-    .hdr-company-sub  { font-size: 8pt; font-weight: 800; color: #000; margin-top: 1px; white-space: nowrap; }
-    .hdr-company-reg  { font-size: 7.2pt; font-weight: 800; color: #1e293b; font-family: monospace; white-space: nowrap; }
+    .hdr-company-sub {
+      font-size: 7.8pt;
+      font-weight: 800;
+      color: #000;
+      margin-top: 1px;
+      white-space: nowrap;
+    }
+    .hdr-company-reg {
+      font-size: 7pt;
+      font-weight: 800;
+      color: #1e293b;
+      font-family: monospace;
+      white-space: nowrap;
+    }
 
     .hdr-col-center {
       text-align: center;
-      flex: 2.35;
-      min-width: 0;
+      flex: 1;
+      padding: 0 4px;
       display: flex;
       justify-content: center;
       align-items: center;
+      min-width: 0;
+      box-sizing: border-box;
     }
     .title-banner {
       background: linear-gradient(135deg, #004d80 0%, #0284c7 100%);
       color: #fff;
-      padding: 3.5px 12px;
-      border-radius: 6px;
-      box-shadow: 0 2px 4px rgba(0,77,128,0.22);
+      padding: 3px 8px;
+      border-radius: 5px;
+      box-shadow: 0 1px 3px rgba(0,77,128,0.2);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
+      width: auto;
+      max-width: 100%;
       box-sizing: border-box;
       white-space: nowrap;
     }
     .title-banner h1 {
-      font-size: 10.8pt;
+      font-size: 9.8pt;
       font-weight: 900;
-      letter-spacing: -0.1px;
+      letter-spacing: -0.2px;
       margin: 0;
       line-height: 1.2;
       white-space: nowrap;
-      text-overflow: clip;
     }
     .title-banner .title-en {
-      font-size: 6.3pt;
+      font-size: 5.6pt;
       font-weight: 700;
       opacity: 0.95;
       direction: ltr;
       letter-spacing: 0.1px;
       white-space: nowrap;
-      line-height: 1.2;
+      line-height: 1.15;
       margin-top: 1px;
     }
 
     .hdr-col-left {
       text-align: left;
       direction: ltr;
-      flex: 0.95;
-      min-width: 0;
+      width: 25%;
+      min-width: 44mm;
+      max-width: 28%;
+      flex-shrink: 0;
+      box-sizing: border-box;
+    }
+    .hdr-date-box {
+      font-size: 7.2pt;
+      font-weight: 800;
+      color: #004d80;
+      line-height: 1.25;
+      margin-top: 1.5px;
       white-space: nowrap;
     }
-    .hdr-date-box { font-size: 7.2pt; font-weight: 800; color: #004d80; line-height: 1.25; margin-top: 1.5px; white-space: nowrap; }
 
     /* ── 2. خطاب التقديم ── */
     .intro-block {

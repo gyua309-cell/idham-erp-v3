@@ -5,7 +5,7 @@
 
 import { getById, getAll, update, COLS } from "../utils/db.js";
 import { formatCurrency, todayString } from "../utils/formatters.js";
-import { printMasterCustomerAgreement } from "./agreement-print-template.js?v=4.3";
+import { printMasterCustomerAgreement } from "./agreement-print-template.js?v=4.4";
 
 const showToast = (...a) => (window.showToast ? window.showToast(...a) : console.log(...a));
 
@@ -442,11 +442,11 @@ export async function openCustomerAgreementModal(customerIdOrObj, isBlank = fals
             <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:8px; margin-bottom:8px;">
               <div class="form-group">
                 <label style="font-size:11px; font-weight:800;">رقم جوال المالك</label>
-                <input type="tel" id="ag-owner-phone" class="input mono font-bold" value="${cust.ownerPhone || cust.mobile || cust.phone || ""}" placeholder="05XXXXXXXX" />
+                <input type="tel" id="ag-owner-phone" class="input mono font-bold" value="${cust.ownerPhone || ""}" placeholder="05XXXXXXXX" />
               </div>
               <div class="form-group">
                 <label style="font-size:11px; font-weight:800;">البريد الإلكتروني</label>
-                <input type="email" id="ag-owner-email" class="input mono" value="${cust.ownerEmail || cust.email || ""}" placeholder="owner@..." />
+                <input type="email" id="ag-owner-email" class="input mono" value="${cust.ownerEmail || ""}" placeholder="owner@..." />
               </div>
             </div>
             <div class="form-group">
@@ -678,8 +678,8 @@ window.onAgreementCustomerSelected = (customerId) => {
   setVal("ag-owner-name", cust.ownerName || cust.name || "");
   setVal("ag-owner-id", cust.ownerId || cust.nationalId || "");
   setVal("ag-owner-id-source", cust.ownerIdSource || "ينبع");
-  setVal("ag-owner-phone", cust.ownerPhone || cust.mobile || cust.phone || "");
-  setVal("ag-owner-email", cust.ownerEmail || cust.email || "");
+  setVal("ag-owner-phone", cust.ownerPhone || "");
+  setVal("ag-owner-email", cust.ownerEmail || "");
   
   // العنوان الوطني للمالك
   const ownerAddr = cust.ownerAddress || cust.address || (cust.city ? (cust.city + (cust.district ? " - " + cust.district : "")) : "");
