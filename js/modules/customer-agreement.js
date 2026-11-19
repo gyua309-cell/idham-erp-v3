@@ -5,7 +5,7 @@
 
 import { getById, getAll, update, COLS } from "../utils/db.js";
 import { formatCurrency, todayString } from "../utils/formatters.js";
-import { printMasterCustomerAgreement } from "./agreement-print-template.js?v=4.2";
+import { printMasterCustomerAgreement } from "./agreement-print-template.js?v=4.3";
 
 const showToast = (...a) => (window.showToast ? window.showToast(...a) : console.log(...a));
 

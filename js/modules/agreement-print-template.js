@@ -104,17 +104,18 @@ export function generateMasterAgreementHtml(d, co = null, stampSrc = "") {
   // تجهيز بيانات مالك المنشأة (الكفيل الغارم)
   const ownerName = d.ownerName ? String(d.ownerName).trim() : "";
   const ownerId = d.ownerId ? String(d.ownerId).trim() : "";
-  const ownerPhone = String(d.ownerPhone || d.mobile || d.phone || "").trim();
+  const ownerPhone = d.ownerPhone ? String(d.ownerPhone).trim() : "";
 
   // تجهيز بيانات المسؤول المفوض بالتوقيع بدقة واستقلالية تامة عن مالك المنشأة:
   // إذا أدخل المستخدم اسم المسؤول المفوض في البطاقة 3، يُطبع اسمه وصفته وبياناته.
   // وإذا تُرِك حقله فارغاً في النظام (كما هو الحال لملئه يدوياً وتوقيعه من قبل المحل)، يظل فارغاً تماماً
   // مع أسطر تنقيط واضحة لملئه وتوقيعه يدوياً، ولا يُفترض إطلاقاً أن المالك هو المفوض.
+  // بيانات المسؤول المفوض (تبقى فارغة تماماً إذا لم تُدخل ليتم ملؤها وتوقيعها يدوياً من قِبل المحل)
   const hasManager = Boolean(d.managerName && String(d.managerName).trim());
   const signatoryName = hasManager ? String(d.managerName).trim() : (d.signatoryName && String(d.signatoryName).trim() !== ownerName ? String(d.signatoryName).trim() : "");
   const signatoryRole = hasManager ? (d.managerRole || "المدير المفوض") : "";
-  const signatoryId = hasManager ? String(d.managerId || "").trim() : "";
-  const signatoryPhone = hasManager ? String(d.managerPhone || "").trim() : "";
+  const signatoryId = hasManager ? String(d.managerId || "").trim() : (d.signatoryId && d.signatoryId !== ownerId ? String(d.signatoryId).trim() : "");
+  const signatoryPhone = hasManager ? String(d.managerPhone || "").trim() : (d.signatoryPhone && d.signatoryPhone !== ownerPhone ? String(d.signatoryPhone).trim() : "");
 
   const purchaserDisplay = d.purchaserName ? `${d.purchaserName} ${d.purchaserPhone ? `(${d.purchaserPhone})` : ""}` : "";
   const receiverDisplay = d.receiverName ? `${d.receiverName} ${d.receiverPhone ? `(${d.receiverPhone})` : ""}` : "";
@@ -225,50 +226,76 @@ export function generateMasterAgreementHtml(d, co = null, stampSrc = "") {
       overflow: hidden !important;
     }
 
-    /* ── 1. الهيدر والشعار ── */
+    /* ── 1. الهيدر والشعار (منسق بدقة متناهية لمنع انكسار الكلمات نهائياً) ── */
     .hdr-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       border-bottom: 1.8px solid #004d80;
-      padding-bottom: 2.5px;
+      padding-bottom: 2px;
       margin-bottom: 2px;
+      gap: 4px;
     }
-    .hdr-col-right { text-align: right; flex: 1.2; }
-    .hdr-company-name { font-size: 12.5pt; font-weight: 900; color: #004d80; line-height: 1.15; }
-    .hdr-company-sub  { font-size: 8.5pt; font-weight: 800; color: #000; margin-top: 1px; }
-    .hdr-company-reg  { font-size: 7.5pt; font-weight: 800; color: #1e293b; font-family: monospace; }
+    .hdr-col-right {
+      text-align: right;
+      flex: 1.0;
+      min-width: 0;
+      white-space: nowrap;
+    }
+    .hdr-company-name { font-size: 11.5pt; font-weight: 900; color: #004d80; line-height: 1.15; white-space: nowrap; }
+    .hdr-company-sub  { font-size: 8pt; font-weight: 800; color: #000; margin-top: 1px; white-space: nowrap; }
+    .hdr-company-reg  { font-size: 7.2pt; font-weight: 800; color: #1e293b; font-family: monospace; white-space: nowrap; }
 
     .hdr-col-center {
       text-align: center;
-      flex: 1.6;
+      flex: 2.35;
+      min-width: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .title-banner {
       background: linear-gradient(135deg, #004d80 0%, #0284c7 100%);
       color: #fff;
-      padding: 3px 12px;
+      padding: 3.5px 12px;
       border-radius: 6px;
       box-shadow: 0 2px 4px rgba(0,77,128,0.22);
-      display: inline-block;
-      width: 96%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      box-sizing: border-box;
+      white-space: nowrap;
     }
     .title-banner h1 {
-      font-size: 11.5pt;
+      font-size: 10.8pt;
       font-weight: 900;
-      letter-spacing: -0.2px;
+      letter-spacing: -0.1px;
       margin: 0;
-      line-height: 1.15;
+      line-height: 1.2;
+      white-space: nowrap;
+      text-overflow: clip;
     }
     .title-banner .title-en {
-      font-size: 6.8pt;
+      font-size: 6.3pt;
       font-weight: 700;
       opacity: 0.95;
       direction: ltr;
       letter-spacing: 0.1px;
+      white-space: nowrap;
+      line-height: 1.2;
+      margin-top: 1px;
     }
 
-    .hdr-col-left { text-align: left; direction: ltr; flex: 1.1; }
-    .hdr-date-box { font-size: 7.5pt; font-weight: 800; color: #004d80; line-height: 1.25; margin-top: 1.5px; }
+    .hdr-col-left {
+      text-align: left;
+      direction: ltr;
+      flex: 0.95;
+      min-width: 0;
+      white-space: nowrap;
+    }
+    .hdr-date-box { font-size: 7.2pt; font-weight: 800; color: #004d80; line-height: 1.25; margin-top: 1.5px; white-space: nowrap; }
 
     /* ── 2. خطاب التقديم ── */
     .intro-block {
@@ -649,19 +676,19 @@ export function generateMasterAgreementHtml(d, co = null, stampSrc = "") {
     <tr class="owner-row">
       <th>مالك المنشأة (الكفيل الغارم):</th>
       <td>${valOrLine(ownerName)}</td>
-      <th>الهوية الوطنية:</th>
+      <th>رقم الهوية الوطنية:</th>
       <td class="mono">${valOrLine(ownerId)}</td>
-      <th>هاتف / جوال المالك:</th>
+      <th>رقم جوال المالك:</th>
       <td class="mono">${valOrLine(ownerPhone)}</td>
     </tr>
-    <!-- صف المسؤول المفوض بالتوقيع (يترك فارغاً تماماً إذا لم يُدخل ليملأه المحل يدوياً) -->
+    <!-- صف المسؤول المفوض بالتوقيع (اسم المفوض، رقم هويته، رقم جواله — يترك فارغاً بخطوط تنقيط إذا لم يُدخل ليملأه المحل يدوياً) -->
     <tr class="signatory-row">
-      <th>المفوض بالتوقيع:</th>
+      <th>اسم المسؤول المفوض:</th>
       <td>${valOrLine(signatoryName)}</td>
-      <th>صفته النظامية:</th>
-      <td>${signatoryRole ? `<span class="val-strong">${signatoryRole}</span>` : '<span class="fill-line"></span>'}</td>
-      <th>الهوية / الجوال:</th>
-      <td class="mono" style="font-size:7pt;">${signatoryId || signatoryPhone ? `${signatoryId || '—'} | ${signatoryPhone || '—'}` : '<span class="fill-line"></span>'}</td>
+      <th>رقم الهوية / الإقامة:</th>
+      <td class="mono">${valOrLine(signatoryId)}</td>
+      <th>رقم جوال المفوض:</th>
+      <td class="mono">${valOrLine(signatoryPhone)}</td>
     </tr>
     <!-- صف فصل الصلاحيات التشغيلية (الطلب والاستلام) -->
     <tr>
@@ -734,9 +761,9 @@ export function generateMasterAgreementHtml(d, co = null, stampSrc = "") {
     <div class="sig-col" style="flex: 1.35;">
       <div class="sig-col-hdr">المفوض بالتوقيع (الكفيل الغارم)</div>
       <div class="sig-details-block">
-        <div>الاسم: <strong>${signatoryName ? signatoryName : "........................................"}</strong></div>
-        <div>الصفة: <strong>${signatoryRole ? signatoryRole : "........................................"}</strong></div>
-        <div>الهوية: <strong>${signatoryId ? signatoryId : "........................................"}</strong></div>
+        <div>اسم المفوض: <strong>${signatoryName ? signatoryName : "........................................"}</strong></div>
+        <div>رقم الهوية: <strong>${signatoryId ? signatoryId : "........................................"}</strong></div>
+        <div>رقم الجوال: <strong>${signatoryPhone ? signatoryPhone : "........................................"}</strong></div>
       </div>
       <div class="sig-box-inner" style="min-height:48px; display:flex; flex-direction:column; justify-content:flex-end; align-items:center; padding-bottom:3px;">
         <div style="width:92%; font-size:7pt; color:#004d80; font-weight:800; text-align:right; margin-bottom:2px;">التوقيع: ............................................</div>

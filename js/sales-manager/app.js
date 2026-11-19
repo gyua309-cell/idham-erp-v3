@@ -18,7 +18,7 @@ import {
   orderBy,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
-import { printMasterCustomerAgreement } from "../modules/agreement-print-template.js?v=4.2";
+import { printMasterCustomerAgreement } from "../modules/agreement-print-template.js?v=4.3";
 
 // Firebase Config
 const firebaseConfig = {

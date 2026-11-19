@@ -136,7 +136,7 @@ const ROUTES = {
   "product-profit-margins":   () => import("./modules/product-profit-margins.js?v=1.0"),
   "stock-movement-balance":   () => import("./modules/stock-movement-balance.js?v=1.0"),
   "inventory-replenishment":  () => import("./modules/inventory-replenishment.js?v=1.1"),
-  "customers":                () => import("./modules/customers.js?v=50.0"),
+  "customers":                () => import("./modules/customers.js?v=51.0"),
   "customer-crm":             () => import("./modules/customer-crm.js?v=1.0"),
   "customer-segments":        () => import("./modules/customer-segments.js?v=1.0"),
   "customer-complaints":      () => import("./modules/customer-complaints.js?v=1.0"),

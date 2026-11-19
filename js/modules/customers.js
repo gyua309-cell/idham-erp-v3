@@ -8,7 +8,7 @@ import { formatCurrency, formatDate, getCreditStatus, debounce } from "../utils/
 import { exportToExcel, importFromExcel, downloadTemplate } from "../utils/excel.js";
 import { showRecordPreview, printRecord } from "../utils/record-actions.js";
 import { syncCustomerNameEverywhere, syncCustomerBalanceToCoa } from "../utils/sync-engine.js";
-import { openCustomerAgreementModal } from "./customer-agreement.js?v=4.2";
+import { openCustomerAgreementModal } from "./customer-agreement.js?v=4.3";
 
 window.openCustomerAgreement = openCustomerAgreementModal;
 window.openBlankCustomerAgreement = () => openCustomerAgreementModal(null, true);
