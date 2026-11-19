@@ -1,0 +1,110 @@
+[
+  {
+    "id": "0j34llJOFXQ2McuwHCtr",
+    "name": "مصرف الراجحى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794245911,
+      "nanoseconds": 296000000
+    },
+    "accountId": "PUwOpwDpwzDzcQBnvKvC",
+    "balance": 14469.98000000001,
+    "accountName": "مصرف الراجحى",
+    "active": true,
+    "iban": "SA2180000150608016641332",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790154055,
+      "nanoseconds": 242000000
+    },
+    "openingBalance": 0,
+    "accountCode": "1-1-1-3-02",
+    "accountNumber": "150000010006086641332",
+    "bankName": "مصرف الراجحي"
+  },
+  {
+    "id": "SPVZTmTRaLHp4rnmAwt6",
+    "name": "الراجحى - عهدة مشتريات سيد",
+    "bankName": "الراجحى - عهدة مشتريات سيد",
+    "balance": 0,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792849519,
+      "nanoseconds": 614000000
+    },
+    "accountId": "YXlpHI08GD6IFy5m6Zto",
+    "accountCode": "1-1-1-3-04",
+    "accountNumber": "150000010006086643205",
+    "active": true,
+    "openingBalance": 0,
+    "accountName": "الراجحى - عهدة مشتريات سيد",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793300403,
+      "nanoseconds": 447000000
+    },
+    "iban": "SA8480000150608016643205"
+  },
+  {
+    "id": "bank-aljazira",
+    "balance": 0,
+    "accountId": "bank_rajhi",
+    "name": "بنك الجزيرة",
+    "accountName": "حساب بنك الجزيرة الجاري",
+    "accountCode": "1-1-1-3-01",
+    "bankName": "بنك الجزيرة",
+    "currency": "SAR",
+    "active": true,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792593812,
+      "nanoseconds": 718000000
+    }
+  },
+  {
+    "id": "gUUIXCOI7KtEw2HFn2Tp",
+    "accountName": "بنك الراجحى عهد",
+    "active": true,
+    "accountNumber": "150000010006086643106",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792849549,
+      "nanoseconds": 94000000
+    },
+    "openingBalance": 0,
+    "balance": 0,
+    "accountId": "tr36lgv9lT8se9c9J4Fm",
+    "bankName": "بنك الراجحى عهد",
+    "accountCode": "1-1-1-3-03",
+    "name": "بنك الراجحى عهد محمد عوض",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792578240,
+      "nanoseconds": 226000000
+    },
+    "iban": "SA4180000150608016643106"
+  },
+  {
+    "id": "m8PJAwYQOVzNaKJxUSPu",
+    "accountCode": "1-1-1-3-05",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792849658,
+      "nanoseconds": 136000000
+    },
+    "iban": "SA6380000150608016643098",
+    "accountNumber": "",
+    "accountId": "flLR6q40YtgHBDEY1wo8",
+    "bankName": "الراجحى - المخصصات",
+    "accountName": "الراجحى - المخصصات",
+    "active": true,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792849658,
+      "nanoseconds": 136000000
+    },
+    "openingBalance": 0,
+    "balance": 0,
+    "name": "الراجحى - المخصصات"
+  }
+]

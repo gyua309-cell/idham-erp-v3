@@ -1,0 +1,49 @@
+[
+  {
+    "id": "cc_201",
+    "linkedRepId": "Ao147Sj24LgGa2OOag0c",
+    "createdAt": "2026-07-31T18:09:37.035Z",
+    "type": "warehouse",
+    "name": "سيارة السيد رضا",
+    "updatedAt": "2026-08-29T17:04:59.590Z",
+    "isActive": true,
+    "code": "201",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "cc_301",
+    "updatedAt": "2026-07-27T10:41:26.695Z",
+    "type": "detail",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "parentId": "cc_300",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "code": "301",
+    "name": "سيارة المندوب مصطفى (ينبع والمسارات)"
+  },
+  {
+    "id": "cc_302",
+    "linkedRepId": "i6qFzXabMQq8R7j7GxgL",
+    "parentId": "cc_300",
+    "type": "detail",
+    "code": "302",
+    "name": "سيارة المندوب محمد عوض",
+    "updatedAt": "2026-09-07T08:36:56.996Z",
+    "repId": "i6qFzXabMQq8R7j7GxgL"
+  },
+  {
+    "id": "nv2ZmtprTHESzdhmcTIV",
+    "name": "سيارة المندوب احمد السيد",
+    "driverName": "المندوب احمد السيد",
+    "createdAt": "2026-07-28T14:30:35.455Z",
+    "updatedAt": "2026-08-29T12:05:17.845Z",
+    "code": "003",
+    "allocPct": null,
+    "fixedCost": 0,
+    "notes": "",
+    "isActive": true,
+    "type": "vehicle",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "vehicleId": "",
+    "plateNumber": ""
+  }
+]

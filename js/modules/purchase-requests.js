@@ -168,14 +168,20 @@ export async function render(container, user) {
           <div style="background:var(--bg-2); border-radius:8px; padding:12px; margin-bottom:12px;">
             <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; flex-wrap:wrap; gap:10px;">
               <strong style="font-size:13px; color:var(--brand);">📋 بنود الطلب</strong>
-              <div style="display:flex; gap:8px; align-items:center;">
-                <select id="rfq-product-category-filter" class="form-control" style="width:160px; height:34px; font-size:12px; padding:4px 8px;">
+              <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+                <select id="rfq-product-category-filter" class="form-control" style="width:130px; height:34px; font-size:12px; padding:4px 8px;">
                   <option value="">كل الفئات</option>
                 </select>
-                <div class="autocomplete-container" style="width:480px;">
+                <div class="autocomplete-container" style="width:280px;">
                   <input type="text" id="rfq-product-search" class="form-control" placeholder="+ أضف صنفاً… (بالاسم أو الكود)" autocomplete="off" style="height:34px; font-size:12px;" />
                   <div class="autocomplete-results hidden" id="rfq-product-results"></div>
                 </div>
+                <button type="button" class="btn btn-primary btn-sm" onclick="addCustomRfqLine()" style="height:34px; font-size:11.5px; white-space:nowrap; background:#059669; border-color:#059669; display:inline-flex; align-items:center; gap:5px; font-weight:700;" title="إضافة بند حر يدوي غير مسجل بالكتالوج">
+                  <span>✍️</span> <span>إضافة صنف يدوي</span>
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="addAllProductsToRfq()" style="height:34px; font-size:11.5px; white-space:nowrap;" title="إدراج جميع الأصناف أو أصناف الفئة المحددة">📦 إدراج كل الأصناف</button>
+                <button type="button" class="btn btn-warning btn-sm" onclick="addLowStockProductsToRfq()" style="height:34px; font-size:11.5px; white-space:nowrap; background:rgba(245,158,11,0.12); color:#D97706; border:1px solid rgba(245,158,11,0.35); font-weight:700;" title="إدراج الأصناف التي وصلت للحد الأدنى لنواقص المخزن">⚠️ جلب النواقص</button>
+                <button type="button" class="btn btn-ghost btn-sm text-bad" onclick="clearAllRfqLines()" style="height:34px; font-size:11.5px; white-space:nowrap;" title="تفريغ كافة البنود">🗑️ تفريغ</button>
               </div>
             </div>
             <div class="invoice-lines" style="max-height:260px; overflow-y:auto; margin-top:0;">
@@ -492,7 +498,8 @@ function setupProductSearchAC() {
   if (!input) return;
 
   const performSearch = () => {
-    const term = input.value.trim().toLowerCase();
+    const rawTerm = input.value.trim();
+    const term = rawTerm.toLowerCase();
     const catId = catFilter ? catFilter.value : "";
 
     if (!term && !catId) { results.classList.add("hidden"); return; }
@@ -508,27 +515,68 @@ function setupProductSearchAC() {
     }
 
     matched = matched.slice(0, 15);
-    if (!matched.length) {
-      results.innerHTML = `<div style="padding:10px;text-align:center;color:var(--text-3);">لا توجد نتائج</div>`;
-      results.classList.remove("hidden");
-      return;
+    let html = "";
+    if (matched.length) {
+      html += matched.map(p => {
+        const isAlreadyAdded = currentRfqLines.some(l => 
+          (l.productId && l.productId === p.id) || 
+          (l.sku && p.sku && l.sku === p.sku) || 
+          (l.productName && p.name && l.productName.trim() === p.name.trim())
+        );
+
+        return `
+          <div class="autocomplete-item ${isAlreadyAdded ? 'already-added' : ''}" 
+               style="${isAlreadyAdded ? 'background:#fefce8; border-right:3px solid #eab308; cursor:pointer;' : 'cursor:pointer;'}" 
+               onclick="addRfqLine('${p.id}')">
+            <div class="flex justify-between" style="align-items:center;">
+              <span style="font-weight:700;">${p.name}</span>
+              ${isAlreadyAdded ? `
+                <span class="badge" style="background:#fef08a; color:#854d0e; font-size:10.5px; padding:2px 7px; border:1px solid #fde047; font-weight:800;">
+                  ⚠️ مضاف مسبقاً بالطلب
+                </span>
+              ` : `
+                <span class="mono text-dim" style="font-size:11px;">التكلفة: ${formatCurrency(p.costPrice||0)}</span>
+              `}
+            </div>
+            <div class="item-code">${p.sku || ""} | الوحدة: ${p.unit||""}</div>
+          </div>
+        `;
+      }).join("");
+    } else {
+      html += `<div style="padding:10px;text-align:center;color:var(--text-3); font-size:11.5px;">لا توجد أصناف مطابقة بالكتالوج</div>`;
     }
 
-    results.innerHTML = matched.map(p => `
-      <div class="autocomplete-item" onclick="addRfqLine('${p.id}', '${p.name.replace(/'/g, "\\'")}', '${p.unit||"حبة"}', '${p.sku||""}')">
-        <div class="flex justify-between">
-          <span>${p.name}</span>
-          <span class="mono text-dim" style="font-size:11px;">التكلفة: ${formatCurrency(p.costPrice||0)}</span>
+    if (rawTerm) {
+      html += `
+        <div class="autocomplete-item" style="background:#f0fdf4; border-top:1.5px dashed #86efac; color:#166534; font-weight:800; display:flex; align-items:center; gap:6px; cursor:pointer;" onclick="addCustomRfqLine('${rawTerm.replace(/'/g, "\\'")}')">
+          <span>✍️</span>
+          <span>إضافة "<b>${rawTerm}</b>" كصنف يدوي / بند حر جديد</span>
         </div>
-        <div class="item-code">${p.sku || ""} | الوحدة: ${p.unit||""}</div>
-      </div>
-    `).join("");
+      `;
+    }
+
+    results.innerHTML = html;
     results.classList.remove("hidden");
   };
 
   input.addEventListener("input", performSearch);
   input.addEventListener("focus", performSearch);
   if (catFilter) catFilter.addEventListener("change", performSearch);
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const rawTerm = input.value.trim();
+      if (rawTerm) {
+        const exactMatch = allProducts.find(p => p.name.trim().toLowerCase() === rawTerm.toLowerCase() || (p.sku && p.sku.trim().toLowerCase() === rawTerm.toLowerCase()));
+        if (exactMatch) {
+          addRfqLine(exactMatch.id);
+        } else {
+          addCustomRfqLine(rawTerm);
+        }
+      }
+    }
+  });
 
   document.addEventListener("click", e => {
     if (!input.contains(e.target) && !results.contains(e.target) && (!catFilter || !catFilter.contains(e.target))) {
@@ -591,55 +639,207 @@ window.closeRfqModal = () => {
   closeModal("rfq-modal");
 };
 
-window.addRfqLine = (productId, name, unit, sku) => {
-  if (currentRfqLines.some(l => l.productId === productId)) {
-    showToast("هذا الصنف مضاف بالفعل للطلب", "warning");
+window.addRfqLine = (productId, nameParam, unitParam, skuParam) => {
+  const prod = allProducts.find(p => p.id === productId);
+  const name = prod ? prod.name : (nameParam || "");
+  const unit = prod ? (prod.unit || "كرتون") : (unitParam || "كرتون");
+  const sku = prod ? (prod.sku || "") : (skuParam || "");
+
+  // Check if item already exists in currentRfqLines
+  const existingIdx = currentRfqLines.findIndex(l => 
+    (productId && l.productId === productId) || 
+    (sku && l.sku && l.sku === sku) || 
+    (name && l.productName && l.productName.trim() === name.trim())
+  );
+
+  if (existingIdx !== -1) {
+    // Clear search and close autocomplete
+    const searchInput = document.getElementById("rfq-product-search");
+    if (searchInput) searchInput.value = "";
+    const results = document.getElementById("rfq-product-results");
+    if (results) results.classList.add("hidden");
+
+    // Scroll table to the existing row and illuminate it!
+    const rowEl = document.getElementById(`rfq-line-row-${existingIdx}`);
+    if (rowEl) {
+      rowEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      rowEl.style.transition = "background 0.3s ease";
+      rowEl.style.background = "#fef08a";
+      setTimeout(() => { rowEl.style.background = ""; }, 2500);
+      const qtyInput = rowEl.querySelector('input[type="number"]');
+      if (qtyInput) {
+        qtyInput.focus();
+        qtyInput.select();
+      }
+    }
+
+    if (window.showToast) {
+      window.showToast(`⚠️ الصنف [${name}] مضاف بالفعل في السطر (#${existingIdx + 1}) — تم الانتقال إليه لتعديل كميته`, "warning", 5000);
+    } else {
+      alert(`⚠️ هذا الصنف [${name}] مضاف بالفعل في السطر (#${existingIdx + 1}) في هذا الطلب.`);
+    }
     return;
   }
 
+  // Not in list: Add new line
   currentRfqLines.push({
-    productId,
+    productId: productId || `custom_${Date.now()}`,
     productName: name,
-    unit,
-    sku,
+    unit: unit || "كرتون",
+    sku: sku || "",
     qty: 1,
     packQty: 1,
     notes: "",
-    offeredPrice: 0
+    offeredPrice: 0,
+    isCustom: false
   });
 
-  document.getElementById("rfq-product-search").value = "";
-  document.getElementById("rfq-product-results").classList.add("hidden");
+  const searchInput = document.getElementById("rfq-product-search");
+  if (searchInput) searchInput.value = "";
+  const results = document.getElementById("rfq-product-results");
+  if (results) results.classList.add("hidden");
+
   renderRfqLines();
+
+  // Scroll to the newly added row and focus
+  setTimeout(() => {
+    const newRowIdx = currentRfqLines.length - 1;
+    const rowEl = document.getElementById(`rfq-line-row-${newRowIdx}`);
+    if (rowEl) {
+      rowEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      rowEl.style.transition = "background 0.3s ease";
+      rowEl.style.background = "#bbf7d0";
+      setTimeout(() => { rowEl.style.background = ""; }, 1800);
+      const qtyInput = rowEl.querySelector('input[type="number"]');
+      if (qtyInput) {
+        qtyInput.focus();
+        qtyInput.select();
+      }
+    }
+  }, 100);
+
+  if (window.showToast) {
+    window.showToast(`✅ تم إدراج الصنف [${name}] بنجاح في الطلب`, "success", 3000);
+  }
+};
+
+window.addCustomRfqLine = (customName = "") => {
+  const customId = `custom_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
+  const cleanName = (typeof customName === "string" ? customName.trim() : "") || "";
+
+  currentRfqLines.push({
+    productId: customId,
+    productName: cleanName,
+    unit: "كرتون",
+    sku: "حر",
+    qty: 1,
+    packQty: 1,
+    notes: "",
+    offeredPrice: 0,
+    isCustom: true
+  });
+
+  const searchInput = document.getElementById("rfq-product-search");
+  if (searchInput) searchInput.value = "";
+  const results = document.getElementById("rfq-product-results");
+  if (results) results.classList.add("hidden");
+
+  renderRfqLines();
+
+  if (window.showToast) {
+    window.showToast("✅ تمت إضافة سطر صنف يدوي (بند حر) — يمكنك كتابة الاسم والوحدة مباشرة", "info");
+  }
+
+  // Focus and select the custom name input
+  setTimeout(() => {
+    const newRowIdx = currentRfqLines.length - 1;
+    const rowEl = document.getElementById(`rfq-line-row-${newRowIdx}`);
+    if (rowEl) {
+      rowEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      const nameInput = rowEl.querySelector(".rfq-custom-name-input");
+      if (nameInput) {
+        nameInput.focus();
+        nameInput.select();
+      }
+    }
+  }, 100);
 };
 
 function renderRfqLines() {
   const tbody = document.getElementById("rfq-lines-tbody");
-  tbody.innerHTML = currentRfqLines.map((l, i) => `
-    <tr style="border-bottom:1px solid var(--border-soft);">
-      <td style="padding:6px 10px;">${i+1}</td>
-      <td style="padding:6px 10px;" class="mono">${l.sku || "—"}</td>
-      <td style="padding:6px 10px; font-weight:600;">${l.productName}</td>
-      <td style="padding:6px 10px;">${l.unit}</td>
-      <td style="padding:6px 10px;">
-        <input type="number" class="form-control mono" style="width:75px; height:28px; font-size:11px; padding:2px 6px;" value="${l.qty}" min="1" step="1" onchange="updateRfqLineField(${i}, 'qty', this.value)" />
-      </td>
-      <td style="padding:6px 10px;">
-        <input type="number" class="form-control mono" style="width:75px; height:28px; font-size:11px; padding:2px 6px;" value="${l.packQty}" min="1" step="1" onchange="updateRfqLineField(${i}, 'packQty', this.value)" />
-      </td>
-      <td style="padding:6px 10px;">
-        <input type="text" class="form-control" style="height:28px; font-size:11px; padding:2px 6px;" value="${l.notes}" placeholder="مواصفات توريد..." onchange="updateRfqLineField(${i}, 'notes', this.value)" />
-      </td>
-      <td style="padding:6px 10px;">
-        <button class="btn btn-ghost btn-sm text-bad" onclick="removeRfqLine(${i})">×</button>
-      </td>
-    </tr>
-  `).join("");
+  if (!tbody) return;
+
+  tbody.innerHTML = currentRfqLines.map((l, i) => {
+    const isCustomLine = l.isCustom || !l.productId || String(l.productId).startsWith("custom_");
+
+    return `
+      <tr id="rfq-line-row-${i}" style="border-bottom:1px solid var(--border-soft); ${isCustomLine ? 'background:rgba(16, 185, 129, 0.05);' : ''}">
+        <td style="padding:6px 10px; font-weight:700; color:var(--text-2); text-align:center;">${i+1}</td>
+        
+        <!-- SKU -->
+        <td style="padding:6px 10px;" class="mono">
+          ${isCustomLine ? `
+            <input type="text" class="form-control mono" style="width:80px; height:28px; font-size:11px; padding:2px 6px; border:1px dashed #cbd5e1;" 
+                   value="${l.sku || ''}" placeholder="كود اختياري" onchange="updateRfqLineField(${i}, 'sku', this.value)" />
+          ` : `<span class="mono">${l.sku || "—"}</span>`}
+        </td>
+
+        <!-- Product Name -->
+        <td style="padding:6px 10px;">
+          ${isCustomLine ? `
+            <div style="display:flex; align-items:center; gap:6px;">
+              <input type="text" class="form-control rfq-custom-name-input" 
+                     style="font-weight:700; font-size:12px; height:28px; padding:2px 8px; border:1.5px solid #059669; background:#fff; width:100%; min-width:180px;" 
+                     value="${l.productName || ''}" placeholder="اكتب اسم الصنف هنا يدوي..." 
+                     oninput="updateRfqLineField(${i}, 'productName', this.value)" />
+              <span class="badge" style="background:#dcfce7; color:#166534; font-size:10px; padding:2px 6px; border:1px solid #86efac; white-space:nowrap;">بند حر ✍️</span>
+            </div>
+          ` : `
+            <div style="font-weight:600; font-size:12px; color:var(--text-0);">${l.productName}</div>
+          `}
+        </td>
+
+        <!-- Unit -->
+        <td style="padding:6px 10px;">
+          ${isCustomLine ? `
+            <input type="text" class="form-control" style="width:75px; height:28px; font-size:11px; padding:2px 6px; text-align:center; border:1px dashed #cbd5e1;" 
+                   value="${l.unit || 'كرتون'}" placeholder="الوحدة" onchange="updateRfqLineField(${i}, 'unit', this.value)" />
+          ` : `
+            <span>${l.unit || 'كرتون'}</span>
+          `}
+        </td>
+
+        <!-- Quantity -->
+        <td style="padding:6px 10px;">
+          <input type="number" class="form-control mono" style="width:75px; height:28px; font-size:11px; padding:2px 6px; font-weight:700; color:var(--brand);" 
+                 value="${l.qty}" min="1" step="1" onchange="updateRfqLineField(${i}, 'qty', this.value)" />
+        </td>
+
+        <!-- Pack Qty -->
+        <td style="padding:6px 10px;">
+          <input type="number" class="form-control mono" style="width:75px; height:28px; font-size:11px; padding:2px 6px;" 
+                 value="${l.packQty || 1}" min="1" step="1" onchange="updateRfqLineField(${i}, 'packQty', this.value)" />
+        </td>
+
+        <!-- Notes -->
+        <td style="padding:6px 10px;">
+          <input type="text" class="form-control" style="height:28px; font-size:11px; padding:2px 6px;" 
+                 value="${l.notes || ''}" placeholder="مواصفات توريد..." onchange="updateRfqLineField(${i}, 'notes', this.value)" />
+        </td>
+
+        <!-- Delete -->
+        <td style="padding:6px 10px; text-align:center;">
+          <button class="btn btn-ghost btn-sm text-bad" onclick="removeRfqLine(${i})" style="font-size:14px; cursor:pointer;" title="حذف البند">×</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
 }
 
 window.updateRfqLineField = (idx, field, val) => {
+  if (!currentRfqLines[idx]) return;
   if (field === 'qty' || field === 'packQty') {
-    currentRfqLines[idx][field] = parseFloat(val) || 1;
+    currentRfqLines[idx][field] = Math.max(1, parseFloat(val) || 1);
   } else {
     currentRfqLines[idx][field] = val;
   }
@@ -650,56 +850,185 @@ window.removeRfqLine = (idx) => {
   renderRfqLines();
 };
 
-window.saveRfq = async () => {
-  const date = document.getElementById("rfq-date").value;
-  const num = document.getElementById("rfq-number").value;
-  const supplierId = document.getElementById("rfq-supplier-id").value;
-  const supplierName = document.getElementById("rfq-supplier-search").value;
-  const targetDate = document.getElementById("rfq-target-date").value;
-  const notes = document.getElementById("rfq-notes").value.trim();
-
-  if (!supplierId || !date) {
-    showToast("يرجى تعبئة التاريخ واختيار المورد", "warning");
+window.addAllProductsToRfq = () => {
+  if (!allProducts || allProducts.length === 0) {
+    showToast("لا توجد أصناف في الكتالوج", "warning");
     return;
   }
+  const catFilter = document.getElementById("rfq-product-category-filter")?.value;
+  let targetProducts = allProducts;
+  if (catFilter) {
+    targetProducts = allProducts.filter(p => p.category === catFilter || p.categoryId === catFilter);
+  }
+  if (!targetProducts.length) {
+    showToast("لا توجد أصناف تطابق الفئة المحددة", "warning");
+    return;
+  }
+  if (!confirm(`هل تريد إدراج جميع أصناف الكتالوج (${targetProducts.length} صنف) في طلب الأسعار؟`)) return;
 
-  if (!currentRfqLines.length) {
+  let addedCount = 0;
+  targetProducts.forEach(p => {
+    if (!currentRfqLines.some(l => l.productId === p.id)) {
+      currentRfqLines.push({
+        productId: p.id,
+        productName: p.name,
+        unit: p.unit || "حبة",
+        sku: p.sku || "",
+        qty: 1,
+        packQty: 1,
+        notes: "",
+        offeredPrice: 0
+      });
+      addedCount++;
+    }
+  });
+  renderRfqLines();
+  showToast(`✅ تم إدراج ${addedCount} صنف في الطلب`, "success");
+};
+
+window.addLowStockProductsToRfq = () => {
+  if (!allProducts || allProducts.length === 0) {
+    showToast("لا توجد أصناف مسجلة", "warning");
+    return;
+  }
+  const lowStock = allProducts.filter(p => {
+    const q = parseFloat(p.totalQty || p.stockQty || 0);
+    const r = parseFloat(p.reorderLevel || 0);
+    return q <= r;
+  });
+  if (!lowStock.length) {
+    showToast("لا توجد أصناف وصلت للحد الأدنى للمخزون حالياً", "info");
+    return;
+  }
+  if (!confirm(`تم العثور على (${lowStock.length}) صنف وصل للحد الأدنى (نواقص مخزن). هل تريد إدراجها بالطلب؟`)) return;
+
+  let count = 0;
+  lowStock.forEach(p => {
+    if (!currentRfqLines.some(l => l.productId === p.id)) {
+      const currentQ = parseFloat(p.totalQty || p.stockQty || 0);
+      const reorderL = parseFloat(p.reorderLevel || 10);
+      const suggestedQty = Math.max(1, (reorderL * 2) - currentQ);
+
+      currentRfqLines.push({
+        productId: p.id,
+        productName: p.name,
+        unit: p.unit || "حبة",
+        sku: p.sku || "",
+        qty: suggestedQty,
+        packQty: 1,
+        notes: `نواقص مخزن (الرصيد الحالي: ${currentQ})`,
+        offeredPrice: 0
+      });
+      count++;
+    }
+  });
+  renderRfqLines();
+  showToast(`✅ تم إدراج ${count} صنف من نواقص المخزن`, "success");
+};
+
+window.clearAllRfqLines = () => {
+  if (!currentRfqLines.length) return;
+  if (confirm("هل تريد تفريغ ومسح كافة البنود من الطلب؟")) {
+    currentRfqLines = [];
+    renderRfqLines();
+    showToast("تم تفريغ البنود", "info");
+  }
+};
+
+const showToast = (msg, type = "info") => {
+  if (typeof window.showToast === "function") {
+    window.showToast(msg, type);
+  } else {
+    console.log(`[Toast ${type}]`, msg);
+    alert(msg);
+  }
+};
+
+window.saveRfq = async () => {
+  const date = document.getElementById("rfq-date")?.value || todayString();
+  const num = document.getElementById("rfq-number")?.value || "RFQ-000001";
+  let supplierId = document.getElementById("rfq-supplier-id")?.value;
+  let supplierName = document.getElementById("rfq-supplier-search")?.value?.trim() || "";
+  const targetDate = document.getElementById("rfq-target-date")?.value || "";
+  const notes = document.getElementById("rfq-notes")?.value?.trim() || "";
+
+  // If user typed name without clicking autocomplete
+  if (!supplierId && supplierName) {
+    const found = allSuppliers.find(s => s.name?.trim().toLowerCase() === supplierName.toLowerCase());
+    if (found) {
+      supplierId = found.id;
+      supplierName = found.name;
+    } else {
+      supplierId = "custom";
+    }
+  }
+
+  // If supplier is completely empty, default to general RFQ
+  if (!supplierName) {
+    supplierName = "طلب تسعير عام (لكافة الموردين)";
+    supplierId = "general";
+  }
+
+  if (!currentRfqLines || !currentRfqLines.length) {
     showToast("يرجى إضافة صنف واحد على الأقل للطلب", "warning");
     return;
   }
 
+  const emptyNameLine = currentRfqLines.find(l => !l.productName || !l.productName.trim());
+  if (emptyNameLine) {
+    showToast("يرجى كتابة اسم الصنف للبند اليدوي قبل الحفظ", "warning");
+    return;
+  }
+
   const saveBtn = document.getElementById("rfq-save-btn");
-  saveBtn.disabled = true;
+  if (saveBtn) {
+    saveBtn.disabled = true;
+    saveBtn.textContent = "⏳ جارٍ الحفظ...";
+  }
 
   try {
+    const cleanLines = currentRfqLines.map(l => ({
+      productId: l.productId || `custom_${Date.now()}_${Math.floor(Math.random() * 1000)}`,
+      productName: (l.productName || "").trim(),
+      unit: (l.unit || "كرتون").trim(),
+      sku: l.sku || "",
+      qty: parseFloat(l.qty) || 1,
+      packQty: parseFloat(l.packQty) || 1,
+      notes: l.notes || "",
+      offeredPrice: parseFloat(l.offeredPrice) || 0,
+      isCustom: !!(l.isCustom || !l.productId || String(l.productId).startsWith("custom_"))
+    }));
+
     const docData = {
       number: num,
       date,
-      supplierId,
-      supplierName,
-      targetDate,
-      notes,
-      lines: currentRfqLines,
-      status: currentRfq ? currentRfq.status : "sent",
-      updatedAt: new Date()
+      supplierId: supplierId || "general",
+      supplierName: supplierName || "طلب تسعير عام",
+      targetDate: targetDate || "",
+      notes: notes || "",
+      lines: cleanLines,
+      itemCount: cleanLines.length,
+      status: currentRfq ? (currentRfq.status || "sent") : "sent",
     };
 
-    if (currentRfq) {
-      await update("purchaseRequests", currentRfq.id, docData);
-      showToast("تم تحديث طلب عروض الأسعار بنجاح", "success");
+    if (currentRfq && currentRfq.id) {
+      await update(COLS.purchaseRequests(), currentRfq.id, docData);
+      showToast("تم تحديث طلب عروض الأسعار بنجاح ✅", "success");
     } else {
-      docData.createdAt = new Date();
       await create(COLS.purchaseRequests(), docData);
-      showToast("تم حفظ طلب عروض الأسعار بنجاح", "success");
+      showToast("تم حفظ طلب عروض الأسعار بنجاح ✅", "success");
     }
     
-    closeRfqModal();
+    closeModal("rfq-modal");
     await loadRFQs();
   } catch (err) {
     console.error("Save RFQ Error:", err);
-    showToast("حدث خطأ أثناء حفظ طلب الأسعار", "danger");
+    showToast("حدث خطأ أثناء حفظ طلب الأسعار: " + err.message, "danger");
   } finally {
-    saveBtn.disabled = false;
+    if (saveBtn) {
+      saveBtn.disabled = false;
+      saveBtn.textContent = "حفظ الطلب";
+    }
   }
 };
 
@@ -871,12 +1200,12 @@ window.printRfqForSupplier = (id) => {
   // ── جلب بيانات الشركة من الإعدادات المحفوظة ──
   let co = {};
   try { co = JSON.parse(localStorage.getItem("idham_company") || "{}"); } catch {}
-  const coName    = co.name    || "شركتنا";
-  const coAddress = [co.address, co.city, co.country].filter(Boolean).join("، ");
-  const coPhone   = co.phone   || "";
-  const coVAT     = co.vatNumber || "";
-  const coCR      = co.crNumber  || "";
-  const coEmail   = co.email   || "";
+  const coName    = co.name    || co.nameAr || "شركة نظم الإمداد المتطوره";
+  const coAddress = [co.address, co.city, co.country].filter(Boolean).join("، ") || "ينبع الصناعية — حي غرناطة";
+  const coPhone   = co.phone   || "0549141648";
+  const coVAT     = co.vatNumber || "314996148100003";
+  const coCR      = co.crNumber  || "7054969006";
+  const coEmail   = co.email   || "Nuzmalamdad@gmail.com";
   const coLogo    = co.logoBase64 || "";
   const primaryColor = co.primaryColor || "#4f46e5";
 

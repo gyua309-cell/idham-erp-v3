@@ -1,0 +1,560 @@
+[
+  {
+    "id": "baby",
+    "name": "أطفال وحفاضات",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "velocity": "slow",
+    "description": "أصناف تابعة لقسم أطفال وحفاضات",
+    "code": "baby",
+    "icon": "👶"
+  },
+  {
+    "id": "bakery",
+    "name": "مخبوزات وخبز",
+    "description": "أصناف تابعة لقسم مخبوزات وخبز",
+    "icon": "🥖",
+    "velocity": "medium",
+    "code": "bakery",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    }
+  },
+  {
+    "id": "beverages",
+    "name": "مشروبات وعصائر",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "description": "أصناف تابعة لقسم مشروبات وعصائر",
+    "code": "beverages",
+    "icon": "🧃",
+    "velocity": "fast"
+  },
+  {
+    "id": "biscuits",
+    "description": "أصناف تابعة لقسم بسكويت وكيك",
+    "name": "بسكويت وكيك",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "velocity": "medium",
+    "code": "biscuits",
+    "icon": "🍪"
+  },
+  {
+    "id": "canned",
+    "code": "canned",
+    "icon": "🥫",
+    "description": "أصناف تابعة لقسم معلبات وصلصات",
+    "velocity": "medium",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "name": "معلبات وصلصات"
+  },
+  {
+    "id": "cleaning",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "icon": "🧴",
+    "code": "cleaning",
+    "velocity": "slow",
+    "name": "منظفات ومعطرات",
+    "description": "أصناف تابعة لقسم منظفات ومعطرات"
+  },
+  {
+    "id": "coffee_tea",
+    "icon": "☕",
+    "description": "أصناف تابعة لقسم قهوة وشاي",
+    "code": "coffee_tea",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "velocity": "slow",
+    "name": "قهوة وشاي"
+  },
+  {
+    "id": "confectionery",
+    "name": "حلويات وشوكولاتة",
+    "description": "أصناف تابعة لقسم حلويات وشوكولاتة",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "velocity": "medium",
+    "code": "confectionery",
+    "icon": "🍫"
+  },
+  {
+    "id": "dairy",
+    "code": "dairy",
+    "icon": "🥛",
+    "velocity": "fast",
+    "description": "أصناف تابعة لقسم ألبان ومنتجاتها",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 399000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 399000000
+    },
+    "name": "ألبان ومنتجاتها"
+  },
+  {
+    "id": "dates",
+    "name": "تمور ومنتجاتها",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "code": "dates",
+    "icon": "🌴",
+    "velocity": "medium",
+    "description": "أصناف تابعة لقسم تمور ومنتجاتها"
+  },
+  {
+    "id": "disposables",
+    "icon": "🥤",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "code": "disposables",
+    "description": "أصناف تابعة لقسم أكواب ومستلزمات ضيافة",
+    "velocity": "medium",
+    "name": "أكواب ومستلزمات ضيافة"
+  },
+  {
+    "id": "dry_goods",
+    "name": "سكر ودقيق ومعجنات",
+    "code": "dry_goods",
+    "icon": "🍞",
+    "velocity": "fast",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "description": "أصناف تابعة لقسم سكر ودقيق ومعجنات"
+  },
+  {
+    "id": "egg",
+    "name": "بيض طازج",
+    "velocity": "fast",
+    "description": "أصناف تابعة لقسم بيض طازج",
+    "code": "egg",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "icon": "🥚"
+  },
+  {
+    "id": "frozen",
+    "code": "frozen",
+    "icon": "🧊",
+    "velocity": "slow",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "description": "أصناف تابعة لقسم أغذية مجمدة",
+    "name": "أغذية مجمدة"
+  },
+  {
+    "id": "frozen_veg",
+    "code": "frozen_veg",
+    "icon": "🥦",
+    "description": "أصناف تابعة لقسم خضروات مجمدة",
+    "name": "خضروات مجمدة",
+    "velocity": "medium",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    }
+  },
+  {
+    "id": "honey_jam",
+    "description": "أصناف تابعة لقسم عسل ومربيات وطحينة",
+    "velocity": "medium",
+    "code": "honey_jam",
+    "icon": "🍯",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "name": "عسل ومربيات وطحينة"
+  },
+  {
+    "id": "ice_cream",
+    "name": "آيس كريم وحلويات باردة",
+    "description": "أصناف تابعة لقسم آيس كريم وحلويات باردة",
+    "velocity": "medium",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "code": "ice_cream",
+    "icon": "🍦"
+  },
+  {
+    "id": "meat_poultry",
+    "name": "لحوم ودواجن مجمدة",
+    "description": "أصناف تابعة لقسم لحوم ودواجن مجمدة",
+    "velocity": "slow",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "code": "meat_poultry",
+    "icon": "🍗"
+  },
+  {
+    "id": "nuts_seeds",
+    "name": "مكسرات وبذور",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "code": "nuts_seeds",
+    "description": "أصناف تابعة لقسم مكسرات وبذور",
+    "velocity": "medium",
+    "icon": "🌰"
+  },
+  {
+    "id": "oils",
+    "velocity": "fast",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "name": "زيوت وسمن",
+    "description": "أصناف تابعة لقسم زيوت وسمن",
+    "icon": "🌻",
+    "code": "oils"
+  },
+  {
+    "id": "personal_care",
+    "icon": "🧻",
+    "code": "personal_care",
+    "description": "أصناف تابعة لقسم عناية شخصية وورقيات",
+    "velocity": "slow",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "name": "عناية شخصية وورقيات"
+  },
+  {
+    "id": "pickles",
+    "name": "مخللات وأجبان مكشوفة",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "description": "أصناف تابعة لقسم مخللات وأجبان مكشوفة",
+    "velocity": "medium",
+    "code": "pickles",
+    "icon": "🥒"
+  },
+  {
+    "id": "plastics",
+    "icon": "🛍️",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "code": "plastics",
+    "description": "أصناف تابعة لقسم بلاستيكيات ومستلزمات تغليف",
+    "velocity": "medium",
+    "name": "بلاستيكيات ومستلزمات تغليف"
+  },
+  {
+    "id": "rice_grains",
+    "icon": "🌾",
+    "code": "rice_grains",
+    "description": "أصناف تابعة لقسم أرز وحبوب",
+    "velocity": "fast",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "name": "أرز وحبوب"
+  },
+  {
+    "id": "sauces",
+    "icon": "🍯",
+    "code": "sauces",
+    "description": "أصناف تابعة لقسم صلصات ومايونيز وتوابل سائلة",
+    "velocity": "medium",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "name": "صلصات ومايونيز وتوابل سائلة"
+  },
+  {
+    "id": "seafood",
+    "name": "أسماك ومأكولات بحرية",
+    "description": "أصناف تابعة لقسم أسماك ومأكولات بحرية",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "icon": "🐟",
+    "code": "seafood",
+    "velocity": "slow"
+  },
+  {
+    "id": "snacks",
+    "velocity": "medium",
+    "name": "شيبس ومكسرات",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "code": "snacks",
+    "icon": "🥜",
+    "description": "أصناف تابعة لقسم شيبس ومكسرات"
+  },
+  {
+    "id": "spices",
+    "icon": "🧂",
+    "code": "spices",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "name": "توابل وبهارات",
+    "description": "أصناف تابعة لقسم توابل وبهارات",
+    "velocity": "slow"
+  },
+  {
+    "id": "tobacco",
+    "description": "أصناف تابعة لقسم تبغ ومستلزمات تدخين",
+    "code": "tobacco",
+    "icon": "🚬",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 401000000
+    },
+    "name": "تبغ ومستلزمات تدخين",
+    "velocity": "slow"
+  },
+  {
+    "id": "veg_fruits",
+    "velocity": "fast",
+    "code": "veg_fruits",
+    "icon": "🍅",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "description": "أصناف تابعة لقسم خضار وفواكه طازجة",
+    "name": "خضار وفواكه طازجة"
+  },
+  {
+    "id": "water",
+    "name": "مياه معبأة",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791285358,
+      "nanoseconds": 400000000
+    },
+    "description": "أصناف تابعة لقسم مياه معبأة",
+    "icon": "💧",
+    "velocity": "fast",
+    "code": "water"
+  }
+]

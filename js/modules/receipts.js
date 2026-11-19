@@ -516,6 +516,10 @@ window.saveReceipt = async () => {
     else if (entityType === "supplier") await recalculateSupplierBalance(targetId).catch(() => {});
 
     clearERPCache(`companies/${COMPANY_ID}/receipts`);
+    clearERPCache(`companies/${COMPANY_ID}/cashBoxes`);
+    clearERPCache(`companies/${COMPANY_ID}/cashTransactions`);
+    clearERPCache(`companies/${COMPANY_ID}/bankAccounts`);
+    clearERPCache(`companies/${COMPANY_ID}/bankTransactions`);
     clearERPCache(`companies/${COMPANY_ID}/chartOfAccounts`);
     clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
     clearERPCache(`companies/${COMPANY_ID}/customers`);
@@ -584,7 +588,114 @@ async function _createReceipt(p) {
       { accountId: p.creditAccId, accountCode: p.creditAccCode, accountName: p.creditAccName, debit: 0,        credit: p.amount, note: `تحصيل سند قبض`, costCenterId: p.ccId }
     ]
   });
+
+  // ── Auto-release broker commission on customer payment ──
+  if (p.entityType === "customer" && p.targetId) {
+    try {
+      await releaseBrokerCommissionOnPayment(p.targetId, p.amount, rcptId, p.date, p.notes);
+    } catch (commErr) {
+      console.warn("[BrokerCommission] Auto release on receipt failed:", commErr);
+    }
+  }
+
   return rcptId;
+}
+
+/**
+ * دالة إطلاق عمولة الوسيط تلقائياً عند سداد العميل للفاتورة وتوليد القيد المحاسبي
+ */
+async function releaseBrokerCommissionOnPayment(customerId, amountPaid, rcptId, receiptDate, notes) {
+  try {
+    const invRef = collection(db, `companies/${COMPANY_ID}/salesInvoices`);
+    const q = fsQuery(
+      invRef,
+      where("customerId", "==", customerId),
+      where("hasBrokerCommission", "==", true)
+    );
+    const snap = await fsGetDocs(q);
+    if (snap.empty) return;
+
+    let remainingReceiptAmt = parseFloat(amountPaid) || 0;
+
+    for (const d of snap.docs) {
+      if (remainingReceiptAmt <= 0) break;
+      const inv = d.data();
+      if (inv.brokerCommissionStatus === "earned" && (inv.brokerCommissionEarned || 0) >= (inv.brokerCommissionTotal || 0)) {
+        continue;
+      }
+
+      const totalInv = parseFloat(inv.totalWithVat || 0);
+      const prevEarned = parseFloat(inv.brokerCommissionEarned || 0);
+      const rate = parseFloat(inv.brokerRate) || 1.0;
+      const totalComm = parseFloat(inv.brokerCommissionTotal) || Math.round(parseFloat(inv.subtotal || 0) * (rate / 100) * 100) / 100;
+      const unearnedComm = Math.max(0, totalComm - prevEarned);
+
+      if (unearnedComm <= 0.01) continue;
+
+      // Portion of payment applied to this invoice
+      const invPaid = parseFloat(inv.paidAmount || 0);
+      const invRemaining = Math.max(0, totalInv - invPaid);
+      const payApplied = Math.min(remainingReceiptAmt, invRemaining > 0 ? invRemaining : totalInv);
+      const earnedRatio = totalInv > 0 ? Math.min(1, payApplied / totalInv) : 1;
+      const commToRelease = Math.min(unearnedComm, Math.round(totalComm * earnedRatio * 100) / 100);
+
+      if (commToRelease > 0.01) {
+        remainingReceiptAmt -= payApplied;
+
+        // 1. توليد قيد اليومية الآلي للعمولة المستحقة
+        // مدين: 5-4-10 (مصروفات عمولات وسيط)
+        // دائن: 2-1-4-2 (مستحقات عمولات الوسطاء - زياد)
+        const brokerAcc = inv.brokerAccountCode || "2-1-4-2";
+        const expenseAcc = inv.brokerExpenseCode || "5-4-10";
+        const brokerName = inv.brokerName || "زياد";
+        const invNum = inv.number || d.id;
+
+        const jeLines = [
+          {
+            accountCode: expenseAcc,
+            accountName: "مصروفات عمولات وسيط",
+            debit: commToRelease,
+            credit: 0,
+            note: `استحقاق عمولة الوسيط (${brokerName}) لسداد فاتورة ${invNum}`
+          },
+          {
+            accountCode: brokerAcc,
+            accountName: `مستحقات عمولات الوسطاء - ${brokerName}`,
+            debit: 0,
+            credit: commToRelease,
+            note: `استحقاق عمولة الوسيط (${brokerName}) لسداد فاتورة ${invNum}`
+          }
+        ];
+
+        const jeId = await createJournalEntry({
+          date: receiptDate || todayString(),
+          sourceType: "broker_commission",
+          sourceId: d.id,
+          description: `قيد آلي: استحقاق عمولة الوسيط ${brokerName} (${commToRelease} ر.س) لتحصيل فاتورة ${invNum} بموجب سند قبض #${rcptId.substring(0,6).toUpperCase()}`,
+          lines: jeLines
+        });
+
+        // 2. تحديث الفاتورة
+        const newEarned = Math.round((prevEarned + commToRelease) * 100) / 100;
+        const newStatus = newEarned >= (totalComm - 0.05) ? "earned" : "partial_earned";
+        const batch = writeBatch(db);
+        batch.update(fsDoc(db, `companies/${COMPANY_ID}/salesInvoices`, d.id), {
+          brokerCommissionEarned: newEarned,
+          brokerCommissionStatus: newStatus,
+          lastBrokerJeId: jeId || "",
+          updatedAt: serverTimestamp()
+        });
+        await batch.commit();
+
+        console.log(`[BrokerCommission] Auto-released ${commToRelease} SAR for broker ${brokerName} on invoice ${invNum}. JE: ${jeId}`);
+        if (window.showToast) {
+          window.showToast(`✅ تم إثبات استحقاق عمولة الوسيط (${brokerName}: ${formatCurrency(commToRelease)}) بقيد آلي فور تحصيل الفاتورة`, "success", 5000);
+        }
+      }
+    }
+  } catch (err) {
+    console.error("[BrokerCommission] Release error:", err);
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -660,6 +771,13 @@ async function _updateReceipt(p) {
   // Use direct add (not in transaction as balances already handled)
   const { addDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
   await addDoc(collection(db, newTxColl), newTxData);
+
+  clearERPCache(`companies/${COMPANY_ID}/cashBoxes`);
+  clearERPCache(`companies/${COMPANY_ID}/cashTransactions`);
+  clearERPCache(`companies/${COMPANY_ID}/bankAccounts`);
+  clearERPCache(`companies/${COMPANY_ID}/bankTransactions`);
+  clearERPCache(`companies/${COMPANY_ID}/chartOfAccounts`);
+  clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -716,6 +834,10 @@ window.confirmDeleteReceipt = async () => {
     else if (old.entityType === "supplier") await recalculateSupplierBalance(old.targetId).catch(() => {});
 
     clearERPCache(`companies/${COMPANY_ID}/receipts`);
+    clearERPCache(`companies/${COMPANY_ID}/cashBoxes`);
+    clearERPCache(`companies/${COMPANY_ID}/cashTransactions`);
+    clearERPCache(`companies/${COMPANY_ID}/bankAccounts`);
+    clearERPCache(`companies/${COMPANY_ID}/bankTransactions`);
     clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
     clearERPCache(`companies/${COMPANY_ID}/chartOfAccounts`);
     clearERPCache(`companies/${COMPANY_ID}/customers`);
@@ -835,12 +957,12 @@ function _buildReceiptHTML(r, id, company) {
   const amountWords = _numberToArabicWords(r.amount);
 
   // Company fields
-  const coName    = company.name    || company.companyName || "شركة نظم الإمداد الحديثة";
+  const coName    = company.name    || company.companyName || "شركة نظم الإمداد المتطورة";
   const coAddress = [company.address, company.city, company.zip, company.country].filter(Boolean).join("، ") || "ينبع، المملكة العربية السعودية";
   const coPhone   = company.phone   || company.mobile || "0549141648";
   const coEmail   = company.email   || "";
-  const coVat     = company.vatNumber || company.vat || company.taxNumber || "312448150500003";
-  const coCr      = company.crNumber || company.cr  || "4700123180";
+  const coVat     = company.vatNumber || company.vat || company.taxNumber || "314996148100003";
+  const coCr      = company.crNumber || company.cr  || "7054969006";
   const coLogo    = company.logoUrl  || company.logoBase64 || company.logo || "";
 
   return `
@@ -972,7 +1094,7 @@ function _buildReceiptHTML(r, id, company) {
 
     <!-- ═══ FOOTER ═══ -->
     <div style="background:#f1f5f9;border-top:1.5px solid #cbd5e1;padding:14px 36px;display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-size:11px;color:#64748b;font-weight:700;">طُبع من نظام شركة نظم الإمداد الحديثة بتاريخ: ${new Date().toLocaleString("ar-SA")}</div>
+      <div style="font-size:11px;color:#64748b;font-weight:700;">طُبع من نظام شركة نظم الإمداد المتطورة بتاريخ: ${new Date().toLocaleString("ar-SA")}</div>
       <div dir="ltr" style="display:inline-block;direction:ltr;font-size:11px;color:#334155;font-family:monospace;font-weight:800;">REF: ${code}</div>
     </div>
 
@@ -1079,7 +1201,7 @@ window.printBlankReceiptVoucher = async () => {
     if (logoSnap.exists() && logoSnap.data().dataUrl) company.logoUrl = logoSnap.data().dataUrl;
   } catch (_) {}
 
-  const coName    = company.name    || company.companyName || "شركة نظم الإمداد الحديثة";
+  const coName    = company.name    || company.companyName || "شركة نظم الإمداد المتطورة";
   const coAddress = [company.address, company.city, company.zip, company.country].filter(Boolean).join("، ") || "ينبع، المملكة العربية السعودية";
   const coPhone   = company.phone   || company.mobile || "";
   const coVat     = company.vatNumber || company.vat || company.taxNumber || "";

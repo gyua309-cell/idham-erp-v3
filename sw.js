@@ -3,7 +3,7 @@
 // Offline caching + background sync strategy
 // ═══════════════════════════════════════════════════════════
 
-const CACHE_V = "idham-erp-v2-20260808-v80";
+const CACHE_V = "idham-erp-v2-20261021-v97";
 const STATIC  = [
   "/",
   "/index.html",

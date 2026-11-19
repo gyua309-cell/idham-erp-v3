@@ -102,6 +102,46 @@
       try { localStorage.clear(); } catch(e) {}
       try { sessionStorage.clear(); } catch(e) {}
 
+      setProgress(85, 'حذف قاعدة بيانات الكاش IndexedDB...');
+      try {
+        if ('indexedDB' in window) {
+          if (indexedDB.databases) {
+            const dbs = await indexedDB.databases();
+            for (const dbInfo of dbs) {
+              if (dbInfo.name) {
+                await new Promise((resolve) => {
+                  const req = indexedDB.deleteDatabase(dbInfo.name);
+                  req.onsuccess = () => resolve();
+                  req.onerror = () => resolve();
+                  req.onblocked = () => resolve();
+                });
+              }
+            }
+          }
+          // Fallbacks for known databases
+          await Promise.all([
+            new Promise((resolve) => {
+              const req = indexedDB.deleteDatabase("idham_erp_cache_db");
+              req.onsuccess = () => resolve();
+              req.onerror = () => resolve();
+              req.onblocked = () => resolve();
+            }),
+            new Promise((resolve) => {
+              const req = indexedDB.deleteDatabase("firestore/__db_persistence_idham-b3a7e_idham-erp");
+              req.onsuccess = () => resolve();
+              req.onerror = () => resolve();
+              req.onblocked = () => resolve();
+            }),
+            new Promise((resolve) => {
+              const req = indexedDB.deleteDatabase("firestore/__db_persistence_idham-b3a7e_[default]");
+              req.onsuccess = () => resolve();
+              req.onerror = () => resolve();
+              req.onblocked = () => resolve();
+            })
+          ]);
+        }
+      } catch(e) {}
+
       setProgress(100, '✅ تم التنظيف بنجاح!');
       await new Promise(r => setTimeout(r, 600));
 

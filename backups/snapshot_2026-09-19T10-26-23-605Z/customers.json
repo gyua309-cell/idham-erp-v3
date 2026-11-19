@@ -1,0 +1,2052 @@
+[
+  {
+    "_id": "0SwH81pA0typmc2cYRSt",
+    "vatNumber": "",
+    "nationalId": "",
+    "id": "0SwH81pA0typmc2cYRSt",
+    "priceList": "default",
+    "name": "ش مطعم مذاق الشعب المصرى",
+    "creditDays": 0,
+    "notes": "",
+    "code": "02017",
+    "balance": 507.07,
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "accountCode": "1-1-2-1-2-02-12",
+    "repName": "مصطفى",
+    "segment": "retail_regular",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "accountId": "FZlHjIdC5AcVsZqZKQB7",
+    "phone": "0540414133",
+    "zone": "",
+    "createdAt": {
+      "seconds": 1784407412,
+      "nanoseconds": 856000000
+    },
+    "creditLimit": 0,
+    "address": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077988,
+      "nanoseconds": 73000000
+    }
+  },
+  {
+    "_id": "1BI1LBdo97pHcBThNHTt",
+    "accountCode": "1-1-2-1-2-02-39",
+    "nationalId": "7030735604",
+    "accountId": "289pKyJIQFV5xI8CK2l8",
+    "creditLimit": 10000,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787233238,
+      "nanoseconds": 703000000
+    },
+    "deliveryDay": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077988,
+      "nanoseconds": 410000000
+    },
+    "name": "مطعم ديار  الشواية لتقديم الوجبات",
+    "promissoryBalance": 10000,
+    "creditDays": 0,
+    "notes": "",
+    "routeGroup": "",
+    "balance": 8083.77,
+    "priceList": "default",
+    "code": "0255",
+    "vatNumber": "300879772700003",
+    "repName": "مصطفى",
+    "segment": "gold",
+    "phone": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "address": "شارع الامير مقرن - حى النخيل",
+    "crNumber": "7030735604",
+    "googleMapsUrl": "",
+    "zone": "ينبع"
+  },
+  {
+    "_id": "1HX4fZz7quqzI9yxSg5x",
+    "creditLimit": 0,
+    "balance": 1215.3,
+    "vatNumber": "300850586600003",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "accountCode": "1-1-2-1-2-02-07",
+    "priceList": "default",
+    "name": "مطعم شواية الجود بخارى",
+    "address": "46428 شارع الامير مقرن ابن عبد العزيز  حى مشرفة",
+    "repName": "مصطفى",
+    "segment": "retail_regular",
+    "phone": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "code": "02045",
+    "creditDays": 0,
+    "crNumber": "753314873",
+    "nationalId": "753314873",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785964014,
+      "nanoseconds": 937000000
+    },
+    "notes": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077989,
+      "nanoseconds": 305000000
+    },
+    "zone": "ينبع",
+    "accountId": "B69DtOdPMQqVlPOp5gVG"
+  },
+  {
+    "_id": "1d9jrl7vsez3BN4yAu9a",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "nanoseconds": 970000000,
+      "seconds": 1784106810
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077989,
+      "nanoseconds": 642000000
+    },
+    "zone": "",
+    "id": "1d9jrl7vsez3BN4yAu9a",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "phone": "",
+    "accountId": "OFVbtZnXg8geR1yg6KSC",
+    "code": "02011",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "isActive": false,
+    "notes": "",
+    "priceList": "default",
+    "creditDays": 0,
+    "address": "",
+    "segment": "at_risk",
+    "name": "عميل نقدى 2",
+    "repName": "مصطفى",
+    "creditLimit": 0,
+    "balance": 1002.52,
+    "nationalId": "",
+    "accountCode": "1-1-2-1-2-02-20",
+    "vatNumber": ""
+  },
+  {
+    "_id": "2mcQzOXzXq9xlstNfB4Q",
+    "vatNumber": "",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "priceList": "wholesale",
+    "name": "عميل نقدي",
+    "repName": "مصطفى",
+    "segment": "at_risk",
+    "notes": "",
+    "nationalId": "",
+    "code": "02010",
+    "address": "",
+    "id": "2mcQzOXzXq9xlstNfB4Q",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "creditLimit": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077990,
+      "nanoseconds": 539000000
+    },
+    "createdAt": {
+      "nanoseconds": 961000000,
+      "seconds": 1784043314
+    },
+    "phone": "",
+    "zone": "",
+    "balance": 0,
+    "accountId": "EPc7uV0pPZZayHgitvPR",
+    "accountCode": "1-1-2-1-2-02-10",
+    "creditDays": 0
+  },
+  {
+    "_id": "5OiBiic5mL02ZvG6jc58",
+    "vatNumber": "311113565900003",
+    "address": "2984 شارع على ابن ابى طالب حى الحوراء",
+    "nationalId": "7037712671",
+    "phone": "",
+    "segment": "vip_platinum",
+    "zone": "ينبع",
+    "repName": "مصطفى",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "creditDays": 0,
+    "promissoryBalance": 8000,
+    "accountCode": "1-1-2-1-2-02-11",
+    "balance": 4050.27,
+    "notes": "",
+    "creditLimit": 0,
+    "priceList": "default",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "code": "0231",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "name": "مطعم الصفا البخارى لتقديم الوجبات",
+    "id": "5OiBiic5mL02ZvG6jc58",
+    "accountId": "FJR03tbp9zLzYKakX5i7",
+    "crNumber": "7037712671",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077991,
+      "nanoseconds": 69000000
+    },
+    "createdAt": {
+      "nanoseconds": 371000000,
+      "seconds": 1785054810
+    }
+  },
+  {
+    "_id": "5z6K98NSIPbL5DoTJ0R2",
+    "creditDays": 0,
+    "name": "مطعم وجبات حمدان للوجبات السريعه",
+    "deliveryDay": "",
+    "creditLimit": 0,
+    "priceList": "default",
+    "accountCode": "1-1-2-1-2-02-38",
+    "tierOverride": "auto",
+    "vatNumber": "301179375200003",
+    "nationalId": "",
+    "address": "شارع  الامير مقرن - ينبع",
+    "accountId": "sfPNFshZgyB65dRNbWkh",
+    "crNumber": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788113320,
+      "nanoseconds": 296000000
+    },
+    "zone": "",
+    "repName": "مصطفى",
+    "notes": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787851793,
+      "nanoseconds": 453000000
+    },
+    "balance": 2240.13,
+    "googleMapsUrl": "",
+    "phone": "",
+    "code": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "routeGroup": ""
+  },
+  {
+    "_id": "6GGxJ4j7E8VJo0bYUrwZ",
+    "balance": 1726.52,
+    "code": "02022",
+    "vatNumber": "",
+    "address": "",
+    "zone": "",
+    "repName": "مصطفى",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "segment": "retail_regular",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "priceList": "default",
+    "notes": "",
+    "nationalId": "",
+    "accountId": "JtBSeVPfPYO6q53Bo7wN",
+    "creditDays": 0,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "id": "6GGxJ4j7E8VJo0bYUrwZ",
+    "phone": "",
+    "accountCode": "1-1-2-1-2-02-15",
+    "name": "مطعم فطائر البلد",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077992,
+      "nanoseconds": 517000000
+    },
+    "createdAt": {
+      "nanoseconds": 238000000,
+      "seconds": 1784449254
+    },
+    "creditLimit": 0
+  },
+  {
+    "_id": "8JabzcTOqsJgrlJt6kEo",
+    "nationalId": "",
+    "balance": 412.91,
+    "address": "",
+    "accountId": "oTj77oQrQmwZoVHvv0n7",
+    "name": "المنار الفضى",
+    "creditDays": 0,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786554436,
+      "nanoseconds": 133000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077994,
+      "nanoseconds": 480000000
+    },
+    "repName": "مصطفى",
+    "segment": "retail_regular",
+    "code": "02053",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "vatNumber": "",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "phone": "",
+    "crNumber": "",
+    "accountCode": "1-1-2-1-2-02-36",
+    "zone": "",
+    "notes": "",
+    "creditLimit": 0,
+    "priceList": "default"
+  },
+  {
+    "_id": "9IeG4r9DqlJ0HC3OuPUA",
+    "accountCode": "1-1-2-1-2-02-37",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "creditLimit": 0,
+    "nationalId": "",
+    "priceList": "default",
+    "zone": "",
+    "vatNumber": "",
+    "creditDays": 0,
+    "code": "2031",
+    "id": "9IeG4r9DqlJ0HC3OuPUA",
+    "name": "مطعم ريحان",
+    "accountId": "qw6a88yNAOwnexfRn64i",
+    "createdAt": {
+      "nanoseconds": 319000000,
+      "seconds": 1785002161
+    },
+    "notes": "",
+    "balance": 5.29,
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077995,
+      "nanoseconds": 854000000
+    },
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "address": "",
+    "phone": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "9J9kZBzBBiXAOUUy4uwi",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "priceList": "default",
+    "name": "تموينات فرح خلف حمود العتيبى للمواد الغذائية",
+    "id": "9J9kZBzBBiXAOUUy4uwi",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "vatNumber": "311950420100003",
+    "segment": "retail_regular",
+    "crNumber": "7037485799",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077997,
+      "nanoseconds": 80000000
+    },
+    "repName": "مصطفى",
+    "creditLimit": 0,
+    "createdAt": {
+      "seconds": 1785086813,
+      "nanoseconds": 413000000
+    },
+    "accountId": "RHjoGfNLaXUWWz0lbx2k",
+    "notes": "",
+    "accountCode": "1-1-2-1-2-02-23",
+    "address": "46432- حى الياقوت",
+    "creditDays": 0,
+    "zone": "ينبع",
+    "nationalId": "7037485799",
+    "balance": 702.58,
+    "phone": "",
+    "code": "02036",
+    "repId": "Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "9UdJsvHGzgqdmJQ7UHzL",
+    "notes": "",
+    "priceList": "default",
+    "additionalNo": "9039",
+    "phone": "",
+    "repId": "Ao147Sj24LgGa2OOag0c",
+    "tierOverride": "auto",
+    "street": "شارع الملك عبد العزيز",
+    "buildingNo": "4951",
+    "creditDays": 0,
+    "routeGroup": "",
+    "crNumber": "7052063430",
+    "district": "المرجان",
+    "accountId": "ZPc4edBplkJ5RgjorBPF",
+    "code": "02063",
+    "creditLimit": 0,
+    "deliveryDay": "",
+    "zone": "ينبع",
+    "postalCode": "46432",
+    "address": "رقم المبنى: 4951 — الشارع: شارع الملك عبد العزيز — الحي: المرجان — المدينة: ينبع — الرمز البريدي: 46432",
+    "nationalId": "7052063430",
+    "googleMapsUrl": "",
+    "repName": "السيد رضا",
+    "city": "ينبع",
+    "balance": 13490.04,
+    "buildingNumber": "4951",
+    "additionalNumber": "9039",
+    "country": "المملكة العربية السعودية",
+    "name": "تموينات ريف رضوى",
+    "vatNumber": "310249816400003",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789807320,
+      "nanoseconds": 354000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788249972,
+      "nanoseconds": 248000000
+    },
+    "accountCode": "1-1-2-1-2-25-01"
+  },
+  {
+    "_id": "AOWPtHdui6jDJQ90d2ZN",
+    "createdAt": {
+      "seconds": 1783246854,
+      "nanoseconds": 483000000
+    },
+    "creditDays": 15,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077998,
+      "nanoseconds": 489000000
+    },
+    "accountId": "DEfiudHMKxhCrvxa0clW",
+    "id": "AOWPtHdui6jDJQ90d2ZN",
+    "balance": 0,
+    "zone": "ينبع",
+    "segment": "at_risk",
+    "repName": "اختر المندوب",
+    "accountCode": "1-1-2-1-2-02-09",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "nationalId": "",
+    "address": "حي الأندلس",
+    "creditLimit": 50000,
+    "code": "CUST-005",
+    "priceList": "default",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "name": "شركة أزواد رواد الغذاء",
+    "phone": "541494131",
+    "repId": "",
+    "vatNumber": "311310759900003",
+    "notes": ""
+  },
+  {
+    "_id": "AsHnoUrfSVEpIPAlTB1l",
+    "vatNumber": "31610349100033",
+    "name": "مطعم سفرة المذاق البخارى  ج 16",
+    "balance": 2682.28,
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "crNumber": "7029954026",
+    "address": "شارع الملك خالد - حى النسيم",
+    "priceList": "default",
+    "zone": "ينبع",
+    "creditLimit": 0,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "nationalId": "7029954026",
+    "phone": "",
+    "accountCode": "1-1-2-1-2-02-22",
+    "accountId": "QjM3W8WWNzPUdpZMIJzv",
+    "code": "",
+    "creditDays": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788077999,
+      "nanoseconds": 945000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786981453,
+      "nanoseconds": 51000000
+    },
+    "notes": ""
+  },
+  {
+    "_id": "BedkdAYusyAzERXePW07",
+    "nationalId": "7051857329",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "name": "بقالة انهار رضوه",
+    "phone": "",
+    "balance": 743.24,
+    "segment": "retail_regular",
+    "accountId": "MIsCa5zfy1fn4FpA94pq",
+    "repName": "مصطفى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785917594,
+      "nanoseconds": 127000000
+    },
+    "creditDays": 0,
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "notes": "",
+    "address": "شارع عمر ابن الخطاب - حى السميرى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078001,
+      "nanoseconds": 445000000
+    },
+    "vatNumber": "314266662200003",
+    "zone": "ينبع",
+    "accountCode": "1-1-2-1-2-02-18",
+    "code": "02042",
+    "creditLimit": 0,
+    "priceList": "default",
+    "crNumber": "7051857329"
+  },
+  {
+    "_id": "CNYkLoGlhiXHMIRSxwc1",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "vatNumber": "",
+    "creditLimit": 0,
+    "phone": "",
+    "accountCode": "1-1-2-1-2-02-02",
+    "notes": "",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "priceList": "default",
+    "name": "مطعم السلام البخارى",
+    "creditDays": 0,
+    "address": "",
+    "code": "0241",
+    "repName": "مصطفى",
+    "segment": "retail_regular",
+    "balance": 2.23,
+    "zone": "ينبع",
+    "accountId": "3AN6jJz3S1bhk9JFo8gA",
+    "nationalId": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785580237,
+      "nanoseconds": 748000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078002,
+      "nanoseconds": 927000000
+    }
+  },
+  {
+    "_id": "CtYTiZUdKdzs4YzkqDfX",
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "accountCode": "1-1-2-1-2-02-14",
+    "priceList": "default",
+    "address": "العسيلى",
+    "name": "تموينات فايز مسلم",
+    "creditLimit": 0,
+    "notes": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "balance": 3617.7200000000003,
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "vatNumber": "310715099200003",
+    "phone": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078004,
+      "nanoseconds": 495000000
+    },
+    "zone": "ينبع",
+    "createdAt": {
+      "nanoseconds": 985000000,
+      "seconds": 1784756145
+    },
+    "accountId": "JU9xPi9Caom9UH6mXYxa",
+    "nationalId": "",
+    "code": "02030",
+    "creditDays": 0,
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "id": "CtYTiZUdKdzs4YzkqDfX"
+  },
+  {
+    "_id": "DHw4NhN1joPAHNB6sll3",
+    "creditLimit": 0,
+    "postalCode": "",
+    "deliveryDay": "",
+    "nationalId": "7015659845",
+    "priceList": "default",
+    "tierOverride": "auto",
+    "additionalNo": "",
+    "googleMapsUrl": "",
+    "street": "",
+    "zone": "",
+    "accountId": "Ga8odKFN1fsIzGlEAIdK",
+    "code": "",
+    "district": "",
+    "crNumber": "7015659845",
+    "additionalNumber": "",
+    "accountCode": "1-1-2-1-2-25-04",
+    "name": "مؤسسة جود المذاق لتقديم الوجبات",
+    "buildingNumber": "",
+    "city": "",
+    "buildingNo": "",
+    "vatNumber": "310272878400003",
+    "creditDays": 0,
+    "routeGroup": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789408663,
+      "nanoseconds": 646000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789408255,
+      "nanoseconds": 993000000
+    },
+    "repName": "السيد رضا",
+    "repId": "Ao147Sj24LgGa2OOag0c",
+    "phone": "",
+    "address": "",
+    "country": "المملكة العربية السعودية",
+    "notes": "",
+    "balance": 670.12
+  },
+  {
+    "_id": "DNlmVvvfxHgbtEByKhIv",
+    "segment": "retail_regular",
+    "creditLimit": 0,
+    "repName": "مصطفى",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "accountCode": "1-1-2-1-2-02-31",
+    "address": "",
+    "creditDays": 0,
+    "name": "بخارى الخليج",
+    "accountId": "dipLt1guj6DEx8uFAuAU",
+    "nationalId": "",
+    "balance": 404.11,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078006,
+      "nanoseconds": 144000000
+    },
+    "createdAt": {
+      "nanoseconds": 66000000,
+      "seconds": 1784407899
+    },
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "vatNumber": "",
+    "zone": "",
+    "id": "DNlmVvvfxHgbtEByKhIv",
+    "notes": "",
+    "code": "02019",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "priceList": "default",
+    "phone": "0507924160"
+  },
+  {
+    "_id": "HfMNkohcnJqIHijhP81n",
+    "vatNumber": "314849277700003",
+    "name": "مؤسسة شواية الشرق الاوسط طريق املج",
+    "street": "المشهد -   حى الفردوس",
+    "crNumber": "",
+    "creditLimit": 0,
+    "district": "",
+    "buildingNumber": "",
+    "routeGroup": "",
+    "deliveryDay": "",
+    "city": "",
+    "creditDays": 0,
+    "notes": "",
+    "buildingNo": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789805416,
+      "nanoseconds": 100000000
+    },
+    "phone": "",
+    "additionalNumber": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787842542,
+      "nanoseconds": 463000000
+    },
+    "repId": "i6qFzXabMQq8R7j7GxgL",
+    "repName": "محمد عوض",
+    "address": "الشارع: المشهد -   حى الفردوس",
+    "accountCode": "1-1-2-1-2-24-01",
+    "balance": 18662.71,
+    "priceList": "wholesale",
+    "country": "المملكة العربية السعودية",
+    "tierOverride": "auto",
+    "zone": "ينبع",
+    "accountId": "KmXrTzhBUalLhZIqSNW0",
+    "nationalId": "",
+    "postalCode": "",
+    "additionalNo": "",
+    "code": "02067",
+    "googleMapsUrl": ""
+  },
+  {
+    "_id": "IA9pgb7adZOM1n4CGMHN",
+    "notes": "",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "creditDays": 0,
+    "code": "02035",
+    "priceList": "default",
+    "phone": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "vatNumber": "",
+    "id": "IA9pgb7adZOM1n4CGMHN",
+    "crNumber": "7012793738",
+    "zone": "ينبع — جده",
+    "nationalId": "7012793738",
+    "accountId": "f1OidXHVbQOkaiRhL3An",
+    "balance": 5527.009999999999,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078007,
+      "nanoseconds": 725000000
+    },
+    "createdAt": {
+      "nanoseconds": 442000000,
+      "seconds": 1785086579
+    },
+    "repName": "مصطفى",
+    "name": "مركز امجاد ينبع للتموينات",
+    "segment": "retail_regular",
+    "creditLimit": 0,
+    "address": "7551- شارع زقاق سرور باعسيل - حى النور",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "accountCode": "1-1-2-1-2-02-32"
+  },
+  {
+    "_id": "IY2W6Wyo7MRd21MSUIXV",
+    "accountId": "Lm2hi4ODhx6fTjdds5lM",
+    "repName": "اختر المندوب",
+    "segment": "at_risk",
+    "code": "CUST-004",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078009,
+      "nanoseconds": 492000000
+    },
+    "createdAt": {
+      "seconds": 1783210095,
+      "nanoseconds": 965000000
+    },
+    "id": "IY2W6Wyo7MRd21MSUIXV",
+    "address": "",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "zone": "جدة و ينبع",
+    "balance": 0,
+    "creditDays": 5,
+    "repId": "",
+    "phone": "",
+    "priceList": "wholesale",
+    "notes": "",
+    "vatNumber": "302240449100003",
+    "creditLimit": 50000,
+    "nationalId": "",
+    "accountCode": "1-1-2-1-2-02-17",
+    "name": "مؤسسة الذوق الممتاز لخدمات الإعاشة"
+  },
+  {
+    "_id": "IuqIqAGPftIfPE2rGy3O",
+    "accountId": "w4RNMJkEutR1jtl2cAkA",
+    "name": "مطعم ريف البخارى",
+    "nationalId": "",
+    "notes": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785776828,
+      "nanoseconds": 268000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078011,
+      "nanoseconds": 116000000
+    },
+    "creditDays": 0,
+    "phone": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "balance": 16.52,
+    "priceList": "default",
+    "zone": "ينبع",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "address": "الامارة  - حى الامارة",
+    "vatNumber": "",
+    "accountCode": "1-1-2-1-2-02-41",
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "creditLimit": 0,
+    "code": "02066"
+  },
+  {
+    "_id": "KiSevKYKUjsZRtzbMHz9",
+    "accountCode": "1-1-2-1-2-02-33",
+    "accountId": "gWthndTohQXPnLMMLuHT",
+    "creditLimit": 0,
+    "nationalId": "4650247281",
+    "createdAt": "2026-07-27T13:15:26.062Z",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "zone": "ينبع",
+    "notes": "",
+    "balance": 54.36,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078012,
+      "nanoseconds": 174000000
+    },
+    "segment": "silver",
+    "creditDays": 0,
+    "repName": "مصطفى",
+    "phone": "",
+    "code": "2051",
+    "address": "42361شارع الامير مقرن بن عبد العزيز",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "name": "شركة سفرة المذاق لتقديم الوجبات",
+    "priceList": "default",
+    "vatNumber": "311650349100003",
+    "crNumber": "4650247281"
+  },
+  {
+    "_id": "L8h3pCyfj0TPfuL0Owe2",
+    "name": "تموينات فرح",
+    "crNumber": "7054233668",
+    "priceList": "default",
+    "phone": "",
+    "creditDays": 0,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "id": "L8h3pCyfj0TPfuL0Owe2",
+    "creditLimit": 0,
+    "nationalId": "7054233668",
+    "notes": "",
+    "accountCode": "1-1-2-1-2-02-21",
+    "vatNumber": "314770973400003",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078012,
+      "nanoseconds": 710000000
+    },
+    "createdAt": {
+      "nanoseconds": 380000000,
+      "seconds": 1784746389
+    },
+    "segment": "at_risk",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "repName": "مصطفى",
+    "accountId": "PNrLht20Gam8sbwVT9dX",
+    "zone": "ينبع",
+    "address": "حى البندر - شارع عمر ابن عبد العزيز",
+    "code": "02029",
+    "balance": 0.14
+  },
+  {
+    "_id": "Mmbh5TClAN4II0lazeOW",
+    "buildingNumber": "2947",
+    "accountCode": "1-1-2-1-2-02-04",
+    "id": "Mmbh5TClAN4II0lazeOW",
+    "zone": "ينبع",
+    "code": "02028",
+    "accountId": "6oTrhmG2olTwiwtJqFIR",
+    "buildingNo": "2947",
+    "creditDays": 0,
+    "routeGroup": "",
+    "tierOverride": "auto",
+    "street": "ابو طلحة الانصارى",
+    "googleMapsUrl": "",
+    "priceList": "default",
+    "additionalNo": "6764",
+    "crNumber": "7032556727",
+    "postalCode": "46427",
+    "district": "حى العقيق",
+    "nationalId": "7032556727",
+    "creditLimit": 0,
+    "deliveryDay": "",
+    "additionalNumber": "6764",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788880709,
+      "nanoseconds": 272000000
+    },
+    "createdAt": {
+      "seconds": 1784744829,
+      "nanoseconds": 386000000
+    },
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "address": "رقم المبنى: 2947 — الشارع: ابو طلحة الانصارى — الحي: حى العقيق — المدينة: ينبع — الرمز البريدي: 46427",
+    "name": "مؤسسة بقالة جسر الخير للمواد الغذائية",
+    "notes": "",
+    "vatNumber": "311705263800003",
+    "city": "ينبع",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "balance": 1586.46,
+    "phone": "",
+    "country": "المملكة العربية السعودية"
+  },
+  {
+    "_id": "MmqfvDjcERx8Wn93AxXf",
+    "accountId": "YaPrzX1HrmAexcDBzlB1",
+    "nationalId": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078014,
+      "nanoseconds": 424000000
+    },
+    "code": "02015",
+    "createdAt": {
+      "seconds": 1784383354,
+      "nanoseconds": 788000000
+    },
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "zone": "ينبع",
+    "creditDays": 0,
+    "notes": "",
+    "repName": "مصطفى",
+    "id": "MmqfvDjcERx8Wn93AxXf",
+    "segment": "gold",
+    "creditLimit": 0,
+    "address": "طريق املج",
+    "accountCode": "1-1-2-1-2-02-28",
+    "priceList": "default",
+    "phone": "0550170388",
+    "vatNumber": "311417017400003",
+    "name": "مطعم رواد الاسماك",
+    "totalPaid": 15038,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "balance": 23317.52
+  },
+  {
+    "_id": "NL21SHvgTBUKWXbPm7GK",
+    "name": "بقالة عبد الله",
+    "phone": "",
+    "buildingNo": "",
+    "creditDays": 0,
+    "repId": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982258,
+      "nanoseconds": 999000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788888026,
+      "nanoseconds": 166000000
+    },
+    "city": "",
+    "notes": "",
+    "district": "",
+    "crNumber": "7031695229",
+    "address": "",
+    "additionalNumber": "",
+    "vatNumber": "310818061300003",
+    "repName": "اختر المندوب",
+    "deliveryDay": "",
+    "routeGroup": "",
+    "country": "المملكة العربية السعودية",
+    "balance": 208.3,
+    "creditLimit": 0,
+    "additionalNo": "",
+    "buildingNumber": "",
+    "googleMapsUrl": "",
+    "postalCode": "",
+    "nationalId": "7031695229",
+    "street": "",
+    "tierOverride": "auto",
+    "accountId": "P2KgErcIlRyIFE6C9IZL",
+    "zone": "",
+    "priceList": "default",
+    "code": "",
+    "accountCode": "1-1-2-1-1-08"
+  },
+  {
+    "_id": "NM0Yt4AU5FfSbOts1rCJ",
+    "vatNumber": "311818275600003",
+    "balance": 1422.87,
+    "name": "شركة جمار الريف",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "nationalId": "7035530596",
+    "notes": "",
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "creditLimit": 0,
+    "creditDays": 0,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "address": "شارع عمر ابن الخطاب - حى الصريف",
+    "phone": "",
+    "accountCode": "1-1-2-1-2-02-30",
+    "priceList": "default",
+    "zone": "ينبع",
+    "accountId": "a2sQzyqDevgl4QCXmRTz",
+    "code": "02044",
+    "crNumber": "7035530596",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078014,
+      "nanoseconds": 818000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785963837,
+      "nanoseconds": 188000000
+    }
+  },
+  {
+    "_id": "OstXL9KHvRnvNV7Kycid",
+    "accountCode": "1-1-2-1-2-02-34",
+    "priceList": "default",
+    "balance": 17.91,
+    "creditLimit": 0,
+    "vatNumber": "",
+    "name": "شواية المذاق - الصريف",
+    "repName": "مصطفى",
+    "segment": "retail_regular",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "address": "",
+    "phone": "",
+    "accountId": "ha0LN3aVZm62x1kAP0g6",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785967547,
+      "nanoseconds": 909000000
+    },
+    "nationalId": "",
+    "code": "2047",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078015,
+      "nanoseconds": 230000000
+    },
+    "notes": "",
+    "creditDays": 0,
+    "zone": ""
+  },
+  {
+    "_id": "P96Q9INFt51v0z6SSdop",
+    "googleMapsUrl": "",
+    "city": "",
+    "name": "بقالة سعيد",
+    "vatNumber": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788792357,
+      "nanoseconds": 344000000
+    },
+    "postalCode": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788792523,
+      "nanoseconds": 360000000
+    },
+    "nationalId": "",
+    "crNumber": "",
+    "street": "",
+    "district": "",
+    "accountCode": "1-1-2-1-2-02-45",
+    "buildingNumber": "",
+    "routeGroup": "",
+    "priceList": "default",
+    "balance": 802.52,
+    "country": "المملكة العربية السعودية",
+    "repName": "مصطفى",
+    "additionalNumber": "",
+    "address": "",
+    "notes": "",
+    "creditLimit": 0,
+    "deliveryDay": "",
+    "additionalNo": "",
+    "accountId": "PZOxmSoMknwnX5e54G4o",
+    "code": "",
+    "phone": "",
+    "tierOverride": "auto",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "buildingNo": "",
+    "creditDays": 0,
+    "zone": ""
+  },
+  {
+    "_id": "QkU0SBapHaA8PLamu94k",
+    "id": "QkU0SBapHaA8PLamu94k",
+    "balance": 4384.09,
+    "accountId": "MxsrjJ9dr1lOA3WKVsue",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "seconds": 1784490541,
+      "nanoseconds": 6000000
+    },
+    "name": "مطعم البيت البخارى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078015,
+      "nanoseconds": 536000000
+    },
+    "phone": "",
+    "address": "",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "notes": "",
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "zone": "ينبع -بعد بقالة مروج",
+    "priceList": "default",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "nationalId": "",
+    "creditLimit": 0,
+    "vatNumber": "",
+    "code": "2027",
+    "creditDays": 0,
+    "accountCode": "1-1-2-1-2-02-19"
+  },
+  {
+    "_id": "VKz4LaUMyuNy54mzLfpG",
+    "vatNumber": "",
+    "notes": "",
+    "code": "005",
+    "phone": "",
+    "repId": "",
+    "creditLimit": 0,
+    "id": "VKz4LaUMyuNy54mzLfpG",
+    "zone": "",
+    "priceList": "default",
+    "accountCode": "1-1-2-1-2-02-08",
+    "creditDays": 0,
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "balance": 0,
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "repName": "اختر المندوب",
+    "name": "سلة البركة",
+    "segment": "at_risk",
+    "accountId": "BWY7KTycWdd9nnb1i2VU",
+    "address": "",
+    "nationalId": "",
+    "createdAt": {
+      "seconds": 1784227271,
+      "nanoseconds": 851000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078015,
+      "nanoseconds": 866000000
+    }
+  },
+  {
+    "_id": "Vn9pVIhuYD8DBjjnRBK0",
+    "repName": "محمد عوض",
+    "address": "الشارع: الامير مقرن بن عبد العزيز - حى العقيق",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806269,
+      "nanoseconds": 111000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787855872,
+      "nanoseconds": 683000000
+    },
+    "street": "الامير مقرن بن عبد العزيز - حى العقيق",
+    "balance": 7794.3,
+    "country": "المملكة العربية السعودية",
+    "name": "مطعم ومطبخ درة المندى",
+    "tierOverride": "auto",
+    "nationalId": "7025179644",
+    "postalCode": "",
+    "vatNumber": "310249076300003",
+    "additionalNo": "",
+    "deliveryDay": "",
+    "city": "",
+    "creditLimit": 0,
+    "accountId": "UYLof8Z1zMsY1KoFNybt",
+    "zone": "ينبع",
+    "buildingNumber": "",
+    "notes": "",
+    "routeGroup": "",
+    "phone": "",
+    "code": "",
+    "repId": "i6qFzXabMQq8R7j7GxgL",
+    "priceList": "default",
+    "additionalNumber": "",
+    "crNumber": "7025179644",
+    "creditDays": 0,
+    "district": "",
+    "accountCode": "1-1-2-1-2-24-02",
+    "googleMapsUrl": "",
+    "buildingNo": ""
+  },
+  {
+    "_id": "Xo5nBGOH8LT9fwgrzWhe",
+    "creditDays": 0,
+    "segment": "silver",
+    "repName": "مصطفى",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "name": "مطعم البرنس للبخارى",
+    "address": "",
+    "notes": "",
+    "priceList": "default",
+    "vatNumber": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "balance": 16544.78,
+    "nationalId": "7025638144",
+    "phone": "0556516177",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "accountId": "Rw8Wwu1D080gOqMvTVUT",
+    "zone": "",
+    "accountCode": "1-1-2-1-2-02-25",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789319374,
+      "nanoseconds": 916000000
+    },
+    "creditLimit": 0,
+    "createdAt": {
+      "nanoseconds": 667000000,
+      "seconds": 1784407482
+    },
+    "crNumber": "7025638144",
+    "code": "02018",
+    "id": "Xo5nBGOH8LT9fwgrzWhe"
+  },
+  {
+    "_id": "ZYmlZsEwxKlhyM82o8Bz",
+    "notes": "",
+    "id": "ZYmlZsEwxKlhyM82o8Bz",
+    "creditLimit": 0,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "accountId": "7gRSctuNCmHVK3u9gem0",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "phone": "0531807064",
+    "accountCode": "1-1-2-1-2-02-05",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078016,
+      "nanoseconds": 667000000
+    },
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "name": "مطعم بخارى محمد ياسين",
+    "createdAt": {
+      "nanoseconds": 962000000,
+      "seconds": 1784383454
+    },
+    "balance": 62.09,
+    "nationalId": "",
+    "vatNumber": "",
+    "code": "02014",
+    "address": "",
+    "zone": "",
+    "repName": "مصطفى",
+    "creditDays": 0,
+    "segment": "retail_regular",
+    "priceList": "default"
+  },
+  {
+    "_id": "br7glCQ5qbSzsxYmHNBQ",
+    "priceList": "default",
+    "additionalNumber": "",
+    "notes": "",
+    "tierOverride": "auto",
+    "additionalNo": "",
+    "routeGroup": "",
+    "creditLimit": 0,
+    "deliveryDay": "",
+    "phone": "",
+    "repId": "Ao147Sj24LgGa2OOag0c",
+    "buildingNo": "",
+    "crNumber": "",
+    "balance": 72.9,
+    "zone": "",
+    "district": "",
+    "accountId": "9yC2h0oJzYnQGV9F3owG",
+    "creditDays": 0,
+    "country": "المملكة العربية السعودية",
+    "repName": "السيد رضا",
+    "address": "",
+    "code": "",
+    "name": "الطعم العدنى",
+    "googleMapsUrl": "",
+    "vatNumber": "",
+    "accountCode": "1-1-2-1-2-25-03",
+    "city": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789058860,
+      "nanoseconds": 732000000
+    },
+    "buildingNumber": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789058930,
+      "nanoseconds": 790000000
+    },
+    "street": "",
+    "postalCode": "",
+    "nationalId": ""
+  },
+  {
+    "_id": "dgfZOGkq9RN7p61KgTfJ",
+    "repName": "مصطفى",
+    "notes": "",
+    "segment": "silver",
+    "creditDays": 0,
+    "priceList": "default",
+    "address": "حى المشهد",
+    "code": "",
+    "phone": "0544515750",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "balance": 7057.56,
+    "zone": "ينبع",
+    "vatNumber": "314460622800003",
+    "nationalId": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078016,
+      "nanoseconds": 986000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785687447,
+      "nanoseconds": 953000000
+    },
+    "creditLimit": 0,
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "accountId": "wnUvElEzf6DlazhDyDjp",
+    "accountCode": "1-1-2-1-2-02-42",
+    "name": "سلسلة طعم شواية"
+  },
+  {
+    "_id": "eU6Quf0fABdZaQAbyj96",
+    "name": "مؤسسة شواية الشرق الاوسط",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "accountCode": "1-1-2-1-2-02-40",
+    "accountId": "vVH544eAetIleGPnhf71",
+    "createdAt": "2026-07-27T13:15:24.595Z",
+    "creditLimit": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078017,
+      "nanoseconds": 290000000
+    },
+    "crNumber": "7050447973",
+    "balance": 1402.6,
+    "priceList": "default",
+    "nationalId": "7050447973",
+    "zone": "ينبع",
+    "phone": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "creditDays": 0,
+    "vatNumber": "314849277700003",
+    "address": "شارع الملك عبد العزيز - حى المجد",
+    "code": "",
+    "notes": "",
+    "segment": "silver",
+    "repName": "مصطفى"
+  },
+  {
+    "_id": "fzV2SKT1pS5uD9j3K3dt",
+    "creditLimit": 0,
+    "id": "fzV2SKT1pS5uD9j3K3dt",
+    "accountCode": "1-1-2-1-2-02-26",
+    "creditDays": 0,
+    "priceList": "default",
+    "name": "مطعم عيش وملح",
+    "balance": 36855.06,
+    "nationalId": "",
+    "vatNumber": "",
+    "segment": "silver",
+    "repName": "مصطفى",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "address": "",
+    "zone": "",
+    "accountId": "Ul3sAi85u8Zm9nDQtzNy",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "nanoseconds": 735000000,
+      "seconds": 1784406857
+    },
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078017,
+      "nanoseconds": 591000000
+    },
+    "phone": "0560906573",
+    "code": "02016",
+    "notes": ""
+  },
+  {
+    "_id": "gBdLpxY3uovJ79u4bAdG",
+    "creditDays": 10,
+    "zone": "ينبع",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "code": "CUST-003",
+    "accountId": "RtyslnKVe4fNWcZ4DXqg",
+    "nationalId": "",
+    "createdAt": {
+      "nanoseconds": 555000000,
+      "seconds": 1783210095
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078019,
+      "nanoseconds": 86000000
+    },
+    "vatNumber": "302108636600003",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "balance": 0,
+    "repId": "",
+    "name": "مطعم فطائر ومشويات بيتي لتقديم الوجبات",
+    "phone": "0114445566",
+    "creditLimit": 50000,
+    "address": "",
+    "id": "gBdLpxY3uovJ79u4bAdG",
+    "priceList": "wholesale",
+    "accountCode": "1-1-2-1-2-02-24",
+    "segment": "at_risk",
+    "repName": "اختر المندوب",
+    "notes": ""
+  },
+  {
+    "_id": "i11KlEm4Wfr2RQG6y4OX",
+    "creditDays": 0,
+    "buildingNo": "",
+    "priceList": "default",
+    "balance": 871.94,
+    "zone": "",
+    "country": "المملكة العربية السعودية",
+    "accountCode": "1-1-2-1-1-07",
+    "repName": "اختر المندوب",
+    "buildingNumber": "",
+    "address": "",
+    "code": "",
+    "accountId": "lc31nXOXwUEXGzuVTIXn",
+    "additionalNo": "",
+    "street": "",
+    "tierOverride": "auto",
+    "crNumber": "7033402350",
+    "additionalNumber": "",
+    "district": "",
+    "routeGroup": "",
+    "vatNumber": "",
+    "nationalId": "7033402350",
+    "creditLimit": 0,
+    "deliveryDay": "",
+    "postalCode": "",
+    "name": "مؤسسة تموينات شاهين البحر للمواد الغذائية",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788860125,
+      "nanoseconds": 52000000
+    },
+    "notes": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789548253,
+      "nanoseconds": 637000000
+    },
+    "city": "",
+    "phone": "",
+    "googleMapsUrl": "",
+    "repId": ""
+  },
+  {
+    "_id": "ionUgkwKwQMwoiQUSu02",
+    "creditLimit": 0,
+    "name": "مطعم مارا بروست",
+    "vatNumber": "",
+    "creditDays": 0,
+    "id": "ionUgkwKwQMwoiQUSu02",
+    "accountCode": "1-1-2-1-2-02-29",
+    "nationalId": "",
+    "priceList": "default",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "notes": "",
+    "address": "",
+    "zone": "",
+    "createdAt": {
+      "seconds": 1784449206,
+      "nanoseconds": 728000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078020,
+      "nanoseconds": 602000000
+    },
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "phone": "",
+    "balance": 0.88,
+    "accountId": "ZxjwoJtBIAgefSuCvArf",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "code": "02021"
+  },
+  {
+    "_id": "luVpZMfrKfjxHzEwFlI1",
+    "phone": "",
+    "createdAt": {
+      "nanoseconds": 626000000,
+      "seconds": 1784423951
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078022,
+      "nanoseconds": 295000000
+    },
+    "balance": 0.15,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "accountId": "GjC2kLJVVyDX4oOjGQcO",
+    "creditDays": 0,
+    "code": "02020",
+    "notes": "",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "address": "",
+    "nationalId": "",
+    "repName": "مصطفى",
+    "zone": "",
+    "segment": "at_risk",
+    "priceList": "default",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "creditLimit": 0,
+    "accountCode": "1-1-2-1-2-02-13",
+    "id": "luVpZMfrKfjxHzEwFlI1",
+    "name": "مطعم مشعل الجهنى",
+    "vatNumber": ""
+  },
+  {
+    "_id": "oUdJ4SoQa6oSAEDpR1XM",
+    "id": "oUdJ4SoQa6oSAEDpR1XM",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "name": "بقالة ويست زون",
+    "phone": "0500311411",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078024,
+      "nanoseconds": 50000000
+    },
+    "accountCode": "1-1-2-1-2-02-06",
+    "createdAt": {
+      "nanoseconds": 191000000,
+      "seconds": 1784668009
+    },
+    "creditLimit": 0,
+    "accountId": "8wIN77i30QIdynsmldOI",
+    "notes": "",
+    "zone": "المروج - ينبع",
+    "address": "",
+    "crNumber": "",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "creditDays": 0,
+    "segment": "silver",
+    "repName": "مصطفى",
+    "vatNumber": "301115877300003",
+    "code": "02027",
+    "priceList": "default",
+    "nationalId": "",
+    "balance": 1263.99
+  },
+  {
+    "_id": "pQDd6SoXH8mhKIr93lUh",
+    "accountCode": "1-1-2-1-2-02-03",
+    "code": "02038",
+    "creditDays": 0,
+    "creditLimit": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078025,
+      "nanoseconds": 183000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785163286,
+      "nanoseconds": 176000000
+    },
+    "zone": "ينبع",
+    "nationalId": "",
+    "accountId": "6LwxZGD2nvebahPG3I2n",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "repName": "مصطفى",
+    "segment": "retail_regular",
+    "phone": "0507214178",
+    "address": "شارع سعد بن عماره -حى الفردوس",
+    "vatNumber": "312814174800003",
+    "notes": "",
+    "priceList": "default",
+    "balance": 22.014999999999873,
+    "name": "مطعم الصفا البخارى 2",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    }
+  },
+  {
+    "_id": "qNJQgUmU510yenX167P8",
+    "address": "",
+    "name": "شركة مطاعم فخر الضيافة لتقديم الوجبات",
+    "notes": "",
+    "segment": "at_risk",
+    "repName": "",
+    "balance": -6.93,
+    "assignedRepId": null,
+    "accountId": "urZBoleGgl1joMcylSOs",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788034385,
+      "nanoseconds": 303000000
+    },
+    "phone": "0500625000",
+    "repId": null,
+    "createdAt": {
+      "nanoseconds": 766000000,
+      "seconds": 1783210094
+    },
+    "creditDays": 15,
+    "creditLimit": 25000,
+    "vatNumber": "312516589800003",
+    "id": "qNJQgUmU510yenX167P8",
+    "accountCode": "1-1-2-1-1-06",
+    "zone": "ينبع",
+    "nationalId": "",
+    "priceList": "wholesale",
+    "code": "CUST-001"
+  },
+  {
+    "_id": "rgst8ljMzc6gcJ41ZtQ3",
+    "notes": "",
+    "code": "006",
+    "balance": 1566.37,
+    "priceList": "default",
+    "phone": "0541520511",
+    "creditLimit": 0,
+    "repName": "مصطفى",
+    "segment": "silver",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "vatNumber": "",
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "zone": "",
+    "accountCode": "1-1-2-1-2-02-16",
+    "address": "",
+    "accountId": "LV9XSdtRmIPAn8QSjtie",
+    "creditDays": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078026,
+      "nanoseconds": 672000000
+    },
+    "createdAt": {
+      "seconds": 1784231176,
+      "nanoseconds": 691000000
+    },
+    "name": "مطعم الشعب الكريم",
+    "nationalId": "",
+    "id": "rgst8ljMzc6gcJ41ZtQ3",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    }
+  },
+  {
+    "_id": "s4FWaox6s81UTBWIjVra",
+    "vatNumber": "312991904100003",
+    "creditDays": 0,
+    "phone": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "zone": "ينبع",
+    "nationalId": "7049989390",
+    "accountCode": "1-1-2-1-2-02-43",
+    "notes": "",
+    "creditLimit": 0,
+    "priceList": "default",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "code": "02052",
+    "balance": 0.31,
+    "name": "مطعم الخير البخارى",
+    "crNumber": "7049989390",
+    "address": "ينبع البلد  حى ينبع",
+    "accountId": "yBjPUAZ4BKY3q82FmAHQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786348870,
+      "nanoseconds": 582000000
+    },
+    "segment": "retail_regular",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078027,
+      "nanoseconds": 974000000
+    },
+    "repName": "مصطفى"
+  },
+  {
+    "_id": "sQG0xwdcdaKEfdUKG3IS",
+    "address": "طريق الملك عبد العزيز - حى الشعلة",
+    "notes": "",
+    "crNumber": "4700016883",
+    "vatNumber": "311107246200003",
+    "repName": "السيد رضا",
+    "creditDays": 0,
+    "balance": -0.59,
+    "deliveryDay": "",
+    "phone": "",
+    "nationalId": "4700016883",
+    "creditLimit": 10000,
+    "name": "شركة الاحلام المتطورة الفندقيه",
+    "repId": "Ao147Sj24LgGa2OOag0c",
+    "tierOverride": "auto",
+    "accountCode": "1-1-2-1-2-25-02",
+    "priceList": "default",
+    "googleMapsUrl": "",
+    "code": "02060",
+    "accountId": "pdHe9H2SPrhY55Yc5O1I",
+    "routeGroup": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788252082,
+      "nanoseconds": 570000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787831764,
+      "nanoseconds": 2000000
+    },
+    "zone": "ينبع"
+  },
+  {
+    "_id": "sjg0WZdCXonWUrPFDTc6",
+    "accountCode": "1-1-2-1-2-02-27",
+    "creditLimit": 0,
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "priceList": "wholesale",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "name": "مطعم صبا المذاق لتقديم الوجبات",
+    "vatNumber": "302240449100003",
+    "phone": "0501713939",
+    "accountId": "WKvQVFuCyVocKdr08HCu",
+    "address": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078028,
+      "nanoseconds": 880000000
+    },
+    "code": "02012",
+    "nationalId": "",
+    "repName": "مصطفى",
+    "createdAt": {
+      "nanoseconds": 283000000,
+      "seconds": 1784214611
+    },
+    "segment": "at_risk",
+    "id": "sjg0WZdCXonWUrPFDTc6",
+    "creditDays": 0,
+    "notes": "",
+    "balance": 0.09,
+    "zone": ""
+  },
+  {
+    "_id": "uFMXG3DyKZI4IzzOywvr",
+    "googleMapsUrl": "",
+    "city": "ينبع",
+    "postalCode": "46451",
+    "nationalId": "7013860858",
+    "deliveryDay": "",
+    "name": "عالم البخارى",
+    "vatNumber": "302080884500003",
+    "creditLimit": 0,
+    "additionalNumber": "3512",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788175150,
+      "nanoseconds": 295000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806846,
+      "nanoseconds": 151000000
+    },
+    "crNumber": "7013860858",
+    "district": "البثنه",
+    "buildingNumber": "7175",
+    "priceList": "default",
+    "balance": 14149.59,
+    "country": "المملكة العربية السعودية",
+    "buildingNo": "7175",
+    "address": "رقم المبنى: 7175 — الشارع: بابل — الحي: البثنه — المدينة: ينبع — الرمز البريدي: 46451",
+    "creditDays": 0,
+    "accountCode": "1-1-2-1-2-24-03",
+    "street": "بابل",
+    "repName": "المندوب احمد السيد",
+    "additionalNo": "3512",
+    "code": "02061",
+    "notes": "",
+    "routeGroup": "",
+    "accountId": "5F7hC5jULT2sxZQDyiar",
+    "repId": "61pG3jXw8Ps7HCJc9ljI",
+    "zone": "",
+    "phone": "",
+    "tierOverride": "auto"
+  },
+  {
+    "_id": "wH6dTDnlCecLiDHIN25U",
+    "accountCode": "1-1-2-1-2-02-35",
+    "name": "مؤسسة عماد ابراهيم الفت حلواني لتقديم الوجبات",
+    "creditLimit": 50000,
+    "assignedRepId": "Z8vkxuOfaumR63DMz7vA",
+    "accountId": "meTwKxeZCUayZmiSww6A",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078029,
+      "nanoseconds": 784000000
+    },
+    "id": "wH6dTDnlCecLiDHIN25U",
+    "createdAt": {
+      "nanoseconds": 86000000,
+      "seconds": 1783210095
+    },
+    "nationalId": "",
+    "address": "",
+    "zone": "ينبع — جده",
+    "vatNumber": "301131391200003",
+    "segment": "at_risk",
+    "repName": "اختر المندوب",
+    "notes": "",
+    "balance": 0,
+    "code": "CUST-002",
+    "creditDays": 15,
+    "repId": "",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "priceList": "wholesale",
+    "phone": "0113334455"
+  },
+  {
+    "_id": "xlRX8BzwcH2QEDqFTOrr",
+    "district": "حى الفردوس",
+    "crNumber": "7054768770",
+    "accountId": "JUkMSefh12lKMPbNdVPP",
+    "routeGroup": "",
+    "buildingNo": "",
+    "deliveryDay": "",
+    "priceList": "default",
+    "additionalNo": "",
+    "creditDays": 0,
+    "creditLimit": 0,
+    "phone": "",
+    "zone": "",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "code": "",
+    "notes": "",
+    "googleMapsUrl": "",
+    "tierOverride": "auto",
+    "name": "مؤسسة نوف",
+    "additionalNumber": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788374523,
+      "nanoseconds": 708000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788374528,
+      "nanoseconds": 288000000
+    },
+    "city": "ينبع",
+    "country": "المملكة العربية السعودية",
+    "balance": 173.58,
+    "accountCode": "1-1-2-1-2-02-44",
+    "buildingNumber": "",
+    "street": "شارع عمر بن عبد العزيز",
+    "address": "الشارع: شارع عمر بن عبد العزيز — الحي: حى الفردوس — المدينة: ينبع",
+    "vatNumber": "314196419400003",
+    "postalCode": "",
+    "nationalId": "7054768770",
+    "repName": "مصطفى"
+  },
+  {
+    "_id": "yFkCQhjQ4XWvx0Uly6vV",
+    "creditLimit": 0,
+    "creditDays": 0,
+    "priceList": "default",
+    "accountCode": "1-1-2-1-2-02-43",
+    "notes": "",
+    "name": "مطعم الفروج الدسم لتقديم الوجبات",
+    "lastBalanceRecalc": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786874207,
+      "nanoseconds": 518000000
+    },
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "nationalId": "7027521926",
+    "phone": "",
+    "vatNumber": "311161448500003",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788078030,
+      "nanoseconds": 334000000
+    },
+    "address": "شارع ابن المظفر -  حى الصريف",
+    "crNumber": "7027521926",
+    "zone": "ينبع",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786035342,
+      "nanoseconds": 571000000
+    },
+    "segment": "retail_regular",
+    "repName": "مصطفى",
+    "accountId": "uWOkzpJ1ho0L2FAF3s64",
+    "balance": 2795.27,
+    "code": "02051"
+  }
+]

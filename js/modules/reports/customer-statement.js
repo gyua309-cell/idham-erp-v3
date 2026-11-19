@@ -50,6 +50,8 @@ export async function render(container, user) {
 
       <!-- أزرار التصدير -->
       <div style="margin-right:auto; display:flex; gap:8px;">
+        <button class="btn-export" style="background:#4338ca; color:#fff; border-color:#6366f1;" onclick="openDebtAckFromReportStatement()" title="إصدار إقرار مديونية وتعهد سداد"><span>⚖️</span> إقرار مديونية</button>
+        <button class="btn-export" style="background:#0369a1; color:#fff; border-color:#0284c7;" onclick="openTrustReceiptFromReportStatement()" title="إصدار سند أمانة وعهدة مالية (م/79)"><span>🛡️</span> سند أمانة</button>
         <button class="btn-export" onclick="exportStatementPDF()" title="طباعة / PDF"><span>📄</span> PDF</button>
         <button class="btn-export excel" onclick="exportStatementExcel()" title="تصدير Excel"><span>📊</span> Excel</button>
         <button class="btn-export print" onclick="exportStatementPDF()" title="طباعة كشف الحساب"><span>🖨️</span> طباعة</button>
@@ -435,24 +437,39 @@ async function loadCustomerStatement(custId, from, to) {
   const rcptSnap = await getDocs(rcptQ);
   const receipts = rcptSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.entityType === "customer");
 
+  // سندات تسليم البضاعة غير الضريبية (DN)
+  const dnQ = query(collection(db, `companies/${COMPANY_ID}/deliveryNotes`), where("customerId", "==", custId), limit(500));
+  const dnSnap = await getDocs(dnQ).catch(() => ({ docs: [] }));
+  const deliveryNotes = dnSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
   let ledger = [];
 
   invoices.forEach(inv => {
     if (inv.status === "cancelled") return;
     const pm = (inv.paymentMethod || "cash").toLowerCase();
-    // تم إلغاء استثناء الفواتير النقدية لكي تظهر في كشف الحساب وتتطابق مع سند القبض التلقائي المقابل لها
-    /*
-    if (pm === "cash" && (inv.status === "paid" || (inv.paidAmount || 0) >= (inv.totalWithVat || inv.total || 0))) {
-      // Exclude cash invoices that are paid (since they have no effect on credit/receivables balance)
-      return;
-    }
-    */
     ledger.push({
       date: inv.date || (inv.createdAt?.toDate ? inv.createdAt.toDate().toISOString().split("T")[0] : ""),
       type: "فاتورة مبيعات",
       docNum: inv.number || inv.invoiceNumber || "",
       notes: `مبيعات ${inv.lines?.length || 0} صنف — ${pm === 'cash' ? 'نقدي' : 'آجل'}`,
       debit: inv.totalWithVat || 0,
+      credit: 0,
+    });
+  });
+
+  // إضافة سندات تسليم البضاعة غير الضريبية
+  (deliveryNotes || []).forEach(dn => {
+    if (dn.status === "cancelled" || dn.status === "void") return;
+    const isConverted = dn.status === "converted_to_invoice";
+    const dnTotal = parseFloat(dn.totalAmount || dn.grandTotal || dn.total || 0);
+    const pm = (dn.paymentMethod || "credit").toLowerCase();
+
+    ledger.push({
+      date: dn.date || (dn.createdAt?.toDate ? dn.createdAt.toDate().toISOString().split("T")[0] : ""),
+      type: "سند تسليم بضاعة (غير ضريبي)",
+      docNum: dn.number || dn.dnNumber || `DN-${dn.id.slice(0, 6)}`,
+      notes: dn.notes || (isConverted ? `سند تسليم بضاعة (تم إصدار فاتورة ضريبية له)` : `تسليم بضاعة ${dn.lines?.length || 0} صنف — ${pm === 'cash' ? 'نقدي' : 'آجل'}`),
+      debit: isConverted ? 0 : dnTotal,
       credit: 0,
     });
   });
@@ -493,6 +510,56 @@ async function loadCustomerStatement(custId, from, to) {
       credit: rcpt.amount || 0,
     });
   });
+
+  // إضافة قيود اليومية المحاسبية اليدوية (لتسوية الحسابات والأرصدة الافتتاحية إن وجدت)
+  try {
+    const coaSnap = await getDocs(query(collection(db, `companies/${COMPANY_ID}/chartOfAccounts`), where("sourceEntityId", "==", custId))).catch(() => ({ docs: [] }));
+    const matchedAccCodes = new Set();
+    const matchedAccIds = new Set();
+    coaSnap.docs.forEach(d => {
+      matchedAccIds.add(d.id);
+      if (d.data().code) matchedAccCodes.add(d.data().code);
+    });
+
+    const jeSnap = await getDocs(query(COLS.journalEntries(), limit(500))).catch(() => ({ docs: [] }));
+    jeSnap.docs.forEach(d => {
+      const je = d.data();
+      if (je.status === "cancelled" || je.isReversed) return;
+      const st = (je.sourceType || "").toLowerCase();
+      const rt = (je.refType || "").toLowerCase();
+      const desc = (je.description || "").toLowerCase();
+
+      // منع تكرار القيود التلقائية التي أُضيفت بالفعل من الفواتير وسندات القبض وسندات التسليم
+      const isAuto = st === "salesinvoice" || st === "sales" || st === "receipt" || st === "salesreturn" || 
+                     st === "sales_return" || st === "deliverynote" || st === "delivery_note" ||
+                     st === "cogs" || st === "salescogs" || st === "deliverynote_cogs" || st === "collection" ||
+                     rt.includes("sales") || rt.includes("receipt") || rt.includes("invoice") || rt.includes("delivery") ||
+                     desc.includes("مبيعات") || desc.includes("فاتورة") || desc.includes("سند قبض") || desc.includes("سند تسليم");
+      if (isAuto) return;
+
+      (je.lines || []).forEach(l => {
+        const isMatch = (l.accountId && matchedAccIds.has(l.accountId)) ||
+                        (l.accountCode && matchedAccCodes.has(l.accountCode)) ||
+                        (cust && l.accountName && l.accountName.trim() === cust.name.trim());
+        if (isMatch) {
+          const dAmt = parseFloat(l.debit || 0);
+          const cAmt = parseFloat(l.credit || 0);
+          if (dAmt > 0 || cAmt > 0) {
+            ledger.push({
+              date: je.date || (je.createdAt?.toDate ? je.createdAt.toDate().toISOString().split("T")[0] : ""),
+              type: "قيد يومية تسوية",
+              docNum: je.entryNumber || je.number || `JE-${d.id.slice(0, 6)}`,
+              notes: je.description || l.note || "تسوية محاسبية",
+              debit: dAmt,
+              credit: cAmt,
+            });
+          }
+        }
+      });
+    });
+  } catch (jeErr) {
+    console.warn("Manual JE fetch error:", jeErr);
+  }
 
   renderLedger(ledger, from, to, "balance_due");
 }
@@ -613,6 +680,10 @@ async function loadRepStatement(repId, from, to) {
   const colSnap = await getDocs(colQ);
   const collections = colSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
+  const dnQ = query(collection(db, `companies/${COMPANY_ID}/deliveryNotes`), where("repId", "==", repId), limit(500));
+  const dnSnap = await getDocs(dnQ).catch(() => ({ docs: [] }));
+  const deliveryNotes = dnSnap.docs.map(d => d.data());
+
   const cBoxes = await getAll(COLS.cashBoxes());
   const repBox = cBoxes.find(b => b.keeper?.trim() === rep.name.trim() || b.name.includes(rep.name));
   
@@ -672,6 +743,21 @@ async function loadRepStatement(repId, from, to) {
       docNum: inv.number,
       notes: `فاتورة مبيعات للعميل ${inv.customerName} (${inv.lines?.length || 0} صنف)`,
       debit: inv.totalWithVat || 0,
+      credit: 0,
+    });
+  });
+
+  (deliveryNotes || []).forEach(dn => {
+    if (dn.status === "cancelled" || dn.status === "void") return;
+    const isConverted = dn.status === "converted_to_invoice";
+    const dnTotal = parseFloat(dn.totalAmount || dn.grandTotal || dn.total || 0);
+    if (isConverted) return;
+    ledger.push({
+      date: dn.date || (dn.createdAt?.toDate ? dn.createdAt.toDate().toISOString().split("T")[0] : ""),
+      type: "سند تسليم بضاعة لعملائه",
+      docNum: dn.number || dn.dnNumber || "",
+      notes: `تسليم بضاعة للعميل ${dn.customerName || ""} — (${dn.lines?.length || 0} صنف)`,
+      debit: dnTotal,
       credit: 0,
     });
   });
@@ -841,7 +927,7 @@ window.exportStatementPDF = () => {
   const from        = document.getElementById("stmt-from")?.value || "";
   const to          = document.getElementById("stmt-to")?.value   || "";
   const co          = window.ERP_COMPANY || {};
-  const coName      = co.name  || "مؤسسة إدهام للمواد الغذائية";
+  const coName      = co.name  || "شركة نظم الإمداد المتطورة";
   const coPhone     = co.phone || "";
   const coEmail     = co.email || "";
   const coAddress   = co.address || "";
@@ -1018,4 +1104,45 @@ window.exportStatementExcel = () => {
     headers, rows, sheetName: "كشف الحساب"
   });
 };
+
+// ── إصدار إقرار مديونية وتعهد سداد من كشف الحساب الموحد ────────────────────
+window.openDebtAckFromReportStatement = async () => {
+  const type     = document.getElementById("stmt-type-select")?.value || _currentEntityType;
+  const entityId = (type === "customer") ? (_currentEntityId || document.getElementById("stmt-entity-id")?.value) : null;
+  const balEl = document.getElementById("stmt-closing-balance");
+  let balText = balEl ? balEl.textContent.replace(/[^\d.-]/g, '') : "0";
+  const balNum = parseFloat(balText) || 0;
+  const toDate = document.getElementById("stmt-to")?.value || "";
+
+  try {
+    const { openDebtAcknowledgmentModal } = await import("../debt-acknowledgment.js?v=2.2");
+    openDebtAcknowledgmentModal(entityId || null, {
+      amount: balNum > 0 ? balNum : undefined,
+      asOfDate: toDate || undefined
+    });
+  } catch (err) {
+    console.error("Failed to open debt acknowledgment modal:", err);
+    alert("تعذر فتح نموذج إقرار المديونية: " + (err.message || err));
+  }
+};
+
+window.openTrustReceiptFromReportStatement = async () => {
+  const type     = document.getElementById("stmt-type-select")?.value || _currentEntityType;
+  const entityId = (type === "customer") ? (_currentEntityId || document.getElementById("stmt-entity-id")?.value) : null;
+  const balEl = document.getElementById("stmt-closing-balance");
+  let balText = balEl ? balEl.textContent.replace(/[^\d.-]/g, '') : "0";
+  const balNum = parseFloat(balText) || 0;
+
+  try {
+    const { openTrustReceiptModal } = await import("../trust-receipts.js?v=2.2");
+    openTrustReceiptModal(entityId || null, {
+      amount: balNum > 0 ? balNum : undefined
+    });
+  } catch (err) {
+    console.error("Failed to open trust receipt modal:", err);
+    alert("تعذر فتح نموذج سند الأمانة: " + (err.message || err));
+  }
+};
+
+
 

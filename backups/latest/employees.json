@@ -1,0 +1,275 @@
+[
+  {
+    "id": "0DrqIOogPBIJvcmovlj2",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785534787,
+      "nanoseconds": 365000000
+    },
+    "nid": "2622047153",
+    "salary": 2000,
+    "iban": "",
+    "status": "active",
+    "date": "2026-07-13",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785534810,
+      "nanoseconds": 805000000
+    },
+    "nidExpiry": "2026-10-10",
+    "passportExpiry": "",
+    "name": "ناجى عاطف",
+    "passportNo": "",
+    "bankName": "",
+    "gosiNumber": "",
+    "nationality": "foreigner",
+    "allowance": 0,
+    "job": "امين مخزن"
+  },
+  {
+    "id": "7PY1jbwphUrnWkViIv9o",
+    "nidExpiry": "2025-10-10",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788770215,
+      "nanoseconds": 875000000
+    },
+    "bankName": "",
+    "name": "محمد عوض",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785534862,
+      "nanoseconds": 535000000
+    },
+    "salary": 2000,
+    "job": "مندوب مبيعات",
+    "status": "active",
+    "date": "2025-01-01",
+    "iban": "",
+    "allowance": 0,
+    "nationality": "foreigner",
+    "nid": "125111",
+    "passportExpiry": "",
+    "passportNo": "",
+    "gosiNumber": ""
+  },
+  {
+    "id": "Dgtz1QiJDZiAqQNWIS8u",
+    "passportExpiry": "",
+    "job": "امين مخزن",
+    "nidExpiry": "2025-12-11",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786461131,
+      "nanoseconds": 481000000
+    },
+    "nationality": "foreigner",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786461131,
+      "nanoseconds": 481000000
+    },
+    "bankName": "",
+    "gosiNumber": "",
+    "iban": "",
+    "passportNo": "15111",
+    "status": "active",
+    "date": "2026-08-07",
+    "salary": 1500,
+    "allowance": 0,
+    "nid": "1234",
+    "name": "ابراهيم ابو رياض"
+  },
+  {
+    "id": "GOnzMbFPplfeSDwh7Zhc",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785531957,
+      "nanoseconds": 98000000
+    },
+    "nidExpiry": "2026-09-14",
+    "job": "محاسب",
+    "nationality": "foreigner",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785531957,
+      "nanoseconds": 98000000
+    },
+    "status": "active",
+    "nid": "2623864671",
+    "gosiNumber": "",
+    "date": "2026-07-01",
+    "allowance": 0,
+    "passportNo": "",
+    "iban": "",
+    "salary": 3000,
+    "passportExpiry": "",
+    "name": "على السيد عبده",
+    "bankName": ""
+  },
+  {
+    "id": "O2ierOANhX0EW8laDd3U",
+    "salary": 1500,
+    "name": "عمرو راجح",
+    "status": "active",
+    "nationality": "foreigner",
+    "bankName": "",
+    "nid": "2515",
+    "allowance": 0,
+    "iban": "",
+    "date": "2026-10-10",
+    "accountId": "aWDNUFDljGZcS7XvwSnt",
+    "repId": "FwJwxsDXQHlJlBiu5UAq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791629045,
+      "nanoseconds": 503000000
+    },
+    "passportExpiry": "2027-10-10",
+    "job": "مندوب مبيعات",
+    "accountCode": "2-1-5-2-01",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793471385,
+      "nanoseconds": 730000000
+    },
+    "gosiNumber": "123",
+    "nidExpiry": "2027-10-10",
+    "passportNo": "1234"
+  },
+  {
+    "id": "OCnh3BdQ77BLDTy3V7UP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788023039,
+      "nanoseconds": 918000000
+    },
+    "salary": 2000,
+    "status": "active",
+    "name": "السيد رضا",
+    "passportNo": "5555",
+    "nationality": "foreigner",
+    "gosiNumber": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788023098,
+      "nanoseconds": 840000000
+    },
+    "nidExpiry": "2027-10-10",
+    "job": "مندوب مبيعات",
+    "date": "2026-08-21",
+    "iban": "",
+    "bankName": "",
+    "passportExpiry": "2027-10-10",
+    "nid": "521444",
+    "allowance": 0
+  },
+  {
+    "id": "bQUo3McjEc1w6SePt3Gq",
+    "bankName": "",
+    "date": "2026-07-27",
+    "iban": "",
+    "nid": "2610111",
+    "allowance": 0,
+    "status": "active",
+    "name": "احمد السيد",
+    "nationality": "foreigner",
+    "salary": 1500,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785534913,
+      "nanoseconds": 359000000
+    },
+    "passportNo": "",
+    "gosiNumber": "",
+    "nidExpiry": "2026-08-31",
+    "job": "مندوب مبيعات",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788004822,
+      "nanoseconds": 976000000
+    },
+    "passportExpiry": ""
+  },
+  {
+    "id": "rt9HNwBQUwIklHh0bnzd",
+    "date": "2026-06-01",
+    "job": "المدير العام",
+    "iban": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786461271,
+      "nanoseconds": 989000000
+    },
+    "name": "أ / محمود",
+    "gosiNumber": "",
+    "bankName": "",
+    "passportNo": "965554",
+    "nidExpiry": "2027-01-01",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786461271,
+      "nanoseconds": 989000000
+    },
+    "nationality": "foreigner",
+    "status": "active",
+    "passportExpiry": "",
+    "allowance": 0,
+    "nid": "26555444",
+    "salary": 3500
+  },
+  {
+    "id": "u3PVfaphgK1pkHOMpWyf",
+    "nidExpiry": "2027-01-01",
+    "nid": "2521111",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786461282,
+      "nanoseconds": 992000000
+    },
+    "passportExpiry": "",
+    "bankName": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786461215,
+      "nanoseconds": 6000000
+    },
+    "nationality": "foreigner",
+    "allowance": 0,
+    "gosiNumber": "",
+    "passportNo": "96666",
+    "name": "عبد الرحمن",
+    "salary": 2500,
+    "iban": "",
+    "status": "active",
+    "job": "مدير ادارة الموارد البشرية",
+    "date": "2026-06-01"
+  },
+  {
+    "id": "wOxNLDnyefMxOkvqrNSo",
+    "bankName": "",
+    "nationality": "foreigner",
+    "status": "active",
+    "nid": "1099887766",
+    "salary": 1500,
+    "allowance": 0,
+    "passportNo": "",
+    "gosiNumber": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785534396,
+      "nanoseconds": 257000000
+    },
+    "date": "2026-07-01",
+    "iban": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785534803,
+      "nanoseconds": 410000000
+    },
+    "nidExpiry": "2027-12-31",
+    "job": "مندوب مبيعات",
+    "passportExpiry": "",
+    "name": "مصطفى الاسيوطى"
+  }
+]

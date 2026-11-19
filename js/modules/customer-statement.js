@@ -53,6 +53,8 @@ export async function render(container, user) {
         <button class="btn btn-secondary" onclick="window.exportCustomerStatementExcel()" id="stmt-excel-btn" disabled>📊 Excel</button>
         <button class="btn btn-primary" style="background:#25D366; border-color:#25D366;" onclick="window.shareCustomerStatementWhatsApp()" id="stmt-wa-btn" disabled>💬 واتساب</button>
         <button class="btn btn-secondary" style="background:rgba(124,58,237,.1); color:#7C3AED; border-color:rgba(124,58,237,.3);" onclick="window.printBalanceConfirmation()" id="stmt-confirm-btn" disabled>📑 مصادقة رصيد</button>
+        <button class="btn btn-secondary" style="background:rgba(220,38,38,.08); color:#dc2626; border-color:rgba(220,38,38,.3);" onclick="window.openDebtAcknowledgmentForCurrentCustomer()" id="stmt-debt-ack-btn" title="إصدار إقرار مديونية وتعهد سداد قضائي">⚖️ إقرار مديونية</button>
+        <button class="btn btn-secondary" style="background:rgba(3,105,161,.08); color:#0284c7; border-color:rgba(3,105,161,.3);" onclick="window.openTrustReceiptForCurrentCustomer()" id="stmt-trust-btn" title="إصدار سند أمانة وعهدة مالية (م/79)">🛡️ سند أمانة</button>
       </div>
     </div>
 
@@ -103,6 +105,7 @@ export async function render(container, user) {
         <button class="btn btn-secondary btn-sm" id="btn-flt-inv" onclick="window.setStmtTypeFilter('invoice')">🧾 فواتير فقط</button>
         <button class="btn btn-secondary btn-sm" id="btn-flt-rcpt" onclick="window.setStmtTypeFilter('receipt')">💵 سندات قبض فقط</button>
         <button class="btn btn-secondary btn-sm" id="btn-flt-ret" onclick="window.setStmtTypeFilter('return')">↩️ مردودات فقط</button>
+        <button class="btn btn-secondary btn-sm" id="btn-flt-dn" onclick="window.setStmtTypeFilter('delivery_note')">📦 سندات تسليم فقط</button>
       </div>
 
       <!-- Statement Ledger Table -->
@@ -215,7 +218,7 @@ function setupGlobalFunctions() {
     if (inp) inp.value = selectedCustomer.name;
 
     // Enable buttons and show aging & type filter
-    ["stmt-print-btn", "stmt-pdf-btn", "stmt-excel-btn", "stmt-wa-btn", "stmt-confirm-btn"].forEach(id => {
+    ["stmt-print-btn", "stmt-pdf-btn", "stmt-excel-btn", "stmt-wa-btn", "stmt-confirm-btn", "stmt-debt-ack-btn"].forEach(id => {
       const b = document.getElementById(id);
       if (b) b.disabled = false;
     });
@@ -257,13 +260,14 @@ function setupGlobalFunctions() {
 
   window.setStmtTypeFilter = (type) => {
     activeTypeFilter = type;
-    ["all", "inv", "rcpt", "ret"].forEach(k => {
+    ["all", "inv", "rcpt", "ret", "dn"].forEach(k => {
       const b = document.getElementById(`btn-flt-${k}`);
       if (b) {
         const isMatched = (k === "all" && type === "all") ||
           (k === "inv" && type === "invoice") ||
           (k === "rcpt" && type === "receipt") ||
-          (k === "ret" && type === "return");
+          (k === "ret" && type === "return") ||
+          (k === "dn" && type === "delivery_note");
         b.className = isMatched ? "btn btn-primary btn-sm" : "btn btn-secondary btn-sm";
       }
     });
@@ -528,6 +532,76 @@ function setupGlobalFunctions() {
           </button>
         `;
       }
+    } else if (item.type === "delivery_note") {
+      let dn = item.raw;
+      const lines = dn.lines || dn.items || [];
+      const grand = parseFloat(dn.totalAmount || dn.grandTotal || dn.total || 0);
+
+      bodyEl.innerHTML = `
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-bottom:16px;">
+          <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border-soft);">
+            <div style="font-size:10.5px; color:var(--text-2);">رقم سند التسليم</div>
+            <div class="mono" style="font-weight:800; font-size:13px; color:var(--brand);">${dn.number || dn.dnNumber || item.refNo}</div>
+          </div>
+          <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border-soft);">
+            <div style="font-size:10.5px; color:var(--text-2);">تاريخ التسليم</div>
+            <div class="mono" style="font-weight:700; font-size:13px;">${dn.date || item.date}</div>
+          </div>
+          <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border-soft);">
+            <div style="font-size:10.5px; color:var(--text-2);">المستودع / السيارة</div>
+            <div style="font-weight:700; font-size:12px;">🏢 ${dn.warehouseName || '—'}</div>
+          </div>
+          ${dn.repName ? `
+            <div style="background:var(--bg-card); padding:10px 12px; border-radius:8px; border:1px solid var(--border-soft);">
+              <div style="font-size:10.5px; color:var(--text-2);">المندوب / السائق</div>
+              <div style="font-weight:700; font-size:12px;">👤 ${dn.repName}</div>
+            </div>
+          ` : ''}
+        </div>
+
+        <div class="table-container mb-16" style="border:1px solid var(--border-soft); border-radius:8px; max-height:280px; overflow-y:auto;">
+          <table class="data-dense" style="margin:0; font-size:12px;">
+            <thead>
+              <tr style="background:var(--bg-2);">
+                <th style="width:35px; text-align:center;">#</th>
+                <th>الصنف المسلّم</th>
+                <th style="width:75px; text-align:center;">الكمية</th>
+                <th style="width:95px; text-align:left;">السعر</th>
+                <th style="width:110px; text-align:left;">الإجمالي</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${lines.length ? lines.map((l, i) => {
+                const q = parseFloat(l.qty || l.quantity || 0);
+                const p = parseFloat(l.unitPrice || l.price || 0);
+                const tot = parseFloat(l.lineTotal || (q * p) || 0);
+                return `
+                  <tr>
+                    <td style="text-align:center;" class="mono dim">${i+1}</td>
+                    <td><b>${l.productName || l.name || '—'}</b></td>
+                    <td style="text-align:center;" class="mono font-bold">${formatQuantity(q)} ${l.unit || 'كرتون'}</td>
+                    <td style="text-align:left;" class="mono">${formatCurrency(p)}</td>
+                    <td style="text-align:left;" class="mono font-bold">${formatCurrency(tot)}</td>
+                  </tr>
+                `;
+              }).join("") : `<tr><td colspan="5" style="text-align:center; padding:16px;">لا توجد بنود</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-2); padding:12px 16px; border-radius:8px; margin-bottom:12px;">
+          <span style="font-weight:700;">إجمالي سند التسليم:</span>
+          <span class="mono" style="font-size:18px; font-weight:900; color:var(--brand);">${formatCurrency(grand)}</span>
+        </div>
+      `;
+
+      if (actionsEl) {
+        actionsEl.innerHTML = `
+          <button class="btn btn-primary" onclick="window.printDocFromStatement(${idx})" style="display:flex; align-items:center; gap:6px; font-weight:700;">
+            <i class="fas fa-print"></i> 🖨️ طباعة سند التسليم (A4)
+          </button>
+        `;
+      }
     } else {
       bodyEl.innerHTML = `<pre style="background:var(--bg-2); padding:12px; border-radius:8px;">${JSON.stringify(item.raw, null, 2)}</pre>`;
     }
@@ -585,6 +659,17 @@ function setupGlobalFunctions() {
         }
         if (typeof window.printSingleJournalVoucher === "function") {
           window.printSingleJournalVoucher(item.raw.id);
+        }
+      } else if (item.type === "delivery_note") {
+        if (typeof window.directPrintDNA4 !== "function") {
+          try {
+            await import("./delivery-notes.js?v=50.0");
+          } catch (e) {
+            console.error("Failed to load delivery-notes module:", e);
+          }
+        }
+        if (typeof window.directPrintDNA4 === "function") {
+          window.directPrintDNA4(item.raw.id);
         }
       }
     } catch (err) {
@@ -708,10 +793,46 @@ function setupGlobalFunctions() {
     window.open(url, "_blank");
   };
 
+    window.openTrustReceiptForCurrentCustomer = async () => {
+    try {
+      const { openTrustReceiptModal } = await import("./trust-receipts.js?v=2.4");
+      const balVal = (typeof statementKPIs !== "undefined" && statementKPIs && statementKPIs.balance !== undefined && !isNaN(statementKPIs.balance))
+        ? statementKPIs.balance
+        : (selectedCustomer ? parseFloat(selectedCustomer.balance || 0) : 0);
+      openTrustReceiptModal(selectedCustomer || null, {
+        amount: balVal > 0 ? balVal : 0,
+        notes: selectedCustomer ? ("حساب عميل: " + selectedCustomer.name) : ""
+      });
+    } catch (err) {
+      console.error("Failed to open trust receipt modal:", err);
+      alert("تعذر فتح نموذج سند الأمانة: " + (err.message || err));
+    }
+  };
+
+  window.openDebtAcknowledgmentForCurrentCustomer = async () => {
+    try {
+      const { openDebtAcknowledgmentModal } = await import("./debt-acknowledgment.js?v=2.2");
+      if (!selectedCustomer) {
+        openDebtAcknowledgmentModal(null);
+        return;
+      }
+      const balVal = (typeof statementKPIs !== "undefined" && statementKPIs && statementKPIs.balance !== undefined && !isNaN(statementKPIs.balance))
+        ? statementKPIs.balance
+        : (parseFloat(selectedCustomer.balance || 0));
+      openDebtAcknowledgmentModal(selectedCustomer, {
+        amount: balVal,
+        asOfDate: filterTo || todayStr()
+      });
+    } catch (err) {
+      console.error("Failed to open debt acknowledgment modal:", err);
+      alert("تعذر فتح نموذج إقرار المديونية: " + (err.message || err));
+    }
+  };
+
   window.printBalanceConfirmation = () => {
     if (!selectedCustomer) return;
     const win = window.open("", "_blank");
-    const coName = window.ERP_COMPANY?.name || "مؤسسة إدهام للمواد الغذائية";
+    const coName = window.ERP_COMPANY?.name || "شركة نظم الإمداد المتطورة";
     win.document.write(`
       <html dir="rtl">
       <head>
@@ -775,10 +896,11 @@ async function generateStatementData() {
   });
 
   // Fetch all transactions for customer
-  const [invoices, receipts, returns, journalEntries] = await Promise.all([
+  const [invoices, receipts, returns, deliveryNotes, journalEntries] = await Promise.all([
     getAll(COLS.salesInvoices(), [where("customerId", "==", selectedCustomer.id)]).catch(() => []),
     getAll(COLS.receipts(),      [where("targetId", "==", selectedCustomer.id)]).catch(() => []),
     getAll(COLS.salesReturns(),   [where("customerId", "==", selectedCustomer.id)]).catch(() => []),
+    getAll(COLS.deliveryNotes(), [where("customerId", "==", selectedCustomer.id)]).catch(() => []),
     getAll(COLS.journalEntries()).catch(() => [])
   ]);
 
@@ -827,6 +949,22 @@ async function generateStatementData() {
     });
   });
 
+  (deliveryNotes || []).forEach(dn => {
+    if (dn.status === "cancelled" || dn.status === "void") return;
+    const isConverted = dn.status === "converted_to_invoice";
+    const tot = parseFloat(dn.totalAmount || dn.grandTotal || dn.total || 0);
+    allEvents.push({
+      date: dn.date || todayStr(),
+      type: "delivery_note",
+      typeLabel: "📦 سند تسليم بضاعة (DN)",
+      refNo: dn.number || dn.dnNumber || dn.id,
+      notes: dn.notes || (isConverted ? `سند تسليم بضاعة (تم إصدار فاتورة ضريبية له)` : `سند تسليم بضاعة غير ضريبي (${(dn.lines||[]).length} أصناف)`),
+      debit: isConverted ? 0 : tot,
+      credit: 0,
+      raw: dn
+    });
+  });
+
   // 4. Manual Journal Entries
   journalEntries.forEach((je, jeIdx) => {
     if (je.status === "cancelled" || je.isReversed) return;
@@ -835,14 +973,15 @@ async function generateStatementData() {
     const rt = (je.refType || "").toLowerCase();
     const desc = (je.description || "").toLowerCase();
 
-    // Exclude ALL auto-generated journal entries (sales, invoices, receipts, returns, cogs)
+    // Exclude ALL auto-generated journal entries (sales, invoices, receipts, returns, cogs, delivery notes)
     const isAutoGenerated = 
       st === "salesinvoice" || st === "sales" || st === "receipt" || st === "salesreturn" || 
       st === "sales_return" || st === "salescogs" || st === "cogs" || st === "salesreturncogs" || 
       st === "salesinvoice_cogs" || st === "collection" || st === "expense" || st === "supplierpayment" ||
-      rt.includes("sales") || rt.includes("receipt") || rt.includes("invoice") || rt.includes("return") ||
+      st === "deliverynote" || st === "delivery_note" || st === "deliverynote_cogs" ||
+      rt.includes("sales") || rt.includes("receipt") || rt.includes("invoice") || rt.includes("return") || rt.includes("delivery") ||
       desc.includes("مبيعات") || desc.includes("فاتورة") || desc.includes("سند قبض") || 
-      desc.includes("مرتجع") || desc.includes("إشعار دائن") || desc.includes("تصفية");
+      desc.includes("مرتجع") || desc.includes("إشعار دائن") || desc.includes("تصفية") || desc.includes("سند تسليم");
 
     if (isAutoGenerated) return;
   

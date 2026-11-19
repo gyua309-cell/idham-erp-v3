@@ -1,12 +1,23 @@
-// ============================================================
-// IDHAM ERP — Sales by Customer Report (مبيعات حسب العميل)
-// ============================================================
 import { COLS, getAll } from "../../utils/db.js";
 import { query, orderBy, limit, getDocs } from "../../utils/db.js";
 import { formatCurrency, startOfMonth, todayString } from "../../utils/formatters.js";
+import { getCustomerTierInfo } from "../customers.js";
 
 export async function render(container, user) {
   container.innerHTML = `
+    <style>
+      .tier-badge {
+        display: inline-flex; align-items: center; gap: 4px;
+        padding: 2px 7px; border-radius: 6px; font-size: 11px; font-weight: 700;
+        white-space: nowrap; line-height: 1.2;
+      }
+      .tier-badge-a { background: linear-gradient(135deg, rgba(212,175,55,0.2) 0%, rgba(245,215,110,0.1) 100%); color: #F5D76E; border: 1px solid rgba(212,175,55,0.45); }
+      .tier-badge-b { background: linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(129,140,248,0.1) 100%); color: #A5B4FC; border: 1px solid rgba(99,102,241,0.45); }
+      .tier-badge-c { background: linear-gradient(135deg, rgba(16,185,129,0.2) 0%, rgba(52,211,153,0.1) 100%); color: #6EE7B7; border: 1px solid rgba(16,185,129,0.45); }
+      .tier-badge-d { background: linear-gradient(135deg, rgba(249,115,22,0.2) 0%, rgba(251,146,60,0.1) 100%); color: #FDBA74; border: 1px solid rgba(249,115,22,0.45); }
+      .tier-badge-inactive { background: rgba(148,163,184,0.12); color: #94A3B8; border: 1px solid rgba(148,163,184,0.3); }
+    </style>
+
     <div class="filterbar">
       <div class="date-range-group"><label>من</label>
         <input type="date" id="rsc-from" value="${startOfMonth()}" onchange="loadSalesByCustomer()" /></div>
@@ -30,6 +41,7 @@ export async function render(container, user) {
             <thead>
               <tr>
                 <th>اسم العميل</th>
+                <th>الشريحة</th>
                 <th>المنطقة</th>
                 <th>المندوب</th>
                 <th>عدد الفواتير</th>
@@ -86,6 +98,7 @@ async function loadSalesByCustomer() {
         repName: c.repName || "—",
         balance: c.balance || 0,
         creditLimit: c.creditLimit || 0,
+        tierOverride: c.tierOverride || c.manualTier,
         invCount: 0,
         totalSales: 0,
       };
@@ -98,15 +111,23 @@ async function loadSalesByCustomer() {
     });
 
     custReportData = Object.values(custMap).filter(c => c.totalSales > 0 || c.balance > 0);
+    custReportData.forEach(c => {
+      c.tier = getCustomerTierInfo(c.totalSales, c.tierOverride);
+    });
 
     if (custReportData.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text-2);">لا توجد حركات مبيعات عملاء في هذه الفترة</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-2);">لا توجد حركات مبيعات عملاء في هذه الفترة</td></tr>`;
       return;
     }
 
     tbody.innerHTML = custReportData.map(c => `
       <tr>
         <td class="font-heading font-semibold">${c.name}</td>
+        <td>
+          <span class="tier-badge ${c.tier.badgeClass}">
+            ${c.tier.label} ${c.tier.isManual ? '🔒' : ''}
+          </span>
+        </td>
         <td class="dim">${c.zone}</td>
         <td class="dim">${c.repName}</td>
         <td class="mono">${c.invCount}</td>
@@ -118,7 +139,7 @@ async function loadSalesByCustomer() {
         </td>
       </tr>`).join("");
   } catch (err) {
-    tbody.innerHTML = `<tr><td colspan="8"><div class="alert bad" style="margin:8px;">${err.message}</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="9"><div class="alert bad" style="margin:8px;">${err.message}</div></td></tr>`;
   }
 }
 

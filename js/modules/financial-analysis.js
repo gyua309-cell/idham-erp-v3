@@ -275,6 +275,7 @@ async function loadData(force = false) {
   if (force) {
     clearERPCache(`companies/${COMPANY_ID}/salesInvoices`);
     clearERPCache(`companies/${COMPANY_ID}/purchaseInvoices`);
+    clearERPCache(`companies/${COMPANY_ID}/salesReturns`);
     clearERPCache(`companies/${COMPANY_ID}/stockByWarehouse`);
     clearERPCache(`companies/${COMPANY_ID}/customers`);
     clearERPCache(`companies/${COMPANY_ID}/suppliers`);
@@ -283,10 +284,11 @@ async function loadData(force = false) {
     clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
   }
 
-  // Fetch sales and purchase invoices from 6 months ago to support 6-month trend chart
-  const [SI_all, PI_all, ST, CU, SU, PRODS, ACCS, JES] = await Promise.all([
-    getAll(COLS.salesInvoices(),    [where("date",">=",sixMonthsAgo), where("date","<=",to)]),
-    getAll(COLS.purchaseInvoices(), [where("date",">=",sixMonthsAgo), where("date","<=",to)]),
+  // Fetch full datasets so all period presets (all, month, year, etc.) and trend charts work reliably
+  const [SI_all, PI_all, RET_all, ST, CU, SU, PRODS, ACCS, JES] = await Promise.all([
+    getAll(COLS.salesInvoices()),
+    getAll(COLS.purchaseInvoices()),
+    getAll(COLS.salesReturns()),
     getAll(COLS.stockByWarehouse()),
     getAll(COLS.customers()),
     getAll(COLS.suppliers()),
@@ -295,9 +297,22 @@ async function loadData(force = false) {
     getAll(COLS.journalEntries()),
   ]);
 
-  // Filter invoices for current selected period
-  const SI = SI_all.filter(i => (i.date || "") >= from && (i.date || "") <= to);
-  const PI = PI_all.filter(i => (i.date || "") >= from && (i.date || "") <= to);
+  // Filter invoices and returns for current selected period
+  const SI = SI_all.filter(i => {
+    if (i.status === "cancelled" || i.status === "void") return false;
+    const d = i.date || (i.createdAt?.toDate ? i.createdAt.toDate().toISOString().split("T")[0] : "");
+    return d >= from && d <= to;
+  });
+  const PI = PI_all.filter(i => {
+    if (i.status === "cancelled" || i.status === "void") return false;
+    const d = i.date || (i.createdAt?.toDate ? i.createdAt.toDate().toISOString().split("T")[0] : "");
+    return d >= from && d <= to;
+  });
+  const RET = (RET_all || []).filter(r => {
+    if (r.status === "cancelled" || r.status === "void") return false;
+    const d = r.date || (r.createdAt?.toDate ? r.createdAt.toDate().toISOString().split("T")[0] : "");
+    return d >= from && d <= to;
+  });
 
   // Build account lookup maps
   const accById   = {};
@@ -309,7 +324,7 @@ async function loadData(force = false) {
   function accBalance(accId, fromD, toD, cumulative=false) {
     let b = 0;
     for (const je of JES) {
-      if (je.status && je.status !== "posted") continue;
+      if (je.status && je.status !== "posted" && je.status !== "مرحل" && je.status !== "مرحّل") continue;
       const d = je.date || "";
       const inRange = cumulative ? (d <= toD) : (d >= fromD && d <= toD);
       if (!inRange) continue;
@@ -323,12 +338,12 @@ async function loadData(force = false) {
   }
 
   // ── P&L from JEs (period) ──
-  let revenue = 0, cogs = 0, opExpenses = 0;
+  let jeRevenue = 0, jeCogs = 0, opExpenses = 0;
   let vatOut = 0, vatIn = 0;
   for (const acc of ACCS) {
     let bal = 0;
     for (const je of JES) {
-      if (je.status && je.status !== "posted") continue;
+      if (je.status && je.status !== "posted" && je.status !== "مرحل" && je.status !== "مرحّل") continue;
       const d = je.date || "";
       if (d >= from && d <= to) {
         for (const line of (je.lines || [])) {
@@ -339,11 +354,11 @@ async function loadData(force = false) {
       }
     }
     if (acc.type === "revenue") {
-      revenue += bal;
+      jeRevenue += bal;
     } else if (acc.type === "expense") {
       const val = -bal;
       const isCOGS = acc.code?.startsWith("5-1") || acc.name?.includes("تكلفة البضاعة") || acc.name?.includes("تكلفة مبيعات") || acc.name?.includes("نقل بضاعة");
-      if (isCOGS) cogs += val;
+      if (isCOGS) jeCogs += val;
       else opExpenses += val;
     } else if (acc.code?.startsWith("2-1-3")) {
       vatOut += Math.abs(bal); // VAT payable
@@ -352,9 +367,23 @@ async function loadData(force = false) {
     }
   }
 
-  // If JE-based COGS is zero (no COGS JEs yet), fallback to invoice totalCost
-  if (cogs < 0.01) {
-    cogs = SI.reduce((s,i)=>s+(i.totalCost||0),0);
+  // Invoice-level operational calculations (including sales returns deduction):
+  const invGrossSub = SI.reduce((s,i) => s + (i.subtotal !== undefined ? i.subtotal : (i.totalBeforeTax || (i.totalWithVat ? i.totalWithVat / 1.15 : i.total || 0))), 0);
+  const retSub = RET.reduce((s,r) => s + (r.subtotal !== undefined ? r.subtotal : (r.totalBeforeTax || (r.totalWithVat ? r.totalWithVat / 1.15 : r.total || 0))), 0);
+  const invNetRev = Math.max(0, invGrossSub - retSub);
+  const invVat = SI.reduce((s,i) => s + (i.totalVat || i.vatAmount || 0), 0);
+
+  let invCogs = SI.reduce((s,i) => s + (i.totalCost || 0), 0) - RET.reduce((s,r) => s + (r.totalCost || 0), 0);
+  invCogs = Math.max(0, invCogs);
+
+  // Reconcile: use JEs if available, fallback gracefully to operational invoices
+  const revenue = jeRevenue > 0.01 ? jeRevenue : invNetRev;
+  let cogs = jeCogs > 0.01 ? jeCogs : invCogs;
+  if (cogs < 0.01 && revenue > 0) {
+    cogs = invCogs;
+  }
+  if (vatOut < 0.01) {
+    vatOut = invVat;
   }
 
   const grossProfit = revenue - cogs;
@@ -363,14 +392,15 @@ async function loadData(force = false) {
   const netProfit   = opProfit - tax;
   const revTotal    = revenue + vatOut;
 
-  // ── Balance Sheet from JEs (cumulative to today) ──
+  // ── Balance Sheet from JEs (cumulative to selected 'to' date) ──
   let curAssets = 0, fixedAssets = 0, curLiab = 0, longLiab = 0;
   let cashVal = 0, receivables = 0, invVal = 0, payables = 0;
+  let otherCurAssets = 0;
 
   for (const acc of ACCS) {
     let bal = 0;
     for (const je of JES) {
-      if (je.status && je.status !== "posted") continue;
+      if (je.status && je.status !== "posted" && je.status !== "مرحل" && je.status !== "مرحّل") continue;
       const d = je.date || "";
       if (d <= to) {
         for (const line of (je.lines || [])) {
@@ -382,49 +412,63 @@ async function loadData(force = false) {
     }
     if (acc.type === "asset") {
       const isFixed = acc.code?.startsWith("1-2") || acc.code?.startsWith("1-3") ||
-        acc.name?.includes("سيارات") || acc.name?.includes("أثاث") || acc.name?.includes("معدات");
-      if (isFixed) fixedAssets += bal;
-      else {
+        acc.name?.includes("سيارات") || acc.name?.includes("أثاث") || acc.name?.includes("معدات") || acc.name?.includes("عقارات");
+      if (isFixed) {
+        fixedAssets += bal;
+      } else {
         curAssets += bal;
-        // 1-1-1: Cash boxes, 1-1-2: Banks
-        if (acc.code?.startsWith("1-1-1") || acc.code?.startsWith("1-1-2") || acc.code?.startsWith("111") || acc.code?.startsWith("112") || acc.name?.includes("صندوق") || acc.name?.includes("بنك")) {
+        // 1-1-1: Cash boxes, rep cash, banks (النقدية وما في حكمها)
+        if (acc.code?.startsWith("1-1-1") || acc.name?.includes("صندوق") || acc.name?.includes("بنك") || acc.name?.includes("مصرف")) {
           cashVal += bal;
         }
-        // 1-1-3: Customer receivables
-        if (acc.code?.startsWith("1-1-3") || acc.code?.startsWith("113") || acc.name?.includes("عملاء") || acc.name?.includes("مدينة")) {
+        // 1-1-2: Customer receivables (الذمم المدينة التجارية - مطابقة لتقرير مديونية العملاء الشجري)
+        else if (acc.code?.startsWith("1-1-2") || (acc.name?.includes("عملاء") && !acc.name?.includes("مورد"))) {
           receivables += bal;
         }
-        // 1-1-4: Inventory
-        if (acc.code?.startsWith("1-1-4") || acc.code?.startsWith("114") || acc.name?.includes("مخزون")) {
+        // 1-1-4: Inventory (المخزون)
+        else if (acc.code?.startsWith("1-1-4") || acc.name?.includes("مخزون")) {
           invVal += bal;
+        }
+        // 1-1-3 & 1-1-5: Other current assets (مصروفات مدفوعة مقدماً، سلف موظفين، ضريبة مدخلات)
+        else {
+          otherCurAssets += bal;
         }
       }
     } else if (acc.type === "liability") {
       const val = -bal;
       const isLT = acc.code?.startsWith("2-2") || acc.name?.includes("طويل");
-      if (isLT) longLiab += val;
-      else {
+      if (isLT) {
+        longLiab += val;
+      } else {
         curLiab += val;
-        if (acc.code?.startsWith("2-1-1") || acc.code?.startsWith("211") || acc.name?.includes("موردين") || acc.name?.includes("دائنة")) {
+        // 2-1-1: Trade Payables (الذمم الدائنة التجارية - موردين)
+        if (acc.code?.startsWith("2-1-1") || acc.name?.includes("موردين") || acc.name?.includes("دائنة")) {
           payables += val;
         }
       }
     }
   }
 
-  // Fallback: if JE-based inventory is zero, estimate from stock snapshot
+  // Fallback / verification from operational datasets:
   if (invVal < 0.01) {
     const costMap = {};
     PRODS.forEach(p => { costMap[p.id] = p.averageCost || p.costPrice || 0; });
     invVal = ST.reduce((s,r) => s + ((r.qty||0) * (costMap[r.productId]||0)), 0);
   }
-  // Fallback receivables from customer balances
-  if (receivables < 0.01) {
-    receivables = CU.reduce((s,c) => s + Math.max(0, c.balance||0), 0);
+  // Reconcile Customer Receivables with customer balances if JE is 0
+  const custBalancesSum = CU.reduce((s,c) => s + Math.max(0, c.balance||0), 0);
+  if (receivables < 0.01 && custBalancesSum > 0) {
+    receivables = custBalancesSum;
   }
-  // Fallback payables
-  if (payables < 0.01) {
-    payables = SU.reduce((s,s2) => s + Math.max(0, s2.balance||0), 0);
+  // Fallback payables from supplier balances
+  const suppPayablesSum = SU.reduce((s,s2) => s + Math.max(0, s2.balance||0), 0);
+  if (payables < 0.01 && suppPayablesSum > 0) {
+    payables = suppPayablesSum;
+  }
+
+  // Ensure current assets reconciles with component sums
+  if (curAssets < (cashVal + receivables + invVal)) {
+    curAssets = Math.max(curAssets, cashVal + receivables + invVal + otherCurAssets);
   }
 
   const totAssets = curAssets + fixedAssets;
@@ -441,11 +485,25 @@ async function loadData(force = false) {
     const d = new Date(now.getFullYear(), now.getMonth()-5+i, 1);
     const lbl = d.toLocaleString("ar-SA",{month:"short"});
     const yr=d.getFullYear(), mn=d.getMonth();
-    const sRev = SI_all.filter(x=>{const dt=new Date(x.date||"");return dt.getFullYear()===yr&&dt.getMonth()===mn})
-                       .reduce((s,x)=>s+(x.totalWithVat||x.grandTotal||0),0);
-    const pCst = PI_all.filter(x=>{const dt=new Date(x.date||"");return dt.getFullYear()===yr&&dt.getMonth()===mn})
-                       .reduce((s,x)=>s+(x.total||x.grandTotal||0),0);
-    const gp   = grossProfit > 0 && revenue > 0 ? sRev * (grossProfit/revenue) : 0;
+    const sRev = SI_all.filter(x=>{
+      if (x.status === "cancelled" || x.status === "void") return false;
+      const dt=new Date(x.date||"");
+      return dt.getFullYear()===yr&&dt.getMonth()===mn;
+    }).reduce((s,x)=>s+(x.totalWithVat||x.grandTotal||0),0);
+
+    const sCost = SI_all.filter(x=>{
+      if (x.status === "cancelled" || x.status === "void") return false;
+      const dt=new Date(x.date||"");
+      return dt.getFullYear()===yr&&dt.getMonth()===mn;
+    }).reduce((s,x)=>s+(x.totalCost||0),0);
+
+    const pCst = PI_all.filter(x=>{
+      if (x.status === "cancelled" || x.status === "void") return false;
+      const dt=new Date(x.date||"");
+      return dt.getFullYear()===yr&&dt.getMonth()===mn;
+    }).reduce((s,x)=>s+(x.total||x.grandTotal||0),0);
+
+    const gp = Math.max(0, (sRev > 0 ? (sRev / 1.15) - sCost : 0));
     return {lbl, rev:Math.round(sRev), cost:Math.round(pCst), gp:Math.round(gp)};
   });
 
@@ -607,13 +665,13 @@ function buildOv(cnt, d) {
   <div class="slbl"><span>◆</span> المؤشرات المالية الكبرى — KPIs</div>
   <div class="kgrid">
     ${kCard("إجمالي المبيعات (بدون ضريبة)","Total Revenue",fmtC(d.revenue),"",""+d.invCount+" فاتورة",C.indigo,"💰",75)}
-    ${kCard("الربح الإجمالي","Gross Profit",fmtC(d.grossProfit),"",fmtP(R.grossMgn),C.green,"📈",R.grossMgn*2)}
-    ${kCard("الربح التشغيلي","Operating Profit",fmtC(d.opProfit),"",fmtP(R.opMgn),C.teal,"⚡",R.opMgn*2)}
-    ${kCard("صافي الربح","Net Profit",fmtC(d.netProfit),"",fmtP(R.netMgn),C.violet,"✨",R.netMgn*3)}
+    ${kCard("الربح الإجمالي","Gross Profit",fmtC(d.grossProfit),"",fmtP(R.grossMgn)+" هامش ربح",C.green,"📈",Math.min(100, R.grossMgn*15))}
+    ${kCard("الربح التشغيلي","Operating Profit",fmtC(d.opProfit),"",fmtP(R.opMgn),C.teal,"⚡",Math.min(100, Math.abs(R.opMgn)*5))}
+    ${kCard("صافي الربح","Net Profit",fmtC(d.netProfit),"",fmtP(R.netMgn),C.violet,"✨",Math.min(100, Math.abs(R.netMgn)*5))}
     ${kCard("قيمة المخزون","Inventory Value",fmtC(d.invVal),"",d.invQty+" وحدة",C.yellow,"📦",60)}
-    ${kCard("الذمم المدينة","Receivables",fmtC(d.receivables),"",d.custCount+" عميل",C.red,"👥",50)}
-    ${kCard("الذمم الدائنة","Payables",fmtC(d.payables),"",d.suppCount+" مورد",C.orange,"🚛",45)}
-    ${kCard("متوسط الفاتورة","Avg Invoice",fmtC(d.avgInv),"",fmtP(d.collRate)+" محصّل",C.blue,"🧾",d.collRate)}
+    ${kCard("الذمم المدينة (العملاء)","Receivables",fmtC(d.receivables),"",d.custCount+" عميل",C.blue,"👥",50)}
+    ${kCard("الذمم الدائنة (الموردين)","Payables",fmtC(d.payables),"",d.suppCount+" مورد",C.orange,"🚛",45)}
+    ${kCard("النقدية بالبنوك والصناديق","Cash & Banks",fmtC(d.cash),"","سيولة متاحة",C.teal,"💵",40)}
   </div>
 
   <div class="slbl"><span>◆</span> الرسوم البيانية — Analytics</div>
@@ -630,7 +688,7 @@ function buildOv(cnt, d) {
   <div class="slbl"><span>◆</span> ملخص النسب الرئيسية</div>
   <div class="rgrid">
     ${rCard("نسبة التداول","Current Ratio",fmtR(R.curRatio),"×",R.curRatio*33,C.purple,"≥ 2.0×",[0.5,1,2])}
-    ${rCard("هامش الربح الإجمالي","Gross Margin",fmtP(R.grossMgn),""  ,R.grossMgn,  C.green, "20-30%",[5,15,25])}
+    ${rCard("هامش الربح الإجمالي","Gross Margin",fmtP(R.grossMgn),""  ,Math.min(100, R.grossMgn*15),  C.green, "4-10% (جملة)",[2,4,7])}
     ${rCard("معدل دوران المخزون","Inventory Turnover",fmtR(R.invTurn),"×",R.invTurn*8,C.yellow,"6-12×",[1,4,8])}
     ${rCard("أيام التحصيل","Days Sales Outstanding",fmtR(R.dso,0),"يوم",100-Math.min(100,R.dso),C.red,"30-45 يوم",[60,45,30])}
     ${rCard("نسبة الدين إلى الملكية","Debt/Equity",fmtR(R.de),"×",Math.max(0,100-R.de*20),C.orange,"< 2×",[3,2,1])}
@@ -697,15 +755,15 @@ function buildPft(cnt, d) {
     ${cCard("ch-pft-bar","📊 مقارنة الهوامش","Margin Comparison Bar",260)}
   </div>
   <div class="rgrid">
-    ${rCard("هامش الربح الإجمالي","Gross Margin",fmtP(R.grossMgn),"",R.grossMgn*2,C.green,"20-30%",[5,15,25])}
-    ${rCard("هامش الربح التشغيلي","Operating Margin",fmtP(R.opMgn),"",R.opMgn*3,C.teal,"10-20%",[2,8,15])}
-    ${rCard("هامش صافي الربح","Net Margin",fmtP(R.netMgn),"",R.netMgn*4,C.violet,"5-15%",[1,5,10])}
+    ${rCard("هامش الربح الإجمالي","Gross Margin",fmtP(R.grossMgn),"",Math.min(100, R.grossMgn*15),C.green,"4-10% (جملة)",[2,4,7])}
+    ${rCard("هامش الربح التشغيلي","Operating Margin",fmtP(R.opMgn),"",Math.min(100, Math.abs(R.opMgn)*5),C.teal,"1-5%",[0,2,4])}
+    ${rCard("هامش صافي الربح","Net Margin",fmtP(R.netMgn),"",Math.min(100, Math.abs(R.netMgn)*5),C.violet,"1-4%",[0,1.5,3])}
     ${rCard("العائد على الأصول","ROA",fmtP(R.roa),"",R.roa*5,C.yellow,"5-10%",[2,5,10])}
     ${rCard("العائد على الملكية","ROE",fmtP(R.roe),"",R.roe*3,C.blue,"10-20%",[5,10,20])}
     ${rCard("العائد على الاستثمار","ROI",fmtP(R.roi),"",Math.min(100,R.roi*2),C.orange,"10-25%",[5,10,20])}
-    ${rCard("هامش EBITDA","EBITDA Margin",fmtP(R.ebitda),"",R.ebitda*2,C.pink,"15-25%",[5,12,20])}
-    ${rCard("نسبة الترميح","Markup",fmtP(R.markup),"",Math.min(100,R.markup),C.red,"20-50%",[5,15,30])}
-    ${rCard("الربح على إجمالي المبيعات","Gross/Total Sales",fmtP(R.grossOnSales),"",R.grossOnSales*2,C.indigo,"15-25%",[5,12,20])}
+    ${rCard("هامش EBITDA","EBITDA Margin",fmtP(R.ebitda),"",R.ebitda*2,C.pink,"5-15%",[2,5,10])}
+    ${rCard("نسبة الترميح","Markup",fmtP(R.markup),"",Math.min(100,R.markup*12),C.red,"4-12%",[2,4,8])}
+    ${rCard("الربح على إجمالي المبيعات","Gross/Total Sales",fmtP(R.grossOnSales),"",R.grossOnSales*2,C.indigo,"4-10%",[2,4,8])}
   </div>`;
 }
 
@@ -1165,11 +1223,11 @@ function renderCharts(tab, d) {
         itemStyle:{borderRadius:8,borderColor:"#0f172a",borderWidth:3},
         label:{color:"#94a3b8",fontSize:9,formatter:p=>`${p.name}\n${p.percent.toFixed(1)}%`},
         data:[
-          {value:+d.grossProfit.toFixed(0),name:"الربح الإجمالي",itemStyle:{color:C.green}},
-          {value:+d.cogs.toFixed(0),       name:"تكلفة البضاعة", itemStyle:{color:C.red}},
-          {value:+d.vatOut.toFixed(0),     name:"ضريبة المبيعات",itemStyle:{color:C.orange}},
-          {value:+d.opExpenses.toFixed(0), name:"مصاريف تشغيل",  itemStyle:{color:C.yellow}},
-          {value:+d.tax.toFixed(0),        name:"ضريبة الدخل",   itemStyle:{color:C.violet}},
+          {value:+Math.max(0, d.grossProfit).toFixed(0),name:"الربح الإجمالي",itemStyle:{color:C.green}},
+          {value:+Math.max(0, d.cogs).toFixed(0),       name:"تكلفة البضاعة", itemStyle:{color:C.red}},
+          {value:+Math.max(0, d.vatOut).toFixed(0),     name:"ضريبة المبيعات",itemStyle:{color:C.orange}},
+          {value:+Math.max(0, d.opExpenses).toFixed(0), name:"مصاريف تشغيل",  itemStyle:{color:C.yellow}},
+          {value:+Math.max(0, d.tax).toFixed(0),        name:"ضريبة الدخل",   itemStyle:{color:C.violet}},
         ]
       }]
     });

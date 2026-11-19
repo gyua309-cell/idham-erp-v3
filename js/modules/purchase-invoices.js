@@ -193,307 +193,339 @@ function buildPage() {
   </div>
 
   <!-- ═══════════ NEW PURCHASE INVOICE MODAL (WORLD-CLASS ENTERPRISE) ═══════════ -->
+  <!-- ═══════════ NEW PURCHASE INVOICE MODAL (TRUE FULLSCREEN COCKPIT) ═══════════ -->
   <div class="modal-overlay" id="purchase-modal" onclick="if(event.target===this)closeModal('purchase-modal')">
-    <div class="modal modal-xl" style="max-width:98vw; width:98vw; height:96vh; max-height:96vh; display:flex; flex-direction:column; padding:0; overflow:hidden; border-radius:16px; background:var(--bg-1); box-shadow:0 25px 60px -15px rgba(0,0,0,0.5);">
+    <style>
+      #purchase-modal {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: rgba(15, 23, 42, 0.82) !important;
+        z-index: 9999 !important;
+        display: flex !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
+      }
+      #purchase-modal .modal-xl {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        margin: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+        border: none !important;
+        background: #f8fafc !important;
+      }
+      #purchase-modal .no-spin::-webkit-outer-spin-button,
+      #purchase-modal .no-spin::-webkit-inner-spin-button {
+        -webkit-appearance: none !important;
+        margin: 0 !important;
+      }
+      #purchase-modal .no-spin {
+        -moz-appearance: textfield !important;
+      }
+      #purchase-modal input:focus, #purchase-modal select:focus {
+        outline: 2px solid #2563eb !important;
+        outline-offset: -1px !important;
+        background-color: #eff6ff !important;
+      }
+      #pur-lines-tbody tr:hover {
+        background-color: #f1f5f9 !important;
+      }
+      .pur-hud-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        background: #ffffff;
+        border: 1.5px solid #cbd5e1;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #334155;
+        white-space: nowrap;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      }
+      .pur-hud-pill b {
+        font-family: monospace;
+        font-size: 12.5px;
+        font-weight: 800;
+      }
+    </style>
+    <div class="modal modal-xl">
       
-      <!-- Modal Header -->
-      <div class="modal-header" style="padding:12px 20px; border-bottom:1px solid var(--border-soft); display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); flex-shrink:0;">
-        <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:34px; height:34px; border-radius:8px; background:linear-gradient(135deg, #6366F1, #4F46E5); display:flex; align-items:center; justify-content:center; color:#fff; font-size:16px;">
-            🏢
-          </div>
-          <div>
-            <h3 class="modal-title" id="pur-modal-title" style="margin:0; font-size:15px; font-weight:900; color:var(--text-0);">
-              فاتورة مشتريات وتوريد بضاعة
-            </h3>
-            <div style="font-size:11px; color:var(--text-2); margin-top:1px;">
-              توثيق الشراء • الخصومات التجارية • البونص المجاني • تحديث تكلفة الأصناف
-            </div>
-          </div>
+      <!-- Modal Header (Crisp Light Theme 44px) -->
+      <div class="modal-header" style="height:44px; padding:6px 18px; border-bottom:1.5px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; background:#ffffff; color:#0f172a; flex-shrink:0; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-size:20px;">🏢</span>
+          <h3 class="modal-title" id="pur-modal-title" style="margin:0; font-size:15px; font-weight:900; color:#0f172a;">
+            فاتورة مشتريات وتوريد بضاعة
+          </h3>
+          <span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:800; font-size:10.5px; padding:2px 7px; border:1px solid #c7d2fe;">
+            ⛶ شاشة كاملة
+          </span>
+          <span class="badge" id="pur-live-badge-status" style="background:#dcfce7; color:#15803d; font-weight:800; font-size:11px; padding:2px 8px; border:1px solid #bbf7d0;">
+            📝 فاتورة جديدة
+          </span>
         </div>
 
-        <div style="display:flex; align-items:center; gap:10px;">
-          <!-- Invoice Tax Type Selector (Standard Tax vs Non-Tax) -->
-          <div style="display:inline-flex; background:var(--bg-2); padding:3px; border-radius:8px; border:1px solid var(--border-soft); gap:3px;">
-            <button type="button" id="pur-type-btn-taxable" class="btn btn-sm btn-primary" onclick="setPurchaseInvoiceType('taxable')" style="padding:4px 10px; font-size:11.5px; font-weight:800; border-radius:6px; display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
-              <span>🏢</span> فاتورة ضريبية (15%)
+        <div style="display:flex; align-items:center; gap:8px;">
+          <!-- Invoice Tax Type Selector -->
+          <div style="display:inline-flex; background:#f1f5f9; padding:2px; border-radius:6px; border:1px solid #cbd5e1; gap:2px;">
+            <button type="button" id="pur-type-btn-taxable" class="btn btn-sm btn-primary" onclick="setPurchaseInvoiceType('taxable')" style="padding:3px 10px; font-size:11px; font-weight:800; border-radius:4px; display:inline-flex; align-items:center; gap:4px; cursor:pointer;">
+              <span>🏢</span> ضريبية (15%)
             </button>
-            <button type="button" id="pur-type-btn-nontax" class="btn btn-sm btn-ghost" onclick="setPurchaseInvoiceType('non_tax')" style="padding:4px 10px; font-size:11.5px; font-weight:800; border-radius:6px; display:inline-flex; align-items:center; gap:4px; color:#059669; cursor:pointer;">
+            <button type="button" id="pur-type-btn-nontax" class="btn btn-sm btn-ghost" onclick="setPurchaseInvoiceType('non_tax')" style="padding:3px 10px; font-size:11px; font-weight:800; border-radius:4px; display:inline-flex; align-items:center; gap:4px; color:#059669; cursor:pointer;">
               <span>🟢</span> غير ضريبية (0%)
             </button>
           </div>
           <input type="hidden" id="pur-invoice-type" value="taxable" />
 
-          <span class="badge" id="pur-live-badge-status" style="background:rgba(99,102,241,0.12); color:var(--brand); font-weight:800; font-size:11px; padding:4px 8px;">
-            📝 فاتورة جديدة
-          </span>
-          <button class="modal-close" onclick="closeModal('purchase-modal')" style="font-size:20px; line-height:1;">×</button>
+          <button class="modal-close" onclick="closeModal('purchase-modal')" style="color:#64748b; font-size:24px; line-height:1; padding:0 6px; background:transparent; border:none; cursor:pointer; font-weight:700;">×</button>
         </div>
       </div>
 
-      <!-- Modal Body (Optimized Clean Workspace) -->
-      <div class="modal-body" style="padding:14px 18px; overflow-y:auto; flex:1; display:flex; flex-direction:column; gap:10px; background:var(--bg-3);">
+      <!-- Modal Body (Flex 1, No outer scroll) -->
+      <div class="modal-body" style="padding:8px 12px; overflow:hidden; flex:1 1 0%; min-height:0; display:flex; flex-direction:column; gap:6px; background:#f1f5f9;">
         
         <!-- Pinned Supplier Warning Alert -->
-        <div id="sup-warning-alert" class="alert bad hidden" style="margin-bottom:6px; padding:8px 12px; font-size:12px; font-weight:800; border-radius:8px; display:flex; align-items:center; gap:8px;"></div>
+        <div id="sup-warning-alert" class="alert bad hidden" style="margin:0; padding:6px 10px; font-size:11.5px; font-weight:800; border-radius:6px; display:flex; align-items:center; gap:8px;"></div>
 
-        <!-- Section 1: Compact Ergonomic Header Grid (2 Rows Only) -->
-        <div class="card" style="padding:10px 14px; border-radius:10px; background:var(--bg-card); border:1px solid var(--border-soft); flex-shrink:0;">
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:10px 14px; align-items:center;">
+        <!-- Section 1: Compact Ergonomic Meta Bar (Single Row ~40px) -->
+        <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:6px 10px; box-shadow:0 1px 3px rgba(0,0,0,0.04); flex-shrink:0;">
+          <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
             
-            <div class="form-group" style="margin:0;">
-              <label class="form-label" style="font-weight:700; font-size:11px; margin-bottom:2px;">رقم الفاتورة (System)</label>
+            <div style="width:110px;">
               <input type="text" id="pur-inv-number" class="form-control mono font-bold" readonly
-                style="background:var(--bg-2); color:var(--brand); font-size:12px; height:32px; padding:4px 8px;" placeholder="يُولَّد تلقائياً" />
+                style="background:#f8fafc; color:#4338ca; font-size:11px; height:30px; padding:2px 6px; text-align:center;" placeholder="رقم الفاتورة" title="رقم الفاتورة بالنظام" />
             </div>
 
-            <div class="form-group" style="margin:0;">
-              <label class="form-label" style="font-weight:700; font-size:11px; margin-bottom:2px;">تاريخ الفاتورة <span class="text-bad">*</span></label>
-              <input type="date" id="pur-inv-date" class="form-control mono font-bold" value="${todayString()}" style="height:32px; padding:4px 8px; font-size:12px;" />
+            <div style="width:125px;">
+              <input type="date" id="pur-inv-date" class="form-control mono font-bold" value="${todayString()}"
+                style="height:30px; padding:2px 6px; font-size:11.5px; text-align:center;" title="تاريخ الفاتورة *" />
             </div>
 
-            <div class="form-group" style="margin:0;">
-              <label class="form-label" style="font-weight:700; font-size:11px; margin-bottom:2px;">فاتورة المورد الورقية / المرجع</label>
-              <input type="text" id="pur-ref-num" class="form-control mono font-bold" placeholder="INV-SUPP-00123" style="height:32px; padding:4px 8px; font-size:12px;" />
-            </div>
-
-            <div class="form-group" style="margin:0; min-width:210px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:2px;">
-                <label class="form-label" style="font-weight:700; font-size:11px; margin:0;">المورد <span class="text-bad">*</span></label>
-                <button type="button" id="pur-sup-360-btn" class="btn btn-ghost sm hidden" style="font-size:10px; padding:0 3px; color:var(--brand);" onclick="window.viewSupplierIntelligence360(document.getElementById('supplier-id').value)">👁️ 360°</button>
-              </div>
+            <div style="flex:2; min-width:210px; position:relative;">
               <div class="autocomplete-container">
                 <input type="text" id="supplier-search" class="form-control font-bold"
-                  placeholder="ابحث باسم المورد…" autocomplete="off" style="height:32px; padding:4px 8px; font-size:12px;" />
-                <div class="autocomplete-results hidden" id="supplier-results"></div>
+                  placeholder="👤 ابحث بالمورد أو اختر المورد... *" autocomplete="off"
+                  style="height:30px; padding:2px 10px; font-size:12px; border-color:#2563eb; background:#fff;" />
+                <div class="autocomplete-results hidden" id="supplier-results" style="z-index:99999; max-height:260px; box-shadow:0 8px 24px rgba(0,0,0,0.18);"></div>
                 <input type="hidden" id="supplier-id" />
               </div>
             </div>
 
-            <div class="form-group" style="margin:0;">
-              <label class="form-label" style="font-weight:700; font-size:11px; margin-bottom:2px;">المخزن المستلِم <span class="text-bad">*</span></label>
-              <select id="pur-warehouse" class="form-control font-bold" style="height:32px; padding:4px 8px; font-size:12px;">
-                <option value="">اختر المستودع</option>
+            <button type="button" id="pur-sup-360-btn" class="btn btn-ghost sm hidden" style="font-size:10.5px; padding:0 5px; height:30px; color:#2563eb; border:1px solid #bfdbfe; background:#eff6ff;" onclick="window.viewSupplierIntelligence360(document.getElementById('supplier-id').value)">👁️ 360°</button>
+
+            <div style="width:130px;">
+              <select id="pur-warehouse" class="form-control font-bold" style="height:30px; padding:2px 6px; font-size:11.5px;" title="المخزن المستلم">
+                <option value="">المخزن المستلِم *</option>
               </select>
             </div>
 
-            <div class="form-group" style="margin:0;">
-              <label class="form-label" style="font-weight:700; font-size:11px; margin-bottom:2px;">طريقة السداد</label>
-              <select id="pur-payment" class="form-control font-bold" style="height:32px; padding:4px 8px; font-size:12px;">
+            <div style="width:115px;">
+              <select id="pur-payment" class="form-control font-bold" style="height:30px; padding:2px 6px; font-size:11.5px;" title="طريقة السداد">
                 <option value="credit">آجل (سداد لاحق)</option>
-                <option value="cash">نقدي فوري (من الخزينة)</option>
+                <option value="cash">نقدي (خزينة)</option>
                 <option value="transfer">تحويل بنكي</option>
                 <option value="check">شيك مصرفي</option>
               </select>
             </div>
 
-            <div class="form-group" style="margin:0;">
-              <label class="form-label" style="font-weight:700; font-size:11px; margin-bottom:2px;">الاستحقاق (Due Date)</label>
-              <input type="date" id="pur-due-date" class="form-control mono" style="height:32px; padding:4px 8px; font-size:11.5px;" />
+            <div style="width:130px;">
+              <input type="text" id="pur-ref-num" class="form-control mono font-bold" placeholder="مرجع ورقي #..." style="height:30px; padding:2px 6px; font-size:11.5px;" title="رقم فاتورة المورد الورقية" />
             </div>
 
-            <div class="form-group" style="margin:0;">
-              <label class="form-label" style="font-weight:700; font-size:11px; margin-bottom:2px;">ضريبة المورد (VAT)</label>
-              <input type="text" id="pur-supplier-vat" class="form-control mono" placeholder="300000000000003" style="height:32px; padding:4px 8px; font-size:11.5px;" />
-            </div>
+            <button type="button" id="pur-extra-details-btn" class="btn btn-secondary btn-sm" onclick="window.togglePurExtraDetails()" style="height:30px; font-size:11px; padding:0 8px; font-weight:700;" title="إظهار تفاصيل إضافية: استحقاق، ضريبة المورد، مرفق">
+              ⚙️ تفاصيل إضافية
+            </button>
 
-            <div class="form-group" style="margin:0;">
-              <label class="form-label" style="font-weight:700; font-size:11px; margin-bottom:2px;">المرفق (صورة/PDF)</label>
-              <input type="file" id="pur-attachment" class="form-control" accept="image/*,application/pdf" style="height:32px; padding:2px 4px; font-size:11px;" />
-            </div>
+            <button type="button" id="pur-discount-notes-btn" class="btn btn-secondary btn-sm" onclick="window.togglePurDiscountNotes()" style="height:30px; font-size:11px; padding:0 8px; font-weight:700;" title="إظهار الخصم العام ومصاريف الشحن والملاحظات">
+              🏷️ خصم وملاحظات
+            </button>
 
           </div>
+
+          <!-- Secondary Extra Details Drawer -->
+          <div id="pur-extra-details-drawer" style="display:none; margin-top:6px; padding-top:6px; border-top:1px dashed #cbd5e1; gap:10px; align-items:center; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:6px;">
+              <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">تاريخ الاستحقاق:</label>
+              <input type="date" id="pur-due-date" class="form-control mono" style="height:28px; padding:2px 6px; font-size:11px; width:130px;" />
+            </div>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">ضريبة المورد (VAT):</label>
+              <input type="text" id="pur-supplier-vat" class="form-control mono" placeholder="300000000000003" style="height:28px; padding:2px 6px; font-size:11px; width:140px;" />
+            </div>
+            <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:200px;">
+              <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">المرفق (صورة/PDF):</label>
+              <input type="file" id="pur-attachment" class="form-control" accept="image/*,application/pdf" style="height:28px; padding:1px 4px; font-size:10.5px; flex:1;" />
+            </div>
+          </div>
+
+          <!-- Secondary Discount & Notes Drawer -->
+          <div id="pur-discount-notes-drawer" style="display:none; margin-top:6px; padding-top:6px; border-top:1px dashed #cbd5e1; gap:10px; align-items:center; flex-wrap:wrap;">
+            <div style="display:flex; align-items:center; gap:4px;">
+              <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">نوع الخصم:</label>
+              <select id="pur-global-discount-type" class="form-control" onchange="window.syncPurGlobalDiscount('drawer')" style="height:28px; padding:2px 6px; font-size:11px; width:110px;">
+                <option value="pct">نسبة (%)</option>
+                <option value="amount">مبلغ مقطوع (ر.س)</option>
+              </select>
+              <input type="number" id="pur-global-discount-val" class="form-control mono font-bold no-spin" placeholder="0" min="0" step="0.5" oninput="window.syncPurGlobalDiscount('drawer')" style="height:28px; padding:2px 6px; font-size:11px; width:80px; text-align:center;" />
+            </div>
+            <div style="display:flex; align-items:center; gap:4px;">
+              <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">مصاريف شحن/نقل:</label>
+              <input type="number" id="pur-freight-val" class="form-control mono no-spin" placeholder="0.00" min="0" step="1" oninput="window.recalcPurchaseTotals()" style="height:28px; padding:2px 6px; font-size:11px; width:90px; text-align:center;" />
+            </div>
+            <div style="display:flex; align-items:center; gap:4px; flex:1; min-width:220px;">
+              <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">ملاحظات:</label>
+              <input type="text" id="pur-notes" class="form-control" placeholder="أي شروط سداد أو ملاحظات..." style="height:28px; padding:2px 8px; font-size:11px; flex:1;" />
+            </div>
+          </div>
+
         </div>
 
-        <!-- Section 2: Huge Items Workspace (المساحة الكبرى للأصناف) -->
-        <div class="card" style="padding:12px 14px; border-radius:10px; background:var(--bg-card); border:1px solid var(--border-soft); flex:1; display:flex; flex-direction:column; min-height:420px;">
-          
-          <!-- Smart Action Toolbar -->
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
-            <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-              <strong style="font-size:13.5px; color:var(--text-0);">📋 بنود وأصناف الفاتورة</strong>
-              <span class="badge" id="pur-items-badge" style="font-size:11px; background:var(--bg-2);">0 صنف</span>
-            </div>
-
-            <!-- Smart Import Buttons -->
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="window.openImportPOModal()" title="استيراد من أمر شراء" style="font-size:11px; padding:4px 8px;">
-                📋 استيراد من PO
-              </button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="window.openImportQuoteModal()" title="استيراد من عرض سعر مورد" style="font-size:11px; padding:4px 8px;">
-                📑 استيراد عرض سعر
-              </button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="window.openImportDeliveryModal()" title="استيراد من شحنة واردة" style="font-size:11px; padding:4px 8px;">
-                🚚 استيراد شحنة
-              </button>
-              <button type="button" class="btn btn-secondary btn-sm" style="color:var(--brand); font-size:11px; padding:4px 8px;" onclick="window.openQuickProductModal()" title="إضافة صنف جديد سريع">
-                + صنف جديد
-              </button>
-            </div>
-          </div>
-
-          <!-- Search & Add Product Row -->
-          <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px; background:var(--bg-2); padding:6px 10px; border-radius:8px;">
-            <select id="pur-product-category-filter" class="form-control" style="width:160px; height:34px; font-size:12px;">
+        <!-- Section 2: Search & Smart Action Toolbar (Compact ~36px) -->
+        <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:4px 8px; box-shadow:0 1px 3px rgba(0,0,0,0.04); flex-shrink:0; display:flex; gap:8px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+          <div style="display:flex; gap:6px; flex:1; min-width:320px; align-items:center;">
+            <select id="pur-product-category-filter" class="form-control" style="width:130px; height:32px; font-size:11.5px; padding:2px 6px;">
               <option value="">كل الفئات</option>
             </select>
-            <div class="autocomplete-container" style="flex:1;">
+            <div class="autocomplete-container" style="flex:1; position:relative;">
               <input type="text" id="pur-product-search" class="form-control"
-                placeholder="🔍 ابحث بالاسم، الكود، أو امسح الباركود لإضافة الصنف مباشرة للفاتورة... [F8 للبحث المتقدم]" autocomplete="off"
-                style="height:34px; font-size:13px; font-weight:600; padding:6px 12px; background:var(--bg-card);" />
-              <div class="autocomplete-results hidden" id="pur-product-results"></div>
+                placeholder="🔍 ابحث بالاسم أو امسح الباركود لإضافة الصنف فوراً... [اضغط Enter للعودة هنا بعد كتابة الكمية]" autocomplete="off"
+                style="height:32px; font-size:12.5px; font-weight:700; padding:2px 10px; background:#fff; border-color:#2563eb;" />
+              <div class="autocomplete-results hidden" id="pur-product-results" style="z-index:99999; max-height:280px; box-shadow:0 10px 30px rgba(0,0,0,0.18);"></div>
             </div>
+            <span class="badge" id="pur-items-badge" style="font-size:11px; background:#e0e7ff; color:#3730a3; font-weight:800; padding:4px 8px; white-space:nowrap;">0 صنف</span>
           </div>
 
-          <!-- Lines Table (Expanded Height Workspace) -->
-          <div class="table-container" style="border:1px solid var(--border-soft); border-radius:8px; flex:1; min-height:300px; max-height:calc(100vh - 430px); overflow-y:auto; background:var(--bg-1);">
-            <table class="data-dense" style="margin:0; font-size:12px; width:100%;">
-              <thead>
-                <tr style="background:var(--bg-3); position:sticky; top:0; z-index:2; box-shadow:0 1px 2px rgba(0,0,0,0.06);">
-                  <th style="width:30px; text-align:center;">#</th>
-                  <th style="width:90px;">كود الصنف</th>
-                  <th>اسم الصنف</th>
-                  <th style="width:80px;">الوحدة</th>
-                  <th style="width:85px; text-align:center;">الكمية</th>
-                  <th style="width:85px; text-align:center; color:#10B981;" title="كميات إضافية مجانية ممنوحة من المورد">🎁 بونص</th>
-                  <th style="width:100px; text-align:left;">السعر</th>
-                  <th style="width:80px; text-align:center;" title="نسبة الخصم الخاصة بالبند %">خصم%</th>
-                  <th style="width:100px; text-align:left; color:var(--brand);" title="صافي تكلفة الوحدة بعد الخصم">صافي الوحدة</th>
-                  <th style="width:100px;">التشغيلة (Lot)</th>
-                  <th style="width:115px;">الانتهاء</th>
-                  <th style="width:55px; text-align:center;">VAT</th>
-                  <th style="width:110px; text-align:left; color:var(--brand);">الإجمالي</th>
-                  <th style="width:35px;"></th>
-                </tr>
-              </thead>
-              <tbody id="pur-lines-tbody"></tbody>
-            </table>
+          <div style="display:flex; gap:5px; align-items:center; flex-wrap:wrap;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.openImportPOModal()" title="استيراد من أمر شراء" style="font-size:11px; padding:3px 7px; height:30px;">
+              📋 أمر شراء PO
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.openImportQuoteModal()" title="استيراد من عرض سعر مورد" style="font-size:11px; padding:3px 7px; height:30px;">
+              📑 عرض سعر
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="window.openImportDeliveryModal()" title="استيراد من شحنة واردة" style="font-size:11px; padding:3px 7px; height:30px;">
+              🚚 شحنة واردة
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" style="color:#059669; font-size:11px; padding:3px 8px; height:30px; font-weight:700; background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.3);" onclick="window.openQuickProductModal()" title="إضافة صنف جديد سريع">
+              + صنف جديد
+            </button>
           </div>
         </div>
 
-        <!-- Section 3: Docked Financial Summary & Notes -->
-        <div style="display:grid; grid-template-columns: 1fr 1.1fr; gap:12px; flex-shrink:0;">
+        <!-- Section 3: THE MAIN ITEMS TABLE (Maximized Screen Real Estate) -->
+        <div class="table-container" style="border:1.5px solid #cbd5e1; border-radius:8px; flex:1 1 0%; min-height:0; overflow-y:auto; overflow-x:auto; background:#fff; box-shadow:inset 0 1px 3px rgba(0,0,0,0.04);">
+          <table class="data-dense" style="margin:0; font-size:12px; width:100%; border-collapse:collapse;">
+            <thead>
+              <tr style="background:#f8fafc; color:#1e293b; position:sticky; top:0; z-index:10; border-bottom:2px solid #cbd5e1; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                <th style="width:30px; text-align:center; padding:8px 4px; color:#475569; font-weight:800;">#</th>
+                <th style="width:90px; padding:8px 6px; color:#334155; font-weight:800;">كود الصنف</th>
+                <th style="padding:8px 8px; text-align:right; color:#0f172a; font-weight:900; min-width:240px;">اسم الصنف</th>
+                <th style="width:105px; padding:8px 4px; text-align:center; color:#334155; font-weight:800;">الوحدة</th>
+                <th style="width:85px; text-align:center; padding:8px 4px; color:#0284c7; font-weight:900;">الكمية</th>
+                <th style="width:80px; text-align:center; padding:8px 4px; color:#059669; font-weight:900;" title="كميات إضافية مجانية ممنوحة من المورد">🎁 بونص</th>
+                <th style="width:95px; text-align:left; padding:8px 4px; color:#334155; font-weight:800;">السعر</th>
+                <th style="width:105px; text-align:center; padding:8px 4px; color:#dc2626; font-weight:900;" title="الخصم للبند: نسبة مئوية (%) أو مبلغ نقدي (ر.س)">الخصم</th>
+                <th style="width:95px; text-align:left; padding:8px 6px; color:#4338ca; font-weight:900;" title="صافي تكلفة الوحدة بعد الخصم">صافي الوحدة</th>
+                <th style="width:90px; padding:8px 4px; color:#334155; font-weight:800;">التشغيلة</th>
+                <th style="width:105px; padding:8px 4px; color:#334155; font-weight:800;">الانتهاء</th>
+                <th style="width:65px; text-align:center; padding:8px 4px; color:#334155; font-weight:800;">VAT</th>
+                <th style="width:110px; text-align:left; padding:8px 8px; color:#1e40af; font-weight:900;">الإجمالي</th>
+                <th style="width:36px; padding:8px 2px; text-align:center;"></th>
+              </tr>
+            </thead>
+            <tbody id="pur-lines-tbody"></tbody>
+          </table>
+        </div>
+
+        <div id="pur-form-error" class="alert bad hidden" style="margin:0; padding:6px 10px; font-size:11.5px;"></div>
+
+      </div>
+
+      <!-- Section 4: FIXED BOTTOM HUD BAR (Crisp High-Contrast Light Theme) -->
+      <div class="modal-footer" style="height:54px; padding:0 16px; background:#ffffff; border-top:2px solid #cbd5e1; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; box-shadow:0 -2px 10px rgba(0,0,0,0.04);">
+        
+        <!-- Live Totals Strip -->
+        <div style="display:flex; align-items:center; gap:8px; overflow-x:auto; flex:1; margin-left:12px;">
           
-          <!-- Left Box: Global Discount & Notes -->
-          <div class="card" style="padding:10px 14px; border-radius:10px; background:var(--bg-card); border:1px solid var(--border-soft); display:flex; flex-direction:column; justify-content:space-between;">
-            <div>
-              <div class="grid-2 gap-10 mb-8">
-                <div class="form-group" style="margin:0;">
-                  <label style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:2px;">نوع الخصم العام</label>
-                  <select id="pur-global-discount-type" class="form-control" onchange="window.recalcPurchaseTotals()" style="height:30px; padding:3px 8px; font-size:11.5px;">
-                    <option value="pct">نسبة مئوية (%)</option>
-                    <option value="amount">مبلغ مقطوع (ر.س)</option>
-                  </select>
-                </div>
-                <div class="form-group" style="margin:0;">
-                  <label style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:2px;">قيمة الخصم العام</label>
-                  <input type="number" id="pur-global-discount-val" class="form-control mono font-bold" placeholder="0.00" min="0" step="0.5" oninput="window.recalcPurchaseTotals()" style="height:30px; padding:3px 8px; font-size:12px;" />
-                </div>
-              </div>
-
-              <div class="grid-2 gap-10 mb-8">
-                <div class="form-group" style="margin:0;">
-                  <label style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:2px;">مصاريف شحن/نقل (Freight)</label>
-                  <input type="number" id="pur-freight-val" class="form-control mono" placeholder="0.00" min="0" step="1" oninput="window.recalcPurchaseTotals()" style="height:30px; padding:3px 8px; font-size:12px;" />
-                </div>
-                <div class="form-group" style="margin:0;">
-                  <label style="font-size:11px; font-weight:700; color:var(--text-2); margin-bottom:2px;">شروط وملاحظات التوريد</label>
-                  <input type="text" id="pur-notes" class="form-control" placeholder="أي ملاحظة أو شروط سداد إضافية…" style="height:30px; padding:3px 8px; font-size:11.5px;" />
-                </div>
-              </div>
-            </div>
-
-            <!-- Savings & Bonus Summary Banner -->
-            <div id="pur-savings-banner" style="background:rgba(16,185,129,0.06); border:1px dashed rgba(16,185,129,0.3); padding:6px 12px; border-radius:8px; font-size:11.5px; display:flex; justify-content:space-between; align-items:center;">
-              <div>
-                <span style="color:#10B981; font-weight:800;">🎁 إجمالي البونص: </span>
-                <b id="pur-total-bonus-label" class="mono font-bold">0 كرتون مجاني</b>
-              </div>
-              <div>
-                <span style="color:var(--brand); font-weight:800;">💰 إجمالي الوفر: </span>
-                <b id="pur-total-savings-label" class="mono font-bold text-good">0.00 ر.س</b>
-              </div>
-            </div>
+          <div class="pur-hud-pill">
+            <span style="color:#64748b;">قبل الخصم:</span>
+            <b id="pur-gross-subtotal" style="color:#0f172a;">0.00 ر.س</b>
           </div>
 
-          <!-- Right Box: Financial Totals Breakdown -->
-          <div class="card" style="padding:10px 14px; border-radius:10px; background:var(--bg-card); border:1.5px solid var(--border-soft); display:flex; flex-direction:column; justify-content:space-between;">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:4px 12px; font-size:12px;">
-              
-              <div class="invoice-total-row" style="display:flex; justify-content:space-between; padding:2px 0;">
-                <span style="color:var(--text-2);">قبل الخصم:</span>
-                <span class="mono font-bold" id="pur-gross-subtotal">0.00 ر.س</span>
-              </div>
+          <div class="pur-hud-pill">
+            <span style="color:#dc2626;">خصم البنود:</span>
+            <b id="pur-line-discounts" style="color:#dc2626;">- 0.00 ر.س</b>
+          </div>
 
-              <div class="invoice-total-row" style="display:flex; justify-content:space-between; padding:2px 0;">
-                <span style="color:var(--text-2);">خصومات البنود:</span>
-                <span class="mono font-bold text-bad" id="pur-line-discounts">- 0.00 ر.س</span>
-              </div>
+          <div class="pur-hud-pill" style="display:inline-flex; align-items:center; gap:4px; background:#fff1f2; border:1.5px solid #fecdd3; padding:2px 8px; border-radius:6px;" title="خصم إضافي عام على كامل فاتورة الشراء">
+            <span style="color:#dc2626; font-weight:800; font-size:11px; white-space:nowrap;">الخصم العام:</span>
+            <input type="number" id="pur-hud-discount-val" class="mono font-bold no-spin" step="0.5" min="0" placeholder="0"
+              style="width:58px; height:24px; padding:1px 4px; font-size:11.5px; text-align:center; border:1px solid #fda4af; border-radius:4px; background:#ffffff; color:#be123c;"
+              oninput="window.syncPurGlobalDiscount('hud')" title="قيمة الخصم العام للفاتورة" />
+            <select id="pur-hud-discount-type" style="height:24px; padding:0 2px; font-size:11px; font-weight:bold; border:1px solid #fda4af; border-radius:4px; background:#ffffff; color:#be123c; cursor:pointer;"
+              onchange="window.syncPurGlobalDiscount('hud')" title="نوع الخصم: نسبة مئوية (%) أو مبلغ مقطوع (ر.س)">
+              <option value="pct">%</option>
+              <option value="amount">ر.س</option>
+            </select>
+            <b id="pur-global-discount-amount" style="color:#dc2626; font-size:11.5px; margin-right:4px; white-space:nowrap;">- 0.00 ر.س</b>
+          </div>
 
-              <div class="invoice-total-row" style="display:flex; justify-content:space-between; padding:2px 0;">
-                <span style="color:var(--text-2);">الخصم العام:</span>
-                <span class="mono font-bold text-bad" id="pur-global-discount-amount">- 0.00 ر.س</span>
-              </div>
+          <div class="pur-hud-pill">
+            <span style="color:#2563eb;">الوعاء (15%):</span>
+            <b id="pur-net-taxable" style="color:#2563eb;">0.00 ر.س</b>
+          </div>
 
-              <div class="invoice-total-row" style="display:flex; justify-content:space-between; padding:2px 0;">
-                <span style="color:var(--text-1); font-weight:700;">صافي الوعاء (15%):</span>
-                <span class="mono font-bold text-brand" id="pur-net-taxable">0.00 ر.س</span>
-              </div>
+          <div class="pur-hud-pill" id="pur-exempt-row">
+            <span style="color:#059669;">معفى (0%):</span>
+            <b id="pur-net-exempt" style="color:#059669;">0.00 ر.س</b>
+          </div>
 
-              <div class="invoice-total-row" id="pur-exempt-row" style="display:flex; justify-content:space-between; padding:2px 0;">
-                <span style="color:var(--text-2);">معفاة (0%):</span>
-                <span class="mono font-bold text-good" id="pur-net-exempt">0.00 ر.س</span>
-              </div>
+          <div class="pur-hud-pill">
+            <span style="color:#d97706;">الضريبة (15%):</span>
+            <b id="pur-vat" style="color:#d97706;">0.00 ر.س</b>
+          </div>
 
-              <div class="invoice-total-row" style="display:flex; justify-content:space-between; padding:2px 0;">
-                <span style="color:var(--text-2);">ضريبة (15% VAT):</span>
-                <span class="mono font-bold text-warn" id="pur-vat">0.00 ر.س</span>
-              </div>
+          <div class="pur-hud-pill" style="display:none;">
+            <b id="pur-freight-label">+ 0.00 ر.س</b>
+          </div>
 
-              <div class="invoice-total-row" style="display:flex; justify-content:space-between; padding:2px 0;">
-                <span style="color:var(--text-2);">الشحن والنقل:</span>
-                <span class="mono font-bold" id="pur-freight-label">+ 0.00 ر.س</span>
-              </div>
+          <!-- Bonus & Savings Banner -->
+          <div id="pur-savings-banner" class="pur-hud-pill" style="background:#ecfdf5; border-color:#a7f3d0;">
+            <span style="color:#059669; font-weight:800;">🎁 بونص: </span>
+            <b id="pur-total-bonus-label" style="color:#059669;">0 مجاني</b>
+            <span style="color:#0284c7; font-weight:800; margin-right:4px;">| وفر: </span>
+            <b id="pur-total-savings-label" style="color:#0284c7;">0.00 ر.س</b>
+          </div>
 
-            </div>
-
-            <div class="invoice-total-row grand-total"
-              style="border-top:2px solid var(--brand); margin-top:6px; padding-top:6px; display:flex; justify-content:space-between; align-items:center;">
-              <span style="font-size:14px; font-weight:900; color:var(--text-0);">الإجمالي النهائي المستحق:</span>
-              <span class="mono" style="font-size:18px; font-weight:900; color:var(--brand);" id="pur-grand">0.00 ر.س</span>
-            </div>
+          <!-- Pinned Grand Total -->
+          <div style="display:inline-flex; align-items:center; gap:8px; padding:5px 16px; background:linear-gradient(135deg, #1e40af, #2563eb); border-radius:8px; border:1px solid #1d4ed8; box-shadow:0 2px 6px rgba(37,99,235,0.25);">
+            <span style="font-size:12.5px; font-weight:800; color:#dbeafe;">المستحق:</span>
+            <span class="mono" style="font-size:18px; font-weight:900; color:#ffffff;" id="pur-grand">0.00 ر.س</span>
           </div>
 
         </div>
 
-        <div id="pur-form-error" class="alert bad hidden" style="margin-top:6px;"></div>
-      </div>
-
-      <!-- Modal Footer -->
-      <div class="modal-footer" style="padding:10px 20px; background:var(--bg-card); border-top:1px solid var(--border-soft); display:flex; justify-content:space-between; align-items:center; flex-shrink:0;">
-        <button class="btn btn-ghost" onclick="closeModal('purchase-modal')">إلغاء</button>
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-secondary" onclick="printPurchasePreview()">🖨️ معاينة وطباعة</button>
-          <button class="btn btn-warning" onclick="generatePurchaseOrder()" style="background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;">📋 أمر شراء / عرض سعر</button>
-          <button class="btn btn-primary" onclick="savePurchase()" id="save-pur-btn" style="padding:7px 22px; font-weight:800; font-size:13px;">
+        <!-- Action Buttons -->
+        <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
+          <button class="btn btn-ghost sm" onclick="closeModal('purchase-modal')" style="color:#64748b; height:34px; font-size:12px; font-weight:700;">إلغاء</button>
+          <button class="btn btn-secondary sm" onclick="printPurchasePreview()" style="height:34px; font-size:12px; padding:0 12px; background:#f8fafc; border:1.5px solid #cbd5e1; color:#0f172a; font-weight:800;">🖨️ طباعة</button>
+          <button class="btn btn-warning sm" onclick="generatePurchaseOrder()" style="height:34px; font-size:12px; padding:0 12px; background:linear-gradient(135deg,#f97316,#ea580c); color:#fff; border:none; font-weight:800;">📋 أمر شراء</button>
+          <button class="btn btn-primary" onclick="savePurchase()" id="save-pur-btn" style="height:36px; padding:0 20px; font-weight:900; font-size:13px; background:linear-gradient(135deg,#2563eb,#1d4ed8); box-shadow:0 2px 6px rgba(37,99,235,0.3);">
             💾 حفظ واعتماد الفاتورة
           </button>
         </div>
-      </div>
-    </div>
-  </div>
 
-      <!-- Modal Footer -->
-      <div class="modal-footer" style="padding:14px 24px; background:var(--bg-card); border-top:1px solid var(--border-soft); display:flex; justify-content:space-between; align-items:center;">
-        <button class="btn btn-ghost" onclick="closeModal('purchase-modal')">إلغاء</button>
-        <div style="display:flex; gap:8px;">
-          <button class="btn btn-secondary" onclick="printPurchasePreview()">🖨️ معاينة وطباعة</button>
-          <button class="btn btn-warning" onclick="generatePurchaseOrder()" style="background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;">📋 أمر شراء / عرض سعر</button>
-          <button class="btn btn-primary" onclick="savePurchase()" id="save-pur-btn" style="padding:8px 20px; font-weight:800;">
-            💾 حفظ واعتماد الفاتورة
-          </button>
-        </div>
       </div>
+
     </div>
   </div>
 
@@ -861,15 +893,18 @@ function setupPurProductAC() {
       return;
     }
 
-    results.innerHTML = matched.map(p => `
+    results.innerHTML = matched.map(p => {
+      const lastPrice = p.lastPurchasePrice || p.costPrice || p.purchasePrice || 0;
+      return `
       <div class="autocomplete-item"
-        onclick="addPurLine('${p.id}','${(p.name||"").replace(/'/g,"\\'")}',${p.costPrice||0},'${p.unit||"Piece"}','${p.sku||""}','${p.taxCategory||"S"}','${p.altUnit||""}',${p.unitFactor||1})">
+        onclick="addPurLine('${p.id}','${(p.name||"").replace(/'/g,"\\'")}',${lastPrice},'${p.unit||"Piece"}','${p.sku||""}','${p.taxCategory||"S"}','${p.altUnit||""}',${p.unitFactor||1})">
         <div class="flex justify-between">
           <span>${p.name}</span>
-          <span class="mono text-indigo">${formatCurrency(p.costPrice||0)}</span>
+          <span class="mono text-indigo" title="آخر سعر شراء تم">${formatCurrency(lastPrice)}</span>
         </div>
-        <div class="item-code">${p.sku||""} | الوحدة: ${p.unit||""}${p.altUnit && p.unitFactor > 1 ? ` | <span style="color:#d97706;font-weight:700;">📦 ${p.unitFactor} ${p.unit} = 1 ${p.altUnit}</span>` : ''}</div>
-      </div>`).join("");
+        <div class="item-code">${p.sku||""} | الوحدة: ${p.unit||""} | <span style="color:#2563eb;font-weight:700;">آخر شراء: ${formatCurrency(lastPrice)}</span>${p.altUnit && p.unitFactor > 1 ? ` | <span style="color:#d97706;font-weight:700;">📦 ${p.unitFactor} ${p.unit} = 1 ${p.altUnit}</span>` : ''}</div>
+      </div>`;
+    }).join("");
     results.classList.remove("hidden");
   };
 
@@ -948,9 +983,68 @@ window.setPurchaseInvoiceType = (type) => {
   updatePurTotals();
 };
 
+window.onPurLineKey = (e, index, field) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const searchInput = document.getElementById("pur-product-search");
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.select();
+    }
+  } else if (e.key === "ArrowDown") {
+    const nextEl = document.getElementById(`pur-line-${field}-${index + 1}`);
+    if (nextEl) { e.preventDefault(); nextEl.focus(); nextEl.select(); }
+  } else if (e.key === "ArrowUp") {
+    const prevEl = document.getElementById(`pur-line-${field}-${index - 1}`);
+    if (prevEl) { e.preventDefault(); prevEl.focus(); prevEl.select(); }
+  }
+};
+
+window.togglePurExtraDetails = () => {
+  const el = document.getElementById("pur-extra-details-drawer");
+  if (!el) return;
+  const isHidden = el.style.display === "none";
+  el.style.display = isHidden ? "flex" : "none";
+  const btn = document.getElementById("pur-extra-details-btn");
+  if (btn) {
+    btn.style.background = isHidden ? "#2563eb" : "";
+    btn.style.color = isHidden ? "#fff" : "";
+  }
+};
+
+window.togglePurDiscountNotes = () => {
+  const el = document.getElementById("pur-discount-notes-drawer");
+  if (!el) return;
+  const isHidden = el.style.display === "none";
+  el.style.display = isHidden ? "flex" : "none";
+  const btn = document.getElementById("pur-discount-notes-btn");
+  if (btn) {
+    btn.style.background = isHidden ? "#2563eb" : "";
+    btn.style.color = isHidden ? "#fff" : "";
+  }
+};
+
 window.addPurLine = (pid, pname, unitPrice, unit, sku, taxCategory, altUnit, unitFactor) => {
   document.getElementById("pur-product-search").value = "";
   document.getElementById("pur-product-results").classList.add("hidden");
+
+  // حماية ذكية لمنع تكرار الصنف بالخطأ في فاتورة المشتريات
+  const existingIdx = purchaseLines.findIndex(l => l.productId === pid);
+  if (existingIdx !== -1) {
+    const existingLine = purchaseLines[existingIdx];
+    const warnMsg = `⚠️ تنبيه: الصنف [${pname}] مضاف مسبقاً في السطر (${existingIdx + 1}) بكمية (${existingLine.qty})!\nهل أنت متأكد من تكرار إضافته كسطر منفصل بدلاً من تعديل كميته؟`;
+    if (!confirm(warnMsg)) {
+      // نقل التركيز لسطر الصنف الموجود لتعديل كميته مباشرة
+      const qtyInput = document.getElementById(`pur-line-qty-${existingIdx}`);
+      if (qtyInput) {
+        qtyInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        qtyInput.focus();
+        qtyInput.select();
+      }
+      return;
+    }
+  }
+
   const isInvoiceNonTax = document.getElementById("pur-invoice-type")?.value === "non_tax";
   purchaseLines.push({
     productId: pid,
@@ -965,11 +1059,22 @@ window.addPurLine = (pid, pname, unitPrice, unit, sku, taxCategory, altUnit, uni
     bonusQty: 0,
     unitPrice: parseFloat(unitPrice) || 0,
     discount: 0,
+    discountType: "percent",
     batchNumber: "",
     expiryDate: "",
   });
   renderPurLines();
   updatePurTotals();
+
+  setTimeout(() => {
+    const lastIdx = purchaseLines.length - 1;
+    const qtyInput = document.getElementById(`pur-line-qty-${lastIdx}`);
+    if (qtyInput) {
+      qtyInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      qtyInput.focus();
+      qtyInput.select();
+    }
+  }, 40);
 };
 
 function renderPurLines() {
@@ -990,9 +1095,15 @@ function renderPurLines() {
   tbody.innerHTML = purchaseLines.map((l, i) => {
     const qty = parseFloat(l.qty) || 0;
     const price = parseFloat(l.unitPrice) || 0;
-    const discPct = parseFloat(l.discount) || 0;
+    const discVal = parseFloat(l.discount) || 0;
+    const discType = l.discountType || "percent";
     const gross = qty * price;
-    const discAmt = gross * (discPct / 100);
+    let discAmt = 0;
+    if (discType === "amount") {
+      discAmt = Math.min(gross, Math.max(0, discVal));
+    } else {
+      discAmt = Math.min(gross, Math.max(0, gross * (discVal / 100)));
+    }
     const lineSub = Math.max(0, gross - discAmt);
     const netUnitPrice = qty > 0 ? (lineSub / qty) : price;
     const isTaxable = !isInvoiceNonTax && (l.taxCategory === "S" || l.taxCategory === "standard");
@@ -1000,7 +1111,7 @@ function renderPurLines() {
     const lineTotalWithVat = lineSub + vatAmt;
 
     return `
-    <tr id="pur-line-row-${i}" style="border-bottom:1px solid var(--border-soft); background:var(--bg-card);">
+    <tr id="pur-line-row-${i}" style="border-bottom:1px solid var(--border-soft); background:#fff;">
       <td style="padding:6px 4px; text-align:center; color:var(--text-2); font-size:11px;">${i+1}</td>
       <td style="padding:6px 6px;" class="mono dim" style="font-size:11px;">${l.sku || "—"}</td>
       <td style="padding:6px 6px; font-weight:700; color:var(--text-0);">${l.productName}</td>
@@ -1020,9 +1131,11 @@ function renderPurLines() {
       
       <!-- Qty -->
       <td style="padding:6px 4px; width:75px;">
-        <input type="number" class="form-control mono font-bold"
-          style="width:70px; height:28px; font-size:11.5px; padding:2px 4px; text-align:center;"
+        <input type="number" id="pur-line-qty-${i}" class="form-control mono font-bold no-spin"
+          style="width:70px; height:28px; font-size:12px; padding:2px 4px; text-align:center;"
           value="${l.qty}" min="0.001" step="0.001"
+          onwheel="this.blur()"
+          onkeydown="window.onPurLineKey(event, ${i}, 'qty')"
           oninput="updatePurLine(${i},'qty',this.value)" />
         ${(l.altUnit && l.unitFactor > 1 && l.selectedUnit === l.altUnit)
           ? `<div style="font-size:9.5px;color:#059669;margin-top:2px;text-align:center;font-weight:700;">= ${(parseFloat(l.qty)||0) * l.unitFactor} ${translateUnit(l.unit)}</div>`
@@ -1031,27 +1144,40 @@ function renderPurLines() {
 
       <!-- Bonus Qty -->
       <td style="padding:6px 4px; width:75px;">
-        <input type="number" class="form-control mono font-bold"
-          style="width:70px; height:28px; font-size:11.5px; padding:2px 4px; text-align:center; color:#10B981; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.3);"
+        <input type="number" id="pur-line-bonus-${i}" class="form-control mono font-bold no-spin"
+          style="width:70px; height:28px; font-size:12px; padding:2px 4px; text-align:center; color:#10B981; background:rgba(16,185,129,0.05); border:1px solid rgba(16,185,129,0.3);"
           value="${l.bonusQty || ""}" placeholder="0" min="0" step="1"
           title="كمية مجانية ممنوحة من المورد (تضاف للمخزون بدون تكلفة)"
+          onwheel="this.blur()"
+          onkeydown="window.onPurLineKey(event, ${i}, 'bonus')"
           oninput="updatePurLine(${i},'bonusQty',this.value)" />
       </td>
 
       <!-- Unit Price -->
       <td style="padding:6px 4px; width:95px;">
-        <input type="number" class="form-control mono font-bold"
-          style="width:90px; height:28px; font-size:11.5px; padding:2px 6px;"
+        <input type="number" id="pur-line-price-${i}" class="form-control mono font-bold no-spin"
+          style="width:90px; height:28px; font-size:12px; padding:2px 6px;"
           value="${l.unitPrice}" min="0" step="0.01"
+          onwheel="this.blur()"
+          onkeydown="window.onPurLineKey(event, ${i}, 'price')"
           oninput="updatePurLine(${i},'unitPrice',this.value)" />
       </td>
 
-      <!-- Line Discount % -->
-      <td style="padding:6px 4px; width:70px;">
-        <input type="number" class="form-control mono font-bold"
-          style="width:65px; height:28px; font-size:11.5px; padding:2px 4px; text-align:center; color:#EF4444;"
-          value="${l.discount || ""}" placeholder="0%" min="0" max="100" step="0.5"
-          oninput="updatePurLine(${i},'discount',this.value)" />
+      <!-- Line Discount (% or SAR toggle) -->
+      <td style="padding:6px 4px; width:105px;">
+        <div style="display:flex; align-items:center; justify-content:center; gap:2px;">
+          <input type="number" id="pur-line-disc-${i}" class="form-control mono font-bold no-spin"
+            style="width:58px; height:28px; font-size:12px; padding:2px 3px; text-align:center; color:#EF4444; border-color:#fca5a5;"
+            value="${l.discount ?? ''}" placeholder="0" min="0" ${discType === 'amount' ? '' : 'max="100"'} step="${discType === 'amount' ? '0.01' : '0.5'}"
+            onwheel="this.blur()"
+            onkeydown="window.onPurLineKey(event, ${i}, 'disc')"
+            oninput="updatePurLine(${i},'discount',this.value)" />
+          <button type="button" onclick="window.togglePurLineDiscountType(${i})"
+            title="تبديل نوع الخصم بين نسبة مئوية (%) ومبلغ نقدي (ر.س)"
+            style="border:none; background:${discType === 'amount' ? '#dbeafe' : '#fef2f2'}; color:${discType === 'amount' ? '#1d4ed8' : '#dc2626'}; font-weight:900; font-size:10px; padding:3px 5px; border-radius:4px; cursor:pointer; white-space:nowrap; height:28px; line-height:1;">
+            ${discType === 'amount' ? 'ر.س' : '%'}
+          </button>
+        </div>
       </td>
 
       <!-- Net Unit Price -->
@@ -1061,17 +1187,19 @@ function renderPurLines() {
 
       <!-- Batch Number -->
       <td style="padding:6px 4px; width:90px;">
-        <input type="text" class="form-control mono"
+        <input type="text" id="pur-line-batch-${i}" class="form-control mono"
           style="width:85px; height:28px; font-size:11px; padding:2px 4px;"
           value="${l.batchNumber || ""}" placeholder="LOT-01"
+          onkeydown="window.onPurLineKey(event, ${i}, 'batch')"
           onchange="updatePurLine(${i},'batchNumber',this.value)" />
       </td>
 
       <!-- Expiry Date -->
       <td style="padding:6px 4px; width:110px;">
-        <input type="date" class="form-control mono"
+        <input type="date" id="pur-line-expiry-${i}" class="form-control mono"
           style="width:105px; height:28px; font-size:10.5px; padding:2px 2px;"
           value="${l.expiryDate || ""}"
+          onkeydown="window.onPurLineKey(event, ${i}, 'expiry')"
           onchange="updatePurLine(${i},'expiryDate',this.value)" />
       </td>
 
@@ -1098,6 +1226,13 @@ function renderPurLines() {
   }).join("");
 }
 
+window.togglePurLineDiscountType = (i) => {
+  if (!purchaseLines[i]) return;
+  purchaseLines[i].discountType = (purchaseLines[i].discountType === "amount") ? "percent" : "amount";
+  renderPurLines();
+  updatePurTotals();
+};
+
 window.togglePurLineTax = (i) => {
   if (!purchaseLines[i]) return;
   const isInvoiceNonTax = document.getElementById("pur-invoice-type")?.value === "non_tax";
@@ -1123,9 +1258,15 @@ window.updatePurLine = (i, f, v) => {
   const l = purchaseLines[i];
   const qty = parseFloat(l.qty) || 0;
   const price = parseFloat(l.unitPrice) || 0;
-  const discPct = parseFloat(l.discount) || 0;
+  const discVal = parseFloat(l.discount) || 0;
+  const discType = l.discountType || "percent";
   const gross = qty * price;
-  const discAmt = gross * (discPct / 100);
+  let discAmt = 0;
+  if (discType === "amount") {
+    discAmt = Math.min(gross, Math.max(0, discVal));
+  } else {
+    discAmt = Math.min(gross, Math.max(0, gross * (discVal / 100)));
+  }
   const lineSub = Math.max(0, gross - discAmt);
   const netUnitPrice = qty > 0 ? (lineSub / qty) : price;
   const isInvoiceNonTax = document.getElementById("pur-invoice-type")?.value === "non_tax";
@@ -1176,10 +1317,16 @@ function updatePurTotals() {
     const qty = parseFloat(l.qty) || 0;
     const bonus = parseFloat(l.bonusQty) || 0;
     const price = parseFloat(l.unitPrice) || 0;
-    const discPct = parseFloat(l.discount) || 0;
+    const discVal = parseFloat(l.discount) || 0;
+    const discType = l.discountType || "percent";
 
     const lineGross = qty * price;
-    const lineDiscAmt = lineGross * (discPct / 100);
+    let lineDiscAmt = 0;
+    if (discType === "amount") {
+      lineDiscAmt = Math.min(lineGross, Math.max(0, discVal));
+    } else {
+      lineDiscAmt = Math.min(lineGross, Math.max(0, lineGross * (discVal / 100)));
+    }
     const lineNet = Math.max(0, lineGross - lineDiscAmt);
 
     grossSubtotal += lineGross;
@@ -1237,6 +1384,22 @@ function updatePurTotals() {
 }
 window.recalcPurchaseTotals = updatePurTotals;
 
+window.syncPurGlobalDiscount = (from) => {
+  const hudVal = document.getElementById("pur-hud-discount-val");
+  const hudType = document.getElementById("pur-hud-discount-type");
+  const drawerVal = document.getElementById("pur-global-discount-val");
+  const drawerType = document.getElementById("pur-global-discount-type");
+
+  if (from === "hud") {
+    if (drawerVal && hudVal) drawerVal.value = hudVal.value;
+    if (drawerType && hudType) drawerType.value = hudType.value;
+  } else {
+    if (hudVal && drawerVal) hudVal.value = drawerVal.value;
+    if (hudType && drawerType) hudType.value = drawerType.value;
+  }
+  updatePurTotals();
+};
+
 // ────────────────────────────────────────────────
 // OPEN / SAVE MODAL
 // ────────────────────────────────────────────────
@@ -1246,12 +1409,15 @@ window.openPurchaseModal = async () => {
   const btn = document.getElementById("save-pur-btn");
   if (btn) btn.textContent = "💾 حفظ واعتماد الفاتورة";
 
-  ["supplier-search","pur-ref-num","pur-notes","pur-supplier-vat","pur-global-discount-val","pur-freight-val"].forEach(id => {
+  ["supplier-search","pur-ref-num","pur-notes","pur-supplier-vat","pur-global-discount-val","pur-freight-val","pur-hud-discount-val"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = "";
   });
   if (document.getElementById("pur-global-discount-type")) {
     document.getElementById("pur-global-discount-type").value = "pct";
+  }
+  if (document.getElementById("pur-hud-discount-type")) {
+    document.getElementById("pur-hud-discount-type").value = "pct";
   }
   document.getElementById("supplier-id").value = "";
   document.getElementById("pur-inv-date").value = todayString();
@@ -1342,6 +1508,13 @@ async function cleanupPurchaseAssociatedTransactions(oldInv) {
 }
 
 window.savePurchase = async () => {
+  if (window._isSavingPurchaseInvoice) {
+    console.warn("[savePurchase] Save already in progress, ignoring double-click");
+    return;
+  }
+  window._isSavingPurchaseInvoice = true;
+  let priceChangeItems = [];
+
   const errEl = document.getElementById("pur-form-error");
   errEl.classList.add("hidden");
 
@@ -1374,6 +1547,7 @@ window.savePurchase = async () => {
   }
 
   const showErr = (msg) => {
+    window._isSavingPurchaseInvoice = false;
     errEl.textContent = msg;
     errEl.classList.remove("hidden");
     errEl.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -1413,10 +1587,16 @@ window.savePurchase = async () => {
       const qty = parseFloat(l.qty) || 0;
       const bonus = parseFloat(l.bonusQty) || 0;
       const price = parseFloat(l.unitPrice) || 0;
-      const discPct = parseFloat(l.discount) || 0;
+      const discVal = parseFloat(l.discount) || 0;
+      const discType = l.discountType || "percent";
 
       const lineGross = qty * price;
-      const lineDiscAmt = lineGross * (discPct / 100);
+      let lineDiscAmt = 0;
+      if (discType === "amount") {
+        lineDiscAmt = Math.min(lineGross, Math.max(0, discVal));
+      } else {
+        lineDiscAmt = Math.min(lineGross, Math.max(0, lineGross * (discVal / 100)));
+      }
       const lineNet = Math.max(0, lineGross - lineDiscAmt);
 
       grossSubtotal += lineGross;
@@ -1565,6 +1745,17 @@ window.savePurchase = async () => {
       }
       await update("purchaseInvoices", invId, data);
     } else {
+      // Check for duplicate invoice number in Firestore before creating
+      try {
+        const existSnap = await getDocs(query(COLS.purchaseInvoices(), where("number", "==", invNum), limit(1)));
+        if (!existSnap.empty) {
+          console.warn(`[savePurchase] Invoice number ${invNum} already exists! Generating new unique number...`);
+          invNum = await generateInvoiceNumber("PUR");
+          data.number = invNum;
+        }
+      } catch (checkErr) {
+        console.warn("[savePurchase] Could not verify number uniqueness:", checkErr);
+      }
       const invRef = await create(COLS.purchaseInvoices(), data);
       invId  = typeof invRef === "string" ? invRef : invRef.id;
     }
@@ -1603,10 +1794,12 @@ window.savePurchase = async () => {
 
       const line = purchaseLines.find(l => l.productId === pid) || {};
       try {
+        const nowTs = Date.now();
         await adjustStock(warehouseId, pid, netDelta, {
           type:          netDelta > 0 ? "purchase_in" : "purchase_reverse_edit",
           sourceType:    "purchaseInvoice",
           sourceId:      invId,
+          txDocId:       invId ? `tx_pur_edit_${invId}_${nowTs}_${pid}` : undefined,
           documentNumber: invNum,
           invoiceNumber: invNum,
           purchasePrice: line.unitPrice || 0,
@@ -1639,7 +1832,7 @@ window.savePurchase = async () => {
         if (d.productId) currentQtyMap[d.productId] = (currentQtyMap[d.productId] || 0) + (d.qty || 0);
       });
 
-      const priceChangeItems = [];
+      priceChangeItems = [];
       for (const line of purchaseLines) {
         const qty = parseFloat(line.qty) || 0;
         const bonus = parseFloat(line.bonusQty) || 0;
@@ -1654,29 +1847,49 @@ window.savePurchase = async () => {
 
           // صافي تكلفة البند الفعلي بعد الخصم الموزع والبونص المجاني
           const lineGross = qty * line.unitPrice;
-          const lineDisc = lineGross * ((parseFloat(line.discount) || 0) / 100);
+          const discVal = parseFloat(line.discount) || 0;
+          const discType = line.discountType || "percent";
+          let lineDisc = 0;
+          if (discType === "amount") {
+            lineDisc = Math.min(lineGross, Math.max(0, discVal));
+          } else {
+            lineDisc = Math.min(lineGross, Math.max(0, lineGross * (discVal / 100)));
+          }
           const lineAfterLineDisc = lineGross - lineDisc;
           const globalDiscPortion = subtotalAfterLineDiscounts > 0 ? (lineAfterLineDisc / subtotalAfterLineDiscounts) * globalDiscountAmt : 0;
           const netLinePaid = Math.max(0, lineAfterLineDisc - globalDiscPortion);
           const effectiveNetUnitPrice = physicalQty > 0 ? (netLinePaid / physicalQty) : line.unitPrice;
 
-          const totalQty    = Math.max(physicalQty, (currentQtyMap[line.productId] || 0) + physicalQty);
-          const oldQty      = Math.max(0, totalQty - physicalQty);
-          const oldAvg      = Number(prod.avgCostPrice || prod.costPrice || prod.purchasePrice || 0);
+          // currentQtyMap يحتوي على الكمية الإجمالية في المخزن بعد تنفيذ adjustStock
+          const stockAfterPurchase = currentQtyMap[line.productId] || 0;
+          // الكمية السابقة للشراء الحالي:
+          const oldQty = Math.max(0, stockAfterPurchase - physicalQty);
+          const totalQty = oldQty + physicalQty;
+          const oldAvg = Number(prod.averageCost || prod.costPrice || prod.lastPurchasePrice || prod.avgCostPrice || prod.purchasePrice || 0);
 
-          // المتوسط المرجح: (قديم × كمية قديمة + جديد × كمية جديدة) ÷ (قديمة + جديدة)
-          const newAvg = (oldQty + physicalQty) > 0
-            ? ((oldAvg * oldQty) + (effectiveNetUnitPrice * physicalQty)) / (oldQty + physicalQty)
-            : effectiveNetUnitPrice;
+          // المتوسط المرجح WAC:
+          let newAvg = effectiveNetUnitPrice;
+          if (!invId) {
+            // فاتورة شراء جديدة: دمج المخزون السابق بالجديد بالمتوسط المرجح
+            newAvg = (oldQty > 0 && oldAvg > 0)
+              ? ((oldAvg * oldQty) + (effectiveNetUnitPrice * physicalQty)) / totalQty
+              : effectiveNetUnitPrice;
+          } else {
+            // تعديل فاتورة سابقة: الاحتفاظ بالمتوسط المرجح الصحيح للأصناف لمنع إفساده برصيد سالب بعد بيع جزء من البضاعة
+            newAvg = (oldAvg > 0) ? oldAvg : effectiveNetUnitPrice;
+          }
 
           const oldLastPur = Number(prod.lastPurchasePrice || prod.purchasePrice || prod.costPrice || 0);
           const roundedNewCost = Math.round(effectiveNetUnitPrice * 100) / 100;
+          const roundedAvg = Math.round(newAvg * 100) / 100;
 
           await updateDoc(prodRef, {
             lastPurchasePrice: roundedNewCost,
             lastPurchaseDate:  invDate,
             lastSupplierName:  supplierName || "",
-            avgCostPrice:      Math.round(newAvg * 100) / 100, // تقريب لخانتين عشريتين
+            avgCostPrice:      roundedAvg,
+            averageCost:       roundedAvg,
+            costPrice:         roundedAvg,
             updatedAt:         fsST(),
           });
           console.log(`[WACC] ${line.productName}: netPrice ${effectiveNetUnitPrice.toFixed(2)}, avg ${oldAvg} → ${newAvg.toFixed(2)} (qty ${oldQty}+${physicalQty})`);
@@ -1739,6 +1952,11 @@ window.savePurchase = async () => {
         supplierId:    supplierId,
         supplierName:  supplierName,
         paymentMethod: payment,
+        grossSubtotal: grossSubtotal,
+        discountTotal: totalDiscount,
+        lineDiscountTotal: lineDiscountTotal,
+        globalDiscountAmount: globalDiscountAmt,
+        freightCharge:  freight,
         subtotal:      netTaxableBase + netExemptBase,
         taxAmount:     vatTotal,
         total:         grandTotal,
@@ -1827,6 +2045,7 @@ window.savePurchase = async () => {
     errEl.classList.remove("hidden");
     console.error(err);
   } finally {
+    window._isSavingPurchaseInvoice = false;
     btn.disabled = false;
     btn.textContent = "💾 حفظ وإنشاء قيد";
   }
@@ -1863,12 +2082,19 @@ window.editPurchaseInvoice = async (id) => {
     }
 
     // Set global discount & freight values
+    const discType = inv.globalDiscountType || inv.discountType || (inv.discountPercent ? "pct" : "pct");
     if (document.getElementById("pur-global-discount-type")) {
-      document.getElementById("pur-global-discount-type").value = inv.globalDiscountType || inv.discountType || (inv.discountPercent ? "pct" : "pct");
+      document.getElementById("pur-global-discount-type").value = discType;
     }
+    if (document.getElementById("pur-hud-discount-type")) {
+      document.getElementById("pur-hud-discount-type").value = discType;
+    }
+    const discVal = inv.globalDiscountVal !== undefined ? inv.globalDiscountVal : (inv.discountValue !== undefined ? inv.discountValue : (inv.discountPercent !== undefined ? inv.discountPercent : (inv.globalDiscountAmount || inv.discountTotal || 0)));
     if (document.getElementById("pur-global-discount-val")) {
-      const discVal = inv.globalDiscountVal !== undefined ? inv.globalDiscountVal : (inv.discountValue !== undefined ? inv.discountValue : (inv.discountPercent !== undefined ? inv.discountPercent : (inv.globalDiscountAmount || inv.discountTotal || 0)));
       document.getElementById("pur-global-discount-val").value = discVal || "";
+    }
+    if (document.getElementById("pur-hud-discount-val")) {
+      document.getElementById("pur-hud-discount-val").value = discVal || "";
     }
     if (document.getElementById("pur-freight-val")) {
       document.getElementById("pur-freight-val").value = inv.freightCharge || inv.freight || inv.freightAmount || "";
@@ -1880,10 +2106,14 @@ window.editPurchaseInvoice = async (id) => {
       productName: line.productName,
       sku:         line.sku         || "",
       unit:        line.unit        || "PCS",
+      altUnit:     line.altUnit     || "",
+      unitFactor:  parseFloat(line.unitFactor) || 1,
+      selectedUnit: line.selectedUnit || line.unit || "PCS",
       qty:         line.qty         || 0,
       bonusQty:    line.bonusQty    || 0,
       unitPrice:   line.unitPrice   || 0,
       discount:    line.discount    || 0,
+      discountType: line.discountType || "percent",
       taxCategory: invType === "non_tax" ? "E" : (line.taxCategory || "S"),
       batchNumber: line.batchNumber || "",
       expiryDate:  line.expiryDate  || ""
@@ -1929,21 +2159,27 @@ window.viewPurchaseInvoice = async (id) => {
     if (cancelBtn) cancelBtn.style.display = inv.status === "cancelled" ? "none" : "";
 
     const lines = (inv.lines || []).map((l, i) => {
-      const tot = calcLineTotal(l.qty, l.unitPrice, l.discount);
+      const discVal = parseFloat(l.discount) || 0;
+      const discType = l.discountType || "percent";
+      const tot = calcLineTotal(l.qty, l.unitPrice, discVal, discType);
       const isTaxable = !isNonTax && (l.taxCategory === "S" || l.taxCategory === "standard");
       const vat = isTaxable ? tot * 0.15 : 0;
+      const discDisplay = discType === "amount" ? `${formatCurrency(discVal)}` : `${discVal}%`;
       return `<tr>
         <td style="padding:7px 12px;">${i+1}</td>
         <td style="padding:7px 12px;" class="mono">${l.sku||"—"}</td>
         <td style="padding:7px 12px; font-weight:600;">${l.productName}</td>
-        <td style="padding:7px 12px;">${l.unit||"—"}</td>
+        <td style="padding:7px 12px;">${translateUnit(l.unit||"—")}</td>
         <td style="padding:7px 12px;" class="mono">${l.qty}</td>
         <td style="padding:7px 12px;" class="mono">${formatCurrency(l.unitPrice)}</td>
-        <td style="padding:7px 12px;" class="mono">${l.discount||0}%</td>
+        <td style="padding:7px 12px; color:#dc2626;" class="mono font-bold">${discDisplay}</td>
         <td style="padding:7px 12px;" class="mono ${isNonTax ? 'text-good' : 'text-warn'}">${isNonTax ? '0% (معفى)' : formatCurrency(vat)}</td>
         <td style="padding:7px 12px;" class="mono font-bold">${formatCurrency(tot + vat)}</td>
       </tr>`;
     }).join("");
+
+    const grossSub = parseFloat(inv.grossSubtotal || ((parseFloat(inv.subtotal || 0)) + parseFloat(inv.discountTotal || 0)));
+    const totalDisc = parseFloat(inv.discountTotal || ((parseFloat(inv.lineDiscountTotal || 0)) + parseFloat(inv.globalDiscountAmount || 0)) || 0);
 
     body.innerHTML = `
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px;">
@@ -1959,16 +2195,18 @@ window.viewPurchaseInvoice = async (id) => {
             <div><div class="section-label mb-6">التاريخ</div><div>${formatDate(inv.date || inv.createdAt)}</div></div>
             <div><div class="section-label mb-6">طريقة الدفع</div><div>${inv.paymentMethod === "credit" ? "آجل" : inv.paymentMethod === "cash" ? "نقدي" : inv.paymentMethod}</div></div>
             ${inv.refNumber ? `<div><div class="section-label mb-6">مرجع المورد</div><div class="mono">${inv.refNumber}</div></div>` : ""}
-            ${inv.journalEntryId ? `<div><div class="section-label mb-6">رقم القيد</div><span class="badge good">✓ مُرحَّل</span></div>` : ""}
+            ${inv.journalEntryId ? `<div><div class="section-label mb-6">رقم القيد</div><span class="badge good" style="font-family:monospace; padding:3px 8px;">✓ قيد مُرحَّل (${inv.journalEntryId})</span></div>` : ""}
             ${inv.attachmentUrl ? `<div style="grid-column: span 2;"><div class="section-label mb-6">المرفق (فاتورة المورد)</div><a href="${inv.attachmentUrl}" target="_blank" class="btn btn-secondary btn-sm" style="display:inline-flex;align-items:center;gap:6px;width:fit-content;padding:6px 12px;background:var(--primary-dim);color:var(--primary);border-color:var(--primary);">📎 فتح الفاتورة المرفقة</a></div>` : ""}
           </div>
         </div>
         <div style="background:var(--bg-2); border-radius:8px; padding:16px; display:flex; flex-direction:column; justify-content:space-between;">
           <div>
-            <div class="invoice-total-row"><span>المجموع قبل الضريبة</span><span class="mono">${formatCurrency(inv.subtotal||0)}</span></div>
-            ${inv.discountTotal > 0 ? `<div class="invoice-total-row"><span>الخصومات</span><span class="mono text-bad">- ${formatCurrency(inv.discountTotal)}</span></div>` : ""}
+            <div class="invoice-total-row"><span>المجموع قبل الخصم</span><span class="mono">${formatCurrency(grossSub)}</span></div>
+            ${totalDisc > 0.009 ? `<div class="invoice-total-row"><span style="color:#dc2626; font-weight:700;">خصومات مشتريات (مكتسبة)</span><span class="mono text-bad font-bold">- ${formatCurrency(totalDisc)}</span></div>` : ""}
+            <div class="invoice-total-row"><span>الصافي الخاضع للضريبة</span><span class="mono font-semibold">${formatCurrency(inv.subtotal||0)}</span></div>
             <div class="invoice-total-row"><span>${isNonTax ? 'ضريبة القيمة المضافة (0% معفى)' : 'VAT 15%'}</span><span class="mono ${isNonTax ? 'text-good' : 'text-warn'}">${isNonTax ? '0.00 ر.س' : formatCurrency(inv.totalVat||0)}</span></div>
-            <div class="invoice-total-row grand-total"><span>الإجمالي</span><span class="mono text-brand">${formatCurrency(inv.totalWithVat||0)}</span></div>
+            ${inv.freightCharge > 0 ? `<div class="invoice-total-row"><span>مصاريف شحن ونقل</span><span class="mono">+ ${formatCurrency(inv.freightCharge)}</span></div>` : ""}
+            <div class="invoice-total-row grand-total"><span>الإجمالي النهائي المستحق</span><span class="mono text-brand font-black" style="font-size:16px;">${formatCurrency(inv.totalWithVat||0)}</span></div>
           </div>
           <div style="margin-top:16px; border-top:1px solid var(--border-soft); padding-top:12px; display:flex; justify-content:space-between; align-items:center; gap:8px;">
             <div>
@@ -1996,7 +2234,7 @@ window.viewPurchaseInvoice = async (id) => {
         <table class="data-dense">
           <thead><tr>
             <th>#</th><th>الكود</th><th>الصنف</th><th>الوحدة</th>
-            <th>الكمية</th><th>السعر</th><th>خصم%</th><th>VAT</th><th>الإجمالي</th>
+            <th>الكمية</th><th>السعر</th><th>الخصم</th><th>VAT</th><th>الإجمالي</th>
           </tr></thead>
           <tbody>${lines}</tbody>
         </table>
@@ -2194,13 +2432,20 @@ window.reapplyPurchaseStock = async () => {
   try {
     const warehouses = await getAll(COLS.warehouses());
     // Auto purchase journal entry
+    const discountTot = parseFloat(inv.discountTotal || (parseFloat(inv.lineDiscountTotal || 0) + parseFloat(inv.globalDiscountAmount || 0)) || 0);
+    const grossSub = parseFloat(inv.grossSubtotal || ((parseFloat(inv.subtotal || 0)) + discountTot));
     jeId = await autoPurchaseJE({
       id:            inv.id,
-      invoiceNumber: inv.number,
+      invoiceNumber: inv.number || inv.invoiceNumber,
       date:          inv.date,
       supplierId:    inv.supplierId,  // ← مطلوب لتحديد الحساب الفرعي للمورد
       supplierName:  inv.supplierName,
       paymentMethod: inv.paymentMethod,
+      grossSubtotal: grossSub,
+      discountTotal: discountTot,
+      lineDiscountTotal: inv.lineDiscountTotal || 0,
+      globalDiscountAmount: inv.globalDiscountAmount || 0,
+      freightCharge: inv.freightCharge || 0,
       subtotal:      inv.subtotal,
       taxAmount:     inv.totalVat || inv.taxAmount || 0,
       total:         inv.totalWithVat || inv.total || 0,
@@ -2392,27 +2637,47 @@ async function generatePurchasePDF(inv, isPO = false) {
 
   const items = inv.items || inv.lines || [];
   let itemsHTML = "";
-  let subtotal = 0, totalVat = 0;
+  let grossSubtotal = 0, totalDiscount = 0, subtotal = 0, totalVat = 0;
 
   items.forEach((l, i) => {
-    const lineTotal = (l.qty || 0) * (l.unitPrice || 0) * (1 - (l.discount || 0) / 100);
+    const qty = parseFloat(l.qty) || 0;
+    const unitPrice = parseFloat(l.unitPrice) || 0;
+    const discVal = parseFloat(l.discount) || 0;
+    const discType = l.discountType || "percent";
+    const gross = qty * unitPrice;
+    let discAmt = 0;
+    if (discType === "amount") {
+      discAmt = Math.min(gross, Math.max(0, discVal));
+    } else {
+      discAmt = Math.min(gross, Math.max(0, gross * (discVal / 100)));
+    }
+    const lineTotal = Math.max(0, gross - discAmt);
     const vat = l.taxCategory === "S" ? lineTotal * 0.15 : 0;
+    grossSubtotal += gross;
+    totalDiscount += discAmt;
     subtotal += lineTotal;
     totalVat += vat;
+
+    const discDisplay = discType === "amount" ? `${discVal.toFixed(2)} ر.س` : `${discVal}%`;
     itemsHTML += `
       <tr>
         <td style="text-align:center;">${i + 1}</td>
         <td class="mono">${l.sku || "—"}</td>
         <td style="font-weight:600;">${l.productName || ""}</td>
-        <td style="text-align:center;">${l.unit || "—"}</td>
-        <td class="mono" style="text-align:center;">${l.qty}</td>
-        <td class="mono">${Number(l.unitPrice || 0).toFixed(2)}</td>
-        <td class="mono" style="text-align:center;">${l.discount || 0}%</td>
+        <td style="text-align:center;">${translateUnit(l.unit || "—")}</td>
+        <td class="mono" style="text-align:center;">${qty}</td>
+        <td class="mono">${unitPrice.toFixed(2)}</td>
+        <td class="mono" style="text-align:center; color:#dc2626;">${discDisplay}</td>
         <td class="mono">${lineTotal.toFixed(2)}</td>
       </tr>`;
   });
 
-  const grandTotal = subtotal + totalVat;
+  const globalDiscAmt = parseFloat(inv.globalDiscountAmount || 0);
+  const totalAllDiscounts = totalDiscount + globalDiscAmt;
+  const netTaxable = Math.max(0, subtotal - globalDiscAmt);
+  const vatCalculated = inv.totalVat !== undefined ? parseFloat(inv.totalVat) : (netTaxable * 0.15);
+  const freight = parseFloat(inv.freightCharge || inv.freight || 0);
+  const grandTotal = inv.totalWithVat !== undefined ? parseFloat(inv.totalWithVat) : (netTaxable + vatCalculated + freight);
   const isNonTax = inv.invoiceType === "non_tax" || inv.isTaxExempt || (inv.totalVat === 0 && (inv.exemptSubtotal > 0 || (inv.subtotal > 0 && inv.totalVat === 0)));
   const docTitle = isPO ? "أمر شراء / طلب عرض سعر" : (isNonTax ? "فاتورة مشتريات (غير ضريبية)" : "فاتورة مشتريات ضريبية");
   const docIcon = isPO ? "📋" : (isNonTax ? "🟢" : "📦");
@@ -2511,7 +2776,7 @@ async function generatePurchasePDF(inv, isPO = false) {
         <th style="text-align:center;">الوحدة</th>
         <th style="text-align:center;">الكمية${isPO ? ' المطلوبة' : ''}</th>
         <th>سعر الوحدة</th>
-        <th style="text-align:center;">خصم%</th>
+        <th style="text-align:center;">الخصم</th>
         <th>الصافي</th>
       </tr>
     </thead>
@@ -2521,12 +2786,17 @@ async function generatePurchasePDF(inv, isPO = false) {
   </table>
 
   <div class="totals-box">
-    <div class="total-row"><span>المجموع قبل الضريبة</span><span class="mono">${subtotal.toFixed(2)} ر.س</span></div>
+    <div class="total-row"><span>المجموع قبل الخصم</span><span class="mono">${(inv.grossSubtotal ? Number(inv.grossSubtotal).toFixed(2) : grossSubtotal.toFixed(2))} ر.س</span></div>
+    ${(totalAllDiscounts > 0.009) ? `
+      <div class="total-row" style="color:#dc2626; font-weight:600;"><span>الخصم المكتسب</span><span class="mono">- ${totalAllDiscounts.toFixed(2)} ر.س</span></div>
+    ` : ''}
+    <div class="total-row"><span>الصافي الخاضع</span><span class="mono">${netTaxable.toFixed(2)} ر.س</span></div>
     ${isNonTax ? `
       <div class="total-row"><span>ضريبة القيمة المضافة (0%)</span><span class="mono" style="color:#059669;">0.00 ر.س (معفى)</span></div>
     ` : `
-      <div class="total-row"><span>ضريبة القيمة المضافة 15%</span><span class="mono">${totalVat.toFixed(2)} ر.س</span></div>
+      <div class="total-row"><span>ضريبة القيمة المضافة 15%</span><span class="mono">${vatCalculated.toFixed(2)} ر.س</span></div>
     `}
+    ${freight > 0 ? `<div class="total-row"><span>مصاريف الشحن</span><span class="mono">+ ${freight.toFixed(2)} ر.س</span></div>` : ''}
     <div class="total-row grand"><span>الإجمالي النهائي</span><span class="mono">${grandTotal.toFixed(2)} ر.س</span></div>
   </div>
 

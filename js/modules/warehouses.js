@@ -2,7 +2,7 @@
 // IDHAM ERP — Warehouses Management System v3.0
 // دورة مخزنية متكاملة — إدارة المخازن والمواقع والإحصائيات
 // ============================================================
-import { COLS, create, update, remove, getAll, query, orderBy, getDocs, where, limit, getStockForWarehouse } from "../utils/db.js";
+import { COLS, create, update, remove, getAll, query, orderBy, getDocs, where, limit, getStockForWarehouse, clearERPCache } from "../utils/db.js";
 import { formatCurrency, formatQuantity, debounce } from "../utils/formatters.js";
 import { db, COMPANY_ID } from "../firebase-config.js";
 import { doc, getDoc, collection, orderBy as fbOrderBy } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
@@ -341,13 +341,15 @@ async function loadWarehouses() {
   const area = document.getElementById("wh-content-area");
   if (!area) return;
   try {
+    clearERPCache(COLS.warehouses().path);
     // Fetch all datasets in parallel for KPI accuracy
     const [whList, stockAll, products, locsAll] = await Promise.all([
-      getAll(COLS.warehouses(), [orderBy("barcodePrefix")]),
+      getAll(COLS.warehouses()),
       getAll(COLS.stockByWarehouse()),
       getAll(COLS.products()),
       getAll(COLS.locations()),
     ]);
+    whList.sort((a, b) => (a.barcodePrefix || a.code || "").localeCompare(b.barcodePrefix || b.code || "", undefined, { numeric: true }) || (a.name || "").localeCompare(b.name || "", "ar"));
     warehouses = whList;
 
     // Build product cost map (id → cost)

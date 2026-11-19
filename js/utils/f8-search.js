@@ -104,8 +104,15 @@ export function initF8Search() {
 
     // Global Close Helper
     window.closeF8Modal = () => {
-      document.getElementById("f8-search-modal").classList.remove("active");
+      document.getElementById("f8-search-modal")?.classList.remove("active");
     };
+
+    const f8Overlay = document.getElementById("f8-search-modal");
+    if (f8Overlay) {
+      f8Overlay.addEventListener("click", (e) => {
+        if (e.target === f8Overlay) window.closeF8Modal();
+      });
+    }
 
     // Setup input listeners
     const searchInput = document.getElementById("f8-search-input");
@@ -116,11 +123,13 @@ export function initF8Search() {
     searchInput.addEventListener("keydown", handleF8Navigation);
   }
 
-  // Global F8 Trigger
+  // Global F8 Trigger & Escape
   document.addEventListener("keydown", (e) => {
     if (e.key === "F8") {
       e.preventDefault();
       triggerF8Search();
+    } else if (e.key === "Escape") {
+      window.closeF8Modal?.();
     }
   });
 }

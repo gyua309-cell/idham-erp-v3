@@ -26,12 +26,13 @@ const BORDER_CLR  = 'CBD5E1';
 const ALT_ROW     = 'F8FAFC';
 
 /** Build a styled workbook cell range from an array of arrays */
-function buildStyledSheet(headers, rows, colWidths) {
+function buildStyledSheet(headers, rows, colWidths, options = {}) {
   const data = [headers, ...rows];
   const ws = XLSX.utils.aoa_to_sheet(data);
 
-  // Column widths
-  ws['!cols'] = colWidths.map(w => ({ wch: w }));
+  // Column widths & RTL support
+  ws['!cols'] = (colWidths || []).map(w => ({ wch: w }));
+  ws['!views'] = [{ rightToLeft: true }];
 
   // Style header row
   const range = XLSX.utils.decode_range(ws['!ref']);
@@ -49,15 +50,28 @@ function buildStyledSheet(headers, rows, colWidths) {
   // Style data rows
   for (let R = 1; R <= range.e.r; R++) {
     const isAlt = R % 2 === 0;
+    const isLastRow = (options.hasTotalRow && R === range.e.r);
     for (let C = range.s.c; C <= range.e.c; C++) {
       const addr = XLSX.utils.encode_cell({ r: R, c: C });
       if (!ws[addr]) ws[addr] = { t: 's', v: '' };
+
+      const cellVal = ws[addr].v;
+      const isNum = typeof cellVal === 'number';
+
       ws[addr].s = {
-        fill:      { patternType: 'solid', fgColor: { rgb: isAlt ? ALT_ROW : 'FFFFFF' } },
-        alignment: { vertical: 'center', wrapText: false },
+        fill:      { patternType: 'solid', fgColor: { rgb: isLastRow ? 'E2E8F0' : (isAlt ? ALT_ROW : 'FFFFFF') } },
+        alignment: { horizontal: isNum ? 'right' : (C === 0 ? 'center' : 'right'), vertical: 'center', wrapText: false },
         border:    borderAll(BORDER_CLR),
-        font:      { name: 'Calibri', sz: 10 },
+        font:      { name: 'Calibri', sz: 10, bold: isLastRow },
       };
+
+      if (isNum) {
+        ws[addr].z = '#,##0.00';
+      } else if (C === 0) {
+        // Enforce text formatting for codes (prevents Excel turning 5-7 into dates)
+        ws[addr].t = 's';
+        ws[addr].z = '@';
+      }
     }
   }
 
@@ -97,12 +111,12 @@ function buildInfoSheet(title, exportedBy, totalRows) {
  * @param {number[]} colWidths   - Column widths in chars
  * @param {string}   [user]      - Current user name for info sheet
  */
-export async function exportToExcel({ title, headers, rows, colWidths, user = '' }) {
+export async function exportToExcel({ title, headers, rows, colWidths, user = '', hasTotalRow = false }) {
   await loadXLSX();
   const wb = XLSX.utils.book_new();
   wb.Props = { Title: title, Company: 'إدهام للمواد الغذائية', CreatedDate: new Date() };
 
-  const dataSheet = buildStyledSheet(headers, rows, colWidths);
+  const dataSheet = buildStyledSheet(headers, rows, colWidths, { hasTotalRow });
   XLSX.utils.book_append_sheet(wb, dataSheet, title.substring(0, 31));
 
   const infoSheet = buildInfoSheet(title, user, rows.length);

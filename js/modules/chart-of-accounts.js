@@ -10,12 +10,12 @@
 // ============================================================
 
 import {
-  COLS, create, update, getAll,
+  COLS, create, update, getAll, clearERPCache,
   query, where, orderBy, getDocs, getDoc,
   doc, serverTimestamp, limit, writeBatch, updateDoc
 } from "../utils/db.js";
 import { db, COMPANY_ID } from "../firebase-config.js";
-import { formatCurrency } from "../utils/formatters.js";
+import { formatCurrency, tafqeetArabic, todayString } from "../utils/formatters.js";
 import { backfillCOAFromEntities } from "../utils/coa-connector.js";
 
 // ──────────────────────────────────────────
@@ -183,7 +183,7 @@ const DEFAULT_COA = [
   { code:"4-1-2",       name:"مردودات ومسموحات المبيعات",               type:"revenue",   parentCode:"4-1",     nodeType:"header", level:2 },
   { code:"4-1-2-1",     name:"مردودات مبيعات — تجزئة",                 type:"revenue",   parentCode:"4-1-2",   nodeType:"detail", level:3 },
   { code:"4-1-2-2",     name:"مردودات مبيعات — جملة",                  type:"revenue",   parentCode:"4-1-2",   nodeType:"detail", level:3 },
-  { code:"4-1-3",       name:"خصومات المبيعات المكتسبة",                type:"revenue",   parentCode:"4-1",     nodeType:"header", level:2 },
+  { code:"4-1-3",       name:"الخصم المسموح به (خصومات المبيعات)",      type:"revenue",   parentCode:"4-1",     nodeType:"header", level:2 },
   { code:"4-1-3-1",     name:"خصم تجاري ممنوح",                        type:"revenue",   parentCode:"4-1-3",   nodeType:"detail", level:3 },
   { code:"4-1-3-2",     name:"خصم نقدي ممنوح",                         type:"revenue",   parentCode:"4-1-3",   nodeType:"detail", level:3 },
 
@@ -202,12 +202,6 @@ const DEFAULT_COA = [
 
   // ── 5-1 تكلفة البضاعة المباعة (COGS) ──
   { code:"5-1",         name:"إجمالي تكلفة المبيعات (COGS)",            type:"expense",   parentCode:"5",       nodeType:"header", level:1 },
-  { code:"5-1-1",       name:"مشتريات البضاعة",                         type:"expense",   parentCode:"5-1",     nodeType:"header", level:2 },
-  { code:"5-1-1-1",     name:"مشتريات محلية — مواد غذائية",            type:"expense",   parentCode:"5-1-1",   nodeType:"detail", level:3 },
-  { code:"5-1-1-2",     name:"مشتريات استيراد — مواد غذائية",          type:"expense",   parentCode:"5-1-1",   nodeType:"header", level:3 },
-  { code:"5-1-1-2-1",   name:"مشتريات استيراد — غذائية صنف A",       type:"expense",   parentCode:"5-1-1-2", nodeType:"detail", level:4 },
-  { code:"5-1-1-2-2",   name:"مشتريات استيراد — غذائية صنف B",       type:"expense",   parentCode:"5-1-1-2", nodeType:"detail", level:4 },
-  { code:"5-1-1-3",     name:"مشتريات تغليف وعبوات",                    type:"expense",   parentCode:"5-1-1",   nodeType:"detail", level:3 },
   { code:"5-1-2",       name:"مردودات المشتريات",                       type:"expense",   parentCode:"5-1",     nodeType:"detail", level:2 },
   { code:"5-1-3",       name:"خصومات المشتريات المكتسبة",               type:"expense",   parentCode:"5-1",     nodeType:"detail", level:2 },
   { code:"5-1-4",       name:"هالك وتالف المخزون",                      type:"expense",   parentCode:"5-1",     nodeType:"detail", level:2 },
@@ -469,15 +463,47 @@ function buildLayout() {
 
 <!-- ═══ LEDGER MODAL ═══ -->
 <div class="modal-overlay" id="coa-ledger-modal">
-  <div class="modal modal-xl">
-    <div class="modal-header">
-      <h3 class="modal-title" id="ledger-title">كشف حساب</h3>
+  <div class="modal modal-xl" style="max-width:1150px; width:95%;">
+    <div class="modal-header" style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:22px;">📜</span>
+        <h3 class="modal-title" id="ledger-title" style="margin:0;">كشف حساب</h3>
+      </div>
       <button class="modal-close" onclick="closeModal('coa-ledger-modal')">×</button>
     </div>
-    <div class="modal-body" id="ledger-body"></div>
-    <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('coa-ledger-modal')">إغلاق</button>
-      <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> طباعة</button>
+
+    <!-- Date Range & Period Filter Bar -->
+    <div style="background:var(--bg-2, #f8fafc); border-bottom:1px solid var(--border-soft, #e2e8f0); padding:10px 18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+      <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+        <span style="font-size:12px; font-weight:700; color:var(--text-1);"><i class="fas fa-calendar-alt" style="color:var(--brand);"></i> تحديد الفترة:</span>
+        <div style="display:inline-flex; align-items:center; gap:5px;">
+          <label for="ledger-from-date" style="font-size:11px; color:var(--text-2); font-weight:600;">من:</label>
+          <input type="date" id="ledger-from-date" class="input" style="height:32px; padding:2px 8px; font-size:12px; width:135px;" onchange="window.filterLedgerByDate()" />
+        </div>
+        <div style="display:inline-flex; align-items:center; gap:5px;">
+          <label for="ledger-to-date" style="font-size:11px; color:var(--text-2); font-weight:600;">إلى:</label>
+          <input type="date" id="ledger-to-date" class="input" style="height:32px; padding:2px 8px; font-size:12px; width:135px;" onchange="window.filterLedgerByDate()" />
+        </div>
+        <div style="display:inline-flex; gap:4px;">
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.setLedgerPeriod('thisMonth')">هذا الشهر</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.setLedgerPeriod('lastMonth')">الشهر السابق</button>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="window.setLedgerPeriod('all')">كامل الحركات</button>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <span id="ledger-period-badge" class="badge" style="font-size:11px; padding:4px 10px; background:rgba(37,99,235,0.08); color:var(--brand); border:1px solid rgba(37,99,235,0.2);">عرض كامل الحركات</span>
+        <button type="button" class="btn btn-secondary btn-sm" onclick="window.resetLedgerPeriod()" title="إعادة ضبط"><i class="fas fa-undo"></i> إعادة تعيين</button>
+      </div>
+    </div>
+
+    <div class="modal-body" id="ledger-body" style="max-height: calc(85vh - 200px); overflow-y:auto; padding:16px;"></div>
+    <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+      <div id="ledger-footer-info" style="font-size:11px; color:var(--text-2); font-family:monospace;"></div>
+      <div style="display:flex; gap:8px;">
+        <button id="ledger-payslip-btn" type="button" class="btn btn-secondary" style="display:none;" onclick="window.printAccountPayslip()"><i class="fas fa-file-invoice-dollar" style="color:var(--brand);"></i> 🖨️ قسيمة استلام راتب</button>
+        <button class="btn btn-secondary" onclick="closeModal('coa-ledger-modal')">إغلاق</button>
+        <button class="btn btn-primary" onclick="window.printAccountStatement()"><i class="fas fa-print"></i> طباعة كشف الحساب (عن الفترة المحددة)</button>
+      </div>
     </div>
   </div>
 </div>
@@ -626,17 +652,14 @@ function buildLayout() {
 // ──────────────────────────────────────────
 async function loadAccounts() {
   try {
-    const snap = await getDocs(COLS.chartOfAccounts());
-    _accounts  = snap.docs.map(d => {
-      const data = d.data();
-      return {
-        id: d.id,
-        ...data,
-        _rawBalance: data.balance || 0,
-        _rawDebit: data.totalDebit || 0,
-        _rawCredit: data.totalCredit || 0
-      };
-    }).filter(a => a.code !== "1-1-4-2" && a.id !== "1-1-4-2" && !(a.name && a.name.includes("1-1-4-2")));
+    const docs = await getAll(COLS.chartOfAccounts());
+    _accounts  = docs.map(data => ({
+      id: data.id,
+      ...data,
+      _rawBalance: data.balance || 0,
+      _rawDebit: data.totalDebit || 0,
+      _rawCredit: data.totalCredit || 0
+    })).filter(a => a.code !== "1-1-4-2" && a.id !== "1-1-4-2" && !(a.name && a.name.includes("1-1-4-2")));
     // Sort client-side by code
     _accounts.sort((a, b) => (a.code || '').localeCompare(b.code || '', undefined, { numeric: true }));
 
@@ -750,9 +773,11 @@ function byCode(a,b) {
 
 function computeTotals(accounts) {
   accounts.forEach(a => {
-    a.balance     = a._rawBalance  !== undefined ? a._rawBalance  : (a.balance     || 0);
     a.totalDebit  = a._rawDebit    !== undefined ? a._rawDebit    : (a.totalDebit  || 0);
     a.totalCredit = a._rawCredit   !== undefined ? a._rawCredit   : (a.totalCredit || 0);
+    const isCredit = a.normalBalance === "credit" || ["liability", "equity", "revenue"].includes(a.type);
+    const delta = a.totalDebit - a.totalCredit;
+    a.balance = Math.round((isCredit ? -delta : delta) * 100) / 100;
   });
 
   // We do NOT do bottom-up aggregation here because the values loaded from Firestore
@@ -1064,77 +1089,1124 @@ window.deleteAccount = async () => {
 };
 
 // ──────────────────────────────────────────
-// Ledger (كشف الحساب)
+// Ledger (كشف الحساب) — مع تصفية الفترات والطباعة المتقدمة
 // ──────────────────────────────────────────
+let _activeLedgerData = null;
+let _activeLedgerContext = null;
+
+window.setLedgerPeriod = (period) => {
+  const fromEl = document.getElementById("ledger-from-date");
+  const toEl = document.getElementById("ledger-to-date");
+  if (!fromEl || !toEl) return;
+
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+
+  if (period === "thisMonth") {
+    const y = now.getFullYear();
+    const m = now.getMonth();
+    const lastDay = new Date(y, m + 1, 0).getDate();
+    fromEl.value = `${y}-${pad(m + 1)}-01`;
+    toEl.value = `${y}-${pad(m + 1)}-${pad(lastDay)}`;
+  } else if (period === "lastMonth") {
+    const prev = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const y = prev.getFullYear();
+    const m = prev.getMonth();
+    const lastDay = new Date(y, m + 1, 0).getDate();
+    fromEl.value = `${y}-${pad(m + 1)}-01`;
+    toEl.value = `${y}-${pad(m + 1)}-${pad(lastDay)}`;
+  } else if (period === "all") {
+    fromEl.value = "";
+    toEl.value = "";
+  }
+  window.renderLedgerTable();
+};
+
+window.resetLedgerPeriod = () => {
+  const fromEl = document.getElementById("ledger-from-date");
+  const toEl = document.getElementById("ledger-to-date");
+  if (fromEl) fromEl.value = "";
+  if (toEl) toEl.value = "";
+  window.renderLedgerTable();
+};
+
+window.filterLedgerByDate = () => {
+  window.renderLedgerTable();
+};
+
+window.renderLedgerTable = () => {
+  if (!_activeLedgerContext) return;
+  const { id, code, name, acc, allEntries } = _activeLedgerContext;
+  const bodyEl = document.getElementById("ledger-body");
+  const badgeEl = document.getElementById("ledger-period-badge");
+  const footerInfoEl = document.getElementById("ledger-footer-info");
+
+  const fromDate = document.getElementById("ledger-from-date")?.value || "";
+  const toDate = document.getElementById("ledger-to-date")?.value || "";
+
+  // Determine normal balance
+  const isDebit = !(acc?.normalBalance === "credit" || ["liability", "equity", "revenue"].includes(acc?.type));
+  const baseOpeningBalance = parseFloat(acc?.openingBalance || 0) || 0;
+
+  // 1. Separate entries prior to fromDate to compute Period Opening Balance
+  let periodOpeningBalance = baseOpeningBalance;
+  let periodEntries = [];
+
+  allEntries.forEach(entry => {
+    const entryDate = entry.date || "";
+    const dr = entry._line.debit || 0;
+    const cr = entry._line.credit || 0;
+
+    if (fromDate && entryDate < fromDate) {
+      // Prior to period -> accumulates into opening balance
+      periodOpeningBalance += isDebit ? (dr - cr) : (cr - dr);
+    } else if ((!fromDate || entryDate >= fromDate) && (!toDate || entryDate <= toDate)) {
+      // Inside selected period
+      periodEntries.push(entry);
+    }
+  });
+
+  // Calculate period sums
+  const totalDr = periodEntries.reduce((s, e) => s + (e._line.debit || 0), 0);
+  const totalCr = periodEntries.reduce((s, e) => s + (e._line.credit || 0), 0);
+  const periodNetDelta = isDebit ? (totalDr - totalCr) : (totalCr - totalDr);
+  const finalBalance = periodOpeningBalance + periodNetDelta;
+
+  // Update period badge
+  if (badgeEl) {
+    if (fromDate && toDate) {
+      badgeEl.textContent = `الفترة: من ${fromDate} إلى ${toDate}`;
+      badgeEl.style.background = "rgba(37,99,235,0.12)";
+      badgeEl.style.color = "#1d4ed8";
+    } else if (fromDate) {
+      badgeEl.textContent = `من تاريخ: ${fromDate}`;
+      badgeEl.style.background = "rgba(37,99,235,0.12)";
+      badgeEl.style.color = "#1d4ed8";
+    } else if (toDate) {
+      badgeEl.textContent = `حتى تاريخ: ${toDate}`;
+      badgeEl.style.background = "rgba(37,99,235,0.12)";
+      badgeEl.style.color = "#1d4ed8";
+    } else {
+      badgeEl.textContent = `عرض كامل الحركات (من البداية)`;
+      badgeEl.style.background = "rgba(37,99,235,0.08)";
+      badgeEl.style.color = "var(--brand)";
+    }
+  }
+
+  if (footerInfoEl) {
+    footerInfoEl.textContent = `عدد حركات الفترة: ${periodEntries.length} من أصل ${allEntries.length} حركة مسجلة`;
+  }
+
+  // Save for print
+  _activeLedgerData = {
+    id, code, name, acc,
+    relevant: periodEntries,
+    allCount: allEntries.length,
+    fromDate, toDate,
+    openingBalance: periodOpeningBalance,
+    baseOpeningBalance,
+    running: finalBalance,
+    totalDr, totalCr, isDebit
+  };
+
+  // Build rows
+  const openingLabel = fromDate ? `🏁 رصيد بداية الفترة (حتى ${fromDate})` : `🏁 رصيد افتتاحي`;
+  let rows = `<tr style="background:var(--bg-2); font-style:italic; font-weight:700;">
+    <td colspan="3" style="padding:10px 14px;">${openingLabel}</td>
+    <td class="mono" style="text-align:right;">—</td>
+    <td class="mono" style="text-align:right;">—</td>
+    <td class="mono" style="text-align:right; font-weight:800; color:var(--text-0);">
+      ${formatCurrency(Math.abs(periodOpeningBalance))} 
+      <span style="font-size:10px; font-weight:600; color:var(--text-2);">
+        ${periodOpeningBalance >= 0 ? (isDebit ? "مدين" : "دائن") : (isDebit ? "دائن" : "مدين")}
+      </span>
+    </td>
+  </tr>`;
+
+  let currentRun = periodOpeningBalance;
+  periodEntries.forEach((e, i) => {
+    const dr = e._line.debit || 0;
+    const cr = e._line.credit || 0;
+    currentRun += isDebit ? dr - cr : cr - dr;
+
+    const lineNote = e._line?.note || e._line?.description || "";
+    const headerDesc = e.description || e.notes || "";
+    const displayNote = lineNote || headerDesc || "حركة قيود يومية";
+    const entryNum = e.entryNumber || e.number || e.id || "—";
+
+    rows += `<tr>
+      <td class="mono" style="font-size:11px; color:var(--text-2); text-align:center;">${i + 1}</td>
+      <td class="mono" style="font-size:11px; white-space:nowrap;">${e.date || ""}</td>
+      <td>
+        <div style="font-weight:700; color:var(--text-0); line-height:1.4;">${displayNote}</div>
+        <div style="font-size:10.5px; color:var(--brand); font-family:monospace; margin-top:2px;">#${entryNum}</div>
+      </td>
+      <td class="mono" style="color:var(--bad); text-align:right; font-weight:700;">${dr ? formatCurrency(dr) : "—"}</td>
+      <td class="mono" style="color:var(--good); text-align:right; font-weight:700;">${cr ? formatCurrency(cr) : "—"}</td>
+      <td class="mono" style="text-align:right; font-weight:800; color:${currentRun >= 0 ? "var(--good)" : "var(--bad)"}">
+        ${formatCurrency(Math.abs(currentRun))} <span style="font-size:10px;">${currentRun >= 0 ? (isDebit ? "مدين" : "دائن") : (isDebit ? "دائن" : "مدين")}</span>
+      </td>
+    </tr>`;
+  });
+
+  if (!periodEntries.length) {
+    rows += `<tr><td colspan="6" style="text-align:center; padding:32px; color:var(--text-2);">لا توجد حركات مالية مسجلة لهذا الحساب خلال الفترة المحددة</td></tr>`;
+  }
+
+  const kpiOpeningTitle = fromDate ? "رصيد بداية الفترة" : "الرصيد الافتتاحي";
+  const kpiClosingTitle = toDate ? "رصيد نهاية الفترة" : "الرصيد الختامي الصافي";
+
+  bodyEl.innerHTML = `
+    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px;">
+      <div class="coa-kpi">
+        <div class="coa-kpi-label">${kpiOpeningTitle}</div>
+        <div class="coa-kpi-value" style="color:var(--text-1);">${formatCurrency(Math.abs(periodOpeningBalance))} <span style="font-size:11px; font-weight:normal;">${periodOpeningBalance >= 0 ? (isDebit ? "مدين" : "دائن") : (isDebit ? "دائن" : "مدين")}</span></div>
+      </div>
+      <div class="coa-kpi">
+        <div class="coa-kpi-label">حركات الفترة المدينة (+)</div>
+        <div class="coa-kpi-value" style="color:var(--bad);">${formatCurrency(totalDr)}</div>
+      </div>
+      <div class="coa-kpi">
+        <div class="coa-kpi-label">حركات الفترة الدائنة (-)</div>
+        <div class="coa-kpi-value" style="color:var(--good);">${formatCurrency(totalCr)}</div>
+      </div>
+      <div class="coa-kpi">
+        <div class="coa-kpi-label">${kpiClosingTitle}</div>
+        <div class="coa-kpi-value" style="color:var(--brand);">${formatCurrency(Math.abs(finalBalance))} <span style="font-size:11px;">${finalBalance >= 0 ? (isDebit ? "مدين" : "دائن") : (isDebit ? "دائن" : "مدين")}</span></div>
+      </div>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="ledger-table" style="width:100%;">
+        <thead>
+          <tr>
+            <th style="width:40px; text-align:center;">#</th>
+            <th style="width:95px;">التاريخ</th>
+            <th>البيان والتفاصيل المحاسبية</th>
+            <th style="width:110px; text-align:right; color:var(--bad);">مدين (+)</th>
+            <th style="width:110px; text-align:right; color:var(--good);">دائن (-)</th>
+            <th style="width:130px; text-align:right;">الرصيد الجاري</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+};
+
 window.openLedger = async (id, code, name) => {
   document.getElementById("ledger-title").textContent = `كشف حساب: ${code} — ${name}`;
   const bodyEl = document.getElementById("ledger-body");
-  bodyEl.innerHTML = `<div class="coa-loading"><i class="fas fa-spinner fa-spin"></i></div>`;
+  bodyEl.innerHTML = `<div class="coa-loading"><i class="fas fa-spinner fa-spin"></i> جاري استرجاع قيود اليومية وحركات الحساب...</div>`;
+  
+  // Clear period filters by default on fresh open
+  const fromEl = document.getElementById("ledger-from-date");
+  const toEl = document.getElementById("ledger-to-date");
+  if (fromEl) fromEl.value = "";
+  if (toEl) toEl.value = "";
+
+  const isEmployeeAccount = code.startsWith("2-1-5") || code.startsWith("1-1-5-4") || name.includes("مندوب") || name.includes("موظف") || name.includes("سلف") || name.includes("مستحقات");
+  const payslipBtn = document.getElementById("ledger-payslip-btn");
+  if (payslipBtn) {
+    payslipBtn.style.display = isEmployeeAccount ? "inline-flex" : "none";
+  }
+
   openModal("coa-ledger-modal");
 
   try {
-    const q    = query(COLS.journalEntries(), orderBy("date"));
+    const q = query(COLS.journalEntries(), orderBy("date"));
     const snap = await getDocs(q);
     const entries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
     const relevant = [];
     entries.forEach(entry => {
-
       (entry.lines || []).forEach(line => {
         if (line.accountCode === code || line.accountId === id)
           relevant.push({ ...entry, _line: line });
       });
     });
 
-    const acc     = _accounts.find(a => a.id === id);
-    let running   = acc?.openingBalance || 0;
-    const isDebit = acc?.normalBalance !== "credit";
-    const totalDr = relevant.reduce((s,e) => s + (e._line.debit  || 0), 0);
-    const totalCr = relevant.reduce((s,e) => s + (e._line.credit || 0), 0);
+    // Ensure strict chronological order
+    relevant.sort((a, b) => (a.date || "").localeCompare(b.date || ""));
 
-    let rows = `<tr style="color:var(--text-2);font-style:italic">
-      <td colspan="5">رصيد افتتاحي</td>
-      <td class="mono" style="text-align:right;font-weight:800">${formatCurrency(running)}</td></tr>`;
+    const acc = _accounts.find(a => a.id === id);
+    _activeLedgerContext = { id, code, name, acc, allEntries: relevant };
 
-    relevant.forEach((e, i) => {
-      const dr = e._line.debit || 0, cr = e._line.credit || 0;
-      running += isDebit ? dr - cr : cr - dr;
-      rows += `<tr>
-        <td class="mono" style="font-size:11px;color:var(--text-2)">${i+1}</td>
-        <td class="mono" style="font-size:11px">${e.date || ""}</td>
-        <td>${e.entryNumber || e.description || "—"}</td>
-        <td class="mono" style="color:var(--bad);text-align:right">${dr ? formatCurrency(dr) : "—"}</td>
-        <td class="mono" style="color:var(--good);text-align:right">${cr ? formatCurrency(cr) : "—"}</td>
-        <td class="mono" style="text-align:right;font-weight:800;color:${running>=0?"var(--good)":"var(--bad)"}">
-          ${formatCurrency(Math.abs(running))} ${running>=0?"م":"د"}
-        </td></tr>`;
+    window.renderLedgerTable();
+  } catch (err) {
+    console.error("Error opening ledger:", err);
+    bodyEl.innerHTML = `<div class="coa-loading" style="color:var(--bad)">حدث خطأ أثناء تحميل كشف الحساب: ${err.message}</div>`;
+  }
+};
+
+let _coaEmployees = [];
+
+window.printAccountPayslip = async () => {
+  if (!_activeLedgerContext) return;
+  const { name, code } = _activeLedgerContext;
+  try {
+    if (!_coaEmployees || !_coaEmployees.length) {
+      const { getDocs, collection } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+      const empSnap = await getDocs(collection(db, `companies/${COMPANY_ID}/employees`));
+      _coaEmployees = empSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    }
+
+    const norm = (str) => (str || "").replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي").toLowerCase().trim();
+    const cleanAccName = norm(name);
+
+    let matched = _coaEmployees.find(e => {
+      const eName = norm(e.name);
+      return cleanAccName.includes(eName) || eName.includes(cleanAccName) || (e.code && code.includes(e.code));
     });
 
-    if (!relevant.length) rows = `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--text-2)">لا توجد حركة مالية</td></tr>`;
+    if (!matched) {
+      const tokens = cleanAccName.split(/\s+/).filter(t => t.length >= 3 && !["سلف", "سلفة", "المندوب", "الموظف", "مستحقات", "حساب"].includes(t));
+      matched = _coaEmployees.find(e => {
+        const eName = norm(e.name);
+        return tokens.some(t => eName.includes(t));
+      });
+    }
 
-    bodyEl.innerHTML = `
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
-        <div class="coa-kpi"><div class="coa-kpi-label">إجمالي المدين</div>
-          <div class="coa-kpi-value" style="color:var(--bad)">${formatCurrency(totalDr)}</div></div>
-        <div class="coa-kpi"><div class="coa-kpi-label">إجمالي الدائن</div>
-          <div class="coa-kpi-value" style="color:var(--good)">${formatCurrency(totalCr)}</div></div>
-        <div class="coa-kpi"><div class="coa-kpi-label">الرصيد الختامي</div>
-          <div class="coa-kpi-value">${formatCurrency(Math.abs(running))} ${running>=0?"مدين":"دائن"}</div></div>
-      </div>
-      <div style="overflow-x:auto">
-        <table class="ledger-table">
-          <thead><tr>
-            <th>#</th><th>التاريخ</th><th>البيان</th>
-            <th style="text-align:right;color:var(--bad)">مدين</th>
-            <th style="text-align:right;color:var(--good)">دائن</th>
-            <th style="text-align:right">الرصيد الجاري</th>
-          </tr></thead>
-          <tbody>${rows}</tbody>
-        </table>
-      </div>`;
-  } catch(err) {
-    bodyEl.innerHTML = `<div class="coa-loading" style="color:var(--bad)">خطأ: ${err.message}</div>`;
+    const empIdToUse = matched ? matched.id : (_coaEmployees[0]?.id || "");
+    window.openCoaPayslipModal(empIdToUse);
+  } catch (err) {
+    console.error("Error opening payslip from ledger:", err);
+    window.showToast?.("حدث خطأ أثناء فتح قسيمة الموظف: " + err.message, "error");
   }
+};
+
+window.openCoaPayslipModal = (empId) => {
+  const emp = _coaEmployees.find(e => e.id === empId) || _coaEmployees[0] || { name: "موظف", salary: 0, allowance: 0 };
+  const advanceBalance = Math.abs(_activeLedgerData?.running || 0);
+  const curMonth = _activeLedgerData?.fromDate?.slice(0, 7) || todayString().slice(0, 7);
+  const basic = emp.salary || 0;
+  const allowance = emp.allowance || 0;
+  const empGosi = emp.nationality === "saudi" ? ((basic + allowance) * 0.0975) : 0;
+  const repay = advanceBalance;
+  const bonus = 0;
+  const overtime = 0;
+  const deduct = 0;
+  const gross = basic + allowance + bonus + overtime;
+  const totalDeduct = repay + deduct + empGosi;
+  const net = Math.max(0, gross - totalDeduct);
+
+  const oldOverlay = document.getElementById("coa-payslip-overlay");
+  if (oldOverlay) oldOverlay.remove();
+
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay active";
+  overlay.id = "coa-payslip-overlay";
+  overlay.style.cssText = "z-index: 2100; display:flex; align-items:center; justify-content:center; background:rgba(15,23,42,0.65); backdrop-filter:blur(4px);";
+
+  const empOptions = _coaEmployees.map(e => `
+    <option value="${e.id}" ${e.id === emp.id ? "selected" : ""}>${e.name} (${e.job || "موظف"}) - راتب: ${formatCurrency(e.salary || 0)}</option>
+  `).join("");
+
+  overlay.innerHTML = `
+    <div class="modal" style="max-width:760px; width:95%; background:#ffffff; border-radius:18px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.35); overflow:hidden; display:flex; flex-direction:column; max-height:92vh;">
+      <div style="background:linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%); color:#ffffff; padding:18px 24px; display:flex; justify-content:space-between; align-items:center; border-bottom:3px solid #f59e0b;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div style="font-size:24px; background:rgba(255,255,255,0.15); width:44px; height:44px; border-radius:12px; display:flex; align-items:center; justify-content:center;">📑</div>
+          <div>
+            <h3 style="margin:0; font-size:16px; font-weight:800; color:#ffffff;">إعداد وقسيمة استلام راتب وتصفية السلف</h3>
+            <p style="margin:2px 0 0; font-size:11.5px; color:#bfdbfe;">تسوية مستحقات الموظف وإقفال رصيد السلف وإصدار سند رسمي بالتوقيع</p>
+          </div>
+        </div>
+        <button style="background:none; border:none; color:#ffffff; font-size:24px; cursor:pointer; padding:4px 8px; line-height:1;" onclick="document.getElementById('coa-payslip-overlay').remove()">×</button>
+      </div>
+
+      <div style="padding:20px 24px; overflow-y:auto; flex:1;">
+        <!-- Employee & Period Selector Header -->
+        <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:14px 18px; margin-bottom:16px; display:grid; grid-template-columns: 1.6fr 1fr 1fr; gap:12px; align-items:center;">
+          <div>
+            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">👤 اختيار الموظف المستحق:</label>
+            <select id="cp-emp-select" style="width:100%; padding:8px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:12.5px; font-weight:700; color:#0f172a;" onchange="window.onCoaPayslipEmpChange()">
+              ${empOptions}
+            </select>
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">📅 شهر الاستحقاق:</label>
+            <input type="month" id="cp-month" value="${curMonth}" style="width:100%; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:12.5px; font-weight:700;" onchange="window.calcCoaPayslipNet()">
+          </div>
+          <div>
+            <label style="display:block; font-size:11px; font-weight:700; color:#475569; margin-bottom:4px;">🗓️ تاريخ الصرف:</label>
+            <input type="date" id="cp-date" value="${todayString()}" style="width:100%; padding:7px 10px; border:1px solid #cbd5e1; border-radius:8px; font-size:12.5px; font-weight:700;">
+          </div>
+        </div>
+
+        <!-- Employee Info Quick Badge -->
+        <div id="cp-emp-info-badge" style="background:#eff6ff; border:1px solid #bfdbfe; border-right:4px solid #2563eb; border-radius:10px; padding:10px 16px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; font-size:12px;">
+          <div><strong>المسمى الوظيفي:</strong> <span id="cp-info-job" style="color:#1d4ed8; font-weight:700;">${emp.job || "مندوب مبيعات"}</span></div>
+          <div><strong>رقم الموظف:</strong> <span id="cp-info-code" class="mono" style="font-weight:700;">${emp.code || emp.id?.slice(-5) || "EMP"}</span></div>
+          <div><strong>الهوية / الإقامة:</strong> <span id="cp-info-nid" class="mono">${emp.nid || "—"}</span></div>
+          <div><strong>الجنسية:</strong> <span id="cp-info-nat">${emp.nationality === "saudi" ? "سعودي" : "مقيم"}</span></div>
+        </div>
+
+        <!-- 2 Columns: Earnings & Deductions -->
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+          <!-- Column 1: Earnings -->
+          <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:12px; padding:14px 16px;">
+            <div style="font-size:13px; font-weight:800; color:#166534; margin-bottom:12px; display:flex; justify-content:space-between;">
+              <span>➕ الاستحقاقات والمكافآت (Earnings)</span>
+            </div>
+            
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:11px; font-weight:700; color:#374151; margin-bottom:3px;">الراتب الأساسي (ر.س):</label>
+              <input type="number" id="cp-basic" value="${basic}" step="0.01" style="width:100%; padding:7px 10px; border:1px solid #86efac; border-radius:8px; font-family:monospace; font-weight:700;" oninput="window.calcCoaPayslipNet()">
+            </div>
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:11px; font-weight:700; color:#374151; margin-bottom:3px;">البدلات الشهرية (سكن / مواصلات) (ر.س):</label>
+              <input type="number" id="cp-allowance" value="${allowance}" step="0.01" style="width:100%; padding:7px 10px; border:1px solid #86efac; border-radius:8px; font-family:monospace; font-weight:700;" oninput="window.calcCoaPayslipNet()">
+            </div>
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:11px; font-weight:700; color:#374151; margin-bottom:3px;">مكافآت وحوافز تشجيعية (ر.س):</label>
+              <input type="number" id="cp-bonus" value="${bonus}" step="0.01" style="width:100%; padding:7px 10px; border:1px solid #86efac; border-radius:8px; font-family:monospace; font-weight:700;" oninput="window.calcCoaPayslipNet()">
+            </div>
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:11px; font-weight:700; color:#374151; margin-bottom:3px;">بيان سبب المكافأة / الحافز:</label>
+              <input type="text" id="cp-bonus-desc" value="حافز تارغت المبيعات" placeholder="مثال: مكافأة مبيعات شهرية" style="width:100%; padding:7px 10px; border:1px solid #86efac; border-radius:8px; font-size:11.5px;">
+            </div>
+            <div>
+              <label style="display:block; font-size:11px; font-weight:700; color:#374151; margin-bottom:3px;">أجر ساعات إضافية (Overtime) (ر.س):</label>
+              <input type="number" id="cp-overtime" value="${overtime}" step="0.01" style="width:100%; padding:7px 10px; border:1px solid #86efac; border-radius:8px; font-family:monospace; font-weight:700;" oninput="window.calcCoaPayslipNet()">
+            </div>
+          </div>
+
+          <!-- Column 2: Deductions -->
+          <div style="background:#fef2f2; border:1.5px solid #fecaca; border-radius:12px; padding:14px 16px;">
+            <div style="font-size:13px; font-weight:800; color:#991b1b; margin-bottom:12px; display:flex; justify-content:space-between;">
+              <span>➖ الاستقطاعات وتسوية السلف (Deductions)</span>
+            </div>
+
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:11px; font-weight:700; color:#374151; margin-bottom:3px;">خصم وإقفال سلفة الموظف (ر.س):</label>
+              <input type="number" id="cp-repay" value="${repay}" step="0.01" style="width:100%; padding:7px 10px; border:1.5px solid #f87171; border-radius:8px; font-family:monospace; font-weight:800; color:#b91c1c; background:#fff;" oninput="window.calcCoaPayslipNet()">
+              <div style="font-size:10.5px; color:#b91c1c; margin-top:3px; font-weight:600;">💡 الرصيد المفتوح الحالي للسلفة في كشف الحساب: <strong>${formatCurrency(advanceBalance)}</strong></div>
+            </div>
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:11px; font-weight:700; color:#374151; margin-bottom:3px;">خصومات وجزاءات أخرى (ر.س):</label>
+              <input type="number" id="cp-deduct" value="${deduct}" step="0.01" style="width:100%; padding:7px 10px; border:1px solid #fca5a5; border-radius:8px; font-family:monospace; font-weight:700;" oninput="window.calcCoaPayslipNet()">
+            </div>
+            <div style="margin-bottom:10px;">
+              <label style="display:block; font-size:11px; font-weight:700; color:#374151; margin-bottom:3px;">التأمينات الاجتماعية (GOSI) (ر.س):</label>
+              <input type="number" id="cp-gosi" value="${empGosi.toFixed(2)}" step="0.01" style="width:100%; padding:7px 10px; border:1px solid #fca5a5; border-radius:8px; font-family:monospace; font-weight:700;" oninput="window.calcCoaPayslipNet()">
+            </div>
+          </div>
+        </div>
+
+        <!-- Net Payable & Live Calculation Ribbon -->
+        <div style="background:linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%); border-radius:14px; padding:16px 20px; color:#ffffff; display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; box-shadow:0 4px 14px rgba(4,120,87,0.25);">
+          <div>
+            <div style="font-size:14px; font-weight:800;">💰 صافي الراتب المستحق للصرف والتوقيع:</div>
+            <div style="font-size:11px; opacity:0.85;">المبلغ الفعلي الصافي بعد تسوية كافة الاستحقاقات والسلف القائمة</div>
+          </div>
+          <div style="text-align:left;">
+            <span id="cp-net-disp" style="font-size:26px; font-weight:900; font-family:monospace; letter-spacing:0.5px;">${formatCurrency(net)}</span>
+            <span style="font-size:13px; font-weight:700; margin-right:4px;">ريال سعودي</span>
+          </div>
+        </div>
+
+        <!-- Live Tafqeet Box -->
+        <div id="cp-tafqeet-preview" style="background:#f0fdf4; border:1px dashed #86efac; border-radius:10px; padding:10px 16px; font-size:12px; color:#166534; font-weight:700; margin-bottom:8px;">
+          ✍️ المبلغ كتابةً وتفقيطاً: <span style="font-weight:800; color:#047857;">فقط ${tafqeetArabic(net)} لا غير.</span>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div style="background:#f8fafc; border-top:1px solid #e2e8f0; padding:14px 24px; display:flex; justify-content:space-between; align-items:center;">
+        <button class="btn btn-secondary" onclick="document.getElementById('coa-payslip-overlay').remove()">إلغاء وإغلاق</button>
+        <button class="btn btn-primary" style="background:#2563eb; padding:10px 24px; font-size:13px; font-weight:800; border-radius:10px; display:flex; align-items:center; gap:8px;" onclick="window.submitCoaPayslipPrint()">
+          <i class="fas fa-print"></i> 🖨️ طباعة قسيمة الراتب وسند الصرف الرسمي
+        </button>
+      </div>
+    </div>
+  `;
+
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+  window.calcCoaPayslipNet();
+};
+
+window.onCoaPayslipEmpChange = () => {
+  const sel = document.getElementById("cp-emp-select");
+  if (!sel) return;
+  const emp = _coaEmployees.find(e => e.id === sel.value);
+  if (!emp) return;
+
+  const basic = emp.salary || 0;
+  const allowance = emp.allowance || 0;
+  const gosi = emp.nationality === "saudi" ? ((basic + allowance) * 0.0975) : 0;
+
+  const basicEl = document.getElementById("cp-basic");
+  if (basicEl) basicEl.value = basic;
+  const allowEl = document.getElementById("cp-allowance");
+  if (allowEl) allowEl.value = allowance;
+  const gosiEl = document.getElementById("cp-gosi");
+  if (gosiEl) gosiEl.value = gosi.toFixed(2);
+
+  const jobEl = document.getElementById("cp-info-job");
+  if (jobEl) jobEl.textContent = emp.job || "موظف / مندوب";
+  const codeEl = document.getElementById("cp-info-code");
+  if (codeEl) codeEl.textContent = emp.code || emp.id?.slice(-5) || "EMP";
+  const nidEl = document.getElementById("cp-info-nid");
+  if (nidEl) nidEl.textContent = emp.nid || "—";
+  const natEl = document.getElementById("cp-info-nat");
+  if (natEl) natEl.textContent = emp.nationality === "saudi" ? "سعودي" : "مقيم";
+
+  window.calcCoaPayslipNet();
+};
+
+window.calcCoaPayslipNet = () => {
+  const basic = parseFloat(document.getElementById("cp-basic")?.value) || 0;
+  const allowance = parseFloat(document.getElementById("cp-allowance")?.value) || 0;
+  const bonus = parseFloat(document.getElementById("cp-bonus")?.value) || 0;
+  const overtime = parseFloat(document.getElementById("cp-overtime")?.value) || 0;
+  const repay = parseFloat(document.getElementById("cp-repay")?.value) || 0;
+  const deduct = parseFloat(document.getElementById("cp-deduct")?.value) || 0;
+  const gosi = parseFloat(document.getElementById("cp-gosi")?.value) || 0;
+
+  const gross = basic + allowance + bonus + overtime;
+  const totalDeduct = repay + deduct + gosi;
+  const net = Math.max(0, gross - totalDeduct);
+
+  const netEl = document.getElementById("cp-net-disp");
+  if (netEl) netEl.textContent = formatCurrency(net);
+
+  const tafqeetEl = document.getElementById("cp-tafqeet-preview");
+  if (tafqeetEl) {
+    tafqeetEl.innerHTML = `✍️ <strong>المبلغ كتابةً وتفقيطاً:</strong> <span style="font-weight:800; color:#047857;">فقط ${tafqeetArabic(net)} لا غير.</span>`;
+  }
+};
+
+window.submitCoaPayslipPrint = async () => {
+  const sel = document.getElementById("cp-emp-select");
+  const emp = _coaEmployees.find(e => e.id === sel.value) || { name: "الموظف المستحق", job: "مندوب" };
+
+  const month = document.getElementById("cp-month")?.value || todayString().slice(0, 7);
+  const payDate = document.getElementById("cp-date")?.value || todayString();
+  const basic = parseFloat(document.getElementById("cp-basic")?.value) || 0;
+  const allowance = parseFloat(document.getElementById("cp-allowance")?.value) || 0;
+  const bonus = parseFloat(document.getElementById("cp-bonus")?.value) || 0;
+  const bonusDesc = (document.getElementById("cp-bonus-desc")?.value || "مكافآت وحوافز تشجيعية").trim();
+  const overtime = parseFloat(document.getElementById("cp-overtime")?.value) || 0;
+  const repay = parseFloat(document.getElementById("cp-repay")?.value) || 0;
+  const deduct = parseFloat(document.getElementById("cp-deduct")?.value) || 0;
+  const gosi = parseFloat(document.getElementById("cp-gosi")?.value) || 0;
+
+  const totalGross = basic + allowance + bonus + overtime;
+  const totalDeduct = repay + deduct + gosi;
+  const finalNet = Math.max(0, totalGross - totalDeduct);
+  const amountWords = tafqeetArabic(finalNet);
+
+  let company = {
+    name: "شركة نظم الإمداد المتطورة",
+    nameEn: "Modern Supply Systems Co.",
+    crNumber: "7054969006",
+    vatNumber: "314996148100003",
+    phone: "0549141648",
+    logoUrl: ""
+  };
+  try {
+    const cached = localStorage.getItem("idham_company");
+    if (cached) Object.assign(company, JSON.parse(cached));
+  } catch(e) {}
+
+  const voucherNumber = `SAL-${emp.code || emp.id?.slice(-4) || 'EMP'}-${month.replace(/[^0-9]/g,'')}`;
+
+  const html = `
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>سند صرف واستلام راتب — ${emp.name} — ${month}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', Arial, sans-serif;
+      direction: rtl;
+      color: #0f172a;
+      background: #fff;
+      padding: 20px;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    @media print {
+      body { padding: 0; }
+      @page { size: A4 portrait; margin: 6mm 8mm; }
+      .no-print { display: none !important; }
+    }
+    .sal-container {
+      max-width: 860px;
+      margin: 0 auto;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .sal-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%) !important;
+      padding: 16px 22px;
+      color: #fff !important;
+    }
+    .sal-header-gold {
+      height: 4px;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b) !important;
+    }
+    .sal-badge-box {
+      background: rgba(255,255,255,0.18) !important;
+      border: 1px solid rgba(255,255,255,0.35) !important;
+      border-radius: 12px;
+      padding: 8px 18px;
+      text-align: center;
+    }
+    .sal-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 18px;
+    }
+    .sal-meta-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 6px 10px;
+      text-align: center;
+    }
+    .sal-meta-label { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+    .sal-meta-val { font-size: 12.5px; font-weight: 800; color: #0f172a; }
+    .sal-emp-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-right: 5px solid #2563eb;
+      border-radius: 10px;
+      margin: 12px 18px;
+      padding: 10px 16px;
+    }
+    .sal-emp-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1.2fr 1.2fr 1fr;
+      gap: 10px;
+    }
+    .sal-emp-item-lbl { font-size: 10px; color: #1e40af; font-weight: 700; margin-bottom: 2px; }
+    .sal-emp-item-val { font-size: 12.5px; font-weight: 800; color: #0f172a; }
+    .sal-breakdown-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0 18px 12px 18px;
+    }
+    .sal-panel {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .sal-panel.earnings { border-color: #a7f3d0; background: #fff; }
+    .sal-panel.deductions { border-color: #fecaca; background: #fff; }
+    .sal-panel-head {
+      padding: 6px 12px;
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sal-panel.earnings .sal-panel-head { background: #d1fae5; color: #065f46; }
+    .sal-panel.deductions .sal-panel-head { background: #fee2e2; color: #991b1b; }
+    .sal-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .sal-items-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .sal-items-table tr:last-child td { border-bottom: none; }
+    .sal-panel-foot {
+      padding: 6px 12px;
+      font-weight: 800;
+      font-size: 11.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #e2e8f0;
+    }
+    .sal-panel.earnings .sal-panel-foot { background: #ecfdf5; color: #047857; }
+    .sal-panel.deductions .sal-panel-foot { background: #fef2f2; color: #b91c1c; }
+    .sal-net-ribbon {
+      margin: 0 18px 10px 18px;
+      background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+      border-radius: 10px;
+      padding: 12px 18px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(4,120,87,0.2);
+    }
+    .sal-net-val {
+      font-size: 22px;
+      font-weight: 900;
+      font-family: monospace;
+      letter-spacing: 0.5px;
+    }
+    .sal-tafqeet-box {
+      margin: 0 18px 10px 18px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 11px;
+    }
+    .sal-legal-box {
+      margin: 0 18px 12px 18px;
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-right: 5px solid #f59e0b;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 10.5px;
+      line-height: 1.5;
+      color: #92400e;
+    }
+    .sal-sigs {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 10px;
+      margin: 0 18px 14px 18px;
+    }
+    .sal-sig-box {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .sal-sig-title { font-size: 10.5px; font-weight: 800; color: #334155; margin-bottom: 26px; }
+    .sal-sig-line { border-top: 1px dashed #94a3b8; padding-top: 5px; font-size: 9.5px; color: #64748b; }
+    .sal-footer {
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      padding: 6px 18px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="sal-container">
+    <div class="sal-header">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          ${company.logoUrl ? `<img src="${company.logoUrl}" alt="Logo" style="height:52px;max-width:100px;object-fit:contain;background:#fff;padding:2px;border-radius:6px;" />` : `<div style="font-size:28px;">🏢</div>`}
+          <div>
+            <div style="font-size:16px;font-weight:900;color:#fff;">${company.name}</div>
+            <div style="font-size:10.5px;opacity:0.85;font-weight:600;color:#fff;">${company.nameEn}</div>
+            <div style="font-size:9.5px;opacity:0.8;margin-top:2px;color:#fff;">
+              <span>الهاتف: <strong>${company.phone}</strong></span> |
+              <span>الرقم الضريبي: <strong>${company.vatNumber}</strong></span> |
+              <span>سجل تجاري: <strong>${company.crNumber}</strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="sal-badge-box">
+          <div style="font-size:16px;font-weight:900;color:#fff !important;">سند صرف واستلام راتب</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.9) !important;letter-spacing:0.5px;">SALARY PAYMENT & PAYSLIP VOUCHER</div>
+        </div>
+      </div>
+    </div>
+    <div class="sal-header-gold"></div>
+
+    <div class="sal-meta-grid">
+      <div class="sal-meta-card"><div class="sal-meta-label">رقم السند</div><div class="sal-meta-val mono" style="color:#047857;">${voucherNumber}</div></div>
+      <div class="sal-meta-card"><div class="sal-meta-label">تاريخ الصرف</div><div class="sal-meta-val mono">${payDate}</div></div>
+      <div class="sal-meta-card"><div class="sal-meta-label">شهر الاستحقاق</div><div class="sal-meta-val" style="color:#1d4ed8;">شهر ${month}</div></div>
+      <div class="sal-meta-card"><div class="sal-meta-label">طريقة الصرف</div><div class="sal-meta-val" style="font-size:11px;">نقدي / تحويل بنكي</div></div>
+    </div>
+
+    <div class="sal-emp-box">
+      <div class="sal-emp-grid">
+        <div><div class="sal-emp-item-lbl">👤 اسم الموظف المستحق</div><div class="sal-emp-item-val" style="font-size:13.5px;color:#1e3a8a;">${emp.name}</div></div>
+        <div><div class="sal-emp-item-lbl">💼 المسمى الوظيفي</div><div class="sal-emp-item-val">${emp.job || "موظف / مندوب"}</div></div>
+        <div><div class="sal-emp-item-lbl">🆔 رقم الهوية / الإقامة</div><div class="sal-emp-item-val mono">${emp.nid || "—"}</div></div>
+        <div><div class="sal-emp-item-lbl">💳 الآيبان / الحساب</div><div class="sal-emp-item-val mono" style="font-size:10.5px;">${emp.iban || "—"}</div></div>
+      </div>
+    </div>
+
+    <div class="sal-breakdown-section">
+      <div class="sal-panel earnings">
+        <div class="sal-panel-head"><span>➕ مفردات الاستحقاقات والمكافآت</span><span style="font-size:10px;">(Earnings)</span></div>
+        <table class="sal-items-table">
+          <tbody>
+            <tr><td><strong>الراتب الأساسي</strong></td><td class="mono font-bold" style="text-align:left;color:#047857;">+${formatCurrency(basic)} ر.س</td></tr>
+            <tr><td><strong>البدلات الشهرية</strong></td><td class="mono font-bold" style="text-align:left;color:#047857;">+${formatCurrency(allowance)} ر.س</td></tr>
+            ${overtime ? `<tr><td><strong>أجر ساعات إضافية</strong></td><td class="mono font-bold" style="text-align:left;color:#047857;">+${formatCurrency(overtime)} ر.س</td></tr>` : ''}
+            ${bonus ? `<tr><td><strong>${bonusDesc || "مكافآت وحوافز تشجيعية"}</strong></td><td class="mono font-bold" style="text-align:left;color:#047857;">+${formatCurrency(bonus)} ر.س</td></tr>` : ''}
+          </tbody>
+        </table>
+        <div class="sal-panel-foot"><span>إجمالي الاستحقاقات:</span><span class="mono font-bold">${formatCurrency(totalGross)} ر.س</span></div>
+      </div>
+
+      <div class="sal-panel deductions">
+        <div class="sal-panel-head"><span>➖ مفردات الاستقطاعات والسلف</span><span style="font-size:10px;">(Deductions)</span></div>
+        <table class="sal-items-table">
+          <tbody>
+            ${deduct ? `<tr><td><strong>خصومات وغياب</strong></td><td class="mono font-bold" style="text-align:left;color:#b91c1c;">-${formatCurrency(deduct)} ر.س</td></tr>` : ''}
+            ${gosi ? `<tr><td><strong>تأمينات اجتماعية (GOSI)</strong></td><td class="mono font-bold" style="text-align:left;color:#b91c1c;">-${formatCurrency(gosi)} ر.س</td></tr>` : ''}
+            ${repay ? `<tr><td><strong>إقفال وتسوية سلفة الموظف</strong></td><td class="mono font-bold" style="text-align:left;color:#b91c1c;">-${formatCurrency(repay)} ر.س</td></tr>` : ''}
+            ${totalDeduct === 0 ? `<tr><td style="color:#94a3b8;text-align:center;padding:12px;">لا توجد أي استقطاعات</td></tr>` : ''}
+          </tbody>
+        </table>
+        <div class="sal-panel-foot"><span>إجمالي الاستقطاعات:</span><span class="mono font-bold">${formatCurrency(totalDeduct)} ر.س</span></div>
+      </div>
+    </div>
+
+    <div class="sal-net-ribbon">
+      <div><div style="font-size:11.5px;opacity:0.9;font-weight:700;">💰 صافي الراتب المنصرف للموظف</div><div style="font-size:9.5px;opacity:0.8;">Net Salary Payable</div></div>
+      <div style="text-align:left;"><span class="sal-net-val">${formatCurrency(finalNet)}</span> <span style="font-size:13px;font-weight:700;margin-right:4px;">ريال سعودي</span></div>
+    </div>
+
+    <div class="sal-tafqeet-box">
+      <strong>✍️ المبلغ كتابةً وتفقيطاً:</strong> <span style="color:#047857;font-weight:800;">فقط ${amountWords} لا غير.</span>
+    </div>
+
+    <div class="sal-legal-box">
+      <strong>📝 إقرار واستلام الموظف وبراءة ذمة:</strong>
+      <p style="margin-top:2px;">
+        أقر أنا الموظف الموضحة بياناتي أعلاه بأنني استلمت كامل صافي راتبي ومستحقاتي ومكافآتي عن شهر (<strong>${month}</strong>) الموضحة في هذا السند، ولا يحق لي المطالبة بأي مبالغ أخرى أو متأخرات عن هذه الفترة لدى الشركة، ويعد توقيعي أدناه إقراراً نهائياً بالاستلام وبراءة ذمة شاملة.
+      </p>
+    </div>
+
+    <div class="sal-sigs">
+      <div class="sal-sig-box">
+        <div class="sal-sig-title">توقيع الموظف المستلم (المقر بالاستلام)</div>
+        <div class="sal-sig-line">الاسم: ${emp.name}</div>
+      </div>
+      <div class="sal-sig-box">
+        <div class="sal-sig-title">إعداد ومراجعة قسم المحاسبة والرواتب</div>
+        <div class="sal-sig-line">المحاسب المالي</div>
+      </div>
+      <div class="sal-sig-box">
+        <div class="sal-sig-title">اعتماد الإدارة والمدير العام</div>
+        <div class="sal-sig-line">المدير العام / المفوض</div>
+      </div>
+    </div>
+
+    <div class="sal-footer">
+      <div>نظام إدهام المتكامل لإدارة الموارد — IDHAM ERP v4.0</div>
+      <div>تمت الطباعة آلياً بتاريخ: ${payDate}</div>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  const w = window.open("", "_blank");
+  if (!w) {
+    window.showToast?.("يرجى السماح بالنوافذ المنبثقة لطباعة قسيمة الراتب", "warning");
+    return;
+  }
+  w.document.open();
+  w.document.write(html);
+  w.document.close();
+  setTimeout(() => {
+    try {
+      w.focus();
+      w.print();
+    } catch(e) {}
+  }, 450);
+};
+
+window.printAccountStatement = async () => {
+  if (!_activeLedgerData) {
+    window.showToast?.("لا توجد بيانات كشف حساب للطباعة", "error");
+    return;
+  }
+
+  const { code, name, acc, relevant, fromDate, toDate, openingBalance, totalDr, totalCr, isDebit } = _activeLedgerData;
+
+  // Load company and logo settings
+  let company = {
+    name: "شركة نظم الإمداد المتطورة",
+    nameEn: "Modern Supply Systems Co.",
+    crNumber: "7054969006",
+    vatNumber: "314996148100003",
+    phone: "0549141648",
+    email: "Nuzmalamdad@gmail.com",
+    address: "مبنى 7689 — شارع ينبع  الصناعية 2179 — حي غرناطة — ينبع — رمز 46414",
+    logoUrl: ""
+  };
+
+  try {
+    const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+    const [coSnap, logoSnap] = await Promise.all([
+      getDoc(doc(db, `companies/${COMPANY_ID}/settings/company`)),
+      getDoc(doc(db, `companies/${COMPANY_ID}/settings/logo`))
+    ]);
+    if (coSnap.exists()) {
+      const cd = coSnap.data();
+      company.name = cd.name || cd.companyName || company.name;
+      company.nameEn = cd.nameEn || cd.legalName || company.nameEn;
+      company.crNumber = cd.crNumber || cd.cr || company.crNumber;
+      company.vatNumber = cd.vatNumber || cd.vat || company.vatNumber;
+      company.phone = cd.phone || company.phone;
+      company.email = cd.email || company.email;
+      company.address = cd.address ? (cd.city ? `${cd.address} — ${cd.city}` : cd.address) : company.address;
+    }
+    if (logoSnap.exists()) company.logoUrl = logoSnap.data().dataUrl || logoSnap.data().logoUrl || "";
+  } catch (_) {}
+
+  const printTime = new Date().toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric" });
+  const printClock = new Date().toLocaleTimeString("ar-SA", { hour: "2-digit", minute: "2-digit" });
+
+  let running = openingBalance;
+  let rowsHtml = `
+    <tr style="background:#f8fafc; font-style:italic; font-weight:bold;">
+      <td colspan="3" style="padding:8px 12px;">🏁 ${fromDate ? `رصيد بداية الفترة (حتى ${fromDate})` : "رصيد افتتاحي"}</td>
+      <td style="text-align:right;">—</td>
+      <td style="text-align:right;">—</td>
+      <td style="text-align:right; font-weight:800;">${formatCurrency(Math.abs(openingBalance))} ر.س <span style="font-size:10px; color:#64748b;">(${openingBalance >= 0 ? (isDebit ? "مدين" : "دائن") : (isDebit ? "دائن" : "مدين")})</span></td>
+    </tr>
+  `;
+
+  relevant.forEach((e, i) => {
+    const dr = e._line.debit || 0;
+    const cr = e._line.credit || 0;
+    running += isDebit ? dr - cr : cr - dr;
+
+    const lineNote = e._line?.note || e._line?.description || "";
+    const headerDesc = e.description || e.notes || "";
+    const displayNote = lineNote || headerDesc || "حركة قيد يومية";
+    const entryNum = e.entryNumber || e.number || e.id || "—";
+
+    rowsHtml += `
+      <tr>
+        <td style="text-align:center; font-family:monospace; color:#64748b;">${i + 1}</td>
+        <td style="font-family:monospace; white-space:nowrap;">${e.date || "—"}</td>
+        <td>
+          <div style="font-weight:700; color:#0f172a;">${displayNote}</div>
+          <div style="font-size:10px; color:#4338ca; font-family:monospace; margin-top:2px;">مرجع: #${entryNum}</div>
+        </td>
+        <td style="text-align:right; font-family:monospace; font-weight:700; color:#dc2626;">${dr ? formatCurrency(dr) + " ر.س" : "—"}</td>
+        <td style="text-align:right; font-family:monospace; font-weight:700; color:#16a34a;">${cr ? formatCurrency(cr) + " ر.س" : "—"}</td>
+        <td style="text-align:right; font-family:monospace; font-weight:800; color:${running >= 0 ? "#16a34a" : "#dc2626"};">
+          ${formatCurrency(Math.abs(running))} ر.س <span style="font-size:10px; color:#64748b;">(${running >= 0 ? (isDebit ? "مدين" : "دائن") : (isDebit ? "دائن" : "مدين")})</span>
+        </td>
+      </tr>
+    `;
+  });
+
+  if (!relevant.length) {
+    rowsHtml += `<tr><td colspan="6" style="text-align:center; padding:24px; color:#64748b; font-weight:600;">لا توجد أي حركات مالية مسجلة لهذا الحساب خلال الفترة المحددة</td></tr>`;
+  }
+
+  const finalBalanceLabel = running >= 0 ? (isDebit ? "مدين" : "دائن") : (isDebit ? "دائن" : "مدين");
+
+  const printableHTML = `<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>كشف حساب — ${code} — ${name}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#0f172a; background:#fff; padding:24px; font-size:12px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    
+    /* ══ HEADER BANNER ══ */
+    .company-header {
+      display:flex; justify-content:space-between; align-items:center;
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #3b82f6 100%);
+      color:#fff; padding:20px 24px; border-radius:12px; margin-bottom:20px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+    }
+    .company-info h1 { font-size:22px; font-weight:900; margin-bottom:4px; letter-spacing:-0.5px; }
+    .company-info .sub { font-size:12px; opacity:0.9; margin-bottom:8px; }
+    .company-meta { font-size:11px; opacity:0.95; display:flex; flex-wrap:wrap; gap:16px; margin-top:6px; }
+    .company-meta span { display:inline-flex; align-items:center; gap:4px; }
+    .company-logo {
+      width:80px; height:80px; background:#fff; border-radius:10px; padding:4px;
+      display:flex; align-items:center; justify-content:center; overflow:hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+    .company-logo img { max-width:100%; max-height:100%; object-fit:contain; }
+    .company-logo-fallback { font-size:32px; }
+
+    /* ══ REPORT TITLE & METADATA ══ */
+    .report-badge-strip {
+      display:flex; justify-content:space-between; align-items:center;
+      background:#f1f5f9; border:1px solid #cbd5e1; border-radius:10px;
+      padding:12px 18px; margin-bottom:16px;
+    }
+    .report-title-box h2 { font-size:16px; font-weight:800; color:#1e3a8a; }
+    .report-title-box .code { font-family:monospace; font-size:13px; color:#475569; font-weight:700; }
+    .report-date-box { font-size:11px; color:#64748b; text-align:left; line-height:1.6; }
+
+    /* ══ KPI CARDS ══ */
+    .kpi-grid {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:20px;
+    }
+    .kpi-card {
+      background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:12px 14px;
+      text-align:center;
+    }
+    .kpi-card.opening { border-top:3px solid #64748b; }
+    .kpi-card.debit { border-top:3px solid #dc2626; }
+    .kpi-card.credit { border-top:3px solid #16a34a; }
+    .kpi-card.final { border-top:3px solid #2563eb; background:#eff6ff; }
+    .kpi-card .lbl { font-size:10.5px; color:#64748b; font-weight:600; margin-bottom:4px; }
+    .kpi-card .val { font-size:15px; font-weight:900; font-family:monospace; }
+    .kpi-card.debit .val { color:#dc2626; }
+    .kpi-card.credit .val { color:#16a34a; }
+    .kpi-card.final .val { color:#1e40af; }
+
+    /* ══ TABLE ══ */
+    table { width:100%; border-collapse:collapse; margin-bottom:24px; }
+    th {
+      background:#1e3a8a; color:#fff; padding:9px 10px; font-size:11.5px;
+      font-weight:700; text-align:right; border:1px solid #1e3a8a;
+    }
+    td {
+      padding:8px 10px; border:1px solid #e2e8f0; font-size:11.5px;
+      vertical-align:middle;
+    }
+    tr:nth-child(even) td { background:#f8fafc; }
+
+    /* ══ SIGNATURES & FOOTER ══ */
+    .signatures-block {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+      margin-top:36px; padding-top:16px; border-top:2px solid #e2e8f0;
+      page-break-inside:avoid;
+    }
+    .sig-box {
+      text-align:center; padding:12px; border:1px dashed #cbd5e1; border-radius:8px;
+      background:#fafafa;
+    }
+    .sig-title { font-size:11px; font-weight:700; color:#475569; margin-bottom:40px; }
+    .sig-line { border-bottom:1px solid #94a3b8; width:70%; margin:0 auto; }
+
+    .print-footer {
+      margin-top:24px; text-align:center; font-size:10px; color:#94a3b8;
+      border-top:1px solid #f1f5f9; padding-top:8px;
+    }
+
+    @media print {
+      body { padding:10px; }
+      .company-header { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      th { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; background:#1e3a8a !important; color:#fff !important; }
+      tr:nth-child(even) td { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; background:#f8fafc !important; }
+      .kpi-card { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Banner -->
+  <div class="company-header">
+    <div class="company-info">
+      <h1>${company.name || "إدهام للمواد الغذائية"}</h1>
+      <div class="sub">${company.nameEn || "Idham Foodstuff Trading Co."}</div>
+      <div class="company-meta">
+        ${company.crNumber ? `<span>📋 س.ت: <strong>${company.crNumber}</strong></span>` : ""}
+        ${company.vatNumber ? `<span>🧾 الرقم الضريبي: <strong>${company.vatNumber}</strong></span>` : ""}
+        ${company.phone ? `<span>📞 الهاتف: <strong>${company.phone}</strong></span>` : ""}
+        ${company.address ? `<span>📍 ${company.address}</span>` : ""}
+      </div>
+    </div>
+    <div class="company-logo">
+      ${company.logoUrl ? `<img src="${company.logoUrl}" alt="Logo">` : `<div class="company-logo-fallback">🏢</div>`}
+    </div>
+  </div>
+
+  <!-- Statement Details Strip -->
+  <div class="report-badge-strip">
+    <div class="report-title-box">
+      <h2>كشف حساب تفصيلي: ${name}</h2>
+      <div class="code">كود الحساب: ${code} | تصنيف الحساب: ${acc?.typeAr || acc?.type || "حساب مالي"}</div>
+      ${(fromDate || toDate) ? `
+      <div style="margin-top:6px; font-size:12px; font-weight:800; color:#1e40af; background:#e0e7ff; display:inline-block; padding:4px 12px; border-radius:6px; border:1px solid #bfdbfe;">
+        📅 الفترة المالية المحددة: من <strong>${fromDate || "بداية النشاط"}</strong> إلى <strong>${toDate || "تاريخ اليوم"}</strong>
+      </div>` : `<div style="margin-top:4px; font-size:11px; color:#64748b;">(كامل الحركات التاريخية منذ التأسيس)</div>`}
+    </div>
+    <div class="report-date-box">
+      <div><strong>تاريخ الإصدار:</strong> ${printTime}</div>
+      <div><strong>الوقت:</strong> ${printClock}</div>
+    </div>
+  </div>
+
+  <!-- KPI Summary Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card opening">
+      <div class="lbl">${fromDate ? "رصيد بداية الفترة" : "الرصيد الافتتاحي"}</div>
+      <div class="val">${formatCurrency(Math.abs(openingBalance))} ر.س</div>
+    </div>
+    <div class="kpi-card debit">
+      <div class="lbl">إجمالي حركات الفترة المدينة (+)</div>
+      <div class="val">${formatCurrency(totalDr)} ر.س</div>
+    </div>
+    <div class="kpi-card credit">
+      <div class="lbl">إجمالي حركات الفترة الدائنة (-)</div>
+      <div class="val">${formatCurrency(totalCr)} ر.س</div>
+    </div>
+    <div class="kpi-card final">
+      <div class="lbl">${toDate ? "رصيد نهاية الفترة الصافي" : "الرصيد الختامي الصافي"}</div>
+      <div class="val">${formatCurrency(Math.abs(running))} ر.س (${finalBalanceLabel})</div>
+    </div>
+  </div>
+
+  <!-- Transactions Table -->
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35px; text-align:center;">#</th>
+        <th style="width:90px; text-align:center;">التاريخ</th>
+        <th>البيان والتفاصيل المحاسبية</th>
+        <th style="width:115px; text-align:center;">مدين (+)</th>
+        <th style="width:115px; text-align:center;">دائن (-)</th>
+        <th style="width:140px; text-align:center;">الرصيد الجاري</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rowsHtml}
+    </tbody>
+  </table>
+
+  <!-- Signatures Block -->
+  <div class="signatures-block">
+    <div class="sig-box">
+      <div class="sig-title">إعداد المحاسب المسؤول</div>
+      <div class="sig-line"></div>
+    </div>
+    <div class="sig-box">
+      <div class="sig-title">المراجعة والتدقيق المالي</div>
+      <div class="sig-line"></div>
+    </div>
+    <div class="sig-box">
+      <div class="sig-title">الاعتماد والختم الرسمي</div>
+      <div class="sig-line"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="print-footer">
+    تم استخراج هذا الكشف آلياً من نظام إدهام للمواد الغذائية (IDHAM ERP) — جميع الحقوق محفوظة © ${new Date().getFullYear()}
+  </div>
+
+  <script>
+    setTimeout(() => {
+      window.focus();
+      window.print();
+    }, 450);
+  </script>
+</body>
+</html>`;
+
+  const printWin = window.open("", "_blank", "width=900,height=950");
+  printWin.document.write(printableHTML);
+  printWin.document.close();
 };
 
 // ──────────────────────────────────────────
@@ -1300,12 +2372,20 @@ window.rebuildAccountBalances = async (options = {}) => {
       accountsList.push(accInfo);
     });
 
-    // 4. التجميع التصاعدي الهرمي — من الأعمق للأقل عمقاً
-    const sortedAccounts = [...accountsList].sort((a, b) => {
-      const depthA = (a.code.match(/-/g) || []).length;
-      const depthB = (b.code.match(/-/g) || []).length;
-      return depthB - depthA;
+    // 4. التجميع التصاعدي الهرمي الشجري الدقيق — من الأعمق للأقل عمقاً بناءً على شجرة الأبناء
+    function getTreeDepth(code, visited = new Set()) {
+      const a = accountsMap[code];
+      if (!a || !a.parentCode || !accountsMap[a.parentCode]) return 0;
+      if (visited.has(code)) return 0;
+      visited.add(code);
+      return 1 + getTreeDepth(a.parentCode, visited);
+    }
+
+    accountsList.forEach(a => {
+      a.treeDepth = getTreeDepth(a.code);
     });
+
+    const sortedAccounts = [...accountsList].sort((a, b) => b.treeDepth - a.treeDepth);
     for (const acc of sortedAccounts) {
       if (acc.parentCode) {
         const pCode = acc.parentCode;
@@ -1355,7 +2435,8 @@ window.rebuildAccountBalances = async (options = {}) => {
 
     if (opCount > 0) await batch.commit();
 
-    // 6. إعادة تحميل الشجرة وعرض النتائج
+    // 6. مسح كاش الحسابات وإعادة تحميل الشجرة وعرض النتائج المحدثة
+    await clearERPCache(COLS.chartOfAccounts().path);
     await loadAccounts();
     window.showToast?.(
       `✅ تمت إعادة بناء الأرصدة بنجاح! تم تحديث ${updatedCount} حساب بأرصدة | ${zeroedCount} حساب برصيد صفر`,

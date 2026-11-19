@@ -1,0 +1,590 @@
+[
+  {
+    "_id": "1SepY8QMGVmcNb6L303y",
+    "name": "مصنع جودى الدولية للتصنيع والتغليف",
+    "nationalId": "",
+    "address": "المدينة الصناعية - جدة",
+    "notes": "",
+    "vatNumber": "311078221200003",
+    "phone": "",
+    "balance": 126787.5,
+    "category": "other",
+    "accountId": "jJC1s6TlLf08kNqUh1yV",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786973994,
+      "nanoseconds": 226000000
+    },
+    "accountCode": "2-1-1-1-1-09",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786978681,
+      "nanoseconds": 847000000
+    },
+    "code": "006"
+  },
+  {
+    "_id": "9dR35NMnocccCpfVCwAZ",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787680751,
+      "nanoseconds": 254000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787680751,
+      "nanoseconds": 254000000
+    },
+    "balance": 0,
+    "accountId": "pQyFY6mcNPgWFQIjxXQ2",
+    "phone": "0571777359",
+    "googleMapsUrl": "",
+    "category": "other",
+    "address": "",
+    "code": "0011",
+    "iban": "",
+    "accountCode": "2-1-1-1-1-18",
+    "notes": "",
+    "bankName": "",
+    "name": "مصنع تركي المرعشي للبلاستيك",
+    "nationalId": "",
+    "vatNumber": ""
+  },
+  {
+    "_id": "AeQkTSD8z3hcq75DvyJ5",
+    "balance": 33,
+    "notes": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850106,
+      "nanoseconds": 754000000
+    },
+    "address": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787849517,
+      "nanoseconds": 163000000
+    },
+    "category": "other",
+    "accountId": "p1ThC1lfbvJYGmYqqEoi",
+    "phone": "",
+    "bankName": "",
+    "code": "",
+    "iban": "",
+    "accountCode": "2-1-1-1-1-24",
+    "name": "محامص ومطاحن زاد طيبة",
+    "googleMapsUrl": "",
+    "vatNumber": "312402383500003",
+    "nationalId": ""
+  },
+  {
+    "_id": "D5aKNH2GBcpUa9N4r6HS",
+    "category": "other",
+    "accountCode": "2-1-1-1-1-07",
+    "nationalId": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786015984,
+      "nanoseconds": 977000000
+    },
+    "code": "007",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786012044,
+      "nanoseconds": 167000000
+    },
+    "accountId": "NyLkfSUpju1rVcEiCOKZ",
+    "address": "",
+    "vatNumber": "",
+    "notes": "",
+    "name": "شركة الافاق العربية الحديثة للتجارة",
+    "balance": 2219.5,
+    "phone": ""
+  },
+  {
+    "_id": "F0m6WKgZ056fj38gSbBc",
+    "vatNumber": "310570726200003",
+    "phone": "",
+    "notes": "",
+    "name": "ملتقى الخبازين  للتجارة",
+    "nationalId": "4030226951",
+    "code": "007",
+    "address": "شارع المحجر - جده",
+    "accountId": "zoeHdWWvS9t6Y0P5d979",
+    "category": "flour",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786017186,
+      "nanoseconds": 926000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786012426,
+      "nanoseconds": 694000000
+    },
+    "balance": 713,
+    "accountCode": "2-1-1-1-1-08"
+  },
+  {
+    "_id": "G9jkfr5Eym3JwP8KJpsZ",
+    "accountId": "xQsQG3VQ5RmkFsKVL50r",
+    "name": "شركة الرفادة العربية التجارية",
+    "nationalId": "",
+    "notes": "",
+    "address": "حى النخيل -جدة",
+    "vatNumber": "310668876500003",
+    "accountCode": "2-1-1-1-1-1",
+    "phone": "0549880636",
+    "balance": 0.5,
+    "code": "001"
+  },
+  {
+    "_id": "GG58T6gb5UDMgm7gJ2hU",
+    "address": "جدة - بترومين - دوار النجوم",
+    "accountId": "x5GhKK7caPgNmzBP5DPJ",
+    "name": "مؤسسة باهطف للمواد الغذائية",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786011883,
+      "nanoseconds": 516000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786017387,
+      "nanoseconds": 343000000
+    },
+    "balance": 158.7,
+    "category": "rice",
+    "notes": "",
+    "accountCode": "2-1-1-1-1-06",
+    "vatNumber": "300099289100003",
+    "code": "006",
+    "nationalId": "",
+    "phone": ""
+  },
+  {
+    "_id": "Jr3PXKiwntPrkZ6i7cQX",
+    "vatNumber": "",
+    "phone": "",
+    "address": "",
+    "category": "services",
+    "notes": "موردو الخدمات",
+    "code": "008",
+    "balance": -6035.38,
+    "name": "شركة الدريس",
+    "nationalId": "",
+    "accountId": "3s82jGpzdYSoHjmVQQNk",
+    "accountCode": "2-1-1-1-1-12",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787246038,
+      "nanoseconds": 851000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787246042,
+      "nanoseconds": 705000000
+    }
+  },
+  {
+    "_id": "JukiN7Gyq1HVu1lrPdiV",
+    "googleMapsUrl": "",
+    "accountCode": "2-1-1-1-1-20",
+    "phone": "",
+    "nationalId": "",
+    "vatNumber": "300424079700003",
+    "notes": "",
+    "name": "مؤسسة ايمن حمدان حمد العتيبى",
+    "iban": "",
+    "code": "",
+    "balance": 116.99,
+    "category": "other",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787848851,
+      "nanoseconds": 903000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850160,
+      "nanoseconds": 479000000
+    },
+    "bankName": "",
+    "accountId": "LjPnXPLsW1e39quu7xT1",
+    "address": ""
+  },
+  {
+    "_id": "KWF2WFrt82vjVgd3aQuD",
+    "iban": "",
+    "code": "",
+    "notes": "",
+    "accountId": "aqRGf8jXsWLfeZ5YSMO0",
+    "category": "other",
+    "phone": "",
+    "googleMapsUrl": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787849577,
+      "nanoseconds": 547000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787849837,
+      "nanoseconds": 403000000
+    },
+    "bankName": "",
+    "nationalId": "",
+    "balance": 196.01,
+    "vatNumber": "",
+    "address": "",
+    "accountCode": "2-1-1-1-1-25",
+    "name": "بريم ماركت"
+  },
+  {
+    "_id": "RkLU4BXXmTjt2eKBcd2v",
+    "address": "",
+    "code": "0010",
+    "iban": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787680650,
+      "nanoseconds": 364000000
+    },
+    "balance": 0,
+    "bankName": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787680650,
+      "nanoseconds": 364000000
+    },
+    "accountId": "vKwVIzA9YeUE6r3rcJjR",
+    "category": "other",
+    "nationalId": "",
+    "name": "مصنع كيان للبلاستيك",
+    "vatNumber": "",
+    "notes": "",
+    "googleMapsUrl": "",
+    "accountCode": "2-1-1-1-1-17",
+    "phone": ""
+  },
+  {
+    "_id": "Txj2Uq2NOEEjoKqKRfoB",
+    "nationalId": "4700101390",
+    "iban": "",
+    "code": "",
+    "accountId": "EgqzNMj5jzQIxlEShAEx",
+    "bankName": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850213,
+      "nanoseconds": 434000000
+    },
+    "category": "other",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787849359,
+      "nanoseconds": 45000000
+    },
+    "accountCode": "2-1-1-1-1-22",
+    "notes": "",
+    "vatNumber": "300981876400003",
+    "address": "",
+    "phone": "",
+    "googleMapsUrl": "",
+    "name": "مؤسسة امداد رضوى لتجارة الجملة والتجزئة",
+    "balance": 0.03
+  },
+  {
+    "_id": "WIDvPcdlldzkab5ZikBB",
+    "notes": "",
+    "balance": 218980.62,
+    "accountCode": "2-1-1-1-1-02",
+    "nationalId": "",
+    "code": "002",
+    "vatNumber": "310110852500003",
+    "category": "rice",
+    "address": "جدة الكيلو 10 طريق مكة",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788337815,
+      "nanoseconds": 232000000
+    },
+    "phone": "6201774",
+    "name": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "accountId": "oKmWW9jBUajIIpHuvpZo"
+  },
+  {
+    "_id": "bSmOumTaiFsCx80iisMs",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787849425,
+      "nanoseconds": 134000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850044,
+      "nanoseconds": 394000000
+    },
+    "nationalId": "4702000995",
+    "iban": "",
+    "code": "",
+    "accountId": "JgE5GrR6D0WBmKRoxsBS",
+    "googleMapsUrl": "",
+    "bankName": "",
+    "category": "other",
+    "phone": "",
+    "address": "",
+    "accountCode": "2-1-1-1-1-23",
+    "notes": "",
+    "vatNumber": "31079697700003",
+    "balance": -0.5,
+    "name": "شركة ثلاجات الساحل للتجارة"
+  },
+  {
+    "_id": "cgr0XDvjx5sG3Kv9Nys1",
+    "address": "جدة",
+    "notes": "",
+    "code": "004",
+    "accountCode": "2-1-1-1-1-04",
+    "vatNumber": "310085644400003",
+    "nationalId": "4030370062",
+    "balance": 0,
+    "accountId": "O9wPqShaOUyQCZTUZpbA",
+    "phone": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789668034,
+      "nanoseconds": 935000000
+    },
+    "name": "الشامل بلاستيك",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785430319,
+      "nanoseconds": 812000000
+    }
+  },
+  {
+    "_id": "d6qw7i99llSzSgTsq8NO",
+    "vatNumber": "314485677800003",
+    "name": "شركة متاجر النجوم للتجارة",
+    "address": "",
+    "notes": "",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785430416,
+      "nanoseconds": 377000000
+    },
+    "code": "005",
+    "accountCode": "2-1-1-1-1-05",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785442327,
+      "nanoseconds": 874000000
+    },
+    "nationalId": "",
+    "balance": 5200.3,
+    "phone": "",
+    "accountId": "2IDy9DsZuOu47ZbAY5qU"
+  },
+  {
+    "_id": "gRFQtWbjOm4N84tSkTNs",
+    "vatNumber": "311127220300003",
+    "accountCode": "2-1-1-1-1-03",
+    "name": "شركة جيلانى باك التجارية",
+    "phone": "",
+    "address": "حى النخيل -جدة",
+    "accountId": "wyfUvQNhZZ9EpM25nySC",
+    "nationalId": "113287",
+    "code": "003",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785442976,
+      "nanoseconds": 932000000
+    },
+    "notes": "",
+    "balance": 78.1
+  },
+  {
+    "_id": "jKmmoYwYFdh7rCvbUujZ",
+    "address": "",
+    "bankName": "",
+    "category": "other",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789408413,
+      "nanoseconds": 181000000
+    },
+    "balance": 0.13,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789408478,
+      "nanoseconds": 635000000
+    },
+    "name": "مورد نقدى",
+    "accountId": "FLku01daetwEQcphWqDR",
+    "code": "",
+    "iban": "",
+    "phone": "",
+    "nationalId": "",
+    "googleMapsUrl": "",
+    "accountCode": "2-1-1-1-1-28",
+    "vatNumber": "",
+    "notes": ""
+  },
+  {
+    "_id": "pZEf7gzmCe6GccACJyoC",
+    "address": "",
+    "balance": 0.93,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788250419,
+      "nanoseconds": 519000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789548118,
+      "nanoseconds": 815000000
+    },
+    "accountCode": "2-1-1-1-1-26",
+    "name": "شركة بن خميس",
+    "accountId": "iX500M6f1ZvdYUxXbvPE",
+    "code": "012",
+    "iban": "",
+    "googleMapsUrl": "",
+    "bankName": "",
+    "notes": "",
+    "vatNumber": "310807391400003",
+    "category": "other",
+    "phone": "",
+    "nationalId": "1010644197"
+  },
+  {
+    "_id": "q1P6cNaULvwp6533OLaJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787821166,
+      "nanoseconds": 828000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787824373,
+      "nanoseconds": 2000000
+    },
+    "accountId": "fQzMOESqF2ZlNtkZCGTa",
+    "googleMapsUrl": "",
+    "code": "008",
+    "iban": "",
+    "category": "other",
+    "bankName": "",
+    "nationalId": "4650040966",
+    "phone": "",
+    "balance": -291.03,
+    "notes": "",
+    "name": "مؤسسة اغصان طيبه التجارية",
+    "vatNumber": "300505551200003",
+    "address": "الوبره - شارع خالد ابن القيس",
+    "accountCode": "2-1-1-1-1-19"
+  },
+  {
+    "_id": "t945IFUzWJeEHM8pMtZT",
+    "address": "",
+    "accountCode": "2-1-1-1-1-21",
+    "name": "شركة سناء الغذاء التجارية",
+    "balance": 255.3,
+    "vatNumber": "310972326400003",
+    "bankName": "",
+    "notes": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787849910,
+      "nanoseconds": 753000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787849278,
+      "nanoseconds": 462000000
+    },
+    "googleMapsUrl": "",
+    "accountId": "dO1TXIFWQ1OWPi0oQknB",
+    "category": "other",
+    "code": "",
+    "iban": "",
+    "nationalId": "",
+    "phone": ""
+  },
+  {
+    "_id": "x4ExkI9XaqWEO3ji7bLv",
+    "accountCode": "2-1-1-1-1-10",
+    "address": "حى الوادى - جده",
+    "nationalId": "4030306940",
+    "name": "شركة مجموعة با فرط للصناعة لانتاج المواد الغذائية",
+    "vatNumber": "300277675900003",
+    "balance": -452.53,
+    "accountId": "A01btx70gO2D3jjv1Ydl",
+    "phone": "",
+    "category": "other",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787396431,
+      "nanoseconds": 674000000
+    },
+    "code": "008",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787078021,
+      "nanoseconds": 867000000
+    },
+    "notes": ""
+  },
+  {
+    "_id": "xRzDD2xxX1c5zJOaJo8j",
+    "accountCode": "2-1-1-1-1-27",
+    "vatNumber": "300001538600003",
+    "nationalId": "4700009981",
+    "bankName": "",
+    "name": "الشركة العربية الماليزية لمنتجات الزيوت النباتية المحدوده",
+    "category": "sugar_oil",
+    "iban": "",
+    "code": "",
+    "address": "",
+    "phone": "",
+    "googleMapsUrl": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788795176,
+      "nanoseconds": 494000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788793499,
+      "nanoseconds": 675000000
+    },
+    "balance": 0.25,
+    "notes": "",
+    "accountId": "Htvhi4H42usmleZfYiJj"
+  },
+  {
+    "_id": "zei9SjBGhLZrVGcCrZNo",
+    "address": "المملكة العربية السعودية",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787143449,
+      "nanoseconds": 511000000
+    },
+    "accountCode": "2-1-1-1-1-11",
+    "name": "شركة ارنون للصناعات البلاستيكية المحدوده",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787136539,
+      "nanoseconds": 364000000
+    },
+    "accountId": "8A2WHaZeHSNsN2R9zDN6",
+    "balance": -354.2,
+    "phone": "",
+    "nationalId": "2050034821",
+    "category": "other",
+    "code": "300498609900003",
+    "vatNumber": "",
+    "notes": ""
+  }
+]

@@ -2,7 +2,7 @@
 // IDHAM ERP — HR & Payroll Module (شؤون الموظفين والرواتب المطور)
 // ============================================================
 import { COLS, create, update, remove, getAll, query, orderBy, createJournalEntry } from "../utils/db.js";
-import { formatCurrency, todayString } from "../utils/formatters.js";
+import { formatCurrency, todayString, tafqeetArabic } from "../utils/formatters.js";
 import { db, COMPANY_ID } from "../firebase-config.js";
 import { 
   collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, 
@@ -332,8 +332,8 @@ export async function render(container, user) {
 
     <!-- Payroll Sheet Modal -->
     <div class="modal-overlay" id="payroll-modal">
-      <div class="modal modal-xl" style="max-width:95vw;"><div class="modal-header"><h3 class="modal-title">إعداد مسير رواتب الموظفين والمناديب</h3><button class="modal-close" onclick="closeModal('payroll-modal')">×</button></div>
-      <div class="modal-body" style="padding:12px;">
+      <div class="modal modal-xl" style="max-width:96vw; width:1350px; max-height:92vh; display:flex; flex-direction:column;"><div class="modal-header"><h3 class="modal-title">إعداد مسير رواتب الموظفين والمناديب</h3><button class="modal-close" onclick="closeModal('payroll-modal')">×</button></div>
+      <div class="modal-body" style="padding:14px; flex:1; display:flex; flex-direction:column; overflow:hidden;">
         <div class="grid-3 gap-12 mb-12">
           <div class="form-group"><label>شهر الاستحقاق</label><input type="month" id="pr-month" class="input" value="${todayString().slice(0,7)}" onchange="onPayrollMonthChange()" /></div>
           <div class="form-group"><label>طريقة الدفع *</label>
@@ -355,30 +355,31 @@ export async function render(container, user) {
           </div>
         </div>
         <div class="alert info mb-12" style="font-size:11px; padding:6px 12px; margin:0 0 10px 0;">
-          سيقوم النظام بتوليد قيد يومية محاسبي مركب متكامل، وسندات صرف وتحديث أرصدة سلف الموظفين مباشرة بعد الاعتماد.
+          💡 يقرأ المسير تلقائياً من شجرة الحسابات ودفتر الأستاذ: سلف الشهر، المكافآت وعمولات المبيعات، ومستحقات كل موظف. الحضور مفترض 100% كاملاً تلقائياً.
         </div>
         
-        <div class="table-container" style="max-height:40vh; overflow-y:auto; border:1px solid var(--border-soft);">
-          <table class="data-dense" style="margin:0; font-size:11px;">
+        <div class="table-container" style="flex:1; max-height:55vh; overflow-y:auto; border:1px solid var(--border-soft); border-radius:8px;">
+          <table class="data-dense" style="margin:0; font-size:11.5px;">
             <thead>
-              <tr style="position:sticky; top:0; background:var(--bg-1); z-index:10;">
-                <th>الموظف</th>
+              <tr style="position:sticky; top:0; background:var(--bg-1); z-index:10; box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+                <th style="min-width:170px;">الموظف وحسابه</th>
                 <th>الأساسي</th>
                 <th>البدلات</th>
-                <th style="width:80px;">إضافي (+)</th>
-                <th style="width:80px;">مكافآت (+)</th>
-                <th style="width:80px;">غياب/خصم (-)</th>
-                <th style="width:80px;">تأمينات (-)</th>
-                <th>سلف قائمة</th>
-                <th style="width:90px;">سداد سلفة (-)</th>
-                <th>الصافي</th>
+                <th style="width:75px;">إضافي (+)</th>
+                <th style="min-width:130px;">مكافآت وحوافز (+)</th>
+                <th style="width:75px;">غياب/خصم (-)</th>
+                <th style="width:75px;">تأمينات (-)</th>
+                <th style="min-width:90px;">سلف قائمة</th>
+                <th style="width:85px;">سداد سلفة (-)</th>
+                <th style="min-width:90px;">الصافي المستحق</th>
+                <th style="width:85px; text-align:center;">معاينة/قسيمة</th>
               </tr>
             </thead>
             <tbody id="pr-tbody"></tbody>
           </table>
         </div>
-        <div class="flex items-center justify-between" style="margin-top:12px; padding:12px; background:var(--bg-2); border-radius:8px;">
-            <span style="font-size:14px; font-weight:bold;">إجمالي رواتب المسير:</span>
+        <div class="flex items-center justify-between" style="margin-top:12px; padding:10px 16px; background:var(--bg-2); border-radius:8px; border:1px solid var(--border-soft);">
+            <span style="font-size:14px; font-weight:bold;">إجمالي رواتب المسير المعتمدة:</span>
             <span id="pr-total" class="mono text-bad" style="font-size:18px; font-weight:bold;">0.00 ر.س</span>
         </div>
         <div id="pr-error" class="alert bad hidden" style="margin-top:10px; padding:8px;"></div>
@@ -461,13 +462,15 @@ window.switchHrTab = async (tab) => {
 
 // ── Loaders ──
 async function loadEmployeesData() {
-  employees = await getAll(COLS.employees(), [orderBy("name")]);
+  employees = await getAll(COLS.employees());
+  employees.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 }
 
 async function loadLoansData() {
   try {
     if (!employees || !employees.length) {
-      employees = await getAll(COLS.employees(), [orderBy("name")]);
+      employees = await getAll(COLS.employees());
+      employees.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
     }
 
     // Direct live fetch from Firestore to avoid browser local cache issues
@@ -610,7 +613,7 @@ function renderEmployeesTab(target) {
               <th>الجنسية</th>
               <th>اسم البنك / الآيبان</th>
               <th>الحالة</th>
-              <th style="width:100px;">إجراءات</th>
+              <th style="width:170px; text-align:center;">إجراءات وقسائم</th>
             </tr>
           </thead>
           <tbody>
@@ -645,8 +648,10 @@ function renderEmployeesTab(target) {
                   <small class="mono" style="color:var(--text-3); font-size:10px;">${e.iban || "—"}</small>
                 </td>
                 <td>${statusLabel}</td>
-                <td>
-                  <button class="btn btn-icon sm btn-ghost text-brand" onclick="openDetailedEmployeePayslipModal('${e.id}')" title="كشف حساب ومسير تفصيلي للموظف">📄</button>
+                <td style="white-space:nowrap; text-align:center;">
+                  <button class="btn btn-primary sm" style="padding:3px 9px; font-size:11px; margin-left:4px;" onclick="openDetailedEmployeePayslipModal('${e.id}')" title="عرض وطباعة قسيمة استلام الراتب وبراءة الذمة">
+                    📄 قسيمة راتب
+                  </button>
                   <button class="btn btn-icon sm btn-ghost" onclick="editEmp('${e.id}')" title="تعديل البيانات">✏️</button>
                   <button class="btn btn-icon sm btn-ghost text-bad" onclick="delEmp('${e.id}','${e.name}')" title="حذف الموظف">🗑️</button>
                 </td>
@@ -1070,45 +1075,11 @@ window.saveAttendanceLog = async () => {
   }
 };
 
-// ── On Month Change in Payroll modal, auto-inject attendance log if exists ──
+// ── On Month Change in Payroll modal, auto-inject attendance and live GL data ──
 window.onPayrollMonthChange = async () => {
-  const month = document.getElementById("pr-month").value;
+  const month = document.getElementById("pr-month")?.value;
   if (!month) return;
-
-  const docRef = doc(db, `companies/${COMPANY_ID}/employeeAttendance`, month);
-  const snap = await getDoc(docRef);
-
-  if (snap.exists()) {
-    const data = snap.data().items || [];
-    showToast(`📝 تم اكتشاف سجل حضور لشهر ${month} وتعبئة الحقول تلقائياً.`, "info");
-    
-    document.querySelectorAll(".pr-row").forEach(row => {
-      const empId = row.dataset.id;
-      const emp = employees.find(e => e.id === empId);
-      const att = data.find(x => x.empId === empId) || { absentDays: 0, overtimeHours: 0, lateMins: 0 };
-      
-      const absentInput   = row.querySelector(".pr-deduct");
-      const overtimeInput = row.querySelector(".pr-overtime");
-
-      // ── Calculations according to Saudi Labor Law ──
-      const basic = emp.salary || 0;
-      const hourlyRate = basic / 240;
-      const overtimePay = hourlyRate * (att.overtimeHours || 0) * 1.5;
-      const absenceDeduction = (basic / 30) * (att.absentDays || 0);
-      const lateDeduction = (att.lateMins || 0) * (hourlyRate / 60);
-
-      const totalDeductions = absenceDeduction + lateDeduction;
-
-      if (overtimeInput) {
-        overtimeInput.value = overtimePay.toFixed(2);
-      }
-      if (absentInput) {
-        absentInput.value = totalDeductions.toFixed(2);
-      }
-
-      calculateRowNet(empId, basic, emp.allowance || 0);
-    });
-  }
+  await window.openPayrollModal();
 };
 
 let currentLoanFilter = "all"; // all | active | paid
@@ -1268,7 +1239,7 @@ function renderPayrollTab(target) {
                 <td><small>${p.expenseAccName || "—"}</small></td>
                 <td><small style="color:var(--text-3);">${p.notes || "—"}</small></td>
                 <td>
-                  <button class="btn btn-secondary sm" onclick="viewPayrollDetails('${p.id}')">📂 عرض التفاصيل</button>
+                  <button class="btn btn-secondary sm" onclick="viewPayrollDetails('${p.id}')">📂 عرض الموظفين وقسائمهم</button>
                   <button class="btn btn-primary sm" onclick="printPayrollSheet('${p.id}')">🖨️ طباعة المسير</button>
                 </td>
               </tr>
@@ -2111,6 +2082,65 @@ window.saveEosSettlement = async () => {
   }
 };
 
+// ── Helper: Normalize Arabic Text ──
+function normalizeText(str) {
+  if (!str) return "";
+  return str.replace(/[أإآ]/g, "ا")
+            .replace(/[ى]/g, "ي")
+            .replace(/[ة]/g, "ه")
+            .replace(/[\/\-_]/g, " ")
+            .replace(/\s+/g, " ")
+            .trim()
+            .toLowerCase();
+}
+
+// ── Helper: Resolve Employee Specific Accounts in Chart of Accounts ──
+function resolveEmployeeAccounts(emp, accList) {
+  if (!emp || !accList || !accList.length) return { liabAcc: null, loanAcc: null, custodyAcc: null };
+  const norm = normalizeText(emp.name);
+  let liabAcc = null;
+  let loanAcc = null;
+  let custodyAcc = null;
+
+  if (norm.includes("ابراهيم")) {
+    liabAcc = accList.find(a => a.code === "2-1-5-6" || (a.code?.startsWith("2-1-5") && normalizeText(a.name).includes("ابراهيم")));
+    loanAcc = accList.find(a => a.code === "1-1-5-4-5" || (normalizeText(a.name).includes("ابراهيم") && (a.code?.startsWith("1-1-5") || a.code?.startsWith("1-1-3"))));
+  } else if (norm.includes("مصطفي") || norm.includes("الاسيوطي")) {
+    liabAcc = accList.find(a => a.code === "2-1-5-1" || (a.code?.startsWith("2-1-5") && (normalizeText(a.name).includes("مصطفي") || normalizeText(a.name).includes("الاسيوطي")) && a.type === "liability"));
+    loanAcc = accList.find(a => a.code === "2-1-5-3" || (a.code?.startsWith("1-1-5") && normalizeText(a.name).includes("مصطفي")));
+  } else if (norm.includes("عوض") || (norm.includes("محمد") && !norm.includes("محمود"))) {
+    liabAcc = accList.find(a => a.code === "2-1-5-2" || (a.code?.startsWith("2-1-5") && normalizeText(a.name).includes("محمد") && !norm.includes("محمود")));
+    loanAcc = accList.find(a => a.code === "1-1-5-4-7" || (a.code?.startsWith("1-1-5") && normalizeText(a.name).includes("محمد")));
+    custodyAcc = accList.find(a => a.code === "1-1-2-3-1" || (a.code?.startsWith("1-1-2-3") && normalizeText(a.name).includes("محمد")));
+  } else if (norm.includes("علي") || norm.includes("عبده")) {
+    liabAcc = accList.find(a => a.code === "2-1-5-4" || (a.code?.startsWith("2-1-5") && normalizeText(a.name).includes("علي")));
+    loanAcc = accList.find(a => a.code === "1-1-5-4-4" || (a.code?.startsWith("1-1-5") && normalizeText(a.name).includes("علي")));
+  } else if (norm.includes("السيد رضا") || (norm.includes("رضا") && !norm.includes("رياض"))) {
+    liabAcc = accList.find(a => a.code === "2-1-5-10" || (a.code?.startsWith("2-1-5") && normalizeText(a.name).includes("رضا")));
+    loanAcc = accList.find(a => a.code === "1-1-5-4-8" || (a.code?.startsWith("1-1-5") && normalizeText(a.name).includes("رضا")));
+    custodyAcc = accList.find(a => a.code === "1-1-2-3-2" || (a.code?.startsWith("1-1-2-3") && normalizeText(a.name).includes("رضا")));
+  } else if (norm.includes("احمد السيد") || norm.includes("احمد")) {
+    liabAcc = accList.find(a => a.code === "2-1-5-9" || (a.code?.startsWith("2-1-5") && normalizeText(a.name).includes("احمد")));
+    loanAcc = accList.find(a => a.code === "1-1-5-4-6" || (a.code?.startsWith("1-1-5") && normalizeText(a.name).includes("احمد")));
+  } else if (norm.includes("محمود")) {
+    liabAcc = accList.find(a => a.code === "2-1-5-8" || (a.code?.startsWith("2-1-5") && normalizeText(a.name).includes("محمود")));
+  } else if (norm.includes("عبد الرحمن")) {
+    liabAcc = accList.find(a => a.code === "2-1-5-7" || (a.code?.startsWith("2-1-5") && normalizeText(a.name).includes("عبد الرحمن")));
+  } else if (norm.includes("ناجي") || norm.includes("عاطف")) {
+    liabAcc = accList.find(a => a.code === "2-1-5-5" || (a.code?.startsWith("2-1-5") && normalizeText(a.name).includes("ناجي")));
+  }
+
+  // Fallbacks
+  if (!liabAcc && emp.accountId) liabAcc = accList.find(a => a.id === emp.accountId);
+  if (!liabAcc && emp.accountCode) liabAcc = accList.find(a => a.code === emp.accountCode);
+  if (!liabAcc) {
+    const tokens = norm.split(" ").filter(t => t.length >= 3);
+    liabAcc = accList.find(a => a.code?.startsWith("2-1-5") && a.type === "liability" && tokens.some(t => normalizeText(a.name).includes(t)));
+  }
+
+  return { liabAcc, loanAcc, custodyAcc };
+}
+
 window.calculateGrandTotal = () => {
   let totalNet = 0;
   document.querySelectorAll(".pr-row").forEach(row => {
@@ -2128,7 +2158,7 @@ window.calculateGrandTotal = () => {
   }
 };
 
-// ── Payroll modal UI & Logic ──
+// ── Payroll modal UI & Logic (Automatic CoA & GL Integration) ──
 window.openPayrollModal = async () => {
   try {
     if (!employees || !employees.length) {
@@ -2144,9 +2174,16 @@ window.openPayrollModal = async () => {
       bankAccounts = await getAll(COLS.bankAccounts());
     }
     if (!employeeLoans || !employeeLoans.length) {
-      const snap = await getDocs(COLS.employeeLoans());
-      employeeLoans = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      try {
+        const snap = await getDocs(COLS.employeeLoans());
+        employeeLoans = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      } catch(e) {}
     }
+
+    let allJournalEntries = [];
+    try {
+      allJournalEntries = await getAll(COLS.journalEntries());
+    } catch(e) {}
 
     const activeEmps = employees.filter(e => e.status === "active");
     if (!activeEmps.length) { showToast("لا يوجد موظفون نشطون لإصدار رواتب لهم", "warning"); return; }
@@ -2160,13 +2197,20 @@ window.openPayrollModal = async () => {
     document.getElementById("pr-allowance-acc").innerHTML = '<option value="">اختر...</option>' + 
       expAccs.map(a => `<option value="${a.id}">${a.code} - ${a.name}</option>`).join("");
 
-    const basicAcc = allAccounts.find(a => a.code === "5-2-2") || allAccounts.find(a => a.code.startsWith("5-2"));
-    const allowAcc = allAccounts.find(a => a.code === "5-2-5-1") || allAccounts.find(a => a.code === "5-2-5");
+    // Smart default expense accounts mapping (5-2-1 for salaries, 5-2-2 / 5-2-5 for allowances)
+    const basicAcc = allAccounts.find(a => a.code === "5-2-1" || a.code === "5-2-1-1") ||
+                     allAccounts.find(a => a.code?.startsWith("5-2-1")) ||
+                     allAccounts.find(a => a.name?.includes("رواتب") && a.type === "expense") ||
+                     allAccounts.find(a => a.code?.startsWith("5-2"));
+    const allowAcc = allAccounts.find(a => a.code === "5-2-2" || a.code === "5-2-5" || a.code === "5-2-5-1") ||
+                     allAccounts.find(a => (a.code?.startsWith("5-2-2") || a.code?.startsWith("5-2-5")) && a.type === "expense") ||
+                     allAccounts.find(a => a.name?.includes("بدلات") && a.type === "expense");
     if (basicAcc) document.getElementById("pr-expense-acc").value = basicAcc.id;
     if (allowAcc) document.getElementById("pr-allowance-acc").value = allowAcc.id;
 
-    // Calculate representatives commission dynamically for selected month
     const selectedMonth = document.getElementById("pr-month")?.value || new Date().toISOString().slice(0, 7);
+    
+    // Calculate representatives commission dynamically for selected month
     const commByEmployeeId = {};
     try {
       const [reps, receipts, invoices] = await Promise.all([
@@ -2185,7 +2229,6 @@ window.openPayrollModal = async () => {
           }
         });
         
-        // Calculate representative sales for target check
         let repSales = 0;
         monthlyInvoices.forEach(inv => {
           if (inv.repId === rep.id) {
@@ -2210,52 +2253,114 @@ window.openPayrollModal = async () => {
     let grandTotal = 0;
 
     tbody.innerHTML = activeEmps.map(e => {
-      const outstandingLoans = employeeLoans.filter(l => 
+      const { liabAcc, loanAcc } = resolveEmployeeAccounts(e, allAccounts);
+      const basic = parseFloat(e.salary || 0);
+      const allowance = parseFloat(e.allowance || 0);
+      const repComm = commByEmployeeId[e.id] || 0;
+      const empTokens = normalizeText(e.name).split(" ").filter(t => t.length >= 3);
+
+      // Parse GL / Journal Entries for this specific employee
+      let monthAdvancesTaken = 0;
+      let monthBonuses = 0;
+      let historicalUnsettledBalance = 0;
+
+      for (const je of allJournalEntries) {
+        const jeDate = je.date || "";
+        const isSelectedMonth = jeDate.startsWith(selectedMonth);
+        const isBeforeOrInMonth = jeDate <= `${selectedMonth}-31`;
+        const jeDesc = normalizeText(je.description || "");
+
+        const isPayrollSettlement = jeDesc.includes("اقفال سلف") || jeDesc.includes("اقفال السلف") || 
+                                    jeDesc.includes("صرف راتب") || jeDesc.includes("صرف رواتب") ||
+                                    jeDesc.includes("تصفية مستحقات") || jeDesc.includes("قيد اثبات مستحقات") ||
+                                    jeDesc.includes("قيد رواتب");
+
+        for (const line of (je.lines || [])) {
+          const accId = line.accountId;
+          const accCode = line.accountCode || "";
+          const dr = parseFloat(line.debit || 0) || 0;
+          const cr = parseFloat(line.credit || 0) || 0;
+          const lineDesc = normalizeText(line.desc || "");
+
+          // 1. Advance / Loan Account
+          if (loanAcc && (accId === loanAcc.id || accCode === loanAcc.code)) {
+            if (isSelectedMonth && dr > 0 && !isPayrollSettlement) {
+              monthAdvancesTaken += dr;
+            }
+            if (isBeforeOrInMonth && !isPayrollSettlement) {
+              historicalUnsettledBalance += (dr - cr);
+            }
+          }
+
+          // 2. Direct advance debit on liability account
+          if (liabAcc && (accId === liabAcc.id || accCode === liabAcc.code)) {
+            if (isSelectedMonth && dr > 0 && (jeDesc.includes("سلف") || jeDesc.includes("سلفة") || jeDesc.includes("مخالف")) && !isPayrollSettlement) {
+              monthAdvancesTaken += dr;
+            }
+          }
+
+          // 3. Bonuses / Incentives from 5-2-7
+          if (isSelectedMonth && accCode.startsWith("5-2-7") && dr > 0) {
+            if (empTokens.some(t => jeDesc.includes(t) || lineDesc.includes(t)) || (liabAcc && accId === liabAcc.id)) {
+              monthBonuses += dr;
+            }
+          }
+        }
+      }
+
+      // Legacy loans from HR section
+      const legacyLoans = (employeeLoans || []).filter(l => 
         (l.remainingBalance || 0) > 0 && 
         (l.empId === e.id || (l.empName && e.name && (l.empName.includes(e.name) || e.name.includes(l.empName))))
       );
-      const totalLoanBalance = outstandingLoans.reduce((sum, l) => sum + (l.remainingBalance || 0), 0);
+      const legacyLoanBal = legacyLoans.reduce((sum, l) => sum + (l.remainingBalance || 0), 0);
 
-      const basic = e.salary || 0;
-      const allowance = e.allowance || 0;
-      
-      // Auto-fill calculated rep commission if exists
-      const repComm = commByEmployeeId[e.id] || 0;
-      const gross = basic + allowance + repComm;
-      grandTotal += gross;
+      const totalLoanBalance = Math.max(monthAdvancesTaken, historicalUnsettledBalance, legacyLoanBal);
+      const effectiveBonus = repComm > 0 ? repComm : monthBonuses;
+      const gross = basic + allowance + effectiveBonus;
 
-      const suggestedRepay = totalLoanBalance > 0 ? Math.min(totalLoanBalance, (basic + allowance) * 0.25) : 0;
+      // Suggested repayment: exactly matches the month's taken advances (or up to gross)
+      const suggestedRepay = monthAdvancesTaken > 0 ? Math.min(monthAdvancesTaken, basic + allowance) : (totalLoanBalance > 0 ? Math.min(totalLoanBalance, (basic + allowance) * 0.25) : 0);
 
-      // ── Native Saudi GOSI auto calculations ──
-      let empGosi = 0;
-      if (e.nationality === "saudi") {
-        empGosi = (basic + allowance) * 0.0975; // Saudi employee GOSI share: 9.75%
-      } else {
-        empGosi = 0; // Resident/Foreigner employee share: 0%
-      }
+      // Saudi GOSI (9.75% for Saudi, 0 for Non-Saudi)
+      const empGosi = e.nationality === "saudi" ? (basic + allowance) * 0.0975 : 0;
+      const net = Math.max(0, gross - empGosi - suggestedRepay);
+      grandTotal += net;
+
+      const liabBadge = liabAcc ? `<span class="badge" style="font-size:9.5px; background:rgba(37,99,235,0.1); color:#1d4ed8; border:1px solid rgba(37,99,235,0.25); margin-right:4px;" title="حساب المستحقات: ${liabAcc.name}">${liabAcc.code}</span>` : '';
+      const loanBadge = loanAcc ? `<span class="badge" style="font-size:9.5px; background:rgba(220,38,38,0.1); color:#b91c1c; border:1px solid rgba(220,38,38,0.25); margin-right:4px;" title="حساب السلف: ${loanAcc.name}">${loanAcc.code}</span>` : '';
 
       return `
-        <tr class="pr-row" data-id="${e.id}" data-nationality="${e.nationality || 'saudi'}">
-          <td><strong>${e.name}</strong><br><small style="color:var(--text-3);">${e.job || ""}</small></td>
-          <td class="mono">${formatCurrency(basic)}</td>
+        <tr class="pr-row" data-id="${e.id}" data-nationality="${e.nationality || 'saudi'}" data-liab-acc="${liabAcc?.id || ''}" data-loan-acc="${loanAcc?.id || ''}">
+          <td style="white-space:nowrap;">
+            <strong>${e.name}</strong> ${liabBadge} ${loanBadge}<br>
+            <small style="color:var(--text-3);">${e.job || "موظف"}</small>
+          </td>
+          <td class="mono font-bold">${formatCurrency(basic)}</td>
           <td class="mono">${formatCurrency(allowance)}</td>
           <td>
             <input type="number" class="input mono pr-overtime" value="0" min="0" step="0.01" style="height:28px; padding:2px; font-size:11px;" onchange="calculateRowNet('${e.id}', ${basic}, ${allowance})" />
           </td>
           <td>
-            <input type="number" class="input mono pr-bonus" value="${repComm.toFixed(2)}" min="0" step="0.01" style="height:28px; padding:2px; font-size:11px;" onchange="calculateRowNet('${e.id}', ${basic}, ${allowance})" />
+            <div style="display:flex; flex-direction:column; gap:2px;">
+              <input type="number" class="input mono pr-bonus" value="${effectiveBonus.toFixed(2)}" min="0" step="0.01" style="height:26px; padding:2px; font-size:11px;" onchange="calculateRowNet('${e.id}', ${basic}, ${allowance})" title="${repComm > 0 ? 'عمولة مبيعات مناديب' : 'مكافآت وحوافز'}" placeholder="0.00" />
+              <input type="text" class="input pr-bonus-desc" value="${repComm > 0 ? 'عمولة مبيعات شهر ' + selectedMonth : ''}" placeholder="بيان المكافأة..." style="height:20px; padding:1px 4px; font-size:9.5px; color:var(--text-1);" title="بيان المكافأة ليظهر تفصيلياً في كشف حساب المستحقات" />
+            </div>
           </td>
           <td>
-            <input type="number" class="input mono pr-deduct" value="0" min="0" step="0.01" style="height:28px; padding:2px; font-size:11px;" onchange="calculateRowNet('${e.id}', ${basic}, ${allowance})" />
+            <input type="number" class="input mono pr-deduct" value="0" min="0" step="0.01" style="height:28px; padding:2px; font-size:11px;" onchange="calculateRowNet('${e.id}', ${basic}, ${allowance})" title="حاضر الشهر بالكامل افتراضياً (0 خصم)" />
           </td>
           <td>
             <input type="number" class="input mono pr-gosi" value="${empGosi.toFixed(2)}" min="0" step="0.01" style="height:28px; padding:2px; font-size:11px;" onchange="calculateRowNet('${e.id}', ${basic}, ${allowance})" />
           </td>
-          <td class="mono text-bad font-bold" id="loan-bal-${e.id}">${formatCurrency(totalLoanBalance)}</td>
+          <td class="mono text-bad font-bold" id="loan-bal-${e.id}" title="سلف الشهر القائمة من دفتر الأستاذ">${formatCurrency(totalLoanBalance)}</td>
           <td>
-            <input type="number" class="input mono pr-repay" id="repay-input-${e.id}" data-max="${totalLoanBalance}" value="${suggestedRepay.toFixed(2)}" min="0" max="${totalLoanBalance}" step="0.01" style="height:28px; padding:2px; font-size:11px;" ${totalLoanBalance<=0?'disabled':''} onchange="calculateRowNet('${e.id}', ${basic}, ${allowance})" />
+            <input type="number" class="input mono pr-repay" id="repay-input-${e.id}" data-max="${totalLoanBalance}" value="${suggestedRepay.toFixed(2)}" min="0" max="${Math.max(totalLoanBalance, (basic+allowance))}" step="0.01" style="height:28px; padding:2px; font-size:11px;" onchange="calculateRowNet('${e.id}', ${basic}, ${allowance})" />
           </td>
-          <td class="mono font-bold text-ok" id="net-${e.id}">${formatCurrency(gross - empGosi - suggestedRepay)}</td>
+          <td class="mono font-bold text-ok" id="net-${e.id}" style="font-size:12px;">${formatCurrency(net)}</td>
+          <td style="text-align:center;">
+            <button type="button" class="btn btn-secondary sm" style="padding:2px 8px; font-size:10.5px;" onclick="window.printRowPayslip('${e.id}')" title="معاينة وطباعة قسيمة استلام الراتب للموظف">🖨️ قسيمة</button>
+          </td>
         </tr>
       `;
     }).join("");
@@ -2271,6 +2376,24 @@ window.openPayrollModal = async () => {
   }
 };
 
+window.printRowPayslip = (empId) => {
+  const row = document.querySelector(`.pr-row[data-id="${empId}"]`);
+  if (!row) return;
+  const emp = employees.find(e => e.id === empId);
+  const basic = emp?.salary || 0;
+  const allowance = emp?.allowance || 0;
+  const overtime = parseFloat(row.querySelector(".pr-overtime")?.value) || 0;
+  const bonus = parseFloat(row.querySelector(".pr-bonus")?.value) || 0;
+  const bonusDesc = row.querySelector(".pr-bonus-desc")?.value?.trim() || "";
+  const deduct = parseFloat(row.querySelector(".pr-deduct")?.value) || 0;
+  const gosi = parseFloat(row.querySelector(".pr-gosi")?.value) || 0;
+  const repay = parseFloat(row.querySelector(".pr-repay")?.value) || 0;
+  const net = Math.max(0, (basic + allowance + overtime + bonus) - (deduct + gosi + repay));
+  const month = document.getElementById("pr-month")?.value || todayString().slice(0, 7);
+
+  window.printEmployeePayslip(empId, basic, allowance, overtime, bonus, deduct, gosi, repay, net, month, bonusDesc);
+};
+
 window.calculateRowNet = (empId, basic, allowance) => {
   const row = document.querySelector(`.pr-row[data-id="${empId}"]`);
   if (!row) return;
@@ -2283,13 +2406,13 @@ window.calculateRowNet = (empId, basic, allowance) => {
   const maxRepay = parseFloat(repayInput.dataset.max) || 0;
   let repay = parseFloat(repayInput.value) || 0;
 
-  if (repay > maxRepay) {
+  if (repay > maxRepay && maxRepay > 0) {
     repay = maxRepay;
     repayInput.value = maxRepay;
   }
 
   const gross = basic + allowance + overtime + bonus;
-  const net = gross - (deduct + gosi + repay);
+  const net = Math.max(0, gross - (deduct + gosi + repay));
 
   document.getElementById(`net-${empId}`).textContent = formatCurrency(net);
   calculateGrandTotal();
@@ -2335,19 +2458,20 @@ window.submitPayroll = async () => {
       const allowance = emp.allowance || 0;
       const overtime = parseFloat(row.querySelector(".pr-overtime").value) || 0;
       const bonus = parseFloat(row.querySelector(".pr-bonus").value) || 0;
+      const bonusDesc = row.querySelector(".pr-bonus-desc")?.value?.trim() || "";
       const deduct = parseFloat(row.querySelector(".pr-deduct").value) || 0;
       const gosi = parseFloat(row.querySelector(".pr-gosi").value) || 0;
       const repay = parseFloat(row.querySelector(".pr-repay").value) || 0;
 
-      const net = (basic + allowance + overtime + bonus) - (deduct + gosi + repay);
+      const net = Math.max(0, (basic + allowance + overtime + bonus) - (deduct + gosi + repay));
 
-      // ── Saudi GOSI Employer Share Auto Calculations ──
+      // Saudi GOSI Employer Share Auto Calculations
       const gross = basic + allowance;
       let employerGosi = 0;
       if (emp.nationality === "saudi") {
         employerGosi = gross * 0.1175; // Saudi employer GOSI share: 11.75%
       } else {
-        employerGosi = gross * 0.02; // Foreigner employer GOSI share (Occupational Hazard): 2.0%
+        employerGosi = gross * 0.02; // Foreigner employer GOSI share: 2.0%
       }
 
       grandNet += net;
@@ -2355,7 +2479,6 @@ window.submitPayroll = async () => {
       grandAllowances += allowance;
       grandOvertime += overtime;
       
-      // Separate standard bonuses from rep sales commissions
       const isRep = reps.some(r => r.employeeId === empId || r.name.includes(emp.name) || emp.name.includes(r.name));
       if (isRep) {
         grandCommissions += bonus;
@@ -2374,6 +2497,7 @@ window.submitPayroll = async () => {
         allowance,
         overtime,
         bonus,
+        bonusDesc,
         deduct,
         gosi,
         repay,
@@ -2403,38 +2527,43 @@ window.submitPayroll = async () => {
       }
     }
 
-    if (grandNet <= 0) throw new Error("لا توجد مبالغ صافية للصرف في هذا المسير");
+    if (grandNet <= 0 && grandTotalLoanDeductions <= 0) throw new Error("لا توجد مبالغ في هذا المسير");
 
     // Retrieve accounts for the compound ledger entry
-    const basicExpenseAcc = allAccounts.find(a => a.id === expAccId);
-    const allowancesExpenseAcc = allAccounts.find(a => a.id === allowAccId);
+    const basicExpenseAcc = allAccounts.find(a => a.id === expAccId) || { id: "EXP_SAL", code: "5-2-1", name: "رواتب وأجور" };
+    const allowancesExpenseAcc = allAccounts.find(a => a.id === allowAccId) || { id: "EXP_ALLOW", code: "5-2-5", name: "بدلات الموظفين" };
     const commExpenseAcc = allAccounts.find(a => a.code === "5-2-7") || { id: "REP_COMMISSIONS", code: "5-2-7", name: "مصروف عمولات المناديب" };
-    const bonusExpenseAcc = allAccounts.find(a => a.code === "5-2-5-1") || { id: "PR_BONUSES", code: "5-2-5-1", name: "مصروف حوافز ومكافآت الموظفين" };
-    const loanAssetAcc = allAccounts.find(a => a.code === "1-1-5-4-1") || { id: "EMP_ADVANCES", code: "1-1-5-4-1", name: "سلف موظفين" };
-    const gosiAccruedAcc = allAccounts.find(a => a.code === "2-1-5-1") || { id: "GOSI_LIABILITY", code: "2-1-5-1", name: "التأمينات الاجتماعية المستحقة" };
-    const gosiExpenseAcc = allAccounts.find(a => a.code === "5-2-6") || { id: "GOSI_EXPENSE", code: "5-2-6", name: "التأمينات الاجتماعية — حصة صاحب العمل" };
+    const bonusExpenseAcc = allAccounts.find(a => a.code === "5-2-5-1" || a.code === "5-2-7") || { id: "PR_BONUSES", code: "5-2-7", name: "مصروف حوافز ومكافآت الموظفين" };
+    const loanAssetAcc = allAccounts.find(a => a.code === "1-1-5-4") || { id: "EMP_ADVANCES", code: "1-1-5-4", name: "سلف للموظفين والمناديب" };
+    const gosiAccruedAcc = allAccounts.find(a => a.code === "2-1-3" || a.code === "2-1-4") || { id: "GOSI_LIABILITY", code: "2-1-3", name: "التأمينات الاجتماعية المستحقة" };
+    const gosiExpenseAcc = allAccounts.find(a => a.code === "5-7" || a.code === "5-2-6") || { id: "GOSI_EXPENSE", code: "5-7", name: "التأمينات الاجتماعية — حصة صاحب العمل" };
 
     // ── 1. Accrual Journal Entry (قيد استحقاق الرواتب والالتزامات) ──
-    const accrualLines = [
-      // Debit: Basic Salaries & Wages Expense
-      { 
+    const accrualLines = [];
+
+    // Debit: Basic Salaries & Wages Expense
+    if (grandBasic + grandOvertime > 0) {
+      accrualLines.push({ 
         accountId: expAccId, 
-        accountCode: basicExpenseAcc?.code || "", 
-        accountName: basicExpenseAcc?.name || "", 
+        accountCode: basicExpenseAcc?.code || "5-2-1", 
+        accountName: basicExpenseAcc?.name || "رواتب وأجور", 
         debit: grandBasic + grandOvertime, 
         credit: 0, 
         note: `مصروف الرواتب الأساسية والإضافي لشهر ${month}` 
-      },
-      // Debit: Allowances Expense
-      { 
+      });
+    }
+
+    // Debit: Allowances Expense
+    if (grandAllowances > 0) {
+      accrualLines.push({ 
         accountId: allowAccId, 
-        accountCode: allowancesExpenseAcc?.code || "", 
-        accountName: allowancesExpenseAcc?.name || "", 
+        accountCode: allowancesExpenseAcc?.code || "5-2-5", 
+        accountName: allowancesExpenseAcc?.name || "بدلات", 
         debit: grandAllowances, 
         credit: 0, 
         note: `مصروف بدلات الموظفين لشهر ${month}` 
-      }
-    ];
+      });
+    }
 
     if (grandCommissions > 0) {
       accrualLines.push({
@@ -2472,86 +2601,172 @@ window.submitPayroll = async () => {
     // Credit: Individual Accrued Salary accounts for each employee
     for (const it of items) {
       const emp = employees.find(e => e.id === it.empId);
-      let empAccId = emp?.accountId;
-      let empAccCode = emp?.accountCode || "";
-      let empAccName = emp ? `رواتب مستحقة - ${emp.name}` : "";
+      const { liabAcc } = resolveEmployeeAccounts(emp, allAccounts);
+      let empAccId = liabAcc?.id || emp?.accountId;
+      let empAccCode = liabAcc?.code || emp?.accountCode || "";
+      let empAccName = liabAcc?.name || (emp ? `مستحقات الموظف ${emp.name}` : "");
       if (!empAccId) {
-        const generalLiab = allAccounts.find(a => a.code === "2-1-5-2") || { id: "ACCRUED_SALARIES", code: "2-1-5-2", name: "رواتب ومستحقات الموظفين المستحقة" };
+        const generalLiab = allAccounts.find(a => a.code === "2-1-5") || { id: "ACCRUED_SALARIES", code: "2-1-5", name: "مستحقات الموظفين والمناديب" };
         empAccId = generalLiab.id;
         empAccCode = generalLiab.code;
         empAccName = generalLiab.name;
       }
-      accrualLines.push({
-        accountId: empAccId,
-        accountCode: empAccCode,
-        accountName: empAccName,
-        debit: 0,
-        credit: it.net,
-        note: `استحقاق صافي راتب الموظف ${it.empName} لشهر ${month}`
-      });
+
+      // 1. Credit: Basic Salary + Allowances + Overtime
+      const salEarn = (it.basic || 0) + (it.allowance || 0) + (it.overtime || 0);
+      if (salEarn > 0) {
+        accrualLines.push({
+          accountId: empAccId,
+          accountCode: empAccCode,
+          accountName: empAccName,
+          debit: 0,
+          credit: salEarn,
+          note: `استحقاق راتب وبدلات شهر ${month} للموظف ${it.empName}`
+        });
+      }
+
+      // 2. Credit: Bonuses / Incentives with distinct note (ليظهر ببيانه المستقل في كشف حساب المستحقات)
+      if (it.bonus > 0) {
+        const bNote = it.bonusDesc ? `${it.bonusDesc} — ${it.empName}` : `إثبات مكافآت وحوافز شهر ${month} للموظف ${it.empName}`;
+        accrualLines.push({
+          accountId: empAccId,
+          accountCode: empAccCode,
+          accountName: empAccName,
+          debit: 0,
+          credit: it.bonus,
+          note: bNote
+        });
+      }
     }
 
-    // Credit: Employee Advances (Asset reduction)
-    if (grandTotalLoanDeductions > 0) {
-      accrualLines.push({
-        accountId: loanAssetAcc.id,
-        accountCode: loanAssetAcc.code,
-        accountName: loanAssetAcc.name,
-        debit: 0,
-        credit: grandTotalLoanDeductions,
-        note: `استرداد سلف موظفين مستقطعة من الرواتب شهر ${month}`
-      });
-    }
-
-    // Credit: Accrued GOSI (Employee deductions + Employer Share)
-    const totalGosiCredit = grandTotalGosiDeductions + grandTotalGosiEmployerShare;
-    if (totalGosiCredit > 0) {
+    // Credit: Accrued GOSI (Employer Share)
+    if (grandTotalGosiEmployerShare > 0) {
       accrualLines.push({
         accountId: gosiAccruedAcc.id,
         accountCode: gosiAccruedAcc.code,
         accountName: gosiAccruedAcc.name,
         debit: 0,
-        credit: totalGosiCredit,
-        note: `التأمينات الاجتماعية المستحقة (خصم الموظفين + حصة الشركة) لشهر ${month}`
+        credit: grandTotalGosiEmployerShare,
+        note: `التأمينات الاجتماعية المستحقة (حصة الشركة) لشهر ${month}`
       });
     }
 
     const jeAccNo = `JE-PR-ACC-${month.replace("-", "")}`;
     await createJournalEntry({
       date: todayString(),
-      description: `قيد استحقاق رواتب وعمولات الموظفين والمناديب لشهر ${month}`,
+      description: `قيد استحقاق رواتب ومكافآت الموظفين والمناديب لشهر ${month}`,
       sourceType: "payroll_accrual",
       sourceId: month,
       lines: accrualLines,
       entryNumber: jeAccNo
     });
 
-    // ── 2. Payment Journal Entry (قيد صرف وتسوية الرواتب) ──
+    // ── 2. Payment & Settlement Journal Entry (قيد صرف الرواتب وتسوية وإقفال السلف في المستحقات) ──
     const paymentLines = [];
-    
-    // Debit: Individual Accrued Salary accounts (settling the liability)
+
+    // A. Debit: Employee dues for loan repayments & Credit: Loan Accounts (إقفال سلفة الموظف في المستحقات)
+    for (const it of items) {
+      if (it.repay > 0) {
+        const emp = employees.find(e => e.id === it.empId);
+        const { liabAcc, loanAcc } = resolveEmployeeAccounts(emp, allAccounts);
+        let empAccId = liabAcc?.id || emp?.accountId;
+        let empAccCode = liabAcc?.code || emp?.accountCode || "";
+        let empAccName = liabAcc?.name || (emp ? `مستحقات الموظف ${emp.name}` : "");
+        if (!empAccId) {
+          const generalLiab = allAccounts.find(a => a.code === "2-1-5") || { id: "ACCRUED_SALARIES", code: "2-1-5", name: "مستحقات الموظفين والمناديب" };
+          empAccId = generalLiab.id;
+          empAccCode = generalLiab.code;
+          empAccName = generalLiab.name;
+        }
+
+        // Debit: Employee dues account
+        paymentLines.push({
+          accountId: empAccId,
+          accountCode: empAccCode,
+          accountName: empAccName,
+          debit: it.repay,
+          credit: 0,
+          note: `إقفال سلفة الموظف ${it.empName} فى المستحقات عن شهر ${month}`
+        });
+
+        // Credit: Employee loan account (clearing advance balance)
+        const lId = loanAcc?.id || loanAssetAcc.id;
+        const lCode = loanAcc?.code || loanAssetAcc.code;
+        const lName = loanAcc?.name || loanAssetAcc.name;
+        paymentLines.push({
+          accountId: lId,
+          accountCode: lCode,
+          accountName: lName,
+          debit: 0,
+          credit: it.repay,
+          note: `إقفال سلفة الموظف ${it.empName} فى المستحقات عن شهر ${month}`
+        });
+      }
+    }
+
+    // B. Debit: Employee dues for Net Salary Disbursed
+    for (const it of items) {
+      if (it.net > 0) {
+        const emp = employees.find(e => e.id === it.empId);
+        const { liabAcc } = resolveEmployeeAccounts(emp, allAccounts);
+        let empAccId = liabAcc?.id || emp?.accountId;
+        let empAccCode = liabAcc?.code || emp?.accountCode || "";
+        let empAccName = liabAcc?.name || (emp ? `مستحقات الموظف ${emp.name}` : "");
+        if (!empAccId) {
+          const generalLiab = allAccounts.find(a => a.code === "2-1-5") || { id: "ACCRUED_SALARIES", code: "2-1-5", name: "مستحقات الموظفين والمناديب" };
+          empAccId = generalLiab.id;
+          empAccCode = generalLiab.code;
+          empAccName = generalLiab.name;
+        }
+        paymentLines.push({
+          accountId: empAccId,
+          accountCode: empAccCode,
+          accountName: empAccName,
+          debit: it.net,
+          credit: 0,
+          note: `صرف صافي راتب ومستحقات شهر ${month} للموظف ${it.empName}`
+        });
+      }
+    }
+
+    // C. Debit: Employee dues for GOSI & Other Deductions
     for (const it of items) {
       const emp = employees.find(e => e.id === it.empId);
-      let empAccId = emp?.accountId;
-      let empAccCode = emp?.accountCode || "";
-      let empAccName = emp ? `رواتب مستحقة - ${emp.name}` : "";
+      const { liabAcc } = resolveEmployeeAccounts(emp, allAccounts);
+      let empAccId = liabAcc?.id || emp?.accountId;
+      let empAccCode = liabAcc?.code || emp?.accountCode || "";
+      let empAccName = liabAcc?.name || (emp ? `مستحقات الموظف ${emp.name}` : "");
       if (!empAccId) {
-        const generalLiab = allAccounts.find(a => a.code === "2-1-5-2") || { id: "ACCRUED_SALARIES", code: "2-1-5-2", name: "رواتب ومستحقات الموظفين المستحقة" };
+        const generalLiab = allAccounts.find(a => a.code === "2-1-5") || { id: "ACCRUED_SALARIES", code: "2-1-5", name: "مستحقات الموظفين والمناديب" };
         empAccId = generalLiab.id;
         empAccCode = generalLiab.code;
         empAccName = generalLiab.name;
       }
-      paymentLines.push({
-        accountId: empAccId,
-        accountCode: empAccCode,
-        accountName: empAccName,
-        debit: it.net,
-        credit: 0,
-        note: `تسوية وصرف صافي راتب الموظف ${it.empName} لشهر ${month}`
-      });
+
+      if (it.gosi > 0) {
+        paymentLines.push({
+          accountId: empAccId,
+          accountCode: empAccCode,
+          accountName: empAccName,
+          debit: it.gosi,
+          credit: 0,
+          note: `خصم حصة التأمينات الاجتماعية من راتب ${it.empName} شهر ${month}`
+        });
+      }
+
+      if (it.deduct > 0) {
+        paymentLines.push({
+          accountId: empAccId,
+          accountCode: empAccCode,
+          accountName: empAccName,
+          debit: it.deduct,
+          credit: 0,
+          note: `خصومات وغياب شهر ${month} للموظف ${it.empName}`
+        });
+      }
     }
 
-    // Credit: Paid Cash or Bank
+    // D. Credit: Paid Cash or Bank
     let creditAccId = "";
     let creditAccCode = "";
     let creditAccName = "";
@@ -2572,24 +2787,65 @@ window.submitPayroll = async () => {
     }
     const creditAccountObj = allAccounts.find(a => a.id === creditAccId);
 
-    paymentLines.push({
-      accountId: creditAccId,
-      accountCode: creditAccountObj?.code || "",
-      accountName: creditAccountObj?.name || "",
-      debit: 0,
-      credit: grandNet,
-      note: `دفع وصرف مسير رواتب شهر ${month} من حساب ${creditAccName}`
-    });
+    if (grandNet > 0) {
+      paymentLines.push({
+        accountId: creditAccId,
+        accountCode: creditAccountObj?.code || "",
+        accountName: creditAccountObj?.name || "",
+        debit: 0,
+        credit: grandNet,
+        note: `دفع وصرف مسير رواتب شهر ${month} من حساب ${creditAccName}`
+      });
+    }
 
-    const jePayNo = `JE-PR-PAY-${month.replace("-", "")}`;
-    await createJournalEntry({
-      date: todayString(),
-      description: `قيد صرف وتسوية مسير رواتب شهر ${month}`,
-      sourceType: "payroll_payment",
-      sourceId: month,
-      lines: paymentLines,
-      entryNumber: jePayNo
-    });
+    // E. Credit: Accrued GOSI (Employee deductions)
+    if (grandTotalGosiDeductions > 0) {
+      paymentLines.push({
+        accountId: gosiAccruedAcc.id,
+        accountCode: gosiAccruedAcc.code,
+        accountName: gosiAccruedAcc.name,
+        debit: 0,
+        credit: grandTotalGosiDeductions,
+        note: `التأمينات الاجتماعية المستقطعة من رواتب الموظفين لشهر ${month}`
+      });
+    }
+
+    // F. Credit: Deductions contra if any
+    const grandDeductions = items.reduce((sum, it) => sum + (it.deduct || 0), 0);
+    if (grandDeductions > 0) {
+      const deductContraAcc = allAccounts.find(a => a.code === "4-3" || a.code === "4-2" || a.type === "revenue") || basicExpenseAcc;
+      paymentLines.push({
+        accountId: deductContraAcc.id,
+        accountCode: deductContraAcc.code,
+        accountName: deductContraAcc.name,
+        debit: 0,
+        credit: grandDeductions,
+        note: `استقطاعات غياب وجزاءات من رواتب شهر ${month}`
+      });
+    }
+
+    if (paymentLines.length > 0) {
+      const jePayNo = `JE-PR-PAY-${month.replace("-", "")}`;
+      await createJournalEntry({
+        date: todayString(),
+        description: `قيد صرف وتسوية مسير رواتب وإقفال السلف لشهر ${month}`,
+        sourceType: "payroll_payment",
+        sourceId: month,
+        lines: paymentLines,
+        entryNumber: jePayNo
+      });
+
+      if (sourceDocRef) {
+        const sSnap = await getDoc(sourceDocRef);
+        if (sSnap.exists()) {
+          const curBal = parseFloat(sSnap.data().balance || 0);
+          await updateDoc(sourceDocRef, {
+            balance: curBal - grandNet,
+            updatedAt: serverTimestamp()
+          });
+        }
+      }
+    }
 
     // Save payroll history record
     const prRef = doc(collection(db, `companies/${COMPANY_ID}/payrolls`));
@@ -2603,7 +2859,7 @@ window.submitPayroll = async () => {
       expenseAccId: expAccId,
       expenseAccName: basicExpenseAcc?.name || "",
       items,
-      notes: `مسير رواتب شهر ${month} المعتمد - قيود: ${jeAccNo} & ${jePayNo}`,
+      notes: `مسير رواتب شهر ${month} المعتمد من شجرة الحسابات`,
       createdAt: serverTimestamp()
     });
 
@@ -2615,19 +2871,8 @@ window.submitPayroll = async () => {
       method,
       sourceId,
       sourceName: method === 'cash' ? "صندوق" : "بنك",
-      notes: `صرف مسير رواتب شهر ${month} - قيود: ${jeAccNo} & ${jePayNo}`
+      notes: `صرف مسير رواتب شهر ${month}`
     });
-
-    if (sourceDocRef) {
-      const sSnap = await getDoc(sourceDocRef);
-      if (sSnap.exists()) {
-        const curBal = parseFloat(sSnap.data().balance || 0);
-        await updateDoc(sourceDocRef, {
-          balance: curBal - grandNet,
-          updatedAt: serverTimestamp()
-        });
-      }
-    }
 
     showToast("✅ تم اعتماد مسير الرواتب وترحيل القيود والرواتب بنجاح", "success");
     closeModal("payroll-modal");
@@ -2640,58 +2885,338 @@ window.submitPayroll = async () => {
 };
 
 // ── Print individual employee payslip ──
-window.printEmployeePayslip = (empId, basic, allowance, overtime, bonus, deduct, gosi, repay, net, month) => {
-  const body = document.getElementById("payslip-modal-body");
-  if (!body) return;
+window.printEmployeePayslip = async (empId, basic, allowance, overtime, bonus, deduct, gosi, repay, net, month, bonusDesc = "") => {
+  const emp = (employees || []).find(e => e.id === empId) || { name: "الموظف المستحق" };
+  const totalGross = (basic || 0) + (allowance || 0) + (overtime || 0) + (bonus || 0);
+  const totalDeduct = (deduct || 0) + (gosi || 0) + (repay || 0);
+  const finalNet = net !== undefined ? net : Math.max(0, totalGross - totalDeduct);
+  const amountWords = (typeof tafqeetArabic === "function") ? tafqeetArabic(finalNet) : `${finalNet} ريال سعودي`;
 
-  const emp = employees.find(e => e.id === empId) || { name: "موظف" };
+  let company = {
+    name: "شركة نظم الإمداد المتطورة",
+    nameEn: "Modern Supply Systems Co.",
+    crNumber: "7054969006",
+    vatNumber: "314996148100003",
+    phone: "0549141648",
+    logoUrl: ""
+  };
+  try {
+    const cached = localStorage.getItem("idham_company");
+    if (cached) Object.assign(company, JSON.parse(cached));
+  } catch(e) {}
 
-  body.innerHTML = `
-    <div style="border:1px solid #ddd; padding:16px; border-radius:12px; background:#fff; font-family:'Cairo', sans-serif; direction:rtl;">
-      <div style="text-align:center; border-bottom:2px dashed #ddd; padding-bottom:12px; margin-bottom:12px;">
-        <h3 style="margin:0 0 4px 0; color:#111;">إدهام للمواد الغذائية</h3>
-        <h4 style="margin:0; color:#555;">قسيمة تفصيل الراتب (Payslip)</h4>
-        <span style="font-size:12px; color:#888;">شهر الاستحقاق: ${month}</span>
-      </div>
+  const voucherNumber = `SAL-${emp.code || emp.id?.slice(-4) || 'EMP'}-${month?.replace(/[^0-9]/g,'') || todayString().replace(/-/g,'')}`;
 
-      <div style="font-size:12px; display:flex; flex-direction:column; gap:6px; margin-bottom:16px; border-bottom:1px solid #eee; padding-bottom:10px;">
-        <div><strong>الموظف:</strong> ${emp.name}</div>
-        <div><strong>المسمى الوظيفي:</strong> ${emp.job || "—"}</div>
-        <div><strong>رقم الهوية/الإقامة:</strong> ${emp.nid || "—"}</div>
-        ${emp.iban ? `<div><strong>رقم الآيبان:</strong> <span class="mono">${emp.iban}</span></div>` : ""}
-      </div>
-
-      <div style="display:flex; justify-content:space-between; gap:16px; font-size:12px;">
-        <div style="flex:1;">
-          <h5 style="margin:0 0 6px 0; color:#22c55e; border-bottom:1px solid #eee; padding-bottom:4px;">➕ المستحقات</h5>
-          <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>الراتب الأساسي:</span><span class="mono">${formatCurrency(basic)}</span></div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>البدلات:</span><span class="mono">${formatCurrency(allowance)}</span></div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>الإضافي:</span><span class="mono">${formatCurrency(overtime)}</span></div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>المكافآت:</span><span class="mono">${formatCurrency(bonus)}</span></div>
-          <div style="display:flex; justify-content:space-between; font-weight:bold; border-top:1px solid #eee; padding-top:4px;"><span>إجمالي المستحقات:</span><span class="mono">${formatCurrency(basic+allowance+overtime+bonus)}</span></div>
+  const html = `
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>سند صرف واستلام راتب — ${emp.name} — ${month}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', Arial, sans-serif;
+      direction: rtl;
+      color: #0f172a;
+      background: #fff;
+      padding: 20px;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    @media print {
+      body { padding: 0; }
+      @page { size: A4 portrait; margin: 6mm 8mm; }
+      .no-print { display: none !important; }
+    }
+    .sal-container {
+      max-width: 860px;
+      margin: 0 auto;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    .sal-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%) !important;
+      padding: 16px 22px;
+      color: #fff !important;
+    }
+    .sal-header-gold {
+      height: 4px;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b) !important;
+    }
+    .sal-badge-box {
+      background: rgba(255,255,255,0.18) !important;
+      border: 1px solid rgba(255,255,255,0.35) !important;
+      border-radius: 12px;
+      padding: 8px 18px;
+      text-align: center;
+    }
+    .sal-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 10px 18px;
+    }
+    .sal-meta-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 6px 10px;
+      text-align: center;
+    }
+    .sal-meta-label { font-size: 10px; color: #64748b; font-weight: 700; text-transform: uppercase; margin-bottom: 2px; }
+    .sal-meta-val { font-size: 12.5px; font-weight: 800; color: #0f172a; }
+    .sal-emp-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-right: 5px solid #2563eb;
+      border-radius: 10px;
+      margin: 12px 18px;
+      padding: 10px 16px;
+    }
+    .sal-emp-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1.2fr 1.2fr 1fr;
+      gap: 10px;
+    }
+    .sal-emp-item-lbl { font-size: 10px; color: #1e40af; font-weight: 700; margin-bottom: 2px; }
+    .sal-emp-item-val { font-size: 12.5px; font-weight: 800; color: #0f172a; }
+    .sal-breakdown-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 0 18px 12px 18px;
+    }
+    .sal-panel {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .sal-panel.earnings { border-color: #a7f3d0; background: #fff; }
+    .sal-panel.deductions { border-color: #fecaca; background: #fff; }
+    .sal-panel-head {
+      padding: 6px 12px;
+      font-weight: 800;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sal-panel.earnings .sal-panel-head { background: #d1fae5; color: #065f46; }
+    .sal-panel.deductions .sal-panel-head { background: #fee2e2; color: #991b1b; }
+    .sal-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .sal-items-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .sal-items-table tr:last-child td { border-bottom: none; }
+    .sal-panel-foot {
+      padding: 6px 12px;
+      font-weight: 800;
+      font-size: 11.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #e2e8f0;
+    }
+    .sal-panel.earnings .sal-panel-foot { background: #ecfdf5; color: #047857; }
+    .sal-panel.deductions .sal-panel-foot { background: #fef2f2; color: #b91c1c; }
+    .sal-net-ribbon {
+      margin: 0 18px 10px 18px;
+      background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+      border-radius: 10px;
+      padding: 12px 18px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(4,120,87,0.2);
+    }
+    .sal-net-val {
+      font-size: 22px;
+      font-weight: 900;
+      font-family: monospace;
+      letter-spacing: 0.5px;
+    }
+    .sal-tafqeet-box {
+      margin: 0 18px 10px 18px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 11px;
+    }
+    .sal-legal-box {
+      margin: 0 18px 12px 18px;
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-right: 5px solid #f59e0b;
+      border-radius: 8px;
+      padding: 9px 14px;
+      font-size: 10.5px;
+      line-height: 1.5;
+      color: #92400e;
+    }
+    .sal-sigs {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 10px;
+      margin: 0 18px 14px 18px;
+    }
+    .sal-sig-box {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .sal-sig-title { font-size: 10.5px; font-weight: 800; color: #334155; margin-bottom: 26px; }
+    .sal-sig-line { border-top: 1px dashed #94a3b8; padding-top: 5px; font-size: 9.5px; color: #64748b; }
+    .sal-footer {
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      padding: 6px 18px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="sal-container">
+    <div class="sal-header">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          ${company.logoUrl ? `<img src="${company.logoUrl}" alt="Logo" style="height:52px;max-width:100px;object-fit:contain;background:#fff;padding:2px;border-radius:6px;" />` : `<div style="font-size:28px;">🏢</div>`}
+          <div>
+            <div style="font-size:16px;font-weight:900;color:#fff;">${company.name}</div>
+            <div style="font-size:10.5px;opacity:0.85;font-weight:600;color:#fff;">${company.nameEn}</div>
+            <div style="font-size:9.5px;opacity:0.8;margin-top:2px;color:#fff;">
+              <span>الهاتف: <strong>${company.phone}</strong></span> |
+              <span>الرقم الضريبي: <strong>${company.vatNumber}</strong></span> |
+              <span>سجل تجاري: <strong>${company.crNumber}</strong></span>
+            </div>
+          </div>
         </div>
-        
-        <div style="flex:1; border-right:1px solid #eee; padding-right:12px; margin-right:12px;">
-          <h5 style="margin:0 0 6px 0; color:#ef4444; border-bottom:1px solid #eee; padding-bottom:4px;">➖ الاستقطاعات</h5>
-          <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>الخصومات/الغياب:</span><span class="mono">${formatCurrency(deduct)}</span></div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>تأمينات (GOSI):</span><span class="mono">${formatCurrency(gosi)}</span></div>
-          <div style="display:flex; justify-content:space-between; margin-bottom:4px;"><span>قسط السلفة:</span><span class="mono">${formatCurrency(repay)}</span></div>
-          <div style="display:flex; justify-content:space-between; font-weight:bold; border-top:1px solid #eee; padding-top:4px;"><span>إجمالي الاستقطاعات:</span><span class="mono">${formatCurrency(deduct+gosi+repay)}</span></div>
+        <div class="sal-badge-box">
+          <div style="font-size:16px;font-weight:900;color:#fff !important;">سند صرف واستلام راتب</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.9) !important;letter-spacing:0.5px;">SALARY PAYMENT & PAYSLIP VOUCHER</div>
         </div>
-      </div>
-
-      <div style="margin-top:20px; background:#f4f6fa; padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-weight:bold; font-size:14px; border:1px solid #e2e8f0;">
-        <span>صافي الراتب المستحق:</span>
-        <span class="mono text-bad" style="font-size:16px;">${formatCurrency(net)} ر.س</span>
-      </div>
-
-      <div style="margin-top:24px; text-align:center; font-size:10px; color:#aaa; border-top:1px solid #eee; padding-top:12px;">
-        تمت معالجة القسيمة آلياً عبر نظام إدهام لإدارة الموارد البشرية
       </div>
     </div>
+    <div class="sal-header-gold"></div>
+
+    <div class="sal-meta-grid">
+      <div class="sal-meta-card"><div class="sal-meta-label">رقم السند</div><div class="sal-meta-val mono" style="color:#047857;">${voucherNumber}</div></div>
+      <div class="sal-meta-card"><div class="sal-meta-label">تاريخ الصرف</div><div class="sal-meta-val mono">${todayString()}</div></div>
+      <div class="sal-meta-card"><div class="sal-meta-label">شهر الاستحقاق</div><div class="sal-meta-val" style="color:#1d4ed8;">شهر ${month}</div></div>
+      <div class="sal-meta-card"><div class="sal-meta-label">طريقة الصرف</div><div class="sal-meta-val" style="font-size:11px;">نقدي / تحويل بنكي</div></div>
+    </div>
+
+    <div class="sal-emp-box">
+      <div class="sal-emp-grid">
+        <div><div class="sal-emp-item-lbl">👤 اسم الموظف المستحق</div><div class="sal-emp-item-val" style="font-size:13.5px;color:#1e3a8a;">${emp.name}</div></div>
+        <div><div class="sal-emp-item-lbl">💼 المسمى الوظيفي</div><div class="sal-emp-item-val">${emp.job || "موظف / مندوب"}</div></div>
+        <div><div class="sal-emp-item-lbl">🆔 رقم الهوية / الإقامة</div><div class="sal-emp-item-val mono">${emp.nid || "—"}</div></div>
+        <div><div class="sal-emp-item-lbl">💳 الآيبان / الحساب</div><div class="sal-emp-item-val mono" style="font-size:10.5px;">${emp.iban || "—"}</div></div>
+      </div>
+    </div>
+
+    <div class="sal-breakdown-section">
+      <div class="sal-panel earnings">
+        <div class="sal-panel-head"><span>➕ مفردات الاستحقاقات والمكافآت</span><span style="font-size:10px;">(Earnings)</span></div>
+        <table class="sal-items-table">
+          <tbody>
+            <tr><td><strong>الراتب الأساسي</strong></td><td class="mono font-bold" style="text-align:left;color:#047857;">+${formatCurrency(basic)} ر.س</td></tr>
+            <tr><td><strong>البدلات الشهرية</strong></td><td class="mono font-bold" style="text-align:left;color:#047857;">+${formatCurrency(allowance)} ر.س</td></tr>
+            ${overtime ? `<tr><td><strong>أجر ساعات إضافية</strong></td><td class="mono font-bold" style="text-align:left;color:#047857;">+${formatCurrency(overtime)} ر.س</td></tr>` : ''}
+            ${bonus ? `<tr><td><strong>${bonusDesc || "مكافآت وحوافز تشجيعية"}</strong></td><td class="mono font-bold" style="text-align:left;color:#047857;">+${formatCurrency(bonus)} ر.س</td></tr>` : ''}
+          </tbody>
+        </table>
+        <div class="sal-panel-foot"><span>إجمالي الاستحقاقات:</span><span class="mono font-bold">${formatCurrency(totalGross)} ر.س</span></div>
+      </div>
+
+      <div class="sal-panel deductions">
+        <div class="sal-panel-head"><span>➖ مفردات الاستقطاعات والسلف</span><span style="font-size:10px;">(Deductions)</span></div>
+        <table class="sal-items-table">
+          <tbody>
+            ${deduct ? `<tr><td><strong>خصومات وغياب</strong></td><td class="mono font-bold" style="text-align:left;color:#b91c1c;">-${formatCurrency(deduct)} ر.س</td></tr>` : ''}
+            ${gosi ? `<tr><td><strong>تأمينات اجتماعية (GOSI)</strong></td><td class="mono font-bold" style="text-align:left;color:#b91c1c;">-${formatCurrency(gosi)} ر.س</td></tr>` : ''}
+            ${repay ? `<tr><td><strong>إقفال وتسوية سلفة الموظف</strong></td><td class="mono font-bold" style="text-align:left;color:#b91c1c;">-${formatCurrency(repay)} ر.س</td></tr>` : ''}
+            ${totalDeduct === 0 ? `<tr><td style="color:#94a3b8;text-align:center;padding:12px;">لا توجد أي استقطاعات</td></tr>` : ''}
+          </tbody>
+        </table>
+        <div class="sal-panel-foot"><span>إجمالي الاستقطاعات:</span><span class="mono font-bold">${formatCurrency(totalDeduct)} ر.س</span></div>
+      </div>
+    </div>
+
+    <div class="sal-net-ribbon">
+      <div><div style="font-size:11.5px;opacity:0.9;font-weight:700;">💰 صافي الراتب المنصرف للموظف</div><div style="font-size:9.5px;opacity:0.8;">Net Salary Payable</div></div>
+      <div style="text-align:left;"><span class="sal-net-val">${formatCurrency(finalNet)}</span> <span style="font-size:13px;font-weight:700;margin-right:4px;">ريال سعودي</span></div>
+    </div>
+
+    <div class="sal-tafqeet-box">
+      <strong>✍️ المبلغ كتابةً وتفقيطاً:</strong> <span style="color:#047857;font-weight:800;">فقط ${amountWords} لا غير.</span>
+    </div>
+
+    <div class="sal-legal-box">
+      <strong>📝 إقرار واستلام الموظف وبراءة ذمة:</strong>
+      <p style="margin-top:2px;">
+        أقر أنا الموظف الموضحة بياناتي أعلاه بأنني استلمت كامل صافي راتبي ومستحقاتي ومكافآتي عن شهر (<strong>${month}</strong>) الموضحة في هذا السند، ولا يحق لي المطالبة بأي مبالغ أخرى أو متأخرات عن هذه الفترة لدى الشركة، ويعد توقيعي أدناه إقراراً نهائياً بالاستلام وبراءة ذمة شاملة.
+      </p>
+    </div>
+
+    <div class="sal-sigs">
+      <div class="sal-sig-box" style="border:1.5px solid #2563eb;background:#f8fafc;">
+        <div class="sal-sig-title" style="color:#1e3a8a;">✍️ توقيع واستلام الموظف</div>
+        <div style="text-align:right;font-size:10px;color:#334155;margin-bottom:4px;">الاسم: <strong>${emp.name}</strong></div>
+        <div class="sal-sig-line">التوقيع / البصمة: ............................................</div>
+      </div>
+      <div class="sal-sig-box">
+        <div class="sal-sig-title">💼 أمين الصندوق / المحاسب الصارف</div>
+        <div style="text-align:right;font-size:10px;color:#334155;margin-bottom:4px;">الاسم: <strong>المحاسب المسؤول</strong></div>
+        <div class="sal-sig-line">التوقيع: ............................................</div>
+      </div>
+      <div class="sal-sig-box">
+        <div class="sal-sig-title">🏢 اعتماد الإدارة العامة والختم</div>
+        <div style="text-align:right;font-size:10px;color:#334155;margin-bottom:4px;">الاعتماد: <strong>${company.name}</strong></div>
+        <div class="sal-sig-line">الختم والتوقيع: ............................................</div>
+      </div>
+    </div>
+
+    <div class="sal-footer">
+      <span>طُبع عبر: <strong>نظام إدهام للمواد الغذائية ERP — قسم الموارد البشرية والرواتب</strong></span>
+      <span>تاريخ وساعة الطباعة: <strong>${new Date().toLocaleString("ar-SA")}</strong></span>
+    </div>
+  </div>
+</body>
+</html>
   `;
 
-  openModal("payslip-modal");
+  const win = window.open("", "_blank");
+  if (win) {
+    win.document.write(html);
+    win.document.close();
+    setTimeout(() => { win.focus(); win.print(); }, 400);
+  } else {
+    // Fallback to modal if popups are blocked
+    const body = document.getElementById("payslip-modal-body");
+    if (body) {
+      body.innerHTML = html;
+      openModal("payslip-modal");
+    }
+  }
 };
 
 // ── View Historical Payroll Details ──
@@ -2734,13 +3259,13 @@ window.viewPayrollDetails = (payrollId) => {
                 <td class="mono">${formatCurrency(item.basic)}</td>
                 <td class="mono">${formatCurrency(item.allowance)}</td>
                 <td class="mono text-ok">+${formatCurrency(item.overtime || 0)}</td>
-                <td class="mono text-ok">+${formatCurrency(item.bonus || 0)}</td>
+                <td class="mono text-ok">+${formatCurrency(item.bonus || 0)}${item.bonusDesc ? `<br><small style="color:var(--text-3); font-size:9.5px;">${item.bonusDesc}</small>` : ''}</td>
                 <td class="mono text-bad">-${formatCurrency(item.deduct || 0)}</td>
                 <td class="mono text-bad">-${formatCurrency(item.gosi || 0)}</td>
                 <td class="mono text-bad font-bold">-${formatCurrency(item.repay || 0)}</td>
                 <td class="font-bold text-ok mono">${formatCurrency(item.net)}</td>
                 <td>
-                  <button class="btn btn-secondary sm" style="padding:2px 8px; font-size:10px; margin:0;" onclick="printEmployeePayslip('${item.empId}', ${item.basic}, ${item.allowance}, ${item.overtime || 0}, ${item.bonus || 0}, ${item.deduct || 0}, ${item.gosi || 0}, ${item.repay || 0}, ${item.net}, '${p.month}')">🖨️ قسيمة</button>
+                  <button class="btn btn-secondary sm" style="padding:2px 8px; font-size:10px; margin:0;" onclick="printEmployeePayslip('${item.empId}', ${item.basic}, ${item.allowance}, ${item.overtime || 0}, ${item.bonus || 0}, ${item.deduct || 0}, ${item.gosi || 0}, ${item.repay || 0}, ${item.net}, '${p.month}', '${(item.bonusDesc || "").replace(/'/g, "\\'")}')">🖨️ قسيمة</button>
                 </td>
               </tr>
             `).join("")}

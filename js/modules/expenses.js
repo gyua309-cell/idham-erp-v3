@@ -55,6 +55,7 @@ export async function render(container, user) {
           <option value="expense">مصروف</option>
           <option value="supplier">مورد</option>
           <option value="customer">عميل</option>
+          <option value="cash_box">تحويل لصندوق / عهدة</option>
           <option value="other">حساب عام</option>
         </select>
       </div>
@@ -75,6 +76,8 @@ export async function render(container, user) {
       <div style="margin-right:auto;display:flex;gap:8px;">
         <button class="btn btn-secondary btn-sm" onclick="exportPagePDF('.data-dense','سندات_الصرف')" title="تصدير PDF">📄 PDF</button>
         <button class="btn btn-secondary btn-sm" onclick="exportPageExcel('.data-dense','سندات_الصرف')" title="تصدير Excel">📊 Excel</button>
+        <button class="btn btn-secondary btn-sm" onclick="printAllExpenseVouchers()" title="طباعة جميع السندات المعروضة">🖨️ طباعة الكل</button>
+        <button class="btn btn-secondary btn-sm" onclick="printBlankExpenseVoucher()" title="طباعة سند صرف فارغ للتعبئة اليدوية" style="background:rgba(239,68,68,0.08);border-color:rgba(239,68,68,0.35);color:#991b1b;">📝 سند فارغ</button>
         <button class="btn btn-primary" onclick="openExpenseModal()">+ سند صرف جديد</button>
       </div>
     </div>
@@ -126,7 +129,7 @@ export async function render(container, user) {
             <thead>
               <tr style="background:var(--bg-2);">
                 <th style="width:100px;">التاريخ</th>
-                <th style="width:110px;">رقم السند</th>
+                <th style="width:130px;">رقم السند / القيد</th>
                 <th>جهة الصرف</th>
                 <th style="width:100px;">نوع الجهة</th>
                 <th>البيان والملاحظات</th>
@@ -175,6 +178,7 @@ export async function render(container, user) {
                 <option value="expense">بند مصروف</option>
                 <option value="supplier">مورد (سداد ذمة دائنة)</option>
                 <option value="customer">عميل (رد نقدية)</option>
+                <option value="cash_box">📦 تحويل لصندوق / تغذية عهدة</option>
                 <option value="other">حساب عام</option>
               </select>
             </div>
@@ -262,11 +266,13 @@ export async function render(container, user) {
 }
 
 async function loadReferenceData() {
-  allAccounts = await getAll(COLS.chartOfAccounts());
-  cashBoxes = await getAll(COLS.cashBoxes());
-  bankAccounts = await getAll(COLS.bankAccounts());
-  suppliers = await getAll(COLS.suppliers());
-  customers = await getAll(COLS.customers());
+  [allAccounts, cashBoxes, bankAccounts, suppliers, customers] = await Promise.all([
+    getAll(COLS.chartOfAccounts()),
+    getAll(COLS.cashBoxes()),
+    getAll(COLS.bankAccounts()),
+    getAll(COLS.suppliers()),
+    getAll(COLS.customers())
+  ]);
   
   onEntityTypeChange();
   togglePaySource();
@@ -303,6 +309,13 @@ window.onEntityTypeChange = () => {
   } else if (type === "customer") {
     label.textContent = "العميل المستهدف *";
     list = customers.map(c => ({ id: c.id, text: c.name }));
+  } else if (type === "cash_box") {
+    label.textContent = "الصندوق المستلم (المراد تغذيته) *";
+    const srcBoxId = document.getElementById("exp-source")?.value;
+    list = (cashBoxes || []).filter(c => c.id !== srcBoxId).map(c => ({
+      id: c.id,
+      text: `${c.name} (${formatCurrency(c.balance || 0)})`
+    }));
   } else {
     label.textContent = "الحساب المستهدف (دليل الحسابات) *";
     list = allAccounts.map(a => ({ id: a.id, text: `${a.code} - ${a.name}` }));
@@ -327,21 +340,37 @@ window.filterExpenseTargetEntity = () => {
 };
 
 window.togglePaySource = () => {
-  const method = document.getElementById("exp-pay-method").value;
+  const method = document.getElementById("exp-pay-method")?.value || "cash";
   const label = document.getElementById("exp-source-label");
   const sel = document.getElementById("exp-source");
+  if (!sel) return;
   sel.innerHTML = '<option value="">اختر...</option>';
 
   if (method === 'cash') {
-    label.textContent = "صندوق الصرف *";
-    sel.innerHTML += cashBoxes.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+    if (label) label.textContent = "صندوق الصرف *";
+    let list = (cashBoxes && cashBoxes.length > 0) ? cashBoxes : [];
+    if (list.length === 0 && allAccounts && allAccounts.length > 0) {
+      list = allAccounts.filter(a => a.code?.startsWith("1-1-1-1") || a.code?.startsWith("1-1-1-2") || a.name?.includes("صندوق") || a.code === "1-1-1-1-3");
+    }
+    sel.innerHTML += list.map(c => `<option value="${c.id}">${c.name || c.accountName || c.code}</option>`).join("");
   } else {
-    label.textContent = "الحساب البنكي المخصوم منه *";
-    sel.innerHTML += bankAccounts.map(b => `<option value="${b.id}">${b.name || "بنك"} - ${b.accountNumber || ""}</option>`).join("");
+    if (label) label.textContent = "الحساب البنكي المخصوم منه *";
+    let list = (bankAccounts && bankAccounts.length > 0) ? bankAccounts : [];
+    if (list.length === 0 && allAccounts && allAccounts.length > 0) {
+      list = allAccounts.filter(a => a.code?.startsWith("1-1-1-3") || a.name?.includes("بنك") || a.name?.includes("الراجح") || a.name?.includes("الجزير"));
+    }
+    sel.innerHTML += list.map(b => {
+      const bName = b.name || b.bankName || b.accountName || "حساب بنكي";
+      const bAcc = b.accountNumber ? ` (${b.accountNumber})` : (b.accountCode ? ` [${b.accountCode}]` : '');
+      return `<option value="${b.id}">${bName}${bAcc}</option>`;
+    }).join("");
   }
 };
 
-window.openExpenseModal = () => {
+window.openExpenseModal = async () => {
+  if (!cashBoxes.length || !bankAccounts.length || !allAccounts.length) {
+    await loadReferenceData();
+  }
   _editingExpenseId = null;
   const titleEl = document.getElementById("expense-modal-title");
   if (titleEl) titleEl.textContent = "سند صرف جديد (Payment Voucher)";
@@ -349,6 +378,11 @@ window.openExpenseModal = () => {
   document.getElementById("exp-amount").value = "";
   document.getElementById("exp-entity-type").value = "expense";
   onEntityTypeChange();
+  
+  const methodEl = document.getElementById("exp-pay-method");
+  if (methodEl) methodEl.value = "cash";
+  togglePaySource();
+
   document.getElementById("exp-notes").value = "";
   const ccSel = document.getElementById("exp-cc-sel");
   if (ccSel) ccSel.value = "";
@@ -432,18 +466,26 @@ window.saveExpense = async () => {
       const supp = suppliers.find(s => s.id === targetId);
       destinationName = supp?.name;
       
-      const parentSuppCode = "2-1-1-1-1"; 
-      for (const code in allAccounts) {
-        const acc = allAccounts[code];
-        if (acc.sourceEntityId === targetId && acc.sourceModule === "suppliers") {
-          debitAccId = acc.id;
-          debitAccCode = acc.code;
-          debitAccName = acc.name;
-          break;
+      const parentSuppCode = "2-1-1-1-1";
+      if (supp?.accountId) {
+        const directAcc = allAccounts.find(a => a.id === supp.accountId);
+        if (directAcc) {
+          debitAccId = directAcc.id;
+          debitAccCode = directAcc.code;
+          debitAccName = directAcc.name;
         }
       }
       if (!debitAccId) {
-        const match = allAccounts.find(a => a.name.includes(supp?.name));
+        const byEntity = allAccounts.find(a => a.sourceEntityId === targetId);
+        if (byEntity) {
+          debitAccId = byEntity.id;
+          debitAccCode = byEntity.code;
+          debitAccName = byEntity.name;
+        }
+      }
+      if (!debitAccId && supp?.name) {
+        const sName = supp.name.trim().toLowerCase();
+        const match = allAccounts.find(a => a.name && (a.name.trim().toLowerCase() === sName || a.name.includes(supp.name) || supp.name.includes(a.name)));
         debitAccId = match?.id || allAccounts.find(a => a.code === parentSuppCode)?.id;
         debitAccCode = match?.code || parentSuppCode;
         debitAccName = match?.name || "ذمم الموردين";
@@ -467,6 +509,12 @@ window.saveExpense = async () => {
         debitAccCode = match?.code || parentCustCode;
         debitAccName = match?.name || "ذمم العملاء";
       }
+    } else if (entityType === "cash_box") {
+      const targetBox = cashBoxes.find(c => c.id === targetId);
+      destinationName = `صندوق: ${targetBox?.name || 'مستلم'}`;
+      debitAccId = targetBox?.accountId || null;
+      debitAccCode = targetBox?.accountCode || targetBox?.code || "1-1-1-1-3";
+      debitAccName = targetBox?.name || "صندوق مستلم";
     } else {
       const acc = allAccounts.find(a => a.id === targetId);
       debitAccId = targetId;
@@ -483,27 +531,36 @@ window.saveExpense = async () => {
 
     if (method === 'cash') {
       const cb = cashBoxes.find(c => c.id === sourceId);
-      creditAccId = cb?.accountId;
-      creditAccCode = cb?.code;
-      creditAccName = cb?.name;
+      creditAccId = cb?.accountId || null;
+      const acc = allAccounts.find(a => a.id === cb?.accountId || (cb?.accountCode && a.code === cb.accountCode) || a.id === sourceId || a.code === sourceId);
+      creditAccId = creditAccId || acc?.id || null;
+      creditAccCode = acc?.code || cb?.accountCode || cb?.code || null;
+      creditAccName = acc?.name || cb?.name || null;
       sourceDocRef = fsDoc(db, `companies/${COMPANY_ID}/cashBoxes`, sourceId);
     } else {
       const ba = bankAccounts.find(b => b.id === sourceId);
-      creditAccId = ba?.accountId;
-      creditAccCode = ba?.code;
-      creditAccName = ba?.name;
+      creditAccId = ba?.accountId || null;
+      let acc = allAccounts.find(a => a.id === ba?.accountId || (ba?.accountCode && a.code === ba.accountCode) || a.id === sourceId || a.code === sourceId);
+      if (!acc && ba?.name) {
+        const baClean = ba.name.replace(/[\s\-_]/g, '').toLowerCase();
+        acc = allAccounts.find(a => a.parentCode === "1-1-1-3" && (
+          a.name?.replace(/[\s\-_]/g, '').toLowerCase().includes(baClean) ||
+          baClean.includes((a.name || '').replace(/[\s\-_]/g, '').toLowerCase())
+        ));
+      }
+      creditAccId = creditAccId || acc?.id || null;
+      creditAccCode = acc?.code || ba?.accountCode || ba?.code || null;
+      creditAccName = acc?.name || ba?.name || null;
       sourceDocRef = fsDoc(db, `companies/${COMPANY_ID}/bankAccounts`, sourceId);
     }
 
     if (!creditAccId) {
-      const parentCashCode = "1-1-1-1-3";
-      const parentBankCode = "1-1-1-3-2";   // ✅ كود صحيح (مصرف الراجحي أو أي بنك)
-      const fallbackCode = method === 'cash' ? parentCashCode : parentBankCode;
-      const match = allAccounts.find(a => a.code === fallbackCode)
-                 || allAccounts.find(a => a.parentCode === "1-1-1-3");  // أي حساب بنكي
-      creditAccId = match?.id;
-      creditAccCode = match?.code;
-      creditAccName = match?.name;
+      const fallback = allAccounts.find(a => a.code === (method === "cash" ? "1-1-1-1-3" : "1-1-1-3-02"))
+                    || (method !== "cash" && allAccounts.find(a => a.code?.startsWith("1-1-1-3")))
+                    || allAccounts.find(a => a.code === "1-1-1-1-3");
+      creditAccId = fallback?.id || null;
+      creditAccCode = fallback?.code || null;
+      creditAccName = fallback?.name || null;
     }
 
     // 3. Check if target is a CashBox (e.g. Owner's Current or another Cashbox)
@@ -586,6 +643,7 @@ window.saveExpense = async () => {
         amount,
         entityType,
         targetId,
+        isTransfer: entityType === "cash_box",
         accountName: destinationName || "مصروف",
         method,
         sourceId,
@@ -604,7 +662,12 @@ window.saveExpense = async () => {
           type: "out",
           amount,
           balanceAfter,
-          notes: `سند صرف رقم ${expId.substring(0,6).toUpperCase()} — ${notes}`,
+          sourceType: "expense",
+          sourceId: expId,
+          isTransfer: entityType === "cash_box",
+          notes: entityType === "cash_box" 
+            ? `تحويل صادر لسند صرف #${expId.substring(0,6).toUpperCase()} إلى ${destinationName} — ${notes}`
+            : `سند صرف رقم ${expId.substring(0,6).toUpperCase()} — ${notes}`,
           userName: "المستخدم",
           createdAt: serverTimestamp()
         });
@@ -615,6 +678,9 @@ window.saveExpense = async () => {
           type: "out",
           amount,
           balanceAfter,
+          sourceType: "expense",
+          sourceId: expId,
+          isTransfer: entityType === "cash_box",
           notes: `سند صرف رقم ${expId.substring(0,6).toUpperCase()} — ${notes}`,
           refNumber: `PV-${expId.substring(0,6).toUpperCase()}`,
           createdAt: serverTimestamp()
@@ -628,6 +694,9 @@ window.saveExpense = async () => {
           type: "in",
           amount,
           balanceAfter: targetBalAfter,
+          sourceType: "expense",
+          sourceId: expId,
+          isTransfer: true,
           notes: `توريد واستلام من سند صرف رقم ${expId.substring(0,6).toUpperCase()} — ${notes}`,
           userName: "المستخدم",
           createdAt: serverTimestamp()
@@ -639,9 +708,13 @@ window.saveExpense = async () => {
     const decAccDetail = allAccounts.find(a => a.id === debitAccId);
     const crAccDetail = allAccounts.find(a => a.id === creditAccId);
 
-    await createJournalEntry({
+    const jeDesc = entityType === "cash_box"
+      ? `مناقلة نقدية (سند صرف #${expId.substring(0,6).toUpperCase()}) — تغذية إلى ${destinationName} — ${notes}`
+      : `سند صرف رقم #${expId.substring(0,6).toUpperCase()} - ${notes}`;
+
+    const jeId = await createJournalEntry({
       date: date,
-      description: `سند صرف رقم #${expId.substring(0,6).toUpperCase()} - ${notes}`,
+      description: jeDesc,
       sourceType: "expense",
       sourceId: expId,
       lines: [
@@ -666,8 +739,26 @@ window.saveExpense = async () => {
       ]
     });
 
+    // ربط وتثبيت رقم ومعرف القيد المحاسبي الآلي داخل مستند سند الصرف لسهولة التتبع الفوري
+    if (jeId && expId) {
+      try {
+        const jeSnap = await getDoc(fsDoc(db, `companies/${COMPANY_ID}/journalEntries`, jeId));
+        const jeCode = jeSnap.exists() ? (jeSnap.data().entryNumber || jeSnap.data().code || "") : "";
+        await updateDoc(fsDoc(db, `companies/${COMPANY_ID}/expenses`, expId), {
+          journalEntryId: jeId,
+          journalEntryCode: jeCode
+        });
+      } catch (linkErr) {
+        console.warn("[expenses] Error linking journalEntry to expense doc:", linkErr);
+      }
+    }
+
     const { clearERPCache: clear } = await import("../utils/db.js");
     clear(`companies/${COMPANY_ID}/expenses`);
+    clear(`companies/${COMPANY_ID}/cashBoxes`);
+    clear(`companies/${COMPANY_ID}/cashTransactions`);
+    clear(`companies/${COMPANY_ID}/bankAccounts`);
+    clear(`companies/${COMPANY_ID}/bankTransactions`);
     clear(`companies/${COMPANY_ID}/chartOfAccounts`);
     clear(`companies/${COMPANY_ID}/journalEntries`);
 
@@ -730,10 +821,11 @@ window.printSingleExpenseVoucher = async (id) => {
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; padding:20px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     @media print {
-      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; padding:0; }
-      .header-container { background:linear-gradient(135deg,#7c2d12 0%,#c2410c 60%,#ea580c 100%) !important; }
+      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      .header-container { background:linear-gradient(135deg, #450a0a 0%, #1c1917 50%, #7c2d12 100%) !important; }
     }
   </style>
 </head>
@@ -814,12 +906,13 @@ async function loadExpenses() {
         const idStr = (e.id || "").toLowerCase();
         const numStr = (e.number || "").toLowerCase();
         const dispStr = (e.displayCode || "").toLowerCase();
+        const jeStr = (e.journalEntryCode || "").toLowerCase();
         const codeStr = idStr.substring(0, 6);
         const name = (e.accountName || e.targetName || e.supplierName || e.category || "").toLowerCase();
         const notes = (e.notes || e.description || "").toLowerCase();
         const srcName = (e.sourceName || "").toLowerCase();
         const ccName = (e.costCenterName || "").toLowerCase();
-        return idStr.includes(queryText) || numStr.includes(queryText) || dispStr.includes(queryText) || codeStr.includes(queryText) ||
+        return idStr.includes(queryText) || numStr.includes(queryText) || dispStr.includes(queryText) || jeStr.includes(queryText) || codeStr.includes(queryText) ||
                name.includes(queryText) || notes.includes(queryText) ||
                srcName.includes(queryText) || ccName.includes(queryText);
       });
@@ -855,11 +948,12 @@ async function loadExpenses() {
       return;
     }
 
-    const typeLabels = { expense: "مصروف", supplier: "مورد", customer: "عميل", other: "حساب عام" };
+    const typeLabels = { expense: "مصروف", supplier: "مورد", customer: "عميل", cash_box: "تحويل لصندوق / عهدة", other: "حساب عام" };
     const typeBadgeStyles = {
       expense:  "background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.25);",
       supplier: "background:rgba(99,102,241,0.12);color:#4f46e5;border:1px solid rgba(99,102,241,0.25);",
       customer: "background:rgba(16,185,129,0.12);color:#059669;border:1px solid rgba(16,185,129,0.25);",
+      cash_box: "background:rgba(2,132,199,0.12);color:#0284c7;border:1px solid rgba(2,132,199,0.25);",
       other:    "background:rgba(107,114,128,0.12);color:#4b5563;border:1px solid rgba(107,114,128,0.25);"
     };
 
@@ -877,7 +971,10 @@ async function loadExpenses() {
       return `
         <tr style="${rowStyle}transition:all 0.15s ease;">
           <td class="mono font-bold" style="font-size:12.5px;">${e.date || "—"}</td>
-          <td class="mono" style="font-size:12px;"><span dir="ltr" style="display:inline-block;direction:ltr;background:var(--bg-2);padding:3px 10px;border-radius:6px;font-weight:900;color:#c2410c;font-family:monospace;">${e.displayCode}</span></td>
+          <td class="mono" style="font-size:12px;">
+            <span dir="ltr" style="display:inline-block;direction:ltr;background:var(--bg-2);padding:2px 8px;border-radius:6px;font-weight:900;color:#c2410c;font-family:monospace;">${e.displayCode}</span>
+            ${e.journalEntryCode ? `<div style="margin-top:4px;"><span dir="ltr" style="display:inline-block;direction:ltr;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:1px 6px;border-radius:4px;font-size:10.5px;font-weight:800;font-family:monospace;" title="القيد المحاسبي الآلي المرتبط">⚖️ ${e.journalEntryCode}</span></div>` : ''}
+          </td>
           <td><strong style="font-size:13.5px;color:var(--text-1);">${e.accountName || e.targetName || e.supplierName || e.category || e.description || "—"}</strong></td>
           <td><span class="badge" style="${typeBadgeStyles[e.entityType] || typeBadgeStyles.expense}font-size:11px;font-weight:700;">${typeLabels[e.entityType] || "مصروف"}</span></td>
           <td><small style="color:var(--text-2);font-size:12px;font-weight:600;">${e.notes || e.description || "—"}</small></td>
@@ -981,9 +1078,225 @@ window.printExpenseVoucher = () => {
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; padding:20px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
     @media print {
-      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; padding:0; }
+      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      .header-container { background:linear-gradient(135deg, #450a0a 0%, #1c1917 50%, #7c2d12 100%) !important; }
+    }
+  </style>
+</head>
+<body>${html}</body>
+</html>`);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); win.close(); }, 600);
+};
+
+window.printAllExpenseVouchers = async () => {
+  const vouchers = (typeof _loadedExpenses !== "undefined" ? _loadedExpenses : []);
+  if (!vouchers.length) { window.showToast("لا توجد سندات صرف للطباعة في القائمة الحالية", "warning"); return; }
+
+  let company = {};
+  try {
+    const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+    const { db, COMPANY_ID } = await import("../firebase-config.js");
+    const [coSnap, logoSnap] = await Promise.all([
+      getDoc(doc(db, `companies/${COMPANY_ID}/settings/company`)),
+      getDoc(doc(db, `companies/${COMPANY_ID}/settings/logo`))
+    ]);
+    if (coSnap.exists()) company = coSnap.data();
+    if (logoSnap.exists()) company.logoUrl = logoSnap.data().dataUrl || logoSnap.data().logoUrl || "";
+  } catch (_) {}
+
+  const allHtml = vouchers.map((e, i) => {
+    const isLast = i === vouchers.length - 1;
+    return `<div style="${isLast ? '' : 'page-break-after:always;'}">${_buildExpenseHTML(e, e.id, company)}</div>`;
+  }).join("");
+
+  const win = window.open("", "_blank", "width=900,height=700");
+  win.document.write(`<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>طباعة جميع سندات الصرف (${vouchers.length} سند)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @media print {
+      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+      .header-container { background:linear-gradient(135deg, #450a0a 0%, #1c1917 50%, #7c2d12 100%) !important; }
+    }
+  </style>
+</head>
+<body>${allHtml}</body>
+</html>`);
+  win.document.close();
+  setTimeout(() => { win.focus(); win.print(); win.close(); }, 800);
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Blank Payment Voucher (for manual filling by sales reps)
+// ─────────────────────────────────────────────────────────────────────────────
+window.printBlankExpenseVoucher = async () => {
+  let company = {};
+  try {
+    const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+    const { db, COMPANY_ID } = await import("../firebase-config.js");
+    const [coSnap, logoSnap] = await Promise.all([
+      getDoc(doc(db, `companies/${COMPANY_ID}/settings/company`)),
+      getDoc(doc(db, `companies/${COMPANY_ID}/settings/logo`))
+    ]);
+    if (coSnap.exists()) company = coSnap.data();
+    if (logoSnap.exists()) company.logoUrl = logoSnap.data().dataUrl || logoSnap.data().logoUrl || "";
+  } catch (_) {}
+
+  const coName    = company.name    || company.companyName || "شركة نظم الإمداد المتطورة";
+  const coAddress = [company.address, company.city, company.zip, company.country].filter(Boolean).join("، ") || "ينبع، المملكة العربية السعودية";
+  const coPhone   = company.phone   || company.mobile || "";
+  const coVat     = company.vatNumber || company.vat || company.taxNumber || "";
+  const coCr      = company.crNumber || company.cr  || "";
+  const coLogo    = company.logoUrl  || company.logoBase64 || company.logo || "";
+
+  const dottedBox = (h="48px") => `<div style="border:1.5px dashed #d1d5db;border-radius:8px;height:${h};width:100%;"></div>`;
+
+  const html = `
+  <div style="font-family:'Cairo',Arial,sans-serif;direction:rtl;max-width:820px;margin:0 auto;background:#ffffff;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,0.08);border:1px solid #cbd5e1;">
+
+    <!-- ═══ ROYAL HEADER (Red/Brown Payment Theme) ═══ -->
+    <div class="header-container" style="background:linear-gradient(135deg,#450a0a 0%,#1c1917 50%,#7c2d12 100%) !important;padding:20px 30px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          ${coLogo
+            ? `<img src="${coLogo}" style="height:70px;width:70px;object-fit:contain;background:#fff;border-radius:12px;padding:5px;box-shadow:0 3px 10px rgba(0,0,0,0.2);" />`
+            : `<div style="width:70px;height:70px;background:rgba(255,255,255,0.15);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;">🏢</div>`
+          }
+          <div>
+            <div style="font-size:22px;font-weight:900;color:#fff !important;margin-bottom:5px;text-shadow:0 1px 2px rgba(0,0,0,0.3);">${coName}</div>
+            <div style="font-size:11.5px;color:rgba(255,255,255,0.9) !important;margin-bottom:5px;">📍 ${coAddress}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:5px 8px;font-size:11px;color:rgba(255,255,255,0.95) !important;">
+              ${coVat  ? `<span style="background:rgba(255,255,255,0.15) !important;padding:2px 9px;border-radius:7px;border:1px solid rgba(255,255,255,0.25);font-weight:700;">🔢 الرقم الضريبي: <span dir="ltr">${coVat}</span></span>` : ""}
+              ${coCr   ? `<span style="background:rgba(255,255,255,0.15) !important;padding:2px 9px;border-radius:7px;border:1px solid rgba(255,255,255,0.25);font-weight:700;">📋 السجل التجاري: <span dir="ltr">${coCr}</span></span>` : ""}
+              ${coPhone? `<span style="background:rgba(255,255,255,0.15) !important;padding:2px 9px;border-radius:7px;border:1px solid rgba(255,255,255,0.25);font-weight:700;">📞 <span dir="ltr">${coPhone}</span></span>` : ""}
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;">
+          <div style="background:rgba(255,255,255,0.15) !important;border:2px solid rgba(255,255,255,0.4) !important;border-radius:14px;padding:12px 24px;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;">
+            <div style="font-size:26px;font-weight:900;color:#fff !important;letter-spacing:1.5px;">سـنـد صـرف</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.85) !important;letter-spacing:3px;font-weight:800;margin-top:4px;text-transform:uppercase;">PAYMENT VOUCHER</div>
+          </div>
+        </div>
+      </div>
+      <div style="height:4px;background:linear-gradient(90deg,#ea580c 0%,#f59e0b 50%,#ea580c 100%) !important;-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;margin-top:14px;border-radius:3px;"></div>
+    </div>
+
+    <!-- ═══ META BAR ═══ -->
+    <div style="background:#fff7ed;border-bottom:1.5px solid #fed7aa;padding:14px 30px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;align-items:center;">
+      <div style="text-align:center;border-left:1.5px solid #fed7aa;padding-left:10px;">
+        <div style="font-size:10.5px;color:#7c2d12;font-weight:800;margin-bottom:6px;">رقم السند</div>
+        <div style="background:#ffedd5;border-radius:8px;border:1px solid #fed7aa;padding:4px 10px;font-size:18px;font-weight:900;color:#9a3412;font-family:monospace;min-width:130px;min-height:32px;display:inline-block;"></div>
+      </div>
+      <div style="text-align:center;border-left:1.5px solid #fed7aa;padding-left:10px;">
+        <div style="font-size:10.5px;color:#7c2d12;font-weight:800;margin-bottom:6px;">التاريخ</div>
+        <div style="font-size:14px;font-weight:900;color:#0f172a;"> &nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div style="border-bottom:1.5px solid #ea580c;width:140px;margin:4px auto 0;"></div>
+      </div>
+      <div style="text-align:center;">
+        <div style="font-size:10.5px;color:#7c2d12;font-weight:800;margin-bottom:6px;">طريقة الدفع</div>
+        <div style="display:flex;justify-content:center;gap:14px;font-size:13px;font-weight:800;color:#334155;">
+          <label style="display:flex;align-items:center;gap:4px;"><span style="width:15px;height:15px;border:2px solid #c2410c;border-radius:3px;display:inline-block;"></span> نقدي</label>
+          <label style="display:flex;align-items:center;gap:4px;"><span style="width:15px;height:15px;border:2px solid #c2410c;border-radius:3px;display:inline-block;"></span> تحويل بنكي</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ AMOUNT BOX ═══ -->
+    <div style="padding:18px 30px 14px;">
+      <div style="background:linear-gradient(135deg,#fef2f2 0%,#fee2e2 100%);border:2px solid #ef4444;border-radius:14px;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;">
+        <div style="flex:0 0 auto;">
+          <div style="font-size:11px;color:#991b1b;font-weight:800;margin-bottom:6px;">📤 المبلغ المدفوع بالأرقام (ر.س)</div>
+          <div style="border-bottom:2px solid #ef4444;width:190px;height:38px;font-size:26px;font-weight:900;color:#7f1d1d;font-family:monospace;"></div>
+        </div>
+        <div style="flex:1;background:#fff;border:1.5px solid #fca5a5;border-radius:10px;padding:12px 18px;">
+          <div style="font-size:10.5px;color:#991b1b;font-weight:800;margin-bottom:8px;">المبلغ كتابةً (تفقيط)</div>
+          <div style="font-size:13px;color:#7f1d1d;font-weight:700;">فقط ${dottedBox("24px")} لا غير</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ DETAILS TABLE ═══ -->
+    <div style="padding:0 30px 16px;">
+      <table style="width:100%;border-collapse:separate;border-spacing:0;border:1.5px solid #cbd5e1;border-radius:12px;overflow:hidden;">
+        <thead>
+          <tr style="background:#f1f5f9;">
+            <th style="padding:11px 16px;font-size:12px;color:#334155;font-weight:800;border-bottom:1.5px solid #cbd5e1;text-align:right;">المدفوع له (جهة الصرف / الحساب المدين)</th>
+            <th style="padding:11px 16px;font-size:12px;color:#334155;font-weight:800;border-bottom:1.5px solid #cbd5e1;border-right:1.5px solid #cbd5e1;text-align:right;width:130px;">نوع الجهة</th>
+            <th style="padding:11px 16px;font-size:12px;color:#334155;font-weight:800;border-bottom:1.5px solid #cbd5e1;border-right:1.5px solid #cbd5e1;text-align:right;width:180px;">مركز التكلفة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding:14px 16px;">${dottedBox("32px")}</td>
+            <td style="padding:14px 16px;border-right:1.5px solid #cbd5e1;">
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:700;color:#334155;">
+                <label style="display:flex;align-items:center;gap:5px;"><span style="width:13px;height:13px;border:1.5px solid #c2410c;border-radius:50%;display:inline-block;"></span> مصروف</label>
+                <label style="display:flex;align-items:center;gap:5px;"><span style="width:13px;height:13px;border:1.5px solid #c2410c;border-radius:50%;display:inline-block;"></span> مورد</label>
+                <label style="display:flex;align-items:center;gap:5px;"><span style="width:13px;height:13px;border:1.5px solid #c2410c;border-radius:50%;display:inline-block;"></span> عميل / أخرى</label>
+              </div>
+            </td>
+            <td style="padding:14px 16px;border-right:1.5px solid #cbd5e1;">${dottedBox("32px")}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Notes -->
+      <div style="margin-top:14px;background:#fff7ed;border:1.5px dashed #ea580c;border-radius:12px;padding:14px 20px;">
+        <div style="font-size:10.5px;color:#9a3412;font-weight:800;margin-bottom:8px;">البيان / ملاحظات وسبب الصرف</div>
+        ${dottedBox("36px")}
+      </div>
+    </div>
+
+    <!-- ═══ SIGNATURES ═══ -->
+    <div style="border-top:1.5px solid #e2e8f0;padding:20px 30px 24px;background:#fafafa;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;">
+        <div style="text-align:center;">
+          <div style="font-size:11.5px;font-weight:800;color:#334155;margin-bottom:50px;">توقيع المستلم (الجهة المدفوع لها)</div>
+          <div style="border-top:1.5px dashed #94a3b8;width:160px;margin:0 auto;color:#64748b;font-size:10px;padding-top:5px;">التوقيع / الإسم</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11.5px;font-weight:800;color:#334155;margin-bottom:50px;">توقيع المحاسب / الأمين</div>
+          <div style="border-top:1.5px dashed #94a3b8;width:160px;margin:0 auto;color:#64748b;font-size:10px;padding-top:5px;">التوقيع والختم الرسمى</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:11.5px;font-weight:800;color:#334155;margin-bottom:50px;">اعتماد المدير العام</div>
+          <div style="border-top:1.5px dashed #94a3b8;width:160px;margin:0 auto;color:#64748b;font-size:10px;padding-top:5px;">التوقيع والاعتماد</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <div style="background:#f1f5f9;border-top:1.5px solid #cbd5e1;padding:10px 30px;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:10.5px;color:#64748b;font-weight:700;">نموذج سند صرف — ${coName}</div>
+      <div style="font-size:10.5px;color:#94a3b8;font-family:monospace;">BLANK PAYMENT VOUCHER TEMPLATE</div>
+    </div>
+
+  </div>`;
+
+  const win = window.open("", "_blank", "width=900,height=700");
+  win.document.write(`<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>سند صرف فارغ — ${coName}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    @page { size: A4 portrait; margin: 8mm; }
+    body { font-family:'Cairo',sans-serif; direction:rtl; color:#1a1a2e; background:#fff; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    @media print {
+      body { -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
       .header-container { background:linear-gradient(135deg, #450a0a 0%, #1c1917 50%, #7c2d12 100%) !important; }
     }
   </style>
@@ -1056,6 +1369,19 @@ window.deleteExpense = async (id) => {
       });
     }
 
+    // 1b. If it was a transfer to another cashbox, revert target cashbox balance
+    if (exp.entityType === "cash_box" && exp.targetId) {
+      const targetRef = doc(db, `companies/${COMPANY_ID}/cashBoxes`, exp.targetId);
+      const targetSnap = await getDoc(targetRef);
+      if (targetSnap.exists()) {
+        const targetBal = parseFloat(targetSnap.data().balance || 0);
+        await updateDoc(targetRef, {
+          balance: targetBal - exp.amount,
+          updatedAt: serverTimestamp()
+        });
+      }
+    }
+
     // 2. Find and delete Journal Entry (which reverses COA balances)
     const jeQuery = query(collection(db, `companies/${COMPANY_ID}/journalEntries`), where("sourceId", "==", id), where("sourceType", "==", "expense"));
     const jeSnap = await getDocs(jeQuery);
@@ -1063,11 +1389,26 @@ window.deleteExpense = async (id) => {
       await deleteJournalEntry(jeSnap.docs[0].id);
     }
 
+    // 2b. Delete associated cashTransactions records
+    try {
+      const qTx = query(collection(db, `companies/${COMPANY_ID}/cashTransactions`), where("sourceId", "==", id));
+      const snapTx = await getDocs(qTx);
+      for (const d of snapTx.docs) {
+        await deleteDoc(d.ref);
+      }
+    } catch (e) {
+      console.warn("Could not clean up associated cashTransactions:", e);
+    }
+
     // 3. Delete Expense doc
     await deleteDoc(expRef);
 
     const { clearERPCache } = await import("../utils/db.js");
     clearERPCache(`companies/${COMPANY_ID}/expenses`);
+    clearERPCache(`companies/${COMPANY_ID}/cashBoxes`);
+    clearERPCache(`companies/${COMPANY_ID}/cashTransactions`);
+    clearERPCache(`companies/${COMPANY_ID}/bankAccounts`);
+    clearERPCache(`companies/${COMPANY_ID}/bankTransactions`);
     clearERPCache(`companies/${COMPANY_ID}/chartOfAccounts`);
     clearERPCache(`companies/${COMPANY_ID}/journalEntries`);
 
@@ -1088,17 +1429,17 @@ window.deleteExpense = async (id) => {
 
 function _buildExpenseHTML(e, id, company) {
   const code = e.displayCode || _getCleanVoucherCode(e, id, "PV");
-  const typeMap   = { expense: "مصروف", supplier: "مورد", customer: "عميل", other: "حساب عام" };
+  const typeMap   = { expense: "مصروف", supplier: "مورد", customer: "عميل", cash_box: "تحويل لصندوق / تغذية عهدة", other: "حساب عام" };
   const methodMap = { cash: "💵 نقدي", bank: "🏦 تحويل بنكي" };
   const amountWords = _numberToArabicWords(e.amount || 0);
 
   // Company fields
-  const coName    = company.name    || company.companyName || "شركة نظم الإمداد الحديثة";
+  const coName    = company.name    || company.companyName || "شركة نظم الإمداد المتطورة";
   const coAddress = [company.address, company.city, company.zip, company.country].filter(Boolean).join("، ") || "ينبع، المملكة العربية السعودية";
   const coPhone   = company.phone   || company.mobile || "0549141648";
   const coEmail   = company.email   || "";
-  const coVat     = company.vatNumber || company.vat || company.taxNumber || "312448150500003";
-  const coCr      = company.crNumber || company.cr  || "4700012345";
+  const coVat     = company.vatNumber || company.vat || company.taxNumber || "314996148100003";
+  const coCr      = company.crNumber || company.cr  || "7054969006";
   const coLogo    = company.logoUrl  || company.logoBase64 || company.logo || "";
 
   return `
@@ -1142,25 +1483,32 @@ function _buildExpenseHTML(e, id, company) {
     </div>
 
     <!-- ═══ VOUCHER SERIAL & META BAR ═══ -->
-    <div style="background:#fff7ed;border-bottom:1.5px solid #fed7aa;padding:18px 36px;display:grid;grid-template-columns:1fr 1fr 1.2fr;gap:20px;align-items:center;">
+    <div style="background:#fff7ed;border-bottom:1.5px solid #fed7aa;padding:18px 28px;display:grid;grid-template-columns:1fr 1.1fr 1fr 1.2fr;gap:14px;align-items:center;">
       
       <!-- Voucher Number -->
-      <div style="text-align:center;border-left:1.5px solid #fed7aa;padding-left:12px;">
+      <div style="text-align:center;border-left:1.5px solid #fed7aa;padding-left:8px;">
         <div style="font-size:11px;color:#7c2d12;font-weight:800;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">رقم السند المتسلسل</div>
-        <div dir="ltr" style="display:inline-block;direction:ltr;font-size:22px;font-weight:900;color:#9a3412;font-family:'Courier New',Consolas,monospace;background:#ffedd5;padding:3px 14px;border-radius:8px;border:1px solid #fed7aa;">${code}</div>
+        <div dir="ltr" style="display:inline-block;direction:ltr;font-size:20px;font-weight:900;color:#9a3412;font-family:'Courier New',Consolas,monospace;background:#ffedd5;padding:3px 12px;border-radius:8px;border:1px solid #fed7aa;">${code}</div>
+      </div>
+
+      <!-- Journal Entry Number -->
+      <div style="text-align:center;border-left:1.5px solid #fed7aa;padding-left:8px;">
+        <div style="font-size:11px;color:#1e40af;font-weight:800;letter-spacing:0.05em;margin-bottom:4px;">القيد المحاسبي الآلي</div>
+        <div dir="ltr" style="display:inline-block;direction:ltr;font-size:18px;font-weight:900;color:#1d4ed8;font-family:'Courier New',Consolas,monospace;background:#eff6ff;padding:3px 10px;border-radius:8px;border:1px solid #bfdbfe;">${e.journalEntryCode || "قيد آلي مسجل"}</div>
+        <div style="font-size:10.5px;color:#059669;font-weight:700;margin-top:2px;">مرحل آلياً للشجرة ✅</div>
       </div>
 
       <!-- Voucher Date -->
-      <div style="text-align:center;border-left:1.5px solid #fed7aa;padding-left:12px;">
+      <div style="text-align:center;border-left:1.5px solid #fed7aa;padding-left:8px;">
         <div style="font-size:11px;color:#7c2d12;font-weight:800;letter-spacing:0.05em;margin-bottom:4px;">تاريخ التحرير</div>
-        <div style="font-size:18px;font-weight:900;color:#0f172a;font-family:'Courier New',Consolas,monospace;">${e.date || "—"}</div>
+        <div style="font-size:17px;font-weight:900;color:#0f172a;font-family:'Courier New',Consolas,monospace;">${e.date || "—"}</div>
       </div>
 
       <!-- Payment Method -->
       <div style="text-align:center;">
         <div style="font-size:11px;color:#7c2d12;font-weight:800;letter-spacing:0.05em;margin-bottom:4px;">طريقة الدفع / الحساب</div>
         <div style="font-size:15px;font-weight:900;color:#c2410c;">${methodMap[e.method] || e.method}</div>
-        <div style="font-size:12.5px;color:#475569;font-weight:700;margin-top:2px;">${e.sourceName || "الصندوق الرئيسي"}</div>
+        <div style="font-size:12px;color:#475569;font-weight:700;margin-top:2px;">${e.sourceName || "الصندوق الرئيسي"}</div>
       </div>
 
     </div>
@@ -1230,7 +1578,7 @@ function _buildExpenseHTML(e, id, company) {
 
     <!-- ═══ FOOTER ═══ -->
     <div style="background:#f1f5f9;border-top:1.5px solid #cbd5e1;padding:14px 36px;display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-size:11px;color:#64748b;font-weight:700;">طُبع من نظام شركة نظم الإمداد الحديثة بتاريخ: ${new Date().toLocaleString("ar-SA")}</div>
+      <div style="font-size:11px;color:#64748b;font-weight:700;">طُبع من نظام شركة نظم الإمداد المتطورة بتاريخ: ${new Date().toLocaleString("ar-SA")}</div>
       <div dir="ltr" style="display:inline-block;direction:ltr;font-size:11px;color:#334155;font-family:monospace;font-weight:800;">REF: ${code}</div>
     </div>
 

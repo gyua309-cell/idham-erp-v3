@@ -1,0 +1,136 @@
+[
+  {
+    "id": "G0J71JsRCFqc354AoZEv",
+    "balance": 0,
+    "openingBalance": 0,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788373560,
+      "nanoseconds": 170000000
+    },
+    "keeper": "السيد رضا",
+    "currentBalance": 1000,
+    "code": "1-1-1-2-04",
+    "accountCode": "1-1-1-2-04",
+    "accountId": "NKAQ5GIVYsaKI0yQY9av",
+    "type": "rep",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794246625,
+      "nanoseconds": 470000000
+    },
+    "name": "صندوق السيد رضا"
+  },
+  {
+    "id": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "createdAt": "2026-08-01T12:48:34.990Z",
+    "openingBalance": 0,
+    "currentBalance": 0,
+    "type": "rep",
+    "keeper": "المندوب احمد السيد",
+    "name": "صندوق المندوب - المندوب احمد السيد",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792408446,
+      "nanoseconds": 473000000
+    },
+    "repId": "61pG3jXw8Ps7HCJc9ljI",
+    "accountCode": "1-1-1-2-03",
+    "code": "1-1-1-2-03",
+    "balance": 0,
+    "accountId": "noHuPplJVDkM8ImeBFNK"
+  },
+  {
+    "id": "cashBox_FwJwxsDXQHlJlBiu5UAq",
+    "repName": "عمرو راجح",
+    "createdAt": "2026-10-26T11:01:56.232Z",
+    "repId": "FwJwxsDXQHlJlBiu5UAq",
+    "balance": 0,
+    "isActive": true,
+    "type": "rep",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794152061,
+      "nanoseconds": 696000000
+    },
+    "name": "صندوق المندوب - عمرو راجح",
+    "code": "1-1-1-2-05",
+    "accountCode": "1-1-1-2-05",
+    "accountId": "0jvIcWZx54RKPaD1VUav"
+  },
+  {
+    "id": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794246648,
+      "nanoseconds": 135000000
+    },
+    "keeper": "مصطفى",
+    "accountId": "ykm6ygUC2MBpSXoOXoiC",
+    "balance": 345.77,
+    "type": "rep",
+    "name": "صندوق المندوب - مصطفى",
+    "currentBalance": 104.65,
+    "createdAt": "2026-07-14T17:27:24.517Z",
+    "code": "1-1-1-2-01",
+    "accountCode": "1-1-1-2-01",
+    "openingBalance": 0
+  },
+  {
+    "id": "cashBox_i6qFzXabMQq8R7j7GxgL",
+    "keeper": "محمد عوض",
+    "balance": 0,
+    "openingBalance": 0,
+    "createdAt": "2026-07-29T21:24:22.944Z",
+    "accountCode": "1-1-1-2-02",
+    "currentBalance": 720,
+    "repId": "i6qFzXabMQq8R7j7GxgL",
+    "code": "1-1-1-2-02",
+    "accountId": "dNNuor7fjm6dE3jvT7oz",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794152075,
+      "nanoseconds": 914000000
+    },
+    "name": "صندوق المندوب - محمد عوض",
+    "type": "rep"
+  },
+  {
+    "id": "cashBox_owner_current",
+    "balance": 760251.11,
+    "name": "👤 حساب جاري المالك (تمويل شخصي)",
+    "accountCode": "3-1-4",
+    "type": "owner_current",
+    "accountId": "ErUeZws4zc9XMUzil3xx",
+    "notes": "حساب جاري المالك لتمويل المصروفات أو المسحوبات الشخصية",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794246613,
+      "nanoseconds": 717000000
+    },
+    "code": "3-1-4",
+    "currentBalance": 326846.82
+  },
+  {
+    "id": "fldAOs5swMd3RCbxVi8a",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1783791286,
+      "nanoseconds": 864000000
+    },
+    "currentBalance": 0,
+    "keeper": "",
+    "name": "الصندوق الرئيسى",
+    "type": "main",
+    "accountId": "DDJXykWLQP7HqFvo0X8n",
+    "code": "1-1-1-1-3",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794246648,
+      "nanoseconds": 135000000
+    },
+    "accountCode": "1-1-1-1-3",
+    "balance": 638
+  }
+]

@@ -1,0 +1,88 @@
+[
+  {
+    "id": "6uVBS9DyzA5scM0b7G1m",
+    "warehouseId": "9b7bVxLeDYB3kq81Dqb5",
+    "fixedCost": 0,
+    "plateNumber": "",
+    "createdAt": "2026-10-26T11:01:55.912Z",
+    "vehicleId": "",
+    "isActive": true,
+    "repId": "FwJwxsDXQHlJlBiu5UAq",
+    "driverName": "عمرو راجح",
+    "code": "303",
+    "notes": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793471386,
+      "nanoseconds": 675000000
+    },
+    "warehouseName": "مخزن سيارة المندوب عمرو راجح",
+    "linkedRepId": "FwJwxsDXQHlJlBiu5UAq",
+    "allocPct": null,
+    "type": "vehicle",
+    "name": "303 سيارة المندوب عمرو راجح"
+  },
+  {
+    "id": "cc_201",
+    "createdAt": "2026-07-31T18:09:37.035Z",
+    "isActive": true,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788023099,
+      "nanoseconds": 590000000
+    },
+    "name": "سيارة السيد رضا",
+    "linkedRepId": "Ao147Sj24LgGa2OOag0c",
+    "type": "warehouse",
+    "code": "201",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "cc_301",
+    "type": "detail",
+    "parentId": "cc_300",
+    "name": "سيارة المندوب مصطفى (ينبع والمسارات)",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T10:41:26.695Z",
+    "code": "301",
+    "repId": "Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "id": "cc_302",
+    "repId": "i6qFzXabMQq8R7j7GxgL",
+    "code": "302",
+    "parentId": "cc_300",
+    "name": "سيارة المندوب محمد عوض",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788770216,
+      "nanoseconds": 996000000
+    },
+    "linkedRepId": "i6qFzXabMQq8R7j7GxgL",
+    "type": "detail"
+  },
+  {
+    "id": "nv2ZmtprTHESzdhmcTIV",
+    "vehicleId": "",
+    "driverName": "المندوب احمد السيد",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788005117,
+      "nanoseconds": 845000000
+    },
+    "allocPct": null,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785249035,
+      "nanoseconds": 455000000
+    },
+    "fixedCost": 0,
+    "code": "003",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "isActive": true,
+    "plateNumber": "",
+    "type": "vehicle",
+    "name": "سيارة المندوب احمد السيد",
+    "notes": ""
+  }
+]

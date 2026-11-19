@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="مدير المبيعات — إدهام" />
+  <meta name="theme-color" content="#004d80" />
+  <title>بوابة مدير المبيعات — تسجيل العملاء والاتفاقيات القانونية | إدهام ERP</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="css/sales-manager.css?v=1.0" />
+</head>
+<body>
+
+  <!-- Top Sticky Header -->
+  <header class="top-header">
+    <div class="header-brand">
+      <div class="header-icon">💼</div>
+      <div class="header-titles">
+        <h1>إدهام ERP — بوابة مدير المبيعات الميدانية</h1>
+        <p>تسجيل العملاء الجدد، أرشفة المستندات القانونية (KYC)، وإصدار الاتفاقيات الائتمانية</p>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 11px; background: rgba(255,255,255,0.18); padding: 4px 10px; border-radius: 20px; font-weight: 700;">
+        👤 مدير المبيعات
+      </span>
+      <a href="index.html" class="btn btn-secondary btn-sm" style="background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.25);" title="العودة للنظام الرئيسي">
+        🏠 النظام الرئيسي
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">إجمالي العملاء</div>
+          <div class="stat-val" id="stat-total-clients">—</div>
+        </div>
+        <div class="stat-icon" style="background:#eff6ff; color:#0284c7;">👥</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">بانتظار الاعتماد المالي</div>
+          <div class="stat-val" id="stat-pending-clients" style="color:#d97706;">—</div>
+        </div>
+        <div class="stat-icon" style="background:#fffbeb; color:#d97706;">⏳</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">عملاء معتمدين ونشطين</div>
+          <div class="stat-val" id="stat-approved-clients" style="color:#059669;">—</div>
+        </div>
+        <div class="stat-icon" style="background:#ecfdf5; color:#059669;">✅</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-info">
+          <div class="stat-label">اتفاقيات موقعة رسمياً</div>
+          <div class="stat-val" id="stat-agreements-clients" style="color:#7c3aed;">—</div>
+        </div>
+        <div class="stat-icon" style="background:#faf5ff; color:#7c3aed;">📜</div>
+      </div>
+    </div>
+
+    <!-- Action Banner -->
+    <div class="action-banner">
+      <div class="action-banner-text">
+        <h3>تسجيل عميل جديد وتوثيق الأوراق النظامية</h3>
+        <p>إدخال بيانات المنشأة، رفع السجل والضريبة والرخصة، وإصدار اتفاقية فتح حساب قانونية مع التوقيع الحي</p>
+      </div>
+      <div>
+        <button class="btn btn-primary" onclick="window.openNewCustomerModal()" style="font-size:14px; padding:12px 22px;">
+          <span>➕</span>
+          <span>تسجيل عميل جديد واتفاقية ائتمانية</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Status Filter Pills -->
+    <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+      <button class="btn btn-secondary btn-sm filter-pill active" id="filter-status-all" onclick="window.setFilterStatus('all')">🌟 كافة العملاء</button>
+      <button class="btn btn-secondary btn-sm filter-pill" id="filter-status-pending" onclick="window.setFilterStatus('pending')" style="color:#d97706; border-color:#fde68a;">🟡 بانتظار الاعتماد المالي</button>
+      <button class="btn btn-secondary btn-sm filter-pill" id="filter-status-approved" onclick="window.setFilterStatus('approved')" style="color:#059669; border-color:#a7f3d0;">🟢 العملاء المعتمدين</button>
+      <button class="btn btn-secondary btn-sm filter-pill" id="filter-status-signed" onclick="window.setFilterStatus('signed')" style="color:#7c3aed; border-color:#ddd6fe;">✍️ ذوي التوقيع الرقمي</button>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="search-clients-input" class="search-input" placeholder="بحث بالاسم التجاري، كود العميل، رقم الجوال، أو السجل التجاري..." />
+    </div>
+
+    <!-- Clients Grid Container -->
+    <div id="clients-grid-container" class="clients-grid">
+      <!-- Populated dynamically by app.js -->
+    </div>
+
+  </main>
+
+  <!-- Mobile Floating Action Button (FAB) for quick thumb access -->
+  <button class="mobile-fab-btn" onclick="window.openNewCustomerModal()" title="تسجيل عميل جديد واتفاقية ائتمانية" aria-label="تسجيل عميل جديد">
+    <span>➕</span>
+  </button>
+
+  <!-- Application Script -->
+  <script type="module" src="js/sales-manager/app.js?v=4.1"></script>
+</body>
+</html>

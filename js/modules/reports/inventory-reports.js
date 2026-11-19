@@ -15,6 +15,8 @@ let _stock       = [];      // stockByWarehouse records
 let _txns        = [];      // stockTransactions records
 let _adjustments = [];      // inventoryAdjustments records
 let _physCounts  = [];      // physicalCounts records
+let _salesInvoices = [];    // salesInvoices records
+let _salesReturns  = [];    // salesReturns records
 let _dataLoaded  = false;
 
 let _activeTab    = 'tab-basic';
@@ -154,8 +156,6 @@ function buildSortableTable(headers, rows, totalRow = null) {
 export async function render(container, user) {
   container.innerHTML = buildShell();
   setupGlobalHandlers();
-  await loadWarehouses();
-  await loadCategories();
   showReport(_activeTab, _activeReport);
 }
 
@@ -324,7 +324,7 @@ function irSwitchReport(tabId, reportId) {
   _activeTab    = tabId;
   _activeReport = reportId;
   _sortCol      = null;
-  _sortAsc      = true;
+  _sortAsc      = false;
   const tabKey = tabId.replace('tab-', '');
   const subContainer = $(`sub-tabs-${tabKey}`);
   if (subContainer) {
@@ -344,6 +344,7 @@ async function irReloadData() {
   _dataLoaded = false;
   _products = []; _categories = []; _warehouses = [];
   _stock = []; _txns = []; _adjustments = []; _physCounts = [];
+  _salesInvoices = []; _salesReturns = [];
   safeHtml('ir-report-area', `<div style="text-align:center;padding:60px;">
     <div class="loading-spinner" style="margin:0 auto 16px;"></div>
     <div class="dim">جاري إعادة تحميل البيانات…</div>
@@ -353,8 +354,13 @@ async function irReloadData() {
 }
 
 function irSortBy(col) {
-  if (_sortCol === col) _sortAsc = !_sortAsc;
-  else { _sortCol = col; _sortAsc = true; }
+  if (_sortCol === col) {
+    _sortAsc = !_sortAsc;
+  } else {
+    _sortCol = col;
+    const isTextCol = ['productName', 'sku', 'warehouseName', 'categoryName', 'vendorName', 'customerName'].includes(col);
+    _sortAsc = isTextCol ? true : false;
+  }
   showReport(_activeTab, _activeReport);
 }
 
@@ -366,36 +372,43 @@ function irExportCSV() {
 }
 
 // ─── Data loading ─────────────────────────────────────────────────────────────
-async function loadWarehouses() {
-  try {
-    const whs = await getAll(COLS.warehouses(), [orderBy('name')]);
-    const sel = $('ir-wh');
-    if (sel) whs.forEach(w => sel.innerHTML += `<option value="${w.id}">${w.name}</option>`);
-  } catch (e) { console.warn('loadWarehouses:', e); }
-}
-
-async function loadCategories() {
-  try {
-    const cats = await getAll(COLS.categories(), [orderBy('name')]);
-    const sel = $('ir-cat');
-    if (sel) cats.forEach(c => sel.innerHTML += `<option value="${c.id}">${c.name}</option>`);
-  } catch (e) { console.warn('loadCategories:', e); }
+function populateFilterDropdowns() {
+  const selWh = $('ir-wh');
+  if (selWh && selWh.children.length <= 1) {
+    _warehouses.forEach(w => { selWh.innerHTML += `<option value="${w.id}">${w.name}</option>`; });
+  }
+  const selCat = $('ir-cat');
+  if (selCat && selCat.children.length <= 1) {
+    _categories.forEach(c => { selCat.innerHTML += `<option value="${c.id}">${c.name}</option>`; });
+  }
 }
 
 async function loadAllData() {
   if (_dataLoaded) return;
   try {
-    [_products, _categories, _warehouses, _stock, _adjustments, _physCounts] = await Promise.all([
+    const [prods, cats, whs, stock, adjs, phys, invoices, returns, txns] = await Promise.all([
       getAll(COLS.products()),
       getAll(COLS.categories()),
       getAll(COLS.warehouses()),
       getAll(COLS.stockByWarehouse()),
-      getAll(COLS.inventoryAdjustments()),
-      getAll(COLS.physicalCounts()),
+      getAll(COLS.inventoryAdjustments()).catch(() => []),
+      getAll(COLS.physicalCounts()).catch(() => []),
+      getAll(COLS.salesInvoices()).catch(() => []),
+      getAll(COLS.salesReturns()).catch(() => []),
+      getAll(COLS.stockTransactions(), [orderBy('createdAt', 'desc'), limit(1000)]).catch(() => []),
     ]);
 
-    const txSnap = await getDocs(query(COLS.stockTransactions(), orderBy('createdAt', 'desc'), limit(2000)));
-    _txns = txSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    _products = prods || [];
+    _categories = cats || [];
+    _warehouses = whs || [];
+    _stock = stock || [];
+    _adjustments = adjs || [];
+    _physCounts = phys || [];
+    _salesInvoices = invoices || [];
+    _salesReturns = returns || [];
+    _txns = txns || [];
+
+    populateFilterDropdowns();
 
     const prodMap = Object.fromEntries(_products.map(p => [p.id, p]));
     const whMap   = Object.fromEntries(_warehouses.map(w => [w.id, w]));
@@ -409,8 +422,8 @@ async function loadAllData() {
       s.barcode        = p.barcode        || '';
       s.categoryId     = p.categoryId     || '';
       s.categoryName   = (catMap[p.categoryId] || {}).name || '';
-      s.costPrice      = p.costPrice      || p.purchasePrice || 0;
-      s.salePrice      = p.sellingPrice   || p.salePrice     || p.priceRetail   || p.price || 0;
+      s.costPrice      = p.avgCostPrice   || p.costPrice || p.purchasePrice || 0;
+      s.salePrice      = p.sellingPrice   || p.salePrice || p.priceRetail   || p.price || 0;
       s.minStock       = p.minStock       || 0;
       s.reorderPoint   = p.reorderPoint   || p.reorderLevel || 0;
       s.maxStock       = p.maxStock       || 0;
@@ -429,6 +442,7 @@ async function loadAllData() {
       t.productName   = t.productName   || p.name || t.productId;
       t.warehouseName = t.warehouseName || w.name || t.warehouseId;
       t.sku           = t.sku           || p.sku  || '';
+      t.cost          = t.cost || t.unitCost || p.avgCostPrice || p.costPrice || p.purchasePrice || 0;
     });
 
     _dataLoaded = true;
@@ -505,6 +519,14 @@ function sortData(data, col, asc) {
   return [...data].sort((a, b) => {
     let va = a[col] ?? '';
     let vb = b[col] ?? '';
+    if (typeof va === 'number' && typeof vb === 'number') {
+      return asc ? va - vb : vb - va;
+    }
+    const na = Number(va);
+    const nb = Number(vb);
+    if (!isNaN(na) && !isNaN(nb) && typeof va !== 'boolean' && typeof vb !== 'boolean' && va !== '' && vb !== '') {
+      return asc ? na - nb : nb - na;
+    }
     if (typeof va === 'string') va = va.toLowerCase();
     if (typeof vb === 'string') vb = vb.toLowerCase();
     if (va < vb) return asc ? -1 : 1;
@@ -1776,78 +1798,344 @@ function renderFastMoving(f) {
     buildSortableTable(headers, tableRows));
 }
 
-// ─── 19. معدل دوران المخزون ──────────────────────────────────────────────────
+// ─── 19. معدل دوران المخزون وتحليل سرعة الحركة (FSN) ─────────────────────────
 function renderTurnover(f) {
-  const outflows = {};
-  _txns.forEach(t => {
-    if ((t.qtyChange || 0) >= 0) return;
-    if (!inDateRange(t.createdAt, f.dateFrom, f.dateTo)) return;
-    if (f.whId && t.warehouseId !== f.whId) return;
-    if (!outflows[t.productId]) outflows[t.productId] = { cogs: 0, productName: t.productName, sku: t.sku };
-    outflows[t.productId].cogs += Math.abs(t.qtyChange || 0) * (t.cost || 0);
+  const fromStr = (f.dateFrom || '').slice(0, 10);
+  const toStr   = (f.dateTo   || '').slice(0, 10);
+
+  let periodDays = 90;
+  if (fromStr && toStr) {
+    periodDays = Math.max(1, Math.round((new Date(toStr) - new Date(fromStr)) / 86400000) + 1);
+  } else if (fromStr && !toStr) {
+    periodDays = Math.max(1, Math.round((new Date() - new Date(fromStr)) / 86400000) + 1);
+  }
+  const annualFactor = 365 / periodDays;
+
+  const isDocInDate = (doc) => {
+    if (!fromStr && !toStr) return true;
+    let dStr = '';
+    if (doc.date) dStr = String(doc.date).slice(0, 10);
+    else if (doc.createdAt) {
+      if (typeof doc.createdAt === 'string') dStr = doc.createdAt.slice(0, 10);
+      else if (doc.createdAt.toDate) dStr = doc.createdAt.toDate().toISOString().slice(0, 10);
+      else if (doc.createdAt.seconds) dStr = new Date(doc.createdAt.seconds * 1000).toISOString().slice(0, 10);
+    }
+    if (!dStr) return true;
+    if (fromStr && dStr < fromStr) return false;
+    if (toStr && dStr > toStr) return false;
+    return true;
+  };
+
+  const prodMap = Object.fromEntries(_products.map(p => [p.id, p]));
+  const itemOutflowMap = {};
+
+  // 1. حساب مبيعات الفواتير الفعلية (salesInvoices)
+  (_salesInvoices || []).forEach(inv => {
+    if (!isDocInDate(inv)) return;
+    if (f.whId && inv.warehouseId && inv.warehouseId !== f.whId) return;
+    if (inv.status === 'cancelled' || inv.status === 'draft') return;
+
+    (inv.lines || inv.items || []).forEach(l => {
+      if (!l.productId) return;
+      const p = prodMap[l.productId] || {};
+      const unitCost = l.costPrice || l.averageCost || p.avgCostPrice || p.averageCost || p.costPrice || p.purchasePrice || 0;
+      const qty = Math.abs(l.qty || l.quantity || 0);
+      const saleVal = (l.total !== undefined ? l.total : (qty * (l.unitPrice || l.price || 0))) || 0;
+
+      if (!itemOutflowMap[l.productId]) {
+        itemOutflowMap[l.productId] = {
+          productId: l.productId,
+          productName: l.productName || l.name || p.name || l.productId,
+          sku: l.sku || p.sku || '',
+          soldQty: 0,
+          cogs: 0,
+          revenue: 0,
+          txCount: 0,
+        };
+      }
+      itemOutflowMap[l.productId].soldQty += qty;
+      itemOutflowMap[l.productId].cogs += qty * unitCost;
+      itemOutflowMap[l.productId].revenue += saleVal;
+      itemOutflowMap[l.productId].txCount += 1;
+    });
   });
 
-  const prodMap = {};
+  // 2. خصم مرتجعات المبيعات (salesReturns)
+  (_salesReturns || []).forEach(ret => {
+    if (!isDocInDate(ret)) return;
+    if (f.whId && ret.warehouseId && ret.warehouseId !== f.whId) return;
+    (ret.lines || ret.items || []).forEach(l => {
+      if (!l.productId || !itemOutflowMap[l.productId]) return;
+      const p = prodMap[l.productId] || {};
+      const unitCost = l.costPrice || p.avgCostPrice || p.costPrice || 0;
+      const qty = Math.abs(l.qty || 0);
+      itemOutflowMap[l.productId].soldQty = Math.max(0, itemOutflowMap[l.productId].soldQty - qty);
+      itemOutflowMap[l.productId].cogs = Math.max(0, itemOutflowMap[l.productId].cogs - (qty * unitCost));
+    });
+  });
+
+  // 3. مسح حركات المخزون التكميلية (stockTransactions الصادرة مثل تحميل المناديب / الصرف المباشر إن لم تكن في الفواتير)
+  (_txns || []).forEach(t => {
+    const type = (t.type || '').toLowerCase().replace(/_/g, '-');
+    const isOut = (t.qtyChange || 0) < 0 && (type === 'sale-out' || type === 'rep-load' || type === 'dispatch' || type === 'pos-out');
+    if (!isOut) return;
+    if (!isDocInDate(t)) return;
+    if (f.whId && t.warehouseId && t.warehouseId !== f.whId) return;
+    if (!t.productId) return;
+
+    if (!itemOutflowMap[t.productId] || itemOutflowMap[t.productId].cogs === 0) {
+      const p = prodMap[t.productId] || {};
+      const unitCost = t.cost || t.unitCost || p.avgCostPrice || p.costPrice || p.purchasePrice || 0;
+      const qty = Math.abs(t.qtyChange || 0);
+      if (!itemOutflowMap[t.productId]) {
+        itemOutflowMap[t.productId] = {
+          productId: t.productId,
+          productName: t.productName || p.name || t.productId,
+          sku: t.sku || p.sku || '',
+          soldQty: 0,
+          cogs: 0,
+          revenue: 0,
+          txCount: 0,
+        };
+      }
+      itemOutflowMap[t.productId].soldQty += qty;
+      itemOutflowMap[t.productId].cogs += qty * unitCost;
+      itemOutflowMap[t.productId].txCount += 1;
+    }
+  });
+
+  // 4. تجميع رصيد المخزون الحالي الفعلي لكل صنف
+  const stockMap = {};
   _stock.filter(s => matchesFilters(s, f)).forEach(s => {
     if (f.whId && s.warehouseId !== f.whId) return;
-    if (!prodMap[s.productId]) prodMap[s.productId] = {
-      productId: s.productId, productName: s.productName, sku: s.sku, qty: 0, value: 0,
-    };
-    prodMap[s.productId].qty   += (s.qty || 0);
-    prodMap[s.productId].value += s.value;
+    const p = prodMap[s.productId] || {};
+    const unitCost = p.avgCostPrice || p.costPrice || p.purchasePrice || s.costPrice || 0;
+
+    if (!stockMap[s.productId]) {
+      stockMap[s.productId] = {
+        productId: s.productId,
+        productName: s.productName || p.name || s.productId,
+        sku: s.sku || p.sku || '',
+        categoryName: s.categoryName || p.categoryName || '',
+        currentQty: 0,
+        unitCost: unitCost,
+        currentValue: 0,
+      };
+    }
+    const q = (s.qty || 0);
+    stockMap[s.productId].currentQty += q;
+    stockMap[s.productId].currentValue += (q * unitCost);
   });
 
-  let items = Object.values(prodMap).map(p => {
-    const of  = outflows[p.productId] || { cogs: 0 };
-    const avgInv   = p.value || 1;
-    const turnover = of.cogs / avgInv;
-    return { ...p, cogs: of.cogs, turnover: Math.round(turnover * 100) / 100, daysInStock: turnover > 0 ? Math.round(365 / turnover) : 999 };
-  }).filter(i => i.value > 0);
+  // 5. دمج البيانات وحساب معدل الدوران السنوي وأيام التغطية والتصنيف
+  let items = Object.values(stockMap).map(st => {
+    const of = itemOutflowMap[st.productId] || { soldQty: 0, cogs: 0, revenue: 0, txCount: 0 };
+    const avgInv = st.currentValue > 0 ? st.currentValue : (st.currentQty * st.unitCost) || 1;
+    
+    // معدل الدوران في الفترة والمعدل السنوي
+    const rawTurnover = of.cogs / avgInv;
+    const annualizedTurnover = Math.round(rawTurnover * annualFactor * 100) / 100;
+    
+    // أيام التغطية (DSI) = كم يوماً يكفي المخزون الحالي بناءً على متوسط الصرف اليومي
+    const dailyCogs = of.cogs / periodDays;
+    let daysInStock = 999;
+    if (dailyCogs > 0) {
+      daysInStock = Math.round(st.currentValue / dailyCogs);
+    } else if (annualizedTurnover > 0) {
+      daysInStock = Math.round(365 / annualizedTurnover);
+    }
 
-  items = _sortCol ? sortData(items, _sortCol, _sortAsc) : items.sort((a,b) => b.turnover - a.turnover);
+    // تصنيف الحركة FSN
+    let velocity = 'dead';
+    let velocityLabel = '🔴 راكد / عديم الحركة';
+    let velocityBadge = 'danger';
+    let recommendation = '🚨 عروض تصفية / إيقاف شراء';
+    let recBadge = 'danger';
 
-  _currentData = items.map(r => ({
-    اسم_الصنف: r.productName, الكود: r.sku,
-    قيمة_المخزون: r.value, تكلفة_الصادر: r.cogs,
-    معدل_الدوران: r.turnover, أيام_المخزون: r.daysInStock === 999 ? '—' : r.daysInStock,
-  }));
+    if (of.soldQty > 0 || of.cogs > 0) {
+      if (annualizedTurnover >= 6 || (daysInStock > 0 && daysInStock <= 60)) {
+        velocity = 'fast';
+        velocityLabel = '🟢 سريع الحركة (F)';
+        velocityBadge = 'good';
+        recommendation = daysInStock <= 15 ? '🛒 إعادة طلب فوري' : '✅ مستوى مثالي';
+        recBadge = daysInStock <= 15 ? 'warn' : 'good';
+      } else if (annualizedTurnover >= 2 || (daysInStock > 0 && daysInStock <= 180)) {
+        velocity = 'medium';
+        velocityLabel = '🟡 متوسط الحركة (S)';
+        velocityBadge = 'neutral';
+        recommendation = '✅ تدفق طبيعي';
+        recBadge = 'neutral';
+      } else {
+        velocity = 'slow';
+        velocityLabel = '🟠 بطيء الحركة (S)';
+        velocityBadge = 'warn';
+        recommendation = '⚠️ تقليص كميات الشراء';
+        recBadge = 'warn';
+      }
+    } else {
+      if (st.currentQty <= 0) {
+        velocityLabel = '⚪ غير متوفر';
+        velocityBadge = 'neutral';
+        recommendation = '—';
+        recBadge = 'neutral';
+      }
+    }
 
-  const avgTurnover = items.length > 0 ? (items.reduce((s,r)=>s+r.turnover,0) / items.length).toFixed(2) : '0';
+    return {
+      ...st,
+      soldQty: of.soldQty,
+      cogs: of.cogs,
+      revenue: of.revenue,
+      turnover: annualizedTurnover,
+      daysInStock,
+      velocity,
+      velocityLabel,
+      velocityBadge,
+      recommendation,
+      recBadge,
+    };
+  }).filter(i => i.currentQty > 0 || i.soldQty > 0);
+
+  // البحث والتصفية
+  if (f.search) {
+    items = items.filter(r =>
+      `${r.productName || ''} ${r.sku || ''}`.toLowerCase().includes(f.search)
+    );
+  }
+
+  const allItems = items;
+  const activeCount = allItems.filter(r => r.soldQty > 0).length;
+  const fastCount   = allItems.filter(r => r.velocity === 'fast').length;
+  const medCount    = allItems.filter(r => r.velocity === 'medium').length;
+  const slowCount   = allItems.filter(r => r.velocity === 'slow').length;
+  const deadCount   = allItems.filter(r => r.velocity === 'dead').length;
+
+  let displayItems = allItems;
+  if (window._turnoverVelocityFilter === 'active') displayItems = allItems.filter(r => r.soldQty > 0);
+  else if (window._turnoverVelocityFilter === 'fast') displayItems = allItems.filter(r => r.velocity === 'fast');
+  else if (window._turnoverVelocityFilter === 'medium') displayItems = allItems.filter(r => r.velocity === 'medium');
+  else if (window._turnoverVelocityFilter === 'slow') displayItems = allItems.filter(r => r.velocity === 'slow');
+  else if (window._turnoverVelocityFilter === 'dead') displayItems = allItems.filter(r => r.velocity === 'dead');
+
+  // ترتيب تنازلي مؤكد: الأصناف المباعة وذات الدوران الأعلى في المقدمة دائماً
+  if (_sortCol) {
+    displayItems = sortData(displayItems, _sortCol, _sortAsc);
+  } else {
+    displayItems = displayItems.sort((a,b) => b.turnover - a.turnover || b.soldQty - a.soldQty || b.cogs - a.cogs);
+  }
+
+  // إحصائيات المؤشرات العليا
+  const totalInvValue = allItems.reduce((s, r) => s + r.currentValue, 0);
+  const totalCogs = allItems.reduce((s, r) => s + r.cogs, 0);
+  const deadStockValue = allItems.filter(r => r.velocity === 'dead' && r.currentValue > 0).reduce((s, r) => s + r.currentValue, 0);
+  const overallTurnover = totalInvValue > 0 ? ((totalCogs / totalInvValue) * annualFactor).toFixed(2) : '0.00';
+  const overallDSI = Number(overallTurnover) > 0 ? Math.round(365 / Number(overallTurnover)) : '—';
+
   const kpis = [
-    kpiCard('🔄', 'متوسط معدل الدوران', `${avgTurnover}×`, 'indigo', 'مرات في السنة'),
-    kpiCard('📦', 'إجمالي قيمة المخزون', formatCurrency(items.reduce((s,r)=>s+r.value,0)), 'good'),
-    kpiCard('💸', 'إجمالي تكلفة الصادر', formatCurrency(items.reduce((s,r)=>s+r.cogs,0)), 'warn'),
+    kpiCard('🔄', 'متوسط دوران المخزون السنوي', `${overallTurnover}×`, 'indigo', `معدل دورات رأس المال بالسنة`),
+    kpiCard('⏳', 'متوسط أيام بيع المخزون (DSI)', overallDSI !== '—' ? `${overallDSI} يوم` : '—', (typeof overallDSI === 'number' && overallDSI <= 60) ? 'good' : 'indigo', `فترة بقاء البضاعة بالمستودع`),
+    kpiCard('💸', 'إجمالي تكلفة المبيعات (COGS)', formatCurrency(totalCogs), 'good', `${activeCount} صنف تم بيعها بالفترة`),
+    kpiCard('📦', 'إجمالي قيمة المخزون الحالي', formatCurrency(totalInvValue), 'indigo', `بسعر التكلفة المرجح`),
+    kpiCard('🧊', 'رأس المال المجمد (الراكد)', formatCurrency(deadStockValue), deadStockValue > 0 ? 'bad' : 'good', `${deadCount} صنف بلا أي حركة بيع`),
   ].join('');
 
+  const filterBarHtml = `
+    <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin: 0 0 12px 0; background:var(--bg-2); padding:10px 14px; border-radius:8px; border:1px solid var(--border-soft);">
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:6px;">
+        <span style="font-weight:700; font-size:12px; margin-left:6px; color:var(--text-1);">🎯 تصفية الأصناف:</span>
+        <button class="btn btn-sm ${(!window._turnoverVelocityFilter || window._turnoverVelocityFilter==='all') ? 'btn-primary' : 'btn-secondary'}" onclick="window.irSetTurnoverVelocityFilter('all')">🌟 الكل (${allItems.length})</button>
+        <button class="btn btn-sm ${window._turnoverVelocityFilter==='active' ? 'btn-primary' : 'btn-secondary'}" onclick="window.irSetTurnoverVelocityFilter('active')">🟢 النشطة والمباعة (${activeCount})</button>
+        <button class="btn btn-sm ${window._turnoverVelocityFilter==='fast' ? 'btn-primary' : 'btn-secondary'}" onclick="window.irSetTurnoverVelocityFilter('fast')">🚀 سريعة (${fastCount})</button>
+        <button class="btn btn-sm ${window._turnoverVelocityFilter==='medium' ? 'btn-primary' : 'btn-secondary'}" onclick="window.irSetTurnoverVelocityFilter('medium')">🟡 متوسطة (${medCount})</button>
+        <button class="btn btn-sm ${window._turnoverVelocityFilter==='slow' ? 'btn-primary' : 'btn-secondary'}" onclick="window.irSetTurnoverVelocityFilter('slow')">🟠 بطيئة (${slowCount})</button>
+        <button class="btn btn-sm ${window._turnoverVelocityFilter==='dead' ? 'btn-primary' : 'btn-secondary'}" onclick="window.irSetTurnoverVelocityFilter('dead')">🔴 الراكدة بدون بيع (${deadCount})</button>
+      </div>
+      <div style="display:flex; align-items:center; gap:4px;">
+        <span style="font-size:11px; color:var(--text-2); font-weight:600;">الفترة:</span>
+        <button class="btn btn-ghost btn-sm" onclick="window.irSetTurnoverPeriod(30)" style="font-size:11px; ${periodDays===30?'font-weight:bold;color:var(--brand);':''}">٣٠ يوم</button>
+        <button class="btn btn-ghost btn-sm" onclick="window.irSetTurnoverPeriod(90)" style="font-size:11px; ${periodDays===90?'font-weight:bold;color:var(--brand);':''}">٩٠ يوم</button>
+        <button class="btn btn-ghost btn-sm" onclick="window.irSetTurnoverPeriod(180)" style="font-size:11px; ${periodDays===180?'font-weight:bold;color:var(--brand);':''}">٦ أشهر</button>
+        <button class="btn btn-ghost btn-sm" onclick="window.irSetTurnoverPeriod(365)" style="font-size:11px; ${periodDays>=360?'font-weight:bold;color:var(--brand);':''}">سنة</button>
+      </div>
+    </div>
+  `;
+
+  _currentData = displayItems.map(r => ({
+    اسم_الصنف: r.productName,
+    الكود: r.sku,
+    الرصيد_الحالي: r.currentQty,
+    قيمة_المخزون: r.currentValue,
+    الكمية_المباعة: r.soldQty,
+    تكلفة_المبيعات_COGS: r.cogs,
+    معدل_الدوران_السنوي: `${r.turnover}×`,
+    أيام_التغطية_DSI: r.daysInStock === 999 ? '—' : `${r.daysInStock} يوم`,
+    تصنيف_الحركة: r.velocityLabel,
+    توصية_النظام: r.recommendation,
+  }));
+
   const headers = [
-    { key: 'productName', label: 'اسم الصنف',     sortable: true },
-    { key: 'sku',         label: 'الكود',          sortable: true },
-    { key: 'value',       label: 'قيمة المخزون',  sortable: true },
-    { key: 'cogs',        label: 'تكلفة الصادر',  sortable: true },
-    { key: 'turnover',    label: 'معدل الدوران ×', sortable: true },
-    { key: 'daysInStock', label: 'أيام التغطية',  sortable: true },
-    { key: 'perf',        label: 'الأداء',         sortable: false },
+    { key: 'productName',    label: 'اسم الصنف',              sortable: true },
+    { key: 'sku',            label: 'الكود',                  sortable: true },
+    { key: 'currentQty',     label: 'الرصيد المتوفر',          sortable: true },
+    { key: 'currentValue',   label: 'قيمة المخزون',          sortable: true },
+    { key: 'soldQty',        label: 'الكمية المباعة',         sortable: true },
+    { key: 'cogs',           label: 'تكلفة المبيعات (COGS)', sortable: true },
+    { key: 'turnover',       label: 'معدل الدوران السنوي ×',   sortable: true },
+    { key: 'daysInStock',    label: 'أيام التغطية (DSI)',     sortable: true },
+    { key: 'velocity',       label: 'تصنيف الحركة (FSN)',     sortable: true },
+    { key: 'recommendation', label: 'توصية القرار الذكية',   sortable: false },
   ];
 
-  const tableRows = items.map(r => {
-    const t = r.turnover;
-    const perfLabel = t >= 8 ? 'ممتاز' : t >= 4 ? 'جيد' : t >= 1 ? 'متوسط' : 'ضعيف';
-    const perfColor = t >= 8 ? 'good' : t >= 4 ? 'neutral' : t >= 1 ? 'warn' : 'danger';
+  const tableRows = displayItems.map(r => {
     return {
-      _rowClass: t < 1 ? 'row-bad' : t < 4 ? 'row-warn' : 'row-good',
+      _rowClass: r.velocity === 'dead' ? 'row-bad' : r.velocity === 'slow' ? 'row-warn' : r.velocity === 'fast' ? 'row-good' : '',
       productName: `<strong>${r.productName}</strong>`,
-      sku:         `<span class="mono dim" style="font-size:11px;">${r.sku}</span>`,
-      value:       `<span class="mono">${formatCurrency(r.value)}</span>`,
-      cogs:        `<span class="mono">${formatCurrency(r.cogs)}</span>`,
-      turnover:    `<span class="mono font-bold">${r.turnover}×</span>`,
-      daysInStock: `<span class="mono">${r.daysInStock === 999 ? '—' : r.daysInStock + ' يوم'}</span>`,
-      perf:        `<span class="badge-${perfColor}">${perfLabel}</span>`,
+      sku: `<span class="mono dim" style="font-size:11px;">${r.sku}</span>`,
+      currentQty: `<span class="mono font-bold">${formatQuantity(r.currentQty)}</span>`,
+      currentValue: `<span class="mono">${formatCurrency(r.currentValue)}</span>`,
+      soldQty: `<span class="mono font-bold text-good">${formatQuantity(r.soldQty)}</span>`,
+      cogs: `<span class="mono font-bold">${formatCurrency(r.cogs)}</span>`,
+      turnover: `<span class="mono font-bold" style="color:var(--brand);">${r.turnover}×</span>`,
+      daysInStock: `<span class="mono font-bold">${r.daysInStock === 999 ? '<span class="dim">—</span>' : r.daysInStock + ' يوم'}</span>`,
+      velocity: `<span class="badge-${r.velocityBadge}">${r.velocityLabel}</span>`,
+      recommendation: `<span class="badge-${r.recBadge}" style="font-weight:600;">${r.recommendation}</span>`,
     };
   });
 
-  return reportWrap('معدل دوران المخزون — Inventory Turnover Rate', '🔄', kpis,
-    buildSortableTable(headers, tableRows));
+  const totalRow = {
+    productName: 'الإجمالي العام',
+    sku: '',
+    currentQty: '',
+    currentValue: `<span class="mono font-bold">${formatCurrency(totalInvValue)}</span>`,
+    soldQty: '',
+    cogs: `<span class="mono font-bold">${formatCurrency(totalCogs)}</span>`,
+    turnover: `<span class="mono font-bold">${overallTurnover}×</span>`,
+    daysInStock: `<span class="mono font-bold">${overallDSI !== '—' ? overallDSI + ' يوم' : '—'}</span>`,
+    velocity: '',
+    recommendation: '',
+  };
+
+  return reportWrap(`معدل دوران المخزون السنوي وتحليل سرعة الحركة (FSN Analysis) — لفترة ${periodDays} يوماً`, '🔄', kpis,
+    filterBarHtml + buildSortableTable(headers, tableRows, totalRow));
 }
+
+window.irSetTurnoverVelocityFilter = (vel) => {
+  window._turnoverVelocityFilter = vel;
+  showReport(_activeTab, _activeReport);
+};
+
+window.irSetTurnoverPeriod = (days) => {
+  const dTo = new Date();
+  const dFrom = new Date();
+  dFrom.setDate(dTo.getDate() - days);
+  const toStr = dTo.toISOString().split('T')[0];
+  const fromStr = dFrom.toISOString().split('T')[0];
+  const elFrom = $('ir-date-from');
+  const elTo = $('ir-date-to');
+  if (elFrom) elFrom.value = fromStr;
+  if (elTo) elTo.value = toStr;
+  showReport(_activeTab, _activeReport);
+};
 
 // ─── 20. الفاقد والتالف ──────────────────────────────────────────────────────
 function renderWaste(f) {

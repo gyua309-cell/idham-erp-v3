@@ -88,7 +88,7 @@ export async function render(container, user) {
     </div>
 
     <!-- Modal -->
-    <div id="loc-modal" class="modal-overlay">
+    <div id="loc-modal" class="modal-overlay hidden">
       <div class="modal" style="max-width:600px;">
         <div class="modal-header">
           <h2 class="modal-title" id="loc-modal-title">إضافة موقع تخزين</h2>
@@ -234,11 +234,11 @@ function openModal(id = null) {
     if (title) title.textContent = 'إضافة موقع تخزين جديد';
   }
 
-  modal.classList.add('active');
+  modal.classList.remove('hidden');
 }
 
 function closeModal() {
-  document.getElementById('loc-modal')?.classList.remove('active');
+  document.getElementById('loc-modal')?.classList.add('hidden');
   editingId = null;
 }
 

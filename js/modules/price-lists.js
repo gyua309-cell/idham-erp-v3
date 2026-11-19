@@ -41,6 +41,7 @@ export async function render(container, user) {
           <option value="wholesale">قائمة الجملة فقط</option>
           <option value="distributor">قائمة التوزيع فقط</option>
         </select>
+        <button class="btn btn-secondary" onclick="syncAllProductPurchasePrices(this)" title="تحديث أسعار الشراء من الفواتير">🔄 تحديث من الفواتير</button>
         <button class="btn btn-secondary" onclick="selectAllProductsForPrint(true)">☑️ تحديد الكل</button>
         <button class="btn btn-secondary" onclick="selectAllProductsForPrint(false)">⬛ إلغاء التحديد</button>
         <button class="btn btn-lime" onclick="printSelectedPriceList()" style="background:linear-gradient(135deg,#10B981,#059669);color:#fff;font-weight:700;">🖨️ طباعة قائمة الأسعار للأصناف المحددة</button>
@@ -148,7 +149,7 @@ window.saveMargins = async () => {
     // Recalculate and update all products in Firestore
     const { updateDoc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
     const updatePromises = allProducts.map(p => {
-      const cost = p.purchasePrice || p.costPrice || p.averageCost || 0;
+      const cost = p.lastPurchasePrice || p.avgCostPrice || p.purchasePrice || p.costPrice || p.averageCost || 0;
       if (cost <= 0) return Promise.resolve();
 
       // Calculate selling prices inclusive of 15% VAT, but we store selling prices before tax!
@@ -196,8 +197,8 @@ async function loadPriceMatrix() {
     }
 
     tbody.innerHTML = allProducts.map(p => {
-      // Cost price: purchasePrice or costPrice or averageCost
-      const cost = p.purchasePrice || p.costPrice || p.averageCost || 0;
+      // Cost price: lastPurchasePrice, avgCostPrice, purchasePrice, costPrice, or averageCost
+      const cost = p.lastPurchasePrice || p.avgCostPrice || p.purchasePrice || p.costPrice || p.averageCost || 0;
       
       // Calculate selling prices inclusive of 15% VAT
       const retailPrice = cost * (1 + retailMargin / 100) * 1.15;
@@ -255,9 +256,9 @@ window.printSelectedPriceList = async () => {
 
   // Fetch company details and logo
   let co = {
-    name: "شركة نظم الإمداد الحديثة",
-    vatNumber: "312448150500003",
-    address: "المملكة العربية السعودية",
+    name: "شركة نظم الإمداد المتطورة",
+    vatNumber: "314996148100003",
+    address: "مبنى 7689 — شارع ينبع  الصناعية 2179 — حي غرناطة — ينبع — رمز 46414",
     phone: "0549141648",
     email: "Nuzmalamdad@gmail.com"
   };
@@ -292,7 +293,7 @@ window.printSelectedPriceList = async () => {
 
   // Generate table rows dynamically based on the selected print type
   const rows = printItems.map((p, idx) => {
-    const cost = p.purchasePrice || p.costPrice || p.averageCost || 0;
+    const cost = p.lastPurchasePrice || p.avgCostPrice || p.purchasePrice || p.costPrice || p.averageCost || 0;
     const retailPrice = cost * (1 + retailMargin / 100) * 1.15;
     const wholesalePrice = cost * (1 + wholesaleMargin / 100) * 1.15;
     const distributorPrice = cost * (1 + distributorMargin / 100) * 1.15;

@@ -1,0 +1,2781 @@
+[
+  {
+    "id": "07MYj0Dbw4Gf7QbMTQtx",
+    "type": "in",
+    "amount": 1000,
+    "notes": "سند قبض — شبكة",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786961900,
+      "nanoseconds": 624000000
+    },
+    "balanceAfter": 1764,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt",
+    "sourceId": "iCefhfkA15lPR0hxolfY",
+    "refNumber": "RV-ICEFHF"
+  },
+  {
+    "id": "0FavSpgBB5OXvtkJEgRB",
+    "sourceId": "6w5SmwGK3CDxC4J0EkGJ",
+    "refNumber": "RV-6W5SMW",
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل بنكى",
+    "type": "in",
+    "amount": 300,
+    "balanceAfter": 4274,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787384453,
+      "nanoseconds": 85000000
+    }
+  },
+  {
+    "id": "1iGHvq4HvrowuSQuOY9C",
+    "type": "out",
+    "sourceType": "expense",
+    "isTransfer": false,
+    "amount": 1000,
+    "refNumber": "PV-BNQOZN",
+    "balanceAfter": 6460.210000000001,
+    "notes": "سند صرف رقم BNQOZN — راتب السعودى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588887,
+      "nanoseconds": 381000000
+    },
+    "sourceId": "bnqOZn8zJatekW7GzW1A",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "2notSNmqoeJWKClRgTtc",
+    "amount": 730,
+    "notes": "سند قبض — شبكة",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992200,
+      "nanoseconds": 236000000
+    },
+    "type": "in",
+    "sourceType": "receipt",
+    "sourceId": "x0uF7d5dFuEEETWEwPyo",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 1675.8500000000004,
+    "refNumber": "RV-X0UF7D"
+  },
+  {
+    "id": "4BDohjOMMPrlerukevUx",
+    "userName": "النظام",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-NOTX6Q",
+    "amount": 1612,
+    "date": "2026-11-03",
+    "notes": "سند قبض — تحويل",
+    "balanceAfter": 15883.419999999996,
+    "sourceType": "receipt",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793692240,
+      "nanoseconds": 132000000
+    },
+    "sourceId": "noTX6qVUv4NIXl8SWsfr"
+  },
+  {
+    "id": "4eKN0HfE0GFpQw2YMF50",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790064331,
+      "nanoseconds": 453000000
+    },
+    "userName": "النظام",
+    "balanceAfter": -40380.159999999996,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-09-21",
+    "amount": 2140,
+    "refNumber": "RV-FKH3CI",
+    "sourceId": "fkH3cIxzt8ucqeqLAwIy",
+    "notes": "سند قبض — تحويل",
+    "type": "in"
+  },
+  {
+    "id": "5HG0mX6Qh0lK665vIIDQ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792576427,
+      "nanoseconds": 523000000
+    },
+    "date": "2026-10-21",
+    "userName": "النظام",
+    "amount": 306.6,
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل",
+    "balanceAfter": 14716.710000000001,
+    "type": "in",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceId": "EKLqKdGA0rfn8aKF6VUJ",
+    "refNumber": "RV-EKLQKD"
+  },
+  {
+    "id": "5urROl3uKczfZnCQDSTN",
+    "type": "out",
+    "bankAccountId": "bank-aljazira",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237363,
+      "nanoseconds": 369000000
+    },
+    "amount": 30279,
+    "balanceAfter": -129167.5,
+    "refNumber": "PV-6N0SQK",
+    "notes": "سند صرف رقم 6N0SQK — تحويل"
+  },
+  {
+    "id": "67LJuXTeMvWVhhIVDg2S",
+    "sourceId": "et08LYAjp8c5Vv49n8yg",
+    "date": "2026-09-27",
+    "sourceType": "receipt",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-ET08LY",
+    "notes": "سند قبض — تحويل",
+    "type": "in",
+    "amount": 1000,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790534981,
+      "nanoseconds": 161000000
+    },
+    "balanceAfter": 5545,
+    "userName": "النظام"
+  },
+  {
+    "id": "6cA95MEIlbTscHgsO7Ps",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "amount": 35,
+    "refNumber": "RV-1GQ9PQ",
+    "notes": "سند قبض — شبكة",
+    "sourceType": "receipt",
+    "balanceAfter": 5659.210000000001,
+    "sourceId": "1gq9pQ2qrhOZ1QKRLFZP",
+    "date": "2026-10-22",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792665357,
+      "nanoseconds": 692000000
+    }
+  },
+  {
+    "id": "7X2Wy6rPfINKzYDYJGld",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — تحويل",
+    "refNumber": "RV-KQKOR5",
+    "type": "in",
+    "userName": "النظام",
+    "amount": 564,
+    "date": "2026-09-25",
+    "sourceType": "receipt",
+    "sourceId": "kqKOr56c4hoR9yHe7i3E",
+    "balanceAfter": 4545,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790415883,
+      "nanoseconds": 670000000
+    }
+  },
+  {
+    "id": "80NkggtODCrIPTIBhXHn",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "PV-ONGZNV",
+    "type": "out",
+    "amount": 736,
+    "sourceId": "onGZnV7am4Pds1wUvR1X",
+    "sourceType": "expense",
+    "notes": "سند صرف رقم ONGZNV — تحويل مشتريات",
+    "isTransfer": false,
+    "balanceAfter": 5724.210000000001,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792593173,
+      "nanoseconds": 401000000
+    }
+  },
+  {
+    "id": "8DHUdlsP4JBy5nzyVAAG",
+    "userName": "النظام",
+    "sourceType": "receipt",
+    "date": "2026-10-14",
+    "notes": "سند قبض — تحويل",
+    "refNumber": "RV-ATVERT",
+    "balanceAfter": 156631.46000000002,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 2145.14,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792054747,
+      "nanoseconds": 152000000
+    },
+    "sourceId": "ATVErtySsmlPqxNxZIGU"
+  },
+  {
+    "id": "8Z9wmIBLHz2CDnlhXqjm",
+    "sourceId": "EsQExmqlYF625m692C7H",
+    "date": "2026-10-29",
+    "sourceType": "receipt",
+    "refNumber": "RV-ESQEXM",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — تحويل",
+    "type": "in",
+    "amount": 1165,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793293524,
+      "nanoseconds": 473000000
+    },
+    "userName": "النظام",
+    "balanceAfter": 20204.47
+  },
+  {
+    "id": "8g9jRl2R02iMLYXIQe6k",
+    "balanceAfter": 7529.9800000000005,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365586,
+      "nanoseconds": 514000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "out",
+    "refNumber": "PV-FW7MOK",
+    "amount": 998.38,
+    "notes": "سند صرف رقم FW7MOK — تحويل"
+  },
+  {
+    "id": "ASWDMhNdXAoeJh4FzDTo",
+    "notes": "سند صرف رقم GK5Y6T — تحويل قيمة بضاعه",
+    "amount": 6716.15,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787833585,
+      "nanoseconds": 969000000
+    },
+    "type": "out",
+    "refNumber": "PV-GK5Y6T",
+    "balanceAfter": 775.8500000000004
+  },
+  {
+    "id": "AwS2tHnJXUJUs02SrjTa",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "notes": "سند قبض — تحويل بنكى",
+    "refNumber": "RV-M5OGZG",
+    "amount": 400,
+    "sourceType": "receipt",
+    "sourceId": "m5OGzgNK1tI7HnHRCLjt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787211866,
+      "nanoseconds": 133000000
+    },
+    "balanceAfter": 3564
+  },
+  {
+    "id": "AynOppNUzAdu3mus0ZQF",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792917354,
+      "nanoseconds": 102000000
+    },
+    "date": "2026-10-25",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 2281.6,
+    "balanceAfter": 2340.810000000001,
+    "sourceType": "receipt",
+    "type": "in",
+    "notes": "سند قبض — تحويل",
+    "sourceId": "2vx6slZ5g5ttLMbENCxa",
+    "refNumber": "RV-2VX6SL"
+  },
+  {
+    "id": "B4gCn5zkV8J1PcSWXwuA",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787213190,
+      "nanoseconds": 987000000
+    },
+    "amount": 410,
+    "notes": "سند قبض — شبكه",
+    "balanceAfter": 3974,
+    "sourceType": "receipt",
+    "type": "in",
+    "sourceId": "7X3kPC9v6EDdZdvZuHtZ",
+    "refNumber": "RV-7X3KPC"
+  },
+  {
+    "id": "B84riM27MqiKOacehZrm",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-VMQGD5",
+    "notes": "سند قبض — تحويل",
+    "type": "in",
+    "userName": "النظام",
+    "amount": 250,
+    "date": "2026-10-12",
+    "sourceType": "receipt",
+    "sourceId": "vMqgD5uKmvAS2nSuoopS",
+    "balanceAfter": 12119.29,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791798512,
+      "nanoseconds": 295000000
+    }
+  },
+  {
+    "id": "BkAEs4aff9hi4OjCrwFD",
+    "balanceAfter": -20944.350000000002,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788386621,
+      "nanoseconds": 299000000
+    },
+    "sourceId": "arOXnn5px3xFXjaeid86",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-AROXNN",
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "type": "in",
+    "amount": 250
+  },
+  {
+    "id": "C8wj4zFYbx5A25Tc5g8c",
+    "amount": 5230,
+    "type": "in",
+    "notes": "سند قبض — تحويل",
+    "sourceId": "myLRD9ASoZ1CdBVqmd5m",
+    "refNumber": "RV-MYLRD9",
+    "date": "2026-11-03",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793806928,
+      "nanoseconds": 207000000
+    },
+    "userName": "النظام",
+    "sourceType": "receipt",
+    "balanceAfter": 30998.42,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "CRv3ZmD8totPHiOfNe4U",
+    "notes": "سند قبض — شبكه",
+    "refNumber": "RV-CZTKLW",
+    "sourceType": "receipt",
+    "type": "in",
+    "balanceAfter": 13469.98000000001,
+    "userName": "النظام",
+    "sourceId": "CztklwJ02FELXsuJi2KN",
+    "amount": 1268,
+    "date": "2026-11-08",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794151982,
+      "nanoseconds": 760000000
+    }
+  },
+  {
+    "id": "CtNlMX2CLAUqaJT2CxCj",
+    "sourceId": "mkN9v9WYrDBM1FdnsvlI",
+    "sourceType": "receipt",
+    "refNumber": "RV-MKN9V9",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — تحويل",
+    "type": "in",
+    "amount": 600,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787647546,
+      "nanoseconds": 433000000
+    },
+    "balanceAfter": 7226
+  },
+  {
+    "id": "CvZwGDk7fRtL5dvHSa4a",
+    "type": "in",
+    "refNumber": "RV-0FRN4K",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 1,
+    "sourceType": "receipt",
+    "notes": "سند قبض (معدّل) — تحويل بنكى سند معلق للتاكد من صحة التحويل الشبكة",
+    "sourceId": "0frN4KWfLrPuR3k8S2As",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788981879,
+      "nanoseconds": 537000000
+    }
+  },
+  {
+    "id": "E3ZTO78FCcQnlXcKlJBY",
+    "balanceAfter": 12185.11,
+    "refNumber": "PV-ETWPS7",
+    "amount": 677,
+    "sourceType": "expense",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792496689,
+      "nanoseconds": 864000000
+    },
+    "sourceId": "etwpS7NqF8F0hRClObyD",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند صرف رقم ETWPS7 — تحويل مشتروات",
+    "isTransfer": false,
+    "type": "out"
+  },
+  {
+    "id": "EAPqig1dMLy8ubvYGYxc",
+    "amount": 250,
+    "refNumber": "RV-COCYMR",
+    "notes": "سند قبض — تحويل",
+    "sourceId": "CocYMRG8FX6hye4HhUbg",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 8875,
+    "type": "in",
+    "userName": "النظام",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791224357,
+      "nanoseconds": 131000000
+    },
+    "date": "2026-10-05"
+  },
+  {
+    "id": "EQnmKATbwQSSmtNkI9WZ",
+    "sourceId": "vFA0Pf78Bz5HyihpelyG",
+    "amount": 6240,
+    "sourceType": "expense",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127245,
+      "nanoseconds": 68000000
+    },
+    "isTransfer": false,
+    "balanceAfter": 18201.98000000001,
+    "notes": "سند صرف رقم VFA0PF — مشتروات",
+    "refNumber": "PV-VFA0PF",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "out"
+  },
+  {
+    "id": "Ed4kYKf3cw9KO3gINhM5",
+    "balanceAfter": 32999.45,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793518752,
+      "nanoseconds": 413000000
+    },
+    "userName": "النظام",
+    "amount": 1261,
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "date": "2026-11-01",
+    "sourceId": "U653XW65WVpdtZL2dxuL",
+    "refNumber": "RV-U653XW",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "Em8URQUO9FkrbIgUU1PT",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793518693,
+      "nanoseconds": 282000000
+    },
+    "amount": 2283.44,
+    "date": "2026-11-01",
+    "notes": "سند قبض — تحويل",
+    "balanceAfter": 31738.45,
+    "sourceType": "receipt",
+    "type": "in",
+    "sourceId": "WfI02lu4IfVTkuyqKJ7y",
+    "refNumber": "RV-WFI02L"
+  },
+  {
+    "id": "Gjf55E1zD135V1g4kX0r",
+    "refNumber": "PV-ZYXVNP",
+    "sourceId": "ZyxVNpvaBclEiLTzLQX8",
+    "notes": "سند صرف رقم ZYXVNP — مشتروات",
+    "isTransfer": false,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 2208,
+    "balanceAfter": 146507.46000000002,
+    "sourceType": "expense",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229431,
+      "nanoseconds": 490000000
+    },
+    "type": "out"
+  },
+  {
+    "id": "GmUbvEaWXub1sODRGtGt",
+    "type": "out",
+    "notes": "سند صرف رقم M8AJS6 — تحويل بنكى",
+    "balanceAfter": 14763.84,
+    "refNumber": "PV-M8AJS6",
+    "amount": 613,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254523,
+      "nanoseconds": 321000000
+    },
+    "bankAccountId": "bank-aljazira"
+  },
+  {
+    "id": "HJi1tO8hUT15i15cwysg",
+    "refNumber": "RV-MSMSGR",
+    "type": "in",
+    "sourceId": "MSMsGRnFvswSVijnr5dm",
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل",
+    "userName": "النظام",
+    "date": "2026-10-20",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792497578,
+      "nanoseconds": 367000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 250,
+    "balanceAfter": 12435.11
+  },
+  {
+    "id": "ImZlhpX5I6XOUAyUgBGg",
+    "notes": "سند صرف رقم 4FNBQA — تحويل لمشتريات",
+    "refNumber": "PV-4FNBQA",
+    "balanceAfter": -43620.899999999994,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788799483,
+      "nanoseconds": 945000000
+    },
+    "amount": 19337,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "out"
+  },
+  {
+    "id": "J0eGz9iJOfbCo3VhBMCp",
+    "isTransfer": false,
+    "balanceAfter": 8092.710000000001,
+    "sourceId": "WfybxIUM5yp1HfiCC6eX",
+    "type": "out",
+    "sourceType": "expense",
+    "refNumber": "PV-WFYBXI",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588568,
+      "nanoseconds": 586000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند صرف رقم WFYBXI — تحويل",
+    "amount": 6624
+  },
+  {
+    "id": "JBlp8kaZRi3VIf1FkcQ2",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791624507,
+      "nanoseconds": 451000000
+    },
+    "date": "2026-10-10",
+    "amount": 2551,
+    "notes": "سند قبض — تحويل",
+    "type": "in",
+    "balanceAfter": 9003.130000000001,
+    "sourceType": "receipt",
+    "sourceId": "FL9JdXNG7mEq2BNGeLmx",
+    "refNumber": "RV-FL9JDX"
+  },
+  {
+    "id": "KPtxgrniFWQ0quhtoXa0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791100207,
+      "nanoseconds": 858000000
+    },
+    "notes": "سند قبض — شبكة",
+    "sourceId": "OrkXla7CrQZADNPwyxKt",
+    "type": "in",
+    "sourceType": "receipt",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 8325,
+    "amount": 500,
+    "userName": "النظام",
+    "date": "2026-10-04",
+    "refNumber": "RV-ORKXLA"
+  },
+  {
+    "id": "Kqob0z56FYZnghlunqLI",
+    "refNumber": "RV-N8TKSB",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-17",
+    "balanceAfter": 141603.56,
+    "userName": "النظام",
+    "notes": "سند قبض — تحويل بنكى",
+    "sourceId": "N8tksbklAa4zX04tTSbe",
+    "sourceType": "receipt",
+    "amount": 1225,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792491088,
+      "nanoseconds": 227000000
+    }
+  },
+  {
+    "id": "L4sTv1jNdn1k6xZU1N1H",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-11-07",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794124067,
+      "nanoseconds": 152000000
+    },
+    "userName": "النظام",
+    "amount": 2283.44,
+    "type": "in",
+    "sourceType": "receipt",
+    "sourceId": "Aw91gfvGSaW6cv7CjuDS",
+    "notes": "سند قبض — تحويل",
+    "refNumber": "RV-AW91GF",
+    "balanceAfter": 44231.86
+  },
+  {
+    "id": "LFk1drBuAYae1pkh6mnm",
+    "type": "out",
+    "sourceType": "expense",
+    "isTransfer": false,
+    "amount": 2235.6,
+    "refNumber": "PV-NFPXMH",
+    "balanceAfter": 144271.86000000002,
+    "notes": "سند صرف رقم NFPXMH — مشتروات",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229479,
+      "nanoseconds": 473000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceId": "nfPxMheHRWh6mWo2TJ8I"
+  },
+  {
+    "id": "LkJyBNgKCkVEuxb9dXsI",
+    "balanceAfter": 3123.85,
+    "sourceId": "rlQf8wIJwW9rqJEu4VKV",
+    "type": "in",
+    "refNumber": "RV-RLQF8W",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254421,
+      "nanoseconds": 866000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — تحويل",
+    "amount": 2500
+  },
+  {
+    "id": "M3sGtLSb9ar91DFJSQTz",
+    "amount": 0.1,
+    "refNumber": "RV-POF1EM",
+    "sourceId": "POf1emeltpxbpKXQCMzO",
+    "notes": "سند قبض — شبكه لم تسمع فى الحساب",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 16590.86,
+    "type": "in",
+    "sourceType": "receipt",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791811408,
+      "nanoseconds": 162000000
+    },
+    "date": "2026-10-11"
+  },
+  {
+    "id": "MgEsfcfBc6rvsNK2LUIv",
+    "amount": 725,
+    "refNumber": "PV-UO5SYS",
+    "notes": "سند صرف رقم UO5SYS — 725",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 950.8500000000004,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992866,
+      "nanoseconds": 138000000
+    },
+    "type": "out"
+  },
+  {
+    "id": "N1COKMw1FIbpLb3pI3Gc",
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "sourceId": "fPo6As4A7aPV2pmyIYCl",
+    "refNumber": "RV-FPO6AS",
+    "balanceAfter": 3981,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790415824,
+      "nanoseconds": 722000000
+    },
+    "amount": 2586,
+    "userName": "النظام",
+    "date": "2026-09-25"
+  },
+  {
+    "id": "NBCiIZpQbjX4DXMilvH4",
+    "userName": "النظام",
+    "date": "2026-10-01",
+    "refNumber": "RV-OTYEFY",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791028079,
+      "nanoseconds": 226000000
+    },
+    "balanceAfter": 7825,
+    "type": "in",
+    "notes": "سند قبض — شبكة",
+    "sourceId": "OtyefYqKcUCTtn15Nnwm",
+    "amount": 180
+  },
+  {
+    "id": "NHm1Xwgq4NCqRnVf0C22",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788692997,
+      "nanoseconds": 513000000
+    },
+    "amount": 665.45,
+    "type": "in",
+    "sourceId": "0TZyKTwIP8Xf2ONnpqqM",
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل",
+    "refNumber": "RV-0TZYKT",
+    "balanceAfter": -25283.899999999998
+  },
+  {
+    "id": "Nv3UGSfM9q7UEgvjtOWl",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792680093,
+      "nanoseconds": 949000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 419,
+    "balanceAfter": 5240.210000000001,
+    "sourceType": "expense",
+    "type": "out",
+    "isTransfer": false,
+    "notes": "سند صرف رقم WDNUUG — مشتروات",
+    "sourceId": "WdnuUGLljzdQ8z0S97Dw",
+    "refNumber": "PV-WDNUUG"
+  },
+  {
+    "id": "OMVNUbmliln3Fgl99H4q",
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "sourceId": "4ZLPpWTOqBPDjqbHmIgS",
+    "refNumber": "RV-4ZLPPW",
+    "balanceAfter": 7492,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787648255,
+      "nanoseconds": 770000000
+    },
+    "amount": 266
+  },
+  {
+    "id": "Ogw5yG3T2yZGCveIo1OF",
+    "balanceAfter": 19039.47,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793182846,
+      "nanoseconds": 951000000
+    },
+    "amount": 3734,
+    "userName": "النظام",
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "date": "2026-10-28",
+    "sourceId": "TmhbfJyzKTz7MwobFEX0",
+    "refNumber": "RV-TMHBFJ",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "OljUbPn25Y6Ly5VbocnI",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — شبكة",
+    "refNumber": "RV-SWRM1Y",
+    "type": "in",
+    "userName": "النظام",
+    "amount": 50,
+    "sourceType": "receipt",
+    "date": "2026-10-03",
+    "sourceId": "SWRm1yEMrNvErtnUB3yJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791106977,
+      "nanoseconds": 376000000
+    },
+    "balanceAfter": 8375
+  },
+  {
+    "id": "OpysvfRY4beZYd4X2fTQ",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 500,
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788686859,
+      "nanoseconds": 663000000
+    },
+    "notes": "سند قبض — شبكة",
+    "refNumber": "RV-QNXMAP",
+    "type": "in",
+    "balanceAfter": -18264.350000000002,
+    "sourceId": "QnXMapCFgiBwpPZ80jBL"
+  },
+  {
+    "id": "OwhtOXwOFuAKDrr5bPJ0",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt",
+    "amount": 814,
+    "refNumber": "RV-CAAPOI",
+    "userName": "النظام",
+    "date": "2026-10-26",
+    "notes": "سند قبض — تحويل",
+    "sourceId": "caapoin1ryGpHgJ55Mut",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793037907,
+      "nanoseconds": 848000000
+    },
+    "balanceAfter": 13305.470000000001,
+    "type": "in"
+  },
+  {
+    "id": "Q3S80beBhiDRY0yoNBiX",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794124127,
+      "nanoseconds": 753000000
+    },
+    "date": "2026-11-07",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 250,
+    "balanceAfter": 44481.86,
+    "type": "in",
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل",
+    "sourceId": "Mo6tV9kBEwFQBK9F70MU",
+    "refNumber": "RV-MO6TV9"
+  },
+  {
+    "id": "R1gHxBssMSpO8RE97KoR",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-06",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791284925,
+      "nanoseconds": 223000000
+    },
+    "userName": "النظام",
+    "amount": 2500,
+    "type": "in",
+    "sourceId": "sQq8YIC7k953QqXu0jiV",
+    "sourceType": "receipt",
+    "notes": "سند قبض — شبكه",
+    "refNumber": "RV-SQQ8YI",
+    "balanceAfter": 11375
+  },
+  {
+    "id": "RBTDDQws7VP5uT2YSGZo",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792925106,
+      "nanoseconds": 502000000
+    },
+    "date": "2026-10-25",
+    "amount": 200,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt",
+    "notes": "سند قبض — شبكة",
+    "type": "in",
+    "refNumber": "RV-QHV3XF",
+    "sourceId": "QHv3xFnPXMZpHmf5lB8i",
+    "balanceAfter": 3873.390000000001
+  },
+  {
+    "id": "RR0rUMV8cAgAuhQKVyyo",
+    "refNumber": "PV-TUYZAP",
+    "balanceAfter": 229.21000000000095,
+    "sourceId": "TUyZapRHGS0qnE2oVZlY",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "out",
+    "amount": 5011,
+    "sourceType": "expense",
+    "notes": "سند صرف رقم TUYZAP — تحويل",
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792689317,
+      "nanoseconds": 734000000
+    }
+  },
+  {
+    "id": "RYcZ1hL66jJgWyPdPpIi",
+    "refNumber": "RV-RKZUNT",
+    "sourceType": "receipt",
+    "sourceId": "RkzUNt6v1hnk9UHCLt0U",
+    "amount": 8000,
+    "balanceAfter": 52481.86,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — تحويل",
+    "date": "2026-11-07",
+    "userName": "النظام",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794124601,
+      "nanoseconds": 915000000
+    }
+  },
+  {
+    "id": "SB8wGhsZMmwHmvOcAGwt",
+    "refNumber": "RV-HCTAAL",
+    "balanceAfter": 31455.010000000002,
+    "sourceId": "hCTaaLcb3vhkpiZrhhsO",
+    "type": "in",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل",
+    "amount": 4319.4,
+    "userName": "النظام",
+    "date": "2026-10-31",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793445702,
+      "nanoseconds": 584000000
+    }
+  },
+  {
+    "id": "SMoPLam2n2yiwPRPqLbu",
+    "type": "in",
+    "sourceType": "receipt",
+    "balanceAfter": 7545,
+    "sourceId": "pV78JUY4YwPBFoS3gErx",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790679270,
+      "nanoseconds": 781000000
+    },
+    "date": "2026-09-29",
+    "refNumber": "RV-PV78JU",
+    "notes": "سند قبض — تحويل",
+    "amount": 2000,
+    "userName": "النظام",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "Te2on0Qx6EN7enIFqCVP",
+    "type": "in",
+    "sourceType": "receipt",
+    "balanceAfter": 11892.62,
+    "refNumber": "RV-YKJCMR",
+    "userName": "النظام",
+    "date": "2026-10-26",
+    "sourceId": "YkJCmrn0qwzufWAmEYSf",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — شبكه",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793003217,
+      "nanoseconds": 423000000
+    },
+    "amount": 500
+  },
+  {
+    "id": "TfsD4FAar0PSYp1baq9K",
+    "sourceId": "EMSpjYXWVIGRAuAz9zuc",
+    "sourceType": "expense",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 132633.86000000002,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229776,
+      "nanoseconds": 700000000
+    },
+    "isTransfer": false,
+    "refNumber": "PV-EMSPJY",
+    "type": "out",
+    "notes": "سند صرف رقم EMSPJY — مشتروات",
+    "amount": 11224
+  },
+  {
+    "id": "ToV26zC8bK7Ocxmr6NZ8",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "refNumber": "RV-PJNJ10",
+    "notes": "سند قبض — تحويل",
+    "userName": "النظام",
+    "amount": 2330.16,
+    "date": "2026-10-10",
+    "sourceType": "receipt",
+    "sourceId": "PjNj107ZYdwKVYPzyxBh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791624950,
+      "nanoseconds": 864000000
+    },
+    "balanceAfter": 11333.29
+  },
+  {
+    "id": "TtS4sfx7pDh9WDEFKaTC",
+    "amount": 3908.64,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365544,
+      "nanoseconds": 563000000
+    },
+    "balanceAfter": 8528.36,
+    "notes": "سند صرف رقم FH1XIF — تحويل",
+    "refNumber": "PV-FH1XIF",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "out"
+  },
+  {
+    "id": "V0MoxhwcAsQtzVpml3iJ",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237270,
+      "nanoseconds": 816000000
+    },
+    "amount": 64503.5,
+    "refNumber": "PV-5KOCF8",
+    "balanceAfter": -64503.5,
+    "bankAccountId": "bank-aljazira",
+    "notes": "سند صرف رقم 5KOCF8 — تحويل قيمة  بضاعة",
+    "type": "out"
+  },
+  {
+    "id": "VE43hvuzyBBKK4kvwX9x",
+    "amount": 3515,
+    "refNumber": "RV-YNDDSJ",
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "type": "in",
+    "sourceId": "yNdDSJeZ3WH4y4toVlTb",
+    "userName": "النظام",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 19398.42,
+    "date": "2026-11-03",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793692422,
+      "nanoseconds": 806000000
+    }
+  },
+  {
+    "id": "WO1UXpR1aA2u2B7FUWyp",
+    "balanceAfter": 623.8500000000004,
+    "notes": "سند صرف رقم TML19I — تحويل بضاعه",
+    "refNumber": "PV-TML19I",
+    "amount": 327,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992915,
+      "nanoseconds": 597000000
+    },
+    "type": "out",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "WT5A1CJAfzSog8wP88aG",
+    "amount": 1000,
+    "notes": "سند قبض — تحويل",
+    "refNumber": "RV-GHAZCK",
+    "sourceType": "receipt",
+    "type": "in",
+    "sourceId": "gHAZckSwqYfpqYWHWTGG",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "userName": "النظام",
+    "balanceAfter": 6452.130000000001,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791486043,
+      "nanoseconds": 563000000
+    },
+    "date": "2026-10-08"
+  },
+  {
+    "id": "WYgynpjieGYfFXOdMHY1",
+    "amount": 170,
+    "sourceType": "receipt",
+    "notes": "سند قبض — شبكه",
+    "type": "in",
+    "refNumber": "RV-GAMWJN",
+    "sourceId": "GAmWJNAWvINPzmAhftOz",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992148,
+      "nanoseconds": 560000000
+    },
+    "balanceAfter": 945.8500000000004,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "XxccM3Uj5c4sM45voAYK",
+    "sourceId": "OvPKXZomXIAmesmJh6xw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791804569,
+      "nanoseconds": 16000000
+    },
+    "amount": 5007.47,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — تحويل",
+    "balanceAfter": 17126.760000000002,
+    "date": "2026-10-12",
+    "sourceType": "receipt",
+    "refNumber": "RV-OVPKXZ",
+    "userName": "النظام",
+    "type": "in"
+  },
+  {
+    "id": "Y5OR6CeDBkq65mM2eJgl",
+    "type": "out",
+    "notes": "سند صرف رقم FE74HF — فاتورة مشتريات",
+    "refNumber": "PV-FE74HF",
+    "bankAccountId": "bank-aljazira",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787145810,
+      "nanoseconds": 169000000
+    },
+    "amount": 45682.6,
+    "balanceAfter": 5192.090000000004
+  },
+  {
+    "id": "Y8bTOt77PjIWfZlTmi5G",
+    "refNumber": "RV-BKELFH",
+    "sourceId": "bkelfhufch36R3yE4sP0",
+    "amount": 104,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — شبكة",
+    "sourceType": "receipt",
+    "type": "in",
+    "balanceAfter": -21324.350000000002,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788386455,
+      "nanoseconds": 654000000
+    }
+  },
+  {
+    "id": "YyVQSf4t3mWR9KjHa1nt",
+    "sourceId": "DIRazI9VP0LVzH5mS8ZC",
+    "refNumber": "RV-DIRAZI",
+    "sourceType": "receipt",
+    "date": "2026-10-31",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — تحويل",
+    "balanceAfter": 27132.66,
+    "amount": 2000,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793436231,
+      "nanoseconds": 500000000
+    },
+    "userName": "النظام"
+  },
+  {
+    "id": "aD2wYM5l5dBpxk6mG6cU",
+    "sourceId": "BWTpcE63aaqpBLcGmjzh",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 141609.31,
+    "amount": 2997.48,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792490917,
+      "nanoseconds": 279000000
+    },
+    "date": "2026-10-19",
+    "sourceType": "receipt",
+    "notes": "سند قبض — تحويل",
+    "refNumber": "RV-BWTPCE",
+    "type": "in",
+    "userName": "النظام"
+  },
+  {
+    "id": "aJsZ6vZ1BZ5z7q10fb9I",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792960675,
+      "nanoseconds": 227000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "expense",
+    "isTransfer": false,
+    "notes": "سند صرف رقم YTAU3H — تحويل",
+    "type": "out",
+    "amount": 5980,
+    "sourceId": "YTau3hElFo1sFH7R4ZmB",
+    "balanceAfter": 9793.390000000001,
+    "refNumber": "PV-YTAU3H"
+  },
+  {
+    "id": "aaUlEycNDIhYMTmggC4I",
+    "balanceAfter": 4398,
+    "amount": 124,
+    "notes": "سند قبض — شبكة",
+    "type": "in",
+    "sourceId": "nv1h3oHydDUD6JQjNNF2",
+    "refNumber": "RV-NV1H3O",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787384503,
+      "nanoseconds": 554000000
+    },
+    "sourceType": "receipt"
+  },
+  {
+    "id": "aohmk5V5KMx3ZdtXdRPS",
+    "balanceAfter": 27682.66,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793298047,
+      "nanoseconds": 505000000
+    },
+    "date": "2026-10-28",
+    "notes": "سند قبض — تحويل",
+    "userName": "النظام",
+    "sourceType": "receipt",
+    "type": "in",
+    "sourceId": "yDVp4DXzwAH22sILHOIB",
+    "amount": 677,
+    "refNumber": "RV-YDVP4D",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "b00CRU7GQg63o4pRf3Hz",
+    "amount": 36430.28,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787145220,
+      "nanoseconds": 316000000
+    },
+    "notes": "سند صرف رقم VPCLW7 — سداد الفاتورة الاخيره",
+    "type": "out",
+    "bankAccountId": "bank-aljazira",
+    "refNumber": "PV-VPCLW7",
+    "balanceAfter": 42124.69
+  },
+  {
+    "id": "bIYwwxAFvbiiG1R39ot5",
+    "refNumber": "PV-UWOMSU",
+    "sourceId": "UWoMsuOuZtEgtPZI9AeX",
+    "sourceType": "expense",
+    "notes": "سند صرف رقم UWOMSU — مشتروات",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "isTransfer": false,
+    "balanceAfter": 148715.46000000002,
+    "amount": 6240,
+    "type": "out",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229370,
+      "nanoseconds": 667000000
+    }
+  },
+  {
+    "id": "blRNGxapwIypdkgq3omC",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-05",
+    "userName": "النظام",
+    "refNumber": "RV-T5VFJ5",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791224265,
+      "nanoseconds": 925000000
+    },
+    "type": "in",
+    "notes": "سند قبض — شبكه",
+    "sourceId": "T5vfJ5cRpolbfOIgUSBM",
+    "amount": 50,
+    "balanceAfter": 8625,
+    "sourceType": "receipt"
+  },
+  {
+    "id": "btx_je_0NbHw2CCVExTYusJKh18_0j34llJOFXQ2McuwHCtr_0",
+    "type": "out",
+    "sourceType": "manualJE",
+    "sourceId": "0NbHw2CCVExTYusJKh18",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793522558,
+      "nanoseconds": 760000000
+    },
+    "date": "2026-11-01",
+    "refNumber": "JE-002750",
+    "notes": "قيد يومية: اثبات سداد جزء من فاتورة صحارى للاكترونيات",
+    "amount": 2500,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "btx_je_1JMMLW6i4hRJiYXxFHM5_0j34llJOFXQ2McuwHCtr_0",
+    "sourceType": "manualJE",
+    "refNumber": "JE-002521",
+    "amount": 11900,
+    "date": "2026-10-25",
+    "notes": "قيد يومية: تحويل من جارى المالك الى مصرف الراجحى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792960610,
+      "nanoseconds": 900000000
+    },
+    "type": "in",
+    "sourceId": "1JMMLW6i4hRJiYXxFHM5",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "btx_je_3FNU3zgeKCnkavIqcf57_0j34llJOFXQ2McuwHCtr_1",
+    "type": "out",
+    "notes": "قيد يومية: اثبات سداد فاتورة الانترنت شهر 10",
+    "refNumber": "JE-002691",
+    "date": "2026-10-28",
+    "sourceId": "3FNU3zgeKCnkavIqcf57",
+    "amount": 239,
+    "sourceType": "manualJE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793437282,
+      "nanoseconds": 767000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "btx_je_94Fok6iicQyFOD1QdrPf_0j34llJOFXQ2McuwHCtr_1",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794126895,
+      "nanoseconds": 667000000
+    },
+    "sourceType": "manualJE",
+    "type": "out",
+    "sourceId": "94Fok6iicQyFOD1QdrPf",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "قيد يومية: مدفوعات مشتريات",
+    "amount": 41845.63,
+    "date": "2026-11-04",
+    "refNumber": "JE-002993"
+  },
+  {
+    "id": "btx_je_A171Txdw0EfivDh06TsS_0j34llJOFXQ2McuwHCtr_0",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793003868,
+      "nanoseconds": 362000000
+    },
+    "sourceType": "manualJE",
+    "date": "2026-10-26",
+    "notes": "قيد يومية: اثبات عمولة نقاط البيع",
+    "sourceId": "A171Txdw0EfivDh06TsS",
+    "type": "in",
+    "amount": 7.7,
+    "refNumber": "JE-002536"
+  },
+  {
+    "id": "btx_je_A171Txdw0EfivDh06TsS_0j34llJOFXQ2McuwHCtr_2",
+    "date": "2026-10-26",
+    "refNumber": "JE-002536",
+    "notes": "قيد يومية: اثبات عمولة نقاط البيع",
+    "type": "out",
+    "amount": 8.85,
+    "sourceType": "manualJE",
+    "sourceId": "A171Txdw0EfivDh06TsS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793003868,
+      "nanoseconds": 734000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "btx_je_AoXpRRDKde44",
+    "notes": "قيد يومية: من الجارى الى مصرف الراجحى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792493909,
+      "nanoseconds": 15000000
+    },
+    "sourceId": "AoXpRRDKde44HpUWdMyo",
+    "type": "in",
+    "balanceAfter": 146234.32,
+    "sourceType": "manualJE",
+    "amount": 2314.76,
+    "refNumber": "JE-2026-20260724",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-01"
+  },
+  {
+    "id": "btx_je_AoXpRRDKde44HpUWdMyo_0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-01",
+    "balanceAfter": 146234.42,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792495669,
+      "nanoseconds": 301000000
+    },
+    "notes": "قيد يومية: من الجارى الى مصرف الراجحى",
+    "sourceType": "manualJE",
+    "sourceId": "AoXpRRDKde44HpUWdMyo",
+    "type": "in",
+    "amount": 0.1,
+    "refNumber": "JE",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "btx_je_C36APGXfi61Rxtm5fYM8_0j34llJOFXQ2McuwHCtr_1",
+    "type": "in",
+    "amount": 100,
+    "sourceType": "manualJE",
+    "refNumber": "JE-002473",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "قيد يومية: حويل من بنك العهد الى مصرف الراجحى",
+    "date": "2026-10-24",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792842201,
+      "nanoseconds": 562000000
+    },
+    "sourceId": "C36APGXfi61Rxtm5fYM8"
+  },
+  {
+    "id": "btx_je_C36APGXfi61Rxtm5fYM8_gUUIXCOI7KtEw2HFn2Tp_0",
+    "date": "2026-10-24",
+    "amount": 100,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792842201,
+      "nanoseconds": 192000000
+    },
+    "sourceType": "manualJE",
+    "notes": "قيد يومية: حويل من بنك العهد الى مصرف الراجحى",
+    "type": "out",
+    "refNumber": "JE-002473",
+    "sourceId": "C36APGXfi61Rxtm5fYM8",
+    "bankAccountId": "gUUIXCOI7KtEw2HFn2Tp"
+  },
+  {
+    "id": "btx_je_IdqcH0fviKNRbTRvpz46_0j34llJOFXQ2McuwHCtr_1",
+    "sourceType": "manualJE",
+    "date": "2026-10-24",
+    "sourceId": "IdqcH0fviKNRbTRvpz46",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792842153,
+      "nanoseconds": 824000000
+    },
+    "notes": "قيد يومية: مصروفات اغنام ومواشى",
+    "type": "out",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 300,
+    "refNumber": "JE-002472"
+  },
+  {
+    "id": "btx_je_K8UevWNs9NUG20sNIFqx_0j34llJOFXQ2McuwHCtr_0",
+    "sourceType": "manualJE",
+    "refNumber": "JE-002994",
+    "amount": 12075,
+    "date": "2026-11-04",
+    "notes": "قيد يومية: مشتروات من فجر الراقيه",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794126958,
+      "nanoseconds": 229000000
+    },
+    "sourceId": "K8UevWNs9NUG20sNIFqx",
+    "type": "out",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "btx_je_MTUcW8eMxpDYvtCTjQml_0j34llJOFXQ2McuwHCtr_0",
+    "amount": 5500,
+    "date": "2026-11-03",
+    "notes": "قيد يومية: تمويل من جارى المالك الى الراجحى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793692116,
+      "nanoseconds": 361000000
+    },
+    "sourceId": "MTUcW8eMxpDYvtCTjQml",
+    "sourceType": "manualJE",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "refNumber": "JE-002812"
+  },
+  {
+    "id": "btx_je_RfGEcoNlukgJDSzXJ6o1_0j34llJOFXQ2McuwHCtr_1",
+    "sourceType": "manualJE",
+    "refNumber": "JE-002991",
+    "sourceId": "RfGEcoNlukgJDSzXJ6o1",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 50000,
+    "date": "2026-11-04",
+    "notes": "قيد يومية: من البنك الى الجارى",
+    "type": "out",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794126394,
+      "nanoseconds": 224000000
+    }
+  },
+  {
+    "id": "btx_je_XILVzQ6ky8OXDDIoZZjC_0j34llJOFXQ2McuwHCtr_2",
+    "sourceType": "manualJE",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "out",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793437690,
+      "nanoseconds": 686000000
+    },
+    "refNumber": "JE-002692",
+    "notes": "قيد يومية: اثبات رسوم بنكيه",
+    "amount": 8.05,
+    "date": "2026-10-27",
+    "sourceId": "XILVzQ6ky8OXDDIoZZjC"
+  },
+  {
+    "id": "btx_je_YgkuvJFLVaYdiaTMh1Eb_0j34llJOFXQ2McuwHCtr_0",
+    "sourceType": "manualJE",
+    "refNumber": "JE-002707",
+    "date": "2026-10-31",
+    "sourceId": "YgkuvJFLVaYdiaTMh1Eb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793445840,
+      "nanoseconds": 133000000
+    },
+    "type": "out",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 2000,
+    "notes": "قيد يومية: مسحوبات للجارى"
+  },
+  {
+    "id": "btx_je_cEI0Iqt9ED2zfntubiKA_0j34llJOFXQ2McuwHCtr_0",
+    "sourceType": "manualJE",
+    "refNumber": "JE-2026-20260724",
+    "amount": 70097,
+    "date": "2026-10-18",
+    "notes": "قيد يومية: التحويل من مصرف الراجحى الى جارى المالك",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792496554,
+      "nanoseconds": 123000000
+    },
+    "sourceId": "cEI0Iqt9ED2zfntubiKA",
+    "type": "out",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "btx_je_cEI0Iqt9ED2zfntubiKA_0j34llJOFXQ2McuwHCtr_1",
+    "type": "out",
+    "amount": 27094,
+    "notes": "قيد يومية: التحويل من مصرف الراجحى الى جارى المالك",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792496554,
+      "nanoseconds": 604000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-18",
+    "sourceId": "cEI0Iqt9ED2zfntubiKA",
+    "refNumber": "JE-2026-20260724",
+    "sourceType": "manualJE"
+  },
+  {
+    "id": "btx_je_cEI0Iqt9ED2zfntubiKA_0j34llJOFXQ2McuwHCtr_2",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792496554,
+      "nanoseconds": 948000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "manualJE",
+    "type": "out",
+    "notes": "قيد يومية: التحويل من مصرف الراجحى الى جارى المالك",
+    "date": "2026-10-18",
+    "amount": 33866.55,
+    "sourceId": "cEI0Iqt9ED2zfntubiKA",
+    "refNumber": "JE-2026-20260724"
+  },
+  {
+    "id": "btx_je_cWpIemoPP9IikzwJ3QJK_0j34llJOFXQ2McuwHCtr_1",
+    "sourceType": "manualJE",
+    "sourceId": "cWpIemoPP9IikzwJ3QJK",
+    "amount": 2000,
+    "type": "out",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793522647,
+      "nanoseconds": 213000000
+    },
+    "refNumber": "JE-002751",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "قيد يومية: اثبات قيد شراء معدات للكاميرات",
+    "date": "2026-10-31"
+  },
+  {
+    "id": "btx_je_djqvBMyoqYT4WuGkGqEg_0j34llJOFXQ2McuwHCtr_1",
+    "refNumber": "JE-002406",
+    "sourceId": "djqvBMyoqYT4WuGkGqEg",
+    "type": "out",
+    "sourceType": "manualJE",
+    "amount": 100,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "قيد يومية: تحويل بين الحسابات البنكيه",
+    "date": "2026-10-18",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792593812,
+      "nanoseconds": 294000000
+    }
+  },
+  {
+    "id": "btx_je_djqvBMyoqYT4WuGkGqEg_bank_aljazira_0",
+    "sourceId": "djqvBMyoqYT4WuGkGqEg",
+    "amount": 100,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792593811,
+      "nanoseconds": 880000000
+    },
+    "refNumber": "JE-002406",
+    "sourceType": "manualJE",
+    "notes": "قيد يومية: تحويل بين الحسابات البنكيه",
+    "bankAccountId": "gUUIXCOI7KtEw2HFn2Tp",
+    "date": "2026-10-18"
+  },
+  {
+    "id": "btx_je_fWNm0zENm32qNBcoYMVl_0j34llJOFXQ2McuwHCtr_0",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "manualJE",
+    "type": "out",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793299343,
+      "nanoseconds": 416000000
+    },
+    "refNumber": "JE-002678",
+    "notes": "قيد يومية: سحب لجارى المالك من الحساب البنكى",
+    "amount": 2500,
+    "date": "2026-10-29",
+    "sourceId": "fWNm0zENm32qNBcoYMVl"
+  },
+  {
+    "id": "btx_je_fYU6t9KEmC4p8M4SY94m_0j34llJOFXQ2McuwHCtr_0",
+    "refNumber": "JE-002992",
+    "amount": 122800,
+    "notes": "قيد يومية: من الجارى الى مصرف الراجحى",
+    "type": "in",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceId": "fYU6t9KEmC4p8M4SY94m",
+    "sourceType": "manualJE",
+    "date": "2026-11-04",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794126749,
+      "nanoseconds": 640000000
+    }
+  },
+  {
+    "id": "btx_je_hblc47TwvPmbcYXrfomm_0j34llJOFXQ2McuwHCtr_1",
+    "date": "2026-11-04",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127081,
+      "nanoseconds": 801000000
+    },
+    "refNumber": "JE-002996",
+    "type": "out",
+    "sourceId": "hblc47TwvPmbcYXrfomm",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "manualJE",
+    "notes": "قيد يومية: مدفوعات مشتروات",
+    "amount": 4899
+  },
+  {
+    "id": "btx_je_iYzR9hw2RABjfhIwTrnc_0j34llJOFXQ2McuwHCtr_1",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792920909,
+      "nanoseconds": 523000000
+    },
+    "date": "2026-10-25",
+    "amount": 239,
+    "notes": "قيد يومية: سداد فاتورة الانترنت شهر 10",
+    "sourceId": "iYzR9hw2RABjfhIwTrnc",
+    "type": "out",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "manualJE",
+    "refNumber": "JE-002504"
+  },
+  {
+    "id": "btx_je_lnLbLBgatkrjdvknp4ME_0j34llJOFXQ2McuwHCtr_1",
+    "amount": 6000,
+    "refNumber": "JE-003001",
+    "notes": "قيد يومية: تحوسل الى ابراهيم رشيد",
+    "type": "out",
+    "sourceType": "manualJE",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127331,
+      "nanoseconds": 509000000
+    },
+    "date": "2026-11-05",
+    "sourceId": "lnLbLBgatkrjdvknp4ME",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "btx_je_mhTZMe04FxcW3ZZIdGil_0j34llJOFXQ2McuwHCtr_0",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792960981,
+      "nanoseconds": 950000000
+    },
+    "sourceType": "manualJE",
+    "type": "in",
+    "sourceId": "mhTZMe04FxcW3ZZIdGil",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "قيد يومية: اثبات عمولات البنكيه",
+    "amount": 5.14,
+    "date": "2026-10-23",
+    "refNumber": "JE-002523"
+  },
+  {
+    "id": "btx_je_mhTZMe04FxcW3ZZIdGil_0j34llJOFXQ2McuwHCtr_2",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792960982,
+      "nanoseconds": 310000000
+    },
+    "amount": 5.91,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "manualJE",
+    "sourceId": "mhTZMe04FxcW3ZZIdGil",
+    "notes": "قيد يومية: اثبات عمولات البنكيه",
+    "date": "2026-10-23",
+    "type": "out",
+    "refNumber": "JE-002523"
+  },
+  {
+    "id": "btx_je_rJtVRNg676VccS5fHc16_0j34llJOFXQ2McuwHCtr_1",
+    "sourceId": "rJtVRNg676VccS5fHc16",
+    "amount": 976.38,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793691682,
+      "nanoseconds": 992000000
+    },
+    "type": "out",
+    "sourceType": "manualJE",
+    "refNumber": "JE-002811",
+    "notes": "قيد يومية: مدفوعات التامينات الاجتماعية",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-11-01"
+  },
+  {
+    "id": "btx_je_rZCRoCWNk4U5TOf00a9e_0j34llJOFXQ2McuwHCtr_1",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794125879,
+      "nanoseconds": 920000000
+    },
+    "sourceType": "manualJE",
+    "date": "2026-11-03",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 2000,
+    "sourceId": "rZCRoCWNk4U5TOf00a9e",
+    "type": "out",
+    "refNumber": "JE-002989",
+    "notes": "قيد يومية: من البنك الى جارى المالك / احمدعبد الحميد حسن"
+  },
+  {
+    "id": "btx_je_smdDMLxApyahyYrLcYAc_0j34llJOFXQ2McuwHCtr_1",
+    "refNumber": "JE-002995",
+    "sourceId": "smdDMLxApyahyYrLcYAc",
+    "type": "out",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "manualJE",
+    "notes": "قيد يومية: مشتروات من العسائى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127027,
+      "nanoseconds": 412000000
+    },
+    "amount": 38220.25,
+    "date": "2026-11-04"
+  },
+  {
+    "id": "btx_je_uoVz6rX8EOOYH5rQPADC_0j34llJOFXQ2McuwHCtr_1",
+    "sourceId": "uoVz6rX8EOOYH5rQPADC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792843653,
+      "nanoseconds": 25000000
+    },
+    "date": "2026-10-24",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "JE-002486",
+    "sourceType": "manualJE",
+    "type": "out",
+    "notes": "قيد يومية: شحن محفظة الدريس",
+    "amount": 2500
+  },
+  {
+    "id": "btx_je_wdSlRnNJlbgGGYYcQCnH_0j34llJOFXQ2McuwHCtr_1",
+    "refNumber": "JE-002990",
+    "type": "out",
+    "amount": 1000,
+    "sourceType": "manualJE",
+    "notes": "قيد يومية: راتب السعودى",
+    "date": "2026-11-03",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceId": "wdSlRnNJlbgGGYYcQCnH",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794125956,
+      "nanoseconds": 943000000
+    }
+  },
+  {
+    "id": "c3JLC5AI5PWaBYiyitoy",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceId": "rTviRXcZETIeuz1UehPl",
+    "sourceType": "receipt",
+    "date": "2026-11-03",
+    "refNumber": "RV-RTVIRX",
+    "amount": 10000,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793806995,
+      "nanoseconds": 255000000
+    },
+    "userName": "النظام",
+    "type": "in",
+    "notes": "سند قبض — تحويل",
+    "balanceAfter": 40998.42
+  },
+  {
+    "id": "cUFPvy05WtROyaronikP",
+    "sourceType": "expense",
+    "refNumber": "PV-AM1FRK",
+    "isTransfer": false,
+    "balanceAfter": 154955.46000000002,
+    "sourceId": "AM1FRkU9qUzBUNU5EuJ6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229314,
+      "nanoseconds": 772000000
+    },
+    "type": "out",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند صرف رقم AM1FRK — تحويل مشتريات",
+    "amount": 1676
+  },
+  {
+    "id": "ctrFgDb0tx229UhmEoUW",
+    "bankAccountId": "bank-aljazira",
+    "refNumber": "PV-9MDEVR",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788889768,
+      "nanoseconds": 40000000
+    },
+    "type": "out",
+    "notes": "سند صرف رقم 9MDEVR — تحويل بضاعه",
+    "amount": 664,
+    "balanceAfter": 9243.84
+  },
+  {
+    "id": "e3BfGmORyufAhxSlgLUn",
+    "sourceId": "pRvt3hS7yVvsB4uQhJTW",
+    "date": "2026-10-15",
+    "sourceType": "receipt",
+    "refNumber": "RV-PRVT3H",
+    "notes": "سند قبض — تحويل",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792233323,
+      "nanoseconds": 284000000
+    },
+    "amount": 6295.22,
+    "type": "in",
+    "balanceAfter": 133991.08000000002,
+    "userName": "النظام"
+  },
+  {
+    "id": "e78dz4aoRqxh4FF5Ebh2",
+    "balanceAfter": 7460.210000000001,
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588649,
+      "nanoseconds": 375000000
+    },
+    "sourceType": "expense",
+    "sourceId": "bhqgynxaBzWaKmqBfdtV",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "out",
+    "amount": 632.5,
+    "refNumber": "PV-BHQGYN",
+    "notes": "سند صرف رقم BHQGYN — مشتروات"
+  },
+  {
+    "id": "evH8By8rwl3Guv60s9HC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792240306,
+      "nanoseconds": 756000000
+    },
+    "userName": "النظام",
+    "date": "2026-10-15",
+    "amount": 3390,
+    "balanceAfter": 137381.08000000002,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt",
+    "sourceId": "bU1eEFiYtCdhkSeIPKfH",
+    "refNumber": "RV-BU1EEF",
+    "notes": "سند قبض — تحويل",
+    "type": "in"
+  },
+  {
+    "id": "fQ5oqD5q9TSgnWG73tVL",
+    "refNumber": "RV-7PKPGT",
+    "date": "2026-11-09",
+    "sourceId": "7PKpgtVUUtpGDEplGiXB",
+    "sourceType": "receipt",
+    "balanceAfter": 14469.98000000001,
+    "type": "in",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — تحويل",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794245911,
+      "nanoseconds": 296000000
+    },
+    "amount": 1000
+  },
+  {
+    "id": "g3gJK99ttQLmldf5cpmr",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789890964,
+      "nanoseconds": 151000000
+    },
+    "type": "in",
+    "amount": 100,
+    "balanceAfter": -42520.159999999996,
+    "sourceType": "receipt",
+    "notes": "سند قبض — شبكة",
+    "refNumber": "RV-NBTVFS",
+    "date": "2026-09-19",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceId": "nbTVFsL6CcMpXSBXqwZo"
+  },
+  {
+    "id": "gJJbSxO1nrBJWF8cLBHh",
+    "sourceType": "receipt",
+    "refNumber": "RV-WA8FU9",
+    "date": "2026-11-07",
+    "userName": "النظام",
+    "balanceAfter": 41248.42,
+    "sourceId": "Wa8FU9KKhDRBlNjKkeDo",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794123853,
+      "nanoseconds": 512000000
+    },
+    "type": "in",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 250,
+    "notes": "سند قبض — شبكه"
+  },
+  {
+    "id": "gW08HqEo35vbz5pxyTno",
+    "sourceId": "elhia9bRoxe4rFysbQ1w",
+    "balanceAfter": 143857.86000000002,
+    "sourceType": "expense",
+    "amount": 414,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229554,
+      "nanoseconds": 567000000
+    },
+    "isTransfer": false,
+    "type": "out",
+    "refNumber": "PV-ELHIA9",
+    "notes": "سند صرف رقم ELHIA9 — مشتروات",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "gqFXtq8LhB8R7qYR74Fm",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127165,
+      "nanoseconds": 487000000
+    },
+    "amount": 800,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "expense",
+    "isTransfer": false,
+    "type": "out",
+    "notes": "سند صرف رقم 0SKBCX — مشتروات",
+    "refNumber": "PV-0SKBCX",
+    "sourceId": "0SkbcxS74bu5Rca5hPpV",
+    "balanceAfter": 24441.98000000001
+  },
+  {
+    "id": "gqaJaxDEsx2cySCZYsxg",
+    "balanceAfter": 6518.84,
+    "amount": 2725,
+    "refNumber": "PV-4B178G",
+    "bankAccountId": "bank-aljazira",
+    "notes": "سند صرف رقم 4B178G — تحويل",
+    "type": "out",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789062829,
+      "nanoseconds": 734000000
+    }
+  },
+  {
+    "id": "h4igCAXK1SFpXyrwjmx3",
+    "sourceId": "catgL153YRopAR7bzh8V",
+    "refNumber": "PV-CATGL1",
+    "sourceType": "expense",
+    "isTransfer": false,
+    "amount": 970,
+    "type": "out",
+    "notes": "سند صرف رقم CATGL1 — تحويل",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 154486.32,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991507,
+      "nanoseconds": 167000000
+    }
+  },
+  {
+    "id": "hBOEyu1T1rLl8WoewX2Q",
+    "type": "out",
+    "balanceAfter": 9907.84,
+    "refNumber": "PV-KERJ6T",
+    "bankAccountId": "bank-aljazira",
+    "amount": 4856,
+    "notes": "سند صرف رقم KERJ6T — تحويل قيمة بضاعه",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788773963,
+      "nanoseconds": 899000000
+    }
+  },
+  {
+    "id": "hUHWqb1ZnJVg2tG6uK7K",
+    "sourceId": "MBKg0qggODLVDZB6ntjt",
+    "sourceType": "expense",
+    "amount": 369.15,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793691540,
+      "nanoseconds": 241000000
+    },
+    "isTransfer": false,
+    "notes": "سند صرف رقم MBKG0Q — مشترياات",
+    "refNumber": "PV-MBKG0Q",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "out",
+    "balanceAfter": 28130.299999999996
+  },
+  {
+    "id": "ibyodXruMckLAYCCxY2H",
+    "amount": 2180,
+    "refNumber": "RV-VLSM00",
+    "notes": "سند قبض — تحويل بنكى",
+    "balanceAfter": -18764.350000000002,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "sourceId": "vlSM004e3v2LOElRGcBG",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788686794,
+      "nanoseconds": 30000000
+    }
+  },
+  {
+    "id": "jksQ9YsMJW1QLi0D58tV",
+    "balanceAfter": 6626,
+    "sourceType": "receipt",
+    "refNumber": "RV-ZV71OC",
+    "notes": "سند قبض — تحويل",
+    "sourceId": "Zv71oc3Is1beA8cqD0kg",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787560306,
+      "nanoseconds": 407000000
+    },
+    "amount": 250,
+    "type": "in",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "k8pEIbYcGxBnH5VqB3hi",
+    "date": "2026-11-03",
+    "amount": 250,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "userName": "النظام",
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "refNumber": "RV-TLB3DD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793692522,
+      "nanoseconds": 620000000
+    },
+    "balanceAfter": 20698.42,
+    "type": "in",
+    "sourceId": "tLb3dDJdsmC3r0wBGn7w"
+  },
+  {
+    "id": "l025GCQreYavZUFphH1f",
+    "amount": 130,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند قبض — شبكة",
+    "refNumber": "RV-VFI5Y9",
+    "type": "in",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788386498,
+      "nanoseconds": 828000000
+    },
+    "sourceId": "vFi5Y9EvH8QxWeAnLImp",
+    "balanceAfter": -21194.350000000002
+  },
+  {
+    "id": "lSDc6yLTdNRzCYioBv48",
+    "amount": 126787.5,
+    "bankAccountId": "bank-aljazira",
+    "type": "out",
+    "balanceAfter": 42304.97,
+    "refNumber": "PV-OOIE4M",
+    "notes": "سند صرف رقم OOIE4M — سداد فاتورة جودى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786978803,
+      "nanoseconds": 793000000
+    }
+  },
+  {
+    "id": "lpRwrFSWKKSV1IWM6qAg",
+    "amount": 1000,
+    "sourceId": "nccJZMZLfff2ScGqbikW",
+    "notes": "سند قبض — تحصيل شبكة",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "balanceAfter": 2764,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787043110,
+      "nanoseconds": 944000000
+    },
+    "refNumber": "RV-NCCJZM",
+    "sourceType": "receipt"
+  },
+  {
+    "id": "lvJMxuAYx7iVmy9S6KlA",
+    "balanceAfter": -98888.5,
+    "refNumber": "PV-EUDNUC",
+    "bankAccountId": "bank-aljazira",
+    "notes": "سند صرف رقم EUDNUC — تحويل قيمة مشتريات",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237320,
+      "nanoseconds": 507000000
+    },
+    "type": "out",
+    "amount": 34385
+  },
+  {
+    "id": "mEG7PDxf6zPBNkf64eiJ",
+    "type": "in",
+    "sourceId": "Fq7o7YkOydxg03UCWMta",
+    "notes": "سند قبض — شبكة",
+    "sourceType": "receipt",
+    "refNumber": "RV-FQ7O7Y",
+    "balanceAfter": 1395,
+    "date": "2026-09-23",
+    "amount": 1395,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790154221,
+      "nanoseconds": 360000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "userName": "النظام"
+  },
+  {
+    "id": "mWgDbJgQmoU0T7bs5tvC",
+    "refNumber": "RV-KQXQ7C",
+    "sourceId": "KqXq7CvYLkSlPcZ1oX6M",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": 6376,
+    "amount": 1378,
+    "type": "in",
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787560277,
+      "nanoseconds": 275000000
+    }
+  },
+  {
+    "id": "ml3dLf0g1nRJiNAlC7yS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230155,
+      "nanoseconds": 244000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "سند صرف رقم RIMPAF — مشتروات",
+    "sourceType": "expense",
+    "amount": 4938,
+    "sourceId": "rImPAfbPZZOejYLg8k6s",
+    "isTransfer": false,
+    "type": "out",
+    "refNumber": "PV-RIMPAF",
+    "balanceAfter": 127695.86000000002
+  },
+  {
+    "id": "nPZPTG18I9ixGhU00OVs",
+    "sourceType": "receipt",
+    "refNumber": "RV-89VEWN",
+    "sourceId": "89VEwnmraYfmx2rsasjM",
+    "balanceAfter": 7645,
+    "date": "2026-09-29",
+    "notes": "سند قبض — شبكة",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 100,
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790679471,
+      "nanoseconds": 653000000
+    },
+    "type": "in"
+  },
+  {
+    "id": "nv2PhaJvqjKdS3OqF3sr",
+    "date": "2026-10-26",
+    "sourceType": "receipt",
+    "sourceId": "kMz3unNWODtFc7sNoQaS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793003155,
+      "nanoseconds": 653000000
+    },
+    "amount": 1600,
+    "type": "in",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-KMZ3UN",
+    "balanceAfter": 11392.62,
+    "userName": "النظام",
+    "notes": "سند قبض — تحويل"
+  },
+  {
+    "id": "o2AG5cyFXdnRMByiJhwk",
+    "userName": "النظام",
+    "date": "2026-09-16",
+    "sourceType": "receipt",
+    "refNumber": "RV-UFIYGY",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789632791,
+      "nanoseconds": 644000000
+    },
+    "balanceAfter": -42620.159999999996,
+    "type": "in",
+    "sourceId": "ufiyGy8Q2XZ6iIFokfwF",
+    "amount": 200,
+    "notes": "سند قبض — شبكة"
+  },
+  {
+    "id": "p5YUnbj2OIRLMebfmsqL",
+    "refNumber": "RV-LMNOPP",
+    "type": "in",
+    "amount": 6751.19,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "userName": "النظام",
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "sourceId": "lmnoPpbOSWYe8BrEzFnt",
+    "date": "2026-10-29",
+    "balanceAfter": 27005.66,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793297639,
+      "nanoseconds": 464000000
+    }
+  },
+  {
+    "id": "pG7fb2e6FfWIOsbqgsrf",
+    "balanceAfter": 12492.62,
+    "userName": "النظام",
+    "amount": 600,
+    "sourceType": "receipt",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793003263,
+      "nanoseconds": 736000000
+    },
+    "refNumber": "RV-UPPQO8",
+    "notes": "سند قبض — شبكه",
+    "sourceId": "uPPQo8o8rUT35kyNedrY",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-26"
+  },
+  {
+    "id": "pmGkKhV6S0klfz4oF8GU",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "type": "in",
+    "amount": 1062,
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "refNumber": "RV-ZTLSGF",
+    "userName": "النظام",
+    "date": "2026-10-07",
+    "sourceId": "ztlSgfCy0EWAdWmNcbPB",
+    "balanceAfter": 12437,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365289,
+      "nanoseconds": 966000000
+    }
+  },
+  {
+    "id": "pmIkLKy7trtASco9E44I",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792925259,
+      "nanoseconds": 142000000
+    },
+    "date": "2026-10-25",
+    "userName": "النظام",
+    "sourceType": "receipt",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 1571.58,
+    "sourceId": "Dx0Z9hgdpTlnV31RAjZ0",
+    "type": "in",
+    "refNumber": "RV-DX0Z9H",
+    "notes": "سند قبض — تحويل",
+    "balanceAfter": 3873.390000000001
+  },
+  {
+    "id": "q40ATASxsqrahPnaAuyu",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473684,
+      "nanoseconds": 704000000
+    },
+    "sourceType": "receipt",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 300,
+    "sourceId": "RW84ZxDJtEV2QI7OTzdZ",
+    "type": "in",
+    "notes": "سند قبض — تحويل",
+    "refNumber": "RV-RW84ZX",
+    "balanceAfter": 4998
+  },
+  {
+    "id": "q7R0iWlptcCl4f9sQAo8",
+    "bankAccountId": "bank-aljazira",
+    "date": "2026-10-06",
+    "refNumber": "RV-KSW2FX",
+    "sourceId": "KsW2fXwrGFsa3wLMh9R9",
+    "notes": "سند قبض — تحويل",
+    "type": "in",
+    "amount": 4028,
+    "userName": "النظام",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365091,
+      "nanoseconds": 391000000
+    },
+    "balanceAfter": 4028
+  },
+  {
+    "id": "qYAsUoSJiPzPwEBGsjFq",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787134889,
+      "nanoseconds": 73000000
+    },
+    "amount": 200,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt",
+    "notes": "سند قبض — شبكة",
+    "type": "in",
+    "sourceId": "Wg0uWy1Cqwj20xYrxobu",
+    "refNumber": "RV-WG0UWY",
+    "balanceAfter": 3164
+  },
+  {
+    "id": "qp73S5anesbG78EmpICn",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791224100,
+      "nanoseconds": 868000000
+    },
+    "userName": "النظام",
+    "date": "2026-10-05",
+    "notes": "سند قبض — تحويل",
+    "sourceType": "receipt",
+    "amount": 200,
+    "sourceId": "1mmCdd9rGU512oGztH7e",
+    "type": "in",
+    "refNumber": "RV-1MMCDD",
+    "balanceAfter": 8575
+  },
+  {
+    "id": "rCNxSmzOHycsoXarE5ue",
+    "sourceId": "0Q0SMrNwbfYtokxgjxMp",
+    "date": "2026-09-16",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789632612,
+      "nanoseconds": 230000000
+    },
+    "amount": 600,
+    "sourceType": "receipt",
+    "type": "in",
+    "refNumber": "RV-0Q0SMR",
+    "balanceAfter": -42820.159999999996,
+    "notes": "سند قبض — تحويل",
+    "userName": "النظام"
+  },
+  {
+    "id": "rSZvommy5dlGmxnc8r4T",
+    "refNumber": "RV-XWLKS2",
+    "sourceId": "XwLks2Xa563yG9kNQ7Xg",
+    "type": "in",
+    "amount": 1199.74,
+    "balanceAfter": -43420.159999999996,
+    "notes": "سند قبض — تحويل بنكى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789059694,
+      "nanoseconds": 28000000
+    },
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt"
+  },
+  {
+    "id": "rY1r1ZCtsgQHiHTEujQc",
+    "amount": 2077.85,
+    "type": "out",
+    "notes": "سند صرف رقم EOGTGY — تحويل",
+    "refNumber": "PV-EOGTGY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791366167,
+      "nanoseconds": 735000000
+    },
+    "balanceAfter": 5452.130000000001,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "rdjfLEqD0BvxyEVUkelL",
+    "type": "in",
+    "refNumber": "RV-VBHZAK",
+    "sourceType": "receipt",
+    "balanceAfter": 20448.42,
+    "sourceId": "VBHZAKRk790lCrzjP93C",
+    "date": "2026-11-03",
+    "userName": "النظام",
+    "notes": "سند قبض — تحويل",
+    "amount": 1050,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793692484,
+      "nanoseconds": 992000000
+    }
+  },
+  {
+    "id": "sIIjQp8ikWQrbi0uzirr",
+    "date": "2026-10-21",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-OLGQKC",
+    "sourceId": "OLGQKCK3mZKSUjE6hxmz",
+    "notes": "سند قبض — تحويل",
+    "type": "in",
+    "amount": 1975,
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792576369,
+      "nanoseconds": 444000000
+    },
+    "sourceType": "receipt",
+    "balanceAfter": 14410.11
+  },
+  {
+    "id": "sefTTxAcDBq0XgZI9ZPe",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791897642,
+      "nanoseconds": 870000000
+    },
+    "sourceType": "receipt",
+    "userName": "النظام",
+    "date": "2026-10-13",
+    "amount": 150,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceId": "SuqLoLz7y8XwIDxl0zwO",
+    "type": "in",
+    "balanceAfter": 16740.86,
+    "notes": "سند قبض — شبكة",
+    "refNumber": "RV-SUQLOL"
+  },
+  {
+    "id": "t361ecg5se376hnijKDC",
+    "refNumber": "RV-8FOYV3",
+    "sourceType": "receipt",
+    "sourceId": "8foyv31wLl3HTbh5F7hB",
+    "date": "2026-11-07",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 700,
+    "balanceAfter": 41948.42,
+    "userName": "النظام",
+    "notes": "سند قبض — شبكه",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794123897,
+      "nanoseconds": 896000000
+    },
+    "type": "in"
+  },
+  {
+    "id": "vgHsIrbu7pbKgNo9AnO1",
+    "sourceId": "xPh04lRSy3ievlT9cFzG",
+    "isTransfer": false,
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793691605,
+      "nanoseconds": 358000000
+    },
+    "amount": 18382.5,
+    "sourceType": "expense",
+    "type": "out",
+    "balanceAfter": 9747.799999999996,
+    "refNumber": "PV-XPH04L",
+    "notes": "سند صرف رقم XPH04L — مشتريات"
+  },
+  {
+    "id": "viSYkCMAW4xk4Wp94ltT",
+    "amount": 24552.2,
+    "type": "out",
+    "notes": "سند صرف رقم 5JCPDM — تحويل مشتروات",
+    "refNumber": "PV-5JCPDM",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "balanceAfter": -21428.350000000002,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788337908,
+      "nanoseconds": 493000000
+    }
+  },
+  {
+    "id": "wBBHNgS9jaccYQSd7gow",
+    "notes": "سند قبض — شبكة",
+    "type": "in",
+    "sourceId": "4raqsnkrVhyMeS4LnlOm",
+    "sourceType": "receipt",
+    "refNumber": "RV-4RAQSN",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 200,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787134853,
+      "nanoseconds": 584000000
+    },
+    "balanceAfter": 2964
+  },
+  {
+    "id": "wO94oFBmOHoMGV4To6D0",
+    "balanceAfter": 4698,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473194,
+      "nanoseconds": 870000000
+    },
+    "sourceId": "DEVU9VHkAnG2qDNhZnjT",
+    "notes": "سند قبض — تحويل",
+    "refNumber": "RV-DEVU9V",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 300,
+    "sourceType": "receipt"
+  },
+  {
+    "id": "wj5XxwwLV95Pv2YN8fQ6",
+    "balanceAfter": 2759.210000000001,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792840139,
+      "nanoseconds": 940000000
+    },
+    "date": "2026-10-24",
+    "userName": "النظام",
+    "notes": "سند قبض — تحويل",
+    "amount": 2530,
+    "type": "in",
+    "sourceId": "5MM0vQy7MM4OJRy6GdfD",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-5MM0VQ",
+    "sourceType": "receipt"
+  },
+  {
+    "id": "xvX7txwQn0N3ec2mGcxe",
+    "sourceId": "JzsC7EISM86sVwHGDeBB",
+    "refNumber": "RV-JZSC7E",
+    "type": "in",
+    "amount": 250,
+    "balanceAfter": 27382.66,
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793436312,
+      "nanoseconds": 76000000
+    },
+    "notes": "سند قبض — تحويل بنكى",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-31",
+    "sourceType": "receipt"
+  },
+  {
+    "id": "yrZF7Km69COM2dEsBX3j",
+    "amount": 2000,
+    "sourceId": "V01XfOLslma2Oxng11ga",
+    "notes": "سند قبض — تحويل",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793182804,
+      "nanoseconds": 730000000
+    },
+    "balanceAfter": 15305.470000000001,
+    "sourceType": "receipt",
+    "type": "in",
+    "userName": "النظام",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-V01XFO",
+    "date": "2026-10-28"
+  },
+  {
+    "id": "yyPOHeUmyRTmuaQLgpFa",
+    "userName": "النظام",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793806712,
+      "nanoseconds": 162000000
+    },
+    "sourceType": "receipt",
+    "amount": 5070,
+    "date": "2026-11-03",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "refNumber": "RV-OZYXRK",
+    "sourceId": "ozyXRKMXOB5Qv0DaBOh8",
+    "balanceAfter": 25768.42,
+    "notes": "سند قبض — تحويل",
+    "type": "in"
+  },
+  {
+    "id": "zAHj9a94W2SpD3DlL3l5",
+    "balanceAfter": 143919.56,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792492027,
+      "nanoseconds": 974000000
+    },
+    "date": "2026-10-13",
+    "sourceType": "receipt",
+    "sourceId": "GPSE5FsTYdafJbPr3UO5",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "userName": "النظام",
+    "type": "in",
+    "refNumber": "RV-GPSE5F",
+    "amount": 2316,
+    "notes": "سند قبض — تحويل"
+  },
+  {
+    "id": "zxYCcBHcR2ABhCXkn4gR",
+    "balanceAfter": -40280.159999999996,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790064808,
+      "nanoseconds": 65000000
+    },
+    "userName": "النظام",
+    "date": "2026-09-22",
+    "notes": "سند قبض — تحويل",
+    "amount": 100,
+    "type": "in",
+    "sourceId": "CI7yCL5TEKdlHEpX1LXc",
+    "bankAccountId": "0j34llJOFXQ2McuwHCtr",
+    "sourceType": "receipt",
+    "refNumber": "RV-CI7YCL"
+  }
+]

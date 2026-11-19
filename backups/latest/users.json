@@ -1,0 +1,61 @@
+[
+  {
+    "id": "YmnOYFTWQc3kgWOmKy3M",
+    "name": "على فياض",
+    "status": "active",
+    "permissions": [
+      "sales",
+      "inventory",
+      "hr",
+      "purchases",
+      "accounts",
+      "settings"
+    ],
+    "role": "admin",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1783470640,
+      "nanoseconds": 156000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785094858,
+      "nanoseconds": 685000000
+    },
+    "email": "alifayad18@gmail.com"
+  },
+  {
+    "id": "eZ8UlvjeYawtWSre5EwW",
+    "email": "alifayadacc18@gmail.com",
+    "role": "admin",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1783809594,
+      "nanoseconds": 696000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1783809594,
+      "nanoseconds": 696000000
+    },
+    "name": "على فيااض",
+    "passwordHash": "6f496eaf16d46f92b4dd7827da5a81b9acdd5eec77818b3108abebd545166f1a"
+  },
+  {
+    "id": "t6ILliJdh8STfuDKHVRvI8ey7EO2",
+    "role": "warehouse_keeper",
+    "passwordHash": "076498881fb648b271ee525d8cd58b3f7f29b1979b838346021796de77389782",
+    "email": "nagy@gmail.com",
+    "name": "ناجى عاطف",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785745274,
+      "nanoseconds": 611000000
+    },
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785745274,
+      "nanoseconds": 611000000
+    }
+  }
+]

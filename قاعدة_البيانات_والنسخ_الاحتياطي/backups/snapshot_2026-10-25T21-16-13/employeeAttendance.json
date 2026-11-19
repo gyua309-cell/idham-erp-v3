@@ -1,0 +1,39 @@
+[
+  {
+    "id": "2026-07",
+    "updatedAt": "2026-07-31T22:20:22.853Z",
+    "items": [
+      {
+        "overtimeHours": 0,
+        "empName": "خالد المندوب",
+        "empId": "bQUo3McjEc1w6SePt3Gq",
+        "absentDays": 27
+      },
+      {
+        "empId": "GOnzMbFPplfeSDwh7Zhc",
+        "absentDays": 0,
+        "overtimeHours": 0,
+        "empName": "على السيد عبده"
+      },
+      {
+        "overtimeHours": 0,
+        "empName": "محمد عوض",
+        "empId": "7PY1jbwphUrnWkViIv9o",
+        "absentDays": 0
+      },
+      {
+        "absentDays": 13,
+        "empName": "مصطفى الاسيوطى",
+        "overtimeHours": 0,
+        "empId": "wOxNLDnyefMxOkvqrNSo"
+      },
+      {
+        "absentDays": 12,
+        "overtimeHours": 0,
+        "empName": "ناجى عاطف",
+        "empId": "0DrqIOogPBIJvcmovlj2"
+      }
+    ],
+    "month": "2026-07"
+  }
+]

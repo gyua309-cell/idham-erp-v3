@@ -2,10 +2,21 @@
 // IDHAM ERP — Stock Transfer Module (تحويل بضاعة بين المخازن)
 // Multi-item transfer with two-step workflow (In Transit / Received)
 // ============================================================
-import { COLS, create, update, getAll, getStockForProduct, adjustStock, adjustStockBulk, generateInvoiceNumber, createJournalEntry, deleteDoc } from "../utils/db.js";
-import { query, orderBy, limit, getDocs, where, doc, getDoc, collection, deleteDoc as fbDeleteDoc } from "../utils/db.js";
+import { COLS, create, update, getAll, getStockForProduct, adjustStock, adjustStockBulk, generateInvoiceNumber, createJournalEntry, deleteDoc, clearERPCache } from "../utils/db.js";
+import { query, orderBy, limit, getDocs, where, doc, getDoc, collection, updateDoc, deleteDoc as fbDeleteDoc } from "../utils/db.js";
 import { formatQuantity, formatDate, formatDateLong, todayString, debounce } from "../utils/formatters.js";
 import { db, COMPANY_ID } from "../firebase-config.js";
+
+function translateUnit(u) {
+  const map = {
+    Piece:'حبة', Carton:'كرتون', Box:'بوكس', Bag:'كيس', Pack:'شد',
+    Sack:'شوال', Bale:'بالة', Barrel:'برميل', Tray:'طبق', Gallon:'جالون',
+    Kilogram:'كيلو', Ton:'طن', Liter:'لتر', Gram:'جرام', Can:'علبة',
+    Bottle:'زجاجة', Meter:'متر', Tank:'تنك', Roll:'رول', Pallet:'باليت',
+    PCS:'حبة'
+  };
+  return map[u] || u || '';
+}
 
 // ──────────────────────────────────────────
 // القيد المحاسبي التلقائي للتحويل المخزني — Stock Transfer Auto JE
@@ -83,11 +94,17 @@ async function createTransferJE(transfer) {
   let totalCost = 0;
   for (const line of (transfer.lines || [])) {
     const cost = line.costPrice || await getProductCostPrice(line.productId);
-    totalCost += Math.round(cost * line.qty * 100) / 100;
+    const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+    const effQty = line.effectiveQty !== undefined ? line.effectiveQty : (line.qty * factor);
+    totalCost += Math.round(cost * effQty * 100) / 100;
   }
 
   if (totalCost < 0.001) {
-    totalCost = (transfer.lines || []).reduce((s, l) => s + (l.qty || 1), 0);
+    totalCost = (transfer.lines || []).reduce((s, l) => {
+      const factor = (l.altUnit && l.unitFactor > 1 && l.selectedUnit === l.altUnit) ? l.unitFactor : 1;
+      const effQty = l.effectiveQty !== undefined ? l.effectiveQty : (l.qty * factor);
+      return s + (effQty || 1);
+    }, 0);
   }
 
   // منع تكرار القيد
@@ -105,6 +122,7 @@ async function createTransferJE(transfer) {
   const toAcc   = await getWarehouseInventoryAccount(transfer.toWarehouseId,   transfer.toWarehouseName);
 
   const jeId = await createJournalEntry({
+    entryNumber: `JE-${transfer.number}`,
     date:        transfer.date || new Date().toISOString().slice(0, 10),
     description: `تحويل مخزني ${transfer.number} — من ${transfer.fromWarehouseName} إلى ${transfer.toWarehouseName}`,
     lines: [
@@ -264,17 +282,17 @@ export async function render(container, user) {
             </div>
 
             <!-- Transfer Items Lines Table -->
-            <div style="max-height:220px; overflow-y:auto; border:1px solid var(--border); border-radius:6px; background:#fff;">
+            <div style="max-height:280px; overflow-y:auto; border:1px solid var(--border); border-radius:6px; background:#fff;">
               <table style="width:100%; font-size:12px; border-collapse:collapse;">
                 <thead>
                   <tr style="background:var(--bg-3); position:sticky; top:0; z-index:1;">
-                    <th style="padding:8px 10px; text-align:right;">#</th>
+                    <th style="padding:8px 10px; text-align:right; width:30px;">#</th>
                     <th style="padding:8px 10px; text-align:right;">اسم الصنف</th>
-                    <th style="padding:8px 10px; text-align:right;">الكود</th>
-                    <th style="padding:8px 10px; text-align:right;">الوحدة</th>
+                    <th style="padding:8px 10px; text-align:right; width:85px;">الكود</th>
+                    <th style="padding:8px 10px; text-align:right; min-width:95px;">الوحدة</th>
                     <th style="padding:8px 10px; text-align:right; color:var(--primary);">الرصيد المتاح</th>
-                    <th style="padding:8px 10px; text-align:right; width:100px;">الكمية</th>
-                    <th style="padding:8px 6px;"></th>
+                    <th style="padding:8px 10px; text-align:center; min-width:160px;">الكمية المحولة</th>
+                    <th style="padding:8px 6px; width:40px;"></th>
                   </tr>
                 </thead>
                 <tbody id="st-lines-tbody">
@@ -328,14 +346,41 @@ export async function render(container, user) {
   document.getElementById("st-from")?.addEventListener("change", () => loadTransferHistory());
   document.getElementById("st-to")?.addEventListener("change", () => loadTransferHistory());
 
-  await loadWarehousesList();
-  await loadTransferHistory();
+  await Promise.all([
+    loadWarehousesList(),
+    loadTransferHistory()
+  ]);
   setupProductSearch();
 }
 
 async function loadWarehousesList() {
   try {
-    warehouses = await getAll(COLS.warehouses(), [orderBy("name")]);
+    clearERPCache(COLS.warehouses().path);
+    const rawWhs = await getAll(COLS.warehouses());
+    
+    // Deduplicate by ID and clean active list
+    const seenIds = new Set();
+    const seenNames = new Set();
+    const uniqueWhs = [];
+
+    rawWhs.forEach(w => {
+      if (!w || !w.id || seenIds.has(w.id)) return;
+      seenIds.add(w.id);
+      if (w.isActive === false) return;
+
+      const normName = (w.name || "").replace(/\s+/g, " ").trim();
+      if (!normName) return;
+
+      // Deduplicate if name matches another warehouse
+      if (seenNames.has(normName)) return;
+      seenNames.add(normName);
+
+      uniqueWhs.push({ ...w, name: normName });
+    });
+
+    uniqueWhs.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
+    warehouses = uniqueWhs;
+
     const fromSel = document.getElementById("st-from-wh");
     const toSel   = document.getElementById("st-to-wh");
     if (fromSel && toSel) {
@@ -344,17 +389,24 @@ async function loadWarehousesList() {
       toSel.innerHTML   = '<option value="">اختر المخزن المستلم</option>' + opts;
     }
 
-    // Preload products & categories in background
-    getAll(COLS.products(), [orderBy("name")]).then(p => { allProducts = p; });
-    getAll(COLS.categories(), [orderBy("name")]).then(cats => {
-      allCategories = cats;
-      const catFilter = document.getElementById("st-product-category-filter");
-      if (catFilter) {
-        catFilter.innerHTML = '<option value="">كل الفئات</option>' + 
-          allCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
-      }
-    });
-  } catch {}
+    // Preload products, categories & stockByWarehouse live
+    const [p, cats, stDocs] = await Promise.all([
+      getAll(COLS.products(), [orderBy("name")]),
+      getAll(COLS.categories(), [orderBy("name")]),
+      getAll(COLS.stockByWarehouse())
+    ]);
+    allProducts = p || [];
+    allCategories = cats || [];
+    window._stStockCache = stDocs || [];
+
+    const catFilter = document.getElementById("st-product-category-filter");
+    if (catFilter) {
+      catFilter.innerHTML = '<option value="">كل الفئات</option>' + 
+        allCategories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+    }
+  } catch (err) {
+    console.warn("[StockTransfer] Error loading warehouses/products:", err);
+  }
 }
 
 async function loadTransferHistory() {
@@ -483,7 +535,7 @@ function setupProductSearch() {
       );
     }
 
-    matched = matched.slice(0, 15);
+    matched = matched.slice(0, 30);
 
     if (!matched.length) {
       results.innerHTML = `<div style="padding:10px;text-align:center;color:var(--text-2);font-size:12px;">لا توجد نتائج</div>`;
@@ -492,19 +544,38 @@ function setupProductSearch() {
     }
 
     const whId = document.getElementById("st-from-wh")?.value;
-    const cachedObj = window.ERP_CACHE[`companies/${COMPANY_ID}/stockByWarehouse`];
-    const stockCache = cachedObj && Array.isArray(cachedObj.data) ? cachedObj.data : [];
+    const stockCache = window._stStockCache || [];
 
     results.innerHTML = matched.map(p => {
-      const stockItem = stockCache.find(s => s.productId === p.id && s.warehouseId === whId);
-      const avail = stockItem ? stockItem.qty : 0;
+      let avail = 0;
+      if (whId) {
+        const stockItem = stockCache.find(s => s.productId === p.id && s.warehouseId === whId);
+        avail = stockItem ? (stockItem.qty || 0) : 0;
+      } else {
+        const itemStocks = stockCache.filter(s => s.productId === p.id);
+        avail = itemStocks.length > 0
+          ? itemStocks.reduce((sum, s) => sum + (s.qty || 0), 0)
+          : (p.totalQty || p.stock || 0);
+      }
+
+      const safeName    = (p.name || '').replace(/'/g, "\\'");
+      const safeUnit    = (p.unit || 'Piece').replace(/'/g, "\\'");
+      const safeSku     = (p.sku || '').replace(/'/g, "\\'");
+      const safeAltUnit = (p.altUnit || '').replace(/'/g, "\\'");
+      const safeFactor  = parseFloat(p.unitFactor) || 1;
+
       return `
-        <div class="autocomplete-item" onclick="addTransferLine('${p.id}','${(p.name||"").replace(/'/g,"\\'")}','${p.unit || "PCS"}','${p.sku || ""}')">
-          <div class="flex justify-between">
-            <span>${p.name}</span>
-            <span class="badge ${avail > 0 ? 'good' : 'bad'}" style="font-size:10px;">المتاح: ${avail}</span>
+        <div class="autocomplete-item" onclick="addTransferLine('${p.id}','${safeName}','${safeUnit}','${safeSku}','${safeAltUnit}',${safeFactor})">
+          <div class="flex justify-between" style="align-items:center;">
+            <strong style="font-size:13px;">${p.name}</strong>
+            <span class="badge ${avail > 0 ? 'good' : 'bad'}" style="font-size:11px;">
+              ${whId ? 'المتاح بالمخزن: ' : 'إجمالي المتاح: '}${formatQuantity(avail)} ${translateUnit(p.unit) || ''}
+            </span>
           </div>
-          <div class="item-code">${p.sku || ""} | ${p.unit || ""}</div>
+          <div class="item-code" style="font-size:11px;color:var(--text-2);margin-top:2px;">
+            كود: ${p.sku || "بدون كود"} | وحدة: ${translateUnit(p.unit) || "حبة"}
+            ${p.altUnit && safeFactor > 1 ? `<span style="color:#d97706;font-weight:700;margin-right:6px;">📦 1 ${translateUnit(p.altUnit)} = ${safeFactor} ${translateUnit(p.unit)}</span>` : ''}
+          </div>
         </div>
       `;
     }).join("");
@@ -523,7 +594,7 @@ function setupProductSearch() {
   });
 }
 
-window.addTransferLine = async (productId, productName, unit, sku) => {
+window.addTransferLine = async (productId, productName, unit, sku, altUnit = '', unitFactor = 1) => {
   document.getElementById("st-product-search").value = "";
   document.getElementById("st-product-results").classList.add("hidden");
 
@@ -532,19 +603,43 @@ window.addTransferLine = async (productId, productName, unit, sku) => {
     return;
   }
 
-  const fromWh = document.getElementById("st-from-wh").value;
+  const fromWh = document.getElementById("st-from-wh")?.value;
   let availQty = 0;
   if (fromWh) {
-    const stockList = await getStockForProduct(productId);
-    const item = stockList.find(s => s.warehouseId === fromWh);
-    availQty = item ? item.qty : 0;
+    try {
+      const stockList = await getStockForProduct(productId);
+      const item = stockList.find(s => s.warehouseId === fromWh);
+      availQty = item ? item.qty : 0;
+    } catch {
+      const stockCache = window._stStockCache || [];
+      const item = stockCache.find(s => s.productId === productId && s.warehouseId === fromWh);
+      availQty = item ? (item.qty || 0) : 0;
+    }
+  } else {
+    const stockCache = window._stStockCache || [];
+    const itemStocks = stockCache.filter(s => s.productId === productId);
+    if (itemStocks.length > 0) {
+      availQty = itemStocks.reduce((sum, s) => sum + (s.qty || 0), 0);
+    } else {
+      const prod = allProducts.find(p => p.id === productId);
+      availQty = prod ? (prod.totalQty || prod.stock || 0) : 0;
+    }
   }
 
   const prod = allProducts.find(p => p.id === productId);
   const costPrice = prod ? parseFloat(prod.averageCost || prod.costPrice || prod.purchasePrice || 0) : 0;
+  const resolvedAltUnit = altUnit || prod?.altUnit || '';
+  const resolvedFactor  = parseFloat(unitFactor || prod?.unitFactor) || 1;
+  const defaultToAlt    = !!(resolvedAltUnit && resolvedFactor > 1);
 
   transferLines.push({
-    productId, productName, unit, sku,
+    productId,
+    productName,
+    unit: unit || prod?.unit || "Piece",
+    sku: sku || prod?.sku || "",
+    altUnit: resolvedAltUnit,
+    unitFactor: resolvedFactor,
+    selectedUnit: defaultToAlt ? resolvedAltUnit : (unit || prod?.unit || "Piece"),
     qty: 1,
     availQty,
     costPrice
@@ -554,9 +649,17 @@ window.addTransferLine = async (productId, productName, unit, sku) => {
 };
 
 window.updateAllAvailableStock = async () => {
-  const fromWh = document.getElementById("st-from-wh").value;
+  const fromWh = document.getElementById("st-from-wh")?.value;
+  try {
+    window._stStockCache = await getAll(COLS.stockByWarehouse());
+  } catch {}
+
   if (!fromWh) {
-    transferLines.forEach(l => l.availQty = 0);
+    const stockCache = window._stStockCache || [];
+    transferLines.forEach(l => {
+      const itemStocks = stockCache.filter(s => s.productId === l.productId);
+      l.availQty = itemStocks.length > 0 ? itemStocks.reduce((sum, s) => sum + (s.qty || 0), 0) : 0;
+    });
     renderTransferLines();
     return;
   }
@@ -567,55 +670,32 @@ window.updateAllAvailableStock = async () => {
       const item = stockList.find(s => s.warehouseId === fromWh);
       line.availQty = item ? item.qty : 0;
     } catch {
-      line.availQty = 0;
+      const item = (window._stStockCache || []).find(s => s.productId === line.productId && s.warehouseId === fromWh);
+      line.availQty = item ? (item.qty || 0) : 0;
     }
   }
   renderTransferLines();
 };
 
-function renderTransferLines() {
-  const tbody = document.getElementById("st-lines-tbody");
-  if (!tbody) return;
-
-  if (transferLines.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:16px;color:var(--text-2);">لم يتم إضافة أصناف بعد</td></tr>`;
-    document.getElementById("st-error")?.classList.add("hidden");
-    return;
-  }
-
+function checkTransferStockErrors() {
   let hasOverStock = false;
   let overStockNames = [];
 
-  tbody.innerHTML = transferLines.map((line, i) => {
-    const isOver = line.qty > line.availQty;
-    if (isOver) {
+  transferLines.forEach(line => {
+    const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+    const reqBaseQty = (parseFloat(line.qty) || 0) * factor;
+    if (reqBaseQty > line.availQty) {
       hasOverStock = true;
-      overStockNames.push(`${line.productName} (المطلوب: ${line.qty} > المتاح: ${line.availQty})`);
+      overStockNames.push(`${line.productName} (المطلوب: ${formatQuantity(line.qty)} ${translateUnit(line.selectedUnit || line.unit)} = ${formatQuantity(reqBaseQty)} ${translateUnit(line.unit)} > المتاح: ${formatQuantity(line.availQty)})`);
     }
-    return `
-      <tr style="border-bottom:1px solid var(--border-soft); ${isOver ? 'background-color:rgba(239,68,68,0.08);' : ''}">
-        <td style="padding:6px 10px;color:var(--text-2);width:30px;">${i + 1}</td>
-        <td style="padding:6px 10px;font-weight:600;">${line.productName}</td>
-        <td style="padding:6px 10px;" class="mono dim">${line.sku || "—"}</td>
-        <td style="padding:6px 10px;" class="dim">${line.unit || "—"}</td>
-        <td style="padding:6px 10px;" class="mono font-semibold ${line.availQty > 0 ? 'text-good' : 'text-bad'}">${line.availQty}</td>
-        <td style="padding:6px 10px;width:100px;">
-          <input type="number" class="input mono" style="width:90px;height:30px;font-size:12px;${isOver ? 'border-color:var(--bad);background-color:rgba(239,68,68,0.18);color:var(--bad);font-weight:bold;' : ''}"
-            value="${line.qty}" min="0.001" step="0.001"
-            onchange="updateTransferLineQty(${i},this.value)" oninput="updateTransferLineQty(${i},this.value)" />
-        </td>
-        <td style="padding:6px 10px;text-align:center;">
-          <button class="btn btn-icon sm btn-ghost" onclick="removeTransferLine(${i})" style="color:var(--bad);">✕</button>
-        </td>
-      </tr>`;
-  }).join("");
+  });
 
   const errEl = document.getElementById("st-error");
   const execBtn = document.getElementById("exec-st-btn");
 
   if (hasOverStock) {
     if (errEl) {
-      errEl.innerHTML = `🚨 <strong>تنبيه رصيد غير كافٍ:</strong> الأصناف التالية تزيد عن المتاح بالنظام بالمخزن المصدر:<br>• ${overStockNames.join("<br>• ")}`;
+      errEl.innerHTML = `🚨 <strong>تنبيه رصيد غير كافٍ:</strong> الأصناف التالية تزيد عن المتاح بالمخزن المصدر:<br>• ${overStockNames.join("<br>• ")}`;
       errEl.classList.remove("hidden");
     }
     if (execBtn) {
@@ -633,8 +713,145 @@ function renderTransferLines() {
   }
 }
 
+function renderTransferLines() {
+  const tbody = document.getElementById("st-lines-tbody");
+  if (!tbody) return;
+
+  if (transferLines.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:16px;color:var(--text-2);">لم يتم إضافة أصناف بعد</td></tr>`;
+    document.getElementById("st-error")?.classList.add("hidden");
+    const execBtn = document.getElementById("exec-st-btn");
+    if (execBtn) {
+      execBtn.disabled = false;
+      execBtn.style.opacity = "1";
+      execBtn.style.cursor = "pointer";
+    }
+    return;
+  }
+
+  tbody.innerHTML = transferLines.map((line, i) => {
+    const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+    const reqBaseQty = (parseFloat(line.qty) || 0) * factor;
+    const isOver = reqBaseQty > line.availQty;
+
+    // عرض الرصيد المتاح
+    let availDisplay = `<div class="mono font-semibold ${line.availQty > 0 ? 'text-good' : 'text-bad'}" style="font-size:12px;">${formatQuantity(line.availQty)} ${translateUnit(line.unit)}</div>`;
+    if (line.altUnit && line.unitFactor > 1) {
+      const ctnAvail = Math.floor(line.availQty / line.unitFactor);
+      const remPiece = Math.round((line.availQty % line.unitFactor) * 1000) / 1000;
+      availDisplay += `<div style="font-size:10px;color:var(--text-dim);margin-top:2px;">(يعادل ${formatQuantity(ctnAvail)} ${translateUnit(line.altUnit)}${remPiece > 0 ? ` + ${formatQuantity(remPiece)} ${translateUnit(line.unit)}` : ''})</div>`;
+    }
+
+    // محدد الوحدة (كرتون ↔ حبة)
+    const unitDisplay = (line.altUnit && line.unitFactor > 1)
+      ? `<select class="input" style="height:30px;font-size:11.5px;padding:2px 4px;color:var(--brand);font-weight:700;"
+           onchange="updateTransferLineUnit(${i}, this.value)">
+           <option value="${line.altUnit}" ${line.selectedUnit === line.altUnit ? 'selected' : ''}>${translateUnit(line.altUnit)} (كرتون)</option>
+           <option value="${line.unit}" ${line.selectedUnit === line.unit ? 'selected' : ''}>${translateUnit(line.unit)} (حبة)</option>
+         </select>
+         <div style="font-size:9.5px;color:#64748b;margin-top:2px;text-align:center;">
+           ${line.selectedUnit === line.altUnit
+             ? `1 ${translateUnit(line.altUnit)} = ${line.unitFactor} ${translateUnit(line.unit)}`
+             : translateUnit(line.unit)}
+         </div>`
+      : `<span style="font-size:11.5px;color:var(--text-2);font-weight:600;">${translateUnit(line.unit || "—")}</span>`;
+
+    // تلميح التحويل الفوري
+    const convHint = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit)
+      ? `<div id="st-line-conv-${i}" style="font-size:10px;color:#059669;margin-top:3px;text-align:center;font-weight:700;">
+           = ${formatQuantity(reqBaseQty)} ${translateUnit(line.unit)}
+         </div>`
+      : `<div id="st-line-conv-${i}"></div>`;
+
+    return `
+      <tr id="st-line-row-${i}" style="border-bottom:1px solid var(--border-soft); ${isOver ? 'background-color:rgba(239,68,68,0.08);' : ''}">
+        <td style="padding:6px 10px;color:var(--text-2);width:30px;">${i + 1}</td>
+        <td style="padding:6px 10px;font-weight:600;">${line.productName}</td>
+        <td style="padding:6px 10px;" class="mono dim">${line.sku || "—"}</td>
+        <td style="padding:6px 6px;min-width:95px;">${unitDisplay}</td>
+        <td style="padding:6px 10px;">${availDisplay}</td>
+        <td style="padding:6px 8px;min-width:160px;text-align:center;">
+          <input type="number" id="st-qty-input-${i}" class="input mono" style="width:105px;height:30px;font-size:13px;text-align:center;${isOver ? 'border-color:var(--bad);background-color:rgba(239,68,68,0.18);color:var(--bad);font-weight:bold;' : ''}"
+            value="${line.qty}" min="0.001" step="any"
+            oninput="updateTransferLineQtyQuiet(${i}, this.value)"
+            onchange="updateTransferLineQty(${i}, this.value)" />
+
+          <!-- أزرار الكسور السريعة للكرتون (ربع، نصف، ثلاثة أرباع، كرتون كامل) -->
+          <div style="display:flex;gap:3px;justify-content:center;margin-top:4px;">
+            <button type="button" class="btn btn-xs" style="padding:2px 6px;font-size:10.5px;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:4px;cursor:pointer;font-weight:700;color:#334155;"
+              onclick="setTransferLineFraction(${i}, 0.25)" title="ربع كرتون (0.25)">¼ ربع</button>
+            <button type="button" class="btn btn-xs" style="padding:2px 6px;font-size:10.5px;background:#e0e7ff;border:1px solid #a5b4fc;border-radius:4px;cursor:pointer;font-weight:700;color:#3730a3;"
+              onclick="setTransferLineFraction(${i}, 0.5)" title="نصف كرتون (0.5)">½ نصف</button>
+            <button type="button" class="btn btn-xs" style="padding:2px 6px;font-size:10.5px;background:#fef3c7;border:1px solid #fde68a;border-radius:4px;cursor:pointer;font-weight:700;color:#92400e;"
+              onclick="setTransferLineFraction(${i}, 0.75)" title="ثلاثة أرباع كرتون (0.75)">¾</button>
+            <button type="button" class="btn btn-xs" style="padding:2px 6px;font-size:10.5px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:4px;cursor:pointer;font-weight:700;color:#065f46;"
+              onclick="setTransferLineFraction(${i}, 1)" title="كرتون كامل (1)">1</button>
+          </div>
+
+          ${convHint}
+        </td>
+        <td style="padding:6px 6px;text-align:center;width:40px;">
+          <button class="btn btn-icon sm btn-ghost" onclick="removeTransferLine(${i})" style="color:var(--bad);" title="حذف الصنف">✕</button>
+        </td>
+      </tr>`;
+  }).join("");
+
+  checkTransferStockErrors();
+}
+
+window.updateTransferLineQtyQuiet = (idx, val) => {
+  const line = transferLines[idx];
+  if (!line) return;
+  const num = parseFloat(val);
+  line.qty = isNaN(num) ? 0 : num;
+
+  const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+  const reqBaseQty = (line.qty || 0) * factor;
+
+  // تحديث سطر التحويل للقطع إن وجد
+  const convEl = document.getElementById(`st-line-conv-${idx}`);
+  if (convEl) {
+    if (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) {
+      convEl.textContent = `= ${formatQuantity(reqBaseQty)} ${translateUnit(line.unit)}`;
+    } else {
+      convEl.textContent = "";
+    }
+  }
+
+  // تحديث حالة الخطأ بصرياً بدون تدمير الـ DOM أو فقدان الفوكس
+  const isOver = reqBaseQty > line.availQty;
+  const row = document.getElementById(`st-line-row-${idx}`);
+  const input = document.getElementById(`st-qty-input-${idx}`);
+  if (row) row.style.backgroundColor = isOver ? 'rgba(239,68,68,0.08)' : '';
+  if (input) {
+    input.style.borderColor = isOver ? 'var(--bad)' : '';
+    input.style.backgroundColor = isOver ? 'rgba(239,68,68,0.18)' : '';
+    input.style.color = isOver ? 'var(--bad)' : '';
+    input.style.fontWeight = isOver ? 'bold' : 'normal';
+  }
+
+  checkTransferStockErrors();
+};
+
 window.updateTransferLineQty = (idx, val) => {
-  transferLines[idx].qty = parseFloat(val) || 0;
+  const line = transferLines[idx];
+  if (!line) return;
+  const num = parseFloat(val);
+  line.qty = isNaN(num) ? 0 : num;
+  renderTransferLines();
+};
+
+window.setTransferLineFraction = (idx, frac) => {
+  const line = transferLines[idx];
+  if (!line) return;
+  line.qty = frac;
+  renderTransferLines();
+};
+
+window.updateTransferLineUnit = (idx, newUnit) => {
+  const line = transferLines[idx];
+  if (!line) return;
+  line.selectedUnit = newUnit;
   renderTransferLines();
 };
 
@@ -648,10 +865,33 @@ window.openTransferModal = async () => {
   window._editingTransferSnap = null;
   transferLines = [];
   renderTransferLines();
-  document.getElementById("st-product-search").value = "";
-  document.getElementById("st-notes").value = "";
-  document.getElementById("st-error").classList.add("hidden");
-  document.getElementById("st-number").value = "جارٍ التوليد...";
+  if (document.getElementById("st-product-search")) document.getElementById("st-product-search").value = "";
+  if (document.getElementById("st-notes")) document.getElementById("st-notes").value = "";
+  if (document.getElementById("st-error")) document.getElementById("st-error").classList.add("hidden");
+  if (document.getElementById("st-number")) document.getElementById("st-number").value = "جارٍ التوليد...";
+  if (document.getElementById("st-date")) document.getElementById("st-date").value = todayString();
+
+  // 1. Ensure fresh warehouses list is loaded
+  await loadWarehousesList();
+
+  // 2. Fresh reload of products & stockByWarehouse live
+  try {
+    const [pList, sList] = await Promise.all([
+      getAll(COLS.products(), [orderBy("name")]),
+      getAll(COLS.stockByWarehouse())
+    ]);
+    allProducts = pList || [];
+    window._stStockCache = sList || [];
+  } catch(e) {
+    console.warn("[StockTransfer] Live refresh failed:", e);
+  }
+
+  // 3. Select default "From Warehouse" if empty (e.g. Main Warehouse)
+  const fromSel = document.getElementById("st-from-wh");
+  if (fromSel && !fromSel.value && warehouses.length > 0) {
+    const mainWh = warehouses.find(w => (w.name||"").includes("الرئيسي") || (w.name||"").includes("الرئيسى") || w.isDefault);
+    fromSel.value = mainWh ? mainWh.id : warehouses[0].id;
+  }
 
   // عنوان المودال — جديد
   const modalTitle = document.querySelector("#transfer-modal .modal-title");
@@ -663,7 +903,7 @@ window.openTransferModal = async () => {
 
   try {
     const num = await generateInvoiceNumber("TR");
-    document.getElementById("st-number").value = num;
+    if (document.getElementById("st-number")) document.getElementById("st-number").value = num;
   } catch {}
 };
 
@@ -678,7 +918,18 @@ window.openEditTransferModal = async () => {
   window._editingTransferSnap = t; // نسخة القديمة للمقارنة
 
   // ملء الفورم
-  transferLines = (t.lines || []).map(l => ({ ...l })); // نسخ عميق
+  transferLines = (t.lines || []).map(l => {
+    const prod = allProducts.find(p => p.id === l.productId);
+    const altUnit = l.altUnit || prod?.altUnit || '';
+    const unitFactor = parseFloat(l.unitFactor || prod?.unitFactor) || 1;
+    const selectedUnit = l.selectedUnit || (altUnit && unitFactor > 1 ? altUnit : l.unit);
+    return {
+      ...l,
+      altUnit,
+      unitFactor,
+      selectedUnit
+    };
+  });
 
   // انتظر تحميل المخازن إن لم تُحمل
   if (!warehouses.length) await loadWarehousesList();
@@ -711,9 +962,13 @@ window.openEditTransferModal = async () => {
   const origLines = t.lines || [];
   transferLines.forEach(line => {
     const origLine = origLines.find(ol => ol.productId === line.productId);
-    if (origLine && origLine.qty > 0) {
-      line.availQty = (line.availQty || 0) + origLine.qty;
-      line._origQty = origLine.qty; // نحتفظ بالكمية الأصلية للمقارنة
+    if (origLine) {
+      const origFactor = (origLine.altUnit && origLine.unitFactor > 1 && origLine.selectedUnit === origLine.altUnit) ? origLine.unitFactor : 1;
+      const origEff = origLine.effectiveQty !== undefined ? origLine.effectiveQty : ((parseFloat(origLine.qty) || 0) * origFactor);
+      if (origEff > 0) {
+        line.availQty = (line.availQty || 0) + origEff;
+        line._origQty = origEff; // نحتفظ بالكمية الأصلية بالوحدة الأساسية
+      }
     }
   });
   renderTransferLines(); // تحديث العرض بالأرصدة المصحّحة
@@ -723,48 +978,69 @@ window.openEditTransferModal = async () => {
 };
 
 
-window.executeTransfer = async () => {
-  const errEl = document.getElementById("st-error");
-  errEl.classList.add("hidden");
+let isExecutingTransfer = false;
 
-  const fromWh = document.getElementById("st-from-wh").value;
-  const toWh   = document.getElementById("st-to-wh").value;
-  const date   = document.getElementById("st-date").value;
-  const notes  = document.getElementById("st-notes").value.trim();
-  const num    = document.getElementById("st-number").value;
+window.executeTransfer = async () => {
+  if (isExecutingTransfer) {
+    console.warn("[StockTransfer] Transfer execution already in progress...");
+    return;
+  }
+
+  const errEl = document.getElementById("st-error");
+  if (errEl) errEl.classList.add("hidden");
+
+  const fromWh = document.getElementById("st-from-wh")?.value;
+  const toWh   = document.getElementById("st-to-wh")?.value;
+  const date   = document.getElementById("st-date")?.value;
+  const notes  = document.getElementById("st-notes")?.value?.trim() || "";
+  let   num    = document.getElementById("st-number")?.value?.trim();
 
   const fromSel = document.getElementById("st-from-wh");
   const toSel   = document.getElementById("st-to-wh");
-  const fromWhName = fromSel.options[fromSel.selectedIndex]?.dataset.name || "";
-  const toWhName   = toSel.options[toSel.selectedIndex]?.dataset.name || "";
+  const fromWhName = fromSel?.options[fromSel.selectedIndex]?.dataset.name || "";
+  const toWhName   = toSel?.options[toSel.selectedIndex]?.dataset.name || "";
 
-  if (!fromWh || !toWh) { errEl.textContent = "يرجى اختيار المخزن المصدر والمستلم"; errEl.classList.remove("hidden"); return; }
-  if (fromWh === toWh) { errEl.textContent = "المخزن المصدر والمستلم متطابقان"; errEl.classList.remove("hidden"); return; }
-  if (transferLines.length === 0) { errEl.textContent = "يرجى إضافة صنف واحد على الأقل"; errEl.classList.remove("hidden"); return; }
+  if (!fromWh || !toWh) { if (errEl) { errEl.textContent = "يرجى اختيار المخزن المصدر والمستلم"; errEl.classList.remove("hidden"); } return; }
+  if (fromWh === toWh) { if (errEl) { errEl.textContent = "المخزن المصدر والمستلم متطابقان"; errEl.classList.remove("hidden"); } return; }
+  if (transferLines.length === 0) { if (errEl) { errEl.textContent = "يرجى إضافة صنف واحد على الأقل"; errEl.classList.remove("hidden"); } return; }
 
   // Validate stock level for each line
   for (const line of transferLines) {
-    if (line.qty <= 0) { errEl.textContent = `الكمية للصنف ${line.productName} يجب أن تكون أكبر من 0`; errEl.classList.remove("hidden"); return; }
-    if (line.qty > line.availQty) {
-      errEl.textContent = `رصيد غير كافٍ للصنف ${line.productName} (الكمية المطلوبة: ${line.qty} > المتاح: ${line.availQty})`;
-      errEl.classList.remove("hidden");
+    const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+    const reqBaseQty = (parseFloat(line.qty) || 0) * factor;
+    line.effectiveQty = Math.round(reqBaseQty * 1000) / 1000;
+
+    if (line.qty <= 0) {
+      if (errEl) {
+        errEl.textContent = `الكمية للصنف ${line.productName} يجب أن تكون أكبر من 0`;
+        errEl.classList.remove("hidden");
+      }
+      return;
+    }
+    if (reqBaseQty > line.availQty) {
+      if (errEl) {
+        errEl.textContent = `رصيد غير كافٍ للصنف ${line.productName} (الكمية المطلوبة: ${formatQuantity(line.qty)} ${translateUnit(line.selectedUnit || line.unit)} = ${formatQuantity(reqBaseQty)} ${translateUnit(line.unit)} > المتاح: ${formatQuantity(line.availQty)})`;
+        errEl.classList.remove("hidden");
+      }
       return;
     }
   }
 
+  isExecutingTransfer = true;
   const btn = document.getElementById("exec-st-btn");
-  btn.disabled = true;
+  if (btn) {
+    btn.disabled = true;
+  }
+
+  const editingId = window._editingTransferId;
 
   // ══════════════════════════════════════════════
   //  وضع التعديل — تحديث أذن موجود بدون تكرار
   // ══════════════════════════════════════════════
-  const editingId = window._editingTransferId;
-
   if (editingId) {
-    btn.textContent = "⏳ جارٍ حفظ التعديلات…";
+    if (btn) btn.textContent = "⏳ جارٍ حفظ التعديلات…";
     try {
-      // ✅ FIX: دائماً نجلب أحدث نسخة من Firestore عند الحفظ
-      // (منع خطأ التعديل المتكرر الذي يستخدم بيانات قديمة)
+      // دائماً نجلب أحدث نسخة من Firestore عند الحفظ
       const freshDocRef  = doc(db, `companies/${COMPANY_ID}/stockTransfers`, editingId);
       const freshDocSnap = await getDoc(freshDocRef);
       if (!freshDocSnap.exists()) throw new Error("أمر التحويل غير موجود");
@@ -785,18 +1061,20 @@ window.executeTransfer = async () => {
 
       // ── إذا كان الأذن «قيد النقل» أو «تم الاستلام» — يجب تصحيح كميات المخزن ──
       if (currentSnap.status === "in_transit" || currentSnap.status === "received") {
-        // بناء خريطة السطور القديمة من أحدث نسخة فعلية (ليس من الذاكرة)
         const oldMap = {};
         for (const ol of (currentSnap.lines || [])) {
-          oldMap[ol.productId] = (oldMap[ol.productId] || 0) + ol.qty;
+          const factor = (ol.altUnit && ol.unitFactor > 1 && ol.selectedUnit === ol.altUnit) ? ol.unitFactor : 1;
+          const eff = ol.effectiveQty !== undefined ? ol.effectiveQty : ((parseFloat(ol.qty) || 0) * factor);
+          oldMap[ol.productId] = (oldMap[ol.productId] || 0) + eff;
         }
-        // بناء خريطة السطور الجديدة
         const newMap = {};
         for (const nl of transferLines) {
-          newMap[nl.productId] = (newMap[nl.productId] || 0) + nl.qty;
+          const factor = (nl.altUnit && nl.unitFactor > 1 && nl.selectedUnit === nl.altUnit) ? nl.unitFactor : 1;
+          const eff = Math.round(((parseFloat(nl.qty) || 0) * factor) * 1000) / 1000;
+          nl.effectiveQty = eff;
+          newMap[nl.productId] = (newMap[nl.productId] || 0) + eff;
         }
 
-        // الأصناف الموجودة في القديم والجديد: نعكس الفرق
         const allProductIds = new Set([...Object.keys(oldMap), ...Object.keys(newMap)]);
         const adjustments = [];
         for (const pid of allProductIds) {
@@ -869,24 +1147,44 @@ window.executeTransfer = async () => {
       await loadTransferHistory();
 
     } catch (err) {
-      errEl.textContent = err.message;
-      errEl.classList.remove("hidden");
+      if (errEl) {
+        errEl.textContent = err.message;
+        errEl.classList.remove("hidden");
+      }
     } finally {
-      btn.disabled = false;
-      btn.textContent = "💾 حفظ التعديلات";
+      isExecutingTransfer = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "💾 حفظ التعديلات";
+      }
     }
     return;
   }
 
   // ══════════════════════════════════════════
-  //  وضع الإنشاء — أذن جديد (السلوك القديم)
+  //  وضع الإنشاء — أذن جديد
   // ══════════════════════════════════════════
-  btn.textContent = "جارٍ الحفظ قيد النقل…";
+  if (btn) btn.textContent = "جارٍ الحفظ قيد النقل…";
 
   try {
+    // التحقق من فرادة رقم السند ومنع أي تكرار ناتج عن نقرات متزامنة
+    try {
+      const existingSnap = await getDocs(query(
+        collection(db, `companies/${COMPANY_ID}/stockTransfers`),
+        where("number", "==", num)
+      ));
+      const hasActive = existingSnap.docs.some(d => d.data().status !== "cancelled");
+      if (hasActive || !num || num.includes("جارٍ")) {
+        num = await generateInvoiceNumber("TR");
+        if (document.getElementById("st-number")) document.getElementById("st-number").value = num;
+      }
+    } catch (e) {
+      console.warn("[StockTransfer] Number uniqueness check fallback:", e);
+    }
+
     const transferData = {
       number:            num,
-      date,
+      date:              date || todayString(),
       fromWarehouseId:   fromWh,
       fromWarehouseName: fromWhName,
       toWarehouseId:     toWh,
@@ -894,6 +1192,7 @@ window.executeTransfer = async () => {
       lines:             transferLines,
       notes,
       status:            "in_transit",
+      stockStatus:       "pending_transfer_out",
       createdBy:         window._transferUser?.uid || "system",
       createdByName:     window._transferUser?.displayName || window._transferUser?.email || "النظام",
       receivedAt:        null
@@ -903,22 +1202,39 @@ window.executeTransfer = async () => {
     const trId = await create(collection(db, `companies/${COMPANY_ID}/stockTransfers`), transferData);
 
     // 2. Adjust stock in source warehouse (minus qty) in bulk
-    const adjustments = transferLines.map(line => ({
-      warehouseId: fromWh,
-      productId: line.productId,
-      qtyDelta: -line.qty,
-      metadata: {
-        date: date || new Date().toISOString().slice(0, 10),
-        type: "transfer_out",
-        sourceType: "stockTransfer",
-        sourceId: trId,
-        documentNumber: num,
-        productName: line.productName,
-        notes: `قيد النقل إلى ${toWhName} في المستند ${num}`
-      }
-    }));
+    const adjustments = transferLines.map(line => {
+      const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+      const effectiveQty = line.effectiveQty !== undefined ? line.effectiveQty : Math.round(((parseFloat(line.qty) || 0) * factor) * 1000) / 1000;
+      line.effectiveQty = effectiveQty;
+      return {
+        warehouseId: fromWh,
+        productId: line.productId,
+        qtyDelta: -effectiveQty,
+        metadata: {
+          date: date || new Date().toISOString().slice(0, 10),
+          type: "transfer_out",
+          sourceType: "stockTransfer",
+          sourceId: trId,
+          documentNumber: num,
+          productName: line.productName,
+          notes: `قيد النقل إلى ${toWhName} في المستند ${num} (${line.qty} ${translateUnit(line.selectedUnit || line.unit)})`
+        }
+      };
+    });
     if (adjustments.length > 0) {
-      await adjustStockBulk(adjustments);
+      try {
+        await adjustStockBulk(adjustments);
+        await updateDoc(doc(db, `companies/${COMPANY_ID}/stockTransfers`, trId), {
+          stockStatus: "in_transit_deducted"
+        }).catch(() => {});
+      } catch (stockErr) {
+        console.error("[StockTransfer] adjustStockBulk failed:", stockErr.message);
+        await updateDoc(doc(db, `companies/${COMPANY_ID}/stockTransfers`, trId), {
+          stockStatus: "failed_transfer_out",
+          stockError: stockErr.message
+        }).catch(() => {});
+        throw new Error(`تعذر خصم المخزون من المستودع المحول منه: ${stockErr.message}`);
+      }
     }
 
     // 3. إنشاء القيد المحاسبي التلقائي فوراً للتحويل
@@ -934,14 +1250,17 @@ window.executeTransfer = async () => {
   } catch (err) {
     const isQuota = (err?.message || "").includes("Quota exceeded") || (err?.code === "resource-exhausted") || (err?.message || "").includes("429");
     if (isQuota) {
-      errEl.innerHTML = `🚨 <strong>تنبيه حصة السيرفر (Quota Exceeded):</strong><br>تم الوصول للحد الأقصى اليومي المجاني لقراءة/كتابة السيرفر (50,000 عملية). يتجدد العداد تلقائياً منتصف الليل، أو يمكنك ترقية باقة الفايربيز إلى (Blaze Plan) لإلغاء الحد اليومي فوراً.`;
+      if (errEl) errEl.innerHTML = `🚨 <strong>تنبيه حصة السيرفر (Quota Exceeded):</strong><br>تم الوصول للحد الأقصى اليومي المجاني لقراءة/كتابة السيرفر (50,000 عملية). يتجدد العداد تلقائياً منتصف الليل، أو يمكنك ترقية باقة الفايربيز إلى (Blaze Plan) لإلغاء الحد اليومي فوراً.`;
     } else {
-      errEl.textContent = err.message || "حدث خطأ أثناء حفظ أمر التحويل";
+      if (errEl) errEl.textContent = err.message || "حدث خطأ أثناء حفظ أمر التحويل";
     }
-    errEl.classList.remove("hidden");
+    if (errEl) errEl.classList.remove("hidden");
   } finally {
-    btn.disabled = false;
-    btn.textContent = "💾 تنفيذ التحويل (قيد النقل)";
+    isExecutingTransfer = false;
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "💾 تنفيذ التحويل (قيد النقل)";
+    }
   }
 };
 
@@ -989,16 +1308,23 @@ window.viewTransfer = async (id) => {
     const linesHTML = (t.lines || []).map((l, i) => {
       const p = allProducts.find(prod => prod.id === l.productId);
       const salePrice = p ? (p.salePrice || p.priceRetail || 0) : 0;
-      const lineTotal = l.qty * salePrice;
+      const factor = (l.altUnit && l.unitFactor > 1 && l.selectedUnit === l.altUnit) ? l.unitFactor : 1;
+      const effQty = l.effectiveQty !== undefined ? l.effectiveQty : Math.round(((parseFloat(l.qty) || 0) * factor) * 1000) / 1000;
+      const lineTotal = effQty * salePrice;
       totalSellingVal += lineTotal;
+
+      const unitText = translateUnit(l.selectedUnit || l.unit) || "—";
+      const convText = (l.altUnit && l.unitFactor > 1 && l.selectedUnit === l.altUnit)
+        ? `<div style="font-size:10.5px;color:#059669;font-weight:700;">(= ${formatQuantity(effQty)} ${translateUnit(l.unit)})</div>`
+        : "";
 
       return `
         <tr>
           <td style="padding:7px 12px;">${i+1}</td>
           <td style="padding:7px 12px; font-weight:600;">${l.productName}</td>
           <td style="padding:7px 12px;" class="mono">${l.sku || "—"}</td>
-          <td style="padding:7px 12px;">${l.unit || "—"}</td>
-          <td style="padding:7px 12px;" class="mono font-bold">${formatQuantity(l.qty)}</td>
+          <td style="padding:7px 12px;">${unitText}</td>
+          <td style="padding:7px 12px;" class="mono font-bold">${formatQuantity(l.qty)}${convText}</td>
           <td style="padding:7px 12px;" class="mono text-indigo">${salePrice.toFixed(2)} ر.س</td>
           <td style="padding:7px 12px;" class="mono font-bold text-good">${lineTotal.toFixed(2)} ر.س</td>
         </tr>
@@ -1068,8 +1394,10 @@ window.confirmReceipt = async () => {
   if (!confirm("⚠️ هل تأكدت من استلام كافة كميات الأصناف المذكورة فعلياً في المستودع المستلم؟")) return;
 
   const btn = document.getElementById("st-confirm-btn");
-  btn.disabled = true;
-  btn.textContent = "⏳ جارٍ تأكيد الاستلام…";
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ جارٍ تأكيد الاستلام…";
+  }
 
   try {
     // Re-fetch latest transfer document to avoid stale data!
@@ -1093,52 +1421,33 @@ window.confirmReceipt = async () => {
       receivedByName: window._transferUser?.displayName || window._transferUser?.email || "النظام"
     });
 
-    // ✅ FIX: قبل إضافة الوارد للوجهة — تحقق أن المصدر نُقص بالكمية الصحيحة بالتوازي
-    const outQueries = (latestTransfer.lines || []).map(line => {
-      return getDocs(query(COLS.stockTransactions(),
-        where("documentNumber", "==", latestTransfer.number),
-        where("productId",      "==", line.productId),
-        where("warehouseId",    "==", latestTransfer.fromWarehouseId),
-        where("type",          "==", "transfer_out")
-      ));
-    });
-    const outSnaps = await Promise.all(outQueries);
+    // 2. التحقق الدقيق باستخدام sourceId المستند فقط (وليس رقم السند) لمعرفة الأصناف المخصومة
+    const outSnap = await getDocs(query(COLS.stockTransactions(),
+      where("sourceId", "==", latestTransfer.id),
+      where("type", "==", "transfer_out")
+    )).catch(() => ({ docs: [] }));
+
+    const deductedProductIds = new Set(outSnap.docs.map(d => d.data().productId));
 
     const adjustments = [];
-    (latestTransfer.lines || []).forEach((line, idx) => {
-      const outSnap = outSnaps[idx];
-      const totalOut = outSnap.docs.reduce((s, d) => s + Math.abs(d.data().qtyChange || 0), 0);
+    (latestTransfer.lines || []).forEach((line) => {
+      const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+      const targetBaseQty = line.effectiveQty !== undefined ? line.effectiveQty : Math.round(((parseFloat(line.qty) || 0) * factor) * 1000) / 1000;
 
-      if (totalOut < line.qty) {
-        const missing = line.qty - totalOut;
-        console.warn(`[ConfirmReceipt] ⚠️ الصنف ${line.productName}: صادر مسجّل=${totalOut} < الأمر=${line.qty} — تصحيح تلقائي: -${missing}`);
+      // إذا لم يكن المخزن المصدر قد خُصم منه هذا التحويل تحديداً
+      if (!deductedProductIds.has(line.productId)) {
         adjustments.push({
           warehouseId: latestTransfer.fromWarehouseId,
           productId: line.productId,
-          qtyDelta: -missing,
+          qtyDelta: -targetBaseQty,
           metadata: {
+            date:           latestTransfer.date || new Date().toISOString().slice(0, 10),
             type:           "transfer_out",
             sourceType:     "stockTransfer",
             sourceId:       latestTransfer.id,
             documentNumber: latestTransfer.number,
             productName:    line.productName,
-            notes:          `تصحيح تلقائي عند الاستلام: التحويل ${latestTransfer.number} (كمية مفقودة: ${missing})`
-          }
-        });
-      } else if (totalOut > line.qty) {
-        const excess = totalOut - line.qty;
-        console.warn(`[ConfirmReceipt] ⚠️ الصنف ${line.productName}: صادر مسجّل=${totalOut} > الأمر=${line.qty} — إرجاع الزيادة: +${excess}`);
-        adjustments.push({
-          warehouseId: latestTransfer.fromWarehouseId,
-          productId: line.productId,
-          qtyDelta: +excess,
-          metadata: {
-            type:           "transfer_cancel",
-            sourceType:     "stockTransfer",
-            sourceId:       latestTransfer.id,
-            documentNumber: latestTransfer.number,
-            productName:    line.productName,
-            notes:          `تصحيح تلقائي عند الاستلام: التحويل ${latestTransfer.number} (زيادة مُسترجعة: ${excess})`
+            notes:          `صرف التحويل المخزني إلى ${latestTransfer.toWarehouseName || 'الوجهة'} — سند: ${latestTransfer.number}`
           }
         });
       }
@@ -1147,7 +1456,7 @@ window.confirmReceipt = async () => {
       adjustments.push({
         warehouseId: latestTransfer.toWarehouseId,
         productId: line.productId,
-        qtyDelta: +line.qty,
+        qtyDelta: +targetBaseQty,
         metadata: {
           date:           latestTransfer.date || new Date().toISOString().slice(0, 10),
           type:           "transfer_in",
@@ -1155,13 +1464,25 @@ window.confirmReceipt = async () => {
           sourceId:       latestTransfer.id,
           documentNumber: latestTransfer.number,
           productName:    line.productName,
-          notes:          `تم تأكيد استلام الشحنة ${latestTransfer.number}`
+          notes:          `تم تأكيد استلام الشحنة ${latestTransfer.number} (${line.qty} ${translateUnit(line.selectedUnit || line.unit)})`
         }
       });
     });
 
     if (adjustments.length > 0) {
-      await adjustStockBulk(adjustments);
+      try {
+        await adjustStockBulk(adjustments);
+        await updateDoc(doc(db, `companies/${COMPANY_ID}/stockTransfers`, latestTransfer.id), {
+          stockStatus: "completed"
+        }).catch(() => {});
+      } catch (stockErr) {
+        console.error("[StockTransfer] receive adjustStockBulk failed:", stockErr.message);
+        await updateDoc(doc(db, `companies/${COMPANY_ID}/stockTransfers`, latestTransfer.id), {
+          stockStatus: "failed_transfer_in",
+          stockError: stockErr.message
+        }).catch(() => {});
+        throw new Error(`تعذر إضافة المخزون لمستودع/سيارة الوجهة: ${stockErr.message}`);
+      }
     }
 
     // 3. إنشاء القيد المحاسبي التلقائي
@@ -1214,23 +1535,28 @@ window.cancelTransfer = async () => {
     // 1. Update status to cancelled
     await update("stockTransfers", latestTransfer.id, {
       status: "cancelled",
+      stockStatus: "cancelled",
       cancelledAt: new Date()
     });
 
     // 2. Reverse stock in source warehouse (plus back the qty) in bulk
-    const adjustments = (latestTransfer.lines || []).map(line => ({
-      warehouseId: latestTransfer.fromWarehouseId,
-      productId: line.productId,
-      qtyDelta: +line.qty,
-      metadata: {
-        type: "transfer_cancel",
-        sourceType: "stockTransfer",
-        sourceId: latestTransfer.id,
-        documentNumber: latestTransfer.number,
-        productName: line.productName,
-        notes: `إرجاع الكميات بعد إلغاء الأمر ${latestTransfer.number}`
-      }
-    }));
+    const adjustments = (latestTransfer.lines || []).map(line => {
+      const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+      const effectiveQty = line.effectiveQty !== undefined ? line.effectiveQty : Math.round(((parseFloat(line.qty) || 0) * factor) * 1000) / 1000;
+      return {
+        warehouseId: latestTransfer.fromWarehouseId,
+        productId: line.productId,
+        qtyDelta: +effectiveQty,
+        metadata: {
+          type: "transfer_cancel",
+          sourceType: "stockTransfer",
+          sourceId: latestTransfer.id,
+          documentNumber: latestTransfer.number,
+          productName: line.productName,
+          notes: `إرجاع الكميات بعد إلغاء الأمر ${latestTransfer.number} (+${line.qty} ${translateUnit(line.selectedUnit || line.unit)})`
+        }
+      };
+    });
     if (adjustments.length > 0) {
       await adjustStockBulk(adjustments);
     }
@@ -1282,11 +1608,13 @@ window.approveTransferRequest = async () => {
     
     // Validate stock levels in source warehouse
     for (const line of latestTransfer.lines || []) {
+      const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+      const reqBaseQty = line.effectiveQty !== undefined ? line.effectiveQty : Math.round(((parseFloat(line.qty) || 0) * factor) * 1000) / 1000;
       const stockRef = doc(db, `companies/${companyId}/stockByWarehouse`, `${latestTransfer.fromWarehouseId}_${line.productId}`);
       const stockSnap = await getDoc(stockRef);
       const currentQty = stockSnap.exists() ? (stockSnap.data().qty || 0) : 0;
-      if (currentQty < line.qty) {
-        throw new Error(`عذراً، الرصيد غير كافٍ في مستودع المصدر للصنف: ${line.productName} (المتاح: ${currentQty} ، المطلوب: ${line.qty})`);
+      if (currentQty < reqBaseQty) {
+        throw new Error(`عذراً، الرصيد غير كافٍ في مستودع المصدر للصنف: ${line.productName} (المتاح: ${formatQuantity(currentQty)} ، المطلوب: ${formatQuantity(reqBaseQty)} ${translateUnit(line.unit)})`);
       }
     }
 
@@ -1299,19 +1627,23 @@ window.approveTransferRequest = async () => {
     });
 
     // Deduct stock from source warehouse in bulk
-    const adjustments = (latestTransfer.lines || []).map(line => ({
-      warehouseId: latestTransfer.fromWarehouseId,
-      productId: line.productId,
-      qtyDelta: -line.qty,
-      metadata: {
-        type: "transfer_out",
-        sourceType: "stockTransfer",
-        sourceId: latestTransfer.id,
-        documentNumber: latestTransfer.number,
-        productName: line.productName,
-        notes: `تمت الموافقة وشحن البضاعة للسيارة في المستند ${latestTransfer.number}`
-      }
-    }));
+    const adjustments = (latestTransfer.lines || []).map(line => {
+      const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? line.unitFactor : 1;
+      const effectiveQty = line.effectiveQty !== undefined ? line.effectiveQty : Math.round(((parseFloat(line.qty) || 0) * factor) * 1000) / 1000;
+      return {
+        warehouseId: latestTransfer.fromWarehouseId,
+        productId: line.productId,
+        qtyDelta: -effectiveQty,
+        metadata: {
+          type: "transfer_out",
+          sourceType: "stockTransfer",
+          sourceId: latestTransfer.id,
+          documentNumber: latestTransfer.number,
+          productName: line.productName,
+          notes: `تمت الموافقة وشحن البضاعة للسيارة في المستند ${latestTransfer.number} (${line.qty} ${translateUnit(line.selectedUnit || line.unit)})`
+        }
+      };
+    });
     if (adjustments.length > 0) {
       await adjustStockBulk(adjustments);
     }
@@ -1392,16 +1724,23 @@ window.printStockTransfer = async () => {
   const linesHtml = (t.lines || []).map((l, i) => {
     const p = allProducts.find(prod => prod.id === l.productId);
     const salePrice = p ? (p.salePrice || p.priceRetail || 0) : 0;
-    const lineTotal = l.qty * salePrice;
+    const factor = (l.altUnit && l.unitFactor > 1 && l.selectedUnit === l.altUnit) ? l.unitFactor : 1;
+    const effQty = l.effectiveQty !== undefined ? l.effectiveQty : Math.round(((parseFloat(l.qty) || 0) * factor) * 1000) / 1000;
+    const lineTotal = effQty * salePrice;
     totalSellingVal += lineTotal;
+
+    const unitText = translateUnit(l.selectedUnit || l.unit) || "—";
+    const convText = (l.altUnit && l.unitFactor > 1 && l.selectedUnit === l.altUnit)
+      ? ` <div style="font-size:10.5px;color:#059669;font-weight:bold;">(= ${formatQuantity(effQty)} ${translateUnit(l.unit)})</div>`
+      : "";
 
     return `
       <tr>
         <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${i + 1}</td>
         <td style="border: 1px solid #ddd; padding: 8px; font-weight: bold;">${l.productName}</td>
         <td style="border: 1px solid #ddd; padding: 8px; text-align: center;" class="mono">${l.sku || "—"}</td>
-        <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${l.unit || "—"}</td>
-        <td style="border: 1px solid #ddd; padding: 8px; text-align: center;" class="mono">${formatQuantity(l.qty)}</td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">${unitText}</td>
+        <td style="border: 1px solid #ddd; padding: 8px; text-align: center;" class="mono"><b>${formatQuantity(l.qty)}</b>${convText}</td>
         <td style="border: 1px solid #ddd; padding: 8px; text-align: left;" class="mono">${salePrice.toFixed(2)} ر.س</td>
         <td style="border: 1px solid #ddd; padding: 8px; text-align: left; font-weight: bold;" class="mono">${lineTotal.toFixed(2)} ر.س</td>
       </tr>

@@ -1,0 +1,623 @@
+[
+  {
+    "id": "0JHmvsVy3r7ZP8mXFZkb",
+    "entityType": "chartOfAccounts",
+    "entityId": "QjM3W8WWNzPUdpZMIJzv",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "details": "تم إنشاء حساب 1-1-2-1-2-02-46 - مطعم سفرة المذاق البخارى 31165 ج 16 تلقائياً (customers تحت مندوب Z8vkxuOfaumR63DMz7vA)",
+    "createdAt": "2026-08-17T15:44:17.166Z"
+  },
+  {
+    "id": "0x5WQ1UpFWygx7nslWE7",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityType": "chartOfAccounts",
+    "entityId": "PpI3DIhoOAnwlHjsaKLE",
+    "details": "تم إنشاء حساب 2-1-1-1-1-30 - شركة الغذاء الفاخر المحدوده تلقائياً (suppliers)",
+    "createdAt": "2026-10-05T12:46:10.176Z"
+  },
+  {
+    "id": "25u2U8Iq72C1P3vUHWPR",
+    "entityId": "Fs29vvATht4UDYHbL4R1",
+    "createdAt": "2026-08-25T17:37:11.864Z",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 2-1-1-1-1-15 - مصنع كيان للبلاستيك تلقائياً (suppliers)"
+  },
+  {
+    "id": "2gwUEGBi6QZoHcoFBsPR",
+    "entityType": "chartOfAccounts",
+    "entityId": "kAuFrk5PCqUosLLUyIuL",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-08 - كبسة البادية تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "createdAt": "2026-10-06T12:44:34.981Z",
+    "module": "customers",
+    "action": "coa_account_auto_created"
+  },
+  {
+    "id": "3Eiuun1UHV0pESqfGi6b",
+    "details": "تم إنشاء حساب 2-1-1-1-1-14 - مصنع كيان للبلاستيك تلقائياً (suppliers)",
+    "createdAt": "2026-08-25T17:36:39.285Z",
+    "entityId": "v043Nt6C6TT1PoUmc1N9",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "3rEFBKe4rM1WtQ0gtyvy",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-1-3-04 - الراجحى - عهدة مشتريات سيد تلقائياً (banks)",
+    "createdAt": "2026-10-24T13:45:19.210Z",
+    "entityId": "YXlpHI08GD6IFy5m6Zto",
+    "action": "coa_account_auto_created",
+    "module": "banks"
+  },
+  {
+    "id": "4QGzSeeyQQnpqJToWutE",
+    "details": "تم إنشاء حساب 2-1-1-1-1-40 - شركة سماء المتحدة التجاريه تلقائياً (suppliers)",
+    "createdAt": "2026-10-17T08:31:57.317Z",
+    "entityType": "chartOfAccounts",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityId": "JwHUQzxINGDVSYsi2beS"
+  },
+  {
+    "id": "5Nv59r4kzIcmcfIoWQz4",
+    "details": "تم إنشاء حساب 2-1-1-1-1-28 - مورد نقدى تلقائياً (suppliers)",
+    "createdAt": "2026-09-14T17:53:32.824Z",
+    "entityType": "chartOfAccounts",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityId": "FLku01daetwEQcphWqDR"
+  },
+  {
+    "id": "5Sf08xT9ti8laZ8CMP8S",
+    "entityType": "chartOfAccounts",
+    "entityId": "1X5G0uC9Vu9FRgmBE3bH",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "createdAt": "2026-08-25T17:36:06.469Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-13 - مصنع كيان للبلاستيك تلقائياً (suppliers)"
+  },
+  {
+    "id": "5hgt7gqn4U8MzdsM4lkW",
+    "details": "تم إنشاء حساب 1-1-2-1-1-07 - مؤسسة تموينات شاهين البحر للمواد الغذائية تلقائياً (customers)",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "createdAt": "2026-09-08T09:35:28.465Z",
+    "entityType": "chartOfAccounts",
+    "entityId": "lc31nXOXwUEXGzuVTIXn"
+  },
+  {
+    "id": "6wgvSYNGQp2ouqRuulDV",
+    "createdAt": "2026-10-20T11:45:47.526Z",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityId": "stl2ZbEgD1pCiO0mC1wa",
+    "details": "تم إنشاء حساب 2-1-1-1-1-43 - شركة دار الشاى العربى للتجارة تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "915YH1iIH8KSiK9E51XQ",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "createdAt": "2026-08-27T17:29:57.945Z",
+    "entityId": "sfPNFshZgyB65dRNbWkh",
+    "details": "تم إنشاء حساب 1-1-2-1-2-02-47 - مطعم وجبات حمدان للوجبات السريعه تلقائياً (customers تحت مندوب Z8vkxuOfaumR63DMz7vA)",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "9S2tlRsXkYDyKM6g37Vl",
+    "details": "تم إنشاء حساب 2-1-1-1-1-31 - شركة هلال العروس تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts",
+    "entityId": "Hng4tquc4CTOWrHSanXX",
+    "createdAt": "2026-10-05T14:26:14.605Z",
+    "action": "coa_account_auto_created",
+    "module": "suppliers"
+  },
+  {
+    "id": "AHOz9bV0FtXMI1xZqbu5",
+    "details": "تم إنشاء حساب 2-1-1-1-1-32 - شركة فجر الراقيه التجاريه بالجمله تلقائياً (suppliers)",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityId": "8ZOa5zDFeDkU05chwjMm",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-10-06T08:31:43.317Z"
+  },
+  {
+    "id": "Aok975n1l2sYqb3AZWWP",
+    "details": "تم إنشاء حساب 2-1-1-1-1-18 - مصنع تركي المرعشي للبلاستيك تلقائياً (suppliers)",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityType": "chartOfAccounts",
+    "entityId": "pQyFY6mcNPgWFQIjxXQ2",
+    "createdAt": "2026-08-25T17:59:09.872Z"
+  },
+  {
+    "id": "CbpxYZeJiUgdBfBSkeJF",
+    "details": "تم إنشاء حساب 2-1-1-1-1-17 - مصنع كيان للبلاستيك تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "createdAt": "2026-08-25T17:57:28.734Z",
+    "entityId": "vKwVIzA9YeUE6r3rcJjR"
+  },
+  {
+    "id": "DuT8LGqLVMrlpya3ENxN",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-03 - الطعم العدنى تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "entityId": "9yC2h0oJzYnQGV9F3owG",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-09-10T16:47:43.435Z",
+    "module": "customers",
+    "action": "coa_account_auto_created"
+  },
+  {
+    "id": "ECaz4ryGbExnkWaqMEE0",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityId": "Z6JdW0wnXF2okkKFKyFc",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 2-1-1-1-1-42 - شركة الماسة راما تلقائياً (suppliers)",
+    "createdAt": "2026-10-18T14:40:38.120Z"
+  },
+  {
+    "id": "ENmvzqYrMfDNLNhPMlfR",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-1-3-03 - بنك الراجحى عهد تلقائياً (banks)",
+    "createdAt": "2026-10-21T10:23:59.608Z",
+    "entityId": "tr36lgv9lT8se9c9J4Fm",
+    "action": "coa_account_auto_created",
+    "module": "banks"
+  },
+  {
+    "id": "EejmP1UOdSxN7MlY8rZ7",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityType": "chartOfAccounts",
+    "entityId": "A01btx70gO2D3jjv1Ydl",
+    "createdAt": "2026-08-18T18:33:46.850Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-10 - شركة مجموعة با فرط للصناعة لانتاج المواد الغذائية تلقائياً (suppliers)"
+  },
+  {
+    "id": "GlD4Bn7eobVywbNhnZYl",
+    "entityId": "8A2WHaZeHSNsN2R9zDN6",
+    "entityType": "chartOfAccounts",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "details": "تم إنشاء حساب 2-1-1-1-1-11 - شركة ارنون للصناعات البلاستيكية المحدوده تلقائياً (suppliers)",
+    "createdAt": "2026-08-19T10:49:02.375Z"
+  },
+  {
+    "id": "Hf4lYl16OD7GHZ5YoUyK",
+    "entityId": "PZOxmSoMknwnX5e54G4o",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-2-1-2-02-45 - بقالة سعيد تلقائياً (customers تحت مندوب Z8vkxuOfaumR63DMz7vA)",
+    "createdAt": "2026-09-07T14:46:01.959Z"
+  },
+  {
+    "id": "LYtqnOCe33O7e5561fVY",
+    "entityId": "P2KgErcIlRyIFE6C9IZL",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-2-1-1-08 - بقالة عبد الله تلقائياً (customers)",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "createdAt": "2026-09-08T17:20:35.102Z"
+  },
+  {
+    "id": "N1hZ86X4G3qmnObMBkdd",
+    "details": "تم إنشاء حساب 1-1-2-1-2-24-01 - مؤسسة شواية الشرق الاوسط طريق املج تلقائياً (customers تحت مندوب 61pG3jXw8Ps7HCJc9ljI)",
+    "createdAt": "2026-08-27T14:55:45.963Z",
+    "entityId": "KmXrTzhBUalLhZIqSNW0",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "NNDkPTgzmdCA96jXLJny",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-05 - مطعم طعم شواية مميز تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "entityId": "UUQuG3gMehHJSiQ4Vyy2",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-10-03T08:03:13.697Z"
+  },
+  {
+    "id": "Oi6nwZwKsYMRJkK8dPOq",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-06 - مطعم المائدة البخارى تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-10-04T14:45:13.788Z",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityId": "kmSjq7SsA4h0N3VMBqxS"
+  },
+  {
+    "id": "Oo6PLrpD01e0yJgY8yYh",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-08-27T11:56:07.210Z",
+    "details": "تم إنشاء حساب 1-1-2-1-1-09 - شركة الاحلام المتطورة الفندقيه تلقائياً (customers)",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityId": "pdHe9H2SPrhY55Yc5O1I"
+  },
+  {
+    "id": "QmfdpXH6GWYXndc3qUYz",
+    "entityId": "SN9XkK8fQvTdAMR3fd9Y",
+    "entityType": "chartOfAccounts",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "details": "تم إنشاء حساب 2-1-1-1-1-29 - شركة عبد المجيد العروى التجارية تلقائياً (suppliers)",
+    "createdAt": "2026-10-03T16:26:44.736Z"
+  },
+  {
+    "id": "SMdiIKWYmCF6SCi5ey32",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-2-1-1-10 - مطاعم ام حسن للاكلات المصرية والعربية تلقائياً (customers)",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "entityId": "e64liGNrax5gLU7KQQXO",
+    "createdAt": "2026-10-05T13:09:52.975Z"
+  },
+  {
+    "id": "TKbnCMbWFDwvQDOf3t8x",
+    "entityType": "chartOfAccounts",
+    "entityId": "aWDNUFDljGZcS7XvwSnt",
+    "action": "coa_account_auto_created",
+    "module": "employees",
+    "createdAt": "2026-10-10T10:44:08.387Z",
+    "details": "تم إنشاء حساب 2-1-5-2-01 - عمرو راجح تلقائياً (employees)"
+  },
+  {
+    "id": "V0DnDGP8Ouhx5TVCnx9e",
+    "entityId": "289pKyJIQFV5xI8CK2l8",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-2-1-1-08 - مطعم ديار  الشواية لتقديم الوجبات تلقائياً (customers)",
+    "createdAt": "2026-08-20T13:40:42.182Z"
+  },
+  {
+    "id": "W3Pd68r6o3MbsQfAoVn2",
+    "action": "coa_account_auto_created",
+    "module": "warehouses",
+    "details": "تم إنشاء حساب 1-1-4-1-03 - المستودع الرئيسى تلقائياً (warehouses)",
+    "createdAt": "2026-08-23T10:33:20.810Z",
+    "entityId": "m5CcV18EratZk00WKPMo",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "WsdP2ybJm8i3lb5yQkcO",
+    "entityId": "aqRGf8jXsWLfeZ5YSMO0",
+    "details": "تم إنشاء حساب 2-1-1-1-1-25 - بريم ماركت تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-08-27T16:52:57.172Z",
+    "action": "coa_account_auto_created",
+    "module": "suppliers"
+  },
+  {
+    "id": "YM07wU2loqATdN8yPN9y",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 2-1-1-1-1-22 - مؤسسة امداد رضوى لتجارة الجملة والتجزئة تلقائياً (suppliers)",
+    "createdAt": "2026-08-27T16:49:18.594Z",
+    "entityId": "EgqzNMj5jzQIxlEShAEx",
+    "module": "suppliers",
+    "action": "coa_account_auto_created"
+  },
+  {
+    "id": "Z0CsxyN3us5VYecMFqUt",
+    "entityId": "ldX7AyYYZEWdkKFPRWoB",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "createdAt": "2026-10-18T16:02:44.472Z",
+    "details": "تم إنشاء حساب 1-1-2-1-2-02-46 - خبير الشواية -شركة ليفيد الخاصه المحدودة تلقائياً (customers تحت مندوب Z8vkxuOfaumR63DMz7vA)",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "a7VRnDS56I8os5CVMqOa",
+    "entityId": "TvKCXQARZoPnWKIleg6R",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-10-11T17:47:24.989Z",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "details": "تم إنشاء حساب 2-1-1-1-1-35 - منار العرب تلقائياً (suppliers)"
+  },
+  {
+    "id": "cIBReMIkw19y2NFBbQes",
+    "module": "customers",
+    "createdAt": "2026-09-01T08:06:16.024Z",
+    "action": "coa_account_auto_created",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-01 - تموينات ريف رضوى تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "entityId": "ZPc4edBplkJ5RgjorBPF"
+  },
+  {
+    "id": "d6vqF82ZT3hEDXjoMZTv",
+    "entityType": "chartOfAccounts",
+    "entityId": "LWN0DUoIoxhOfgjqz6sE",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-10 - مطعم منبفة لتقديم الوجبات تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "createdAt": "2026-10-16T11:46:49.252Z"
+  },
+  {
+    "id": "d7Dn8xgRqU7bgR4v1i9n",
+    "entityId": "fQzMOESqF2ZlNtkZCGTa",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 2-1-1-1-1-19 - مؤسسة اغصان طيبه التجارية تلقائياً (suppliers)",
+    "createdAt": "2026-08-27T08:59:26.462Z"
+  },
+  {
+    "id": "dS29t6tYhlOUuubCphM6",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-04 - مؤسسة ذوق المذاق لتقديم الوجبات تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "createdAt": "2026-09-14T17:50:59.106Z",
+    "entityType": "chartOfAccounts",
+    "entityId": "Ga8odKFN1fsIzGlEAIdK",
+    "action": "coa_account_auto_created",
+    "module": "customers"
+  },
+  {
+    "id": "gkTo3khpsqIdOzsDmq3w",
+    "entityId": "iX500M6f1ZvdYUxXbvPE",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "details": "تم إنشاء حساب 2-1-1-1-1-26 - شركة بن خميس تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-09-01T08:13:39.177Z"
+  },
+  {
+    "id": "gvFOkSeNH2hkzpifKw1T",
+    "createdAt": "2026-08-20T17:14:02.256Z",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "details": "تم إنشاء حساب 2-1-1-1-1-12 - شركة الدريس تلقائياً (suppliers)",
+    "entityId": "3s82jGpzdYSoHjmVQQNk",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "hKZ8uDmZrBfKB3ROZLyn",
+    "entityType": "chartOfAccounts",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityId": "pEWcFTlLodB5bvR2tvQp",
+    "details": "تم إنشاء حساب 2-1-1-1-1-39 - شركة ارياد للتجارة تلقائياً (suppliers)",
+    "createdAt": "2026-10-17T07:55:47.962Z"
+  },
+  {
+    "id": "iAXYCZwUT7igUhflqxjx",
+    "createdAt": "2026-10-24T13:47:37.750Z",
+    "action": "coa_account_auto_created",
+    "module": "banks",
+    "details": "تم إنشاء حساب 1-1-1-3-05 - الراجحى - المخصصات تلقائياً (banks)",
+    "entityId": "flLR6q40YtgHBDEY1wo8",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "ivDgQG07Qr52E0qn2I0A",
+    "createdAt": "2026-08-27T18:37:56.140Z",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "details": "تم إنشاء حساب 1-1-2-1-2-24-02 - مطعم ومطبخ درة المندى تلقائياً (customers تحت مندوب 61pG3jXw8Ps7HCJc9ljI)",
+    "entityId": "UYLof8Z1zMsY1KoFNybt",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "juEEeYQsaU8gmPWI3mye",
+    "createdAt": "2026-08-27T16:50:24.735Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-23 - شركة ثلاجات الساحل للتجارة تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityId": "JgE5GrR6D0WBmKRoxsBS"
+  },
+  {
+    "id": "k6WWskhWMmjxsUrGpsCq",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "details": "تم إنشاء حساب 2-1-1-1-1-27 - الشركة العربية الماليزية لمنتجات الزيوت النباتية المحدوده تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-09-07T15:04:59.211Z",
+    "entityId": "Htvhi4H42usmleZfYiJj"
+  },
+  {
+    "id": "llc4v0KWMGnb7egbwrpz",
+    "createdAt": "2026-10-15T18:35:51.282Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-37 - شركة بيادر الغذاء تلقائياً (suppliers)",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityType": "chartOfAccounts",
+    "entityId": "fqMd7qwhcnoeP32d9OaY"
+  },
+  {
+    "id": "nD7OKcgG2jVKBVu3Vk0d",
+    "details": "تم إنشاء حساب 2-1-1-1-1-38 - مؤسسة مارين اسواق لاجين تلقائياً (suppliers)",
+    "createdAt": "2026-10-15T19:40:08.040Z",
+    "entityId": "mAusnZvgZ2J9xzng9xKh",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "nR6EMwZUikQTImuHUzYJ",
+    "createdAt": "2026-10-08T17:16:57.612Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-34 - مجموعة الجيلانى تلقائياً (suppliers)",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityType": "chartOfAccounts",
+    "entityId": "GOr7yQJYheAsmyGpPY6S"
+  },
+  {
+    "id": "ob6rDoWkzcmPus54gIEZ",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-10-04T15:26:21.965Z",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "entityId": "zNae0bIzwSlyfdROhVVS",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-07 - شركة منتجع المرسى الذهبى للايواء السياحى تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)"
+  },
+  {
+    "id": "q6A7lZLH69xh01TGVpdx",
+    "details": "تم إنشاء حساب 1-1-2-1-2-01-01 - بقالة فضة تلقائياً (customers تحت مندوب i6qFzXabMQq8R7j7GxgL)",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityType": "chartOfAccounts",
+    "entityId": "uqUGy4jdwPIz7ZPFOxW2",
+    "createdAt": "2026-10-07T08:42:39.327Z"
+  },
+  {
+    "id": "qHkvIQN1aCkoXj9IzrQM",
+    "createdAt": "2026-08-27T16:47:58.064Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-21 - شركة سناء الغذاء التجارية تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityId": "dO1TXIFWQ1OWPi0oQknB"
+  },
+  {
+    "id": "r42T7soq46OF432JP9EF",
+    "entityType": "chartOfAccounts",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityId": "cnNs636XCrfjWX8vfH37",
+    "details": "تم إنشاء حساب 2-1-1-1-1-41 - شركة ابراج الغذاء للتجارة تلقائياً (suppliers)",
+    "createdAt": "2026-10-17T09:35:12.227Z"
+  },
+  {
+    "id": "r69GXmaZ3yVEG1qn0ucw",
+    "createdAt": "2026-09-20T14:38:14.676Z",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "details": "تم إنشاء حساب 1-1-2-1-1-09 - مطعم اصول الكبسه لتقديم الوجبات تلقائياً (customers)",
+    "entityId": "tuUJhFqiFpdLEMlsbkRY",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "rJ1hj1ARZ67r2w4LYPhB",
+    "createdAt": "2026-08-19T19:18:56.943Z",
+    "entityId": "294wHNPbruHxmjR3ThX7",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-2-1-1-07 - مطعم ديار الشواية تلقائياً (customers)",
+    "action": "coa_account_auto_created",
+    "module": "customers"
+  },
+  {
+    "id": "rT9UebReNgs4N5gApdC0",
+    "module": "warehouses",
+    "action": "coa_account_auto_created",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-4-1-02-03 - مخزن سيارة المندوب محمد تلقائياً (warehouses)",
+    "createdAt": "2026-09-07T08:35:37.254Z",
+    "entityId": "MG4wnHCdXVBpoaHkJm7T"
+  },
+  {
+    "id": "rb73j0SWImllL09pO5qf",
+    "entityType": "chartOfAccounts",
+    "entityId": "5FtjrRPLGSGK3jlw3SUZ",
+    "createdAt": "2026-10-07T20:16:07.608Z",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "details": "تم إنشاء حساب 2-1-1-1-1-33 - مورد مياه تلقائياً (suppliers)"
+  },
+  {
+    "id": "sTFKLNKMSAEUIgICPtSF",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "details": "تم إنشاء حساب 2-1-1-1-1-09 - مصنع جودى الدولية للتصنيع والتغليف تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-08-17T13:39:57.066Z",
+    "entityId": "jJC1s6TlLf08kNqUh1yV"
+  },
+  {
+    "id": "t0r08noRPYRc0UDpMBAR",
+    "entityType": "chartOfAccounts",
+    "entityId": "npXGq9f7anwD1rTEglzf",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "createdAt": "2026-10-11T17:56:23.435Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-36 - مركز ينبع للبلاستيك تلقائياً (suppliers)"
+  },
+  {
+    "id": "tPuolv6zHgr305XpwAD8",
+    "createdAt": "2026-09-02T18:42:07.918Z",
+    "entityType": "chartOfAccounts",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityId": "JUkMSefh12lKMPbNdVPP",
+    "details": "تم إنشاء حساب 1-1-2-1-2-02-44 - مؤسسة نوف تلقائياً (customers تحت مندوب Z8vkxuOfaumR63DMz7vA)"
+  },
+  {
+    "id": "tczw4LBzHxac6HplATBf",
+    "createdAt": "2026-08-31T11:19:13.894Z",
+    "entityType": "chartOfAccounts",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityId": "5F7hC5jULT2sxZQDyiar",
+    "details": "تم إنشاء حساب 1-1-2-1-2-24-03 - عالم البخارى تلقائياً (customers تحت مندوب 61pG3jXw8Ps7HCJc9ljI)"
+  },
+  {
+    "id": "u6g8ze7QYpAxE2rJI3I7",
+    "createdAt": "2026-08-27T16:51:56.652Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-24 - محامص ومطاحن زاد طيبة تلقائياً (suppliers)",
+    "action": "coa_account_auto_created",
+    "module": "suppliers",
+    "entityId": "p1ThC1lfbvJYGmYqqEoi",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "uGF0mg0TMR3qg0vMeVyP",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityId": "Xl2iXR5sYeA1gQ1ExxNt",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-09 - سلطان الشواية تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-10-11T16:39:22.902Z"
+  },
+  {
+    "id": "w6tvljrWwlWI3p4vrDJP",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "entityType": "chartOfAccounts",
+    "createdAt": "2026-10-14T17:19:45.832Z",
+    "details": "تم إنشاء حساب 1-1-2-1-1-11 - تموينات خيرات المدينة تلقائياً (customers)",
+    "entityId": "UYwRchJ7QytvhsThMdwT"
+  },
+  {
+    "id": "x0oqq61k1n909MbqsgkT",
+    "createdAt": "2026-08-25T17:38:15.649Z",
+    "entityId": "5tbShXmzRnnNMMtbbE8G",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "details": "تم إنشاء حساب 2-1-1-1-1-16 - مصنع تركى المرعشى تلقائياً (suppliers)",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "xbnJu8DJSR8M3TbmprGE",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-2-1-2-01-02 - مطعم النيلين تلقائياً (customers تحت مندوب i6qFzXabMQq8R7j7GxgL)",
+    "createdAt": "2026-10-10T16:52:07.053Z",
+    "module": "customers",
+    "action": "coa_account_auto_created",
+    "entityId": "2XzO1HyjXCp7TWAiei1L"
+  },
+  {
+    "id": "zI3OKtNOEcFgAyEue0pB",
+    "createdAt": "2026-08-27T16:40:51.520Z",
+    "details": "تم إنشاء حساب 2-1-1-1-1-20 - مؤسسة ايمن حمدان حمد العتيبى تلقائياً (suppliers)",
+    "module": "suppliers",
+    "action": "coa_account_auto_created",
+    "entityId": "LjPnXPLsW1e39quu7xT1",
+    "entityType": "chartOfAccounts"
+  },
+  {
+    "id": "zsFQAaZMZFEnc4nrIj0v",
+    "entityType": "chartOfAccounts",
+    "details": "تم إنشاء حساب 1-1-2-1-2-25-11 - مطعم المحيط تلقائياً (customers تحت مندوب Ao147Sj24LgGa2OOag0c)",
+    "action": "coa_account_auto_created",
+    "module": "customers",
+    "entityId": "9l7orsBIQEZ2Ubxv6su4",
+    "createdAt": "2026-10-18T17:34:53.788Z"
+  }
+]

@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "site": "idham-foodstuffs-sa",
+    "site": "idham-b3a7e",
     "public": ".",
     "ignore": [
       "firebase.json",
@@ -21,6 +21,9 @@
     ],
     "rewrites": [
       { "source": "/rep.html",                    "destination": "/rep.html" },
+      { "source": "/sales-manager",               "destination": "/sales-manager.html" },
+      { "source": "/sales-manager.html",          "destination": "/sales-manager.html" },
+      { "source": "/css/sales-manager.css",       "destination": "/css/sales-manager.css" },
       { "source": "/clearcache.html",             "destination": "/clearcache.html" },
       { "source": "/migrate-rep-accounts.html",   "destination": "/migrate-rep-accounts.html" },
       { "source": "/sw-rep.js",                   "destination": "/sw-rep.js" },

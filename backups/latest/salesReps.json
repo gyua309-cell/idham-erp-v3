@@ -1,0 +1,132 @@
+[
+  {
+    "id": "61pG3jXw8Ps7HCJc9ljI",
+    "pin": "123456",
+    "assignedWarehouseId": "7egAcDBCbCctJyO4LH91",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785249468,
+      "nanoseconds": 268000000
+    },
+    "employeeId": "bQUo3McjEc1w6SePt3Gq",
+    "salary": 1500,
+    "accountCode": "1-1-2-1-2-24",
+    "notes": "ترك العمل بداية من 2026-10-10",
+    "resignedDate": "2026-10-10",
+    "status": "inactive",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788004484,
+      "nanoseconds": 882000000
+    },
+    "phone": "0539809616",
+    "zone": "",
+    "monthlyTarget": 400000,
+    "isActive": false,
+    "name": "المندوب احمد السيد",
+    "commissionRate": 2.5,
+    "accountId": "9W5cEYOLH2CvQUtgd0Kv"
+  },
+  {
+    "id": "Ao147Sj24LgGa2OOag0c",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788023095,
+      "nanoseconds": 493000000
+    },
+    "assignedWarehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "commissionRate": 1,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788023095,
+      "nanoseconds": 493000000
+    },
+    "name": "السيد رضا",
+    "monthlyTarget": 400000,
+    "employeeId": "OCnh3BdQ77BLDTy3V7UP",
+    "accountCode": "1-1-2-1-2-25",
+    "phone": "",
+    "pin": "2468",
+    "salary": 1500,
+    "zone": "ينبع",
+    "accountId": "0CM5tT560l6WYTRUa8bv"
+  },
+  {
+    "id": "FwJwxsDXQHlJlBiu5UAq",
+    "pin": "246801",
+    "commissionRate": 1,
+    "name": "عمرو راجح",
+    "accountId": "XTGuuGeAHWOKoyPwdAzE",
+    "costCenterName": "303 سيارة المندوب عمرو راجح",
+    "cashBoxId": "cashBox_FwJwxsDXQHlJlBiu5UAq",
+    "active": true,
+    "advanceAccountCode": "1-1-5-4-9",
+    "salary": 1500,
+    "accountCode": "1-1-2-1-2-26",
+    "status": "active",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793471385,
+      "nanoseconds": 371000000
+    },
+    "code": "REP-05",
+    "monthlyTarget": 400000,
+    "costCenterId": "6uVBS9DyzA5scM0b7G1m",
+    "advanceAccountId": "4jAY8axCmI3wpjukGgmV",
+    "isActive": true,
+    "createdAt": "2026-10-26T11:01:56.581Z",
+    "employeeId": "O2ierOANhX0EW8laDd3U",
+    "assignedWarehouseId": "9b7bVxLeDYB3kq81Dqb5",
+    "zone": "ينبع",
+    "phone": "0549141648",
+    "assignedWarehouseName": "مخزن سيارة المندوب عمرو راجح"
+  },
+  {
+    "id": "Z8vkxuOfaumR63DMz7vA",
+    "assignedWarehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "monthlyTarget": 400000,
+    "costCenterName": "سيارة المندوب مصطفى (ينبع والمسارات)",
+    "commissionRate": 2.5,
+    "name": "مصطفى",
+    "phone": "0539809616",
+    "zone": "ينبع",
+    "salary": 1500,
+    "active": true,
+    "costCenterId": "cc_301",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785144572,
+      "nanoseconds": 159000000
+    },
+    "pin": "1234",
+    "code": "REP-01",
+    "employeeId": "wOxNLDnyefMxOkvqrNSo",
+    "assignedWarehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "id": "i6qFzXabMQq8R7j7GxgL",
+    "employeeId": "7PY1jbwphUrnWkViIv9o",
+    "phone": "0505731330",
+    "zone": "ينبع",
+    "accountCode": "1-1-2-1-2-23",
+    "commissionRate": 2.5,
+    "accountId": "gztdkZ7G8rDiI0s205I7",
+    "costCenterName": "سيارة المندوب محمد عوض",
+    "pin": "123456",
+    "assignedWarehouseId": "5spakstdxOmDW0dhLZgp",
+    "monthlyTarget": 400000,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785143714,
+      "nanoseconds": 33000000
+    },
+    "salary": 1500,
+    "costCenterId": "cc_302",
+    "name": "محمد عوض",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788770215,
+      "nanoseconds": 486000000
+    }
+  }
+]

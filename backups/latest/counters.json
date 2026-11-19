@@ -1,0 +1,74 @@
+[
+  {
+    "id": "cn",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793625471,
+      "nanoseconds": 17000000
+    },
+    "seq": 11
+  },
+  {
+    "id": "dn",
+    "seq": 16,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792600777,
+      "nanoseconds": 370000000
+    }
+  },
+  {
+    "id": "inv",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794244612,
+      "nanoseconds": 324000000
+    },
+    "seq": 42128
+  },
+  {
+    "id": "journal",
+    "seq": 3057,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794246682,
+      "nanoseconds": 863000000
+    }
+  },
+  {
+    "id": "pur",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794226669,
+      "nanoseconds": 109000000
+    },
+    "seq": 126
+  },
+  {
+    "id": "qt",
+    "seq": 5101,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794236535,
+      "nanoseconds": 559000000
+    }
+  },
+  {
+    "id": "rfq",
+    "seq": 2,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790006328,
+      "nanoseconds": 730000000
+    }
+  },
+  {
+    "id": "tr",
+    "seq": 96,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794244436,
+      "nanoseconds": 414000000
+    }
+  }
+]

@@ -1,3 +1,13 @@
+
+// Helper to get local date string YYYY-MM-DD in local timezone (Saudi Arabia UTC+3)
+function getTodayLocalDate() {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 // ═══════════════════════════════════════════════════════════
 // IDHAM VAN SALES PWA v2.0 — js/rep/app2.js
 // Full offline-capable, real-time, POS-style rep app
@@ -12,12 +22,12 @@ import {
 
 /* ── Firebase ─────────────────────────────────────────── */
 const FB_CFG = {
-  apiKey:            "AIzaSyAike2lPO7VnFoRHevnGkbHpAQbKoDb5r8",
-  authDomain:        "idham-foodstuffs-sa.firebaseapp.com",
-  projectId:         "idham-foodstuffs-sa",
-  storageBucket:     "idham-foodstuffs-sa.firebasestorage.app",
-  messagingSenderId: "771445462953",
-  appId:             "1:771445462953:web:05d70fb7c36a385c9796b8",
+  apiKey:            "AIzaSyBFMGVZvuWBaxwrjGUJV3GQf7hoyVGB6wY",
+  authDomain:        "idham-b3a7e.firebaseapp.com",
+  projectId:         "idham-b3a7e",
+  storageBucket:     "idham-b3a7e.firebasestorage.app",
+  messagingSenderId: "915839133333",
+  appId:             "1:915839133333:web:fe472e01993025f08a9d9c",
 };
 const fbApp = initializeApp(FB_CFG, "rep-v2");
 const db    = getFirestore(fbApp);
@@ -58,9 +68,10 @@ function _normalizeInvoice(inv) {
 }
 
 /* ── Two-Way Invoice Fetching (Rep App + Main ERP App Invoices) ── */
-async function fetchRepInvoices(limitCount = 100) {
+async function fetchRepInvoices(limitCount = 500) {
   if (!REP || !REP.id) return [];
   try {
+    // ─── جلب فواتير المندوب بحد أعلى 500 لتغطية كل الشهر الحالي ───
     const promises = [
       getDocs(query(COL("salesInvoices"), where("repId", "==", REP.id), limit(limitCount)))
     ];
@@ -80,6 +91,7 @@ async function fetchRepInvoices(limitCount = 100) {
     });
 
     const all = Array.from(map.values());
+    // ترتيب محلي تنازلي حسب التاريخ الفعلي للفاتورة
     all.sort((a, b) => (b.date || "").localeCompare(a.date || ""));
     return all;
   } catch (err) {
@@ -88,9 +100,10 @@ async function fetchRepInvoices(limitCount = 100) {
   }
 }
 
+
 /* ── Company Info (loaded from Firestore, cached in localStorage) ── */
 let COMPANY = JSON.parse(localStorage.getItem("rep_company") || "{}");
-if (!COMPANY.name) COMPANY = { name: "نظم الإمداد الحديثة", phone: "", address: "", vatNumber: "" };
+if (!COMPANY.name) COMPANY = { name: "شركة نظم الإمداد المتطورة", phone: "0549141648", address: "ينبع الصناعية 2179", vatNumber: "314996148100003", crNumber: "7054969006" };
 
 async function loadCompanyInfo() {
   try {
@@ -100,14 +113,16 @@ async function loadCompanyInfo() {
     ]);
     if (compSnap.exists()) {
       const s = compSnap.data();
+      const rawCr = s.crNumber || s.cr || s.commercialRegistration || "";
+      const validCr = (rawCr && (rawCr.startsWith("70") || rawCr.startsWith("47") || rawCr.length >= 7)) ? rawCr : "7054969006";
       COMPANY = {
-        name:       s.name       || COMPANY.name,
-        phone:      s.phone      || COMPANY.phone      || "",
-        address:    s.address    || COMPANY.address    || "",
-        city:       s.city       || COMPANY.city       || "",
-        vatNumber:  s.vatNumber  || COMPANY.vatNumber  || "",
-        crNumber:   s.cr || s.crNumber || COMPANY.crNumber || "",
-        email:      s.email      || COMPANY.email      || "",
+        name:       s.name       || s.companyName || COMPANY.name || "شركة نظم الإمداد المتطورة",
+        phone:      s.phone      || COMPANY.phone      || "0549141648",
+        address:    s.address    || COMPANY.address    || "مبنى 7689 — شارع ينبع  الصناعية 2179 — حي غرناطة — ينبع — رمز 46414",
+        city:       s.city       || COMPANY.city       || "ينبع",
+        vatNumber:  s.vatNumber  || COMPANY.vatNumber  || "314996148100003",
+        crNumber:   validCr,
+        email:      s.email      || COMPANY.email      || "Nuzmalamdad@gmail.com",
         currency:   s.currency   || "SAR",
         vatRate:    s.vatRate    || "15",
         logoUrl:    ""
@@ -202,6 +217,59 @@ async function syncQueue() {
     }
   }
   if (synced > 0) toast(`✅ تمت مزامنة ${synced} حركات معلّقة بنجاح ودخلت في الحسابات`, "ok");
+  await syncPendingStockDeductions();
+}
+
+async function syncPendingStockDeductions() {
+  try {
+    const raw = localStorage.getItem("rep_pending_stock_deductions");
+    if (!raw) return;
+    const list = JSON.parse(raw);
+    if (!list.length) return;
+    const { adjustStockBulk } = await import("../utils/db.js");
+    const remaining = [];
+    let recoveredCount = 0;
+
+    for (const item of list) {
+      try {
+        const adjustments = (item.lines || [])
+          .filter(line => line.productId && line.qty)
+          .map(line => ({
+            warehouseId: item.warehouseId,
+            productId: line.productId,
+            qtyDelta: -line.qty,
+            metadata: {
+              type: "sale_out",
+              sourceType: "salesInvoice",
+              sourceId: item.invoiceNumber,
+              documentNumber: item.invoiceNumber,
+              invoiceNumber: item.invoiceNumber,
+              allowNegative: false,
+              productName: line.name || line.productName || "",
+              notes: `مبيعات المندوب — مزامنة معلقة لفاتورة ${item.invoiceNumber}`
+            }
+          }));
+
+        if (adjustments.length > 0) {
+          await adjustStockBulk(adjustments);
+          await updateDoc(doc(db, `companies/${COID}/salesInvoices`, item.invoiceNumber), {
+            stockStatus: "completed",
+            stockUpdatedAt: serverTimestamp()
+          }).catch(() => {});
+          recoveredCount++;
+        }
+      } catch (err) {
+        console.warn("Retrying pending deduction failed for", item.invoiceNumber, err.message);
+        remaining.push(item);
+      }
+    }
+    localStorage.setItem("rep_pending_stock_deductions", JSON.stringify(remaining));
+    if (recoveredCount > 0) {
+      toast(`✅ تم استكمال خصم المخزون بنجاح لـ ${recoveredCount} فواتير معلقة`, "ok");
+    }
+  } catch (e) {
+    console.warn("syncPendingStockDeductions error:", e.message);
+  }
 }
 
 // Auto-sync when online
@@ -371,7 +439,7 @@ function initApp() {
   const zo  = document.getElementById("header-zone");
   if (zo) zo.textContent = REP.zone || "—";
   const compEl = document.getElementById("header-company");
-  if (compEl) compEl.textContent = COMPANY.name || "نظم الإمداد الحديثة";
+  if (compEl) compEl.textContent = COMPANY.name || "نظم الإمداد المتطورة";
   updateOfflineBadge();
   loadCompanyInfo(); // Load company name/address for invoices
   startHeaderClock(); // Start dynamic top bar clock
@@ -429,8 +497,8 @@ async function renderDashboard(mc) {
   try {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split("T")[0];
-    const all = await fetchRepInvoices(100);
-    const month = all.filter(i => i.date >= monthStart);
+    const all = await fetchRepInvoices(500);
+    const month = all.filter(i => (i.date || "") >= monthStart && i.status !== "cancelled");
     const totalSales = month.reduce((s,i) => s + (i.total||0), 0);
     const totalInvs  = month.length;
     const target     = REP.monthlyTarget || 0;
@@ -483,29 +551,20 @@ async function renderDashboard(mc) {
         }
       }
 
-      // ── قراءة المديونية من رصيد العملاء (balance-sync.js يحدّثه) ──
-      // نجلب عملاء المندوب فقط (repId == REP.id OR assignedRepId)
-      const custQ = query(
-        COL("customers"),
-        where("repId", "==", REP.id)
-      );
-      const custSnap = await getDocs(custQ);
-      custSnap.docs.forEach(d => {
-        const bal = parseFloat(d.data().balance || 0);
+      // ── حساب مديونية عملاء المندوب مباشرة من أرصدة العملاء الحقيقية (0 قراءات زائدة وتوفير الكوته) ──
+      let repCusts = _custCache;
+      if (!repCusts || repCusts.length === 0) {
+        const custSnap = await getDocs(query(COL("customers"), where("repId", "==", REP.id)));
+        repCusts = custSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+        _custCache = repCusts;
+      }
+
+      repCusts.forEach(cust => {
+        const bal = parseFloat(cust.balance || 0);
         if (bal > 0) customerDebts += bal;
       });
+      customerDebts = Math.round(customerDebts * 100) / 100;
 
-      // fallback: إن لم يكن repId مضبوطاً، نحسب من الفواتير الآجلة
-      if (customerDebts === 0) {
-        const allCustQ = await getDocs(COL("customers"));
-        // جمع عملاء الفواتير التي للمندوب
-        const repCustIds = new Set(all.map(i => i.customerId).filter(Boolean));
-        allCustQ.docs.forEach(d => {
-          if (!repCustIds.has(d.id)) return;
-          const bal = parseFloat(d.data().balance || 0);
-          if (bal > 0) customerDebts += bal;
-        });
-      }
     } catch (coaErr) {
       console.warn("Failed to fetch rep customer debts:", coaErr.message);
     }
@@ -514,7 +573,7 @@ async function renderDashboard(mc) {
 
     mc.innerHTML = `
     <div class="page">
-      <div class="page-title">أهلاً ${REP.name?.split(" ")[0] || ""} 👋</div>
+      <div class="page-title">أهلاً ${(REP.name || "").replace(/^المندوب\\s+/, "")} 👋</div>
 
       <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 12px;">
         <div class="kpi-card" style="padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; border-radius:12px; border:1px solid var(--border-soft); background:var(--bg-1);">
@@ -593,7 +652,7 @@ async function renderDashboard(mc) {
           ? `<div class="inv-grid">
               ${all.slice(0, 30).map(inv => {
                 const invNo = inv.invoiceNumber || inv.number || inv.id.slice(0,8);
-                const isRepApp = invNo.startsWith("REP-");
+                const isRepApp = invNo.startsWith("REP") || invNo.startsWith("VAN");
                 const pm = (inv.paymentMethod || "cash").toLowerCase();
                 let badgeClass = "cash";
                 let badgeText = "نقدي 💵";
@@ -648,7 +707,7 @@ async function renderDashboard(mc) {
           : `<div class="inv-list">
               ${all.slice(0, 30).map(inv => {
                 const invNo = inv.invoiceNumber || inv.number || inv.id.slice(0,8);
-                const isRepApp = invNo.startsWith("REP-");
+                const isRepApp = invNo.startsWith("REP") || invNo.startsWith("VAN");
                 const pm = (inv.paymentMethod || "cash").toLowerCase();
                 let badgeClass = "cash";
                 let badgeText = "نقدي";
@@ -784,7 +843,7 @@ window.deleteRepInvoice = async (id) => {
         const rcptId = rcptDoc.id;
         // Delete receipt JEs
         try {
-          const jeSnap = await getDocs(query(COL("journalEntries"), where("sourceType", "==", "pos"), where("sourceId", "==", rcptId)));
+          const jeSnap = await getDocs(query(COL("journalEntries"), where("sourceId", "==", rcptId)));
           for (const jeDoc of jeSnap.docs) {
             await runTransaction(db, async (tx) => { tx.delete(jeDoc.ref); });
           }
@@ -1393,12 +1452,14 @@ function posRenderGrid(search = "") {
     const inCart = _pos.lines.find(l => l.productId === p.id);
     const oos    = REP.assignedWarehouseId && p.stockQty <= 0;
     const price  = p.salePrice || p.priceRetail || p.sellingPrice || p.price || 0;
+    const cost   = p.avgCostPrice || p.averageCost || p.costPrice || p.purchasePrice || p.buyPrice || 0;
     const stockQ = p.stockQty || 0;
     const pName  = p.name || p.nameAr || p.productName || p.title || (p.sku ? `صنف ${p.sku}` : "صنف");
+    const pUnit  = p.unit || p.unitName || "حبة";
     return isGrid ? `
     <div class="prod-card ${inCart?'in-cart':''} ${oos?'out-of-stock':''}"
       data-pid="${p.id}"
-      onclick="posTap('${p.id}','${esc(pName)}',${price},${stockQ})">
+      onclick="posTap('${p.id}','${esc(pName)}',${price},${stockQ},${cost},'${esc(pUnit)}')">
       ${inCart ? `<div class="prod-qty-badge">${inCart.qty}</div>` : ""}
       <div class="prod-img">${prodIcon(p)}</div>
       <div class="prod-name">${pName}</div>
@@ -1407,7 +1468,7 @@ function posRenderGrid(search = "") {
     </div>` : `
     <div class="prod-card list-card ${inCart?'in-cart':''} ${oos?'out-of-stock':''}"
       data-pid="${p.id}"
-      onclick="posTap('${p.id}','${esc(pName)}',${price},${stockQ})">
+      onclick="posTap('${p.id}','${esc(pName)}',${price},${stockQ},${cost},'${esc(pUnit)}')">
       <div class="prod-img">${prodIcon(p)}</div>
       <div class="prod-name">${pName}</div>
       <div class="prod-price">${fmtC(price)}</div>
@@ -1416,30 +1477,31 @@ function posRenderGrid(search = "") {
   }).join("");
 }
 
-/* ─── Tap product (optimized: only updates the tapped card) ─── */
-window.posTap = (id, name, price, stock) => {
-  const ex = _pos.lines.find(l => l.productId === id);
-  if (ex) {
-    if (ex.qty < stock) {
-      ex.qty++;
-    } else {
-      toast("⚠️ وصلت لأقصى كمية متاحة في سيارتك", "warn");
-      return;
-    }
-  } else {
-    if (stock > 0) {
-      _pos.lines.push({ productId: id, name, price, qty: 1, stock });
-    } else {
-      // فتح مودال طلب الشحن مباشرة
-      posRequestShipmentFor(id, name);
-      return;
-    }
-  }
-
 /* ─── فتح مودال طلب الشحن لمنتج محدد ─── */
 window.posRequestShipmentFor = (productId, productName) => {
   openRestockRequestModal(productId, productName);
 };
+
+/* ─── Tap product (optimized: only updates the tapped card) ─── */
+window.posTap = (id, name, price, stock, cost = 0, unit = "حبة") => {
+  const safeStock = (typeof stock === "number" && !isNaN(stock)) ? Math.max(0, stock) : 0;
+  if (safeStock <= 0) {
+    toast("⚠️ هذا الصنف غير متوفر في سيارتك حالياً", "warn");
+    posRequestShipmentFor(id, name);
+    return;
+  }
+  const ex = _pos.lines.find(l => l.productId === id);
+  if (ex) {
+    if (ex.qty < safeStock) {
+      ex.qty++;
+    } else {
+      toast(`⚠️ وصلت لأقصى كمية متاحة في سيارتك (${safeStock})`, "warn");
+      return;
+    }
+  } else {
+    _pos.lines.push({ productId: id, name, price, qty: 1, stock: safeStock, cost, unit: unit || "حبة" });
+  }
+
   const line = _pos.lines.find(l => l.productId === id);
   requestAnimationFrame(() => {
     updateCardBadge(id);
@@ -1501,26 +1563,29 @@ function renderCart() {
     return;
   }
 
-  body.innerHTML = _pos.lines.map((ln, i) => `
-  <div class="cart-row" id="cart-row-${i}">
-    <div class="cart-row-top">
-      <span class="cart-row-icon">${prodIconByName(ln.name)}</span>
-      <div class="cart-row-info">
-        <div class="cart-row-name">${ln.name}</div>
-        <div class="cart-row-unit-price">${fmtC(ln.price)} ر.س / وحدة</div>
+  body.innerHTML = _pos.lines.map((ln, i) => {
+    const maxStock = (typeof ln.stock === "number" && !isNaN(ln.stock)) ? Math.max(1, ln.stock) : 1;
+    return `
+    <div class="cart-row" id="cart-row-${i}">
+      <div class="cart-row-top">
+        <span class="cart-row-icon">${prodIconByName(ln.name)}</span>
+        <div class="cart-row-info">
+          <div class="cart-row-name">${ln.name}</div>
+          <div class="cart-row-unit-price">${fmtC(ln.price)} ر.س / وحدة</div>
+        </div>
+        <button class="cart-row-del" onclick="posRemove(${i})" aria-label="حذف">🗑</button>
       </div>
-      <button class="cart-row-del" onclick="posRemove(${i})" aria-label="حذف">🗑</button>
-    </div>
-    <div class="cart-row-bottom">
-      <button class="cart-qty-btn minus" onclick="posQty(${i},-1)">−</button>
-      <input class="cart-qty-val" type="number" inputmode="numeric"
-        value="${ln.qty}" min="1" max="${ln.stock||999}"
-        onchange="posSetQty(${i},this.value)"
-        onfocus="this.select()" />
-      <button class="cart-qty-btn plus" onclick="posQty(${i},1)">+</button>
-      <div class="cart-row-price">${fmtC(ln.price * ln.qty)} ر.س</div>
-    </div>
-  </div>`).join("");
+      <div class="cart-row-bottom">
+        <button class="cart-qty-btn minus" onclick="posQty(${i},-1)">−</button>
+        <input class="cart-qty-val" type="number" inputmode="numeric"
+          value="${ln.qty}" min="1" max="${maxStock}"
+          onchange="posSetQty(${i},this.value)"
+          onfocus="this.select()" />
+        <button class="cart-qty-btn plus" onclick="posQty(${i},1)">+</button>
+        <div class="cart-row-price">${fmtC(ln.price * ln.qty)} ر.س</div>
+      </div>
+    </div>`;
+  }).join("");
 }
 
 // Get icon by product name (for cart)
@@ -1548,8 +1613,12 @@ function setupSwipe() {
 window.posQty = (i, d) => {
   if (!_pos.lines[i]) return;
   const ln = _pos.lines[i];
-  ln.qty = Math.max(1, ln.qty + d);
-  if (ln.qty > (ln.stock || 999)) { ln.qty = ln.stock; toast("وصلت للحد المتاح", "warn"); }
+  const maxStock = (typeof ln.stock === "number" && !isNaN(ln.stock)) ? Math.max(0, ln.stock) : 0;
+  if (d > 0 && ln.qty >= maxStock) {
+    toast(`⚠️ وصلت لأقصى كمية متاحة في سيارتك (${maxStock})`, "warn");
+    return;
+  }
+  ln.qty = Math.max(1, Math.min(ln.qty + d, maxStock > 0 ? maxStock : 1));
   updateCartFab();
   updateCardBadge(ln.productId);
   refreshCartRow(i); // Update only this row, not the whole cart
@@ -1567,8 +1636,13 @@ window.posRemove = (i) => {
 window.posSetQty = (i, val) => {
   if (!_pos.lines[i]) return;
   const ln = _pos.lines[i];
-  const n = parseInt(val) || 1;
-  ln.qty = Math.max(1, Math.min(n, ln.stock || 999));
+  const maxStock = (typeof ln.stock === "number" && !isNaN(ln.stock)) ? Math.max(0, ln.stock) : 0;
+  let n = parseInt(val) || 1;
+  if (maxStock > 0 && n > maxStock) {
+    toast(`⚠️ الكمية المطلوبة تتجاوز المتاح في سيارتك (${maxStock})`, "warn");
+    n = maxStock;
+  }
+  ln.qty = Math.max(1, maxStock > 0 ? Math.min(n, maxStock) : 1);
   updateCartFab();
   updateCardBadge(ln.productId);
   refreshCartRow(i);
@@ -1705,46 +1779,83 @@ window.selectCust = (id) => {
   window._custOverlay?.remove();
 };
 
-/* ─── Save & Process Invoice (Online/Offline Sync) ─── */
+/* ─── Save & Process Invoice (Strict Atomic Stock Deduction) ─── */
 async function saveAndProcessInvoice(inv) {
-  // 1. Save invoice & customer balances in Firestore
-  // ✅ FIX: Use tx.set+merge instead of tx.update to avoid failure when customer doc doesn't exist yet
-  await runTransaction(db, async (tx) => {
-    tx.set(doc(db, `companies/${COID}/salesInvoices`, inv.invoiceNumber), inv);
-    if (inv.remainingAmount > 0 && inv.customerId) {
-      tx.set(doc(COL("customers"), inv.customerId),
-        { balance: increment(inv.remainingAmount) },
-        { merge: true });
-    }
-  });
+  if (!inv.warehouseId) {
+    throw new Error("لا يوجد مستودع/سيارة مرتبطة بحساب هذا المندوب. يرجى مراجعة الإدارة لتعيين سيارة للمندوب.");
+  }
 
-  // 2. Adjust stock for each line via adjustStock (creates stock transactions for detailed ledger)
-  if (inv.warehouseId && inv.lines) {
-    try {
-      const { adjustStock } = await import("../utils/db.js");
-      for (const line of inv.lines) {
-        if (!line.productId || !line.qty) continue;
-        try {
-          await adjustStock(inv.warehouseId, line.productId, -line.qty, {
-            type: "sale_out",
-            sourceType: "salesInvoice",
-            sourceId: inv.invoiceNumber,
-            documentNumber: inv.invoiceNumber,
-            invoiceNumber: inv.invoiceNumber,
-            allowNegative: true,
-            productName: line.name || line.productName || "",
-            notes: `مبيعات المندوب — فاتورة ${inv.invoiceNumber}`
-          });
-        } catch (lineErr) {
-          console.warn(`Failed adjustStock for line ${line.productId} on invoice ${inv.invoiceNumber}:`, lineErr.message);
-        }
+  // 1. إعداد مصفوفة خصم المخزون
+  const adjustments = (inv.lines || [])
+    .filter(line => line.productId && line.qty)
+    .map(line => ({
+      warehouseId: inv.warehouseId,
+      productId: line.productId,
+      qtyDelta: -line.qty,
+      metadata: {
+        type: "sale_out",
+        sourceType: "salesInvoice",
+        sourceId: inv.invoiceNumber,
+        documentNumber: inv.invoiceNumber,
+        invoiceNumber: inv.invoiceNumber,
+        allowNegative: false, // ⚠️ منع البيع بالسالب قطعياً
+        productName: line.name || line.productName || "",
+        notes: `مبيعات المندوب — فاتورة ${inv.invoiceNumber}`
       }
-    } catch (stockErr) {
-      console.error("Failed to adjust stock for invoice:", stockErr.message);
+    }));
+
+  // 2. التنفيذ الذري لخصم المخزون أولاً وقبل أي كتابة في قاعدة البيانات
+  // إذا كان رصيد الصنف غير كافٍ أو حدث انقطاع في الشبكة، سترمي adjustStockBulk خطأً فورياً يوقف كل شيء
+  // ولن تُسجل الفاتورة ولن يتأثر رصيد العميل نهائياً.
+  let stockDeducted = false;
+  if (adjustments.length > 0) {
+    const { adjustStockBulk } = await import("../utils/db.js");
+    await adjustStockBulk(adjustments);
+    stockDeducted = true;
+    inv.stockStatus = "completed";
+    inv.stockUpdatedAt = serverTimestamp ? serverTimestamp() : new Date().toISOString();
+  }
+
+  // 3. حفظ الفاتورة وتحديث رصيد العميل فقط بعد نجاح خصم المخزون
+  try {
+    await runTransaction(db, async (tx) => {
+      const invRef = doc(db, `companies/${COID}/salesInvoices`, inv.invoiceNumber);
+      const invSnap = await tx.get(invRef);
+      const alreadySaved = invSnap.exists();
+
+      tx.set(invRef, inv, { merge: true });
+
+      if (!alreadySaved && inv.remainingAmount > 0 && inv.customerId) {
+        tx.set(doc(COL("customers"), inv.customerId),
+          { balance: increment(inv.remainingAmount) },
+          { merge: true });
+      }
+    });
+  } catch (invSaveErr) {
+    // تراجع تلقائي (Rollback) فوري للكميات المخصومة إذا تعذر كتابة الفاتورة لضمان التماثل
+    if (stockDeducted && adjustments.length > 0) {
+      try {
+        const { adjustStockBulk } = await import("../utils/db.js");
+        const rollbackAdjustments = adjustments.map(a => ({
+          ...a,
+          qtyDelta: -a.qtyDelta, // عكس الكمية لإعادتها للمخزن
+          metadata: {
+            ...a.metadata,
+            type: "sale_rollback",
+            notes: `تراجع تلقائي عن خصم المخزون لتعذر حفظ الفاتورة ${inv.invoiceNumber}`
+          }
+        }));
+        await adjustStockBulk(rollbackAdjustments);
+        console.warn("[Rollback] Stock deduction successfully reversed for:", inv.invoiceNumber);
+      } catch (rbErr) {
+        console.error("[Rollback] Stock rollback failed:", rbErr.message);
+      }
     }
+    throw new Error(`تعذر حفظ الفاتورة في النظام: ${invSaveErr.message}`);
   }
 
   // 2. Deposit Cash into Rep's Specific Cash Box & Create Receipt
+  let rcptRef = null;
   if (inv.paidAmount > 0 && inv.repId) {
     try {
       const { autoCashTransaction } = await import("../utils/db.js");
@@ -1760,7 +1871,7 @@ async function saveAndProcessInvoice(inv) {
       console.log(`[CashBox] Deposited ${inv.total} into cashBox_${inv.repId}`);
       
       // CREATE REAL RECEIPT FOR SINGLE SOURCE OF TRUTH
-      const rcptRef = doc(COL("receipts"));
+      rcptRef = doc(COL("receipts"));
       await setDoc(rcptRef, {
          date: inv.date,
          amount: inv.paidAmount,
@@ -1837,30 +1948,218 @@ async function saveAndProcessInvoice(inv) {
       totalCost: Math.round(totalCost * 100) / 100
     });
     console.log(`[Accounting] Auto-created JE for rep invoice ${inv.invoiceNumber}: ${jeId}`);
+
+    // إنشاء قيد سند القبض التلقائي لتسوية ذمة العميل وتحصيل المبلغ في صندوق المندوب
+    if (rcptRef && inv.customerId && inv.paidAmount > 0) {
+      try {
+        const { autoCustomerPaymentJE } = await import("../utils/accounting-engine.js");
+        const rcptJeId = await autoCustomerPaymentJE({
+          id: rcptRef.id,
+          date: inv.date,
+          amount: inv.paidAmount,
+          customerId: inv.customerId,
+          customerName: inv.customerName,
+          repId: inv.repId,
+          sourceId: `cashBox_${inv.repId}`,
+          paymentMethod: inv.paymentMethod || "cash",
+          invoiceNumber: inv.invoiceNumber,
+          costCenterId: inv.costCenterId || null,
+          costCenterName: inv.costCenterName || null,
+        }, { displayName: inv.repName, uid: inv.repId });
+
+        await updateDoc(rcptRef, {
+          journalEntryId: rcptJeId,
+          updatedAt: serverTimestamp()
+        });
+        console.log(`[Receipt JE] Auto-created JE for receipt ${rcptRef.id}: ${rcptJeId}`);
+      } catch (rcptJeErr) {
+        console.warn("Failed to create JE for auto-receipt:", rcptJeErr.message);
+      }
+    }
   } catch (aeErr) {
     console.warn("Accounting automation failed for rep invoice:", aeErr.message);
   }
 }
 
-/* ─── Submit Invoice (منع التكرار) ─── */
+/* ─── Failure Alert Modal (تنبيه بفشل العملية وسبب الفشل دون المساس بالأرصدة) ─── */
+function showInvoiceFailureModal(title, message, details = "") {
+  document.getElementById("inv-failure-modal")?.remove();
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay active";
+  overlay.id = "inv-failure-modal";
+  overlay.style.zIndex = "99999";
+
+  overlay.innerHTML = `
+  <div class="modal-sheet" style="max-width:440px; margin:auto; border-radius:20px; overflow:hidden; border:1px solid rgba(239,68,68,0.3); box-shadow:0 20px 45px rgba(0,0,0,0.4);">
+    <div style="background:linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); padding:20px 16px; text-align:center; color:#fff;">
+      <div style="font-size:46px; margin-bottom:6px; line-height:1;">⚠️</div>
+      <h3 style="margin:0; font-size:18px; font-weight:800; letter-spacing:-0.2px;">${title}</h3>
+      <div style="font-size:12px; opacity:0.95; margin-top:4px;">لم يتم اعتماد أو حفظ الفاتورة في النظام</div>
+    </div>
+    
+    <div style="padding:18px 16px;">
+      <div style="background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.22); border-radius:12px; padding:12px 14px; margin-bottom:14px; text-align:right;">
+        <div style="font-size:12px; color:#b91c1c; font-weight:800; margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+          <span>🔍</span> <span>سبب الفشل:</span>
+        </div>
+        <div style="font-size:13.5px; color:var(--text, #1f2937); line-height:1.6; font-weight:600;">${message}</div>
+        ${details ? `<div style="font-size:11.5px; color:var(--t2, #6b7280); margin-top:6px; line-height:1.5;">${details}</div>` : ""}
+      </div>
+
+      <div style="background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.25); border-radius:10px; padding:10px 12px; margin-bottom:16px; font-size:12px; color:#065f46; display:flex; align-items:center; gap:8px;">
+        <span style="font-size:18px;">🛡️</span>
+        <span style="line-height:1.4;"><strong>أمان الحسابات:</strong> لم يتم تعديل رصيد العميل نهائياً، وظلت أصناف السلة محفوظة لتعديلها ومتابعة العمل.</span>
+      </div>
+
+      <button class="confirm-btn" style="width:100%; padding:14px; font-size:15px; font-weight:800; border-radius:12px; background:#1e293b; color:#fff; border:none; cursor:pointer;" onclick="document.getElementById('inv-failure-modal')?.remove();">
+        ✏️ مراجعة وتعديل أصناف الفاتورة
+      </button>
+    </div>
+  </div>`;
+
+  overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+  document.body.appendChild(overlay);
+  if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+}
+
+/* ─── Submit Invoice (الربط الذري الإلزامي ومنع التكرار) ─── */
 let _posSubmitting = false;  // منع الضغط المزدوج على زر الحفظ
 
 window.posSubmit = async () => {
   // الحماية من الحفظ المزدوج
   if (_posSubmitting) {
-    toast("✅ تم حفظ الفاتورة بنجاح", "ok"); return;
+    toast("⏳ جاري معالجة الفاتورة...", "warn"); return;
   }
   if (!_pos.cust)         { toast("❌ اختر عميلاً أولاً", "err"); return; }
   if (!_pos.lines.length) { toast("❌ أضف صنفاً واحداً على الأقل", "err"); return; }
 
+  // 1. فحص الفواتير المعلقة في طابور المزامنة لمنع تداخل الأرصدة
+  const pendingQueue = JSON.parse(localStorage.getItem("rep_pending_stock_deductions") || "[]");
+  const offlineQueue = queueGet();
+  if (offlineQueue.length > 0 || pendingQueue.length > 0) {
+    if (navigator.onLine) {
+      toast("⏳ جاري مزامنة العمليات السابقة المعلقة أولاً...", "warn");
+      try {
+        await syncQueue();
+        await syncPendingStockDeductions();
+      } catch (_) {}
+    }
+    const remainingPending = JSON.parse(localStorage.getItem("rep_pending_stock_deductions") || "[]");
+    const remainingOffline = queueGet();
+    if (remainingOffline.length > 0 || remainingPending.length > 0) {
+      showInvoiceFailureModal(
+        "توجد فواتير سابقة معلقة لم تكتمل مزامنتها",
+        `توجد عمليات سابقة معلقة (${remainingOffline.length + remainingPending.length}) لم يكتمل خصم مخزونها بعد مع الخادم. يرجى التأكد من اتصال الإنترنت والمزامنة أولاً قبل إصدار فواتير جديدة لحماية دقة المخزون ومنع تعارض الأرصدة.`
+      );
+      return;
+    }
+  }
+
+  // 2. التحقق من توفر الإنترنت لضمان الخصم اللحظي الموثوق
+  if (!navigator.onLine) {
+    showInvoiceFailureModal(
+      "لا يوجد اتصال بالإنترنت",
+      "يلزم توفر اتصال نشط بالإنترنت للتحقق لحظياً من رصيد سيارتك وخصم المخزون سحابياً. تم إيقاف الفاتورة لحماية المخزون، ولم يتم التأثير على رصيد العميل."
+    );
+    return;
+  }
+
+// ── دالة توليد رقم فاتورة تسلسلي ذري لكل سيارة/مندوب بدون تكرار ──
+async function generateRepInvoiceNumber(rep) {
+  let p = "VAN1";
+  const name = (rep?.name || "").trim();
+  const code = (rep?.code || "").trim().toUpperCase();
+  if (code.startsWith("VAN") || code.startsWith("REP")) {
+    p = code.replace(/[^A-Z0-9]/g, "");
+  } else if (name.includes("مصطفى")) {
+    p = "VAN1";
+  } else if (name.includes("محمد")) {
+    p = "VAN2";
+  } else if (name.includes("عمرو")) {
+    p = "VAN3";
+  } else if (name.includes("احمد") || name.includes("أحمد")) {
+    p = "VAN4";
+  } else {
+    p = "VAN1";
+  }
+
+  const docKey = p.toLowerCase();
+  const counterRef = doc(db, `companies/${COID}/counters`, docKey);
+  const MAX_RETRIES = 5;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      let num;
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(counterRef);
+        const storedSeq = snap.exists() ? (snap.data().seq || 0) : 0;
+        const nextSeq = storedSeq + 1;
+        tx.set(counterRef, { seq: nextSeq, prefix: p, updatedAt: serverTimestamp() }, { merge: true });
+        num = `${p}-${String(nextSeq).padStart(6, "0")}`;
+      });
+      return num;
+    } catch (e) {
+      if (attempt < MAX_RETRIES) {
+        await new Promise(r => setTimeout(r, attempt * 300));
+        continue;
+      }
+      return `${p}-${Date.now().toString().slice(-6)}`;
+    }
+  }
+}
+
+// ── دالة توليد رقم سند قبض تسلسلي ذري لكل سيارة/مندوب بدون تكرار ──
+async function generateRepReceiptNumber(rep) {
+  let p = "VAN1";
+  const name = (rep?.name || "").trim();
+  const code = (rep?.code || "").trim().toUpperCase();
+  if (code.startsWith("VAN") || code.startsWith("REP")) {
+    p = code.replace(/[^A-Z0-9]/g, "");
+  } else if (name.includes("مصطفى")) {
+    p = "VAN1";
+  } else if (name.includes("محمد")) {
+    p = "VAN2";
+  } else if (name.includes("عمرو")) {
+    p = "VAN3";
+  } else if (name.includes("احمد") || name.includes("أحمد")) {
+    p = "VAN4";
+  } else {
+    p = "VAN1";
+  }
+
+  const docKey = `rv_${p.toLowerCase()}`;
+  const counterRef = doc(db, `companies/${COID}/counters`, docKey);
+  const MAX_RETRIES = 5;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      let num;
+      await runTransaction(db, async (tx) => {
+        const snap = await tx.get(counterRef);
+        const storedSeq = snap.exists() ? (snap.data().seq || 0) : 0;
+        const nextSeq = storedSeq + 1;
+        tx.set(counterRef, { seq: nextSeq, prefix: `RV-${p}`, updatedAt: serverTimestamp() }, { merge: true });
+        num = `RV-${p}-${String(nextSeq).padStart(6, "0")}`;
+      });
+      return num;
+    } catch (e) {
+      if (attempt < MAX_RETRIES) {
+        await new Promise(r => setTimeout(r, attempt * 300));
+        continue;
+      }
+      return `RV-${p}-${Date.now().toString().slice(-6)}`;
+    }
+  }
+}
+
   const btn = document.getElementById("confirm-btn");
-  if (btn) { btn.disabled = true; btn.textContent = "جاري الحفظ…"; }
-  _posSubmitting = true;  // منع الحفظ المزدوج
+  if (btn) { btn.disabled = true; btn.textContent = "جاري التحقق والخصم…"; }
+  _posSubmitting = true;
 
   try {
     const { sub, discAmt, net, vat, total } = posUpdateTotals();
-    const today = new Date().toISOString().split("T")[0];
-    const invNo = `REP-${Date.now().toString().slice(-8)}`;
+    const today = getTodayLocalDate();
+    const invNo = await generateRepInvoiceNumber(REP);
 
     let paidAmount = _pos.paidAmount !== undefined ? parseFloat(_pos.paidAmount) : total;
     if (isNaN(paidAmount) || paidAmount < 0) paidAmount = 0;
@@ -1893,16 +2192,23 @@ window.posSubmit = async () => {
       costCenterId:   REP.costCenterId || null,
       costCenterName: REP.costCenterName || null,
       date:           today,
-      lines:          _pos.lines.map(l => ({ 
-        productId: l.productId, 
-        name: l.name, 
-        productName: l.name, // ✅ For Admin ERP compatibility
-        qty: l.qty, 
-        price: l.price, 
-        unitPrice: l.price,  // ✅ For Admin ERP compatibility
-        discount: 0,         // ✅ For Admin ERP compatibility
-        total: l.price * l.qty 
-      })),
+      lines:          _pos.lines.map(l => {
+        const prod = (_pos.products || []).find(p => p.id === l.productId);
+        const unit = l.unit || prod?.unit || "حبة";
+        return {
+          productId: l.productId, 
+          name: l.name, 
+          productName: l.name, // ✅ For Admin ERP compatibility
+          qty: l.qty, 
+          price: l.price, 
+          unitPrice: l.price,  // ✅ For Admin ERP compatibility
+          unit: unit,          // ✅ Unit of measure
+          discount: 0,         // ✅ For Admin ERP compatibility
+          costPrice: l.cost || 0, // ✅ Store historical cost price
+          purchasePrice: l.cost || 0, // ✅ Backup purchasePrice
+          total: l.price * l.qty 
+        };
+      }),
       subtotal:       sub,
       discountAmount: discAmt,
       discountPct:    0,
@@ -1914,32 +2220,42 @@ window.posSubmit = async () => {
       remainingAmount: remainingAmount,
       paymentMethod:  finalPaymentMethod,
       status:         remainingAmount > 0 ? "posted" : "paid",
+      stockStatus:    "completed", // ✅ يُسجل معتمداً فور نجاح الخصم الذري
       source:         "rep_app_v2",
       companyId:      COID,
       createdAt:      serverTimestamp ? serverTimestamp() : new Date().toISOString(),
     };
 
-    if (navigator.onLine) {
-      await saveAndProcessInvoice(invData);
-      toast(`✅ تم حفظ الفاتورة ${invNo} بنجاح`, "ok");
-    } else {
-      queueAdd(invData);
-      toast(`📥 حُفظت في الانتظار (لا إنترنت)`, "warn");
-    }
+    // التنفيذ الذري: خصم المخزون أولاً ثم حفظ الفاتورة وتحديث رصيد العميل
+    await saveAndProcessInvoice(invData);
+    toast(`✅ تم حفظ الفاتورة ${invNo} وخصم المخزون بنجاح`, "ok");
 
     // Show share options
     setTimeout(() => showShareSheet(invData), 600);
 
-    // ✅ FIX: Force dashboard refresh by resetting _currentPage first
+    // تصفير السلة فقط بعد النجاح التام والمؤكد
     _pos.lines = []; _pos.cust = null; _pos.pay = "cash"; _pos.discount = 0;
-    _currentPage = null;  // ← Force re-render of dashboard even if already there
+    _currentPage = null;  // ← Force re-render of dashboard
     navigate("dashboard");
 
   } catch(e) {
-    toast(`❌ ${e.message}`, "err");
+    console.error("posSubmit error:", e);
+    let errorMsg = e.message || "حدث خطأ غير متوقع أثناء معالجة الفاتورة";
+    let title = "تعذر إتمام الفاتورة";
+
+    if (errorMsg.includes("رصيد المخزون غير كافٍ")) {
+      title = "عجز في مخزون سيارة المندوب";
+    } else if (errorMsg.includes("network") || errorMsg.includes("Failed to fetch") || errorMsg.includes("offline")) {
+      title = "انقطاع أو ضعف في الاتصال بالإنترنت";
+      errorMsg = "تعذر الاتصال بالخادم للتحقق من المخزون وخصمه. تم إيقاف الفاتورة لحماية دقة الحسابات، ولم يتأثر رصيد العميل.";
+    }
+
+    // إظهار التنبيه البارز مع سبب الفشل وتأكيد أمان رصيد العميل
+    showInvoiceFailureModal(title, errorMsg);
     if (btn) { btn.disabled = false; btn.textContent = "✅ تأكيد الفاتورة"; }
   } finally {
     _posSubmitting = false;  // أعد تفعيل الزر دائماً
+    if (btn) { btn.disabled = false; }
   }
 };
 
@@ -2001,7 +2317,7 @@ async function renderCredit(mc) {
     const snap = await getDocs(query(COL("customers"), where("repId", "==", REP.id)));
     _custCache = snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a,b) => (a.name||"").localeCompare(b.name||"","ar"));
   }
-  _cr = { lines: [], cust: null, refInvoice: null };
+  _cr = { lines: [], cust: null, refInvoice: null, originalInvoiceNumber: null, originalInvoiceId: null, customerInvoices: [] };
 
   mc.innerHTML = `
   <div class="pos-shell" id="cr-shell">
@@ -2013,12 +2329,20 @@ async function renderCredit(mc) {
       </div>
     </div>
 
-    <!-- Ref Invoice (optional) -->
-    <div style="padding:6px 12px;background:var(--bg-1);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0;">
-      <span style="font-size:12px;color:var(--t2);white-space:nowrap;">🧾 فاتورة أصلية:</span>
-      <input id="cr-ref-inv" class="pos-search" style="flex:1;font-size:12px;"
-        placeholder="اختياري — رقم الفاتورة الأصلية"
-        oninput="crSetRef(this.value)" />
+    <!-- Ref Invoice Selection -->
+    <div id="cr-ref-inv-wrap" style="padding:6px 12px;background:var(--bg-1);border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:6px;flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--t2);white-space:nowrap;font-weight:700;">🧾 الفاتورة الأصلية:</span>
+        <select id="cr-ref-inv-select" class="pos-search" style="flex:1;font-size:12px;padding:6px 10px;border-radius:8px;background:var(--bg-2);color:var(--t1);" onchange="crSelectInvoice(this.value)">
+          <option value="">اختر العميل أولاً لعرض فواتيره...</option>
+        </select>
+      </div>
+      <div id="cr-ref-manual-row" style="display:none;align-items:center;gap:8px;">
+        <span style="font-size:11px;color:var(--t3);white-space:nowrap;">أو إدخال يدوي:</span>
+        <input id="cr-ref-inv" class="pos-search" style="flex:1;font-size:11px;padding:4px 8px;"
+          placeholder="رقم الفاتورة الأصلية (يدوي)"
+          oninput="crSetRef(this.value)" />
+      </div>
     </div>
 
     <!-- Responsive Split Layout Main Body -->
@@ -2123,9 +2447,11 @@ function crRenderGrid(q = "") {
   grid.innerHTML = prods.map(p => {
     const inCr = _cr.lines.find(l => l.productId === p.id);
     const price = p.salePrice || p.priceRetail || p.sellingPrice || p.price || 0;
+    const unit = p.unit || p.baseUnit || "حبة";
+    const cost = p.costPrice || p.buyPrice || p.purchasePrice || p.averageCost || 0;
     return `
     <div class="prod-card ${inCr ? 'in-cart' : ''}" data-crpid="${p.id}"
-      onclick="crTap('${p.id}','${esc(p.name)}',${price})">
+      onclick="crTap('${p.id}','${esc(p.name)}',${price},'${esc(unit)}',${cost})">
       ${inCr ? `<div class="prod-qty-badge">${inCr.qty}</div>` : ""}
       <div class="prod-img">${prodIcon(p)}</div>
       <div class="prod-name">${p.name}</div>
@@ -2135,10 +2461,41 @@ function crRenderGrid(q = "") {
 }
 
 window.crSearch = (q) => crRenderGrid(q);
-window.crSetRef = (v) => { _cr.refInvoice = v.trim() || null; };
+window.crSetRef = (v) => {
+  const val = v ? v.trim() : null;
+  _cr.refInvoice = val;
+  _cr.originalInvoiceNumber = val;
+};
+
+window.crSelectInvoice = (val) => {
+  const manualRow = document.getElementById("cr-ref-manual-row");
+  const manualInp = document.getElementById("cr-ref-inv");
+  if (val === "__manual__") {
+    if (manualRow) manualRow.style.display = "flex";
+    if (manualInp) manualInp.focus();
+    _cr.refInvoice = manualInp ? (manualInp.value.trim() || null) : null;
+    _cr.originalInvoiceNumber = _cr.refInvoice;
+    _cr.originalInvoiceId = null;
+    return;
+  }
+  if (manualRow) manualRow.style.display = "none";
+  if (!val) {
+    _cr.refInvoice = null;
+    _cr.originalInvoiceNumber = null;
+    _cr.originalInvoiceId = null;
+    if (manualInp) manualInp.value = "";
+    return;
+  }
+  const inv = (_cr.customerInvoices || []).find(i => (i.invoiceNumber || i.id) === val);
+  _cr.refInvoice = val;
+  _cr.originalInvoiceNumber = val;
+  _cr.originalInvoiceId = inv ? (inv.id || val) : val;
+  if (manualInp) manualInp.value = val;
+  toast(`✅ تم ربط المردود بالفاتورة: ${val}`, "ok");
+};
 
 let _crTickerTimer = null;
-window.crTap = (id, name, price) => {
+window.crTap = (id, name, price, unit = "حبة", costPrice = 0) => {
   if (!_cr.cust) {
     toast("❌ اختر عميلاً أولاً", "err");
     return;
@@ -2152,8 +2509,23 @@ window.crTap = (id, name, price) => {
   }
 
   const ex = _cr.lines.find(l => l.productId === id);
-  if (ex) ex.qty++; else _cr.lines.push({ productId: id, name, price, qty: 1 });
+  if (ex) {
+    ex.qty++;
+  } else {
+    _cr.lines.push({
+      productId: id,
+      name,
+      productName: name,
+      price,
+      unitPrice: price,
+      unit: unit || "حبة",
+      qty: 1,
+      discount: 0,
+      costPrice: costPrice || 0
+    });
+  }
   const line = _cr.lines.find(l => l.productId === id);
+  const curPrice = line.unitPrice !== undefined ? line.unitPrice : line.price;
   requestAnimationFrame(() => {
     const card = document.querySelector(`.prod-card[data-crpid="${id}"]`);
     if (card) {
@@ -2171,15 +2543,15 @@ window.crTap = (id, name, price) => {
     if (ticker) { ticker.classList.add("visible"); clearTimeout(_crTickerTimer); _crTickerTimer = setTimeout(() => ticker.classList.remove("visible"), 2500); }
     if (tN) tN.textContent = name;
     if (tQ) tQ.textContent = `×${line.qty}`;
-    if (tP) tP.textContent = `${fmtC(price * line.qty)} ر.س`;
+    if (tP) tP.textContent = `${fmtC(curPrice * line.qty)} ر.س`;
   });
   if (navigator.vibrate) navigator.vibrate(20);
 };
 
 function crUpdateFab() {
   const totalQty = _cr.lines.reduce((s,l) => s+l.qty, 0);
-  const sub = _cr.lines.reduce((s,l) => s+l.price*l.qty, 0);
-  const vat = sub * VAT;
+  const sub = _cr.lines.reduce((s,l) => s + (l.unitPrice !== undefined ? l.unitPrice : l.price) * l.qty, 0);
+  const vat = Math.round((sub * VAT) * 1000) / 1000;
   const total = sub + vat;
 
   // Mobile Floating FAB & Footer
@@ -2211,8 +2583,8 @@ window.openCrSheet = () => {
   overlay.className = "modal-overlay active";
   overlay.id = "cr-sheet-overlay";
 
-  const sub = _cr.lines.reduce((s,l) => s+l.price*l.qty, 0);
-  const vat = sub * VAT;
+  const sub = _cr.lines.reduce((s,l) => s + (l.unitPrice !== undefined ? l.unitPrice : l.price) * l.qty, 0);
+  const vat = Math.round((sub * VAT) * 1000) / 1000;
   const total = sub + vat;
 
   overlay.innerHTML = `
@@ -2265,33 +2637,38 @@ function crRenderCart() {
     return;
   }
 
-  body.innerHTML = _cr.lines.map((ln, i) => `
-  <div class="cart-row" id="crr-${i}">
-    <div class="cart-row-top">
-      <span class="cart-row-icon">${prodIconByName(ln.name)}</span>
-      <div class="cart-row-info">
-        <div class="cart-row-name">${ln.name}</div>
-        <div class="cart-row-unit-price">${fmtC(ln.price)} ر.س / وحدة</div>
+  body.innerHTML = _cr.lines.map((ln, i) => {
+    const price = ln.unitPrice !== undefined ? ln.unitPrice : ln.price;
+    const name = ln.productName || ln.name;
+    const unit = ln.unit || "وحدة";
+    return `
+    <div class="cart-row" id="crr-${i}">
+      <div class="cart-row-top">
+        <span class="cart-row-icon">${prodIconByName(name)}</span>
+        <div class="cart-row-info">
+          <div class="cart-row-name">${name}</div>
+          <div class="cart-row-unit-price">${fmtC(price)} ر.س / ${unit}</div>
+        </div>
+        <button class="cart-row-del" onclick="crRemove(${i})" aria-label="حذف">🗑</button>
       </div>
-      <button class="cart-row-del" onclick="crRemove(${i})" aria-label="حذف">🗑</button>
-    </div>
-    <div class="cart-row-bottom">
-      <button class="cart-qty-btn minus" onclick="crQty(${i},-1)">−</button>
-      <input class="cart-qty-val" type="number" inputmode="numeric"
-        value="${ln.qty}" min="1"
-        onchange="crSetQty(${i},this.value)"
-        onfocus="this.select()" />
-      <button class="cart-qty-btn plus" onclick="crQty(${i},1)">+</button>
-      <div class="cart-row-price" id="crp-${i}">${fmtC(ln.price * ln.qty)} ر.س</div>
-    </div>
-  </div>`).join("");
+      <div class="cart-row-bottom">
+        <button class="cart-qty-btn minus" onclick="crQty(${i},-1)">−</button>
+        <input class="cart-qty-val" type="number" inputmode="numeric"
+          value="${ln.qty}" min="1"
+          onchange="crSetQty(${i},this.value)"
+          onfocus="this.select()" />
+        <button class="cart-qty-btn plus" onclick="crQty(${i},1)">+</button>
+        <div class="cart-row-price" id="crp-${i}">${fmtC(price * ln.qty)} ر.س</div>
+      </div>
+    </div>`;
+  }).join("");
 }
 
 function crRefreshSheet() {
   const body = document.getElementById("cr-sheet-body");
   if (!body) return;
-  const sub = _cr.lines.reduce((s,l) => s+l.price*l.qty, 0);
-  const vat = sub * VAT;
+  const sub = _cr.lines.reduce((s,l) => s + (l.unitPrice !== undefined ? l.unitPrice : l.price) * l.qty, 0);
+  const vat = Math.round((sub * VAT) * 1000) / 1000;
   const total = sub + vat;
   const s = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
   s("cr-sheet-sub",   fmtC(sub));
@@ -2303,31 +2680,36 @@ function crRefreshSheet() {
     body.innerHTML = `<div class="cart-empty"><span style="font-size:48px;">↩️</span><span>لا يوجد مرتجعات</span></div>`;
     return;
   }
-  body.innerHTML = _cr.lines.map((ln,i) => `
-  <div class="cart-row" id="crr-sheet-${i}">
-    <div class="cart-row-top">
-      <span class="cart-row-icon">${prodIconByName(ln.name)}</span>
-      <div class="cart-row-info">
-        <div class="cart-row-name">${ln.name}</div>
-        <div class="cart-row-unit-price">${fmtC(ln.price)} ر.س / وحدة</div>
+  body.innerHTML = _cr.lines.map((ln,i) => {
+    const price = ln.unitPrice !== undefined ? ln.unitPrice : ln.price;
+    const name = ln.productName || ln.name;
+    const unit = ln.unit || "وحدة";
+    return `
+    <div class="cart-row" id="crr-sheet-${i}">
+      <div class="cart-row-top">
+        <span class="cart-row-icon">${prodIconByName(name)}</span>
+        <div class="cart-row-info">
+          <div class="cart-row-name">${name}</div>
+          <div class="cart-row-unit-price">${fmtC(price)} ر.س / ${unit}</div>
+        </div>
+        <button class="cart-row-del" onclick="crRemove(${i})">🗑</button>
       </div>
-      <button class="cart-row-del" onclick="crRemove(${i})">🗑</button>
-    </div>
-    <div class="cart-row-bottom">
-      <button class="cart-qty-btn minus" onclick="crQty(${i},-1)">−</button>
-      <input class="cart-qty-val" type="number" inputmode="numeric"
-        value="${ln.qty}" min="1"
-        onchange="crSetQty(${i},this.value)"
-        onfocus="this.select()" />
-      <button class="cart-qty-btn plus" onclick="crQty(${i},1)">+</button>
-      <div class="cart-row-price" id="crp-sheet-${i}">${fmtC(ln.price*ln.qty)} ر.س</div>
-    </div>
-  </div>`).join("");
+      <div class="cart-row-bottom">
+        <button class="cart-qty-btn minus" onclick="crQty(${i},-1)">−</button>
+        <input class="cart-qty-val" type="number" inputmode="numeric"
+          value="${ln.qty}" min="1"
+          onchange="crSetQty(${i},this.value)"
+          onfocus="this.select()" />
+        <button class="cart-qty-btn plus" onclick="crQty(${i},1)">+</button>
+        <div class="cart-row-price" id="crp-sheet-${i}">${fmtC(price*ln.qty)} ر.س</div>
+      </div>
+    </div>`;
+  }).join("");
 }
 
 function crRefreshSheetTotals() {
-  const sub = _cr.lines.reduce((s,l) => s+l.price*l.qty, 0);
-  const vat = sub * VAT;
+  const sub = _cr.lines.reduce((s,l) => s + (l.unitPrice !== undefined ? l.unitPrice : l.price) * l.qty, 0);
+  const vat = Math.round((sub * VAT) * 1000) / 1000;
   const total = sub + vat;
   const s = (id,v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
   s("cr-sheet-sub",   fmtC(sub));
@@ -2356,23 +2738,49 @@ window.openCrCustPicker = async () => {
     overlay.remove();
     window.selectCust = origSelect;
 
-    // Load customer purchase history
+    // Load customer purchase history and past invoices
     if (_cr.cust) {
-      if (nm) nm.textContent = "👤 جاري فحص تاريخ المشتريات...";
+      if (nm) nm.textContent = "👤 جاري فحص تاريخ المشتريات والفواتير...";
       try {
         const snap = await getDocs(query(COL("salesInvoices"), where("customerId", "==", _cr.cust.id)));
         _cr.purchasedProductIds = new Set();
+        _cr.customerInvoices = [];
         snap.docs.forEach(d => {
           const inv = _normalizeInvoice({ id: d.id, ...d.data() });
+          _cr.customerInvoices.push(inv);
           (inv.lines || []).forEach(l => {
             if (l.productId) _cr.purchasedProductIds.add(l.productId);
           });
         });
+
+        // Sort invoices newest first
+        _cr.customerInvoices.sort((a,b) => (b.date || "").localeCompare(a.date || "") || (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+
+        // Populate invoice select dropdown
+        const invSel = document.getElementById("cr-ref-inv-select");
+        if (invSel) {
+          invSel.innerHTML = `<option value="">اختر الفاتورة الأصلية المراد الإرجاع منها (${_cr.customerInvoices.length} فاتورة مسجلة)...</option>` +
+            _cr.customerInvoices.map(inv => {
+              const num = inv.invoiceNumber || inv.id;
+              const dateStr = inv.date || "";
+              const tot = fmtC(inv.total || inv.totalWithVat || 0);
+              return `<option value="${num}">فاتورة ${num} — ${dateStr} (${tot} ر.س)</option>`;
+            }).join("") +
+            `<option value="__manual__">✏️ إدخال يدوي لرقم فاتورة أخرى...</option>`;
+        }
+
         if (nm) nm.textContent = _cr.cust.name;
-        toast("✅ تم تحميل وتأكيد تاريخ مشتريات العميل", "ok");
+        toast(`✅ تم ربط العميل (${_cr.customerInvoices.length} فاتورة سابقة)`, "ok");
       } catch (e) {
         if (nm) nm.textContent = _cr.cust.name;
         _cr.purchasedProductIds = null;
+        _cr.customerInvoices = [];
+        const invSel = document.getElementById("cr-ref-inv-select");
+        if (invSel) {
+          invSel.innerHTML = `<option value="__manual__">✏️ إدخال رقم الفاتورة يدوياً (نمط دون اتصال)</option>`;
+        }
+        const manualRow = document.getElementById("cr-ref-manual-row");
+        if (manualRow) manualRow.style.display = "flex";
         toast("⚠️ تنبيه: تعذر فحص مشتريات العميل السابقة (نمط دون اتصال)", "warn");
       }
     }
@@ -2380,62 +2788,148 @@ window.openCrCustPicker = async () => {
   document.body.appendChild(overlay);
 };
 
+let _crSubmitting = false;
+
 window.crSubmit = async () => {
+  if (_crSubmitting) {
+    toast("⏳ جاري حفظ الإشعار الدائن...", "warn");
+    return;
+  }
   if (!_cr.cust)  { toast("❌ اختر عميلاً أولاً", "err"); return; }
   if (!_cr.lines.length) { toast("❌ أضف صنفاً واحداً على الأقل", "err"); return; }
 
-  const sub   = _cr.lines.reduce((s,l) => s+l.price*l.qty, 0);
-  const vat   = sub * VAT;
+  _crSubmitting = true;
+
+  const sub   = _cr.lines.reduce((s,l) => s + (l.unitPrice !== undefined ? l.unitPrice : l.price) * l.qty, 0);
+  const vat   = Math.round((sub * VAT) * 1000) / 1000;
   const total = sub + vat;
   const crNo  = `CR-${Date.now().toString().slice(-8)}`;
-  const today = new Date().toISOString().split("T")[0];
+  const today = getTodayLocalDate();
+  const refInv = _cr.originalInvoiceNumber || _cr.refInvoice || null;
+
+  const formattedLines = _cr.lines.map(l => {
+    const uPrice = Number(l.unitPrice !== undefined ? l.unitPrice : l.price) || 0;
+    const qty = Number(l.qty) || 1;
+    const disc = Number(l.discount) || 0;
+    const cPrice = Number(l.costPrice) || 0;
+    return {
+      productId:   l.productId,
+      productName: l.productName || l.name || "صنف",
+      name:        l.productName || l.name || "صنف",
+      unit:        l.unit || "حبة",
+      qty:         qty,
+      unitPrice:   uPrice,
+      price:       uPrice,
+      discount:    disc,
+      costPrice:   cPrice,
+      total:       Math.round(uPrice * qty * (1 - disc / 100) * 100) / 100
+    };
+  });
 
   try {
     await runTransaction(db, async (tx) => {
       // 1. Save credit note document
       tx.set(doc(db, `companies/${COID}/salesReturns`, crNo), {
-        creditNoteNumber: crNo,
-        type: "sales_return",
-        source: "rep_van_app",
-        customerId:    _cr.cust.id,
-        customerName:  _cr.cust.name,
-        repId:         REP.id,
-        repName:       REP.name,
-        warehouseId:   REP.assignedWarehouseId || null,
-        warehouseName: REP.assignedWarehouseName || "سيارة المندوب",
-        refInvoice:    _cr.refInvoice || null,
-        date:          today,
-        lines:         _cr.lines,
-        subtotal:      sub,
-        vatAmount:     vat,
-        total:         total,
-        status:        "posted",
-        companyId:     COID,
-        createdAt:     serverTimestamp(),
+        number:                crNo,
+        creditNoteNumber:      crNo,
+        invoiceNumber:         crNo,
+        type:                  "sales_return",
+        source:                "rep_van_app",
+        customerId:            _cr.cust.id,
+        customerName:          _cr.cust.name,
+        repId:                 REP.id,
+        repName:               REP.name,
+        warehouseId:           REP.assignedWarehouseId || null,
+        warehouseName:         REP.assignedWarehouseName || "سيارة المندوب",
+        originalInvoiceNumber: refInv,
+        originalInvoiceId:     _cr.originalInvoiceId || refInv,
+        refInvoice:            refInv,
+        date:                  today,
+        lines:                 formattedLines,
+        subtotal:              sub,
+        vatAmount:             vat,
+        totalVat:              vat,
+        total:                 total,
+        totalWithVat:          total,
+        status:                "posted",
+        zatcaStatus:           "reported",
+        companyId:             COID,
+        createdAt:             serverTimestamp(),
       });
 
-      // 2. Reduce customer balance (negative = credit)
-      tx.update(doc(COL("customers"), _cr.cust.id), {
+      // 2. Reduce customer balance (credit)
+      tx.set(doc(COL("customers"), _cr.cust.id), {
         balance: increment(-total)
-      });
-
-      // 3. Return stock to rep's van warehouse
-      if (REP.assignedWarehouseId) {
-        for (const ln of _cr.lines) {
-          const stockRef = doc(db, `companies/${COID}/stockByWarehouse/${REP.assignedWarehouseId}_${ln.productId}`);
-          tx.set(stockRef, {
-            warehouseId: REP.assignedWarehouseId,
-            productId:   ln.productId,
-            qty:         increment(ln.qty),
-          }, { merge: true });
-        }
-      }
+      }, { merge: true });
     });
 
-    toast(`✅ تم حفظ الإشعار ${crNo} — تم إعادة المخزون للسيارة`, "ok");
+    // 3. Update stock transactions & inventory balances atomically via adjustStockBulk
+    if (REP.assignedWarehouseId) {
+      try {
+        const { adjustStockBulk } = await import("../utils/db.js");
+        const adjustments = formattedLines
+          .filter(ln => ln.productId && ln.qty)
+          .map(ln => ({
+            warehouseId: REP.assignedWarehouseId,
+            productId: ln.productId,
+            qtyDelta: +ln.qty,
+            metadata: {
+              type: "return_in",
+              sourceType: "salesReturn",
+              sourceId: crNo,
+              documentNumber: crNo,
+              invoiceNumber: crNo,
+              productName: ln.name,
+              notes: `مردود مبيعات المندوب — إشعار دائن ${crNo}`
+            }
+          }));
+        if (adjustments.length > 0) {
+          await adjustStockBulk(adjustments);
+        }
+      } catch (modErr) {
+        console.warn("adjustStockBulk error in rep return:", modErr.message);
+      }
+    }
+
+    // 4. Create accounting journal entry
+    try {
+      const { autoSalesReturnJE } = await import("../utils/accounting-engine.js");
+      const whSnap = await getDocs(COL("warehouses"));
+      const warehouses = whSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const totalCost = formattedLines.reduce((s, l) => s + ((l.costPrice || 0) * (l.qty || 0)), 0);
+      await autoSalesReturnJE({
+        id:           crNo,
+        returnNumber: crNo,
+        date:         today,
+        customerId:   _cr.cust.id,
+        repId:        REP.id,
+        customerName: _cr.cust.name,
+        customerType: _cr.cust.type || "retail",
+        paymentMethod: "credit",
+        subtotal:     sub,
+        taxAmount:    vat,
+        total:        total,
+        totalCost,
+        warehouseId:  REP.assignedWarehouseId,
+      }, {}, warehouses);
+    } catch (jeErr) {
+      console.warn("autoSalesReturnJE error:", jeErr.message);
+    }
+
+    // 5. Sync customer balance recalculation if available
+    try {
+      const bSync = await import("../utils/balance-sync.js");
+      if (bSync && bSync.recalculateCustomerBalance) {
+        await bSync.recalculateCustomerBalance(_cr.cust.id);
+      }
+    } catch (_) {}
+
+    toast(`✅ تم حفظ الإشعار ${crNo} ورُبط بالفاتورة والمخزون بنجاح`, "ok");
     navigate("dashboard");
   } catch(e) {
     toast("❌ " + e.message, "err");
+  } finally {
+    _crSubmitting = false;
   }
 };
 
@@ -2487,7 +2981,7 @@ function renderCustCards(list) {
     const name = c.name || c.nameAr || c.customerName || (c.code ? `عميل ${c.code}` : "عميل");
     const bal = c.balance || 0;
     return `
-    <div class="cust-card" onclick="viewCustomerLedger('${c.id}')" style="cursor:pointer;">
+    <div class="cust-card" data-cust-id="${c.id}" onclick="viewCustomerLedger('${c.id}')" style="cursor:pointer;">
       <div class="cust-ava">${name?.[0]||"ع"}</div>
       <div style="flex:1;">
         <div class="cust-name">${name}</div>
@@ -2642,69 +3136,210 @@ window.printInvoice = async (id) => {
 };
 
 window.printInvoiceData = async (inv) => {
+  try {
   if (typeof inv === "string") inv = JSON.parse(inv);
   inv = _normalizeInvoice(inv);
 
-  // Load customer balance for printing
+  // Load customer full data for printing
   let custBalance = 0;
   let custVat = "";
-  let custAddress = "";
   let custCr = "";
-  if (inv.customerId) {
+  let custStreet = "";
+  let custDistrict = "";
+  let custCity = "";
+  let custBuilding = "";
+  let custZip = "";
+  let custAdditional = "";
+  let custCountry = "المملكة العربية السعودية";
+
+  if (inv.customerId || inv.customerName) {
     try {
-      const { getDoc, doc } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
-      const custSnap = await getDoc(doc(db, `companies/${COID}/customers`, inv.customerId));
-      if (custSnap.exists()) {
+      const { getDoc, doc, collection: colFn, query: qFn, where: wFn, getDocs: getDocsFn } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+      let custSnap = null;
+      if (inv.customerId) {
+        custSnap = await getDoc(doc(db, `companies/${COID}/customers`, inv.customerId));
+        if (!custSnap.exists()) {
+          const custQ = qFn(colFn(db, `companies/${COID}/customers`), wFn("accountId", "==", inv.customerId));
+          const qSnap = await getDocsFn(custQ);
+          if (!qSnap.empty) custSnap = qSnap.docs[0];
+        }
+      }
+      if ((!custSnap || !custSnap.exists()) && inv.customerName) {
+        const nameQ = qFn(colFn(db, `companies/${COID}/customers`), wFn("name", "==", inv.customerName));
+        const nSnap = await getDocsFn(nameQ);
+        if (!nSnap.empty) custSnap = nSnap.docs[0];
+      }
+
+      if (custSnap && custSnap.exists()) {
         const cdata = custSnap.data();
         custBalance = parseFloat(cdata.balance) || 0;
-        custVat = cdata.vatNumber || "";
-        custAddress = cdata.address || "";
-        custCr = cdata.crNumber || cdata.nationalId || cdata.cr || "";
+        
+        // Calculate true previous balance before this invoice by checking prior invoices
+        try {
+          const priorQ = qFn(colFn(db, `companies/${COID}/salesInvoices`), wFn("customerId", "==", inv.customerId || custSnap.id));
+          const priorSnap = await getDocsFn(priorQ);
+          let priorSum = 0;
+          let priorCount = 0;
+          priorSnap.docs.forEach(d => {
+            const did = d.id;
+            const dnum = d.data().invoiceNumber || did;
+            const curNum = inv.invoiceNumber || inv.id || "";
+            if (did !== inv.id && dnum !== curNum) {
+              priorCount++;
+              priorSum += Number(d.data().remainingAmount || d.data().totalWithVat || d.data().total || 0);
+            }
+          });
+          if (priorCount === 0) {
+            previousBalance = 0;
+          } else {
+            previousBalance = Math.max(0, priorSum);
+          }
+        } catch(e) {
+          console.warn("Fallback balance calc:", e);
+          const invRem = Number(inv.remainingAmount || inv.totalWithVat || inv.total || 0);
+          previousBalance = Math.abs(custBalance - invRem) < 0.05 ? 0 : Math.max(0, custBalance - invRem);
+        }
+        custVat = cdata.vatNumber || cdata.vat || cdata.taxNumber || cdata.taxNo || cdata.taxId || "";
+        custCr = cdata.crNumber || cdata.nationalId || cdata.cr || cdata.commercialRegistration || cdata.idNumber || "";
+        custStreet = cdata.street || "";
+        custDistrict = cdata.district || "";
+        custCity = cdata.city || cdata.zone || "";
+        custBuilding = cdata.buildingNo || cdata.buildingNumber || "";
+        custZip = cdata.postalCode || cdata.zip || cdata.zipCode || "";
+        custAdditional = cdata.additionalNo || cdata.additionalNumber || "";
+        custCountry = cdata.country || "المملكة العربية السعودية";
+
+        if (cdata.address) {
+          const addr = cdata.address;
+          if (!custBuilding) {
+            const m = addr.match(/(?:المبنى|رقم المبنى)\s*:\s*([^—\-\n,]+)/i);
+            if (m && m[1]) custBuilding = m[1].trim();
+          }
+          if (!custStreet) {
+            const m = addr.match(/(?:الشارع|شارع)\s*:\s*([^—\-\n,]+)/i);
+            if (m && m[1]) custStreet = m[1].trim();
+          }
+          if (!custDistrict) {
+            const m = addr.match(/(?:الحي|حي)\s*:\s*([^—\-\n,]+)/i);
+            if (m && m[1]) custDistrict = m[1].trim();
+          }
+          if (!custCity) {
+            const m = addr.match(/(?:المدينة|مدينة)\s*:\s*([^—\-\n,]+)/i);
+            if (m && m[1]) custCity = m[1].trim();
+          }
+          if (!custZip) {
+            const m = addr.match(/(?:الرمز البريدي|الرمز|البريدي)\s*:\s*([^—\-\n,]+)/i);
+            if (m && m[1]) custZip = m[1].trim();
+          }
+          if (!custAdditional) {
+            const m = addr.match(/(?:الرقم الإضافي|الرقم الاضافي|الإضافي|الاضافي)\s*:\s*([^—\-\n,]+)/i);
+            if (m && m[1]) custAdditional = m[1].trim();
+          }
+        }
+
+        if (!custDistrict && (custStreet || cdata.address)) {
+          const fullAddr = custStreet || cdata.address || "";
+          if (fullAddr.includes("حي")) {
+            const match = fullAddr.match(/(?:-|—|,|\/)?\s*(حي\s+[^,-—\/]+)/);
+            if (match && match[1]) {
+              custDistrict = match[1].trim();
+              if (custStreet && custStreet.includes(match[0])) {
+                custStreet = custStreet.replace(match[0], "").trim();
+              }
+            }
+          }
+        }
       }
     } catch (e) {
       console.warn("Failed to load customer balance for print:", e);
     }
   }
 
+  const cust = {
+    name: inv.customerName || "عميل نقدي",
+    vatNumber: custVat || "",
+    crNumber: custCr || "",
+    street: custStreet || "",
+    district: custDistrict || "",
+    city: custCity || "",
+    buildingNo: custBuilding || "",
+    postalCode: custZip || "",
+    additionalNo: custAdditional || "",
+    country: custCountry || "المملكة العربية السعودية",
+    balance: custBalance || 0
+  };
+
+  // Determine ZATCA Invoice Category (Standard B2B vs Simplified B2C)
+  const isB2B = !!(custVat && custVat.trim().length >= 10);
+  const titleAr = isB2B ? "فاتورة ضريبية" : "فاتورة ضريبية مبسطة";
+  const titleEn = isB2B ? "TAX INVOICE" : "SIMPLIFIED TAX INVOICE";
+  const typeTag = isB2B ? "فاتورة ضريبية قياسية (B2B)" : "فاتورة ضريبية مبسطة (B2C)";
+
   // ── 1. Generate ZATCA QR Base64 ──
   let qrBase64 = "";
   try {
-    const sellerName = COMPANY.name || "ادهام للمواد الغذائية";
-    const vatNumber  = COMPANY.vatNumber || "300000000000003";
+    const sellerName = COMPANY.name || "شركة نظم الإمداد المتطورة";
+    const vatNumber  = COMPANY.vatNumber || "314996148100003";
     const isoTime    = inv.createdAt
       ? (typeof inv.createdAt === "string" ? inv.createdAt : new Date(inv.createdAt.seconds * 1000).toISOString())
       : new Date().toISOString();
     qrBase64 = getZatcaQRBase64(sellerName, vatNumber, isoTime, inv.total || 0, inv.vatAmount || 0);
   } catch (qrErr) { console.error("[print] QR generation error:", qrErr); }
 
+  const qrImgDataUrl = qrBase64 ? `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrBase64)}` : "";
+
   // ── 2. Build invoice values ──
-  const payLabel   = { cash:"نقدي", credit:"آجل", transfer:"تحويل بنكي", cheque:"شيك" }[inv.paymentMethod] || inv.paymentMethod || "-";
+  const payLabel   = { cash:"نقدي (Cash)", credit:"آجل (Credit)", transfer:"تحويل بنكي", cheque:"شيك" }[inv.paymentMethod] || inv.paymentMethod || "-";
   const subtotal   = inv.subtotal || 0;
   const discAmt    = inv.discountAmount || 0;
-  const discPct    = inv.discountPct || 0;
   const vatAmt     = inv.vatAmount || 0;
   const total      = inv.total || 0;
-  const statusLbl  = inv.status === "paid" ? "✅ مدفوعة" : inv.status === "pending" ? "⏳ معلقة" : "-";
+
+  let totalItemsCount = 0;
+  let totalQtySum = 0;
 
   const lineRows = (inv.lines || []).map((l, i) => {
     const name = l.name || l.productName || "-";
     const qty  = parseFloat(l.qty || 0);
     const price = parseFloat(l.price || l.unitPrice || 0);
     const discPercent = parseFloat(l.discount || 0);
-    const taxableAmount = (qty * price) * (1 - discPercent / 100);
+    const lineDisc = (qty * price) * (discPercent / 100);
+    const taxableAmount = (qty * price) - lineDisc;
     const vatRate = (l.taxCategory === "E" || l.taxCategory === "Z") ? 0 : 15;
     const vatAmount = taxableAmount * (vatRate / 100);
     const totalWithVat = taxableAmount + vatAmount;
 
+    totalItemsCount++;
+    totalQtySum += qty;
+
+    // Smart unit determination:
+    let rawUnit = l.unit;
+    if (!rawUnit || rawUnit === "Piece" || rawUnit === "PCS" || rawUnit === "حبة") {
+      const prodsList = (typeof _pos !== "undefined" && _pos && _pos.products) ? _pos.products : [];
+      const matchedProd = prodsList.find(p => p.id === l.productId || p.name === name);
+      if (matchedProd && matchedProd.unit && matchedProd.unit !== "Piece" && matchedProd.unit !== "PCS") {
+        rawUnit = matchedProd.unit;
+      } else if (!rawUnit) {
+        rawUnit = matchedProd?.unit || "حبة";
+      }
+    }
+    const unitName = rawUnit || "حبة";
+
     return `<tr>
-      <td>${i + 1}</td>
-      <td class="desc">${name}<br><span style="font-size:9px;color:#6b7280;">الواحدة: ${l.unit || "حبة"}</span></td>
-      <td>${qty}</td>
+      <td style="text-align:center; font-weight:700;">${i + 1}</td>
+      <td class="desc" style="text-align:right;">
+        <div style="font-weight:800; color:#1e1b4b; font-size:11.5px;">${name}</div>
+        <div style="font-size:9.5px; color:#6b7280; margin-top:2px;">الوحدة: <b style="color:#1e1b4b;">${unitName}</b></div>
+      </td>
+      <td style="text-align:center;" class="mono font-bold">${qty}</td>
       <td class="mono">${fmtC(price)}</td>
+      <td class="mono" style="color:${discPercent > 0 ? '#dc2626' : '#9ca3af'};">
+        ${discPercent > 0 ? `${discPercent}%` : "—"}
+      </td>
       <td class="mono">${fmtC(taxableAmount)}</td>
-      <td>${vatRate}%</td>
+      <td style="text-align:center;">${vatRate}%</td>
       <td class="mono">${fmtC(vatAmount)}</td>
-      <td class="mono" style="font-weight:700;">${fmtC(totalWithVat)}</td>
+      <td class="mono font-bold" style="color:#1e1b4b;">${fmtC(totalWithVat)}</td>
     </tr>`;
   }).join("");
 
@@ -2713,172 +3348,305 @@ window.printInvoiceData = async (inv) => {
     ? `<div class="logo-circle"><img src="${logoSrc}" alt="شعار" /></div>`
     : `<div class="logo-circle"><div class="default-logo">🏢</div></div>`;
 
-    // ── 3. Build full invoice HTML ──
   const barcodeSvg = (() => {
     const clean = (inv.invoiceNumber || inv.id || "").replace(/[^a-zA-Z0-9]/g, '');
-    let svg = '<svg width="140" height="36" viewBox="0 0 140 36" xmlns="http://www.w3.org/2000/svg">';
+    let svg = '<svg width="150" height="38" viewBox="0 0 150 38" xmlns="http://www.w3.org/2000/svg">';
     let x = 12;
     let hash = 5381;
-    for (let i = 0; i < clean.length; i++) {
-      hash = ((hash << 5) + hash) + clean.charCodeAt(i);
-    }
-    svg += '<rect x="' + x + '" y="2" width="2" height="20" fill="#000" />'; x += 3;
-    svg += '<rect x="' + x + '" y="2" width="1" height="20" fill="#000" />'; x += 2;
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < clean.length; i++) hash = ((hash << 5) + hash) + clean.charCodeAt(i);
+    svg += '<rect x="' + x + '" y="2" width="2" height="22" fill="#111" />'; x += 3;
+    svg += '<rect x="' + x + '" y="2" width="1" height="22" fill="#111" />'; x += 2;
+    for (let i = 0; i < 20; i++) {
       const width = ((Math.abs(hash) >> i) & 1) ? 2.5 : 1;
-      svg += '<rect x="' + x + '" y="2" width="' + width + '" height="20" fill="#000" />';
+      svg += '<rect x="' + x + '" y="2" width="' + width + '" height="22" fill="#111" />';
       x += width + 1.5;
     }
-    svg += '<rect x="' + x + '" y="2" width="1" height="20" fill="#000" />'; x += 2;
-    svg += '<rect x="' + x + '" y="2" width="2" height="20" fill="#000" />';
-    svg += '<text x="70" y="32" font-family="monospace" font-size="8" text-anchor="middle" fill="#000">' + (inv.invoiceNumber || inv.id?.slice(0,10)) + '</text>';
+    svg += '<rect x="' + x + '" y="2" width="1" height="22" fill="#111" />'; x += 2;
+    svg += '<rect x="' + x + '" y="2" width="2" height="22" fill="#111" />';
+    svg += '<text x="75" y="34" font-family="monospace" font-size="9" text-anchor="middle" fill="#111">' + (inv.invoiceNumber || inv.id?.slice(0,10)) + '</text>';
     svg += '</svg>';
     return svg;
   })();
+
+  
+  const lineCount = (inv.lines || []).length;
+  const isSmallInvoice = lineCount <= 4;
 
   const html = `<!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>فاتورة مبسطة #${inv.invoiceNumber || ""}</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<title>${titleAr} #${inv.invoiceNumber || ""}</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet"/>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Cairo',sans-serif;background:#eef2ff;color:#1e293b;direction:rtl;min-height:100vh;padding:10px;print-color-adjust:exact;-webkit-print-color-adjust:exact;}
+  body{font-family:'IBM Plex Sans Arabic',sans-serif;background:#f8fafc;color:#1f2937;direction:rtl;min-height:100vh;padding:12px;print-color-adjust:exact;-webkit-print-color-adjust:exact;}
   
-  .toolbar{background:#fff;border-bottom:1px solid #e2e8f0;padding:10px 20px;display:flex;gap:10px;justify-content:center;position:sticky;top:0;z-index:99;border-radius:8px;margin-bottom:10px;}
-  .btn{border:none;border-radius:10px;padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
-  .btn-print{background:linear-gradient(135deg,#5b3ec2,#7c3aed);color:#fff;}
-  .btn-close{background:#f1f5f9;color:#475569;}
+  .toolbar{background:#1e293b;padding:12px;display:flex;gap:12px;justify-content:center;position:sticky;top:0;z-index:99;border-radius:10px;margin-bottom:12px;}
+  .btn{border:none;border-radius:8px;padding:9px 20px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .btn-print{background:#1e1b4b;color:#fff;}
+  .btn-close{background:#334155;color:#fff;}
   
-  .invoice-container { background: #fff; max-width: 210mm; margin: 0 auto; padding: 15px; border: 1.5px solid #5b3ec2; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+  .invoice-container { background: #fff; max-width: 210mm; margin: 0 auto; padding: 14px; border: 1.5px solid #1e1b4b; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
   
-  /* Top Barcode and Title */
-  .top-row { display: flex; justify-content: center; align-items: center; margin-bottom: 12px; position: relative; }
-  .title-box { text-align: center; }
-  .title-box h1 { font-size: 22px; color: #5b3ec2; font-weight: 800; margin-bottom: 2px; }
-  .title-box h2 { font-size: 10px; color: #5b3ec2; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+  .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 12px; }
+  .title-box { text-align: right; }
+  .title-box h1 { font-size: 22px; color: #1e1b4b; font-weight: 800; line-height: 1.2; }
+  .title-box h2 { font-size: 10.5px; color: #6366f1; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+  .doc-badge { display: inline-block; background: #e0e7ff; color: #1e1b4b; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-top: 4px; }
   
-  /* Purple Company Banner */
-  .company-banner { background: #5b3ec2 !important; color: #fff !important; border-radius: 8px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  .banner-left { text-align: right; font-size: 12px; font-weight: 500; line-height: 1.5; color: #fff !important; }
-  .banner-left div { color: #fff !important; }
-  .banner-left strong { color: #fff !important; }
-  .banner-right { text-align: left; line-height: 1.4; color: #fff !important; }
-  .banner-right h2 { font-size: 17px; font-weight: 800; margin-bottom: 4px; color: #fff !important; }
-  .banner-right div { font-size: 12px; color: #fff !important; }
-  .banner-right strong { color: #fff !important; }
-  .logo-circle { width: 70px; height: 70px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 4px; border: 1.5px solid #5b3ec2; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+  .company-banner { background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%) !important; color: #fff !important; border-radius: 10px; padding: 12px 18px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border-bottom: 3.5px solid #f59e0b; box-shadow: 0 4px 12px rgba(0,0,0,0.12); -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .banner-meta { text-align: right; display: flex; flex-direction: column; gap: 3px; }
+  .meta-line { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: #fff !important; }
+  .meta-line .m-lbl { opacity: 0.9; font-weight: 500; }
+  .meta-line .m-val { font-weight: 800; color: #fff !important; }
+  
+  .banner-co { text-align: left; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .banner-co h2 { font-size: 17px; font-weight: 800; color: #fff !important; margin-bottom: 2px; }
+  .co-id-row { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .co-pill { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); padding: 2px 8px; border-radius: 4px; font-size: 11px; color: #fff !important; display: inline-flex; align-items: center; gap: 6px; }
+  .co-pill strong { color: #fff !important; font-size: 11.5px; }
+  
+  .logo-circle { width: 68px; height: 68px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 4px; border: 2px solid #6366f1; box-shadow: 0 3px 8px rgba(0,0,0,0.15); flex-shrink: 0; margin: 0 12px; }
   .logo-circle img { max-width: 100%; max-height: 100%; object-fit: contain; }
-  .logo-circle .default-logo { font-size: 30px; }
+  .logo-circle .default-logo { font-size: 28px; }
   
-  /* Info Strips */
-  .info-strip { border: 1px solid #5b3ec2; border-radius: 6px; padding: 6px 12px; font-size: 10.5px; background: #fdfcff; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-  .info-strip span { color: #1f2937; }
-  .info-strip strong { color: #5b3ec2; }
+  .parties-container { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .party-card { border: 1.2px solid #cbd5e1; border-radius: 6px; background: #f8fafc; padding: 6px 10px; font-size: 10.5px; }
+  .party-card.seller { border-color: #a5b4fc; background: #fdfcff; }
+  .party-card.buyer { border-color: #cbd5e1; background: #f8fafc; }
   
-  /* Table Styling */
-  .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #5b3ec2; border-radius: 8px; overflow: hidden; }
-  .invoice-table thead tr { background: #5b3ec2 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  .invoice-table thead th { color: #fff !important; font-size: 10.5px; font-weight: 700; padding: 8px 4px; text-align: center; border: 1px solid rgba(255,255,255,0.15); }
-  .invoice-table tbody tr { border-bottom: 1px solid #5b3ec2; }
-  .invoice-table tbody tr:nth-child(even) { background: #fdfcff; }
-  .invoice-table tbody tr:last-child { border-bottom: none; }
-  .invoice-table tbody td { padding: 8px 4px; font-size: 11px; text-align: center; border: 1px solid #e5e7eb; color: #1f2937; white-space: nowrap; }
-  .invoice-table tbody td.desc { text-align: right; font-weight: 700; white-space: normal; }
-  .invoice-table tbody td.mono { font-family: monospace; font-weight: 500; }
+  .party-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 4px; }
+  .party-title { font-weight: 800; color: #3730a3; font-size: 11px; }
+  .party-name { font-size: 12.5px; font-weight: 800; color: #0f172a; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   
-  /* Totals section */
-  .totals-section { display: flex; justify-content: space-between; align-items: stretch; gap: 15px; margin-top: 10px; }
-  .left-footer-box { width: 52%; display: flex; gap: 10px; align-items: stretch; }
-  .qr-wrapper { border: 1px solid #5b3ec2; border-radius: 8px; padding: 6px; background: #fff; display: flex; align-items: center; justify-content: center; width: 90px; flex-shrink: 0; }
-  .notes-box { flex-grow: 1; font-size: 10.5px; color: #4b5563; border: 1px solid #5b3ec2; border-radius: 8px; padding: 10px; background: #fff; }
-  .notes-box h4 { color: #5b3ec2; font-weight: 700; margin-bottom: 4px; font-size: 11px; }
-  .notes-content { line-height: 1.4; color: #4b5563; }
+  /* Dedicated Party ID Badges (CR & VAT) */
+  .party-ids-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 4px; }
+  .id-badge { background: #fff; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; }
+  .id-badge.vat-badge { border-color: #818cf8; background: #fdfcff; }
+  .id-lbl { color: #475569; font-weight: 700; }
+  .id-val { font-weight: 800; color: #1e1b4b; font-size: 10.5px; }
   
-  .totals-box { width: 44%; border: 1px solid #5b3ec2; border-radius: 8px; overflow: hidden; background: #fff; display: flex; flex-direction: column; justify-content: space-between; }
-  .totals-row { display: flex; justify-content: space-between; padding: 7px 10px; font-size: 11px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
-  .totals-row:last-child { border-bottom: none; }
-  .totals-row.grand-total { background: #5b3ec2 !important; color: #fff !important; font-weight: 800; font-size: 13.5px; border-bottom: none; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  .totals-row.grand-total span { color: #fff !important; }
-  .totals-row span.val { font-family: monospace; font-weight: 700; }
-  .totals-row.discount { color: #dc2626; }
-  
-  .thank-you { text-align: center; padding: 10px; font-size: 11px; color: #6b7280; font-weight: 500; border-top: 1px dashed #5b3ec2; margin-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  
-  @page {
-    size: A4;
-    margin: 8mm 10mm 8mm 10mm;
+  .badge-vat { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+  .badge-novat { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+
+  /* Compact Horizontal Address Matrix */
+  .addr-compact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px 6px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 4px 6px;
   }
-  @media print{
-    body{background:#fff;padding:0;}
-    .toolbar{display:none!important;}
-    .invoice-container{box-shadow:none;margin:0;border-radius:0;max-width:100%;border:1px solid #5b3ec2;padding:12px;}
-    .company-banner{background:#5b3ec2!important;color:#fff!important;}
-    .invoice-table thead tr{background:#5b3ec2!important;}
-    .totals-row.grand-total{background:#5b3ec2!important;color:#fff!important;}
+  .addr-line-item {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 9.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .addr-line-item .lbl { color: #64748b; font-weight: 700; }
+  .addr-line-item .val { color: #1e293b; font-weight: 800; }
+  .addr-line-item.full { grid-column: span 3; }
+  
+  .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; border: 1.5px solid #1e1b4b; border-radius: 8px; overflow: hidden; }
+  .invoice-table thead tr { background: #1e1b4b !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .invoice-table thead th { color: #fff !important; font-size: 10px; font-weight: 700; padding: 7px 4px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+  .invoice-table tbody tr { border-bottom: 1px solid #e2e8f0; }
+  .invoice-table tbody tr:nth-child(even) { background: #fdfcff; }
+  .invoice-table tbody td { padding: 7px 5px; font-size: 10.5px; text-align: center; border: 1px solid #e2e8f0; color: #1f2937; }
+  .mono { font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+  .font-bold { font-weight: 700; }
+  
+  .bottom-layout { display: grid; grid-template-columns: 100px 1fr 280px; gap: 10px; margin-bottom: 12px; align-items: stretch; margin-top: 10px; }
+  .qr-box { border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 6px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .qr-box span { font-size: 8.5px; color: #64748b; margin-top: 4px; font-weight: 700; }
+  
+  .notes-box { border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 8px 10px; background: #fff; font-size: 10.5px; display: flex; flex-direction: column; justify-content: space-between; }
+  .notes-title { font-weight: 800; color: #1e1b4b; margin-bottom: 2px; font-size: 11px; }
+  .notes-body { color: #475569; line-height: 1.35; }
+  .official-receipt-notice { margin-top: 4px; background: #fef2f2; border: 1px dashed #ef4444; border-radius: 4px; padding: 3px 6px; }
+  .notice-ar { font-weight: 800; color: #991b1b; font-size: 9.5px; }
+  .notice-en { font-size: 8px; color: #7f1d1d; font-weight: 600; direction: ltr; text-align: right; }
+  
+  .totals-table-wrap { border: 1.5px solid #1e1b4b; border-radius: 8px; overflow: hidden; background: #fff; }
+  .totals-table { width: 100%; border-collapse: collapse; }
+  .totals-table tr td { padding: 6px 10px; font-size: 11px; border-bottom: 1px solid #f1f5f9; }
+  .totals-table tr td.lbl { text-align: right; color: #475569; font-weight: 600; }
+  .totals-table tr td.val { text-align: left; font-family: 'IBM Plex Mono', monospace; font-weight: 700; direction: ltr; white-space: nowrap; }
+  .totals-table tr.grand td { background: #1e1b4b !important; color: #fff !important; font-weight: 800; font-size: 13px; border-bottom: none; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .totals-table tr.grand td.val { color: #fff !important; }
+  .totals-table tr.balance-row td { background: #f8fafc; font-size: 10px; color: #64748b; }
+  .totals-table tr.due-row td { background: #fdfcff; font-weight: 800; color: #1e1b4b; font-size: 11.5px; }
+  
+  .signatures-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; border-top: 1px dashed #cbd5e1; padding-top: 10px; margin-top: 6px; }
+  .sig-box { border: 1px dashed #cbd5e1; border-radius: 6px; padding: 8px 12px; background: #fafafa; font-size: 10.5px; }
+  .sig-title { font-weight: 800; color: #334155; margin-bottom: 20px; }
+  .sig-line { border-top: 1px solid #94a3b8; padding-top: 4px; display: flex; justify-content: space-between; font-size: 10px; color: #64748b; }
+  
+  .footer-bar { text-align: center; padding-top: 10px; font-size: 10.5px; color: #64748b; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; margin-top: 10px; }
+  
+  @page { size: A4; margin: 6mm 8mm 6mm 8mm; }
+  @media print {
+    html, body {
+      background: #fff !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      height: 100% !important;
+      font-size: 10px !important;
+    }
+    .toolbar, .no-print { display: none !important; }
+    .invoice-container {
+      box-shadow: none !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+      border: 1px solid #1e1b4b !important;
+      padding: 5px 8px !important;
+      max-width: 100% !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+    .top-header { padding-bottom: 3px !important; margin-bottom: 4px !important; }
+    .title-box h1 { font-size: 16px !important; }
+    .company-banner { padding: 4px 8px !important; margin-bottom: 4px !important; border-radius: 6px !important; }
+    .company-banner h2 { font-size: 13px !important; }
+    .logo-circle { width: 42px !important; height: 42px !important; margin: 0 4px !important; }
+    .parties-container { gap: 4px !important; margin-bottom: 4px !important; }
+    .party-card { padding: 3px 5px !important; font-size: 8.5px !important; }
+    .party-ids-row { gap: 2px !important; margin-bottom: 2px !important; }
+    .id-badge { padding: 1px 3px !important; font-size: 8px !important; }
+    .addr-compact-grid { padding: 2px 4px !important; }
+    .addr-line-item { font-size: 8px !important; }
+    .invoice-table { margin-bottom: 4px !important; }
+    .invoice-table thead th { padding: 3px 2px !important; font-size: 8.5px !important; }
+    .invoice-table tbody td { padding: 2px 2px !important; font-size: 8.5px !important; }
+    .tafqeet-strip { padding: 2px 5px !important; margin-bottom: 4px !important; font-size: 8.5px !important; }
+    .bottom-layout { gap: 5px !important; margin-bottom: 4px !important; grid-template-columns: 80px 1fr 230px !important; }
+    .qr-box { padding: 2px !important; }
+    .qr-box svg, .qr-box img { max-width: 70px !important; max-height: 70px !important; }
+    .notes-box { padding: 3px 5px !important; font-size: 8px !important; }
+    .totals-table tr td { padding: 2px 5px !important; font-size: 8.5px !important; }
+    .totals-table tr.grand td { font-size: 10px !important; padding: 2.5px 5px !important; }
+    .signatures-grid { gap: 6px !important; margin-top: 3px !important; padding-top: 3px !important; }
+    .sig-box { padding: 3px 5px !important; font-size: 8px !important; }
+    .sig-title { margin-bottom: 6px !important; font-size: 8px !important; }
+    .footer-bar { margin-top: 3px !important; padding-top: 2px !important; font-size: 8px !important; }
   }
 </style>
 </head>
 <body>
 <div class="toolbar">
-  <button class="btn btn-print" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+  <button class="btn btn-print" onclick="window.print()">🖨️ طباعة الفاتورة A4</button>
   <button class="btn btn-close" onclick="window.close()">✕ إغلاق</button>
 </div>
 
 <div class="invoice-container">
-  <!-- Top Barcode and Title -->
-  <div class="top-row">
+  <!-- Top Header with Barcode & Title -->
+  <div class="top-header">
     <div class="title-box">
-      <h1>فاتورة ضريبية مبسطة</h1>
-      <h2>SIMPLIFIED TAX INVOICE</h2>
+      <h1>${titleAr}</h1>
+      <h2>${titleEn}</h2>
+      <span class="doc-badge">${typeTag}</span>
+    </div>
+    <div>
+      ${barcodeSvg}
     </div>
   </div>
 
   <!-- Purple Company Banner -->
   <div class="company-banner">
-    <div class="banner-left">
-      <div>رقم الفاتورة / Invoice No: <strong>${inv.invoiceNumber || inv.id?.slice(0,10) || "—"}</strong></div>
-      <div>تاريخ الفاتورة / Date: <strong>${inv.date || "—"}</strong></div>
-      <div>طريقة الدفع / Payment: <strong>${payLabel}</strong></div>
+    <div class="banner-meta">
+      <div class="meta-line"><span class="m-lbl">رقم الفاتورة / Inv No:</span> <strong class="m-val mono">${inv.invoiceNumber || inv.id?.slice(0,10) || "—"}</strong></div>
+      <div class="meta-line"><span class="m-lbl">تاريخ الإصدار / Date:</span> <strong class="m-val mono">${inv.date || "—"}</strong></div>
+      <div class="meta-line"><span class="m-lbl">طريقة الدفع / Terms:</span> <strong class="m-val">${payLabel}</strong></div>
+      ${inv.dueDate ? `<div class="meta-line"><span class="m-lbl">الاستحقاق / Due:</span> <strong class="m-val mono">${inv.dueDate}</strong></div>` : ""}
     </div>
     ${logoHtml}
-    <div class="banner-right">
-      <h2>${COMPANY.name || "ادهام للمواد الغذائية"}</h2>
-      ${COMPANY.vatNumber ? `<div>الرقم الضريبي: <strong>${COMPANY.vatNumber}</strong></div>` : ""}
-      ${COMPANY.crNumber ? `<div>السجل التجاري: <strong>${COMPANY.crNumber}</strong></div>` : ""}
+    <div class="banner-co">
+      <h2>${COMPANY.name || "شركة نظم الإمداد المتطورة"}</h2>
+      <div class="co-id-row">
+        <span class="co-pill">الرقم الضريبي (VAT): <strong class="mono">${COMPANY.vatNumber || "314996148100003"}</strong></span>
+        <span class="co-pill">السجل التجاري (CR): <strong class="mono">${COMPANY.crNumber || "7054969006"}</strong></span>
+      </div>
     </div>
   </div>
 
-  <!-- Seller Info Strip -->
-  <div class="info-strip">
-    <span><strong>بيانات البائع / Seller:</strong> ${COMPANY.name || "ادهام للمواد الغذائية"}</span>
-    <span><strong>الرقم الضريبي:</strong> ${COMPANY.vatNumber || "—"}</span>
-    <span><strong>السجل التجاري:</strong> ${COMPANY.crNumber || "—"}</span>
-    <span><strong>العنوان:</strong> ${COMPANY.address || "المملكة العربية السعودية"}</span>
-  </div>
+  <!-- ZATCA National Address Tabs/Cards for Seller & Buyer -->
+  <div class="parties-container">
+    <!-- Seller Box -->
+    <div class="party-card seller">
+      <div class="party-head">
+        <span class="party-title">🏢 بيانات المورد / البائع (Seller)</span>
+      </div>
+      <div class="party-name">${COMPANY.name || "شركة نظم الإمداد المتطورة"}</div>
+      <div class="party-ids-row">
+        <div class="id-badge">
+          <span class="id-lbl">السجل التجاري (CR):</span>
+          <span class="id-val mono">${COMPANY.crNumber || "7054969006"}</span>
+        </div>
+        <div class="id-badge vat-badge">
+          <span class="id-lbl">الرقم الضريبي (VAT):</span>
+          <span class="id-val mono">${COMPANY.vatNumber || "314996148100003"}</span>
+        </div>
+      </div>
+      <div class="addr-compact-grid">
+        <div class="addr-line-item"><span class="lbl">المدينة:</span> <span class="val">${COMPANY.city || "ينبع"}</span></div>
+        <div class="addr-line-item"><span class="lbl">الحي:</span> <span class="val">${COMPANY.district || "حي النزهة"}</span></div>
+        <div class="addr-line-item"><span class="lbl">الشارع:</span> <span class="val">${COMPANY.street || "عامر الشعبي"}</span></div>
+        <div class="addr-line-item"><span class="lbl">المبنى:</span> <span class="val mono">${COMPANY.buildingNo || "7480"}</span></div>
+        <div class="addr-line-item"><span class="lbl">الرمز البريدي:</span> <span class="val mono">${COMPANY.zip || "46424"}</span></div>
+        <div class="addr-line-item"><span class="lbl">الرقم الإضافي:</span> <span class="val mono">${COMPANY.additionalNo || "3180"}</span></div>
+        <div class="addr-line-item full"><span class="lbl">الدولة:</span> <span class="val">${COMPANY.country || "المملكة العربية السعودية"}</span></div>
+      </div>
+    </div>
 
-  <!-- Client Info Strip -->
-  <div class="info-strip">
-    <span><strong>بيانات المشتري / Client:</strong> ${inv.customerName || "—"}</span>
-    <span><strong>الرقم الضريبي:</strong> ${custVat || "—"}</span>
-    <span><strong>السجل التجاري:</strong> ${custCr || "—"}</span>
-    <span><strong>العنوان:</strong> ${custAddress || "—"}</span>
+    <!-- Buyer Box -->
+    <div class="party-card buyer">
+      <div class="party-head">
+        <span class="party-title">👤 بيانات العميل / المشتري (Buyer)</span>
+        <span class="${cust.vatNumber ? 'badge-vat' : 'badge-novat'}">${cust.vatNumber ? 'مسجل ضريبياً' : 'غير مسجل'}</span>
+      </div>
+      <div class="party-name">${cust.name || "عميل نقدي"}</div>
+      <div class="party-ids-row">
+        <div class="id-badge">
+          <span class="id-lbl">السجل / الهوية:</span>
+          <span class="id-val mono">${cust.crNumber || "—"}</span>
+        </div>
+        <div class="id-badge vat-badge">
+          <span class="id-lbl">الرقم الضريبي (VAT):</span>
+          <span class="id-val mono" style="color:${cust.vatNumber ? '#1e1b4b' : '#6b7280'};">${cust.vatNumber || "غير مسجل"}</span>
+        </div>
+      </div>
+      <div class="addr-compact-grid">
+        <div class="addr-line-item"><span class="lbl">المدينة:</span> <span class="val">${cust.city || "—"}</span></div>
+        <div class="addr-line-item"><span class="lbl">الحي:</span> <span class="val">${cust.district || "—"}</span></div>
+        <div class="addr-line-item"><span class="lbl">الشارع:</span> <span class="val">${cust.street || "—"}</span></div>
+        <div class="addr-line-item"><span class="lbl">المبنى:</span> <span class="val mono">${cust.buildingNo || "—"}</span></div>
+        <div class="addr-line-item"><span class="lbl">الرمز البريدي:</span> <span class="val mono">${cust.postalCode || "—"}</span></div>
+        <div class="addr-line-item"><span class="lbl">الرقم الإضافي:</span> <span class="val mono">${cust.additionalNo || "—"}</span></div>
+        <div class="addr-line-item full"><span class="lbl">الدولة:</span> <span class="val">${cust.country || "المملكة العربية السعودية"}</span></div>
+      </div>
+    </div>
   </div>
 
   <!-- Items Table -->
   <table class="invoice-table">
     <thead>
       <tr>
-        <th style="width:36px;">م / SR</th>
-        <th>الصنف والبيان / Description</th>
-        <th style="width:55px;">الكمية / Qty</th>
-        <th style="width:80px;">السعر / Price</th>
-        <th style="width:85px;">الخاضع / Taxable</th>
-        <th style="width:55px;">النسبة / Rate</th>
-        <th style="width:80px;">الضريبة / VAT</th>
-        <th style="width:90px;">الإجمالي / Total</th>
+        <th style="width:32px;">م<br><span style="font-size:8px;">#</span></th>
+        <th>الصنف والبيان<br><span style="font-size:8px;">Description & Packaging</span></th>
+        <th style="width:55px;">الكمية<br><span style="font-size:8px;">Qty</span></th>
+        <th style="width:75px;">سعر الوحدة<br><span style="font-size:8px;">Unit Price</span></th>
+        <th style="width:65px;">الخصم<br><span style="font-size:8px;">Discount</span></th>
+        <th style="width:80px;">الخاضع<br><span style="font-size:8px;">Taxable Base</span></th>
+        <th style="width:50px;">النسبة<br><span style="font-size:8px;">Rate</span></th>
+        <th style="width:75px;">الضريبة<br><span style="font-size:8px;">VAT (15%)</span></th>
+        <th style="width:85px;">الإجمالي<br><span style="font-size:8px;">Total (Inc. VAT)</span></th>
       </tr>
     </thead>
     <tbody>
@@ -2886,54 +3654,79 @@ window.printInvoiceData = async (inv) => {
     </tbody>
   </table>
 
-  <!-- Totals Section -->
-  <div class="totals-section">
-    <!-- Left Side: QR Code + Notes -->
-    <div class="left-footer-box">
-      <div class="qr-wrapper">
-        <div id="qrcode-container"></div>
-      </div>
-      <div class="notes-box">
-        <h4>شروط وملاحظات / Notes</h4>
-        <div class="notes-content">
-          ${inv.notes || "شكراً لتعاملكم معنا."}
-          ${inv.repName ? `<br><span style="font-weight:700; color:#5b3ec2;">المندوب: ${inv.repName}</span>` : ""}
-          ${inv.warehouseName ? ` | <span>المستودع: ${inv.warehouseName}</span>` : ""}
+  <!-- Bottom Layout: QR + Notes + Totals -->
+  <div class="bottom-layout">
+    <!-- QR Code -->
+    <div class="qr-box">
+      ${qrImgDataUrl ? `<img src="${qrImgDataUrl}" width="86" height="86" style="display:block;margin:0 auto;border-radius:4px;" alt="ZATCA QR" />` : `<div id="qrcode-container" style="width:86px;height:86px;border:1px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;font-size:9px;color:#94a3b8;">ZATCA QR</div>`}
+      <span>ZATCA</span>
+    </div>
+
+    <!-- Notes & Metadata -->
+    <div class="notes-box">
+      <div>
+        <div class="notes-title">📌 شروط وملاحظات / Notes & Terms:</div>
+        <div class="notes-body">
+          <div>${inv.notes || "البضاعة المباعة لا ترد ولا تستبدل إلا بموجب الفاتورة الأصلية وخلال المدة النظامية."}</div>
+          <div class="official-receipt-notice">
+            <div class="notice-ar">⚠️ لا تعتبر هذه الفاتورة محصلة إلا بموجب سند قبض رسمي</div>
+            <div class="notice-en">The invoice is not considered collected except with an official receipt</div>
+          </div>
         </div>
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
+        ${inv.repName ? `<span style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:4px; padding:2px 8px; font-size:10px; font-weight:600;">👤 المندوب: <b>${inv.repName}</b></span>` : ""}
+        ${inv.warehouseName ? `<span style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:4px; padding:2px 8px; font-size:10px; font-weight:600;">🏢 المستودع: <b>${inv.warehouseName}</b></span>` : ""}
       </div>
     </div>
 
-    <!-- Totals -->
-    <div class="totals-box">
-      <div class="totals-row"><span>المجموع قبل الضريبة / Taxable Amount:</span><span class="val">${fmtC(subtotal)} ر.س</span></div>
-      ${discAmt > 0 ? `<div class="totals-row discount"><span>إجمالي الخصم / Discount:</span><span class="val">- ${fmtC(discAmt)} ر.س</span></div>` : ""}
-      <div class="totals-row"><span>ضريبة القيمة المضافة / VAT (15%):</span><span class="val">${fmtC(vatAmt)} ر.س</span></div>
-      <div class="totals-row grand-total">
-        <span>الإجمالي المستحق / Grand Total:</span>
-        <span class="val">${fmtC(total)} ر.س</span>
-      </div>
-      ${(inv.paymentMethod === "credit" || (custBalance || 0) > 0) ? `
-      <div class="totals-row" style="margin-top:2px; border-top:1px dashed #d1d5db; padding-top:2px; font-size:10px; color:#6b7280;">
-        <span>الرصيد السابق للعميل:</span>
-        <span class="val">${fmtC((custBalance || 0) - (inv.remainingAmount || 0))} ر.س</span>
-      </div>
-      <div class="totals-row" style="font-weight:700; color:#5b3ec2; font-size:11.5px; padding-top:2px;">
-        <span>إجمالي الرصيد المستحق:</span>
-        <span class="val">${fmtC(custBalance || 0)} ر.س</span>
-      </div>
-      ` : ""}
+    <!-- Totals Table -->
+    <div class="totals-table-wrap">
+      <table class="totals-table">
+        <tr>
+          <td class="lbl">المجموع قبل الضريبة (Taxable):</td>
+          <td class="val">${fmtC(subtotal)}</td>
+        </tr>
+        ${discAmt > 0 ? `
+        <tr>
+          <td class="lbl" style="color:#dc2626;">إجمالي الخصم (Discount):</td>
+          <td class="val" style="color:#dc2626;">- ${fmtC(discAmt)}</td>
+        </tr>` : ""}
+        <tr>
+          <td class="lbl">ضريبة القيمة المضافة (15% VAT):</td>
+          <td class="val">${fmtC(vatAmt)}</td>
+        </tr>
+        <tr class="grand">
+          <td class="lbl">الإجمالي شامل الضريبة (Grand Total):</td>
+          <td class="val font-bold">${fmtC(total)}</td>
+        </tr>
+
+      </table>
     </div>
   </div>
 
-  <!-- Thank you footer -->
-  <div class="thank-you">
-    <div>
-      شكراً لتعاملكم معنا — ${COMPANY.name || "ادهام للمواد الغذائية"}
-      ${COMPANY.phone ? `| 📞 الهاتف: ${COMPANY.phone}` : ""}
+  <!-- Signatures & Acceptance Strip -->
+  <div class="signatures-grid">
+    <div class="sig-box">
+      <div class="sig-title">✍️ استلام واعتماد العميل (Received & Accepted By):</div>
+      <div class="sig-line">
+        <span>اسم المستلم: ______________________</span>
+        <span>التوقيع والختم: ________________</span>
+      </div>
     </div>
-    <div style="margin-top: 5px;">
-      ${barcodeSvg}
+    <div class="sig-box">
+      <div class="sig-title">🚚 تسليم المندوب / السائق (Delivered By):</div>
+      <div class="sig-line">
+        <span>المندوب: <b>${inv.repName || "سائق المؤسسة"}</b></span>
+        <span>التوقيع: ____________________</span>
+      </div>
     </div>
+  </div>
+
+  <!-- Footer Bar -->
+  <div class="footer-bar">
+    <div>📞 الهاتف: <b>${COMPANY.phone || "0549141648"}</b></div>
+    <div>شكراً لتعاملكم معنا — ${COMPANY.name || "شركة نظم الإمداد المتطورة"}</div>
   </div>
 </div>
 
@@ -2942,8 +3735,8 @@ window.printInvoiceData = async (inv) => {
   try {
     new QRCode(document.getElementById("qrcode-container"), {
       text: "${qrBase64}",
-      width: 80,
-      height: 80,
+      width: 86,
+      height: 86,
       correctLevel: QRCode.CorrectLevel.M
     });
   } catch(e) {
@@ -2953,39 +3746,105 @@ window.printInvoiceData = async (inv) => {
 </body>
 </html>`;
 
-  // ── 4. Show inside app as overlay (works on mobile without window.open block) ──
+  // ── 4. Show inside app as overlay with robust top toolbar for Mobile Print & PDF ──
   let overlay = document.getElementById("inv-print-overlay");
   if (overlay) overlay.remove();
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const blobUrl = URL.createObjectURL(blob);
+
   overlay = document.createElement("div");
   overlay.id = "inv-print-overlay";
   overlay.style.cssText = `
-    position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.65);
+    position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.85);
     display:flex;flex-direction:column;align-items:center;
     overflow-y:auto;padding:0;
   `;
-  // Close on backdrop click
-  overlay.addEventListener("click", (e) => { if (e.target === overlay) overlay.remove(); });
+
+  // Top Sticky Bar for Print & PDF Controls
+  const topBar = document.createElement("div");
+  topBar.style.cssText = `
+    position:sticky;top:0;z-index:100000;width:100%;max-width:860px;
+    background:#1e1b4b;padding:10px 16px;display:flex;gap:10px;
+    align-items:center;justify-content:space-between;box-shadow:0 4px 20px rgba(0,0,0,0.3);
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  `;
+  topBar.innerHTML = `
+    <div style="color:#fff;font-weight:800;font-size:13px;font-family:'Cairo',sans-serif;display:flex;align-items:center;gap:6px;">
+      📄 <span>معاينة الفاتورة للطباعة و PDF</span>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button id="overlay-do-print" style="
+        background:linear-gradient(135deg,#4f46e5,#6366f1);color:#fff;border:none;
+        border-radius:10px;padding:8px 16px;font-weight:700;font-size:13px;
+        font-family:'Cairo',sans-serif;cursor:pointer;display:flex;align-items:center;gap:6px;
+        box-shadow:0 2px 8px rgba(79,70,229,0.4);
+      ">🖨️ طباعة / حفظ PDF</button>
+      <button id="overlay-open-tab" style="
+        background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);
+        border-radius:10px;padding:8px 12px;font-weight:700;font-size:12px;
+        font-family:'Cairo',sans-serif;cursor:pointer;display:flex;align-items:center;gap:4px;
+      ">🔗 فتح بنافذة مستقلة</button>
+      <button id="overlay-close-btn" style="
+        background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(239,68,68,0.4);
+        border-radius:10px;padding:8px 14px;font-weight:800;font-size:14px;
+        cursor:pointer;
+      ">✕</button>
+    </div>
+  `;
 
   const iframe = document.createElement("iframe");
   iframe.style.cssText = `
-    width:100%;max-width:860px;min-height:100vh;
+    width:100%;max-width:860px;min-height:calc(100vh - 55px);
     border:none;background:#eef2ff;flex-shrink:0;
   `;
-  iframe.srcdoc = html;
+  iframe.src = blobUrl;
+
+  overlay.appendChild(topBar);
   overlay.appendChild(iframe);
   document.body.appendChild(overlay);
 
-  // After iframe loads, hook its print/close buttons
+  const doPrint = () => {
+    try {
+      iframe.contentWindow.focus();
+      iframe.contentWindow.print();
+    } catch(e) {
+      console.warn("Iframe print blocked, opening window...", e);
+      const w = window.open(blobUrl, '_blank');
+      if (w) {
+        w.focus();
+        setTimeout(() => w.print(), 500);
+      }
+    }
+  };
+
+  topBar.querySelector("#overlay-do-print").onclick = doPrint;
+  topBar.querySelector("#overlay-open-tab").onclick = () => {
+    const w = window.open(blobUrl, '_blank');
+    if (w) {
+      w.focus();
+      setTimeout(() => w.print(), 500);
+    }
+  };
+  topBar.querySelector("#overlay-close-btn").onclick = () => {
+    overlay.remove();
+    URL.revokeObjectURL(blobUrl);
+  };
+
   iframe.onload = () => {
     try {
       const iwin = iframe.contentWindow;
-      // Override print to use parent window print (better mobile support)
       const printBtn = iwin.document.querySelector(".btn-print");
-      if (printBtn) printBtn.onclick = () => iwin.print();
+      if (printBtn) printBtn.onclick = doPrint;
       const closeBtn = iwin.document.querySelector(".btn-close");
-      if (closeBtn) closeBtn.onclick = () => overlay.remove();
+      if (closeBtn) closeBtn.onclick = () => { overlay.remove(); URL.revokeObjectURL(blobUrl); };
     } catch(e) {}
   };
+  } catch (err) {
+    console.error("Error in printInvoiceData:", err);
+    if (typeof toast === "function") toast("⚠️ خطأ في تجهيز طباعة الفاتورة: " + err.message, "err");
+    else alert("⚠️ خطأ في تجهيز الطباعة: " + err.message);
+  }
 };
 
 // ════════════════════════════════════════
@@ -3290,7 +4149,7 @@ window.editRepInvoice = async (invId) => {
         <div style="display:flex;justify-content:space-between;font-size:13px;color:#475569;padding:4px 0;"><span>المجموع قبل الضريبة</span><span id="edit-sub" style="font-weight:700;">${fmtC(inv.subtotal||0)} ر.س</span></div>
         <div id="edit-discrow" style="display:${(inv.discountAmount||0)>0?"flex":"none"};justify-content:space-between;font-size:13px;color:#ef4444;padding:4px 0;"><span>الخصم</span><span id="edit-discamt" style="font-weight:700;">- ${fmtC(inv.discountAmount||0)} ر.س</span></div>
         <div style="display:flex;justify-content:space-between;font-size:13px;color:#475569;padding:4px 0;"><span>ضريبة 15%</span><span id="edit-vat" style="font-weight:700;">${fmtC(inv.vatAmount||0)} ر.س</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:900;padding:10px 14px;background:linear-gradient(135deg,#4338ca,#6366f1);color:#fff;border-radius:12px;margin-top:8px;">
+        <div style="display:flex;justify-content:space-between;font-size:16px;font-weight:900;padding:10px 14px;background:linear-gradient(135deg,#1e1b4b,#6366f1);color:#fff;border-radius:12px;margin-top:8px;">
           <span>الإجمالي</span><span id="edit-tot">${fmtC(inv.total||0)} ر.س</span>
         </div>
       </div>
@@ -3322,7 +4181,7 @@ window.editRepInvoice = async (invId) => {
             <input type="number" class="edit-price" data-idx="${i}" min="0" step="0.01" value="${price}"
               style="width:76px;border:1px solid #e2e8f0;border-radius:8px;padding:6px;font-size:13px;font-family:Cairo,sans-serif;text-align:center;"
               oninput="window._editRecalc()"/>
-            <div class="edit-linetot" data-idx="${i}" style="width:76px;text-align:left;font-size:13px;font-weight:700;color:#4338ca;">${fmtC(total)}</div>
+            <div class="edit-linetot" data-idx="${i}" style="width:76px;text-align:left;font-size:13px;font-weight:700;color:#1e1b4b;">${fmtC(total)}</div>
           </div>`;
       }).join("");
     };
@@ -3484,15 +4343,18 @@ window.editRepInvoice = async (invId) => {
         // === STEP 1.5: Revert old stock & Apply new stock via adjustStock (creates stock transactions for detailed ledger) ===
         try {
           const { adjustStock } = await import("../utils/db.js");
+          const nowTs = Date.now();
           // 1. Revert old stock (add it back)
           if (orig.warehouseId && orig.lines) {
-            for (const line of orig.lines) {
+            for (let idx = 0; idx < orig.lines.length; idx++) {
+              const line = orig.lines[idx];
               if (!line.productId || !line.qty) continue;
               try {
                 await adjustStock(orig.warehouseId, line.productId, line.qty, {
                   type: "sale_cancel",
                   sourceType: "salesInvoice",
                   sourceId: invDocId,
+                  txDocId: `tx_sale_cancel_edit_${invDocId}_${nowTs}_${idx}_${line.productId}`,
                   documentNumber: invNumber,
                   invoiceNumber: invNumber,
                   allowNegative: true, // safe on reverse
@@ -3506,16 +4368,18 @@ window.editRepInvoice = async (invId) => {
           }
           // 2. Apply new stock (deduct it)
           if (orig.warehouseId && updLines.length > 0) {
-            for (const line of updLines) {
+            for (let idx = 0; idx < updLines.length; idx++) {
+              const line = updLines[idx];
               if (!line.productId || !line.qty) continue;
               try {
                 await adjustStock(orig.warehouseId, line.productId, -line.qty, {
                   type: "sale_out",
                   sourceType: "salesInvoice",
                   sourceId: invDocId,
+                  txDocId: `tx_sale_out_edit_${invDocId}_${nowTs}_${idx}_${line.productId}`,
                   documentNumber: invNumber,
                   invoiceNumber: invNumber,
-                  allowNegative: true,
+                  allowNegative: false,
                   productName: line.name || line.productName || "",
                   notes: `خصم كمية التعديل — فاتورة ${invNumber}`
                 });
@@ -3558,7 +4422,7 @@ window.editRepInvoice = async (invId) => {
                 const rcptId = rcptDoc.id;
                 // Delete receipt's linked journal entry if exists
                 try {
-                  const jeSnap = await getDocs(query(COL("journalEntries"), where("sourceType", "==", "pos"), where("sourceId", "==", rcptId)));
+                  const jeSnap = await getDocs(query(COL("journalEntries"), where("sourceId", "==", rcptId)));
                   for (const jeDoc of jeSnap.docs) {
                     await runTransaction(db, async (tx) => { tx.delete(jeDoc.ref); });
                   }
@@ -3576,6 +4440,7 @@ window.editRepInvoice = async (invId) => {
         }
 
         // === STEP 3: Add New Cash Transaction & Receipt (only if there is a cash component) ===
+        let editRcptRef = null;
         const newHasCash = ["cash", "partial", "transfer", "cheque"].includes(finalPaymentMethod) && paidAmount > 0.01;
         if (newHasCash && orig.repId) {
           try {
@@ -3592,8 +4457,8 @@ window.editRepInvoice = async (invId) => {
             });
 
             // CREATE REAL RECEIPT FOR SINGLE SOURCE OF TRUTH
-            const rcptRef = doc(COL("receipts"));
-            await setDoc(rcptRef, {
+            editRcptRef = doc(COL("receipts"));
+            await setDoc(editRcptRef, {
                date: upd.date,
                amount: paidAmount,
                entityType: "customer",
@@ -3667,6 +4532,34 @@ window.editRepInvoice = async (invId) => {
             journalEntryId: jeId,
             totalCost:      Math.round(totalCost * 100) / 100
           });
+
+          // إنشاء قيد سند القبض التلقائي لتسوية ذمة العميل وتحصيل المبلغ في صندوق المندوب
+          if (editRcptRef && customerId && paidAmount > 0) {
+            try {
+              const { autoCustomerPaymentJE } = await import("../utils/accounting-engine.js");
+              const rcptJeId = await autoCustomerPaymentJE({
+                id: editRcptRef.id,
+                date: upd.date,
+                amount: paidAmount,
+                customerId: customerId,
+                customerName: upd.customerName,
+                repId: orig.repId,
+                sourceId: `cashBox_${orig.repId}`,
+                paymentMethod: finalPaymentMethod || "cash",
+                invoiceNumber: invNumber,
+                costCenterId: upd.costCenterId || orig.costCenterId || null,
+                costCenterName: upd.costCenterName || orig.costCenterName || null,
+              }, { displayName: orig.repName, uid: orig.repId });
+
+              await updateDoc(editRcptRef, {
+                journalEntryId: rcptJeId,
+                updatedAt: serverTimestamp()
+              });
+              console.log(`[Receipt JE Edit] Auto-created JE for edited receipt ${editRcptRef.id}: ${rcptJeId}`);
+            } catch (rcptJeErr) {
+              console.warn("Failed to create JE for edited auto-receipt:", rcptJeErr.message);
+            }
+          }
 
           // إعادة بناء أرصدة شجرة الحسابات كاملةً بعد كل تعديل
           await rebuildCoaBalances();
@@ -3775,45 +4668,59 @@ window.viewCustomerLedger = async (customerId) => {
   overlay.className = "modal-overlay active";
   overlay.id = "ledger-overlay";
   overlay.innerHTML = `
-  <div class="modal-sheet" style="max-height:85vh; display:flex; flex-direction:column; overflow:hidden;">
+  <div class="modal-sheet" id="ledger-sheet" style="display:flex; flex-direction:column; overflow:hidden;">
     <div class="sheet-handle"></div>
-    <div class="sheet-title" style="flex-shrink:0;">كشف حساب العميل</div>
-    <div class="sheet-body" style="flex:1; overflow-y:auto; padding:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px 10px; border-bottom:1px solid var(--border); flex-shrink:0;">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:22px;">📊</span>
+        <div>
+          <div style="font-size:16px; font-weight:900; color:var(--t1); line-height:1.2;">كشف حساب العميل</div>
+          <div style="font-size:11px; color:var(--t3); margin-top:2px;">${cust.name} ${cust.code ? `• كود: ${cust.code}` : ''}</div>
+        </div>
+      </div>
+      <button onclick="document.getElementById('ledger-overlay')?.remove()" style="background:var(--bg-2); border:1px solid var(--border); font-size:16px; color:var(--t2); cursor:pointer; width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center;" title="إغلاق">✕</button>
+    </div>
+
+    <div class="sheet-body" style="flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:12px; gap:10px;">
       <!-- Customer Card Info -->
-      <div style="background:var(--bg-2); border-radius:12px; padding:14px; border:1px solid var(--border); margin-bottom:16px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <div style="font-size:16px; font-weight:800; color:var(--t1);">${cust.name}</div>
-            <div style="font-size:12px; color:var(--t2); margin-top:2px;">📞 ${cust.phone || "—"}</div>
+      <div class="ledger-cust-card" style="background:var(--bg-2); border-radius:14px; padding:12px 14px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+        <div style="min-width:160px;">
+          <div style="font-size:16px; font-weight:900; color:var(--t1); line-height:1.3;">${cust.name}</div>
+          <div style="display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:4px; font-size:12px; color:var(--t2);">
+            ${cust.phone ? `<a href="tel:${cust.phone}" style="color:var(--brand); text-decoration:none; font-weight:700; display:inline-flex; align-items:center; gap:4px;">📞 ${cust.phone}</a>` : '<span style="color:var(--t3);">📞 بلا هاتف</span>'}
+            ${cust.code ? `<span style="background:var(--bg-3); padding:2px 7px; border-radius:6px; font-size:10.5px; font-family:monospace; font-weight:700;">#${cust.code}</span>` : ''}
           </div>
-          <div style="text-align:left;">
-            <div style="font-size:11px; color:var(--t3);">المديونية الحالية</div>
-            <div id="ledger-cust-balance" style="font-size:18px; font-weight:900; color:var(--brand);">${fmtC(cust.balance || 0)} ر.س</div>
-          </div>
+        </div>
+        <div class="ledger-cust-bal-box" style="text-align:left; background:var(--bg-1); padding:8px 14px; border-radius:12px; border:1.5px solid var(--border); min-width:130px;">
+          <div style="font-size:10px; color:var(--t3); font-weight:700;" id="ledger-bal-label">صافي الرصيد الحالي</div>
+          <div id="ledger-cust-balance" style="font-size:18px; font-weight:900; color:var(--brand);">${fmtC(cust.balance || 0)} <span style="font-size:11px; font-weight:600;">ر.س</span></div>
         </div>
       </div>
 
-      <!-- Action buttons -->
-      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin-bottom:16px;">
-        <button class="btn-primary" onclick="openCollectPaymentModal('${cust.id}')" style="padding:10px 4px; font-size:12px; min-height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; margin:0;">
-          <span>💵</span><span>تحصيل دفعة</span>
+      <!-- Action buttons (4 Grid Buttons) -->
+      <div class="ledger-action-grid" style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;">
+        <button class="btn-primary ledger-action-btn" onclick="openCollectPaymentModal('${cust.id}')" style="padding:8px 3px; font-size:11px; min-height:42px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; margin:0; border-radius:10px;">
+          <span style="font-size:15px;">💵</span><span style="font-weight:800;">تحصيل دفعة</span>
         </button>
-        <button class="btn-secondary" onclick="shareLedgerWhatsApp('${cust.id}')" style="padding:10px 4px; font-size:12px; min-height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; margin:0;">
-          <span>💬</span><span>مشاركة واتساب</span>
+        <button class="btn-secondary ledger-action-btn" onclick="printCustomerLedgerA4('${cust.id}')" style="padding:8px 3px; font-size:11px; min-height:42px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; margin:0; border-radius:10px; background:var(--bg-2); border:1px solid var(--border);">
+          <span style="font-size:15px;">📄</span><span style="font-weight:800;">كشف PDF</span>
         </button>
-        <button class="btn-secondary" onclick="printLedgerThermal('${cust.id}')" style="padding:10px 4px; font-size:12px; min-height:44px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; margin:0;">
-          <span>🖨️</span><span>طباعة حرارية</span>
+        <button class="btn-secondary ledger-action-btn" onclick="shareLedgerWhatsApp('${cust.id}')" style="padding:8px 3px; font-size:11px; min-height:42px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; margin:0; border-radius:10px; background:var(--bg-2); border:1px solid var(--border);">
+          <span style="font-size:15px;">💬</span><span style="font-weight:800;">واتساب</span>
+        </button>
+        <button class="btn-secondary ledger-action-btn" onclick="printLedgerThermal('${cust.id}')" style="padding:8px 3px; font-size:11px; min-height:42px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; margin:0; border-radius:10px; background:var(--bg-2); border:1px solid var(--border);">
+          <span style="font-size:15px;">🖨️</span><span style="font-weight:800;">حراري</span>
         </button>
       </div>
 
-      <div style="font-size:13px; font-weight:700; color:var(--t1); margin-bottom:8px;">📊 آخر الحركات (كشف حساب مصغر)</div>
-      
+      <!-- Ledger Container (Stats, Filters & Table) -->
       <div id="ledger-list-container">
-        <div style="text-align:center; padding:24px;"><span class="spin" style="margin:0 auto 8px;"></span>جاري تحميل كشف الحساب…</div>
+        <div style="text-align:center; padding:32px;"><span class="spin" style="margin:0 auto 10px;"></span>جاري تجهيز كشف الحساب وتدقيق الحركات…</div>
       </div>
     </div>
-    <div style="padding:12px; border-top:1px solid var(--border); flex-shrink:0;">
-      <button class="btn-primary full" onclick="document.getElementById('ledger-overlay')?.remove()" style="margin:0;">إغلاق</button>
+    <div style="padding:8px 14px; border-top:1px solid var(--border); flex-shrink:0; display:flex; justify-content:space-between; align-items:center; background:var(--bg-2);">
+      <div style="font-size:10.5px; color:var(--t3);">💡 اضغط <b>كشف PDF</b> لحفظ أو طباعة كشف حساب معتمد</div>
+      <button class="btn-secondary" onclick="document.getElementById('ledger-overlay')?.remove()" style="margin:0; padding:5px 16px; font-size:12px; font-weight:800; border-radius:8px;">إغلاق</button>
     </div>
   </div>`;
   overlay.onclick = (e) => { if(e.target===overlay) overlay.remove(); };
@@ -3825,80 +4732,84 @@ window.viewCustomerLedger = async (customerId) => {
 
     // ── قراءة من كلا المصدرين: repInvoices + salesInvoices + مرتجعات + إيصالات ──
     const [repInvSnap, saleInvSnap, retSnap, rcptSnap, repRcptSnap, freshCustSnap] = await Promise.all([
-      getDocs(query(collection(db, `companies/${companyId}/repInvoices`),   where("customerId", "==", cust.id), limit(50))),
-      getDocs(query(collection(db, `companies/${companyId}/salesInvoices`), where("customerId", "==", cust.id), limit(50))),
-      getDocs(query(collection(db, `companies/${companyId}/salesReturns`),  where("customerId", "==", cust.id), limit(50))),
-      getDocs(query(collection(db, `companies/${companyId}/receipts`),      where("targetId",   "==", cust.id), limit(50))),
-      getDocs(query(collection(db, `companies/${companyId}/repReceipts`),   where("customerId", "==", cust.id), limit(50))),
+      getDocs(query(collection(db, `companies/${companyId}/repInvoices`),   where("customerId", "==", cust.id), limit(100))),
+      getDocs(query(collection(db, `companies/${companyId}/salesInvoices`), where("customerId", "==", cust.id), limit(100))),
+      getDocs(query(collection(db, `companies/${companyId}/salesReturns`),  where("customerId", "==", cust.id), limit(100))),
+      getDocs(query(collection(db, `companies/${companyId}/receipts`),      where("targetId",   "==", cust.id), limit(100))),
+      getDocs(query(collection(db, `companies/${companyId}/repReceipts`),   where("customerId", "==", cust.id), limit(100))),
       getDoc(doc(db, `companies/${companyId}/customers`, cust.id))
     ]);
 
     if (freshCustSnap && freshCustSnap.exists()) {
       const freshData = freshCustSnap.data();
       Object.assign(cust, freshData);
-      const balEl = document.getElementById("ledger-cust-balance");
-      if (balEl) balEl.textContent = `${fmtC(cust.balance || 0)} ر.س`;
     }
 
     const txs = [];
     let totalInvoices = 0;
     let totalPayments = 0;
     let totalReturns  = 0;
+    const seenInvs    = new Set();
+    const seenRcpts   = new Set();
 
-    // فواتير المندوب
+    // 1. فواتير المندوب
     repInvSnap.docs.forEach(d => {
       const data = d.data();
       if (data.status === "cancelled" || data.status === "void") return;
+      const invNum = data.invoiceNumber || d.id;
+      if (seenInvs.has(invNum)) return;
+      seenInvs.add(invNum);
+
       const amt = parseFloat(data.totalWithVat ?? data.total ?? data.grandTotal ?? 0);
-      const pm  = (data.paymentMethod || "").toLowerCase();
-      // ← نحسب في المديونية فقط الآجل والجزئي
-      const isDebt = pm === "credit" || pm === "deferred" || pm === "آجل" || pm === "partial" || pm === "جزئي";
-      const debtAmt = pm === "partial" || pm === "جزئي"
-        ? parseFloat(data.remainingAmount ?? Math.max(0, amt - parseFloat(data.paidAmount || 0)))
-        : (isDebt ? amt : 0);
-      totalInvoices += debtAmt;
+      const pm  = (data.paymentMethod || data.paymentType || "").toLowerCase();
+      const isCash = pm === "cash" || pm === "نقدي";
+      totalInvoices += amt;
       txs.push({
         date:  data.date || data.invoiceDate || "",
         type:  "invoice",
-        ref:   data.invoiceNumber || d.id.slice(0, 10),
-        amount: isDebt ? debtAmt : 0,  // صفر إن كانت نقدية (لا تزيد المديونية)
-        desc:  pm === "cash" || pm === "نقدي" ? "فاتورة نقدية (لا تؤثر على المديونية)" : `فاتورة آجلة — متبقي: ${fmtC(debtAmt)}`,
+        isCash,
+        ref:   invNum,
+        amount: amt,
+        desc:  isCash ? "فاتورة نقدية" : "فاتورة مبيعات (آجل)",
         timestamp: data.createdAt?.seconds ? data.createdAt.seconds * 1000
                  : data.invoiceDate ? new Date(data.invoiceDate).getTime()
                  : new Date(data.date || 0).getTime(),
       });
     });
 
-    // فواتير البرنامج الرئيسي — نحسب فقط الآجل والجزئي في المديونية
+    // 2. فواتير البرنامج الرئيسي
     saleInvSnap.docs.forEach(d => {
       const data = _normalizeInvoice({ id: d.id, ...d.data() });
       if (data.status === "cancelled") return;
-      const pm  = (data.paymentMethod || "cash").toLowerCase();
-      const tot = parseFloat(data.total || 0);
-      const isDebt = pm === "credit" || pm === "deferred" || pm === "آجل" || pm === "partial" || pm === "جزئي";
-      const debtAmt = pm === "partial" || pm === "جزئي"
-        ? parseFloat(data.remainingAmount ?? Math.max(0, tot - parseFloat(data.paidAmount || 0)))
-        : (isDebt ? tot : 0);
-      totalInvoices += debtAmt;
+      const invNum = data.invoiceNumber || d.id;
+      if (seenInvs.has(invNum)) return;
+      seenInvs.add(invNum);
+
+      const tot = parseFloat(data.totalWithVat ?? data.total ?? 0);
+      const pm  = (data.paymentMethod || data.paymentType || "").toLowerCase();
+      const isCash = pm === "cash" || pm === "نقدي";
+      totalInvoices += tot;
       txs.push({
         date:  data.date || "",
         type:  "invoice",
-        ref:   data.invoiceNumber || d.id.slice(0, 10),
-        amount: debtAmt,
-        desc:  isDebt ? `فاتورة آجلة (رئيسي) — متبقي: ${fmtC(debtAmt)}` : "فاتورة نقدية (لا تؤثر على المديونية)",
+        isCash,
+        ref:   invNum,
+        amount: tot,
+        desc:  isCash ? "فاتورة نقدية" : "فاتورة مبيعات (آجل)",
         timestamp: data.createdAt?.seconds ? data.createdAt.seconds * 1000 : new Date(data.date || 0).getTime(),
       });
     });
 
-    // مرتجعات
+    // 3. مرتجعات المبيعات
     retSnap.docs.forEach(d => {
       const data = d.data();
       if (data.status === "cancelled" || data.status === "void") return;
-      const amt = parseFloat(data.total || 0);
+      const amt = parseFloat(data.totalWithVat ?? data.total ?? 0);
       totalReturns += amt;
       txs.push({
         date:  data.date || "",
         type:  "return",
+        isCash: false,
         ref:   data.creditNoteNumber || d.id.slice(0, 10),
         amount: -amt,
         desc:  "مرتجع مبيعات",
@@ -3906,33 +4817,43 @@ window.viewCustomerLedger = async (customerId) => {
       });
     });
 
-    // سندات قبض (receipts)
+    // 4. سندات القبض (receipts)
     rcptSnap.docs.forEach(d => {
       const data = d.data();
-      if (data.entityType !== "customer" && data.type !== "customer") return;
+      if (data.entityType !== "customer" && data.type !== "customer" && data.entityType !== undefined) return;
+      const rNum = data.receiptNumber || data.voucherNumber || d.id;
+      if (seenRcpts.has(rNum)) return;
+      seenRcpts.add(rNum);
+
       const amt = parseFloat(data.amount || 0);
       totalPayments += amt;
       txs.push({
         date:  data.date || "",
         type:  "payment",
+        isCash: false,
         ref:   data.receiptNumber || data.voucherNumber || `RV-${d.id.slice(0, 8).toUpperCase()}`,
         amount: -amt,
-        desc:  `سند قبض (${data.method === "cash" || data.paymentMethod === "cash" ? "نقدي" : "شبكة"})`,
+        desc:  data.notes ? data.notes : `سند قبض (${data.method === "cash" || data.paymentMethod === "cash" ? "نقدي" : "شبكة"})`,
         timestamp: data.createdAt?.seconds ? data.createdAt.seconds * 1000 : new Date(data.date || 0).getTime(),
       });
     });
 
-    // سندات قبض المندوب (repReceipts)
+    // 5. سندات قبض المندوب (repReceipts)
     repRcptSnap.docs.forEach(d => {
       const data = d.data();
+      const rNum = data.receiptNumber || d.id;
+      if (seenRcpts.has(rNum)) return;
+      seenRcpts.add(rNum);
+
       const amt = parseFloat(data.amount || 0);
       totalPayments += amt;
       txs.push({
         date:  data.date || "",
         type:  "payment",
-        ref:   data.receiptNumber || `RV-RV-${d.id.slice(0, 6).toUpperCase()}`,
+        isCash: false,
+        ref:   data.receiptNumber || `RV-${d.id.slice(0, 6).toUpperCase()}`,
         amount: -amt,
-        desc:  `سند قبض مندوب (${data.method === "cash" || data.paymentMethod === "cash" ? "نقدي" : "شبكة"})`,
+        desc:  data.notes ? data.notes : `سند قبض مندوب (${data.method === "cash" || data.paymentMethod === "cash" ? "نقدي" : "شبكة"})`,
         timestamp: data.createdAt?.seconds ? data.createdAt.seconds * 1000 : new Date(data.date || 0).getTime(),
       });
     });
@@ -3940,85 +4861,249 @@ window.viewCustomerLedger = async (customerId) => {
     // ── حساب الرصيد الصحيح = فواتير − مدفوعات − مرتجعات ──
     const computedBalance = Math.round((totalInvoices - totalPayments - totalReturns) * 100) / 100;
 
-    // تحديث الرصيد المعروض
+    // تحديث الرصيد المعروض في كرت العميل
     const balEl = document.getElementById("ledger-cust-balance");
+    const balLbl = document.getElementById("ledger-bal-label");
     if (balEl) {
       const isPositive = computedBalance > 0;
       balEl.textContent = `${fmtC(computedBalance)} ر.س`;
-      balEl.style.color = isPositive ? "var(--error)" : computedBalance < 0 ? "var(--success)" : "var(--t2)";
-      // تحديث العنوان
-      const labelEl = balEl.previousElementSibling;
-      if (labelEl) labelEl.textContent = isPositive ? "مديونية (مستحق عليه)" : computedBalance < 0 ? "رصيد دائن (له)" : "لا توجد مديونية";
+      balEl.style.color = isPositive ? "#dc2626" : computedBalance < 0 ? "#16a34a" : "var(--t2)";
+      if (balLbl) balLbl.textContent = isPositive ? "مديونية (مستحق عليه)" : computedBalance < 0 ? "رصيد دائن (له)" : "لا توجد مديونية";
     }
 
-    // ترتيب تنازلي بالتاريخ
-    txs.sort((a, b) => b.timestamp - a.timestamp);
-    const miniLedger = txs.slice(0, 30);
+    // مزامنة رصيد العميل فورياً إن وُجد فارق
+    if (Math.abs((cust.balance || 0) - computedBalance) > 0.05) {
+      cust.balance = computedBalance;
+      const cached = _custCache.find(c => c.id === cust.id);
+      if (cached) cached.balance = computedBalance;
+      updateDoc(doc(db, `companies/${companyId}/customers`, cust.id), { balance: computedBalance }).catch(() => {});
+      const outerCardBal = document.querySelector(`[data-cust-id="${cust.id}"] .cust-bal`);
+      if (outerCardBal) outerCardBal.textContent = `${fmtC(computedBalance)} ر.س`;
+    }
 
     const listContainer = document.getElementById("ledger-list-container");
     if (!listContainer) return;
 
-    if (miniLedger.length === 0) {
-      listContainer.innerHTML = `<div style="text-align:center; padding:20px; color:var(--t3); font-size:12px;">لا توجد حركات مسجلة لهذا العميل</div>`;
+    if (txs.length === 0) {
+      listContainer.innerHTML = `<div style="text-align:center; padding:32px; color:var(--t3); font-size:13px; background:var(--bg-2); border-radius:12px; border:1px solid var(--border);">لا توجد حركات مسجلة لهذا العميل حتى الآن</div>`;
       return;
     }
 
-    // حساب رصيد متراكم (تصاعدي من الأقدم)
-    const ascending = [...txs].sort((a, b) => a.timestamp - b.timestamp);
-    const runningMap = new Map();
+    // ── حساب الرصيد التراكمي (تصاعدي من الأقدم للأحدث) ──
+    const sortedAsc = [...txs].sort((a, b) => a.timestamp - b.timestamp);
     let running = 0;
-    ascending.forEach(tx => {
+    sortedAsc.forEach(tx => {
       running = Math.round((running + tx.amount) * 100) / 100;
-      runningMap.set(tx.ref + tx.timestamp, running);
+      tx.runningBalance = running;
     });
 
+    // حفظ في الذاكرة لتسهيل التصدير والطباعة
+    window._currentCustomerLedger = {
+      cust,
+      txs: sortedAsc,
+      totalInvoices,
+      totalPayments,
+      totalReturns,
+      computedBalance
+    };
+
+    // الترتيب التنازلي للعرض (الأحدث أولاً)
+    const sortedDesc = [...sortedAsc].reverse();
+
+    const invCount = txs.filter(t => t.type === "invoice").length;
+    const rcptCount = txs.filter(t => t.type === "payment").length;
+    const retCount = txs.filter(t => t.type === "return").length;
+
     listContainer.innerHTML = `
-      <div style="background:var(--bg-2); border-radius:8px; padding:10px; margin-bottom:12px; display:flex; gap:16px; font-size:11px;">
-        <div><span style="color:var(--t3);">إجمالي الفواتير</span><br><strong style="color:var(--error);">${fmtC(totalInvoices)} ر.س</strong></div>
-        <div><span style="color:var(--t3);">إجمالي المدفوع</span><br><strong style="color:var(--success);">${fmtC(totalPayments)} ر.س</strong></div>
-        <div><span style="color:var(--t3);">مرتجعات</span><br><strong style="color:var(--t2);">${fmtC(totalReturns)} ر.س</strong></div>
-        <div><span style="color:var(--t3);">الرصيد</span><br><strong style="color:${computedBalance > 0 ? "var(--error)" : "var(--success)"}">${fmtC(computedBalance)} ر.س</strong></div>
+      <!-- 4 KPI Stat Cards -->
+      <div class="ledger-kpi-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(135px, 1fr)); gap:8px;">
+        <div class="ledger-kpi-card" style="background:var(--bg-2); border:1px solid var(--border); border-radius:12px; padding:10px 12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--t3); margin-bottom:4px;">
+            <span>🧾 إجمالي الفواتير</span>
+            <span style="font-size:9.5px; background:rgba(37,99,235,0.12); color:#2563eb; padding:1px 6px; border-radius:4px; font-weight:800;">مدين</span>
+          </div>
+          <div style="font-size:14px; font-weight:900; color:#2563eb;">${fmtC(totalInvoices)} <span style="font-size:10px;">ر.س</span></div>
+          <div style="font-size:9.5px; color:var(--t3); margin-top:2px;">${invCount} فاتورة</div>
+        </div>
+
+        <div class="ledger-kpi-card" style="background:var(--bg-2); border:1px solid var(--border); border-radius:12px; padding:10px 12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--t3); margin-bottom:4px;">
+            <span>💵 المقبوضات</span>
+            <span style="font-size:9.5px; background:rgba(22,163,74,0.12); color:#16a34a; padding:1px 6px; border-radius:4px; font-weight:800;">دائن</span>
+          </div>
+          <div style="font-size:14px; font-weight:900; color:#16a34a;">${fmtC(totalPayments)} <span style="font-size:10px;">ر.س</span></div>
+          <div style="font-size:9.5px; color:var(--t3); margin-top:2px;">${rcptCount} سند تحصيل</div>
+        </div>
+
+        <div class="ledger-kpi-card" style="background:var(--bg-2); border:1px solid var(--border); border-radius:12px; padding:10px 12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--t3); margin-bottom:4px;">
+            <span>↩️ المرتجعات</span>
+            <span style="font-size:9.5px; background:rgba(217,119,6,0.12); color:#d97706; padding:1px 6px; border-radius:4px; font-weight:800;">دائن</span>
+          </div>
+          <div style="font-size:14px; font-weight:900; color:#d97706;">${fmtC(totalReturns)} <span style="font-size:10px;">ر.س</span></div>
+          <div style="font-size:9.5px; color:var(--t3); margin-top:2px;">${retCount} مرتجع</div>
+        </div>
+
+        <div class="ledger-kpi-card" style="background:${computedBalance > 0 ? 'rgba(239,68,68,0.06)' : 'rgba(16,185,129,0.06)'}; border:1.5px solid ${computedBalance > 0 ? '#ef4444' : '#10b981'}; border-radius:12px; padding:10px 12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--t3); margin-bottom:4px;">
+            <span>⚖️ صافي الرصيد</span>
+            <span style="font-size:9.5px; background:${computedBalance > 0 ? '#ef4444' : '#10b981'}; color:#fff; padding:1px 6px; border-radius:4px; font-weight:800;">${computedBalance > 0 ? 'مستحق' : 'مسدد'}</span>
+          </div>
+          <div style="font-size:14.5px; font-weight:900; color:${computedBalance > 0 ? '#dc2626' : '#16a34a'};">${fmtC(computedBalance)} <span style="font-size:10px;">ر.س</span></div>
+          <div style="font-size:9.5px; color:var(--t2); margin-top:2px; font-weight:700;">${computedBalance > 0 ? 'مستحق بذمة العميل' : computedBalance < 0 ? 'رصيد دائن للعميل' : 'الحساب مصفى'}</div>
+        </div>
       </div>
-      <div style="overflow-x:auto;">
-        <table style="width:100%; border-collapse:collapse; font-size:11px; text-align:right;">
+
+      <!-- Quick Filter Tabs & Mobile View Switcher -->
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-top:2px;">
+        <div style="display:flex; align-items:center; gap:6px; overflow-x:auto; padding-bottom:2px; flex:1;">
+          <button class="ledger-tab active" onclick="window.filterLedgerTab('all', this)">الكل (${txs.length})</button>
+          <button class="ledger-tab" onclick="window.filterLedgerTab('invoice', this)">🧾 الفواتير (${invCount})</button>
+          <button class="ledger-tab" onclick="window.filterLedgerTab('payment', this)">💵 السندات (${rcptCount})</button>
+          ${retCount > 0 ? `<button class="ledger-tab" onclick="window.filterLedgerTab('return', this)">↩️ المرتجعات (${retCount})</button>` : ''}
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button id="ledger-view-mode-btn" class="ledger-tab ledger-view-toggle" onclick="window.toggleLedgerViewMode(this)" title="تبديل طريقة العرض">📊 عرض جدول</button>
+          <div style="font-size:10.5px; color:var(--t3); white-space:nowrap;">الحركات: <b>${txs.length}</b></div>
+        </div>
+      </div>
+
+      <!-- 1. Mobile Cards View (Optimized for Phones) -->
+      <div class="ledger-cards-wrap" id="ledger-cards-container">
+        ${sortedDesc.map(tx => {
+          const isDebit  = tx.amount > 0;
+          const sign     = isDebit ? "+" : "";
+          const amtColor = isDebit ? "#dc2626" : "#16a34a";
+          const balColor = tx.runningBalance > 0 ? "#dc2626" : tx.runningBalance < 0 ? "#16a34a" : "var(--t2)";
+
+          let badgeHtml = "";
+          if (tx.type === "invoice") {
+            badgeHtml = tx.isCash
+              ? `<span style="background:rgba(16,185,129,0.12); color:#059669; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:800;">🟢 نقدي</span>`
+              : `<span style="background:rgba(37,99,235,0.12); color:#2563eb; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:800;">🔵 فاتورة آجلة</span>`;
+          } else if (tx.type === "payment") {
+            badgeHtml = `<span style="background:rgba(16,185,129,0.12); color:#059669; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:800;">💵 سند تحصيل</span>`;
+          } else if (tx.type === "return") {
+            badgeHtml = `<span style="background:rgba(217,119,6,0.12); color:#d97706; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:800;">↩️ مرتجع</span>`;
+          }
+
+          return `
+            <div class="ledger-card-item ledger-row" data-type="${tx.type}">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                  ${badgeHtml}
+                  <span style="font-family:monospace; font-size:11px; color:var(--t1); font-weight:800;">${tx.ref}</span>
+                </div>
+                <span style="font-size:10.5px; color:var(--t3); font-family:monospace;">${tx.date}</span>
+              </div>
+              ${tx.desc ? `<div style="font-size:11px; color:var(--t2); line-height:1.3;">${tx.desc}</div>` : ''}
+              <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed var(--border); padding-top:7px; margin-top:2px;">
+                <div>
+                  <span style="font-size:10px; color:var(--t3);">المبلغ: </span>
+                  <span style="font-weight:900; color:${amtColor}; font-size:13px; font-family:monospace;">
+                    ${sign}${fmtC(Math.abs(tx.amount))} <span style="font-size:9.5px; font-weight:600;">ر.س</span>
+                  </span>
+                </div>
+                <div style="text-align:left;">
+                  <span style="font-size:10px; color:var(--t3);">الرصيد: </span>
+                  <span style="font-weight:900; color:${balColor}; font-size:13px; font-family:monospace;">
+                    ${fmtC(tx.runningBalance)} <span style="font-size:9.5px; font-weight:600;">ر.س</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <!-- 2. Desktop Table View -->
+      <div class="ledger-table-wrap" style="overflow-x:auto; border:1px solid var(--border); border-radius:12px; background:var(--bg-1);">
+        <table style="width:100%; min-width:520px; border-collapse:collapse; font-size:11px; text-align:right;">
           <thead>
-            <tr style="border-bottom:2px solid var(--border); color:var(--t2);">
-              <th style="padding:6px 4px;">التاريخ</th>
-              <th style="padding:6px 4px;">الحركة</th>
-              <th style="padding:6px 4px;">المرجع</th>
-              <th style="padding:6px 4px; text-align:left;">المبلغ</th>
+            <tr style="background:var(--bg-2); border-bottom:2px solid var(--border); color:var(--t2); font-weight:700;">
+              <th style="padding:10px 8px; width:85px;">التاريخ</th>
+              <th style="padding:10px 8px;">نوع الحركة والبيان</th>
+              <th style="padding:10px 8px; width:110px;">المرجع</th>
+              <th style="padding:10px 8px; text-align:left; width:100px;">المبلغ</th>
+              <th style="padding:10px 8px; text-align:left; width:110px;">الرصيد بعد الحركة</th>
             </tr>
           </thead>
-          <tbody>
-            ${miniLedger.map(tx => {
-              const isDebit  = tx.amount > 0;  // فاتورة → تزيد الدين
-              const isCredit = tx.amount < 0;  // دفعة/مرتجع → تنقص الدين
-              const sign  = isDebit ? "+" : "";
-              const color = isDebit ? "var(--error)" : "var(--success)";
-              const icons = { invoice: "🧾", return: "↩️", payment: "💵" };
-              const label = tx.type === "invoice" ? "فاتورة" : tx.type === "return" ? "مرتجع" : "سند قبض";
+          <tbody id="ledger-table-body">
+            ${sortedDesc.map(tx => {
+              const isDebit  = tx.amount > 0;
+              const sign     = isDebit ? "+" : "";
+              const amtColor = isDebit ? "#dc2626" : "#16a34a";
+              const balColor = tx.runningBalance > 0 ? "#dc2626" : tx.runningBalance < 0 ? "#16a34a" : "var(--t2)";
+
+              let badgeHtml = "";
+              if (tx.type === "invoice") {
+                if (tx.isCash) {
+                  badgeHtml = `<span style="background:rgba(16,185,129,0.12); color:#059669; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; gap:3px;">🟢 فاتورة نقدية</span>`;
+                } else {
+                  badgeHtml = `<span style="background:rgba(37,99,235,0.12); color:#2563eb; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; gap:3px;">🔵 فاتورة آجلة</span>`;
+                }
+              } else if (tx.type === "payment") {
+                badgeHtml = `<span style="background:rgba(16,185,129,0.12); color:#059669; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; gap:3px;">💵 سند تحصيل</span>`;
+              } else if (tx.type === "return") {
+                badgeHtml = `<span style="background:rgba(217,119,6,0.12); color:#d97706; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:800; display:inline-flex; align-items:center; gap:3px;">↩️ مرتجع مبيعات</span>`;
+              }
+
               return `
-                <tr style="border-bottom:1px solid var(--border); vertical-align:middle;">
-                  <td style="padding:8px 4px; color:var(--t2); white-space:nowrap; font-size:10px;">${tx.date}</td>
-                  <td style="padding:8px 4px;">
-                    <div style="font-weight:700; color:var(--t1);">${icons[tx.type] || ""} ${label}</div>
-                    <div style="font-size:9px; color:var(--t3); max-width:130px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${tx.desc}</div>
+                <tr class="ledger-row" data-type="${tx.type}" style="border-bottom:1px solid var(--border); vertical-align:middle;">
+                  <td style="padding:10px 8px; color:var(--t2); white-space:nowrap; font-size:10.5px; font-family:monospace;">${tx.date}</td>
+                  <td style="padding:10px 8px;">
+                    <div>${badgeHtml}</div>
+                    <div style="font-size:10px; color:var(--t3); margin-top:2px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${tx.desc}">${tx.desc}</div>
                   </td>
-                  <td style="padding:8px 4px; font-family:monospace; font-size:10px; color:var(--t2);">${tx.ref}</td>
-                  <td style="padding:8px 4px; text-align:left; font-weight:800; color:${color}; font-size:12px; white-space:nowrap;">${sign}${fmtC(Math.abs(tx.amount))}</td>
+                  <td style="padding:10px 8px; font-family:monospace; font-size:10.5px; color:var(--t1); font-weight:700;">${tx.ref}</td>
+                  <td style="padding:10px 8px; text-align:left; font-weight:800; color:${amtColor}; font-size:11.5px; white-space:nowrap; font-family:monospace;">
+                    ${sign}${fmtC(Math.abs(tx.amount))} <span style="font-size:9px; font-weight:600;">ر.س</span>
+                  </td>
+                  <td style="padding:10px 8px; text-align:left; font-weight:900; color:${balColor}; font-size:12px; white-space:nowrap; font-family:monospace; background:rgba(0,0,0,0.015);">
+                    ${fmtC(tx.runningBalance)} <span style="font-size:9px; font-weight:600;">ر.س</span>
+                  </td>
                 </tr>
               `;
             }).join("")}
           </tbody>
         </table>
       </div>
+      <div id="ledger-empty-filter" style="display:none; text-align:center; padding:24px; color:var(--t3); font-size:12px;">لا توجد حركات مطابقة لهذا الفلتر</div>
     `;
   } catch (err) {
     const listContainer = document.getElementById("ledger-list-container");
     if (listContainer) {
-      listContainer.innerHTML = `<div class="error-box" style="margin:0;">⚠️ خطأ في التحميل: ${err.message}</div>`;
+      listContainer.innerHTML = `<div class="error-box" style="margin:0;">⚠️ خطأ في تحميل كشف الحساب: ${err.message}</div>`;
     }
     console.error("[viewCustomerLedger]", err);
+  }
+};
+
+window.toggleLedgerViewMode = (btn) => {
+  const sheet = document.getElementById("ledger-sheet");
+  if (!sheet) return;
+  const isTable = sheet.classList.toggle("ledger-show-table");
+  if (btn) btn.textContent = isTable ? "📱 عرض بطاقات" : "📊 عرض جدول";
+};
+
+window.filterLedgerTab = (filterType, btnEl) => {
+  document.querySelectorAll('.ledger-tab').forEach(b => b.classList.remove('active'));
+  if (btnEl) btnEl.classList.add('active');
+
+  const rows = document.querySelectorAll('.ledger-row');
+  let visibleCount = 0;
+  rows.forEach(r => {
+    if (filterType === 'all' || r.getAttribute('data-type') === filterType) {
+      r.style.display = '';
+      visibleCount++;
+    } else {
+      r.style.display = 'none';
+    }
+  });
+
+  const emptyEl = document.getElementById('ledger-empty-filter');
+  if (emptyEl) {
+    emptyEl.style.display = visibleCount === 0 ? 'block' : 'none';
   }
 };
 
@@ -4026,140 +5111,363 @@ window.shareLedgerWhatsApp = async (customerId) => {
   const cust = _custCache.find(c => c.id === customerId);
   if (!cust) return;
   toast("جاري تجهيز كشف الحساب للمشاركة...", "warn");
-  try {
-    const companyId = COID;
-    const [invSnap, retSnap, rcptSnap] = await Promise.all([
-      getDocs(query(collection(db, `companies/${companyId}/salesInvoices`), where("customerId", "==", cust.id), limit(10))),
-      getDocs(query(collection(db, `companies/${companyId}/salesReturns`), where("customerId", "==", cust.id), limit(10))),
-      getDocs(query(collection(db, `companies/${companyId}/receipts`), where("targetId", "==", cust.id), limit(10)))
-    ]);
 
-    const txs = [];
-    invSnap.docs.forEach(d => {
-      const data = _normalizeInvoice({ id: d.id, ...d.data() });
-      if (data.status !== "cancelled") {
-        txs.push({ date: data.date, type: "فاتورة", ref: data.invoiceNumber, amount: parseFloat(data.total || 0) });
-      }
-    });
-    retSnap.docs.forEach(d => { if (d.data().status !== "cancelled" && d.data().status !== "void") txs.push({ date: d.data().date, type: "مرتجع", ref: d.data().creditNoteNumber || d.id.slice(0,8), amount: -parseFloat(d.data().total || 0) }); });
-    rcptSnap.docs.forEach(d => { if (d.data().entityType === "customer") txs.push({ date: d.data().date, type: "سند قبض", ref: `RV-${d.id.slice(0,6).toUpperCase()}`, amount: -parseFloat(d.data().amount || 0) }); });
-    
-    txs.sort((a, b) => b.date.localeCompare(a.date));
-    const latestTxs = txs.slice(0, 5);
+  const ledger = window._currentCustomerLedger;
+  const txs = ledger?.txs || [];
+  const latestTxs = [...txs].reverse().slice(0, 8);
 
-    let msg = `📋 *كشف حساب عميل* 📋\n`;
-    msg += `👤 *العميل:* ${cust.name}\n`;
-    msg += `📞 *الهاتف:* ${cust.phone || "—"}\n`;
-    msg += `💰 *المديونية الحالية:* ${fmtC(cust.balance || 0)} ر.س\n\n`;
-    msg += `*آخر 5 حركات مسجلة:*\n`;
-    latestTxs.forEach(t => {
-      msg += `🔹 ${t.date} | ${t.type} (${t.ref}) | ${t.amount > 0 ? "+" : ""}${fmtC(t.amount)} ر.س\n`;
-    });
-    msg += `\n🏢 *${COMPANY.name}*`;
+  let msg = `*📋 كشف حساب عميل 📋*\n`;
+  msg += `🏢 *${COMPANY.name}*\n`;
+  msg += `─────────────────\n`;
+  msg += `👤 *العميل:* ${cust.name}\n`;
+  if (cust.code) msg += `🔢 *كود العميل:* ${cust.code}\n`;
+  if (cust.phone) msg += `📞 *الهاتف:* ${cust.phone}\n`;
+  msg += `📅 *تاريخ الاستخراج:* ${new Date().toISOString().split('T')[0]}\n`;
+  msg += `─────────────────\n`;
+  msg += `🧾 *إجمالي الفواتير:* ${fmtC(ledger?.totalInvoices || 0)} ر.س\n`;
+  msg += `💵 *إجمالي المقبوضات:* ${fmtC(ledger?.totalPayments || 0)} ر.س\n`;
+  if (ledger?.totalReturns) msg += `↩️ *إجمالي المرتجعات:* ${fmtC(ledger.totalReturns)} ر.س\n`;
+  msg += `💰 *صافي الرصيد المستحق:* *${fmtC(cust.balance || 0)} ر.س*\n`;
+  msg += `─────────────────\n`;
+  msg += `*📊 آخر الحركات المسجلة:*\n`;
 
-    const encoded = encodeURIComponent(msg);
-    window.open(`https://wa.me/?text=${encoded}`, "_blank");
-  } catch (e) {
-    toast(`⚠️ فشل مشاركة كشف الحساب: ${e.message}`, "err");
-  }
+  latestTxs.forEach((t) => {
+    const icon = t.type === "invoice" ? (t.isCash ? "🟢" : "🧾") : t.type === "return" ? "↩️" : "💵";
+    const label = t.type === "invoice" ? (t.isCash ? "فاتورة نقدية" : "فاتورة مبيعات") : t.type === "return" ? "مرتجع مبيعات" : "سند قبض";
+    const sign = t.amount > 0 ? "+" : "-";
+    msg += `${icon} *${t.date}* | ${label}\n`;
+    msg += `   مرجع: ${t.ref} | مبلغ: ${sign}${fmtC(Math.abs(t.amount))} ر.س\n`;
+    msg += `   الرصيد بعد الحركة: ${fmtC(t.runningBalance)} ر.س\n`;
+  });
+
+  msg += `─────────────────\n`;
+  msg += `شكراً لتعاملكم معنا 🙏`;
+
+  const encoded = encodeURIComponent(msg);
+  window.open(`https://wa.me/?text=${encoded}`, "_blank");
 };
 
 window.printLedgerThermal = async (customerId) => {
   const cust = _custCache.find(c => c.id === customerId);
   if (!cust) return;
-  toast("جاري تجهيز كشف الحساب للطباعة...", "warn");
-  try {
-    const companyId = COID;
-    const [invSnap, retSnap, rcptSnap] = await Promise.all([
-      getDocs(query(collection(db, `companies/${companyId}/salesInvoices`), where("customerId", "==", cust.id), limit(15))),
-      getDocs(query(collection(db, `companies/${companyId}/salesReturns`), where("customerId", "==", cust.id), limit(15))),
-      getDocs(query(collection(db, `companies/${companyId}/receipts`), where("targetId", "==", cust.id), limit(15)))
-    ]);
+  toast("جاري تجهيز كشف الحساب للطباعة الحرارية...", "warn");
 
-    const txs = [];
-    invSnap.docs.forEach(d => {
-      const data = _normalizeInvoice({ id: d.id, ...d.data() });
-      if (data.status !== "cancelled") {
-        txs.push({ date: data.date, type: "فاتورة", ref: data.invoiceNumber, amount: parseFloat(data.total || 0) });
-      }
-    });
-    retSnap.docs.forEach(d => { if (d.data().status !== "cancelled" && d.data().status !== "void") txs.push({ date: d.data().date, type: "مرتجع", ref: d.data().creditNoteNumber || d.id.slice(0,8), amount: -parseFloat(d.data().total || 0) }); });
-    rcptSnap.docs.forEach(d => { if (d.data().entityType === "customer") txs.push({ date: d.data().date, type: "سند قبض", ref: `RV-REP` }); });
-    
-    txs.sort((a, b) => b.date.localeCompare(a.date));
-    const latestTxs = txs.slice(0, 10);
+  const ledger = window._currentCustomerLedger;
+  const txs = ledger?.txs || [];
+  const latestTxs = [...txs].reverse().slice(0, 15);
 
-    const divider = `<div class="dv">--------------------------------</div>`;
-    const rows = latestTxs.map(t => `
+  const divider = `<div class="dv">--------------------------------</div>`;
+  const rows = latestTxs.map(t => {
+    const sign = t.amount > 0 ? "+" : "-";
+    const label = t.type === "invoice" ? (t.isCash ? "فاتورة نقد" : "فاتورة آجل") : t.type === "return" ? "مرتجع" : "سند قبض";
+    return `
       <tr>
         <td>${t.date}</td>
-        <td>${t.type}</td>
-        <td class="mono">${t.ref}</td>
-        <td>${t.amount > 0 ? "+" : ""}${fmtC(t.amount)}</td>
+        <td>${label}<br><span style="font-size:8px; color:#555;">${t.ref}</span></td>
+        <td style="text-align:left;">${sign}${fmtC(Math.abs(t.amount))}</td>
+        <td style="text-align:left; font-weight:bold;">${fmtC(t.runningBalance)}</td>
       </tr>
-    `).join("");
+    `;
+  }).join("");
 
-    const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="UTF-8"/>
-    <style>
-      * { margin:0; padding:0; box-sizing:border-box; }
-      @page { margin: 0; size: 58mm auto; }
-      body {
-        font-family: 'Courier New', Courier, monospace;
-        font-size: 11px;
-        color: #000;
-        background: #fff;
-        width: 58mm;
-        padding: 4px 2px;
-        direction: rtl;
-      }
-      .center { text-align: center; }
-      .bold { font-weight: bold; }
-      .lg { font-size: 13px; }
-      .dv { text-align: center; color: #555; font-size: 10px; margin: 3px 0; letter-spacing: -1px; }
-      table { width: 100%; border-collapse: collapse; font-size: 10px; }
-      th { border-bottom: 1px dashed #000; padding: 2px 1px; font-weight: bold; text-align: right; }
-      td { padding: 2px 1px; text-align: right; vertical-align: middle; }
-      td:nth-child(3), td:nth-child(4) { text-align: left; }
-      @media print {
-        body { width: 58mm !important; }
-      }
-    </style></head>
-    <body>
-      <div class="center bold lg">${COMPANY.name}</div>
-      <div class="center bold" style="font-size:10px; margin-top:2px;">كشف حساب مصغر</div>
-      ${divider}
-      <div style="font-size:10px;">العميل: <b>${cust.name}</b></div>
-      <div style="font-size:10px;">الهاتف: ${cust.phone || "—"}</div>
-      <div style="font-size:10px;">التاريخ: ${new Date().toISOString().split("T")[0]}</div>
-      <div style="font-size:12px; font-weight:bold; margin-top:4px;">الرصيد المستحق: ${fmtC(cust.balance || 0)} ر.س</div>
-      ${divider}
-      <table>
-        <thead><tr><th>التاريخ</th><th>الحركة</th><th>المرجع</th><th>المبلغ</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-      ${divider}
-      <div class="center" style="font-size:9px;">تطبيق المندوب الميداني</div>
-      <div class="center" style="font-size:9px;">${COMPANY.name}</div>
-      <div style="height:16px;"></div>
-    </body></html>`;
-
-    const fr = document.getElementById("print-frame");
-    if (fr) {
-      fr.srcdoc = html;
-      fr.onload = () => {
-        try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch(e) {
-          const w = window.open("","_blank","width=400,height=600");
-          if (w) { w.document.write(html); w.document.close(); w.focus(); w.print(); }
-        }
-      };
-    } else {
-      const w = window.open("","_blank","width=400,height=600");
-      if (w) { w.document.write(html); w.document.close(); w.focus(); setTimeout(()=>w.print(),300); }
+  const html = `<!DOCTYPE html><html dir="rtl" lang="ar"><head><meta charset="UTF-8"/>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    @page { margin: 0; size: 58mm auto; }
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 10px;
+      color: #000;
+      background: #fff;
+      width: 58mm;
+      padding: 4px 2px;
+      direction: rtl;
     }
-  } catch (e) {
-    toast(`⚠️ فشل طباعة كشف الحساب: ${e.message}`, "err");
+    .center { text-align: center; }
+    .bold { font-weight: bold; }
+    .lg { font-size: 13px; }
+    .dv { text-align: center; color: #555; font-size: 10px; margin: 3px 0; letter-spacing: -1px; }
+    table { width: 100%; border-collapse: collapse; font-size: 9px; }
+    th { border-bottom: 1px dashed #000; padding: 2px 1px; font-weight: bold; text-align: right; }
+    td { padding: 3px 1px; text-align: right; vertical-align: top; border-bottom: 0.5px dotted #ccc; }
+    @media print {
+      body { width: 58mm !important; }
+    }
+  </style></head>
+  <body>
+    <div class="center bold lg">${COMPANY.name}</div>
+    <div class="center bold" style="font-size:10px; margin-top:2px;">كشف حساب عميل مصغر</div>
+    ${divider}
+    <div style="font-size:9.5px;">العميل: <b>${cust.name}</b></div>
+    ${cust.code ? `<div style="font-size:9px;">كود العميل: ${cust.code}</div>` : ''}
+    <div style="font-size:9px;">الهاتف: ${cust.phone || "—"}</div>
+    <div style="font-size:9px;">التاريخ: ${new Date().toISOString().split('T')[0]}</div>
+    <div style="font-size:11px; font-weight:bold; margin-top:4px; border:1px solid #000; padding:4px; text-align:center;">
+      الرصيد المستحق: ${fmtC(cust.balance || 0)} ر.س
+    </div>
+    ${divider}
+    <table>
+      <thead><tr><th>التاريخ</th><th>الحركة</th><th style="text-align:left;">المبلغ</th><th style="text-align:left;">الرصيد</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    ${divider}
+    <div class="center" style="font-size:8.5px;">إجمالي الفواتير: ${fmtC(ledger?.totalInvoices || 0)} ر.س</div>
+    <div class="center" style="font-size:8.5px;">إجمالي المقبوضات: ${fmtC(ledger?.totalPayments || 0)} ر.س</div>
+    <div class="center bold" style="font-size:9.5px; margin-top:2px;">الرصيد الحالي: ${fmtC(cust.balance || 0)} ر.س</div>
+    ${divider}
+    <div class="center" style="font-size:8.5px;">تطبيق المندوب الميداني</div>
+    <div class="center" style="font-size:8.5px;">${COMPANY.name}</div>
+    <div style="height:14px;"></div>
+  </body></html>`;
+
+  const fr = document.getElementById("print-frame");
+  if (fr) {
+    fr.srcdoc = html;
+    fr.onload = () => {
+      try { fr.contentWindow.focus(); fr.contentWindow.print(); } catch(e) {
+        const w = window.open("","_blank","width=400,height=600");
+        if (w) { w.document.write(html); w.document.close(); w.focus(); w.print(); }
+      }
+    };
+  } else {
+    const w = window.open("","_blank","width=400,height=600");
+    if (w) { w.document.write(html); w.document.close(); w.focus(); setTimeout(()=>w.print(),300); }
   }
 };
+
+window.printCustomerLedgerA4 = async (customerId) => {
+  const cust = _custCache.find(c => c.id === customerId);
+  if (!cust) return;
+  toast("جاري إعداد كشف الحساب الرسمي A4 للطباعة...", "warn");
+
+  const ledger = window._currentCustomerLedger;
+  const txs = ledger?.txs || [];
+
+  // جلب بيانات وإعدادات الشركة وشعارها إن وُجد
+  let companyData = { name: COMPANY.name || "مؤسسة ادهام للمواد الغذائية" };
+  try {
+    const compDoc = await getDoc(doc(db, `companies/${COID}/settings`, "company"));
+    if (compDoc.exists()) companyData = { ...companyData, ...compDoc.data() };
+  } catch (_) {}
+
+  const rows = txs.map((t, idx) => {
+    const isDebit = t.amount > 0;
+    const debitStr = isDebit ? fmtC(t.amount) : "—";
+    const creditStr = !isDebit ? fmtC(Math.abs(t.amount)) : "—";
+    const label = t.type === "invoice" ? (t.isCash ? "فاتورة نقدية" : "فاتورة مبيعات") : t.type === "return" ? "مرتجع مبيعات" : "سند قبض / تحصيل";
+    const fullDesc = t.desc ? `${label} (${t.desc})` : label;
+    return `
+      <tr>
+        <td style="text-align:center;">${idx + 1}</td>
+        <td style="white-space:nowrap; text-align:center;">${t.date}</td>
+        <td>${fullDesc}</td>
+        <td style="text-align:center; font-family:monospace; font-weight:bold;">${t.ref}</td>
+        <td style="text-align:center; color:${isDebit ? '#b91c1c' : '#555'}; font-weight:${isDebit ? 'bold' : 'normal'};">${debitStr}</td>
+        <td style="text-align:center; color:${!isDebit ? '#15803d' : '#555'}; font-weight:${!isDebit ? 'bold' : 'normal'};">${creditStr}</td>
+        <td style="text-align:center; font-weight:bold; background:#fafafa;">${fmtC(t.runningBalance)}</td>
+      </tr>
+    `;
+  }).join("");
+
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  const html = `<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>كشف حساب عميل — ${cust.name}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    @page { size: A4 portrait; margin: 10mm; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      direction: rtl;
+      color: #1e293b;
+      background: #fff;
+      padding: 12px;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    .header-box {
+      border-bottom: 2px solid #0f172a;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .company-title { font-size: 18px; font-weight: 900; color: #0f172a; }
+    .company-sub { font-size: 11px; color: #475569; margin-top: 3px; }
+    .doc-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #1e40af;
+      text-align: center;
+      margin: 8px 0 14px;
+      letter-spacing: 0.5px;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .info-card {
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 10px 14px;
+      background: #f8fafc;
+      font-size: 11.5px;
+      line-height: 1.8;
+    }
+    .info-card strong { color: #0f172a; }
+    .summary-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .sum-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: center;
+      background: #f8fafc;
+    }
+    .sum-title { font-size: 10px; color: #64748b; font-weight: 700; }
+    .sum-val { font-size: 14px; font-weight: 900; margin-top: 3px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+      margin-bottom: 20px;
+    }
+    th {
+      background: #0f172a;
+      color: #ffffff;
+      padding: 8px 6px;
+      font-weight: 800;
+      border: 1px solid #0f172a;
+      text-align: center;
+    }
+    td {
+      padding: 7px 6px;
+      border: 1px solid #cbd5e1;
+      vertical-align: middle;
+    }
+    tr:nth-child(even) td { background: #fdfdfd; }
+    .signatures {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 30px;
+      padding-top: 14px;
+      border-top: 1px dashed #cbd5e1;
+      text-align: center;
+      font-size: 11px;
+    }
+    .sign-line { margin-top: 40px; border-bottom: 1px solid #94a3b8; width: 80%; margin-left: auto; margin-right: auto; }
+    @media print {
+      body { padding: 0; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header-box">
+    <div>
+      <div class="company-title">${companyData.name || "مؤسسة ادهام للمواد الغذائية"}</div>
+      <div class="company-sub">
+        ${companyData.taxNumber ? `الرقم الضريبي: ${companyData.taxNumber} | ` : ''}
+        ${companyData.crNumber ? `س.ت: ${companyData.crNumber} | ` : ''}
+        ${companyData.phone ? `هاتف: ${companyData.phone}` : ''}
+      </div>
+    </div>
+    <div style="text-align:left; font-size:11px; color:#475569;">
+      <div>تاريخ الاستخراج: <b>${todayStr}</b></div>
+      <div>بواسطة المندوب: <b>${_profile?.name || "المندوب الميداني"}</b></div>
+    </div>
+  </div>
+
+  <div class="doc-title">كشف حساب عميل تفصيلي</div>
+
+  <div class="info-grid">
+    <div class="info-card">
+      <div>اسم العميل: <b>${cust.name}</b></div>
+      ${cust.code ? `<div>كود الحساب المحاسبي: <b>${cust.code}</b></div>` : ''}
+      <div>رقم الهاتف: <b>${cust.phone || "—"}</b></div>
+    </div>
+    <div class="info-card" style="background:#f1f5f9;">
+      <div>إجمالي المبيعات: <b>${fmtC(ledger?.totalInvoices || 0)} ر.س</b></div>
+      <div>إجمالي المقبوضات: <b>${fmtC(ledger?.totalPayments || 0)} ر.س</b></div>
+      <div style="font-size:13px; font-weight:900; color:${(cust.balance || 0) > 0 ? '#b91c1c' : '#15803d'}; margin-top:4px;">
+        الرصيد النهائي: <b>${fmtC(cust.balance || 0)} ر.س</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="summary-bar">
+    <div class="sum-card">
+      <div class="sum-title">إجمالي الفواتير (مدين)</div>
+      <div class="sum-val" style="color:#2563eb;">${fmtC(ledger?.totalInvoices || 0)} ر.س</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-title">إجمالي المقبوضات (دائن)</div>
+      <div class="sum-val" style="color:#16a34a;">${fmtC(ledger?.totalPayments || 0)} ر.س</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-title">إجمالي المرتجعات</div>
+      <div class="sum-val" style="color:#d97706;">${fmtC(ledger?.totalReturns || 0)} ر.س</div>
+    </div>
+    <div class="sum-card" style="background:${(cust.balance || 0) > 0 ? '#fef2f2' : '#f0fdf4'}; border-color:${(cust.balance || 0) > 0 ? '#fca5a5' : '#86efac'};">
+      <div class="sum-title" style="color:${(cust.balance || 0) > 0 ? '#991b1b' : '#166534'};">الرصيد المستحق الحالي</div>
+      <div class="sum-val" style="color:${(cust.balance || 0) > 0 ? '#b91c1c' : '#15803d'};">${fmtC(cust.balance || 0)} ر.س</div>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35px;">م</th>
+        <th style="width:85px;">التاريخ</th>
+        <th>نوع الحركة والبيان</th>
+        <th style="width:110px;">رقم المرجع</th>
+        <th style="width:90px;">مدين (+)</th>
+        <th style="width:90px;">دائن (-)</th>
+        <th style="width:105px;">الرصيد التراكمي</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rows}
+    </tbody>
+  </table>
+
+  <div class="signatures">
+    <div>
+      <div>المندوب المعتمد</div>
+      <div class="sign-line"></div>
+    </div>
+    <div>
+      <div>المحاسب المالي</div>
+      <div class="sign-line"></div>
+    </div>
+    <div>
+      <div>مصادقة وتوقيع العميل</div>
+      <div class="sign-line"></div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+  const win = window.open("", "_blank", "width=900,height=800");
+  if (win) {
+    win.document.write(html);
+    win.document.close();
+    setTimeout(() => { win.focus(); win.print(); }, 500);
+  }
+};
+
 
 window.openCollectPaymentModal = async (customerId) => {
   const cust = _custCache.find(c => c.id === customerId);
@@ -4257,8 +5565,8 @@ window.openCollectPaymentModal = async (customerId) => {
     btn.disabled = true;
     btn.textContent = "جاري الحفظ…";
 
-    const paymentNo = `RV-REP-${Date.now().toString().slice(-8)}`;
-    const today = new Date().toISOString().split("T")[0];
+    const paymentNo = await generateRepReceiptNumber(REP);
+    const today = getTodayLocalDate();
 
     const paymentData = {
       _queueId:       paymentNo,
@@ -4386,6 +5694,13 @@ async function saveAndProcessPayment(payment) {
   }
 
   await runTransaction(db, async (transaction) => {
+    const receiptRef = doc(db, `companies/${companyId}/receipts`, payment.id);
+    const receiptSnap = await transaction.get(receiptRef);
+    if (receiptSnap.exists()) {
+      console.warn(`[saveAndProcessPayment] Receipt ${payment.id} already exists. Skipping duplicate.`);
+      return;
+    }
+
     let currentBal = 0;
     if (sourceDocRef) {
       const sourceSnap = await transaction.get(sourceDocRef);
@@ -4403,7 +5718,6 @@ async function saveAndProcessPayment(payment) {
       });
     }
 
-    const receiptRef = doc(db, `companies/${companyId}/receipts`, payment.id);
     transaction.set(receiptRef, {
       date: payment.date,
       amount: payment.amount,
@@ -4704,7 +6018,7 @@ window.openRestockRequestModal = async (prefilledProductId = null, prefilledProd
       const fromWarehouseName = sourceWhSelect.options[sourceWhSelect.selectedIndex]?.dataset.name || "";
       const notes = document.getElementById("restock-notes").value.trim();
       const requestNo = `REQ-${Date.now().toString().slice(-8)}`;
-      const today = new Date().toISOString().split("T")[0];
+      const today = getTodayLocalDate();
 
       const toWarehouseId = REP.assignedWarehouseId;
       const toWarehouseName = REP.assignedWarehouseName || `سيارة ${REP.name}`;
@@ -5049,7 +6363,7 @@ window.openVanStocktakeModal = async () => {
         }
 
         const companyId = COID;
-        const today = new Date().toISOString().split("T")[0];
+        const today = getTodayLocalDate();
         const countNo = `STK-REP-${Date.now().toString().slice(-8)}`;
 
         // Load Chart of Accounts

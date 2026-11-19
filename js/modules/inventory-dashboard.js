@@ -183,7 +183,9 @@ function renderDashboard() {
     skeleton.style.display = "block"; main.style.display = "none";
     _destroyCharts();
     try {
-      clearERPCache();
+      clearERPCache(COLS.stockByWarehouse().path);
+      clearERPCache(COLS.products().path);
+      clearERPCache(COLS.stockTransactions().path);
       await loadAllData(); if (_alive) renderDashboard();
     } catch(err) {
       window.showToast?.("فشل التحديث: " + err.message, "error");

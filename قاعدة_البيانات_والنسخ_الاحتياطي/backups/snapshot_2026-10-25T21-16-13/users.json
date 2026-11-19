@@ -1,0 +1,37 @@
+[
+  {
+    "id": "YmnOYFTWQc3kgWOmKy3M",
+    "createdAt": "2026-07-08T00:30:40.156Z",
+    "email": "alifayad18@gmail.com",
+    "permissions": [
+      "sales",
+      "inventory",
+      "hr",
+      "purchases",
+      "accounts",
+      "settings"
+    ],
+    "status": "active",
+    "role": "admin",
+    "name": "على فياض",
+    "updatedAt": "2026-07-26T19:40:58.685Z"
+  },
+  {
+    "id": "eZ8UlvjeYawtWSre5EwW",
+    "createdAt": "2026-07-11T22:39:54.696Z",
+    "email": "alifayadacc18@gmail.com",
+    "passwordHash": "6f496eaf16d46f92b4dd7827da5a81b9acdd5eec77818b3108abebd545166f1a",
+    "name": "على فيااض",
+    "updatedAt": "2026-07-11T22:39:54.696Z",
+    "role": "admin"
+  },
+  {
+    "id": "t6ILliJdh8STfuDKHVRvI8ey7EO2",
+    "updatedAt": "2026-08-03T08:21:14.611Z",
+    "name": "ناجى عاطف",
+    "passwordHash": "076498881fb648b271ee525d8cd58b3f7f29b1979b838346021796de77389782",
+    "createdAt": "2026-08-03T08:21:14.611Z",
+    "role": "warehouse_keeper",
+    "email": "nagy@gmail.com"
+  }
+]

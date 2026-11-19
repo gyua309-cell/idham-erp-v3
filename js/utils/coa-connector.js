@@ -103,27 +103,51 @@ export async function generateCoaSubAccountCode(parentCode) {
 
 /**
  * Synchronize a newly created entity to the Chart of Accounts under its mapped parent.
+ * Supports both signatures:
+ *   syncEntityToCoa("banks", id, name, options)
+ *   syncEntityToCoa({ entityId, entityType, name, parentCode, ... })
  */
-export async function syncEntityToCoa(moduleKey, entityId, entityName, options = {}) {
+export async function syncEntityToCoa(moduleKeyOrObj, entityId, entityName, options = {}) {
+  let moduleKey, id, name, opts;
+  if (typeof moduleKeyOrObj === "object" && moduleKeyOrObj !== null) {
+    const obj = moduleKeyOrObj;
+    id = obj.entityId || "temp";
+    name = obj.name || obj.entityName || "";
+    const type = (obj.entityType || "").toLowerCase();
+    if (type.includes("bank")) moduleKey = "banks";
+    else if (type.includes("cash")) moduleKey = "cashBoxes";
+    else if (type.includes("supp")) moduleKey = "suppliers";
+    else if (type.includes("cust")) moduleKey = "customers";
+    else if (type.includes("ware") || type.includes("veh")) moduleKey = "warehouses";
+    else if (type.includes("emp")) moduleKey = "employees";
+    else moduleKey = obj.moduleKey || "banks";
+    opts = obj;
+  } else {
+    moduleKey = moduleKeyOrObj;
+    id = entityId;
+    name = entityName;
+    opts = options || {};
+  }
+
   const mapping = await getCoaMapping();
-  const config = mapping[moduleKey];
+  const config = mapping[moduleKey] || DEFAULT_MAPPING[moduleKey];
   if (!config || !config.enabled) return null;
 
   // Toggle option to skip (e.g. cash customer)
-  if (options.skipCoa) return null;
+  if (opts.skipCoa) return null;
 
   const colRef = collection(db, `companies/${COMPANY_ID}/chartOfAccounts`);
 
-  let parentCode = config.parentCode;
+  let parentCode = opts.parentCode || config.parentCode;
 
   if (moduleKey === "warehouses") {
-    const isVehicle = options.type === "Vehicle" || /سيارة|مندوب|vehicle|car|rep/i.test(entityName);
-    parentCode = isVehicle ? "1-1-4-1-02" : "1-1-4-1";
+    const isVehicle = opts.type === "Vehicle" || /سيارة|مندوب|vehicle|car|rep/i.test(name);
+    parentCode = isVehicle ? "1-1-4-1-02" : (opts.parentCode || "1-1-4-1");
   }
 
   // ── تقسيم ذمم العملاء: تجاريون مباشرون vs. عملاء مناديب ──
-  if (moduleKey === "customers") {
-    parentCode = await resolveCustomerParentCode(options.repId || null, colRef);
+  if (moduleKey === "customers" && !opts.parentCode) {
+    parentCode = await resolveCustomerParentCode(opts.repId || null, colRef);
   }
 
   if (!parentCode) return null;
@@ -156,7 +180,7 @@ export async function syncEntityToCoa(moduleKey, entityId, entityName, options =
   const accRef = doc(colRef);
   const accData = {
     code,
-    name: entityName,
+    name: name,
     type: parentAcc.type,
     parentCode,
     nodeType: "detail",
@@ -169,8 +193,8 @@ export async function syncEntityToCoa(moduleKey, entityId, entityName, options =
     companyId: COMPANY_ID,
     normalBalance: parentAcc.normalBalance || (["asset", "expense"].includes(parentAcc.type) ? "debit" : "credit"),
     sourceModule: moduleKey,
-    sourceEntityId: entityId,
-    linkedRepId: options.repId || null,   // ربط العميل بمندوبه
+    sourceEntityId: id,
+    linkedRepId: opts.repId || null,   // ربط العميل بمندوبه
     createdAt: new Date().toISOString()
   };
 
@@ -181,7 +205,7 @@ export async function syncEntityToCoa(moduleKey, entityId, entityName, options =
     const auditRef = doc(collection(db, `companies/${COMPANY_ID}/auditTrails`));
     await setDoc(auditRef, {
       action: "coa_account_auto_created",
-      details: `تم إنشاء حساب ${code} - ${entityName} تلقائياً (${moduleKey}${options.repId ? ` تحت مندوب ${options.repId}` : ""})`,
+      details: `تم إنشاء حساب ${code} - ${name} تلقائياً (${moduleKey}${opts.repId ? ` تحت مندوب ${opts.repId}` : ""})`,
       entityType: "chartOfAccounts",
       entityId: accRef.id,
       module: moduleKey,
@@ -191,19 +215,25 @@ export async function syncEntityToCoa(moduleKey, entityId, entityName, options =
     console.error("Audit log failed:", e);
   }
 
-  return { accountId: accRef.id, accountCode: code };
+  return {
+    code,
+    accountId: accRef.id,
+    accountCode: code
+  };
 }
 
 /**
  * Synchronize updates (like entity name changes) to the COA.
  */
-export async function updateEntityInCoa(accountId, newName) {
+export async function updateEntityInCoa(accountId, newName, sourceEntityId = null) {
   if (!accountId) return;
   const colRef = collection(db, `companies/${COMPANY_ID}/chartOfAccounts`);
   const accRef = doc(colRef, accountId);
   const snap = await getDoc(accRef);
   if (snap.exists()) {
-    await updateDoc(accRef, { name: newName, updatedAt: serverTimestamp() });
+    const updateData = { name: newName, updatedAt: serverTimestamp() };
+    if (sourceEntityId) updateData.sourceEntityId = sourceEntityId;
+    await updateDoc(accRef, updateData);
   }
 }
 

@@ -176,32 +176,32 @@ async function loadConsolidatedBalances() {
   if (periodLabel) periodLabel.textContent = `الفترة من ${fromDate} إلى ${toDate}`;
 
   try {
-    // 1. Fetch all required entities and transaction documents including journal entries
-    const [custSnap, suppSnap, coaSnap, invSnap, rcptSnap, purSnap, expSnap, salesRetSnap, purRetSnap, colSnap, jeSnap] = await Promise.all([
-      getDocs(collection(db, `companies/${COMPANY_ID}/customers`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/suppliers`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/chartOfAccounts`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/salesInvoices`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/receipts`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/purchaseInvoices`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/expenses`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/salesReturns`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/purchaseReturns`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/collections`)),
-      getDocs(collection(db, `companies/${COMPANY_ID}/journalEntries`)),
+    // 1. Fetch all required entities and transaction documents using cached layer (quota protected)
+    const [custDocs, suppDocs, coaDocs, invDocs, rcptDocs, purDocs, expDocs, salesRetDocs, purRetDocs, colDocs, jeDocs] = await Promise.all([
+      getAll(COLS.customers()),
+      getAll(COLS.suppliers()),
+      getAll(COLS.chartOfAccounts()),
+      getAll(COLS.salesInvoices()),
+      getAll(COLS.receipts()),
+      getAll(COLS.purchaseInvoices()),
+      getAll(COLS.expenses()),
+      getAll(COLS.salesReturns()),
+      getAll(COLS.purchaseReturns()),
+      getAll(collection(db, `companies/${COMPANY_ID}/collections`)),
+      getAll(COLS.journalEntries()),
     ]);
 
-    const customers = custSnap.docs.map(d => ({ id: d.id, ...d.data(), entityType: "customer" }));
-    const suppliers = suppSnap.docs.map(d => ({ id: d.id, ...d.data(), entityType: "supplier" }));
-    const coaList = coaSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-    const salesInvoices = invSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(i => i.status !== "cancelled");
-    const receiptsList = rcptSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status !== "cancelled");
-    const purchaseInvoices = purSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(p => p.status !== "cancelled");
-    const expensesList = expSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(e => e.status !== "cancelled");
-    const salesReturns = salesRetSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status !== "cancelled");
-    const purchaseReturns = purRetSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(r => r.status !== "cancelled");
-    const collectionsList = colSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(c => c.status !== "cancelled");
-    const manualJEs = jeSnap.docs.map(d => ({ id: d.id, ...d.data() })).filter(isManualJE);
+    const customers = custDocs.map(d => ({ ...d, entityType: "customer" }));
+    const suppliers = suppDocs.map(d => ({ ...d, entityType: "supplier" }));
+    const coaList = coaDocs;
+    const salesInvoices = invDocs.filter(i => i.status !== "cancelled");
+    const receiptsList = rcptDocs.filter(r => r.status !== "cancelled");
+    const purchaseInvoices = purDocs.filter(p => p.status !== "cancelled");
+    const expensesList = expDocs.filter(e => e.status !== "cancelled");
+    const salesReturns = salesRetDocs.filter(r => r.status !== "cancelled");
+    const purchaseReturns = purRetDocs.filter(r => r.status !== "cancelled");
+    const collectionsList = colDocs.filter(c => c.status !== "cancelled");
+    const manualJEs = jeDocs.filter(isManualJE);
 
     reportData = [];
 

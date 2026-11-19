@@ -78,7 +78,8 @@ export async function render(container, user) {
               <option value="admin">مدير نظام (Admin) — كامل الصلاحيات</option>
               <option value="accountant">محاسب (Accountant) — القيود والتقارير المالية</option>
               <option value="sales_rep">مندوب مبيعات (Sales Rep) — الفواتير والعملاء فقط</option>
-              <option value="warehouse_keeper">أمين مخزن (Warehouse Keeper) — المخزون والتحويلات</option>
+              <option value="warehouse_mgr">مدير مخازن (Warehouse Manager) — المخزون والتحويلات</option>
+              <option value="purchase_mgr">مدير مشتريات (Purchase Manager) — المشتريات والموردين والمخزون</option>
             </select>
           </div>
           <div id="usr-error" class="alert bad hidden"></div>
@@ -114,10 +115,11 @@ async function loadUsersList() {
     }
 
     const roleLabels = {
-      admin: { label: "مدير نظام", color: "indigo" },
-      accountant: { label: "محاسب", color: "lime" },
-      sales_rep: { label: "مندوب مبيعات", color: "warn" },
-      warehouse_keeper: { label: "أمين مخزن", color: "neutral" },
+      admin:          { label: "مدير نظام",      color: "indigo"  },
+      accountant:     { label: "محاسب",          color: "lime"    },
+      sales_rep:      { label: "مندوب مبيعات",  color: "warn"    },
+      warehouse_mgr:  { label: "مدير مخازن",    color: "neutral" },
+      purchase_mgr:   { label: "مدير مشتريات",  color: "teal"    },
     };
 
     tbody.innerHTML = users.map(u => {
@@ -182,12 +184,12 @@ window.saveUserRecord = async () => {
     const { getAuth, createUserWithEmailAndPassword, signOut } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js");
 
     const firebaseConfig = {
-      apiKey:            "AIzaSyAike2lPO7VnFoRHevnGkbHpAQbKoDb5r8",
-      authDomain:        "idham-foodstuffs-sa.firebaseapp.com",
-      projectId:         "idham-foodstuffs-sa",
-      storageBucket:     "idham-foodstuffs-sa.firebasestorage.app",
-      messagingSenderId: "771445462953",
-      appId:             "1:771445462953:web:05d70fb7c36a385c9796b8",
+      apiKey:            "AIzaSyBFMGVZvuWBaxwrjGUJV3GQf7hoyVGB6wY",
+      authDomain:        "idham-b3a7e.firebaseapp.com",
+      projectId:         "idham-b3a7e",
+      storageBucket:     "idham-b3a7e.firebasestorage.app",
+      messagingSenderId: "915839133333",
+      appId:             "1:915839133333:web:fe472e01993025f08a9d9c",
     };
 
     const tempAppName = "TempApp_" + Date.now();

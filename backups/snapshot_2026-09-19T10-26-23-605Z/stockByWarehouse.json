@@ -1,0 +1,6671 @@
+[
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_1EU9O4mqrEtwitQPnZ3o",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:07:41.389Z",
+    "qty": 0,
+    "productId": "1EU9O4mqrEtwitQPnZ3o"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_1YfL49HfqYRCA6nZTAKO",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "1YfL49HfqYRCA6nZTAKO",
+    "updatedAt": "2026-07-27T18:07:42.974Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_20XnPz3S3yGlqrJ0kqR8",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "20XnPz3S3yGlqrJ0kqR8"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_2EYPP2V6Nz8PrNAYdf5W",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:07:44.390Z",
+    "productId": "2EYPP2V6Nz8PrNAYdf5W"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_2NbmryZHvF4OFOPE19XG",
+    "productId": "2NbmryZHvF4OFOPE19XG",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_2da0AM4oiAg4oBCXBdEd",
+    "updatedAt": "2026-07-27T18:07:47.315Z",
+    "qty": 0,
+    "productId": "2da0AM4oiAg4oBCXBdEd",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_2yZvHDDqsgTAaUkW2BcJ",
+    "productId": "2yZvHDDqsgTAaUkW2BcJ",
+    "updatedAt": "2026-07-27T18:07:48.912Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_3CYNTCRyqTGGTj2ccAgH",
+    "stockStatus": "out",
+    "productId": "3CYNTCRyqTGGTj2ccAgH",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660418,
+      "nanoseconds": 166000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_3uRSHqrujg6wVrxXe3z0",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "3uRSHqrujg6wVrxXe3z0"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_4BYT6CVNb3Cc2VXvNhOX",
+    "productId": "4BYT6CVNb3Cc2VXvNhOX",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:07:54.560Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_4dEuAA80ziMLFUxH5aJO",
+    "updatedAt": "2026-07-27T18:07:58.862Z",
+    "productId": "4dEuAA80ziMLFUxH5aJO",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_5hFoTTktBTSAB9Fi9SLn",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "5hFoTTktBTSAB9Fi9SLn",
+    "updatedAt": "2026-07-27T18:08:00.263Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_7DvxzI5plNoCjy5gVPsz",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:01.625Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "7DvxzI5plNoCjy5gVPsz"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_7f7PJatqTIplHdulXTWd",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "7f7PJatqTIplHdulXTWd",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_7tCWhZq9UWRXwJxkRTTA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "productId": "7tCWhZq9UWRXwJxkRTTA"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_8AZuD93GootRkJ1CigtI",
+    "qty": 0,
+    "productId": "8AZuD93GootRkJ1CigtI",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:04.506Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_94bTgCDFkYMJQaoETG3Z",
+    "productId": "94bTgCDFkYMJQaoETG3Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:06.025Z",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_9NtVvzhfnxB2Z9rDN3uN",
+    "productId": "9NtVvzhfnxB2Z9rDN3uN",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806066,
+      "nanoseconds": 932000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_9PeZIfHYdFJtZgsKzNbQ",
+    "productId": "9PeZIfHYdFJtZgsKzNbQ",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:08.748Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_9rXe9UCiqrJ4c97SXCJp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "9rXe9UCiqrJ4c97SXCJp",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_A1yASYzpEy0S0M4xm1r8",
+    "updatedAt": "2026-07-27T18:08:10.125Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "A1yASYzpEy0S0M4xm1r8",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_AxokEQfHoYE6iSMXQuFy",
+    "productId": "AxokEQfHoYE6iSMXQuFy",
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_BzDiuvdpbviaXhOG5N0N",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "BzDiuvdpbviaXhOG5N0N",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_C1ac8RMQhx2gXejGiyF3",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:12.849Z",
+    "qty": 0,
+    "productId": "C1ac8RMQhx2gXejGiyF3"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_C4uFJBEhleygJraDO5qH",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "C4uFJBEhleygJraDO5qH",
+    "updatedAt": "2026-07-27T18:08:14.227Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_CcXTqwIBYvF3O1XSa6v2",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:15.617Z",
+    "productId": "CcXTqwIBYvF3O1XSa6v2",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_CdgjhKMW761zK7C4v8CI",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "CdgjhKMW761zK7C4v8CI",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_CwXTkvyG6odoZzZuEDja",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "CwXTkvyG6odoZzZuEDja"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_DY5ADETYmJoMo354HbS6",
+    "productId": "DY5ADETYmJoMo354HbS6",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:18.267Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_DYAhGplYopMJF95oK0IS",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:19.626Z",
+    "productId": "DYAhGplYopMJF95oK0IS",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_Daq0kIm7IykV0OkO4oLa",
+    "updatedAt": "2026-07-27T18:08:21.032Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "Daq0kIm7IykV0OkO4oLa"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_DviRgNpE8LLhT5ASxST3",
+    "updatedAt": "2026-07-27T18:08:22.459Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "DviRgNpE8LLhT5ASxST3",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_EDm62noDcoaSqIWpOgdD",
+    "productId": "EDm62noDcoaSqIWpOgdD",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:23.755Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_ERMKWYiTKdyUihtCTePI",
+    "productId": "ERMKWYiTKdyUihtCTePI",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:25.148Z",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_EXLDPRwT8ppDGrKjmDBM",
+    "updatedAt": "2026-07-27T18:08:26.531Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "EXLDPRwT8ppDGrKjmDBM"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_FlofDooOmuOEFrQiCWFQ",
+    "productId": "FlofDooOmuOEFrQiCWFQ",
+    "updatedAt": "2026-07-27T18:08:27.910Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_G4OKtTeRu9W5SP4J0GKy",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "G4OKtTeRu9W5SP4J0GKy"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_GjMW892nmjpmLeV5Kx3c",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "GjMW892nmjpmLeV5Kx3c",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_H5l12QDSE7W2hZOdcl1C",
+    "productId": "H5l12QDSE7W2hZOdcl1C",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_HWiP60AueqeUffX1owt8",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "HWiP60AueqeUffX1owt8",
+    "updatedAt": "2026-07-27T18:08:33.268Z",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_HtXRAmejDzBMhxsYQEUy",
+    "updatedAt": "2026-07-27T18:08:34.668Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "HtXRAmejDzBMhxsYQEUy"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_IV8f71IUPMlWk4unzQas",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "IV8f71IUPMlWk4unzQas"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_Kgqy5tEZswKnEJtaHB0P",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "Kgqy5tEZswKnEJtaHB0P"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_LYDz1hvYQAgGoTpbTOSw",
+    "updatedAt": "2026-07-27T18:08:37.348Z",
+    "qty": 0,
+    "productId": "LYDz1hvYQAgGoTpbTOSw",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_LecJvj5mC6WvkN8boroZ",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "LecJvj5mC6WvkN8boroZ",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_MNSnc8uULDA5wfiYIW99",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "MNSnc8uULDA5wfiYIW99",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_MrmWUHqDh6stxloRQNkT",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "MrmWUHqDh6stxloRQNkT",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_NJn3bR8RLg1bAUcZvi32",
+    "updatedAt": "2026-07-27T18:08:42.848Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "NJn3bR8RLg1bAUcZvi32"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_OCbk2C3WCS6nrDpMeynA",
+    "reorderLevel": 0,
+    "productId": "OCbk2C3WCS6nrDpMeynA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_PmtB5uXbDG1nXnx8GMSJ",
+    "productId": "PmtB5uXbDG1nXnx8GMSJ",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:45.831Z",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_PnOdolAXPEcF2IfU4MMx",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "PnOdolAXPEcF2IfU4MMx",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:47.184Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_QPV4lrM9pSVlss2NDb9y",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "QPV4lrM9pSVlss2NDb9y",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_R1re9QOHWOUZX1cwZtRB",
+    "productId": "R1re9QOHWOUZX1cwZtRB",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660418,
+      "nanoseconds": 166000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_RcrtoSwuKI63talw1zuG",
+    "updatedAt": "2026-07-27T18:08:48.586Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "RcrtoSwuKI63talw1zuG"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_S48tSeUJz7vl4mPR5okg",
+    "productId": "S48tSeUJz7vl4mPR5okg",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_SQnrnOyRXWzq76NO3yXB",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "SQnrnOyRXWzq76NO3yXB",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789805406,
+      "nanoseconds": 698000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_Sg7k8Y5bVrlOa8zoD5yh",
+    "productId": "Sg7k8Y5bVrlOa8zoD5yh",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:51.389Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_SzHULsTeLonnDaH4vh4Y",
+    "productId": "SzHULsTeLonnDaH4vh4Y",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:52.790Z",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_U7X6AQz47gWcp5ShgLPO",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806066,
+      "nanoseconds": 932000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "productId": "U7X6AQz47gWcp5ShgLPO"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_WruLvzM1VpCOZ6yEHf8Y",
+    "stockStatus": "out",
+    "productId": "WruLvzM1VpCOZ6yEHf8Y",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660418,
+      "nanoseconds": 166000000
+    },
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_X2zgrRmnUXIXqZ6ytQS1",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806066,
+      "nanoseconds": 932000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "X2zgrRmnUXIXqZ6ytQS1"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_XCQOI94ocO903Gm0xeK8",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "XCQOI94ocO903Gm0xeK8",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_YDGp6p8TPz1bqNnOue4N",
+    "updatedAt": "2026-07-27T18:08:56.949Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "YDGp6p8TPz1bqNnOue4N"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_YV2OumfkBeqlzRG2YruG",
+    "qty": 0,
+    "productId": "YV2OumfkBeqlzRG2YruG",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:58.408Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_ZINptjXdR8FmNmwaGo2t",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "ZINptjXdR8FmNmwaGo2t",
+    "updatedAt": "2026-07-27T18:08:59.744Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_Zpy1JPhHmUYrRbFao1IO",
+    "qty": 0,
+    "productId": "Zpy1JPhHmUYrRbFao1IO",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789805406,
+      "nanoseconds": 698000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_a707N5zfeimbWrUe0AxE",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "a707N5zfeimbWrUe0AxE",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_afCATiCiSHOBFsMH1aLK",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "afCATiCiSHOBFsMH1aLK",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_atrR6pMjwiEfK6Hdo2Oi",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "atrR6pMjwiEfK6Hdo2Oi",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_bJ7SHrAJrGUmxRXK5uIt",
+    "productId": "bJ7SHrAJrGUmxRXK5uIt",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "stockStatus": "out"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_bYDk4gcZQhPBwWyPtnrr",
+    "productId": "bYDk4gcZQhPBwWyPtnrr",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:03.830Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_c1AGjekAaUO0zQchv0bK",
+    "productId": "c1AGjekAaUO0zQchv0bK",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789805406,
+      "nanoseconds": 698000000
+    },
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_c7VkTk3H5pvcZB2tCGRN",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "c7VkTk3H5pvcZB2tCGRN",
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_c87KVwQ4KpLT51MM3l1u",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "c87KVwQ4KpLT51MM3l1u",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_cdQSjHVqLxAYqBMVUyLE",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "cdQSjHVqLxAYqBMVUyLE",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_cpOYrBAZbabLvo5DoZ6B",
+    "productId": "cpOYrBAZbabLvo5DoZ6B",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:08.025Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_dX04uuWrBhJhErR3U40T",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "productId": "dX04uuWrBhJhErR3U40T"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_dtCMNYIhjGBZGCUE6Lr1",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "dtCMNYIhjGBZGCUE6Lr1",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_eAXoMt1UyFqPTMLZ4GAX",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "eAXoMt1UyFqPTMLZ4GAX",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806066,
+      "nanoseconds": 932000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_fT46B3aWtLP1P85gLk8J",
+    "productId": "fT46B3aWtLP1P85gLk8J",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660418,
+      "nanoseconds": 166000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_fV6ZGU0s0fFiEluCLKje",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "productId": "fV6ZGU0s0fFiEluCLKje"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_g0ZCXjRkQWyWCXy0qgN5",
+    "updatedAt": "2026-07-27T18:09:13.466Z",
+    "qty": 0,
+    "productId": "g0ZCXjRkQWyWCXy0qgN5",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_h2CTayjdEvjpld1Mc7WO",
+    "updatedAt": "2026-07-27T18:09:14.867Z",
+    "productId": "h2CTayjdEvjpld1Mc7WO",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_hsweOtlJmOZIBAB1tlu1",
+    "productId": "hsweOtlJmOZIBAB1tlu1",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:16.241Z",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_hvysP8vRqA8wXPIz75nN",
+    "productId": "hvysP8vRqA8wXPIz75nN",
+    "updatedAt": "2026-07-27T18:09:17.593Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_iFJ8JyexxPdWuYlzbU5Y",
+    "productId": "iFJ8JyexxPdWuYlzbU5Y",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_iht0utKRHl3JCWuI4D1E",
+    "updatedAt": "2026-07-27T18:09:20.227Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "iht0utKRHl3JCWuI4D1E"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_iqrB1dkzgtyvBOVVXl6q",
+    "productId": "iqrB1dkzgtyvBOVVXl6q",
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_jTxUESxX83gV3ASNzhmT",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "productId": "jTxUESxX83gV3ASNzhmT",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_k9SN4NfHIQJ1Qbzz9F8E",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "k9SN4NfHIQJ1Qbzz9F8E"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_kAm09NsM5EPXF8UvrFeX",
+    "qty": 0,
+    "productId": "kAm09NsM5EPXF8UvrFeX",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:23.015Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_muaXACw0f09dXe4V1QY1",
+    "productId": "muaXACw0f09dXe4V1QY1",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:24.320Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_n4IW05Dc6fcoU0G6Ac2t",
+    "updatedAt": "2026-07-27T18:09:25.738Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "n4IW05Dc6fcoU0G6Ac2t",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_nE7UIt4vMdgbI4fhklhf",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "nE7UIt4vMdgbI4fhklhf",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_ndlDJpMG9hlBKQe4MauJ",
+    "productId": "ndlDJpMG9hlBKQe4MauJ",
+    "updatedAt": "2026-07-27T18:09:27.216Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_nn7SSyLySTxv0WgkoWf8",
+    "productId": "nn7SSyLySTxv0WgkoWf8",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:28.586Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_oILf9Ggdj8bYNt4Pl492",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:29.943Z",
+    "productId": "oILf9Ggdj8bYNt4Pl492"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_oJ9v6weiVvLu7VgYVp1i",
+    "updatedAt": "2026-07-27T18:09:31.258Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "oJ9v6weiVvLu7VgYVp1i"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_ofIJ9TeKlN756jzt61SW",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:32.638Z",
+    "productId": "ofIJ9TeKlN756jzt61SW",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_ols8aSnfOWwSSwgvIzp7",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789805406,
+      "nanoseconds": 698000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "ols8aSnfOWwSSwgvIzp7"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_poGgeZhrDTm4eW0nHNK1",
+    "updatedAt": "2026-07-27T18:09:35.416Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "poGgeZhrDTm4eW0nHNK1"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_qTe6Vs5C1XurYecxJlB5",
+    "productId": "qTe6Vs5C1XurYecxJlB5",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:36.937Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_qjEiCz0kBP2AFa9Yt3D4",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:38.255Z",
+    "productId": "qjEiCz0kBP2AFa9Yt3D4",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_qtl4NmMLGPyRMA9E4Mi5",
+    "updatedAt": "2026-07-27T18:09:39.614Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "qtl4NmMLGPyRMA9E4Mi5"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_qwuMMK8xWSJhh2Q2KbV8",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "qwuMMK8xWSJhh2Q2KbV8"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_rsK4qZNXiYsQYzw97O9W",
+    "productId": "rsK4qZNXiYsQYzw97O9W",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:42.217Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_tAq8ENjtZ0cRpzhW6xFH",
+    "productId": "tAq8ENjtZ0cRpzhW6xFH",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660418,
+      "nanoseconds": 166000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_thEesj4aPMBKJePRHTlE",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "thEesj4aPMBKJePRHTlE",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_vQkzxlzdOHu7z21s9SMV",
+    "qty": 0,
+    "productId": "vQkzxlzdOHu7z21s9SMV",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660418,
+      "nanoseconds": 166000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_wDrRu3ce1hpW4P4XXt0d",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "wDrRu3ce1hpW4P4XXt0d",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:47.593Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_wGEk0xKjCvX7pSSQGUU1",
+    "productId": "wGEk0xKjCvX7pSSQGUU1",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:49.130Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_wxepIAahN8ati3vwaa2L",
+    "productId": "wxepIAahN8ati3vwaa2L",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:50.482Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_x1cIL2f0tNMlLQWMw2ky",
+    "productId": "x1cIL2f0tNMlLQWMw2ky",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_xatSIYYexbA9vqwkiabB",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "xatSIYYexbA9vqwkiabB",
+    "updatedAt": "2026-07-27T18:09:53.164Z",
+    "qty": 0
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_yJJs2qLBiktzgf1yPlTF",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "yJJs2qLBiktzgf1yPlTF",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    }
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_yLOfiimlko7x0ORSKc5c",
+    "productId": "yLOfiimlko7x0ORSKc5c",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:55.815Z"
+  },
+  {
+    "_id": "5spakstdxOmDW0dhLZgp_z8t67CUmJnR9IT1pVAdW",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947897,
+      "nanoseconds": 922000000
+    },
+    "productId": "z8t67CUmJnR9IT1pVAdW",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_1EU9O4mqrEtwitQPnZ3o",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "1EU9O4mqrEtwitQPnZ3o",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_2NbmryZHvF4OFOPE19XG",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "2NbmryZHvF4OFOPE19XG"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_3CYNTCRyqTGGTj2ccAgH",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "productId": "3CYNTCRyqTGGTj2ccAgH",
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_7tCWhZq9UWRXwJxkRTTA",
+    "productId": "7tCWhZq9UWRXwJxkRTTA",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_9NtVvzhfnxB2Z9rDN3uN",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "9NtVvzhfnxB2Z9rDN3uN",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_9rXe9UCiqrJ4c97SXCJp",
+    "productId": "9rXe9UCiqrJ4c97SXCJp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789376292,
+      "nanoseconds": 149000000
+    },
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_AxokEQfHoYE6iSMXQuFy",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "AxokEQfHoYE6iSMXQuFy"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_BzDiuvdpbviaXhOG5N0N",
+    "productId": "BzDiuvdpbviaXhOG5N0N",
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789376292,
+      "nanoseconds": 149000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_CcXTqwIBYvF3O1XSa6v2",
+    "productId": "CcXTqwIBYvF3O1XSa6v2",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_CwXTkvyG6odoZzZuEDja",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "CwXTkvyG6odoZzZuEDja",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_DY5ADETYmJoMo354HbS6",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "DY5ADETYmJoMo354HbS6",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_Daq0kIm7IykV0OkO4oLa",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "Daq0kIm7IykV0OkO4oLa"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_ERMKWYiTKdyUihtCTePI",
+    "productId": "ERMKWYiTKdyUihtCTePI",
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_EXLDPRwT8ppDGrKjmDBM",
+    "productId": "EXLDPRwT8ppDGrKjmDBM",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_FlofDooOmuOEFrQiCWFQ",
+    "productId": "FlofDooOmuOEFrQiCWFQ",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_G4OKtTeRu9W5SP4J0GKy",
+    "productId": "G4OKtTeRu9W5SP4J0GKy",
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_GjMW892nmjpmLeV5Kx3c",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "GjMW892nmjpmLeV5Kx3c"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_H5l12QDSE7W2hZOdcl1C",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "productId": "H5l12QDSE7W2hZOdcl1C",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_IV8f71IUPMlWk4unzQas",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "IV8f71IUPMlWk4unzQas"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_KH4VsMfbVjboRlPsCKpz",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "KH4VsMfbVjboRlPsCKpz",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_Kgqy5tEZswKnEJtaHB0P",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789376292,
+      "nanoseconds": 149000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "Kgqy5tEZswKnEJtaHB0P"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_MNSnc8uULDA5wfiYIW99",
+    "productId": "MNSnc8uULDA5wfiYIW99",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_NJn3bR8RLg1bAUcZvi32",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "NJn3bR8RLg1bAUcZvi32",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_O5Pc4ZP3ks1TWq2AfhOo",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "O5Pc4ZP3ks1TWq2AfhOo",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_OCbk2C3WCS6nrDpMeynA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "OCbk2C3WCS6nrDpMeynA"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_PmtB5uXbDG1nXnx8GMSJ",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "PmtB5uXbDG1nXnx8GMSJ"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_QPV4lrM9pSVlss2NDb9y",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "productId": "QPV4lrM9pSVlss2NDb9y"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_RcrtoSwuKI63talw1zuG",
+    "qty": 0,
+    "productId": "RcrtoSwuKI63talw1zuG",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_RpOpicdA58y2aqs4IA8q",
+    "qty": 0,
+    "productId": "RpOpicdA58y2aqs4IA8q",
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_SQnrnOyRXWzq76NO3yXB",
+    "productId": "SQnrnOyRXWzq76NO3yXB",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789376292,
+      "nanoseconds": 149000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_SzHULsTeLonnDaH4vh4Y",
+    "productId": "SzHULsTeLonnDaH4vh4Y",
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787586135,
+      "nanoseconds": 298000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_U7X6AQz47gWcp5ShgLPO",
+    "productId": "U7X6AQz47gWcp5ShgLPO",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_WruLvzM1VpCOZ6yEHf8Y",
+    "qty": 0,
+    "productId": "WruLvzM1VpCOZ6yEHf8Y",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_WxGec0F3udluHDEFApv7",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "productId": "WxGec0F3udluHDEFApv7"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_XCQOI94ocO903Gm0xeK8",
+    "productId": "XCQOI94ocO903Gm0xeK8",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_YDGp6p8TPz1bqNnOue4N",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "YDGp6p8TPz1bqNnOue4N",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_YV2OumfkBeqlzRG2YruG",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "YV2OumfkBeqlzRG2YruG"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_ZINptjXdR8FmNmwaGo2t",
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "ZINptjXdR8FmNmwaGo2t",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_Zpy1JPhHmUYrRbFao1IO",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "productId": "Zpy1JPhHmUYrRbFao1IO",
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_atrR6pMjwiEfK6Hdo2Oi",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "productId": "atrR6pMjwiEfK6Hdo2Oi",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_bJ7SHrAJrGUmxRXK5uIt",
+    "qty": 0,
+    "productId": "bJ7SHrAJrGUmxRXK5uIt",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_c1AGjekAaUO0zQchv0bK",
+    "stockStatus": "out",
+    "productId": "c1AGjekAaUO0zQchv0bK",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_c7VkTk3H5pvcZB2tCGRN",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "c7VkTk3H5pvcZB2tCGRN"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_c87KVwQ4KpLT51MM3l1u",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "c87KVwQ4KpLT51MM3l1u",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_cdQSjHVqLxAYqBMVUyLE",
+    "productId": "cdQSjHVqLxAYqBMVUyLE",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_cpOYrBAZbabLvo5DoZ6B",
+    "qty": 0,
+    "productId": "cpOYrBAZbabLvo5DoZ6B",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_d17p96xsHv7Vmpyc9Toy",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "d17p96xsHv7Vmpyc9Toy"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_dtCMNYIhjGBZGCUE6Lr1",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "dtCMNYIhjGBZGCUE6Lr1",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_eAXoMt1UyFqPTMLZ4GAX",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "eAXoMt1UyFqPTMLZ4GAX"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_fT46B3aWtLP1P85gLk8J",
+    "productId": "fT46B3aWtLP1P85gLk8J",
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_fV6ZGU0s0fFiEluCLKje",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "fV6ZGU0s0fFiEluCLKje",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_ido9rzLwUEIyH8cBoKJJ",
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "reorderLevel": 0,
+    "productId": "ido9rzLwUEIyH8cBoKJJ",
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_iqrB1dkzgtyvBOVVXl6q",
+    "productId": "iqrB1dkzgtyvBOVVXl6q",
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_jTxUESxX83gV3ASNzhmT",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "jTxUESxX83gV3ASNzhmT",
+    "qty": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_jcvBhus9KJxTvFOKPYea",
+    "productId": "jcvBhus9KJxTvFOKPYea",
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_k9SN4NfHIQJ1Qbzz9F8E",
+    "productId": "k9SN4NfHIQJ1Qbzz9F8E",
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_ndlDJpMG9hlBKQe4MauJ",
+    "stockStatus": "out",
+    "productId": "ndlDJpMG9hlBKQe4MauJ",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_nn7SSyLySTxv0WgkoWf8",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "nn7SSyLySTxv0WgkoWf8",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_oJ9v6weiVvLu7VgYVp1i",
+    "reorderLevel": 0,
+    "productId": "oJ9v6weiVvLu7VgYVp1i",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789297264,
+      "nanoseconds": 138000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_oU8yH7WDRu2ZBKLVYg1A",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788020143,
+      "nanoseconds": 952000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "oU8yH7WDRu2ZBKLVYg1A",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_poGgeZhrDTm4eW0nHNK1",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "productId": "poGgeZhrDTm4eW0nHNK1"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_qtl4NmMLGPyRMA9E4Mi5",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "qtl4NmMLGPyRMA9E4Mi5"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_qwuMMK8xWSJhh2Q2KbV8",
+    "productId": "qwuMMK8xWSJhh2Q2KbV8",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788334952,
+      "nanoseconds": 176000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_tAq8ENjtZ0cRpzhW6xFH",
+    "productId": "tAq8ENjtZ0cRpzhW6xFH",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789297264,
+      "nanoseconds": 138000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_thEesj4aPMBKJePRHTlE",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "thEesj4aPMBKJePRHTlE"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_vQkzxlzdOHu7z21s9SMV",
+    "productId": "vQkzxlzdOHu7z21s9SMV",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_wDrRu3ce1hpW4P4XXt0d",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "productId": "wDrRu3ce1hpW4P4XXt0d"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_wGEk0xKjCvX7pSSQGUU1",
+    "stockStatus": "out",
+    "productId": "wGEk0xKjCvX7pSSQGUU1",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788334952,
+      "nanoseconds": 176000000
+    }
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_wxepIAahN8ati3vwaa2L",
+    "productId": "wxepIAahN8ati3vwaa2L",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_x1cIL2f0tNMlLQWMw2ky",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "x1cIL2f0tNMlLQWMw2ky"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_yJJs2qLBiktzgf1yPlTF",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378341,
+      "nanoseconds": 836000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "yJJs2qLBiktzgf1yPlTF"
+  },
+  {
+    "_id": "7egAcDBCbCctJyO4LH91_z8t67CUmJnR9IT1pVAdW",
+    "productId": "z8t67CUmJnR9IT1pVAdW",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743591,
+      "nanoseconds": 10000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_0KFyB9TM8HlFKAlfMI7J",
+    "qty": 5,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785441100,
+      "nanoseconds": 7000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "0KFyB9TM8HlFKAlfMI7J"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_0LvN11Sl2mJQzLtZrY0u",
+    "qty": 0,
+    "productId": "0LvN11Sl2mJQzLtZrY0u",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722315,
+      "nanoseconds": 536000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_0cniV5I2oOQBqUJLlu39",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 5,
+    "productId": "0cniV5I2oOQBqUJLlu39",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786207648,
+      "nanoseconds": 116000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_1EU9O4mqrEtwitQPnZ3o",
+    "productId": "1EU9O4mqrEtwitQPnZ3o",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 12,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290145,
+      "nanoseconds": 377000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_1YfL49HfqYRCA6nZTAKO",
+    "stockStatus": "ok",
+    "productId": "1YfL49HfqYRCA6nZTAKO",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 46,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789640270,
+      "nanoseconds": 150000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_1zzb2xRZ8xJ1no9UCbsP",
+    "productId": "1zzb2xRZ8xJ1no9UCbsP",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 10,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785442928,
+      "nanoseconds": 163000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_20XnPz3S3yGlqrJ0kqR8",
+    "qty": 15,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "productId": "20XnPz3S3yGlqrJ0kqR8",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_2EYPP2V6Nz8PrNAYdf5W",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230261,
+      "nanoseconds": 870000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "productId": "2EYPP2V6Nz8PrNAYdf5W",
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_2NbmryZHvF4OFOPE19XG",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "reorderLevel": 0,
+    "qty": 17,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "2NbmryZHvF4OFOPE19XG"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_2ai0tmIyP6GugmBuB4oc",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785442903,
+      "nanoseconds": 411000000
+    },
+    "qty": 10,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "2ai0tmIyP6GugmBuB4oc",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_2da0AM4oiAg4oBCXBdEd",
+    "stockStatus": "out",
+    "productId": "2da0AM4oiAg4oBCXBdEd",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230256,
+      "nanoseconds": 997000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_2yZvHDDqsgTAaUkW2BcJ",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "2yZvHDDqsgTAaUkW2BcJ",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230219,
+      "nanoseconds": 686000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_39KzHOrIIhFulgoC328F",
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "39KzHOrIIhFulgoC328F",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982480,
+      "nanoseconds": 949000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_3CYNTCRyqTGGTj2ccAgH",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660436,
+      "nanoseconds": 242000000
+    },
+    "qty": 59,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productCode": "45004",
+    "reorderLevel": 0,
+    "companyId": "idham-main",
+    "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه",
+    "productId": "3CYNTCRyqTGGTj2ccAgH"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_3uRSHqrujg6wVrxXe3z0",
+    "reorderLevel": 0,
+    "qty": 8,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "productId": "3uRSHqrujg6wVrxXe3z0"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_49j3vUnSMUNsfP7qojHd",
+    "productId": "49j3vUnSMUNsfP7qojHd",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 10,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787823002,
+      "nanoseconds": 164000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_4BYT6CVNb3Cc2VXvNhOX",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230218,
+      "nanoseconds": 520000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "4BYT6CVNb3Cc2VXvNhOX",
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_4NzCCNfozK7Vy1tIyEHA",
+    "productId": "4NzCCNfozK7Vy1tIyEHA",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786139513,
+      "nanoseconds": 118000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_4dEuAA80ziMLFUxH5aJO",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786476388,
+      "nanoseconds": 309000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "productId": "4dEuAA80ziMLFUxH5aJO",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_5hFoTTktBTSAB9Fi9SLn",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785587370,
+      "nanoseconds": 52000000
+    },
+    "productId": "5hFoTTktBTSAB9Fi9SLn",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "qty": 1
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_76tptqcKQG7kdvT7gvO7",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "reorderLevel": 0,
+    "productId": "76tptqcKQG7kdvT7gvO7",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_7DvxzI5plNoCjy5gVPsz",
+    "productId": "7DvxzI5plNoCjy5gVPsz",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230217,
+      "nanoseconds": 320000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_7f7PJatqTIplHdulXTWd",
+    "qty": 10,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "7f7PJatqTIplHdulXTWd"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_7tCWhZq9UWRXwJxkRTTA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290145,
+      "nanoseconds": 377000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "qty": 10,
+    "reorderLevel": 0,
+    "productId": "7tCWhZq9UWRXwJxkRTTA"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_7ty5VeY9ebD9ljF6VuAB",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786139505,
+      "nanoseconds": 188000000
+    },
+    "productId": "7ty5VeY9ebD9ljF6VuAB",
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_8AZuD93GootRkJ1CigtI",
+    "stockStatus": "ok",
+    "productId": "8AZuD93GootRkJ1CigtI",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 1,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786631989,
+      "nanoseconds": 369000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_8IE6gW2hpwWcoFBhdb4Z",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290145,
+      "nanoseconds": 377000000
+    },
+    "qty": 10,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "8IE6gW2hpwWcoFBhdb4Z"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_8i29c5YJPmxhhwGnJY1d",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785442930,
+      "nanoseconds": 501000000
+    },
+    "qty": 10,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "8i29c5YJPmxhhwGnJY1d"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_94bTgCDFkYMJQaoETG3Z",
+    "productId": "94bTgCDFkYMJQaoETG3Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230241,
+      "nanoseconds": 720000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_9NtVvzhfnxB2Z9rDN3uN",
+    "stockStatus": "ok",
+    "reorderLevel": 5,
+    "productCode": "03002",
+    "qty": 68,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+    "productId": "9NtVvzhfnxB2Z9rDN3uN",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660787,
+      "nanoseconds": 87000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_9PeZIfHYdFJtZgsKzNbQ",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786261113,
+      "nanoseconds": 724000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "9PeZIfHYdFJtZgsKzNbQ",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_9emGBomCaZlOWAEeegxi",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788715353,
+      "nanoseconds": 666000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 49,
+    "stockStatus": "ok",
+    "productId": "9emGBomCaZlOWAEeegxi"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_9rXe9UCiqrJ4c97SXCJp",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789410574,
+      "nanoseconds": 499000000
+    },
+    "qty": 5,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "9rXe9UCiqrJ4c97SXCJp"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_A1yASYzpEy0S0M4xm1r8",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785571013,
+      "nanoseconds": 62000000
+    },
+    "qty": 0,
+    "productId": "A1yASYzpEy0S0M4xm1r8",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_AFfMPhuP9VNwZFY2Ypu4",
+    "productId": "AFfMPhuP9VNwZFY2Ypu4",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786360463,
+      "nanoseconds": 813000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_AxokEQfHoYE6iSMXQuFy",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "AxokEQfHoYE6iSMXQuFy",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "qty": 7
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_BNTmkCdGBdYZM3NvXM0u",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "productId": "BNTmkCdGBdYZM3NvXM0u",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_BRYy3jvl6JJOqON0PnPr",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786522545,
+      "nanoseconds": 939000000
+    },
+    "qty": 10,
+    "productId": "BRYy3jvl6JJOqON0PnPr",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_BzDiuvdpbviaXhOG5N0N",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789144441,
+      "nanoseconds": 99000000
+    },
+    "productId": "BzDiuvdpbviaXhOG5N0N",
+    "qty": 1,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_C1ac8RMQhx2gXejGiyF3",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "C1ac8RMQhx2gXejGiyF3",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786261113,
+      "nanoseconds": 724000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_C2qgCHPlCqeAxudziRTx",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850858,
+      "nanoseconds": 384000000
+    },
+    "productId": "C2qgCHPlCqeAxudziRTx",
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_C4uFJBEhleygJraDO5qH",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230253,
+      "nanoseconds": 73000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "C4uFJBEhleygJraDO5qH",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_C7O4C5paowvy6a6eQXmQ",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "C7O4C5paowvy6a6eQXmQ"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_CcXTqwIBYvF3O1XSa6v2",
+    "productId": "CcXTqwIBYvF3O1XSa6v2",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 3,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743933,
+      "nanoseconds": 962000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_CdgjhKMW761zK7C4v8CI",
+    "productId": "CdgjhKMW761zK7C4v8CI",
+    "qty": 125,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789412464,
+      "nanoseconds": 908000000
+    },
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_CwXTkvyG6odoZzZuEDja",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789225893,
+      "nanoseconds": 159000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 31,
+    "stockStatus": "ok",
+    "productId": "CwXTkvyG6odoZzZuEDja"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_DY5ADETYmJoMo354HbS6",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290145,
+      "nanoseconds": 377000000
+    },
+    "qty": 5,
+    "productId": "DY5ADETYmJoMo354HbS6",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_DYAhGplYopMJF95oK0IS",
+    "productId": "DYAhGplYopMJF95oK0IS",
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786261113,
+      "nanoseconds": 724000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_DZe4WdAPSGklrw6NBFQo",
+    "qty": 50,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786978663,
+      "nanoseconds": 360000000
+    },
+    "productId": "DZe4WdAPSGklrw6NBFQo",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_Daq0kIm7IykV0OkO4oLa",
+    "qty": 4,
+    "productId": "Daq0kIm7IykV0OkO4oLa",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789297374,
+      "nanoseconds": 859000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_DmiuiCSrrwzLqNmKKYHS",
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "DmiuiCSrrwzLqNmKKYHS",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850858,
+      "nanoseconds": 384000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_DviRgNpE8LLhT5ASxST3",
+    "reorderLevel": 0,
+    "productId": "DviRgNpE8LLhT5ASxST3",
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_EDm62noDcoaSqIWpOgdD",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786866187,
+      "nanoseconds": 285000000
+    },
+    "productId": "EDm62noDcoaSqIWpOgdD"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ERMKWYiTKdyUihtCTePI",
+    "productId": "ERMKWYiTKdyUihtCTePI",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788810689,
+      "nanoseconds": 902000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_EXLDPRwT8ppDGrKjmDBM",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743933,
+      "nanoseconds": 962000000
+    },
+    "qty": 5,
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "EXLDPRwT8ppDGrKjmDBM"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_EZM7P4o8fuuHllcaskVy",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "EZM7P4o8fuuHllcaskVy",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_EbMOr0wK8MmS7nTrrkLN",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788888970,
+      "nanoseconds": 943000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "EbMOr0wK8MmS7nTrrkLN"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_FFntInScWOENSPxwHiMX",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "FFntInScWOENSPxwHiMX",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788337804,
+      "nanoseconds": 358000000
+    },
+    "qty": 25
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_FlofDooOmuOEFrQiCWFQ",
+    "qty": 88,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789412464,
+      "nanoseconds": 908000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "FlofDooOmuOEFrQiCWFQ"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_FvWk9Bio56bO2RWhnZTf",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786139494,
+      "nanoseconds": 601000000
+    },
+    "qty": 0,
+    "productId": "FvWk9Bio56bO2RWhnZTf"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_G4OKtTeRu9W5SP4J0GKy",
+    "reorderLevel": 0,
+    "productId": "G4OKtTeRu9W5SP4J0GKy",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789569015,
+      "nanoseconds": 732000000
+    },
+    "qty": 51
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_G6oNDloeA4oXtc7B9Mx0",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "G6oNDloeA4oXtc7B9Mx0",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_GjMW892nmjpmLeV5Kx3c",
+    "productId": "GjMW892nmjpmLeV5Kx3c",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789225893,
+      "nanoseconds": 159000000
+    },
+    "qty": 14
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_H5l12QDSE7W2hZOdcl1C",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "H5l12QDSE7W2hZOdcl1C",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "qty": 3
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_HWiP60AueqeUffX1owt8",
+    "updatedAt": "2026-07-27T18:08:32.569Z",
+    "qty": 0,
+    "productId": "HWiP60AueqeUffX1owt8",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_HYTUthpUuHZ6AtqtR6Rr",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "HYTUthpUuHZ6AtqtR6Rr",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_HtXRAmejDzBMhxsYQEUy",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "productId": "HtXRAmejDzBMhxsYQEUy",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_IV8f71IUPMlWk4unzQas",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 10,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "stockStatus": "ok",
+    "productId": "IV8f71IUPMlWk4unzQas",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_IcToo8LA1xqDkAotIavx",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "productId": "IcToo8LA1xqDkAotIavx",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850858,
+      "nanoseconds": 384000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_JGaepZOseisiYbAq3o8W",
+    "productId": "JGaepZOseisiYbAq3o8W",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789548246,
+      "nanoseconds": 104000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_JwECXw4VTinmrGoEF7MY",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788889364,
+      "nanoseconds": 159000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "productId": "JwECXw4VTinmrGoEF7MY"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_KH4VsMfbVjboRlPsCKpz",
+    "qty": 6,
+    "productId": "KH4VsMfbVjboRlPsCKpz",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787991489,
+      "nanoseconds": 159000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_KPESAU2IR3TPZpEnCsZg",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "KPESAU2IR3TPZpEnCsZg"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_KPv78zgVevBkFyJeRcCF",
+    "productId": "KPv78zgVevBkFyJeRcCF",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982493,
+      "nanoseconds": 584000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_Kgqy5tEZswKnEJtaHB0P",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789144441,
+      "nanoseconds": 99000000
+    },
+    "productId": "Kgqy5tEZswKnEJtaHB0P",
+    "qty": 35,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_LQ7qcjU0LxGkA8zhd4zz",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789372354,
+      "nanoseconds": 857000000
+    },
+    "qty": 0,
+    "productId": "LQ7qcjU0LxGkA8zhd4zz",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_LYDz1hvYQAgGoTpbTOSw",
+    "productId": "LYDz1hvYQAgGoTpbTOSw",
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786261113,
+      "nanoseconds": 724000000
+    },
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_LecJvj5mC6WvkN8boroZ",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "LecJvj5mC6WvkN8boroZ",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "qty": 2,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_MGvam0giNIBu97AyBL3C",
+    "productId": "MGvam0giNIBu97AyBL3C",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 9,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806835,
+      "nanoseconds": 753000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_MNSnc8uULDA5wfiYIW99",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "qty": 20,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "MNSnc8uULDA5wfiYIW99"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_MWXMvWA35h2AHzrUVO71",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786176925,
+      "nanoseconds": 830000000
+    },
+    "stockStatus": "out",
+    "productId": "MWXMvWA35h2AHzrUVO71",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_MfVGbhCCslV2mvwtwbD6",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 55,
+    "stockStatus": "ok",
+    "productId": "MfVGbhCCslV2mvwtwbD6",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786978665,
+      "nanoseconds": 902000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_MrmWUHqDh6stxloRQNkT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "qty": 2,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "MrmWUHqDh6stxloRQNkT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_NCaERXqkmN4F3KYYdhJj",
+    "stockStatus": "out",
+    "productId": "NCaERXqkmN4F3KYYdhJj",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850858,
+      "nanoseconds": 384000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_NJn3bR8RLg1bAUcZvi32",
+    "qty": 5,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743933,
+      "nanoseconds": 962000000
+    },
+    "productId": "NJn3bR8RLg1bAUcZvi32",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_NmaRT7e4848hSUGRgfAj",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "NmaRT7e4848hSUGRgfAj"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_O5Pc4ZP3ks1TWq2AfhOo",
+    "reorderLevel": 0,
+    "productId": "O5Pc4ZP3ks1TWq2AfhOo",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789225893,
+      "nanoseconds": 159000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_OCbk2C3WCS6nrDpMeynA",
+    "productId": "OCbk2C3WCS6nrDpMeynA",
+    "qty": 3,
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_OQw06toNnn8labUB8doO",
+    "qty": 3,
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "OQw06toNnn8labUB8doO",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785442910,
+      "nanoseconds": 658000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_OpWjOYVzE5ObcAkqHcix",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "OpWjOYVzE5ObcAkqHcix",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850858,
+      "nanoseconds": 384000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_OvQAQw4UrvVqisWzMxFi",
+    "qty": 10,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787822994,
+      "nanoseconds": 310000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "OvQAQw4UrvVqisWzMxFi"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_PmtB5uXbDG1nXnx8GMSJ",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "PmtB5uXbDG1nXnx8GMSJ",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788630324,
+      "nanoseconds": 965000000
+    },
+    "qty": 4
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_PnOdolAXPEcF2IfU4MMx",
+    "productId": "PnOdolAXPEcF2IfU4MMx",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230244,
+      "nanoseconds": 231000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_QPV4lrM9pSVlss2NDb9y",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "QPV4lrM9pSVlss2NDb9y",
+    "qty": 14,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789225893,
+      "nanoseconds": 159000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_R1re9QOHWOUZX1cwZtRB",
+    "qty": 75,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "R1re9QOHWOUZX1cwZtRB",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660436,
+      "nanoseconds": 242000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_RGIKPnqDK2EVjBm86Xd5",
+    "productId": "RGIKPnqDK2EVjBm86Xd5",
+    "qty": 50,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787143422,
+      "nanoseconds": 856000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_RcoMY094R9fVU0YZaHp0",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "RcoMY094R9fVU0YZaHp0",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_RcrtoSwuKI63talw1zuG",
+    "productId": "RcrtoSwuKI63talw1zuG",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 7.75,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789378077,
+      "nanoseconds": 727000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_RjOwuAi5vB44PMtjgYHH",
+    "qty": 49,
+    "productId": "RjOwuAi5vB44PMtjgYHH",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788810689,
+      "nanoseconds": 902000000
+    },
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_Ronvj4u2vzdxVDsKhhi5",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789410574,
+      "nanoseconds": 499000000
+    },
+    "stockStatus": "ok",
+    "qty": 3,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "Ronvj4u2vzdxVDsKhhi5",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_RpOpicdA58y2aqs4IA8q",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743933,
+      "nanoseconds": 962000000
+    },
+    "qty": 5,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "RpOpicdA58y2aqs4IA8q"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_S48tSeUJz7vl4mPR5okg",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "productName": "مكرونة رنا خواتم مخططه  400 ج * 20",
+    "qty": 12,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productCode": "03029",
+    "stockStatus": "ok",
+    "companyId": "idham-main",
+    "productId": "S48tSeUJz7vl4mPR5okg"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_SQnrnOyRXWzq76NO3yXB",
+    "stockStatus": "ok",
+    "qty": 66,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "SQnrnOyRXWzq76NO3yXB",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789752752,
+      "nanoseconds": 40000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_Sg7k8Y5bVrlOa8zoD5yh",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789068426,
+      "nanoseconds": 96000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 38,
+    "reorderLevel": 0,
+    "productId": "Sg7k8Y5bVrlOa8zoD5yh"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_Sn5pgF0JIXwxhTJFZ1xa",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850858,
+      "nanoseconds": 384000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "productId": "Sn5pgF0JIXwxhTJFZ1xa",
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_SzHULsTeLonnDaH4vh4Y",
+    "productId": "SzHULsTeLonnDaH4vh4Y",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787591810,
+      "nanoseconds": 117000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_U7X6AQz47gWcp5ShgLPO",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660787,
+      "nanoseconds": 87000000
+    },
+    "qty": 44,
+    "stockStatus": "ok",
+    "productId": "U7X6AQz47gWcp5ShgLPO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_UIyr9n1nw0alGOBEmpBu",
+    "productId": "UIyr9n1nw0alGOBEmpBu",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787850858,
+      "nanoseconds": 384000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_VR7jS37atTl5VvHcOls9",
+    "productId": "VR7jS37atTl5VvHcOls9",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785441096,
+      "nanoseconds": 578000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 5
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_VebnsAN1qDALoKsheWkP",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "VebnsAN1qDALoKsheWkP"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_Vf8sipSuxheAB2vDrA2f",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789548246,
+      "nanoseconds": 104000000
+    },
+    "productId": "Vf8sipSuxheAB2vDrA2f",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_WruLvzM1VpCOZ6yEHf8Y",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "companyId": "idham-main",
+    "stockStatus": "ok",
+    "productCode": "09008",
+    "qty": 63,
+    "productId": "WruLvzM1VpCOZ6yEHf8Y",
+    "reorderLevel": 0,
+    "productName": "شطة رنا عريض كبير 4.5 * 4 جالون",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660436,
+      "nanoseconds": 242000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_WxGec0F3udluHDEFApv7",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806835,
+      "nanoseconds": 753000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "qty": 2,
+    "productId": "WxGec0F3udluHDEFApv7"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_X2zgrRmnUXIXqZ6ytQS1",
+    "qty": 7,
+    "productId": "X2zgrRmnUXIXqZ6ytQS1",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660787,
+      "nanoseconds": 87000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_XCQOI94ocO903Gm0xeK8",
+    "productId": "XCQOI94ocO903Gm0xeK8",
+    "qty": 45,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_XEFSzlQdM9V3CYHPApx8",
+    "productId": "XEFSzlQdM9V3CYHPApx8",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_YDGp6p8TPz1bqNnOue4N",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743933,
+      "nanoseconds": 962000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "qty": 9,
+    "productId": "YDGp6p8TPz1bqNnOue4N"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_YV2OumfkBeqlzRG2YruG",
+    "qty": 10,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290145,
+      "nanoseconds": 377000000
+    },
+    "productId": "YV2OumfkBeqlzRG2YruG",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ZB8JNbqQrQgQzTGAw5O1",
+    "reorderLevel": 0,
+    "productId": "ZB8JNbqQrQgQzTGAw5O1",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788889364,
+      "nanoseconds": 159000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ZINptjXdR8FmNmwaGo2t",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806835,
+      "nanoseconds": 753000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "ZINptjXdR8FmNmwaGo2t",
+    "reorderLevel": 0,
+    "qty": 3
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ZP0ynGGNAcg1fIQrdshT",
+    "qty": 0,
+    "productId": "ZP0ynGGNAcg1fIQrdshT",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789372354,
+      "nanoseconds": 857000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_Zpy1JPhHmUYrRbFao1IO",
+    "stockStatus": "ok",
+    "productId": "Zpy1JPhHmUYrRbFao1IO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 160,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789580691,
+      "nanoseconds": 675000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_a707N5zfeimbWrUe0AxE",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 44,
+    "productId": "a707N5zfeimbWrUe0AxE"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_afCATiCiSHOBFsMH1aLK",
+    "productId": "afCATiCiSHOBFsMH1aLK",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "qty": 2
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_aibj644bYqbfTJLJEtwF",
+    "productId": "aibj644bYqbfTJLJEtwF",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786978668,
+      "nanoseconds": 657000000
+    },
+    "stockStatus": "ok",
+    "qty": 55,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_atrR6pMjwiEfK6Hdo2Oi",
+    "productId": "atrR6pMjwiEfK6Hdo2Oi",
+    "stockStatus": "ok",
+    "qty": 177,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789225893,
+      "nanoseconds": 159000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_aw5mS2Mw15W4tQvq1256",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787251054,
+      "nanoseconds": 841000000
+    },
+    "reorderLevel": 0,
+    "qty": 54,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "aw5mS2Mw15W4tQvq1256",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_bCHFqmbanNCcBn9YGaAn",
+    "qty": 5,
+    "productId": "bCHFqmbanNCcBn9YGaAn",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785441094,
+      "nanoseconds": 560000000
+    },
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_bJ7SHrAJrGUmxRXK5uIt",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 4,
+    "productId": "bJ7SHrAJrGUmxRXK5uIt"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_bS9dMjuN9LzclGdjxHJ6",
+    "reorderLevel": 0,
+    "productId": "bS9dMjuN9LzclGdjxHJ6",
+    "qty": 7,
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789569508,
+      "nanoseconds": 371000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_bT8MjIL9N5oADgQ3fovZ",
+    "productId": "bT8MjIL9N5oADgQ3fovZ",
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289197,
+      "nanoseconds": 532000000
+    },
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_bYDk4gcZQhPBwWyPtnrr",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230251,
+      "nanoseconds": 676000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "productId": "bYDk4gcZQhPBwWyPtnrr"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_bakqpPzhQ6YuUtDBGAxe",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "bakqpPzhQ6YuUtDBGAxe",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_beXxTsnefRyHdex6cB0E",
+    "productId": "beXxTsnefRyHdex6cB0E",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786139510,
+      "nanoseconds": 476000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_c1AGjekAaUO0zQchv0bK",
+    "productId": "c1AGjekAaUO0zQchv0bK",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 5,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789580691,
+      "nanoseconds": 675000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_c2DiqjXonJolE8VbizR6",
+    "productId": "c2DiqjXonJolE8VbizR6",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788252074,
+      "nanoseconds": 601000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_c7VkTk3H5pvcZB2tCGRN",
+    "reorderLevel": 0,
+    "productId": "c7VkTk3H5pvcZB2tCGRN",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789374436,
+      "nanoseconds": 480000000
+    },
+    "stockStatus": "ok",
+    "qty": 13,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_c87KVwQ4KpLT51MM3l1u",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "qty": 2,
+    "stockStatus": "ok",
+    "productId": "c87KVwQ4KpLT51MM3l1u",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_cdQSjHVqLxAYqBMVUyLE",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 65,
+    "reorderLevel": 0,
+    "productId": "cdQSjHVqLxAYqBMVUyLE"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_cpOYrBAZbabLvo5DoZ6B",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 12,
+    "productId": "cpOYrBAZbabLvo5DoZ6B",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789058922,
+      "nanoseconds": 972000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_d17p96xsHv7Vmpyc9Toy",
+    "productId": "d17p96xsHv7Vmpyc9Toy",
+    "reorderLevel": 0,
+    "companyId": "idham-main",
+    "productName": "رنا تونه خفيف 185* 48 زيت دوار الشمس",
+    "qty": 6,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productCode": "09012",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789374279,
+      "nanoseconds": 202000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_dX04uuWrBhJhErR3U40T",
+    "productId": "dX04uuWrBhJhErR3U40T",
+    "stockStatus": "ok",
+    "qty": 19,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_dtCMNYIhjGBZGCUE6Lr1",
+    "reorderLevel": 0,
+    "qty": 4,
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290145,
+      "nanoseconds": 377000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "dtCMNYIhjGBZGCUE6Lr1"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_eAXoMt1UyFqPTMLZ4GAX",
+    "qty": 145,
+    "productId": "eAXoMt1UyFqPTMLZ4GAX",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660787,
+      "nanoseconds": 87000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_fLTt9zHDbOC7GKFzZWZV",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786139507,
+      "nanoseconds": 819000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "fLTt9zHDbOC7GKFzZWZV"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_fT46B3aWtLP1P85gLk8J",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660436,
+      "nanoseconds": 242000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productCode": "45002",
+    "stockStatus": "ok",
+    "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+    "qty": 45,
+    "companyId": "idham-main",
+    "reorderLevel": 0,
+    "productId": "fT46B3aWtLP1P85gLk8J"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_fV6ZGU0s0fFiEluCLKje",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productCode": "45006",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "companyId": "idham-main",
+    "productName": "خل رنا ابيض طبيعى  474 مل *12",
+    "productId": "fV6ZGU0s0fFiEluCLKje",
+    "qty": 10
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_g0HM02LRWJYAJrRWUdum",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787251357,
+      "nanoseconds": 594000000
+    },
+    "qty": 5,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "g0HM02LRWJYAJrRWUdum",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_g0ZCXjRkQWyWCXy0qgN5",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230222,
+      "nanoseconds": 133000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "g0ZCXjRkQWyWCXy0qgN5"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_h2CTayjdEvjpld1Mc7WO",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "h2CTayjdEvjpld1Mc7WO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230249,
+      "nanoseconds": 189000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_hsweOtlJmOZIBAB1tlu1",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785441109,
+      "nanoseconds": 641000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "stockStatus": "ok",
+    "productId": "hsweOtlJmOZIBAB1tlu1"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_hvysP8vRqA8wXPIz75nN",
+    "stockStatus": "ok",
+    "productId": "hvysP8vRqA8wXPIz75nN",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787074517,
+      "nanoseconds": 989000000
+    },
+    "qty": 2,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_iFJ8JyexxPdWuYlzbU5Y",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "reorderLevel": 0,
+    "qty": 10,
+    "productId": "iFJ8JyexxPdWuYlzbU5Y"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_iNTAY01gkXC26uceT1h6",
+    "productId": "iNTAY01gkXC26uceT1h6",
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789548246,
+      "nanoseconds": 104000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ido9rzLwUEIyH8cBoKJJ",
+    "productId": "ido9rzLwUEIyH8cBoKJJ",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 5,
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743933,
+      "nanoseconds": 962000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_iht0utKRHl3JCWuI4D1E",
+    "productId": "iht0utKRHl3JCWuI4D1E",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-27T18:09:19.542Z"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_iqrB1dkzgtyvBOVVXl6q",
+    "productId": "iqrB1dkzgtyvBOVVXl6q",
+    "reorderLevel": 0,
+    "qty": 36,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806835,
+      "nanoseconds": 753000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_jDBN2zR04WB6afMGzMEj",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789548246,
+      "nanoseconds": 104000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "jDBN2zR04WB6afMGzMEj"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_jTxUESxX83gV3ASNzhmT",
+    "productId": "jTxUESxX83gV3ASNzhmT",
+    "qty": 25,
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806835,
+      "nanoseconds": 753000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_jcvBhus9KJxTvFOKPYea",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787936967,
+      "nanoseconds": 122000000
+    },
+    "reorderLevel": 0,
+    "qty": 4,
+    "productId": "jcvBhus9KJxTvFOKPYea",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_k9SN4NfHIQJ1Qbzz9F8E",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789225893,
+      "nanoseconds": 159000000
+    },
+    "qty": 6,
+    "productId": "k9SN4NfHIQJ1Qbzz9F8E",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_kAm09NsM5EPXF8UvrFeX",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "kAm09NsM5EPXF8UvrFeX",
+    "reorderLevel": 0,
+    "qty": 2,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788595178,
+      "nanoseconds": 975000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_m9qzjahiJEYTNmbfF5Xe",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "m9qzjahiJEYTNmbfF5Xe",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789408655,
+      "nanoseconds": 994000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_mX9vV57bZjDsRDwMppLK",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "mX9vV57bZjDsRDwMppLK",
+    "qty": 10,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785441103,
+      "nanoseconds": 356000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_maCZpJZhumrjcZH1pQ0f",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "maCZpJZhumrjcZH1pQ0f",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788252679,
+      "nanoseconds": 479000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_muaXACw0f09dXe4V1QY1",
+    "reorderLevel": 0,
+    "productId": "muaXACw0f09dXe4V1QY1",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230265,
+      "nanoseconds": 626000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_myiVbPahZ8sKHdTaZ9rx",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788889364,
+      "nanoseconds": 159000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "productId": "myiVbPahZ8sKHdTaZ9rx"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_n4IW05Dc6fcoU0G6Ac2t",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787149739,
+      "nanoseconds": 627000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "n4IW05Dc6fcoU0G6Ac2t"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_nE7UIt4vMdgbI4fhklhf",
+    "productId": "nE7UIt4vMdgbI4fhklhf",
+    "qty": 10,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290145,
+      "nanoseconds": 377000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ndlDJpMG9hlBKQe4MauJ",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788595178,
+      "nanoseconds": 975000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "ndlDJpMG9hlBKQe4MauJ",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_nn7SSyLySTxv0WgkoWf8",
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789492560,
+      "nanoseconds": 260000000
+    },
+    "reorderLevel": 0,
+    "productId": "nn7SSyLySTxv0WgkoWf8",
+    "qty": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_nxXxQqrOKMdP1xxK4xss",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982487,
+      "nanoseconds": 241000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "nxXxQqrOKMdP1xxK4xss"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_oILf9Ggdj8bYNt4Pl492",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "oILf9Ggdj8bYNt4Pl492",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786139499,
+      "nanoseconds": 803000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_oJ9v6weiVvLu7VgYVp1i",
+    "qty": 10,
+    "reorderLevel": 0,
+    "productId": "oJ9v6weiVvLu7VgYVp1i",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789297350,
+      "nanoseconds": 274000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_oU8yH7WDRu2ZBKLVYg1A",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788795140,
+      "nanoseconds": 987000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "productId": "oU8yH7WDRu2ZBKLVYg1A",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ofIJ9TeKlN756jzt61SW",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230223,
+      "nanoseconds": 281000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "ofIJ9TeKlN756jzt61SW"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ols8aSnfOWwSSwgvIzp7",
+    "qty": 7,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789580691,
+      "nanoseconds": 675000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "ols8aSnfOWwSSwgvIzp7",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_p0FPy6EDM1EKc0MEVFgK",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788888970,
+      "nanoseconds": 943000000
+    },
+    "productId": "p0FPy6EDM1EKc0MEVFgK"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_p0xtk6qxq7oElTtQL54I",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788630311,
+      "nanoseconds": 98000000
+    },
+    "qty": 49,
+    "stockStatus": "ok",
+    "productId": "p0xtk6qxq7oElTtQL54I"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_poGgeZhrDTm4eW0nHNK1",
+    "productId": "poGgeZhrDTm4eW0nHNK1",
+    "qty": 3,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789807314,
+      "nanoseconds": 985000000
+    },
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_pqkkX8d4sM9Gm0E4oBXq",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982499,
+      "nanoseconds": 426000000
+    },
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "pqkkX8d4sM9Gm0E4oBXq"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_qTe6Vs5C1XurYecxJlB5",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "qTe6Vs5C1XurYecxJlB5",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230263,
+      "nanoseconds": 109000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_qjEiCz0kBP2AFa9Yt3D4",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "qjEiCz0kBP2AFa9Yt3D4",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785230240,
+      "nanoseconds": 553000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_qtl4NmMLGPyRMA9E4Mi5",
+    "qty": 20,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "qtl4NmMLGPyRMA9E4Mi5",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743933,
+      "nanoseconds": 962000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_qwuMMK8xWSJhh2Q2KbV8",
+    "productId": "qwuMMK8xWSJhh2Q2KbV8",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 9,
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_rG0o2hIQys8YJoScdu58",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "rG0o2hIQys8YJoScdu58",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788889364,
+      "nanoseconds": 159000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_rsK4qZNXiYsQYzw97O9W",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787989692,
+      "nanoseconds": 776000000
+    },
+    "stockStatus": "ok",
+    "qty": 4,
+    "productId": "rsK4qZNXiYsQYzw97O9W",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_sJI1opRNNj9qzcFyCoyg",
+    "productId": "sJI1opRNNj9qzcFyCoyg",
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ssc4ozqGTQlvYerEMDkZ",
+    "productId": "ssc4ozqGTQlvYerEMDkZ",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786866162,
+      "nanoseconds": 686000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_tAq8ENjtZ0cRpzhW6xFH",
+    "productCode": "12001",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "tAq8ENjtZ0cRpzhW6xFH",
+    "companyId": "idham-main",
+    "qty": 91,
+    "reorderLevel": 5,
+    "productName": "شطة رنا قوارير صغير  36*88 مل",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660436,
+      "nanoseconds": 242000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_thEesj4aPMBKJePRHTlE",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "thEesj4aPMBKJePRHTlE",
+    "qty": 8
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_tkgjwvljS7IKGfpkueOm",
+    "productId": "tkgjwvljS7IKGfpkueOm",
+    "qty": 169,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806835,
+      "nanoseconds": 753000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_vQkzxlzdOHu7z21s9SMV",
+    "productCode": "45005",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "vQkzxlzdOHu7z21s9SMV",
+    "companyId": "idham-main",
+    "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789660436,
+      "nanoseconds": 242000000
+    },
+    "qty": 78,
+    "reorderLevel": 5
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_wDrRu3ce1hpW4P4XXt0d",
+    "qty": 4,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788365478,
+      "nanoseconds": 758000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "wDrRu3ce1hpW4P4XXt0d"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_wGEk0xKjCvX7pSSQGUU1",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788810689,
+      "nanoseconds": 902000000
+    },
+    "productId": "wGEk0xKjCvX7pSSQGUU1",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_wSOqYqj2l6pOFVGYNL35",
+    "productId": "wSOqYqj2l6pOFVGYNL35",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785442906,
+      "nanoseconds": 78000000
+    },
+    "reorderLevel": 0,
+    "qty": 10
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_wi9oHOSSoGminu1zPPex",
+    "qty": 3,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785442908,
+      "nanoseconds": 328000000
+    },
+    "stockStatus": "ok",
+    "productId": "wi9oHOSSoGminu1zPPex",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_wxepIAahN8ati3vwaa2L",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "qty": 10,
+    "productId": "wxepIAahN8ati3vwaa2L",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787743933,
+      "nanoseconds": 962000000
+    }
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_x1cIL2f0tNMlLQWMw2ky",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 4,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "productId": "x1cIL2f0tNMlLQWMw2ky"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_xRun3SF1zVyWFFOYAW8g",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "xRun3SF1zVyWFFOYAW8g",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_xatSIYYexbA9vqwkiabB",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789569508,
+      "nanoseconds": 371000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "xatSIYYexbA9vqwkiabB",
+    "qty": 2
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_yJJs2qLBiktzgf1yPlTF",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789806835,
+      "nanoseconds": 753000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "qty": 41,
+    "productId": "yJJs2qLBiktzgf1yPlTF"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_yKhEQH1t0XuHg7LdAttT",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788810689,
+      "nanoseconds": 902000000
+    },
+    "qty": 22,
+    "productId": "yKhEQH1t0XuHg7LdAttT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_yLOfiimlko7x0ORSKc5c",
+    "productId": "yLOfiimlko7x0ORSKc5c",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_yNGhEcHKaekNzKZBejuu",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722083,
+      "nanoseconds": 468000000
+    },
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "yNGhEcHKaekNzKZBejuu",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_ylkpCSA7BrDJAneIZckQ",
+    "productId": "ylkpCSA7BrDJAneIZckQ",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982474,
+      "nanoseconds": 729000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_z8t67CUmJnR9IT1pVAdW",
+    "companyId": "idham-main",
+    "reorderLevel": 0,
+    "productId": "z8t67CUmJnR9IT1pVAdW",
+    "productCode": "03028",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788947962,
+      "nanoseconds": 425000000
+    },
+    "productName": "مكرونة رنا اقلام كبيرة 400 جرام * 20",
+    "qty": 14
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_zD1064Tc2mfyfwsnJQ1K",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786866164,
+      "nanoseconds": 621000000
+    },
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "zD1064Tc2mfyfwsnJQ1K",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "_id": "W5uANJjMgfFh2p3xU4bT_zdhGScGzNhZWL73yZF5X",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "zdhGScGzNhZWL73yZF5X",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722315,
+      "nanoseconds": 536000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_0cniV5I2oOQBqUJLlu39",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "productId": "0cniV5I2oOQBqUJLlu39",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786183959,
+      "nanoseconds": 226000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_1EU9O4mqrEtwitQPnZ3o",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "1EU9O4mqrEtwitQPnZ3o",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289389,
+      "nanoseconds": 812000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_1YfL49HfqYRCA6nZTAKO",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789669902,
+      "nanoseconds": 15000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "1YfL49HfqYRCA6nZTAKO"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_2EYPP2V6Nz8PrNAYdf5W",
+    "updatedAt": "2026-07-27T18:07:44.023Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "2EYPP2V6Nz8PrNAYdf5W",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_2NbmryZHvF4OFOPE19XG",
+    "productName": "ارز علمين الشعلان مزه 8*5 كجم",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236544,
+      "nanoseconds": 558000000
+    },
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "2NbmryZHvF4OFOPE19XG"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_2da0AM4oiAg4oBCXBdEd",
+    "productId": "2da0AM4oiAg4oBCXBdEd",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:07:46.977Z",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_2yZvHDDqsgTAaUkW2BcJ",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:07:48.590Z",
+    "productId": "2yZvHDDqsgTAaUkW2BcJ",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_3CYNTCRyqTGGTj2ccAgH",
+    "productId": "3CYNTCRyqTGGTj2ccAgH",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788637984,
+      "nanoseconds": 400000000
+    },
+    "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_3uRSHqrujg6wVrxXe3z0",
+    "productId": "3uRSHqrujg6wVrxXe3z0",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787409585,
+      "nanoseconds": 178000000
+    },
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_4BYT6CVNb3Cc2VXvNhOX",
+    "productId": "4BYT6CVNb3Cc2VXvNhOX",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:07:53.705Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_4dEuAA80ziMLFUxH5aJO",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786476769,
+      "nanoseconds": 189000000
+    },
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "productName": "زيت قلى  جوالين دلال 1.5*6 لتر",
+    "productId": "4dEuAA80ziMLFUxH5aJO",
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_5hFoTTktBTSAB9Fi9SLn",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:07:59.906Z",
+    "productId": "5hFoTTktBTSAB9Fi9SLn",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_7DvxzI5plNoCjy5gVPsz",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:01.264Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "7DvxzI5plNoCjy5gVPsz"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_7X2KJUvZfYdh8LXNxg9Z",
+    "qty": 0,
+    "productId": "7X2KJUvZfYdh8LXNxg9Z",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236536,
+      "nanoseconds": 922000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_7tCWhZq9UWRXwJxkRTTA",
+    "productId": "7tCWhZq9UWRXwJxkRTTA",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289389,
+      "nanoseconds": 812000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_8AZuD93GootRkJ1CigtI",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "8AZuD93GootRkJ1CigtI",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786873477,
+      "nanoseconds": 805000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_8IE6gW2hpwWcoFBhdb4Z",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289389,
+      "nanoseconds": 812000000
+    },
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "8IE6gW2hpwWcoFBhdb4Z"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_94bTgCDFkYMJQaoETG3Z",
+    "productId": "94bTgCDFkYMJQaoETG3Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:08:05.525Z",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_9NtVvzhfnxB2Z9rDN3uN",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productCode": "03002",
+    "stockStatus": "out",
+    "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789669961,
+      "nanoseconds": 876000000
+    },
+    "productId": "9NtVvzhfnxB2Z9rDN3uN",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_9PeZIfHYdFJtZgsKzNbQ",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "9PeZIfHYdFJtZgsKzNbQ",
+    "reorderLevel": 0,
+    "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786285965,
+      "nanoseconds": 29000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_9emGBomCaZlOWAEeegxi",
+    "stockStatus": "out",
+    "productId": "9emGBomCaZlOWAEeegxi",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788791820,
+      "nanoseconds": 324000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_9rXe9UCiqrJ4c97SXCJp",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787847039,
+      "nanoseconds": 924000000
+    },
+    "stockStatus": "out",
+    "productId": "9rXe9UCiqrJ4c97SXCJp"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_A1yASYzpEy0S0M4xm1r8",
+    "qty": 0,
+    "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785748696,
+      "nanoseconds": 358000000
+    },
+    "stockStatus": "out",
+    "productId": "A1yASYzpEy0S0M4xm1r8"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_AxokEQfHoYE6iSMXQuFy",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789478687,
+      "nanoseconds": 403000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "productId": "AxokEQfHoYE6iSMXQuFy",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_BRYy3jvl6JJOqON0PnPr",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787239009,
+      "nanoseconds": 136000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "BRYy3jvl6JJOqON0PnPr",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_BzDiuvdpbviaXhOG5N0N",
+    "productId": "BzDiuvdpbviaXhOG5N0N",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789405771,
+      "nanoseconds": 160000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_C1ac8RMQhx2gXejGiyF3",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787409586,
+      "nanoseconds": 954000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "C1ac8RMQhx2gXejGiyF3",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_C4uFJBEhleygJraDO5qH",
+    "updatedAt": "2026-07-27T18:08:13.867Z",
+    "productId": "C4uFJBEhleygJraDO5qH",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_CcXTqwIBYvF3O1XSa6v2",
+    "stockStatus": "out",
+    "productId": "CcXTqwIBYvF3O1XSa6v2",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787163485,
+      "nanoseconds": 165000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_CdgjhKMW761zK7C4v8CI",
+    "reorderLevel": 0,
+    "productId": "CdgjhKMW761zK7C4v8CI",
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789412479,
+      "nanoseconds": 185000000
+    },
+    "qty": 1
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_CwXTkvyG6odoZzZuEDja",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "ارز علمين  الشعلان مزه 40 كجم",
+    "reorderLevel": 0,
+    "productId": "CwXTkvyG6odoZzZuEDja",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785572245,
+      "nanoseconds": 193000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_DY5ADETYmJoMo354HbS6",
+    "productId": "DY5ADETYmJoMo354HbS6",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289389,
+      "nanoseconds": 812000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_DYAhGplYopMJF95oK0IS",
+    "productId": "DYAhGplYopMJF95oK0IS",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236534,
+      "nanoseconds": 392000000
+    },
+    "productName": "اندومى مقلية 60*80 جرام",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_Daq0kIm7IykV0OkO4oLa",
+    "productId": "Daq0kIm7IykV0OkO4oLa",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "بيرفتو طويل 220 - 450 جرام * 24 بكت",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789297328,
+      "nanoseconds": 230000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_DviRgNpE8LLhT5ASxST3",
+    "productId": "DviRgNpE8LLhT5ASxST3",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787994768,
+      "nanoseconds": 930000000
+    },
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_EDm62noDcoaSqIWpOgdD",
+    "reorderLevel": 0,
+    "productId": "EDm62noDcoaSqIWpOgdD",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "stockStatus": "out",
+    "productName": "طماطم  مقشرة الطائى 24*400",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786873528,
+      "nanoseconds": 114000000
+    },
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_ERMKWYiTKdyUihtCTePI",
+    "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+    "productId": "ERMKWYiTKdyUihtCTePI",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788637994,
+      "nanoseconds": 599000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_EXLDPRwT8ppDGrKjmDBM",
+    "qty": 2,
+    "productName": "سفر رول بن سلمان 110*100 ملون 10 لفة",
+    "stockStatus": "ok",
+    "productId": "EXLDPRwT8ppDGrKjmDBM",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785334273,
+      "nanoseconds": 71000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_EbMOr0wK8MmS7nTrrkLN",
+    "productId": "EbMOr0wK8MmS7nTrrkLN",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236527,
+      "nanoseconds": 568000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_FlofDooOmuOEFrQiCWFQ",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789631028,
+      "nanoseconds": 567000000
+    },
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "FlofDooOmuOEFrQiCWFQ"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_G4OKtTeRu9W5SP4J0GKy",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789668001,
+      "nanoseconds": 146000000
+    },
+    "productName": "مناديل رول مطعم طبقة 5 كيلو",
+    "qty": 4,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "G4OKtTeRu9W5SP4J0GKy"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_GjMW892nmjpmLeV5Kx3c",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "طحينة سائلة الجميل 14 كيلو",
+    "qty": 1,
+    "productId": "GjMW892nmjpmLeV5Kx3c",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788873992,
+      "nanoseconds": 452000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_H5l12QDSE7W2hZOdcl1C",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786028824,
+      "nanoseconds": 257000000
+    },
+    "reorderLevel": 0,
+    "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+    "qty": 1,
+    "productId": "H5l12QDSE7W2hZOdcl1C",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_HWiP60AueqeUffX1owt8",
+    "productId": "HWiP60AueqeUffX1owt8",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:08:32.909Z"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_HYTUthpUuHZ6AtqtR6Rr",
+    "productId": "HYTUthpUuHZ6AtqtR6Rr",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789238327,
+      "nanoseconds": 905000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_HtXRAmejDzBMhxsYQEUy",
+    "productId": "HtXRAmejDzBMhxsYQEUy",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789238322,
+      "nanoseconds": 827000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_IV8f71IUPMlWk4unzQas",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "IV8f71IUPMlWk4unzQas",
+    "productName": "قودى طويل رقم 20 - 24*450 ج",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787163485,
+      "nanoseconds": 165000000
+    },
+    "qty": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_KH4VsMfbVjboRlPsCKpz",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787991433,
+      "nanoseconds": 890000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "KH4VsMfbVjboRlPsCKpz",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_Kgqy5tEZswKnEJtaHB0P",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789670036,
+      "nanoseconds": 874000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 1,
+    "productId": "Kgqy5tEZswKnEJtaHB0P"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_LQ7qcjU0LxGkA8zhd4zz",
+    "stockStatus": "out",
+    "productId": "LQ7qcjU0LxGkA8zhd4zz",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789372335,
+      "nanoseconds": 417000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_LYDz1hvYQAgGoTpbTOSw",
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "LYDz1hvYQAgGoTpbTOSw",
+    "productName": "ارز ابو كاس 8*5 كجم",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786285072,
+      "nanoseconds": 302000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_LecJvj5mC6WvkN8boroZ",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787595858,
+      "nanoseconds": 82000000
+    },
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0,
+    "productName": "مرقة دجاج ماجى مصرى 24 بكت * 24 ح",
+    "productId": "LecJvj5mC6WvkN8boroZ",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_MNSnc8uULDA5wfiYIW99",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788595317,
+      "nanoseconds": 913000000
+    },
+    "productName": "ارز علمين الشعلان مزه 4 ×10",
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 1,
+    "productId": "MNSnc8uULDA5wfiYIW99"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_MWXMvWA35h2AHzrUVO71",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786207655,
+      "nanoseconds": 871000000
+    },
+    "qty": 0,
+    "productId": "MWXMvWA35h2AHzrUVO71",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_MrmWUHqDh6stxloRQNkT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785593650,
+      "nanoseconds": 857000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "MrmWUHqDh6stxloRQNkT",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_NJn3bR8RLg1bAUcZvi32",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "NJn3bR8RLg1bAUcZvi32",
+    "updatedAt": "2026-07-27T18:08:42.509Z",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_O5Pc4ZP3ks1TWq2AfhOo",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786183962,
+      "nanoseconds": 180000000
+    },
+    "productId": "O5Pc4ZP3ks1TWq2AfhOo",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_OCbk2C3WCS6nrDpMeynA",
+    "productId": "OCbk2C3WCS6nrDpMeynA",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788808940,
+      "nanoseconds": 804000000
+    },
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_PmtB5uXbDG1nXnx8GMSJ",
+    "productId": "PmtB5uXbDG1nXnx8GMSJ",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788630011,
+      "nanoseconds": 270000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_PnOdolAXPEcF2IfU4MMx",
+    "updatedAt": "2026-07-27T18:08:46.863Z",
+    "qty": 0,
+    "productId": "PnOdolAXPEcF2IfU4MMx",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_QPV4lrM9pSVlss2NDb9y",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236547,
+      "nanoseconds": 363000000
+    },
+    "productId": "QPV4lrM9pSVlss2NDb9y"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_RcrtoSwuKI63talw1zuG",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788637987,
+      "nanoseconds": 59000000
+    },
+    "productName": "كمامات 3 طبقات 50*40 بكت",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "RcrtoSwuKI63talw1zuG"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_RjOwuAi5vB44PMtjgYHH",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787595833,
+      "nanoseconds": 488000000
+    },
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "productId": "RjOwuAi5vB44PMtjgYHH"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_Ronvj4u2vzdxVDsKhhi5",
+    "productId": "Ronvj4u2vzdxVDsKhhi5",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785835041,
+      "nanoseconds": 494000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_S48tSeUJz7vl4mPR5okg",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "S48tSeUJz7vl4mPR5okg",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722059,
+      "nanoseconds": 434000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_SQnrnOyRXWzq76NO3yXB",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789752764,
+      "nanoseconds": 542000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "ok",
+    "productId": "SQnrnOyRXWzq76NO3yXB",
+    "qty": 3
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_Sg7k8Y5bVrlOa8zoD5yh",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789321565,
+      "nanoseconds": 836000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "Sg7k8Y5bVrlOa8zoD5yh"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_SzHULsTeLonnDaH4vh4Y",
+    "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787595842,
+      "nanoseconds": 933000000
+    },
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "SzHULsTeLonnDaH4vh4Y",
+    "qty": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_U7X6AQz47gWcp5ShgLPO",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787847052,
+      "nanoseconds": 326000000
+    },
+    "qty": 0,
+    "productId": "U7X6AQz47gWcp5ShgLPO",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_Vf8sipSuxheAB2vDrA2f",
+    "qty": 0,
+    "productId": "Vf8sipSuxheAB2vDrA2f",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236532,
+      "nanoseconds": 528000000
+    },
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_WruLvzM1VpCOZ6yEHf8Y",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788192806,
+      "nanoseconds": 100000000
+    },
+    "productId": "WruLvzM1VpCOZ6yEHf8Y",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 1,
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_WxGec0F3udluHDEFApv7",
+    "productId": "WxGec0F3udluHDEFApv7",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788723137,
+      "nanoseconds": 184000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_X2zgrRmnUXIXqZ6ytQS1",
+    "qty": 2,
+    "productId": "X2zgrRmnUXIXqZ6ytQS1",
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787937081,
+      "nanoseconds": 943000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_XCQOI94ocO903Gm0xeK8",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787595839,
+      "nanoseconds": 802000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "XCQOI94ocO903Gm0xeK8"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_YDGp6p8TPz1bqNnOue4N",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "YDGp6p8TPz1bqNnOue4N",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787163485,
+      "nanoseconds": 165000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_YV2OumfkBeqlzRG2YruG",
+    "reorderLevel": 0,
+    "productId": "YV2OumfkBeqlzRG2YruG",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289389,
+      "nanoseconds": 812000000
+    },
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_ZINptjXdR8FmNmwaGo2t",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787847044,
+      "nanoseconds": 864000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "ZINptjXdR8FmNmwaGo2t"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_ZP0ynGGNAcg1fIQrdshT",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789372335,
+      "nanoseconds": 417000000
+    },
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "ZP0ynGGNAcg1fIQrdshT"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_Zpy1JPhHmUYrRbFao1IO",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789631028,
+      "nanoseconds": 567000000
+    },
+    "qty": 1,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "Zpy1JPhHmUYrRbFao1IO",
+    "stockStatus": "ok",
+    "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_a707N5zfeimbWrUe0AxE",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787595835,
+      "nanoseconds": 358000000
+    },
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "a707N5zfeimbWrUe0AxE",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_afCATiCiSHOBFsMH1aLK",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786028977,
+      "nanoseconds": 250000000
+    },
+    "qty": 0,
+    "productName": "طحينة سائلة الجميل 500 جرام *12",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "afCATiCiSHOBFsMH1aLK",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_atrR6pMjwiEfK6Hdo2Oi",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "atrR6pMjwiEfK6Hdo2Oi",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787595836,
+      "nanoseconds": 746000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_aw5mS2Mw15W4tQvq1256",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787252174,
+      "nanoseconds": 358000000
+    },
+    "reorderLevel": 0,
+    "productId": "aw5mS2Mw15W4tQvq1256",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_bJ7SHrAJrGUmxRXK5uIt",
+    "productId": "bJ7SHrAJrGUmxRXK5uIt",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722052,
+      "nanoseconds": 936000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_bS9dMjuN9LzclGdjxHJ6",
+    "productId": "bS9dMjuN9LzclGdjxHJ6",
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789569473,
+      "nanoseconds": 711000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_bT8MjIL9N5oADgQ3fovZ",
+    "productId": "bT8MjIL9N5oADgQ3fovZ",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789321563,
+      "nanoseconds": 116000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_bYDk4gcZQhPBwWyPtnrr",
+    "productId": "bYDk4gcZQhPBwWyPtnrr",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:09:03.482Z",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_c1AGjekAaUO0zQchv0bK",
+    "productId": "c1AGjekAaUO0zQchv0bK",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789483284,
+      "nanoseconds": 793000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0,
+    "productName": "زيت تنك نسرين *17 لتر"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_c7VkTk3H5pvcZB2tCGRN",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789374774,
+      "nanoseconds": 584000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "c7VkTk3H5pvcZB2tCGRN"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_c87KVwQ4KpLT51MM3l1u",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722050,
+      "nanoseconds": 908000000
+    },
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "c87KVwQ4KpLT51MM3l1u",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_cdQSjHVqLxAYqBMVUyLE",
+    "productId": "cdQSjHVqLxAYqBMVUyLE",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787595832,
+      "nanoseconds": 89000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_cpOYrBAZbabLvo5DoZ6B",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "ok",
+    "updatedAt": "2026-07-27T18:09:07.706Z",
+    "productId": "cpOYrBAZbabLvo5DoZ6B"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_d17p96xsHv7Vmpyc9Toy",
+    "productId": "d17p96xsHv7Vmpyc9Toy",
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789405771,
+      "nanoseconds": 160000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_dX04uuWrBhJhErR3U40T",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788791811,
+      "nanoseconds": 809000000
+    },
+    "reorderLevel": 0,
+    "productId": "dX04uuWrBhJhErR3U40T",
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_dtCMNYIhjGBZGCUE6Lr1",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289389,
+      "nanoseconds": 812000000
+    },
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "dtCMNYIhjGBZGCUE6Lr1",
+    "qty": 0,
+    "productName": "معجون طماطم لونا 8*6 ربطة * 135 ح",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_eAXoMt1UyFqPTMLZ4GAX",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789371076,
+      "nanoseconds": 541000000
+    },
+    "productId": "eAXoMt1UyFqPTMLZ4GAX",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_fT46B3aWtLP1P85gLk8J",
+    "productId": "fT46B3aWtLP1P85gLk8J",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 1,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789569473,
+      "nanoseconds": 711000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_fV6ZGU0s0fFiEluCLKje",
+    "productId": "fV6ZGU0s0fFiEluCLKje",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787649254,
+      "nanoseconds": 110000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_g0HM02LRWJYAJrRWUdum",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "g0HM02LRWJYAJrRWUdum",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787251335,
+      "nanoseconds": 343000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_g0ZCXjRkQWyWCXy0qgN5",
+    "productId": "g0ZCXjRkQWyWCXy0qgN5",
+    "updatedAt": "2026-07-27T18:09:13.107Z",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_h2CTayjdEvjpld1Mc7WO",
+    "productId": "h2CTayjdEvjpld1Mc7WO",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:14.509Z"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_hsweOtlJmOZIBAB1tlu1",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "hsweOtlJmOZIBAB1tlu1",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785972893,
+      "nanoseconds": 99000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_hvysP8vRqA8wXPIz75nN",
+    "qty": 8,
+    "productId": "hvysP8vRqA8wXPIz75nN",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787074976,
+      "nanoseconds": 157000000
+    },
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_iFJ8JyexxPdWuYlzbU5Y",
+    "productName": "ارز ابو كاس مزه 40 كجم",
+    "productId": "iFJ8JyexxPdWuYlzbU5Y",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785572250,
+      "nanoseconds": 540000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_iht0utKRHl3JCWuI4D1E",
+    "qty": 0,
+    "productName": "اندومى خضار 60*75 جرام",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785920339,
+      "nanoseconds": 680000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0,
+    "productId": "iht0utKRHl3JCWuI4D1E"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_iqrB1dkzgtyvBOVVXl6q",
+    "productId": "iqrB1dkzgtyvBOVVXl6q",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789415889,
+      "nanoseconds": 30000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_jDBN2zR04WB6afMGzMEj",
+    "productId": "jDBN2zR04WB6afMGzMEj",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236524,
+      "nanoseconds": 637000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_jTxUESxX83gV3ASNzhmT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "jTxUESxX83gV3ASNzhmT",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789668001,
+      "nanoseconds": 146000000
+    },
+    "qty": 2
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_jcvBhus9KJxTvFOKPYea",
+    "productId": "jcvBhus9KJxTvFOKPYea",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789312459,
+      "nanoseconds": 591000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_k9SN4NfHIQJ1Qbzz9F8E",
+    "qty": 2,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "ok",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722067,
+      "nanoseconds": 855000000
+    },
+    "productId": "k9SN4NfHIQJ1Qbzz9F8E",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_kAm09NsM5EPXF8UvrFeX",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788791814,
+      "nanoseconds": 938000000
+    },
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "kAm09NsM5EPXF8UvrFeX",
+    "stockStatus": "out",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "ارز دلفين بسمتى 8*5 كجم",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_muaXACw0f09dXe4V1QY1",
+    "productId": "muaXACw0f09dXe4V1QY1",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:09:24.014Z",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_n4IW05Dc6fcoU0G6Ac2t",
+    "productId": "n4IW05Dc6fcoU0G6Ac2t",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787423592,
+      "nanoseconds": 647000000
+    },
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_nE7UIt4vMdgbI4fhklhf",
+    "qty": 0,
+    "productId": "nE7UIt4vMdgbI4fhklhf",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289389,
+      "nanoseconds": 812000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_ndlDJpMG9hlBKQe4MauJ",
+    "qty": 1,
+    "productId": "ndlDJpMG9hlBKQe4MauJ",
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236546,
+      "nanoseconds": 160000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_nn7SSyLySTxv0WgkoWf8",
+    "reorderLevel": 0,
+    "productName": "سائل صحون شاينكس بالليمون *30",
+    "stockStatus": "out",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "nn7SSyLySTxv0WgkoWf8",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788808938,
+      "nanoseconds": 553000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_oILf9Ggdj8bYNt4Pl492",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785920328,
+      "nanoseconds": 734000000
+    },
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "oILf9Ggdj8bYNt4Pl492"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_oJ9v6weiVvLu7VgYVp1i",
+    "productId": "oJ9v6weiVvLu7VgYVp1i",
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:09:30.934Z",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_oU8yH7WDRu2ZBKLVYg1A",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788444262,
+      "nanoseconds": 298000000
+    },
+    "productId": "oU8yH7WDRu2ZBKLVYg1A",
+    "qty": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_ofIJ9TeKlN756jzt61SW",
+    "productId": "ofIJ9TeKlN756jzt61SW",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:09:32.298Z"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_ols8aSnfOWwSSwgvIzp7",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789071556,
+      "nanoseconds": 780000000
+    },
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "ols8aSnfOWwSSwgvIzp7"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_p0FPy6EDM1EKc0MEVFgK",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789236530,
+      "nanoseconds": 21000000
+    },
+    "qty": 0,
+    "productId": "p0FPy6EDM1EKc0MEVFgK",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_p0xtk6qxq7oElTtQL54I",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788637981,
+      "nanoseconds": 931000000
+    },
+    "reorderLevel": 0,
+    "productId": "p0xtk6qxq7oElTtQL54I",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_poGgeZhrDTm4eW0nHNK1",
+    "productName": "ارز صنوايت كالروز 20* 1 كجم",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722057,
+      "nanoseconds": 578000000
+    },
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "poGgeZhrDTm4eW0nHNK1",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_qTe6Vs5C1XurYecxJlB5",
+    "productId": "qTe6Vs5C1XurYecxJlB5",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:36.455Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_qjEiCz0kBP2AFa9Yt3D4",
+    "updatedAt": "2026-07-27T18:09:37.936Z",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "qjEiCz0kBP2AFa9Yt3D4"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_qtl4NmMLGPyRMA9E4Mi5",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "qtl4NmMLGPyRMA9E4Mi5",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:39.266Z"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_qwuMMK8xWSJhh2Q2KbV8",
+    "productId": "qwuMMK8xWSJhh2Q2KbV8",
+    "productName": "ارز دلفين مزه بسمتى 40 كجم",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:40.562Z"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_rsK4qZNXiYsQYzw97O9W",
+    "productId": "rsK4qZNXiYsQYzw97O9W",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786177924,
+      "nanoseconds": 610000000
+    },
+    "reorderLevel": 0,
+    "productName": "زبيب ذهبى  رقم 1  - 10 كيلو"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_ssc4ozqGTQlvYerEMDkZ",
+    "reorderLevel": 0,
+    "productId": "ssc4ozqGTQlvYerEMDkZ",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786873532,
+      "nanoseconds": 12000000
+    },
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_tAq8ENjtZ0cRpzhW6xFH",
+    "reorderLevel": 0,
+    "productId": "tAq8ENjtZ0cRpzhW6xFH",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productCode": "12001",
+    "stockStatus": "ok",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788722066,
+      "nanoseconds": 134000000
+    },
+    "qty": 3,
+    "productName": "شطة رنا قوارير صغير  36*88 مل"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_thEesj4aPMBKJePRHTlE",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "productId": "thEesj4aPMBKJePRHTlE",
+    "productName": "سكر الاسرة وسط 10*2 كيلو",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789235828,
+      "nanoseconds": 43000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_tkgjwvljS7IKGfpkueOm",
+    "qty": 5,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789569029,
+      "nanoseconds": 888000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "tkgjwvljS7IKGfpkueOm",
+    "stockStatus": "ok"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_vQkzxlzdOHu7z21s9SMV",
+    "qty": 1,
+    "reorderLevel": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788637997,
+      "nanoseconds": 105000000
+    },
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "productId": "vQkzxlzdOHu7z21s9SMV",
+    "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_wDrRu3ce1hpW4P4XXt0d",
+    "qty": 0,
+    "productId": "wDrRu3ce1hpW4P4XXt0d",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788367907,
+      "nanoseconds": 158000000
+    },
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_wGEk0xKjCvX7pSSQGUU1",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "wGEk0xKjCvX7pSSQGUU1",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787852967,
+      "nanoseconds": 556000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_wxepIAahN8ati3vwaa2L",
+    "qty": 0,
+    "productId": "wxepIAahN8ati3vwaa2L",
+    "reorderLevel": 0,
+    "productName": "ورق برشمان كبير اصلى جيلانى 20 ربطه",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786028977,
+      "nanoseconds": 250000000
+    },
+    "stockStatus": "out",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_x1cIL2f0tNMlLQWMw2ky",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789235825,
+      "nanoseconds": 607000000
+    },
+    "productName": "سكر الاسرة صغير 20*1 كيلو",
+    "reorderLevel": 0,
+    "productId": "x1cIL2f0tNMlLQWMw2ky",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_xRun3SF1zVyWFFOYAW8g",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789238325,
+      "nanoseconds": 391000000
+    },
+    "reorderLevel": 0,
+    "productId": "xRun3SF1zVyWFFOYAW8g",
+    "qty": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_xatSIYYexbA9vqwkiabB",
+    "productId": "xatSIYYexbA9vqwkiabB",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "stockStatus": "ok",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789569473,
+      "nanoseconds": 711000000
+    },
+    "productName": "جوانتى طبى فينيل + اى او تى كبير جدا 70*10 بكت"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_yJJs2qLBiktzgf1yPlTF",
+    "qty": 0,
+    "productId": "yJJs2qLBiktzgf1yPlTF",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789321567,
+      "nanoseconds": 141000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_yKhEQH1t0XuHg7LdAttT",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788016472,
+      "nanoseconds": 548000000
+    },
+    "productId": "yKhEQH1t0XuHg7LdAttT",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_yLOfiimlko7x0ORSKc5c",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "qty": 0,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788791817,
+      "nanoseconds": 621000000
+    },
+    "productName": "ارز دلفين مزة  بسمتى 4*10 كجم",
+    "productId": "yLOfiimlko7x0ORSKc5c",
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_z8t67CUmJnR9IT1pVAdW",
+    "productId": "z8t67CUmJnR9IT1pVAdW",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788374784,
+      "nanoseconds": 141000000
+    }
+  },
+  {
+    "_id": "Zyltw7uwvd0aKejdeqQq_zD1064Tc2mfyfwsnJQ1K",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "zD1064Tc2mfyfwsnJQ1K",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787409583,
+      "nanoseconds": 235000000
+    },
+    "stockStatus": "out",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  }
+]

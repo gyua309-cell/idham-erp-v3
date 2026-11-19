@@ -1214,11 +1214,13 @@ body {
   transition: none !important;
 }
 .modal-overlay:not(.active) {
+  display: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
   visibility: hidden !important;
 }
 .modal-overlay.active {
+  display: flex !important;
   opacity: 1 !important;
   pointer-events: auto !important;
   visibility: visible !important;
@@ -1244,4 +1246,136 @@ body {
 .pm-badge.partial { background: rgba(245, 158, 11, 0.12) !important; color: #f59e0b !important; }
 .pm-badge.network { background: rgba(59, 130, 246, 0.12) !important; color: #3b82f6 !important; }
 
+/* Responsive Desktop Dialog & Ledger Tabs */
+@media (min-width: 768px) {
+  .modal-overlay {
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 24px !important;
+  }
+  .modal-sheet {
+    border-radius: 20px !important;
+    width: 100% !important;
+    max-width: 740px !important;
+    max-height: 88vh !important;
+    margin: 0 auto !important;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45) !important;
+  }
+}
+
+.ledger-tab {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  color: var(--t2);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 99px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+.ledger-tab:hover {
+  background: var(--bg-3);
+  color: var(--t1);
+}
+.ledger-tab.active {
+  background: var(--brand);
+  color: #fff !important;
+  border-color: var(--brand);
+  box-shadow: 0 2px 6px rgba(108, 99, 255, 0.35);
+}
+
+/* ══════════════════════════════════════════════════════════════
+   CUSTOMER LEDGER RESPONSIVE DESIGN (Mobile & Desktop)
+   ══════════════════════════════════════════════════════════════ */
+#ledger-sheet {
+  width: 100% !important;
+  max-width: 760px !important;
+}
+
+@media (max-width: 767px) {
+  #ledger-overlay {
+    padding: 0 !important;
+  }
+  #ledger-sheet {
+    height: 95dvh !important;
+    max-height: 95dvh !important;
+    border-radius: 20px 20px 0 0 !important;
+    margin: 0 !important;
+  }
+  .ledger-cust-card {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+  }
+  .ledger-cust-bal-box {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    text-align: right !important;
+    padding: 6px 12px !important;
+  }
+  .ledger-action-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 6px !important;
+  }
+  .ledger-action-btn {
+    padding: 7px 2px !important;
+    font-size: 10px !important;
+    min-height: 40px !important;
+  }
+  .ledger-kpi-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+  .ledger-kpi-card {
+    padding: 8px 10px !important;
+  }
+  /* Mobile Cards View default on small screens */
+  .ledger-table-wrap {
+    display: none !important;
+  }
+  .ledger-cards-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  /* When user toggles table mode on mobile */
+  .ledger-show-table .ledger-table-wrap {
+    display: block !important;
+  }
+  .ledger-show-table .ledger-cards-wrap {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .ledger-table-wrap {
+    display: block !important;
+  }
+  .ledger-cards-wrap {
+    display: none !important;
+  }
+  .ledger-view-toggle {
+    display: none !important;
+  }
+}
+
+.ledger-card-item {
+  background: var(--bg-1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 11px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.ledger-card-item:active {
+  background: var(--bg-2);
+}
 

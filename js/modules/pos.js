@@ -674,7 +674,8 @@ function buildPOSLayout() {
 // ──────────────────────────────────────────
 async function loadAllData() {
   try {
-    [allProducts, categories, customers, cashBoxes, bankAccounts, warehouses, allAccounts] = await Promise.all([
+    let allStockDocs = [];
+    [allProducts, categories, customers, cashBoxes, bankAccounts, warehouses, allAccounts, allStockDocs] = await Promise.all([
       getAll(COLS.products()),
       getAll(COLS.categories()),
       getAll(COLS.customers()),
@@ -682,6 +683,7 @@ async function loadAllData() {
       getAll(COLS.bankAccounts()),
       getAll(COLS.warehouses()),
       getAll(COLS.chartOfAccounts()),
+      getAll(COLS.stockByWarehouse()).catch(() => []),
     ]);
 
     // Default to first warehouse — pos-warehouse element may or may not exist
@@ -693,8 +695,15 @@ async function loadAllData() {
     }
     activeWarehouseId = warehouses[0]?.id || null;
 
-    // Load stock for active warehouse
-    if (activeWarehouseId) await loadStockForWarehouse(activeWarehouseId);
+    // Build stockMap for active warehouse immediately
+    stockMap = {};
+    if (activeWarehouseId) {
+      allStockDocs.forEach(d => {
+        if (d.warehouseId === activeWarehouseId) {
+          stockMap[d.productId] = d.qty || 0;
+        }
+      });
+    }
 
     // Build cost map from products
     allProducts.forEach(p => {

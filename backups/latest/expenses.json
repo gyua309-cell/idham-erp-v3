@@ -1,0 +1,3159 @@
+[
+  {
+    "id": "0SkbcxS74bu5Rca5hPpV",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127165,
+      "nanoseconds": 487000000
+    },
+    "notes": "مشتروات",
+    "journalEntryCode": "JE-002997",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127165,
+      "nanoseconds": 487000000
+    },
+    "sourceName": "مصرف الراجحى",
+    "accountName": "شركة الماسة راما",
+    "journalEntryId": "WBhoo2VvQnhd5DIiYXOn",
+    "isTransfer": false,
+    "amount": 800,
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "costCenterId": null,
+    "targetId": "GpqmiDxnZj1YFEko23RR",
+    "date": "2026-11-05",
+    "costCenterName": null,
+    "entityType": "supplier",
+    "method": "bank"
+  },
+  {
+    "id": "0T2Nplddxp71sancOup5",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365638,
+      "nanoseconds": 799000000
+    },
+    "costCenterName": null,
+    "entityType": "supplier",
+    "date": "2026-10-05",
+    "accountName": "شركة فجر الراقيه التجاريه بالجمله",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365638,
+      "nanoseconds": 799000000
+    },
+    "targetId": "D4vk02T2bEnDhxlB7rez",
+    "notes": "نقدى",
+    "costCenterId": null,
+    "journalEntryId": "qFEtrxDpDuBTQdxOz56K",
+    "method": "cash",
+    "sourceId": "cashBox_owner_current",
+    "amount": 3013,
+    "journalEntryCode": "JE-001840",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)"
+  },
+  {
+    "id": "0n8SnZgVUOa1qGifSPCZ",
+    "journalEntryCode": "JE-002863",
+    "amount": 155,
+    "sourceName": "الصندوق الرئيسى",
+    "notes": "مشتريات",
+    "targetId": "r1UFSwvJL6uurbAsRbe0",
+    "date": "2026-11-04",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "costCenterName": null,
+    "method": "cash",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793784488,
+      "nanoseconds": 538000000
+    },
+    "entityType": "supplier",
+    "isTransfer": false,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793784488,
+      "nanoseconds": 538000000
+    },
+    "costCenterId": null,
+    "journalEntryId": "Wdg44CGEIEMTtbpc9q03",
+    "accountName": "عميد البحارة"
+  },
+  {
+    "id": "1Ht1F2ylj0QmgDEI7DyN",
+    "journalEntryId": "h3dREn8Zb3tHO3w9q7ea",
+    "sourceName": "الصندوق الرئيسى",
+    "journalEntryCode": "JE-001938",
+    "amount": 82,
+    "costCenterName": "سيارة السيد رضا",
+    "accountName": "مورد نقدى",
+    "date": "2026-10-08",
+    "notes": "فاتورة القفازات",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791490389,
+      "nanoseconds": 895000000
+    },
+    "entityType": "supplier",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "costCenterId": "cc_201",
+    "method": "cash",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791490389,
+      "nanoseconds": 895000000
+    },
+    "targetId": "jKmmoYwYFdh7rCvbUujZ"
+  },
+  {
+    "id": "3OXSNN7rtNMCYv8wvIVb",
+    "amount": 620,
+    "notes": "نقدى صرف فاتورة",
+    "sourceId": "G0J71JsRCFqc354AoZEv",
+    "journalEntryCode": "JE-002031",
+    "date": "2026-09-14",
+    "costCenterId": "cc_201",
+    "targetId": "jKmmoYwYFdh7rCvbUujZ",
+    "costCenterName": "سيارة السيد رضا",
+    "entityType": "supplier",
+    "method": "cash",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789410199,
+      "nanoseconds": 590000000
+    },
+    "sourceName": "صندوق السيد رضا",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789410199,
+      "nanoseconds": 590000000
+    },
+    "journalEntryId": "Y2JVwGew1wAmdO1y4ijf",
+    "accountName": "مورد نقدى"
+  },
+  {
+    "id": "3gRxFoMPIQZOYFhGTqMS",
+    "journalEntryCode": "JE-002139",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "sourceName": "الصندوق الرئيسى",
+    "method": "cash",
+    "notes": "مشتروات لالفت الحلوانى",
+    "date": "2026-10-13",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991962,
+      "nanoseconds": 52000000
+    },
+    "costCenterId": null,
+    "journalEntryId": "rejBmHcLzl1ZgXZli5Rq",
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "amount": 1155,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991962,
+      "nanoseconds": 52000000
+    },
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "entityType": "supplier",
+    "costCenterName": null,
+    "isTransfer": false
+  },
+  {
+    "id": "4FNBQanzewMnLzgUIj5Z",
+    "sourceName": "بنك الراجحي",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788799483,
+      "nanoseconds": 945000000
+    },
+    "accountName": "الشركة العربية الماليزية لمنتجات الزيوت النباتية المحدوده",
+    "journalEntryId": "X4A7c6x1QYIjpQVeC4wt",
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788799483,
+      "nanoseconds": 945000000
+    },
+    "journalEntryCode": "JE-002032",
+    "date": "2026-09-07",
+    "targetId": "xRzDD2xxX1c5zJOaJo8j",
+    "method": "bank",
+    "costCenterName": null,
+    "entityType": "supplier",
+    "sourceId": "bank-alrajhi",
+    "notes": "تحويل لمشتريات",
+    "amount": 19337
+  },
+  {
+    "id": "4b178G1S5SFcYlemvKil",
+    "journalEntryCode": "JE-002033",
+    "costCenterName": null,
+    "costCenterId": null,
+    "date": "2026-09-10",
+    "entityType": "supplier",
+    "sourceId": "bank-aljazira",
+    "amount": 2725,
+    "journalEntryId": "WesKAEAPwI992nKLSBaz",
+    "accountName": "شركة بن خميس",
+    "notes": "تحويل",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789062829,
+      "nanoseconds": 734000000
+    },
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "sourceName": "بنك الجزيرة",
+    "method": "bank",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789062829,
+      "nanoseconds": 734000000
+    }
+  },
+  {
+    "id": "5jcPdmyvp3NeqjIsAqIn",
+    "entityType": "supplier",
+    "journalEntryId": "7XlSr2fqMOBkcLL0ewyu",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788337908,
+      "nanoseconds": 493000000
+    },
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788337908,
+      "nanoseconds": 493000000
+    },
+    "date": "2026-09-01",
+    "costCenterName": null,
+    "amount": 24552.2,
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "journalEntryCode": "JE-001079",
+    "notes": "تحويل مشتروات",
+    "sourceName": "بنك الراجحي",
+    "sourceId": "bank-alrajhi",
+    "costCenterId": null,
+    "method": "bank"
+  },
+  {
+    "id": "5kOcF87uayraLbKQONyr",
+    "journalEntryCode": "JE-001560",
+    "date": "2026-09-23",
+    "sourceName": "بنك الجزيرة",
+    "costCenterName": null,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237270,
+      "nanoseconds": 816000000
+    },
+    "method": "bank",
+    "costCenterId": null,
+    "entityType": "supplier",
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237270,
+      "nanoseconds": 816000000
+    },
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "sourceId": "bank-aljazira",
+    "journalEntryId": "v5sOW67YXBD3m087bgzR",
+    "notes": "تحويل قيمة  بضاعة",
+    "amount": 64503.5
+  },
+  {
+    "id": "6N0SqKy6bbiCbnRqubpR",
+    "journalEntryId": "mqz6Ml2lcSTbjP1qZMVB",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237363,
+      "nanoseconds": 369000000
+    },
+    "amount": 30279,
+    "costCenterId": null,
+    "sourceName": "بنك الجزيرة",
+    "notes": "تحويل",
+    "method": "bank",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237363,
+      "nanoseconds": 369000000
+    },
+    "journalEntryCode": "JE-001562",
+    "costCenterName": null,
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "date": "2026-09-23",
+    "sourceId": "bank-aljazira",
+    "entityType": "supplier"
+  },
+  {
+    "id": "7dl36ZI3HcNWDBx84nS2",
+    "entityType": "supplier",
+    "sourceId": "cashBox_owner_current",
+    "amount": 99015,
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230257,
+      "nanoseconds": 22000000
+    },
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "journalEntryId": "tYiRBVcjb2WLBKBhBSvE",
+    "method": "cash",
+    "isTransfer": false,
+    "notes": "تحويل من نظم الامداد الحديثة",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230257,
+      "nanoseconds": 22000000
+    },
+    "date": "2026-10-15",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "costCenterId": null,
+    "costCenterName": null,
+    "journalEntryCode": "JE-002218"
+  },
+  {
+    "id": "7dtH4lvWHSQF4JELxiDx",
+    "sourceId": "G0J71JsRCFqc354AoZEv",
+    "costCenterId": null,
+    "sourceName": "صندوق السيد رضا",
+    "journalEntryId": "NpoD9PreH2cbn2WXAHHp",
+    "targetId": "gkuc1pZ0vEFgbByjRvj0",
+    "accountName": "مجموعة الجيلانى",
+    "notes": "سداد فاتورة كرتونه الاطباق420",
+    "amount": 160,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791487462,
+      "nanoseconds": 699000000
+    },
+    "journalEntryCode": "JE-001926",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791487462,
+      "nanoseconds": 699000000
+    },
+    "date": "2026-10-08",
+    "costCenterName": null,
+    "method": "cash",
+    "entityType": "supplier"
+  },
+  {
+    "id": "8tZSAK5zsjWHkx8B4t6g",
+    "entityType": "other",
+    "accountName": "جاري المالك",
+    "costCenterName": "سيارة المندوب مصطفى (ينبع والمسارات)",
+    "date": "2026-08-11",
+    "targetId": "ErUeZws4zc9XMUzil3xx",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786439748,
+      "nanoseconds": 979000000
+    },
+    "amount": 3537,
+    "sourceName": "صندوق المندوب - مصطفى",
+    "journalEntryId": "eXXBvYxSs4ENUyJbDJv0",
+    "notes": "تحويل من الصندوق الى جارى المالك",
+    "costCenterId": "cc_301",
+    "method": "cash",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786439748,
+      "nanoseconds": 979000000
+    },
+    "journalEntryCode": "JE-000515"
+  },
+  {
+    "id": "9MdevRvs9PHuwhExvT6Z",
+    "journalEntryCode": "JE-001222",
+    "sourceId": "bank-aljazira",
+    "sourceName": "بنك الجزيرة",
+    "method": "bank",
+    "date": "2026-09-08",
+    "notes": "تحويل بضاعه",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788889768,
+      "nanoseconds": 40000000
+    },
+    "costCenterId": null,
+    "journalEntryId": "7nUDiZ96zMEQq0Rqrn08",
+    "accountName": "شركة بن خميس",
+    "amount": 664,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788889768,
+      "nanoseconds": 40000000
+    },
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "entityType": "supplier",
+    "costCenterName": null
+  },
+  {
+    "id": "9z6jGPzW9HOHp7ysvMSF",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "sourceName": "الصندوق الرئيسى",
+    "journalEntryId": "YEvkB3QuPc68JULkc5i9",
+    "accountName": "مورد نقدى",
+    "targetId": "jKmmoYwYFdh7rCvbUujZ",
+    "date": "2026-11-03",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793807903,
+      "nanoseconds": 185000000
+    },
+    "costCenterName": null,
+    "notes": "مشتريات قرفه",
+    "entityType": "supplier",
+    "method": "cash",
+    "costCenterId": null,
+    "journalEntryCode": "JE-002888",
+    "isTransfer": false,
+    "amount": 28,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793807903,
+      "nanoseconds": 185000000
+    }
+  },
+  {
+    "id": "AM1FRkU9qUzBUNU5EuJ6",
+    "entityType": "supplier",
+    "accountName": "شركة بن خميس",
+    "costCenterName": null,
+    "isTransfer": false,
+    "date": "2026-10-15",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229314,
+      "nanoseconds": 772000000
+    },
+    "amount": 1676,
+    "journalEntryId": "odJiCgdseHHkzoUKiSYc",
+    "sourceName": "مصرف الراجحى",
+    "notes": "تحويل مشتريات",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "method": "bank",
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229314,
+      "nanoseconds": 772000000
+    },
+    "journalEntryCode": "JE-002211"
+  },
+  {
+    "id": "AOYGxjQtaj7rJdSjou0O",
+    "targetId": "F0m6WKgZ056fj38gSbBc",
+    "journalEntryCode": "JE-000451",
+    "sourceId": "bank-alrajhi",
+    "sourceName": "بنك الراجحي",
+    "journalEntryId": "PPc8nB6qoengR1yxUAE5",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786149506,
+      "nanoseconds": 815000000
+    },
+    "method": "bank",
+    "date": "2026-08-08",
+    "notes": "سداد",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786149506,
+      "nanoseconds": 815000000
+    },
+    "accountName": "ملتقى الخبازين  للتجارة",
+    "amount": 713,
+    "entityType": "supplier",
+    "costCenterName": null,
+    "costCenterId": null
+  },
+  {
+    "id": "APKdxgefac0VxD7aDDTw",
+    "journalEntryCode": "JE-003021",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794152295,
+      "nanoseconds": 57000000
+    },
+    "sourceName": "الصندوق الرئيسى",
+    "accountName": "عميد البحارة",
+    "notes": "مشترياات",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794152295,
+      "nanoseconds": 57000000
+    },
+    "costCenterName": null,
+    "targetId": "r1UFSwvJL6uurbAsRbe0",
+    "entityType": "supplier",
+    "method": "cash",
+    "costCenterId": null,
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "amount": 235,
+    "isTransfer": false,
+    "date": "2026-11-08",
+    "journalEntryId": "udecbD7ZfLNLULk5ZDBg"
+  },
+  {
+    "id": "Ae8B6dZ0AzbMKeKlWhOC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785581779,
+      "nanoseconds": 365000000
+    },
+    "notes": "سداد ف مشتروات",
+    "date": "2026-08-01",
+    "entityType": "supplier",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785581779,
+      "nanoseconds": 365000000
+    },
+    "journalEntryId": "4XAM2mTR5kcokd26pzGc",
+    "journalEntryCode": "JE-002035",
+    "amount": 74024.39,
+    "sourceId": "bank-alrajhi",
+    "method": "bank",
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "costCenterId": null,
+    "costCenterName": null,
+    "sourceName": "بنك الراجحي"
+  },
+  {
+    "id": "AhLbp9ldBWiSP79oFcxF",
+    "journalEntryId": "6nRq1bUwx6mK1QmJ3ACO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792497769,
+      "nanoseconds": 305000000
+    },
+    "amount": 310,
+    "costCenterId": null,
+    "sourceName": "الصندوق الرئيسى",
+    "notes": "مشتريات",
+    "method": "cash",
+    "journalEntryCode": "JE-002341",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792497769,
+      "nanoseconds": 305000000
+    },
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "costCenterName": null,
+    "isTransfer": false,
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "date": "2026-10-20",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "entityType": "supplier"
+  },
+  {
+    "id": "B1sBm40CQEj5fSANYhT9",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "sourceName": "الصندوق الرئيسى",
+    "journalEntryId": "xRn7P60ZxouNGg0ZgDRy",
+    "accountName": "منار العرب",
+    "targetId": "LtHSYMFvytG8lOAaxeUe",
+    "journalEntryCode": "JE-002710",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793445992,
+      "nanoseconds": 518000000
+    },
+    "amount": 536,
+    "notes": "مشتريات",
+    "entityType": "supplier",
+    "costCenterName": null,
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793445992,
+      "nanoseconds": 518000000
+    },
+    "isTransfer": false,
+    "method": "cash",
+    "date": "2026-10-31"
+  },
+  {
+    "id": "EMSpjYXWVIGRAuAz9zuc",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 11224,
+    "targetId": "DMcBik38LUXEIAWAYqxO",
+    "method": "bank",
+    "sourceName": "مصرف الراجحى",
+    "costCenterName": null,
+    "date": "2026-10-15",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229776,
+      "nanoseconds": 700000000
+    },
+    "isTransfer": false,
+    "costCenterId": null,
+    "journalEntryCode": "JE-002216",
+    "entityType": "supplier",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229776,
+      "nanoseconds": 700000000
+    },
+    "notes": "مشتروات",
+    "accountName": "شركة ابراج الغذاء للتجارة",
+    "journalEntryId": "brRaggEEYkBctSVs4bvD"
+  },
+  {
+    "id": "FE74hfU5Jk3d7KdAXP9C",
+    "journalEntryId": "0ZkrV8dIW0uqtzTJ8FJ7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787145810,
+      "nanoseconds": 169000000
+    },
+    "date": "2026-08-19",
+    "targetId": "zei9SjBGhLZrVGcCrZNo",
+    "method": "bank",
+    "notes": "فاتورة مشتريات",
+    "entityType": "supplier",
+    "sourceId": "bank-aljazira",
+    "accountName": "شركة ارنون للصناعات البلاستيكية المحدوده",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787145810,
+      "nanoseconds": 169000000
+    },
+    "amount": 45682.6,
+    "costCenterId": null,
+    "journalEntryCode": "JE-000659",
+    "sourceName": "بنك الجزيرة",
+    "costCenterName": null
+  },
+  {
+    "id": "FW7MOKOVmsTQIbfR45JZ",
+    "journalEntryId": "GuVKKScu2dWeqcnXwHvZ",
+    "targetId": "vl31JFZaBmD6RDeZ3A26",
+    "sourceName": "مصرف الراجحى",
+    "notes": "تحويل",
+    "accountName": "شركة هلال العروس",
+    "date": "2026-10-05",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "entityType": "supplier",
+    "method": "bank",
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365586,
+      "nanoseconds": 514000000
+    },
+    "costCenterName": null,
+    "journalEntryCode": "JE-001839",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365586,
+      "nanoseconds": 514000000
+    },
+    "amount": 998.38
+  },
+  {
+    "id": "Fh1xifNiz7gcgrbzRPNq",
+    "amount": 3908.64,
+    "targetId": "0MnVWoaJKhNghkfjSeDT",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-05",
+    "journalEntryId": "EZXgBd66b2FIjNQ86NvD",
+    "entityType": "supplier",
+    "method": "bank",
+    "notes": "تحويل",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365544,
+      "nanoseconds": 563000000
+    },
+    "accountName": "شركة الغذاء الفاخر المحدوده",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365544,
+      "nanoseconds": 563000000
+    },
+    "journalEntryCode": "JE-001838",
+    "costCenterName": null,
+    "sourceName": "مصرف الراجحى",
+    "costCenterId": null
+  },
+  {
+    "id": "FrCObG2k3hkvsNn14YoG",
+    "createdByName": "النظام",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "date": "2026-07-24",
+    "category": "مصروفات مياه + وجبات",
+    "journalEntryId": "M5z2j8UqXtKcpdVarddV",
+    "targetId": "acc_hospitality",
+    "notes": "سند صرف رقم #FRCOBG - مصروفات مياه + وجبات",
+    "type": "expense",
+    "entityType": "expense",
+    "isReversed": false,
+    "method": "cash",
+    "accountName": "ضيافة واستقبال",
+    "targetName": "ضيافة واستقبال",
+    "reversedBy": "",
+    "journalEntryCode": "JE-000203",
+    "status": "posted",
+    "jeId": "M5z2j8UqXtKcpdVarddV",
+    "number": "FRCOBG",
+    "description": "سند صرف رقم #FRCOBG - مصروفات مياه + وجبات",
+    "entryNumber": "JE-000203",
+    "amount": 100
+  },
+  {
+    "id": "Frm2KVDlRhLJqIEcndil",
+    "accountName": "مؤسسة مارين اسواق لاجين",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "costCenterName": null,
+    "costCenterId": null,
+    "entityType": "supplier",
+    "date": "2026-11-04",
+    "targetId": "llbRbtyEPTYAU8oHWeKO",
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793807541,
+      "nanoseconds": 334000000
+    },
+    "amount": 240,
+    "journalEntryId": "1w4xTeHlvADeiUqaw1wu",
+    "sourceName": "الصندوق الرئيسى",
+    "notes": "مشتروات",
+    "journalEntryCode": "JE-002883",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793807541,
+      "nanoseconds": 334000000
+    },
+    "method": "cash"
+  },
+  {
+    "id": "Fw6t7kj8xJfzKoNVUVMu",
+    "jeId": "VzdwOoj3bg6ut8tE99jW",
+    "targetId": "acc_freight_in",
+    "journalEntryId": "VzdwOoj3bg6ut8tE99jW",
+    "accountName": "مصروفات نقل بضاعة (للداخل)",
+    "sourceName": "مصرف الراجحي",
+    "description": "سند صرف رقم #FW6T7K - مصروفات نقل",
+    "category": "مصروفات نقل",
+    "entryNumber": "JE-000036",
+    "createdByName": "النظام",
+    "reversedBy": "",
+    "targetName": "مصروفات نقل بضاعة (للداخل)",
+    "isReversed": false,
+    "date": "2026-07-16",
+    "entityType": "expense",
+    "amount": 600,
+    "method": "bank",
+    "type": "expense",
+    "notes": "سند صرف رقم #FW6T7K - مصروفات نقل",
+    "journalEntryCode": "JE-000036",
+    "number": "FW6T7K",
+    "status": "posted"
+  },
+  {
+    "id": "Hmd8rQYRtt0VU0EWjgCo",
+    "journalEntryId": "Cf0RTY4JksJ9A9ieINjh",
+    "accountName": "مجموعة الجيلانى",
+    "date": "2026-10-21",
+    "sourceName": "الصندوق الرئيسى",
+    "costCenterId": null,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792576827,
+      "nanoseconds": 140000000
+    },
+    "costCenterName": null,
+    "isTransfer": false,
+    "journalEntryCode": "JE-002377",
+    "targetId": "gkuc1pZ0vEFgbByjRvj0",
+    "method": "cash",
+    "notes": "مشتروات",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792576827,
+      "nanoseconds": 140000000
+    },
+    "amount": 716,
+    "entityType": "supplier"
+  },
+  {
+    "id": "I9pDfI7PG0Qzdes7wQNM",
+    "journalEntryCode": "JE-002763",
+    "date": "2026-11-01",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793554352,
+      "nanoseconds": 680000000
+    },
+    "sourceId": "cashBox_owner_current",
+    "entityType": "other",
+    "costCenterId": null,
+    "isTransfer": false,
+    "accountName": "مستحقات الموظف على",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793554352,
+      "nanoseconds": 680000000
+    },
+    "targetId": "rfkWNRO8baDI0dc68kUY",
+    "costCenterName": null,
+    "method": "cash",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "notes": "راتب",
+    "journalEntryId": "NdVj3WjkhQ5zGo0Uzle5",
+    "amount": 3000
+  },
+  {
+    "id": "IAvUR8P5yAuKhQIyhcki",
+    "costCenterId": "cc_201",
+    "costCenterName": "سيارة السيد رضا",
+    "notes": "مصروفات ديزل",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "journalEntryCode": "JE-001974",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 100,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791649036,
+      "nanoseconds": 213000000
+    },
+    "accountName": "مصروفات ديزل السيارة النترا",
+    "date": "2026-10-10",
+    "journalEntryId": "cEbfnU4ouhW0ltY2gPAW",
+    "targetId": "ySdDrlkzWYkpJvKGa8sD",
+    "entityType": "expense",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791649036,
+      "nanoseconds": 213000000
+    },
+    "method": "cash"
+  },
+  {
+    "id": "IMDvP3T4h9yzOIYtn6NY",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791751003,
+      "nanoseconds": 31000000
+    },
+    "sourceName": "الصندوق الرئيسى",
+    "date": "2026-10-11",
+    "journalEntryId": "atbmldT6xpVF0rzgCu56",
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791751003,
+      "nanoseconds": 31000000
+    },
+    "notes": "مشتروات",
+    "entityType": "supplier",
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "method": "cash",
+    "journalEntryCode": "JE-002048",
+    "costCenterName": null,
+    "costCenterId": null,
+    "isTransfer": false,
+    "amount": 1280
+  },
+  {
+    "id": "JVqyJMgxvX3lNc1rqb5W",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "costCenterName": null,
+    "costCenterId": null,
+    "journalEntryCode": "JE-002036",
+    "method": "cash",
+    "amount": 29.5,
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "accountName": "شركة بن خميس",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "notes": "فاتورة 1 مكرونه",
+    "journalEntryId": "UK1Z3tvUIFlqHRfO31zt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254578,
+      "nanoseconds": 132000000
+    },
+    "entityType": "supplier",
+    "date": "2026-08-31",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254578,
+      "nanoseconds": 132000000
+    }
+  },
+  {
+    "id": "JXur6WkVqI3pjacWi3Ed",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "costCenterId": null,
+    "amount": 1500,
+    "method": "cash",
+    "costCenterName": null,
+    "targetId": "M8NZ55YJqDomeO89bvFJ",
+    "journalEntryCode": "JE-000517",
+    "date": "2026-08-11",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786455005,
+      "nanoseconds": 302000000
+    },
+    "entityType": "other",
+    "journalEntryId": "3b0M6jJFYVGVzC5Um9OT",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786455005,
+      "nanoseconds": 302000000
+    },
+    "accountName": "عهدة الموظف محمد عوض",
+    "sourceId": "cashBox_owner_current",
+    "notes": "عهدة للموظف محمد عوض"
+  },
+  {
+    "id": "JikHxM4JcyaEn8xCuEIJ",
+    "amount": 866,
+    "isTransfer": false,
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "notes": "سداد مشتروات",
+    "journalEntryCode": "JE-002081",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791834238,
+      "nanoseconds": 686000000
+    },
+    "sourceId": "cashBox_owner_current",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791834238,
+      "nanoseconds": 686000000
+    },
+    "costCenterName": null,
+    "accountName": "شركة بن خميس",
+    "entityType": "supplier",
+    "method": "cash",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "date": "2026-10-08",
+    "journalEntryId": "UZNUTtSJZY9sib2LDzna",
+    "costCenterId": null
+  },
+  {
+    "id": "K66cSTOG6iEzW5SQw1Dg",
+    "targetId": "jKmmoYwYFdh7rCvbUujZ",
+    "isTransfer": false,
+    "method": "cash",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "costCenterName": null,
+    "amount": 123,
+    "entityType": "supplier",
+    "costCenterId": null,
+    "date": "2026-10-11",
+    "notes": "مشتروات من منار العرب",
+    "journalEntryCode": "JE-002049",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791751054,
+      "nanoseconds": 359000000
+    },
+    "journalEntryId": "1TpKM7lDXp1VS5pYq6rn",
+    "sourceName": "الصندوق الرئيسى",
+    "accountName": "مورد نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791751054,
+      "nanoseconds": 359000000
+    }
+  },
+  {
+    "id": "KeRJ6t0a6tlsag1uvRFj",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "costCenterId": null,
+    "journalEntryId": "4RNW30CS0j0OQePE5D23",
+    "amount": 4856,
+    "sourceName": "بنك الجزيرة",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788773963,
+      "nanoseconds": 899000000
+    },
+    "date": "2026-09-07",
+    "notes": "تحويل قيمة بضاعه",
+    "method": "bank",
+    "accountName": "شركة بن خميس",
+    "sourceId": "bank-aljazira",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788773963,
+      "nanoseconds": 899000000
+    },
+    "entityType": "supplier",
+    "costCenterName": null,
+    "journalEntryCode": "JE-001191"
+  },
+  {
+    "id": "KebK8BSL8tp3UM9QlHsv",
+    "accountName": "شركة بن خميس",
+    "journalEntryId": "BXu8JtLc2pPjXNqqe3Yp",
+    "entityType": "supplier",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "date": "2026-09-16",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789553906,
+      "nanoseconds": 331000000
+    },
+    "method": "cash",
+    "notes": "نقدى",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "journalEntryCode": "JE-001371",
+    "costCenterId": null,
+    "sourceName": "صندوق المندوب - مصطفى",
+    "amount": 376,
+    "costCenterName": null,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789553906,
+      "nanoseconds": 331000000
+    }
+  },
+  {
+    "id": "KkKC4jTbblTMGUn2ZjqR",
+    "amount": 480,
+    "journalEntryId": "O6NXVmPFwgluNHXfCWrz",
+    "date": "2026-10-29",
+    "sourceName": "الصندوق الرئيسى",
+    "costCenterId": null,
+    "accountName": "مؤسسة مارين اسواق لاجين",
+    "method": "cash",
+    "journalEntryCode": "JE-002674",
+    "entityType": "supplier",
+    "costCenterName": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793295304,
+      "nanoseconds": 926000000
+    },
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "notes": "نقدى مشتريات",
+    "targetId": "llbRbtyEPTYAU8oHWeKO",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793295304,
+      "nanoseconds": 926000000
+    },
+    "isTransfer": false
+  },
+  {
+    "id": "MBKg0qggODLVDZB6ntjt",
+    "sourceName": "مصرف الراجحى",
+    "notes": "مشترياات",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793691540,
+      "nanoseconds": 241000000
+    },
+    "targetId": "GQiBytKUzx3VJ54PzdDK",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793691540,
+      "nanoseconds": 241000000
+    },
+    "date": "2026-11-01",
+    "journalEntryId": "2PJvxyx0FZhHsyW2om5D",
+    "entityType": "supplier",
+    "accountName": "شركة سماء المتحدة التجاريه",
+    "method": "bank",
+    "isTransfer": false,
+    "amount": 369.15,
+    "journalEntryCode": "JE-002809",
+    "costCenterName": null
+  },
+  {
+    "id": "NIRuvnpYrKYDvDemROD2",
+    "journalEntryCode": "JE-002823",
+    "method": "cash",
+    "targetId": "ugeyE9SPyvoxdKNzyon1",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "costCenterName": null,
+    "accountName": "مستحقات الموظف مصطفى",
+    "amount": 1038,
+    "sourceId": "cashBox_owner_current",
+    "date": "2026-11-02",
+    "costCenterId": null,
+    "entityType": "other",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793699845,
+      "nanoseconds": 680000000
+    },
+    "journalEntryId": "29yj544dwc8oXTKBvB1n",
+    "notes": "راتب",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793699845,
+      "nanoseconds": 680000000
+    },
+    "isTransfer": false
+  },
+  {
+    "id": "Ntd4PSk5NNIsND1Xaaun",
+    "createdByName": "النظام",
+    "status": "posted",
+    "number": "NTD4PSK5",
+    "notes": "سداد فاتورة مشتريات نقداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية",
+    "isReversed": false,
+    "entityType": "supplier",
+    "entryNumber": "JE-000004",
+    "type": "supplierPayment",
+    "reversedBy": "",
+    "targetName": "شركة الرفادة العربية التجارية",
+    "description": "سداد فاتورة مشتريات نقداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية",
+    "method": "cash",
+    "amount": 10449.48,
+    "accountName": "شركة الرفادة العربية التجارية",
+    "date": "2026-07-12",
+    "supplierId": "G9jkfr5Eym3JwP8KJpsZ",
+    "category": "سداد فاتورة مشتريات نقداً رقم PUR-000001 — مؤسسة إدهام للمواد الغذائية",
+    "sourceName": "الصندوق الرئيسي",
+    "journalEntryId": "CVrSIUbMVohgQzfhge2Y",
+    "journalEntryCode": "JE-002014",
+    "jeId": "Ew7IoNFvZMD3hzkzA0VT",
+    "targetId": "G9jkfr5Eym3JwP8KJpsZ"
+  },
+  {
+    "id": "PY7ILmkQfpxjpQezxM7j",
+    "isTransfer": false,
+    "targetId": "i2g23gNXfTefs3AlsJ2g",
+    "journalEntryId": "6cPAGB3QBailkWK2n24T",
+    "sourceId": "cashBox_owner_current",
+    "date": "2026-11-01",
+    "entityType": "other",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793554113,
+      "nanoseconds": 993000000
+    },
+    "method": "cash",
+    "journalEntryCode": "JE-002760",
+    "costCenterId": null,
+    "accountName": "مستحقات السيد رضا",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "costCenterName": null,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793554113,
+      "nanoseconds": 993000000
+    },
+    "notes": "صرف مستحقات باقى الراتب",
+    "amount": 2095
+  },
+  {
+    "id": "RI3m9a9jOajC1lTq4CVx",
+    "sourceName": "صندوق المندوب - محمد عوض",
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "date": "2026-10-04",
+    "amount": 206,
+    "sourceId": "cashBox_i6qFzXabMQq8R7j7GxgL",
+    "method": "cash",
+    "journalEntryId": "5giOoBTV8RhM9CaKXwgq",
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "journalEntryCode": "JE-001771",
+    "notes": "نقدى",
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791142581,
+      "nanoseconds": 835000000
+    },
+    "entityType": "supplier",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791142581,
+      "nanoseconds": 835000000
+    },
+    "costCenterName": null
+  },
+  {
+    "id": "Rl44LCvDGRU3oFfRmHve",
+    "entityType": "other",
+    "sourceId": "cashBox_owner_current",
+    "amount": 3500,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793554410,
+      "nanoseconds": 343000000
+    },
+    "accountName": "مستحقات الاستاذ/ محمود",
+    "method": "cash",
+    "journalEntryId": "NXxr7NoVzqq0uBjg5UR7",
+    "targetId": "0XbQcpr1v6ivnLzFMGBM",
+    "notes": "راتب",
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793554410,
+      "nanoseconds": 343000000
+    },
+    "date": "2026-11-01",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "costCenterId": null,
+    "costCenterName": null,
+    "journalEntryCode": "JE-002764"
+  },
+  {
+    "id": "Ryt9th7PCIJ1MASemAqA",
+    "journalEntryId": "9QrNqCTgYFwTwY9nunxC",
+    "amount": 5200.3,
+    "targetId": "d6qw7i99llSzSgTsq8NO",
+    "date": "2026-08-01",
+    "sourceName": "بنك الراجحي",
+    "method": "bank",
+    "sourceId": "bank-alrajhi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785581733,
+      "nanoseconds": 761000000
+    },
+    "costCenterName": null,
+    "journalEntryCode": "JE-000316",
+    "notes": "سداد ف مشتروات",
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785581733,
+      "nanoseconds": 761000000
+    },
+    "entityType": "supplier",
+    "accountName": "شركة متاجر النجوم للتجارة"
+  },
+  {
+    "id": "SCiUujDjj0x4CmBiziHg",
+    "journalEntryCode": "JE-002046",
+    "sourceName": "الصندوق الرئيسى",
+    "costCenterId": null,
+    "method": "cash",
+    "costCenterName": null,
+    "amount": 382,
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791750912,
+      "nanoseconds": 525000000
+    },
+    "accountName": "شركة بن خميس",
+    "entityType": "supplier",
+    "journalEntryId": "j5KsuYxlbdH4zCadN6Fi",
+    "date": "2026-10-11",
+    "notes": "مشتروات",
+    "isTransfer": false,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791750912,
+      "nanoseconds": 525000000
+    },
+    "targetId": "pZEf7gzmCe6GccACJyoC"
+  },
+  {
+    "id": "SNAVKNYe8B6UXSmKYK4l",
+    "amount": 364,
+    "targetId": "e6sGPeUZCjTVqeMXnhjN",
+    "notes": "باقى راتبه",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793454105,
+      "nanoseconds": 418000000
+    },
+    "costCenterId": null,
+    "isTransfer": false,
+    "date": "2026-10-31",
+    "entityType": "other",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793454105,
+      "nanoseconds": 418000000
+    },
+    "sourceId": "cashBox_owner_current",
+    "journalEntryId": "NpfAc5AgknBfeH2OssGh",
+    "method": "cash",
+    "journalEntryCode": "JE-002719",
+    "costCenterName": null,
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "accountName": "مستحقات الموظف محمد"
+  },
+  {
+    "id": "SUm2UJfq030OHxlONQmi",
+    "entityType": "other",
+    "targetId": "ErUeZws4zc9XMUzil3xx",
+    "journalEntryId": "29ZnM6nmN2cuW0QYwm5G",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785847617,
+      "nanoseconds": 979000000
+    },
+    "journalEntryCode": "JE-000381",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785847617,
+      "nanoseconds": 979000000
+    },
+    "accountName": "جاري المالك",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "date": "2026-08-03",
+    "costCenterName": null,
+    "costCenterId": null,
+    "amount": 840,
+    "sourceName": "صندوق المندوب - مصطفى",
+    "notes": "الايداعات النقدية عن يوم 03-08",
+    "method": "cash"
+  },
+  {
+    "id": "SzkYx8AZ0Kg1tdLiGSut",
+    "amount": 600,
+    "jeId": "IViXlo0vWlKxBXCYEyU0",
+    "createdByName": "النظام",
+    "category": "مصروف نقل البضاعة",
+    "accountName": "مصروفات نقل بضاعة (للداخل)",
+    "entityType": "expense",
+    "description": "سند صرف رقم #SZKYX8 - مصروف نقل البضاعة",
+    "targetId": "acc_freight_in",
+    "isReversed": false,
+    "number": "SZKYX8",
+    "targetName": "مصروفات نقل بضاعة (للداخل)",
+    "status": "posted",
+    "entryNumber": "JE-000037",
+    "reversedBy": "",
+    "method": "bank",
+    "journalEntryCode": "JE-000037",
+    "date": "2026-07-15",
+    "notes": "سند صرف رقم #SZKYX8 - مصروف نقل البضاعة",
+    "journalEntryId": "IViXlo0vWlKxBXCYEyU0",
+    "type": "expense",
+    "sourceName": "مصرف الراجحي"
+  },
+  {
+    "id": "TUyZapRHGS0qnE2oVZlY",
+    "amount": 5011,
+    "date": "2026-10-22",
+    "method": "bank",
+    "sourceName": "مصرف الراجحى",
+    "accountName": "شركة بن خميس",
+    "costCenterId": null,
+    "costCenterName": null,
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792689317,
+      "nanoseconds": 734000000
+    },
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792689317,
+      "nanoseconds": 734000000
+    },
+    "journalEntryCode": "JE-002444",
+    "journalEntryId": "EuB1mPtQr4QfHLAhRjc9",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "notes": "تحويل",
+    "entityType": "supplier"
+  },
+  {
+    "id": "Tml19ikl2jGMVkt7ikFv",
+    "sourceName": "بنك الراجحي",
+    "journalEntryCode": "JE-002037",
+    "method": "bank",
+    "costCenterId": null,
+    "costCenterName": null,
+    "amount": 327,
+    "sourceId": "bank-alrajhi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992915,
+      "nanoseconds": 597000000
+    },
+    "accountName": "مؤسسة امداد رضوى لتجارة الجملة والتجزئة",
+    "entityType": "supplier",
+    "journalEntryId": "N9J0HkkrWfC3QUw7Xx0D",
+    "date": "2026-08-29",
+    "notes": "تحويل بضاعه",
+    "targetId": "Txj2Uq2NOEEjoKqKRfoB",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992915,
+      "nanoseconds": 597000000
+    }
+  },
+  {
+    "id": "UJjcW3KVBLkt86MQBB0Z",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "journalEntryId": "5FHxGtCnHXyRqujrBfu5",
+    "accountName": "جاري المالك",
+    "entityType": "other",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786526396,
+      "nanoseconds": 246000000
+    },
+    "targetId": "ErUeZws4zc9XMUzil3xx",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786526396,
+      "nanoseconds": 246000000
+    },
+    "notes": "تصفيه عهدة الصندوق * الجارى",
+    "method": "cash",
+    "costCenterName": null,
+    "sourceName": "صندوق المندوب - مصطفى",
+    "costCenterId": null,
+    "date": "2026-08-12",
+    "journalEntryCode": "JE-000529",
+    "amount": 2380
+  },
+  {
+    "id": "UO5sySUGet46fs1Iruyp",
+    "entityType": "supplier",
+    "accountName": "شركة ثلاجات الساحل للتجارة",
+    "costCenterName": null,
+    "date": "2026-08-28",
+    "targetId": "bSmOumTaiFsCx80iisMs",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992866,
+      "nanoseconds": 138000000
+    },
+    "amount": 725,
+    "journalEntryId": "PKoTI6cCUWs3nPwMKwt1",
+    "sourceName": "بنك الراجحي",
+    "notes": "725",
+    "costCenterId": null,
+    "method": "bank",
+    "sourceId": "bank-alrajhi",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992866,
+      "nanoseconds": 138000000
+    },
+    "journalEntryCode": "JE-000985"
+  },
+  {
+    "id": "UWoMsuOuZtEgtPZI9AeX",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229370,
+      "nanoseconds": 667000000
+    },
+    "targetId": "llbRbtyEPTYAU8oHWeKO",
+    "method": "bank",
+    "sourceName": "مصرف الراجحى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229370,
+      "nanoseconds": 667000000
+    },
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 6240,
+    "journalEntryId": "FgpfGAuDuz0lzn4vcqc7",
+    "journalEntryCode": "JE-002212",
+    "accountName": "مؤسسة مارين اسواق لاجين",
+    "entityType": "supplier",
+    "date": "2026-10-15",
+    "notes": "مشتروات",
+    "costCenterId": null,
+    "costCenterName": null,
+    "isTransfer": false
+  },
+  {
+    "id": "VHY9lBjvdwWpaIwxIWPR",
+    "costCenterName": null,
+    "amount": 210,
+    "notes": "مشتروات",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792580622,
+      "nanoseconds": 394000000
+    },
+    "sourceName": "الصندوق الرئيسى",
+    "method": "cash",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792580622,
+      "nanoseconds": 394000000
+    },
+    "journalEntryId": "of4uewdsm2CxsaV5mqNp",
+    "date": "2026-10-21",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "isTransfer": false,
+    "journalEntryCode": "JE-002386",
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "entityType": "supplier",
+    "costCenterId": null,
+    "accountName": "شركة عبد المجيد العروى التجارية"
+  },
+  {
+    "id": "VPcLw7wdNxVDqdvCOSVJ",
+    "costCenterName": null,
+    "accountName": "شركة مجموعة با فرط للصناعة لانتاج المواد الغذائية",
+    "method": "bank",
+    "targetId": "x4ExkI9XaqWEO3ji7bLv",
+    "sourceName": "بنك الجزيرة",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787145220,
+      "nanoseconds": 316000000
+    },
+    "date": "2026-08-19",
+    "sourceId": "bank-aljazira",
+    "amount": 36430.28,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787145220,
+      "nanoseconds": 316000000
+    },
+    "journalEntryId": "F55p0msDH2KNYyqxULPl",
+    "entityType": "supplier",
+    "notes": "سداد الفاتورة الاخيره",
+    "costCenterId": null,
+    "journalEntryCode": "JE-000657"
+  },
+  {
+    "id": "WdnuUGLljzdQ8z0S97Dw",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792680093,
+      "nanoseconds": 949000000
+    },
+    "method": "bank",
+    "costCenterId": null,
+    "costCenterName": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792680093,
+      "nanoseconds": 949000000
+    },
+    "sourceName": "مصرف الراجحى",
+    "notes": "مشتروات",
+    "amount": 419,
+    "journalEntryCode": "JE-002433",
+    "isTransfer": false,
+    "journalEntryId": "b647KFd46hcmzndw1XrE",
+    "targetId": "qTVwyDqT2xJb659VFmyf",
+    "date": "2026-10-18",
+    "accountName": "شركة دار الشاى العربى للتجارة",
+    "entityType": "supplier",
+    "sourceId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "WfybxIUM5yp1HfiCC6eX",
+    "entityType": "supplier",
+    "method": "bank",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588568,
+      "nanoseconds": 586000000
+    },
+    "journalEntryCode": "JE-002395",
+    "journalEntryId": "epLa2giuMabcURrQQSYt",
+    "notes": "تحويل",
+    "amount": 6624,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588568,
+      "nanoseconds": 586000000
+    },
+    "isTransfer": false,
+    "accountName": "شركة هلال العروس",
+    "targetId": "vl31JFZaBmD6RDeZ3A26",
+    "costCenterId": null,
+    "costCenterName": null,
+    "sourceName": "مصرف الراجحى",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-20"
+  },
+  {
+    "id": "X4fz0PmjScaHjh5VyGZo",
+    "status": "posted",
+    "number": "X4FZ0P",
+    "notes": "سند صرف رقم #X4FZ0P - حساب فاتورة",
+    "createdByName": "النظام",
+    "method": "bank",
+    "amount": 23506,
+    "sourceName": "مصرف الراجحي",
+    "jeId": "KrRTH3JXScmgMsOoVPT5",
+    "supplierId": "WIDvPcdlldzkab5ZikBB",
+    "category": "حساب فاتورة",
+    "journalEntryId": "KrRTH3JXScmgMsOoVPT5",
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "type": "expense",
+    "reversedBy": "",
+    "entryNumber": "JE-000214",
+    "targetName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "isReversed": false,
+    "description": "سند صرف رقم #X4FZ0P - حساب فاتورة",
+    "entityType": "supplier",
+    "journalEntryCode": "JE-000214",
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "date": "2026-07-26"
+  },
+  {
+    "id": "Xow6KYNUKYZA75IqULI3",
+    "targetId": "GG58T6gb5UDMgm7gJ2hU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786351523,
+      "nanoseconds": 786000000
+    },
+    "method": "bank",
+    "date": "2026-08-10",
+    "sourceId": "bank-alrajhi",
+    "amount": 158.7,
+    "costCenterName": null,
+    "entityType": "supplier",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786351523,
+      "nanoseconds": 786000000
+    },
+    "journalEntryCode": "JE-000495",
+    "accountName": "مؤسسة باهطف للمواد الغذائية",
+    "notes": "تحويل بضاعه",
+    "costCenterId": null,
+    "journalEntryId": "4ASiHZwS7JngL6kSBWaF",
+    "sourceName": "بنك الراجحي"
+  },
+  {
+    "id": "YTau3hElFo1sFH7R4ZmB",
+    "entityType": "supplier",
+    "method": "bank",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792960675,
+      "nanoseconds": 227000000
+    },
+    "journalEntryCode": "JE-002522",
+    "journalEntryId": "3zEtxWy7aYnQGBd2CYzo",
+    "notes": "تحويل",
+    "amount": 5980,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792960675,
+      "nanoseconds": 227000000
+    },
+    "isTransfer": false,
+    "accountName": "شركة ابراج الغذاء للتجارة",
+    "targetId": "DMcBik38LUXEIAWAYqxO",
+    "costCenterId": null,
+    "costCenterName": null,
+    "sourceName": "مصرف الراجحى",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "date": "2026-10-25"
+  },
+  {
+    "id": "ZyxVNpvaBclEiLTzLQX8",
+    "targetId": "VhIvNg56WTNSADqxWUWc",
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229431,
+      "nanoseconds": 490000000
+    },
+    "method": "bank",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "amount": 2208,
+    "date": "2026-10-15",
+    "costCenterName": null,
+    "entityType": "supplier",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229431,
+      "nanoseconds": 490000000
+    },
+    "accountName": "شركة ارياد للتجارة",
+    "journalEntryCode": "JE-002213",
+    "notes": "مشتروات",
+    "costCenterId": null,
+    "journalEntryId": "36f2sTjpFwVgrQkHMmX1",
+    "sourceName": "مصرف الراجحى"
+  },
+  {
+    "id": "aKAq80ONIncP9GJNOPQv",
+    "costCenterId": null,
+    "isTransfer": false,
+    "amount": 33866.35,
+    "journalEntryId": "Acjy00fHsIyfe7LvoPhP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230534,
+      "nanoseconds": 261000000
+    },
+    "notes": "مشتروات",
+    "method": "cash",
+    "entityType": "supplier",
+    "accountName": "شركة فجر الراقيه التجاريه بالجمله",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230534,
+      "nanoseconds": 261000000
+    },
+    "sourceId": "cashBox_owner_current",
+    "costCenterName": null,
+    "date": "2026-10-14",
+    "targetId": "D4vk02T2bEnDhxlB7rez",
+    "journalEntryCode": "JE-002221",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)"
+  },
+  {
+    "id": "azq7LKwIVQ3DGsm95FiJ",
+    "costCenterId": null,
+    "date": "2026-10-14",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "amount": 15414.6,
+    "sourceId": "cashBox_owner_current",
+    "accountName": "شركة هلال العروس",
+    "method": "cash",
+    "targetId": "vl31JFZaBmD6RDeZ3A26",
+    "journalEntryId": "IDTtNdCQGgcM01wM5i9H",
+    "notes": "من نظم الامداد الحديثة",
+    "entityType": "supplier",
+    "journalEntryCode": "JE-002220",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230409,
+      "nanoseconds": 388000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230409,
+      "nanoseconds": 388000000
+    },
+    "costCenterName": null,
+    "isTransfer": false
+  },
+  {
+    "id": "b6pnM7WphZANvs7Bpi9y",
+    "amount": 27094,
+    "costCenterId": null,
+    "journalEntryId": "bYroDDFwk90m2GzfwQV5",
+    "sourceId": "cashBox_owner_current",
+    "notes": "تحويل من الحساب نظم الامداد الحديثة",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "journalEntryCode": "JE-002177",
+    "targetId": "G9jkfr5Eym3JwP8KJpsZ",
+    "method": "cash",
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792080307,
+      "nanoseconds": 732000000
+    },
+    "date": "2026-10-15",
+    "costCenterName": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792080307,
+      "nanoseconds": 732000000
+    },
+    "accountName": "شركة الرفادة العربية التجارية",
+    "entityType": "supplier"
+  },
+  {
+    "id": "bhqgynxaBzWaKmqBfdtV",
+    "journalEntryCode": "JE-002396",
+    "accountName": "شركة فجر الراقيه التجاريه بالجمله",
+    "sourceName": "مصرف الراجحى",
+    "journalEntryId": "WjT1swezl6LkucIN61oB",
+    "date": "2026-10-20",
+    "isTransfer": false,
+    "costCenterId": null,
+    "targetId": "D4vk02T2bEnDhxlB7rez",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588649,
+      "nanoseconds": 375000000
+    },
+    "amount": 632.5,
+    "method": "bank",
+    "notes": "مشتروات",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588649,
+      "nanoseconds": 375000000
+    },
+    "costCenterName": null,
+    "entityType": "supplier",
+    "sourceId": "0j34llJOFXQ2McuwHCtr"
+  },
+  {
+    "id": "bnqOZn8zJatekW7GzW1A",
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588887,
+      "nanoseconds": 381000000
+    },
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "costCenterName": null,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588887,
+      "nanoseconds": 381000000
+    },
+    "sourceName": "مصرف الراجحى",
+    "targetId": "rid7Vt3Pb3ABbhGukJ9G",
+    "notes": "راتب السعودى",
+    "accountName": "رواتب السعوديين",
+    "date": "2026-10-18",
+    "isTransfer": false,
+    "journalEntryId": "nNMzmtERAVhs6Wl7R6Dx",
+    "method": "bank",
+    "journalEntryCode": "JE-002398",
+    "amount": 1000,
+    "entityType": "expense"
+  },
+  {
+    "id": "cFZxsK4e8Hiy8ytmyPuZ",
+    "category": "المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى",
+    "description": "سند صرف رقم #CFZXSK - المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى",
+    "entryNumber": "JE-000164",
+    "jeId": "IQnaJTIDRo4VNCwwNkl0",
+    "accountName": "جاري المالك",
+    "createdByName": "النظام",
+    "notes": "سند صرف رقم #CFZXSK - المتحصلات النقديه عن يوم 22-07 من المندوب مصطفى",
+    "journalEntryId": "IQnaJTIDRo4VNCwwNkl0",
+    "targetId": "acc_owner",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "type": "expense",
+    "amount": 1252,
+    "journalEntryCode": "JE-000164",
+    "reversedBy": "JE-2026-0005",
+    "date": "2026-07-23",
+    "targetName": "جاري المالك",
+    "isReversed": true,
+    "method": "cash",
+    "entityType": "expense",
+    "number": "CFZXSK",
+    "status": "posted"
+  },
+  {
+    "id": "catgL153YRopAR7bzh8V",
+    "accountName": "شركة بن خميس",
+    "costCenterId": null,
+    "entityType": "supplier",
+    "costCenterName": null,
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "تحويل",
+    "isTransfer": false,
+    "journalEntryCode": "JE-002135",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991507,
+      "nanoseconds": 167000000
+    },
+    "method": "bank",
+    "journalEntryId": "QekDfIDrD0poAV5r9HSk",
+    "sourceName": "مصرف الراجحى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991507,
+      "nanoseconds": 167000000
+    },
+    "date": "2026-10-13",
+    "amount": 970
+  },
+  {
+    "id": "eOgtgYaJlZr4Bk9bStUw",
+    "date": "2026-10-06",
+    "targetId": "vl31JFZaBmD6RDeZ3A26",
+    "entityType": "supplier",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791366167,
+      "nanoseconds": 735000000
+    },
+    "notes": "تحويل",
+    "journalEntryId": "qGsvViKs1xBXsVji4NbU",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791366167,
+      "nanoseconds": 735000000
+    },
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "costCenterId": null,
+    "amount": 2077.85,
+    "sourceName": "مصرف الراجحى",
+    "journalEntryCode": "JE-001842",
+    "accountName": "شركة هلال العروس",
+    "costCenterName": null,
+    "method": "bank"
+  },
+  {
+    "id": "ehqzu2CmWQRcHwIxDFOp",
+    "entityType": "supplier",
+    "amount": 190,
+    "journalEntryId": "JV4LbVunWsZi7CsLOWyh",
+    "method": "cash",
+    "date": "2026-10-07",
+    "isTransfer": false,
+    "accountName": "مورد نقدى",
+    "sourceId": "cashBox_owner_current",
+    "costCenterName": null,
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991650,
+      "nanoseconds": 807000000
+    },
+    "notes": "مشتروات",
+    "targetId": "jKmmoYwYFdh7rCvbUujZ",
+    "costCenterId": null,
+    "journalEntryCode": "JE-002136",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991650,
+      "nanoseconds": 807000000
+    }
+  },
+  {
+    "id": "elhia9bRoxe4rFysbQ1w",
+    "targetId": "GQiBytKUzx3VJ54PzdDK",
+    "journalEntryCode": "JE-002215",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229554,
+      "nanoseconds": 567000000
+    },
+    "date": "2026-10-15",
+    "isTransfer": false,
+    "costCenterId": null,
+    "accountName": "شركة سماء المتحدة التجاريه",
+    "entityType": "supplier",
+    "costCenterName": null,
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229554,
+      "nanoseconds": 567000000
+    },
+    "notes": "مشتروات",
+    "amount": 414,
+    "method": "bank",
+    "journalEntryId": "9mgfACEYsh30tYoC8NYU",
+    "sourceName": "مصرف الراجحى"
+  },
+  {
+    "id": "etwpS7NqF8F0hRClObyD",
+    "accountName": "شركة الماسة راما",
+    "journalEntryId": "BMsqNAqXXDeUP4MMvPyD",
+    "entityType": "supplier",
+    "costCenterId": null,
+    "isTransfer": false,
+    "journalEntryCode": "JE-002336",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792496689,
+      "nanoseconds": 864000000
+    },
+    "date": "2026-10-18",
+    "method": "bank",
+    "sourceName": "مصرف الراجحى",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "costCenterName": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792496689,
+      "nanoseconds": 864000000
+    },
+    "notes": "تحويل مشتروات",
+    "targetId": "GpqmiDxnZj1YFEko23RR",
+    "amount": 677
+  },
+  {
+    "id": "euDnuCYqBMQmT8XOlpTS",
+    "sourceName": "بنك الجزيرة",
+    "sourceId": "bank-aljazira",
+    "journalEntryId": "vT6Wp1enrI8T0Q9xOFBh",
+    "notes": "تحويل قيمة مشتريات",
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "journalEntryCode": "JE-001561",
+    "method": "bank",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237320,
+      "nanoseconds": 507000000
+    },
+    "costCenterId": null,
+    "entityType": "supplier",
+    "costCenterName": null,
+    "date": "2026-09-23",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790237320,
+      "nanoseconds": 507000000
+    },
+    "amount": 34385
+  },
+  {
+    "id": "fEGqTG3gpLV9OIg4jxUB",
+    "date": "2026-11-01",
+    "accountName": "مستحقات الاستاذ / عبد الرحمن",
+    "journalEntryCode": "JE-002765",
+    "costCenterName": null,
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793554446,
+      "nanoseconds": 834000000
+    },
+    "amount": 2500,
+    "sourceId": "cashBox_owner_current",
+    "journalEntryId": "4q3QvT1LtpRUSBCpX5Rp",
+    "method": "cash",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793554446,
+      "nanoseconds": 834000000
+    },
+    "costCenterId": null,
+    "targetId": "SBPVjJ7fuD7dnuHXitNJ",
+    "notes": "راتب",
+    "entityType": "other"
+  },
+  {
+    "id": "fkKumAHCyAVOOPDtjQc3",
+    "costCenterId": "cc_302",
+    "sourceName": "الصندوق الرئيسى",
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "notes": "فاتورة مشتريات خل - فاصوليا - صابون",
+    "journalEntryCode": "JE-001939",
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "journalEntryId": "dMlX2YmmIgVmzjkkNf6B",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "amount": 173,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791490422,
+      "nanoseconds": 318000000
+    },
+    "entityType": "supplier",
+    "costCenterName": "سيارة المندوب محمد عوض",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791490422,
+      "nanoseconds": 318000000
+    },
+    "date": "2026-10-08",
+    "method": "cash"
+  },
+  {
+    "id": "gdgh4DOAifAiAN6dCGOO",
+    "entityType": "supplier",
+    "costCenterName": null,
+    "costCenterId": null,
+    "amount": 229,
+    "notes": "نقدى",
+    "sourceName": "صندوق المندوب - محمد عوض",
+    "journalEntryId": "qJvgBy4KkrFjIectjVUJ",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791142647,
+      "nanoseconds": 554000000
+    },
+    "accountName": "شركة بن خميس",
+    "date": "2026-10-04",
+    "journalEntryCode": "JE-001772",
+    "sourceId": "cashBox_i6qFzXabMQq8R7j7GxgL",
+    "method": "cash",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791142647,
+      "nanoseconds": 554000000
+    }
+  },
+  {
+    "id": "gk5Y6Tmqn1BW6FsFE42A",
+    "targetId": "q1P6cNaULvwp6533OLaJ",
+    "date": "2026-08-27",
+    "amount": 6716.15,
+    "method": "bank",
+    "entityType": "supplier",
+    "journalEntryCode": "JE-000945",
+    "journalEntryId": "roNG5mivpFs7Z9RFvU9d",
+    "sourceId": "bank-alrajhi",
+    "costCenterId": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787833585,
+      "nanoseconds": 969000000
+    },
+    "accountName": "مؤسسة اغصان طيبه التجارية",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787833585,
+      "nanoseconds": 969000000
+    },
+    "costCenterName": null,
+    "notes": "تحويل قيمة بضاعه",
+    "sourceName": "بنك الراجحي"
+  },
+  {
+    "id": "iHWEyVTctqWEKXuyDZeF",
+    "amount": 2160,
+    "notes": "سداد مشتريات ارز الرواسى من فخر الضيافه",
+    "journalEntryId": "L9o2FEyu1HQNfOztDyr8",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789918057,
+      "nanoseconds": 860000000
+    },
+    "targetId": "jKmmoYwYFdh7rCvbUujZ",
+    "entityType": "supplier",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789918057,
+      "nanoseconds": 860000000
+    },
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "method": "cash",
+    "costCenterId": null,
+    "sourceName": "صندوق المندوب - مصطفى",
+    "costCenterName": null,
+    "accountName": "مورد نقدى",
+    "date": "2026-09-20",
+    "journalEntryCode": "JE-001483"
+  },
+  {
+    "id": "iNoA8riL9svxxqt3LOcJ",
+    "date": "2026-10-24",
+    "sourceName": "الصندوق الرئيسى",
+    "journalEntryId": "LAodmTDxxQ95KL7qjdKU",
+    "journalEntryCode": "JE-002460",
+    "method": "cash",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792828831,
+      "nanoseconds": 714000000
+    },
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "isTransfer": false,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792828831,
+      "nanoseconds": 714000000
+    },
+    "targetId": "gkuc1pZ0vEFgbByjRvj0",
+    "entityType": "supplier",
+    "accountName": "مجموعة الجيلانى",
+    "costCenterId": null,
+    "costCenterName": null,
+    "notes": "نقدى",
+    "amount": 32
+  },
+  {
+    "id": "iQrzoEnrqjy7bJp4p1VM",
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "costCenterName": null,
+    "entityType": "supplier",
+    "isTransfer": false,
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "notes": "مشتروات",
+    "date": "2026-10-11",
+    "journalEntryCode": "JE-002047",
+    "sourceName": "الصندوق الرئيسى",
+    "journalEntryId": "S32nq0aCPVMPEKgrG5tY",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791750962,
+      "nanoseconds": 991000000
+    },
+    "amount": 193,
+    "costCenterId": null,
+    "method": "cash",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791750962,
+      "nanoseconds": 991000000
+    }
+  },
+  {
+    "id": "j0IOPvK2aF1A0jI81cBS",
+    "date": "2026-10-11",
+    "journalEntryCode": "JE-002050",
+    "accountName": "مركز ينبع للبلاستيك",
+    "journalEntryId": "DaZHJNOopxW8EEYg7r9l",
+    "sourceName": "الصندوق الرئيسى",
+    "method": "cash",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791751092,
+      "nanoseconds": 597000000
+    },
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "costCenterId": null,
+    "isTransfer": false,
+    "costCenterName": null,
+    "entityType": "supplier",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791751092,
+      "nanoseconds": 597000000
+    },
+    "notes": "مشتروات",
+    "targetId": "zRST7yuup9QI0DEihZpm",
+    "amount": 133.5
+  },
+  {
+    "id": "jkNffsTvm4kMBDikdqoT",
+    "entryNumber": "JE-000215",
+    "description": "سند صرف رقم #JKNFFS - حساب ف مشتروات",
+    "targetName": "شركة الرفادة العربية التجارية",
+    "reversedBy": "",
+    "entityType": "supplier",
+    "isReversed": false,
+    "journalEntryId": "1PYReHhgNxnY3XqDa8xw",
+    "supplierId": "G9jkfr5Eym3JwP8KJpsZ",
+    "accountName": "شركة الرفادة العربية التجارية",
+    "jeId": "1PYReHhgNxnY3XqDa8xw",
+    "targetId": "G9jkfr5Eym3JwP8KJpsZ",
+    "sourceName": "مصرف الراجحي",
+    "journalEntryCode": "JE-000215",
+    "amount": 13994.06,
+    "type": "expense",
+    "createdByName": "النظام",
+    "notes": "سند صرف رقم #JKNFFS - حساب ف مشتروات",
+    "method": "bank",
+    "status": "posted",
+    "category": "حساب ف مشتروات",
+    "number": "JKNFFS",
+    "date": "2026-07-26"
+  },
+  {
+    "id": "kkrpd2afYkfYrFHbSBhg",
+    "date": "2026-10-03",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "نقدى",
+    "journalEntryId": "08VST1tQfBTX62yYjv8w",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791057899,
+      "nanoseconds": 54000000
+    },
+    "costCenterId": null,
+    "sourceName": "صندوق المندوب - مصطفى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791057899,
+      "nanoseconds": 54000000
+    },
+    "targetId": "jKmmoYwYFdh7rCvbUujZ",
+    "accountName": "مورد نقدى",
+    "method": "cash",
+    "costCenterName": null,
+    "entityType": "supplier",
+    "amount": 165,
+    "journalEntryCode": "JE-001730"
+  },
+  {
+    "id": "l0XqtrOkyS5PGni8a2vj",
+    "description": "سند صرف رقم #L0XQTR - تحويل من الصندوق الى الجارى",
+    "createdByName": "النظام",
+    "entryNumber": "JE-000210",
+    "method": "cash",
+    "status": "posted",
+    "number": "L0XQTR",
+    "type": "expense",
+    "targetId": "acc_owner",
+    "journalEntryCode": "JE-000210",
+    "category": "تحويل من الصندوق الى الجارى",
+    "accountName": "جاري المالك",
+    "amount": 1450,
+    "date": "2026-07-25",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "journalEntryId": "yQVDpYhZ5URI2QRVqs3S",
+    "reversedBy": "",
+    "targetName": "جاري المالك",
+    "isReversed": false,
+    "entityType": "expense",
+    "notes": "سند صرف رقم #L0XQTR - تحويل من الصندوق الى الجارى",
+    "jeId": "yQVDpYhZ5URI2QRVqs3S"
+  },
+  {
+    "id": "lAunjRdQmLCxZFYjdwrE",
+    "method": "cash",
+    "isTransfer": false,
+    "journalEntryId": "d825hLYYjYxUbfIFp8Km",
+    "entityType": "supplier",
+    "amount": 1740,
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "journalEntryCode": "JE-002080",
+    "costCenterId": null,
+    "sourceId": "cashBox_owner_current",
+    "date": "2026-10-10",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791834103,
+      "nanoseconds": 408000000
+    },
+    "costCenterName": null,
+    "notes": "سداد مشتروات",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791834103,
+      "nanoseconds": 408000000
+    },
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)"
+  },
+  {
+    "id": "m8AjS645TAYbJIp98goL",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254523,
+      "nanoseconds": 321000000
+    },
+    "journalEntryCode": "JE-002042",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "accountName": "شركة بن خميس",
+    "amount": 613,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254523,
+      "nanoseconds": 321000000
+    },
+    "costCenterName": null,
+    "costCenterId": null,
+    "notes": "تحويل بنكى",
+    "method": "bank",
+    "entityType": "supplier",
+    "date": "2026-08-31",
+    "sourceId": "bank-aljazira",
+    "journalEntryId": "5gpmxYhEg5oTvGeGfDat",
+    "sourceName": "بنك الجزيرة"
+  },
+  {
+    "id": "mMckJ3xpn5RivR5jmGta",
+    "journalEntryId": "UdmZKM0nveGPsifJiMLb",
+    "date": "2026-10-03",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791057928,
+      "nanoseconds": 451000000
+    },
+    "sourceName": "صندوق المندوب - مصطفى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791057928,
+      "nanoseconds": 451000000
+    },
+    "notes": "نقدى",
+    "costCenterId": null,
+    "accountName": "شركة بن خميس",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "costCenterName": null,
+    "entityType": "supplier",
+    "journalEntryCode": "JE-001731",
+    "amount": 486,
+    "method": "cash"
+  },
+  {
+    "id": "mfnPmn72MSVE3TMnNIGr",
+    "jeId": "D9h7httDeHQY50ZFrUl6",
+    "reversedBy": "",
+    "targetName": "شركة الرفادة العربية التجارية",
+    "isReversed": false,
+    "entityType": "supplier",
+    "amount": 33292,
+    "method": "bank",
+    "supplierId": "G9jkfr5Eym3JwP8KJpsZ",
+    "status": "posted",
+    "number": "MFNPMN",
+    "notes": "سند صرف رقم #MFNPMN - تحويل لشركة الرفادة",
+    "sourceName": "مصرف الراجحي",
+    "category": "تحويل لشركة الرفادة",
+    "accountName": "شركة الرفادة العربية التجارية",
+    "journalEntryId": "D9h7httDeHQY50ZFrUl6",
+    "date": "2026-07-13",
+    "journalEntryCode": "JE-000021",
+    "createdByName": "النظام",
+    "entryNumber": "JE-000021",
+    "type": "expense",
+    "targetId": "G9jkfr5Eym3JwP8KJpsZ",
+    "description": "سند صرف رقم #MFNPMN - تحويل لشركة الرفادة"
+  },
+  {
+    "id": "muWPlZEq0wYL6fBUJyld",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "costCenterId": null,
+    "journalEntryCode": "JE-001729",
+    "costCenterName": null,
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "notes": "نقدى",
+    "amount": 532,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791057870,
+      "nanoseconds": 406000000
+    },
+    "entityType": "supplier",
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791057870,
+      "nanoseconds": 406000000
+    },
+    "date": "2026-10-03",
+    "method": "cash",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "journalEntryId": "vaoadv1xgextkdsK33ct"
+  },
+  {
+    "id": "mzS5IkLUmMuWQpQuRNya",
+    "notes": "تحويل من الجارى",
+    "journalEntryId": "5C6vhczLoYwyniKRJY0P",
+    "sourceId": "cashBox_owner_current",
+    "journalEntryCode": "JE-002397",
+    "date": "2026-10-20",
+    "costCenterId": null,
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "targetId": "ndEaxpRg2S8nnNiyTMiQ",
+    "isTransfer": false,
+    "costCenterName": null,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588713,
+      "nanoseconds": 275000000
+    },
+    "method": "cash",
+    "amount": 11442.5,
+    "accountName": "شركة بيادر الغذاء",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792588713,
+      "nanoseconds": 275000000
+    },
+    "entityType": "supplier"
+  },
+  {
+    "id": "nfPxMheHRWh6mWo2TJ8I",
+    "journalEntryId": "NnrJEP1a8qpJWb2otxG2",
+    "isTransfer": false,
+    "amount": 2235.6,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229479,
+      "nanoseconds": 473000000
+    },
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "notes": "مشتروات",
+    "costCenterId": null,
+    "entityType": "supplier",
+    "targetId": "D5aKNH2GBcpUa9N4r6HS",
+    "method": "bank",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792229479,
+      "nanoseconds": 473000000
+    },
+    "costCenterName": null,
+    "date": "2026-10-15",
+    "accountName": "شركة الافاق العربية الحديثة للتجارة",
+    "journalEntryCode": "JE-002214",
+    "sourceName": "مصرف الراجحى"
+  },
+  {
+    "id": "noRY3s1OWl6Wxor4f2u3",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791650147,
+      "nanoseconds": 268000000
+    },
+    "journalEntryId": "tUARwEXdZB0L1ItbMRa4",
+    "entityType": "supplier",
+    "amount": 80,
+    "method": "cash",
+    "notes": "سداد فاتورة الكسكسى من العثيم",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791650147,
+      "nanoseconds": 268000000
+    },
+    "costCenterId": "cc_201",
+    "journalEntryCode": "JE-001978",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "targetId": "jKmmoYwYFdh7rCvbUujZ",
+    "costCenterName": "سيارة السيد رضا",
+    "accountName": "مورد نقدى",
+    "date": "2026-10-10",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "id": "oCtRDUpoRPS0xImRnJqg",
+    "method": "cash",
+    "targetId": "ndEaxpRg2S8nnNiyTMiQ",
+    "costCenterName": null,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230347,
+      "nanoseconds": 777000000
+    },
+    "entityType": "supplier",
+    "notes": "نظم الامداد الحديثة",
+    "sourceId": "cashBox_owner_current",
+    "isTransfer": false,
+    "date": "2026-10-14",
+    "amount": 70097,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230347,
+      "nanoseconds": 777000000
+    },
+    "costCenterId": null,
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "journalEntryId": "sm6RgbHOxtbeC6LPnkBS",
+    "accountName": "شركة بيادر الغذاء",
+    "journalEntryCode": "JE-002219"
+  },
+  {
+    "id": "onGZnV7am4Pds1wUvR1X",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792593173,
+      "nanoseconds": 401000000
+    },
+    "accountName": "شركة ارياد للتجارة",
+    "isTransfer": false,
+    "targetId": "VhIvNg56WTNSADqxWUWc",
+    "amount": 736,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792593173,
+      "nanoseconds": 401000000
+    },
+    "costCenterName": null,
+    "costCenterId": null,
+    "entityType": "supplier",
+    "notes": "تحويل مشتريات",
+    "method": "bank",
+    "date": "2026-10-20",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "sourceName": "مصرف الراجحى"
+  },
+  {
+    "id": "ooie4mu4p2HJCCM5SG6Y",
+    "amount": 126787.5,
+    "journalEntryId": "3Y29jbNu5igdWw9H133E",
+    "entityType": "supplier",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786978803,
+      "nanoseconds": 793000000
+    },
+    "notes": "سداد فاتورة جودى",
+    "method": "bank",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786978803,
+      "nanoseconds": 793000000
+    },
+    "costCenterId": null,
+    "journalEntryCode": "JE-000618",
+    "sourceName": "بنك الجزيرة",
+    "targetId": "1SepY8QMGVmcNb6L303y",
+    "costCenterName": null,
+    "accountName": "مصنع جودى الدولية للتصنيع والتغليف",
+    "date": "2026-08-17",
+    "sourceId": "bank-aljazira"
+  },
+  {
+    "id": "opaHBfpuEnivj7rWPAi7",
+    "notes": "راتب الشهر",
+    "costCenterName": null,
+    "method": "cash",
+    "amount": 1550,
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "sourceId": "cashBox_owner_current",
+    "journalEntryId": "QOWjqlEzfL7NBT0XS304",
+    "isTransfer": false,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793454260,
+      "nanoseconds": 701000000
+    },
+    "journalEntryCode": "JE-002721",
+    "date": "2026-10-31",
+    "targetId": "cMsv6QPqBHNHDcTKOnvr",
+    "costCenterId": null,
+    "entityType": "other",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793454260,
+      "nanoseconds": 701000000
+    },
+    "accountName": "مستحقات الموظف ابراهيم"
+  },
+  {
+    "id": "p3dweIZA1BiQYWD9TOM8",
+    "method": "cash",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991400,
+      "nanoseconds": 486000000
+    },
+    "sourceId": "cashBox_owner_current",
+    "entityType": "supplier",
+    "notes": "تحويل",
+    "costCenterName": null,
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791991400,
+      "nanoseconds": 486000000
+    },
+    "amount": 555,
+    "targetId": "vl31JFZaBmD6RDeZ3A26",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "journalEntryCode": "JE-002134",
+    "journalEntryId": "bg1JyNjwdi4VZXiKLvV0",
+    "accountName": "شركة هلال العروس",
+    "costCenterId": null,
+    "date": "2026-10-06"
+  },
+  {
+    "id": "pKer73SA1hBkrOwYKNmM",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786149467,
+      "nanoseconds": 832000000
+    },
+    "costCenterId": null,
+    "journalEntryCode": "JE-002043",
+    "sourceName": "بنك الراجحي",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786149467,
+      "nanoseconds": 832000000
+    },
+    "journalEntryId": "EnrU1jQOiMNuqSHBNkrZ",
+    "date": "2026-08-08",
+    "accountName": "شركة الافاق العربية الحديثة للتجارة",
+    "targetId": "D5aKNH2GBcpUa9N4r6HS",
+    "amount": 2219.5,
+    "method": "bank",
+    "costCenterName": null,
+    "notes": "تحويل سداد المورد",
+    "sourceId": "bank-alrajhi",
+    "entityType": "supplier"
+  },
+  {
+    "id": "qqxbHo9BrfeCSptv1pFx",
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "sourceName": "الصندوق الرئيسى",
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "journalEntryId": "eQ8PMT50iT9HbLu5UV59",
+    "costCenterId": null,
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "date": "2026-10-29",
+    "journalEntryCode": "JE-002673",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793295251,
+      "nanoseconds": 927000000
+    },
+    "notes": "مشتريات",
+    "costCenterName": null,
+    "entityType": "supplier",
+    "method": "cash",
+    "isTransfer": false,
+    "amount": 38,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793295251,
+      "nanoseconds": 927000000
+    }
+  },
+  {
+    "id": "rImPAfbPZZOejYLg8k6s",
+    "date": "2026-10-15",
+    "costCenterName": null,
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "costCenterId": null,
+    "accountName": "شركة سماء المتحدة التجاريه",
+    "sourceName": "مصرف الراجحى",
+    "targetId": "GQiBytKUzx3VJ54PzdDK",
+    "journalEntryId": "zF5rGVfaOXQGLlWC843b",
+    "isTransfer": false,
+    "method": "bank",
+    "notes": "مشتروات",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230155,
+      "nanoseconds": 244000000
+    },
+    "amount": 4938,
+    "journalEntryCode": "JE-002217",
+    "entityType": "supplier",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792230155,
+      "nanoseconds": 244000000
+    }
+  },
+  {
+    "id": "rJzkIp3aEn5Ozpx7SOX9",
+    "targetId": "acc_freight_in",
+    "jeId": "oTW7iMm49bvnMdcTyhP9",
+    "journalEntryCode": "JE-000184",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "amount": 650,
+    "accountName": "مصروفات نقل بضاعة (للداخل)",
+    "method": "cash",
+    "entryNumber": "JE-000184",
+    "description": "سند صرف رقم #RJZKIP - بيد الاستاذ محمود",
+    "notes": "سند صرف رقم #RJZKIP - بيد الاستاذ محمود",
+    "category": "بيد الاستاذ محمود",
+    "number": "RJZKIP",
+    "status": "posted",
+    "date": "2026-07-25",
+    "isReversed": false,
+    "entityType": "expense",
+    "reversedBy": "",
+    "targetName": "مصروفات نقل بضاعة (للداخل)",
+    "type": "expense",
+    "createdByName": "النظام",
+    "journalEntryId": "oTW7iMm49bvnMdcTyhP9"
+  },
+  {
+    "id": "sfnbOjt3CK7jwfsLpLY6",
+    "amount": 3512,
+    "reversedBy": "",
+    "date": "2026-07-23",
+    "targetName": "شركة جيلانى باك التجارية",
+    "targetId": "gRFQtWbjOm4N84tSkTNs",
+    "isReversed": false,
+    "entityType": "supplier",
+    "notes": "سند صرف رقم #SFNBOJ - حساب ف مشتروات",
+    "category": "حساب ف مشتروات",
+    "status": "posted",
+    "number": "SFNBOJ",
+    "type": "expense",
+    "supplierId": "gRFQtWbjOm4N84tSkTNs",
+    "method": "bank",
+    "sourceName": "مصرف الراجحي",
+    "accountName": "شركة جيلانى باك التجارية",
+    "jeId": "kXG5fSN2XZInEp1B8Eab",
+    "journalEntryId": "jaXzUa4RyYzIrzvSPnoe",
+    "createdByName": "النظام",
+    "entryNumber": "JE-000213",
+    "journalEntryCode": "JE-002044",
+    "description": "سند صرف رقم #SFNBOJ - حساب ف مشتروات"
+  },
+  {
+    "id": "tbRApmLZymLIQJ8Itjme",
+    "costCenterId": null,
+    "journalEntryId": "cPnZ9vcB6qV3ImHhre8h",
+    "entityType": "supplier",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786870495,
+      "nanoseconds": 278000000
+    },
+    "amount": 60006.43,
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "sourceId": "bank-aljazira",
+    "notes": "تحويل قيمة بضاعة",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786870495,
+      "nanoseconds": 278000000
+    },
+    "sourceName": "بنك الجزيرة",
+    "date": "2026-08-16",
+    "method": "bank",
+    "journalEntryCode": "JE-000582",
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "costCenterName": null
+  },
+  {
+    "id": "trZvrVhw5eWGopSGdMu4",
+    "costCenterId": "cc_301",
+    "costCenterName": "سيارة المندوب مصطفى (ينبع والمسارات)",
+    "sourceName": "صندوق المندوب - مصطفى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785838914,
+      "nanoseconds": 357000000
+    },
+    "accountName": "ضيافة واستقبال",
+    "journalEntryCode": "JE-000379",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785838914,
+      "nanoseconds": 357000000
+    },
+    "entityType": "expense",
+    "sourceId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "journalEntryId": "kr9nbvejqZgZXCwkzCTK",
+    "method": "cash",
+    "targetId": "liAa3I6ItBjBcMqbTLQs",
+    "notes": "شراء وصلة شاحن لشبكة مدى",
+    "date": "2026-08-03",
+    "amount": 10
+  },
+  {
+    "id": "tu3ugmsbwMvOuv5W82Vr",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365979,
+      "nanoseconds": 66000000
+    },
+    "method": "cash",
+    "notes": "سداد ف الشاى محمد عوض",
+    "accountName": "شركة بن خميس",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791365979,
+      "nanoseconds": 66000000
+    },
+    "amount": 304,
+    "costCenterId": null,
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "journalEntryId": "zEw8MDKqGQhWNhiFBWim",
+    "sourceId": "cashBox_owner_current",
+    "journalEntryCode": "JE-001841",
+    "date": "2026-10-07",
+    "entityType": "supplier",
+    "targetId": "pZEf7gzmCe6GccACJyoC",
+    "costCenterName": null
+  },
+  {
+    "id": "u5Ydb8DWuKMCAwYkbufV",
+    "journalEntryCode": "JE-001653",
+    "entityType": "other",
+    "journalEntryId": "WTE4twksCWlGYl4QIzwq",
+    "date": "2026-09-30",
+    "costCenterId": null,
+    "sourceId": "cashBox_owner_current",
+    "method": "cash",
+    "accountName": "مستحقات المندوب  احمد السيد",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790771545,
+      "nanoseconds": 914000000
+    },
+    "costCenterName": null,
+    "targetId": "eMkTNBiOPJiQv9ZTEgni",
+    "notes": "تصفية مستحقات الموظف احمد السيد",
+    "amount": 2100,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790771545,
+      "nanoseconds": 914000000
+    },
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)"
+  },
+  {
+    "id": "v5yLw0M6aBRyZ3IWOMjb",
+    "amount": 193,
+    "notes": "نقدى مشتريات",
+    "isTransfer": false,
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "journalEntryCode": "JE-002003",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791713437,
+      "nanoseconds": 379000000
+    },
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791713437,
+      "nanoseconds": 379000000
+    },
+    "costCenterName": null,
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "entityType": "supplier",
+    "method": "cash",
+    "sourceName": "الصندوق الرئيسى",
+    "date": "2026-10-11",
+    "costCenterId": null,
+    "journalEntryId": "2ojD5uo9RlUNDYEDzDik"
+  },
+  {
+    "id": "vFA0Pf78Bz5HyihpelyG",
+    "costCenterId": null,
+    "journalEntryId": "4M1TqkrpyOg9f4xlzTM2",
+    "sourceName": "مصرف الراجحى",
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127245,
+      "nanoseconds": 68000000
+    },
+    "date": "2026-11-07",
+    "amount": 6240,
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "method": "bank",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1794127245,
+      "nanoseconds": 68000000
+    },
+    "costCenterName": null,
+    "targetId": "llbRbtyEPTYAU8oHWeKO",
+    "notes": "مشتروات",
+    "accountName": "مؤسسة مارين اسواق لاجين",
+    "entityType": "supplier",
+    "journalEntryCode": "JE-002998"
+  },
+  {
+    "id": "x0DPnBFawTBf3UNTNqST",
+    "targetId": "ugeyE9SPyvoxdKNzyon1",
+    "sourceId": "G0J71JsRCFqc354AoZEv",
+    "journalEntryId": "Ls5W0hGbTag2xIx3UvtU",
+    "date": "2026-10-05",
+    "entityType": "other",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791206820,
+      "nanoseconds": 13000000
+    },
+    "method": "cash",
+    "journalEntryCode": "JE-001775",
+    "costCenterId": null,
+    "accountName": "مستحقات الموظف مصطفى",
+    "sourceName": "صندوق السيد رضا",
+    "costCenterName": null,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791206820,
+      "nanoseconds": 13000000
+    },
+    "notes": "صرف مستحقات باقى راتب  شهر 9",
+    "amount": 1080
+  },
+  {
+    "id": "xPh04lRSy3ievlT9cFzG",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793691605,
+      "nanoseconds": 358000000
+    },
+    "entityType": "supplier",
+    "targetId": "D4vk02T2bEnDhxlB7rez",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793691605,
+      "nanoseconds": 358000000
+    },
+    "costCenterName": null,
+    "isTransfer": false,
+    "notes": "مشتريات",
+    "accountName": "شركة فجر الراقيه التجاريه بالجمله",
+    "sourceId": "0j34llJOFXQ2McuwHCtr",
+    "journalEntryCode": "JE-002810",
+    "method": "bank",
+    "date": "2026-11-01",
+    "sourceName": "مصرف الراجحى",
+    "journalEntryId": "2bVTROh75TjdrFHmSdkd",
+    "costCenterId": null,
+    "amount": 18382.5
+  },
+  {
+    "id": "xpyUhyQ8zGpQyWmlS0C1",
+    "costCenterId": null,
+    "costCenterName": null,
+    "notes": "سداد فاتورة المياه",
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "journalEntryCode": "JE-002082",
+    "sourceId": "cashBox_owner_current",
+    "amount": 960,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791834356,
+      "nanoseconds": 978000000
+    },
+    "accountName": "مورد مياه",
+    "isTransfer": false,
+    "date": "2026-10-08",
+    "journalEntryId": "bkVTrtAxYTXqbRMkX0iH",
+    "targetId": "EWjN1e5spd4urZRog2H8",
+    "entityType": "supplier",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791834356,
+      "nanoseconds": 978000000
+    },
+    "method": "cash"
+  },
+  {
+    "id": "xv2iB76p06jRZDVeweDo",
+    "journalEntryId": "84pmn3C9WSrimvWzCGXQ",
+    "category": "سداد فاتورة",
+    "amount": 3229.2,
+    "jeId": "84pmn3C9WSrimvWzCGXQ",
+    "notes": "سند صرف رقم #XV2IB7 - سداد فاتورة",
+    "supplierId": "G9jkfr5Eym3JwP8KJpsZ",
+    "status": "posted",
+    "number": "XV2IB7",
+    "isReversed": false,
+    "method": "bank",
+    "entityType": "supplier",
+    "targetId": "G9jkfr5Eym3JwP8KJpsZ",
+    "reversedBy": "",
+    "targetName": "شركة الرفادة العربية التجارية",
+    "date": "2026-07-12",
+    "createdByName": "النظام",
+    "accountName": "شركة الرفادة العربية التجارية",
+    "journalEntryCode": "JE-000007",
+    "entryNumber": "JE-000007",
+    "sourceName": "مصرف الراجحي",
+    "description": "سند صرف رقم #XV2IB7 - سداد فاتورة",
+    "type": "expense"
+  },
+  {
+    "id": "xymDsqXKXknQztzF5LQj",
+    "targetId": "WIDvPcdlldzkab5ZikBB",
+    "supplierId": "WIDvPcdlldzkab5ZikBB",
+    "type": "expense",
+    "createdByName": "النظام",
+    "journalEntryId": "EqvN15jGlhbSBr0w69Xo",
+    "targetName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "date": "2026-07-15",
+    "reversedBy": "",
+    "entityType": "supplier",
+    "category": "تحويل قيمة بضاعة",
+    "isReversed": false,
+    "method": "bank",
+    "journalEntryCode": "JE-002046",
+    "status": "posted",
+    "number": "XYMDSQ",
+    "accountName": "شركة محمد على العيسانى للمواد الغذائية المحدودة",
+    "sourceName": "مصرف الراجحي",
+    "entryNumber": "JE-000020",
+    "description": "سند صرف رقم #XYMDSQ - تحويل قيمة بضاعة",
+    "notes": "سند صرف رقم #XYMDSQ - تحويل قيمة بضاعة",
+    "jeId": "Vx4w5pRJMaroj94eKzpj",
+    "amount": 36891
+  },
+  {
+    "id": "yPqx1tA580VS8DDLGwnm",
+    "journalEntryId": "zP4FvtpG1Bwdquq9mMtX",
+    "method": "cash",
+    "isTransfer": false,
+    "journalEntryCode": "JE-002304",
+    "entityType": "supplier",
+    "accountName": "شركة عبد المجيد العروى التجارية",
+    "amount": 38,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792408540,
+      "nanoseconds": 80000000
+    },
+    "costCenterName": null,
+    "date": "2026-10-19",
+    "targetId": "wEEZNmySO15K2c9VXGQh",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792408540,
+      "nanoseconds": 80000000
+    },
+    "costCenterId": null,
+    "sourceId": "fldAOs5swMd3RCbxVi8a",
+    "sourceName": "الصندوق الرئيسى",
+    "notes": "نقدى من عهدة السيد رضا"
+  },
+  {
+    "id": "yXU2HHqf4oHbWlgTN0La",
+    "isTransfer": false,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793468368,
+      "nanoseconds": 217000000
+    },
+    "date": "2026-10-31",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1793468368,
+      "nanoseconds": 217000000
+    },
+    "costCenterId": null,
+    "journalEntryId": "Slp8QrQeZmfCiukemkh7",
+    "accountName": "مستحقات عمرو",
+    "entityType": "other",
+    "targetId": "WuXVWQ2uwTysFldENfPj",
+    "journalEntryCode": "JE-002730",
+    "amount": 1292,
+    "sourceName": "👤 حساب جاري المالك (تمويل شخصي)",
+    "method": "cash",
+    "sourceId": "cashBox_owner_current",
+    "costCenterName": null,
+    "notes": "باقى الراتب"
+  },
+  {
+    "id": "yaL7lA9dCdm1bDLX1ljq",
+    "sourceName": "بنك الراجحي",
+    "method": "bank",
+    "costCenterId": null,
+    "accountName": "شركة جيلانى باك التجارية",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785581672,
+      "nanoseconds": 89000000
+    },
+    "sourceId": "bank-alrajhi",
+    "date": "2026-08-01",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785581672,
+      "nanoseconds": 89000000
+    },
+    "notes": "سداد فاتورة مشتروات",
+    "targetId": "gRFQtWbjOm4N84tSkTNs",
+    "amount": 6500,
+    "journalEntryId": "4Tj4aubjc5wzd3Fusaqm",
+    "entityType": "supplier",
+    "journalEntryCode": "JE-002047",
+    "costCenterName": null
+  },
+  {
+    "id": "zUPFfv9NthlYnLKYrKr8",
+    "sourceName": "بنك الراجحي",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785581586,
+      "nanoseconds": 102000000
+    },
+    "journalEntryId": "8B5xdgUOahBFLbJ73jL0",
+    "method": "bank",
+    "date": "2026-08-01",
+    "notes": "سداد فاتورة المشتروات",
+    "accountName": "الشامل بلاستيك",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785581586,
+      "nanoseconds": 102000000
+    },
+    "amount": 15157.69,
+    "journalEntryCode": "JE-002048",
+    "costCenterId": null,
+    "entityType": "supplier",
+    "costCenterName": null,
+    "targetId": "cgr0XDvjx5sG3Kv9Nys1",
+    "sourceId": "bank-alrajhi"
+  }
+]

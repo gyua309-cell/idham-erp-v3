@@ -1,0 +1,532 @@
+[
+  {
+    "_id": "3Xxy01k5ocUlzqg9zE4Z",
+    "number": "CN-000006",
+    "totalWithVat": 191.89,
+    "warehouseName": "المستودع الرئيسى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789807312,
+      "nanoseconds": 666000000
+    },
+    "subtotal": 166.86,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789807312,
+      "nanoseconds": 666000000
+    },
+    "status": "issued",
+    "date": "2026-09-19",
+    "customerId": "9UdJsvHGzgqdmJQ7UHzL",
+    "zatcaStatus": "reported",
+    "customerName": "تموينات ريف رضوى",
+    "reason": "مردود",
+    "originalInvoiceId": "BvodqpSCn5r1f5Gxgd1c",
+    "originalInvoiceNumber": "INV-041997",
+    "lines": [
+      {
+        "batchNumber": "",
+        "unitPrice": 166.86,
+        "productId": "poGgeZhrDTm4eW0nHNK1",
+        "maxReturnable": 1,
+        "productName": "ارز صنوايت كالروز 20* 1 كجم",
+        "originalQty": 1,
+        "sku": "",
+        "discount": 0,
+        "unit": "Carton",
+        "expiryDate": "",
+        "taxCategory": "S",
+        "unitCode": "CTN",
+        "availableBatches": [],
+        "alreadyReturned": 0,
+        "qty": 1,
+        "costPrice": 155
+      }
+    ],
+    "totalVat": 25.03,
+    "repId": "Ao147Sj24LgGa2OOag0c"
+  },
+  {
+    "_id": "40w9fJJJ4RXNzHwbV4J7",
+    "zatcaStatus": "reported",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "date": "2026-09-09",
+    "reason": "مرتجع للاسعار الزائده",
+    "originalInvoiceNumber": "INV-042000",
+    "subtotal": 175,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982208,
+      "nanoseconds": 760000000
+    },
+    "warehouseName": "المستودع الرئيسى",
+    "customerId": "NL21SHvgTBUKWXbPm7GK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982208,
+      "nanoseconds": 760000000
+    },
+    "totalWithVat": 201.25,
+    "lines": [
+      {
+        "discount": 0,
+        "expiryDate": "",
+        "costPrice": 35,
+        "qty": 1,
+        "unit": "Carton",
+        "sku": "",
+        "productName": "البطل فشار فلفل حار 5*18*14",
+        "batchNumber": "",
+        "availableBatches": [],
+        "alreadyReturned": 0,
+        "taxCategory": "S",
+        "maxReturnable": 1,
+        "unitCode": "CTN",
+        "originalQty": 1,
+        "unitPrice": 35,
+        "productId": "pqkkX8d4sM9Gm0E4oBXq"
+      },
+      {
+        "originalQty": 1,
+        "maxReturnable": 1,
+        "taxCategory": "S",
+        "unitCode": "CTN",
+        "alreadyReturned": 0,
+        "batchNumber": "",
+        "costPrice": 40.22,
+        "productName": "البطل باربيكيو 12 * 20 * 5",
+        "sku": "",
+        "availableBatches": [],
+        "expiryDate": "",
+        "qty": 1,
+        "unitPrice": 41,
+        "productId": "ylkpCSA7BrDJAneIZckQ",
+        "unit": "Carton",
+        "discount": 0
+      },
+      {
+        "productName": "فلف حار  بالبطاطس من البطل 16*65 جرام",
+        "sku": "",
+        "alreadyReturned": 0,
+        "batchNumber": "",
+        "taxCategory": "S",
+        "originalQty": 1,
+        "availableBatches": [],
+        "costPrice": 26.5,
+        "discount": 0,
+        "expiryDate": "",
+        "unitCode": "CTN",
+        "productId": "39KzHOrIIhFulgoC328F",
+        "unitPrice": 26,
+        "qty": 1,
+        "maxReturnable": 1,
+        "unit": "Carton"
+      },
+      {
+        "batchNumber": "",
+        "productId": "nxXxQqrOKMdP1xxK4xss",
+        "unitPrice": 14,
+        "maxReturnable": 2,
+        "productName": "عصير الربيع 125 * 18",
+        "originalQty": 2,
+        "sku": "",
+        "unit": "Carton",
+        "discount": 0,
+        "expiryDate": "",
+        "taxCategory": "S",
+        "unitCode": "CTN",
+        "alreadyReturned": 0,
+        "availableBatches": [],
+        "qty": 2,
+        "costPrice": 14
+      },
+      {
+        "unit": "Carton",
+        "productId": "KPv78zgVevBkFyJeRcCF",
+        "unitPrice": 45,
+        "discount": 0,
+        "alreadyReturned": 0,
+        "availableBatches": [],
+        "qty": 1,
+        "expiryDate": "",
+        "batchNumber": "",
+        "sku": "",
+        "productName": "عصير الربيع 250 * 30",
+        "maxReturnable": 1,
+        "originalQty": 1,
+        "unitCode": "CTN",
+        "taxCategory": "S",
+        "costPrice": 44.5
+      }
+    ],
+    "repId": "Ao147Sj24LgGa2OOag0c",
+    "totalVat": 26.25,
+    "number": "CN-000005",
+    "originalInvoiceId": "BzwmLRJAafau7pHAQtY7",
+    "status": "issued",
+    "customerName": "بقالة عبد الله"
+  },
+  {
+    "_id": "CR-20005013",
+    "refInvoice": null,
+    "creditNoteNumber": "CR-20005013",
+    "vatAmount": 427.05,
+    "repName": "مصطفى",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "type": "sales_return",
+    "subtotal": 2847,
+    "source": "rep_van_app",
+    "total": 3274.05,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "customerName": "مطعم عيش وملح",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788720005,
+      "nanoseconds": 471000000
+    },
+    "lines": [
+      {
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "qty": 13,
+        "price": 219,
+        "name": "ارز الديوان بسمتى مزة ذهبى 40 كيلو"
+      }
+    ],
+    "date": "2026-09-06",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "status": "posted",
+    "companyId": "idham-main",
+    "customerId": "fzV2SKT1pS5uD9j3K3dt"
+  },
+  {
+    "_id": "CR-21415827",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789373571,
+      "nanoseconds": 976000000
+    },
+    "subtotal": 1137.9,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789321416,
+      "nanoseconds": 549000000
+    },
+    "totalWithVat": 1308.585,
+    "lines": [
+      {
+        "unit": "تنك",
+        "unitPrice": 97.39,
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "productName": "زيت تنك نسرين *17 لتر",
+        "price": 97.39,
+        "total": 973.9,
+        "costPrice": 92.1,
+        "name": "زيت تنك نسرين *17 لتر",
+        "qty": 10,
+        "discount": 0
+      },
+      {
+        "costPrice": 155.57,
+        "qty": 1,
+        "name": "طحينة سائلة الجميل 14 كيلو",
+        "total": 164,
+        "unitPrice": 164,
+        "productId": "GjMW892nmjpmLeV5Kx3c",
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "price": 164,
+        "discount": 0,
+        "unit": "حبة"
+      }
+    ],
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "status": "posted",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "customerId": "pQDd6SoXH8mhKIr93lUh",
+    "companyId": "idham-main",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "number": "CR-21415827",
+    "type": "sales_return",
+    "customerName": "مطعم الصفا البخارى 2",
+    "originalInvoiceNumber": "REP-73984337",
+    "vatAmount": 170.685,
+    "repName": "مصطفى",
+    "totalVat": 170.685,
+    "refInvoice": "REP-73984337",
+    "source": "rep_van_app",
+    "total": 1308.585,
+    "date": "2026-09-13",
+    "originalInvoiceId": "REP-73984337",
+    "creditNoteNumber": "CR-21415827"
+  },
+  {
+    "_id": "CR-31059897",
+    "total": 132.25,
+    "type": "sales_return",
+    "customerName": "مطعم الصفا البخارى لتقديم الوجبات",
+    "journalEntryId": "5FRid0z6MhZjD7qqoG96",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787238113,
+      "nanoseconds": 623000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786631061,
+      "nanoseconds": 336000000
+    },
+    "totalCost": 100,
+    "customerId": "5OiBiic5mL02ZvG6jc58",
+    "creditNoteNumber": "CR-31059897",
+    "status": "posted",
+    "repName": "مصطفى",
+    "companyId": "idham-main",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "originalInvoiceNumber": "REP-85832917",
+    "date": "2026-08-13",
+    "vatAmount": 17.25,
+    "subtotal": 115,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "source": "rep_van_app",
+    "refInvoice": null,
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "lines": [
+      {
+        "qty": 2,
+        "productId": "BRYy3jvl6JJOqON0PnPr",
+        "name": "علب 16 اونز 450 ملى اسود دائرى عبوه 150",
+        "price": 57.5
+      }
+    ],
+    "originalInvoiceId": "REP-85832917"
+  },
+  {
+    "_id": "CR-74700938",
+    "zatcaStatus": "reported",
+    "status": "posted",
+    "total": 111.999,
+    "subtotal": 97.39,
+    "refInvoice": null,
+    "number": "CR-74700938",
+    "invoiceNumber": "CR-74700938",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "originalInvoiceId": null,
+    "source": "rep_van_app",
+    "originalInvoiceNumber": null,
+    "customerName": "ش مطعم مذاق الشعب المصرى",
+    "creditNoteNumber": "CR-74700938",
+    "lines": [
+      {
+        "unitPrice": 97.39,
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "total": 97.39,
+        "unit": "Tank",
+        "productName": "زيت تنك نسرين *17 لتر",
+        "costPrice": 92,
+        "name": "زيت تنك نسرين *17 لتر",
+        "discount": 0,
+        "qty": 1,
+        "price": 97.39
+      }
+    ],
+    "totalVat": 14.609,
+    "type": "sales_return",
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "repName": "مصطفى",
+    "totalWithVat": 111.999,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "vatAmount": 14.609,
+    "date": "2026-09-14",
+    "companyId": "idham-main",
+    "customerId": "0SwH81pA0typmc2cYRSt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789374701,
+      "nanoseconds": 618000000
+    }
+  },
+  {
+    "_id": "WoP03M56F1FYcDMVbKuv",
+    "totalWithVat": 780.16,
+    "reason": "تم الارجاع للمخزن  الرئيسى مقابل مديونية",
+    "warehouseName": "المستودع الرئيسى",
+    "subtotal": 678.4,
+    "originalInvoiceNumber": "INV-94116585",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787989690,
+      "nanoseconds": 646000000
+    },
+    "repId": null,
+    "number": "CN-000002",
+    "customerName": "شركة مطاعم فخر الضيافة لتقديم الوجبات",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787989690,
+      "nanoseconds": 646000000
+    },
+    "lines": [
+      {
+        "maxReturnable": 5,
+        "purchasePrice": 160,
+        "unitCode": "CTN",
+        "costPrice": 160,
+        "qty": 4,
+        "productName": "زبيب ذهبى  رقم 1  - 10 كيلو",
+        "discount": 0,
+        "alreadyReturned": 0,
+        "unit": "Carton",
+        "productId": "rsK4qZNXiYsQYzw97O9W",
+        "unitPrice": 169.6,
+        "taxCategory": "S",
+        "originalQty": 5
+      }
+    ],
+    "originalInvoiceId": "EQw9gQMLS0FwGkICUiTa",
+    "date": "2026-08-29",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "zatcaStatus": "reported",
+    "status": "issued",
+    "customerId": "qNJQgUmU510yenX167P8",
+    "totalVat": 101.76
+  },
+  {
+    "_id": "jXkBngJQUYxJwr1ECYDU",
+    "warehouseName": "المستودع الرئيسى",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "totalVat": 6.7,
+    "zatcaStatus": "reported",
+    "originalInvoiceNumber": "INV-99937276",
+    "date": "2026-09-01",
+    "customerName": "شركة الاحلام المتطورة الفندقيه",
+    "reason": "تبديل",
+    "subtotal": 44.69,
+    "repId": "Ao147Sj24LgGa2OOag0c",
+    "status": "issued",
+    "lines": [
+      {
+        "discount": 0,
+        "sku": "",
+        "costPrice": 38,
+        "maxReturnable": 1,
+        "unit": "Box",
+        "availableBatches": [],
+        "originalQty": 1,
+        "taxCategory": "S",
+        "unitPrice": 44.69,
+        "productId": "S48tSeUJz7vl4mPR5okg",
+        "batchNumber": "",
+        "qty": 1,
+        "unitCode": "BOX",
+        "expiryDate": "",
+        "alreadyReturned": 0,
+        "productName": "مكرونة رنا خواتم مخططه  400 ج * 20"
+      }
+    ],
+    "originalInvoiceId": "yD7c5bsO17608xrRqw0K",
+    "number": "CN-000004",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788251640,
+      "nanoseconds": 578000000
+    },
+    "totalWithVat": 51.39,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788251640,
+      "nanoseconds": 578000000
+    },
+    "customerId": "sQG0xwdcdaKEfdUKG3IS"
+  },
+  {
+    "_id": "lVThbomMtVFSPq04CLFZ",
+    "number": "CN-000003",
+    "status": "issued",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "lines": [
+      {
+        "discount": 0,
+        "unit": "Tank",
+        "costPrice": 157,
+        "alreadyReturned": 0,
+        "qty": 1,
+        "productId": "GjMW892nmjpmLeV5Kx3c",
+        "sku": "19001",
+        "unitPrice": 175.84,
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "maxReturnable": 3,
+        "purchasePrice": 157,
+        "originalQty": 3,
+        "unitCode": "PCE",
+        "taxCategory": "S"
+      }
+    ],
+    "warehouseName": "المستودع الرئيسى",
+    "customerName": "شركة مطاعم فخر الضيافة لتقديم الوجبات",
+    "date": "2026-08-29",
+    "zatcaStatus": "reported",
+    "totalVat": 26.38,
+    "repId": null,
+    "reason": "تسوية  حساب",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787989788,
+      "nanoseconds": 642000000
+    },
+    "originalInvoiceId": "wqsQGSU5QWatmmL3BaUd",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787989788,
+      "nanoseconds": 642000000
+    },
+    "originalInvoiceNumber": "INV-000002",
+    "subtotal": 175.84,
+    "customerId": "qNJQgUmU510yenX167P8",
+    "totalWithVat": 202.22
+  },
+  {
+    "_id": "pjQguPkxPOGP20XoWgMR",
+    "lines": [
+      {
+        "discount": 0,
+        "maxReturnable": 1,
+        "productName": "علب شفاف 206 ارنون عبوة 500",
+        "price": 86.25,
+        "alreadyReturned": 0,
+        "qty": 1,
+        "productId": "XCQOI94ocO903Gm0xeK8",
+        "unitPrice": 86.25,
+        "total": 86.25,
+        "originalQty": 1,
+        "name": "علب شفاف 206 ارنون عبوة 500"
+      }
+    ],
+    "repId": "Z8vkxuOfaumR63DMz7vA",
+    "customerId": "1HX4fZz7quqzI9yxSg5x",
+    "date": "2026-08-20",
+    "warehouseName": "المستودع الرئيسى",
+    "vatAmount": 12.94,
+    "status": "issued",
+    "customerName": "مطعم شواية الجود بخارى",
+    "subtotal": 86.25,
+    "number": "CN-000001",
+    "totalWithVat": 99.19,
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787215090,
+      "nanoseconds": 256000000
+    },
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787211187,
+      "nanoseconds": 545000000
+    },
+    "zatcaStatus": "reported",
+    "total": 99.19,
+    "originalInvoiceId": "REP-37831162",
+    "originalInvoiceNumber": "REP-37831162",
+    "totalVat": 12.94,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reason": "تم الارجاع مباشرة الى المخزن الرئيسى"
+  }
+]

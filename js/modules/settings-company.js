@@ -65,21 +65,35 @@ export async function render(container, user) {
                     <input type="email" id="co-email" class="input" placeholder="info@company.com" />
                   </div>
                 </div>
-                <div class="form-group mb-16">
-                  <label>العنوان</label>
-                  <input type="text" id="co-address" class="input" placeholder="الرياض، حي العليا" />
-                </div>
                 <div class="grid-3 gap-16 mb-16">
                   <div class="form-group">
-                    <label>المدينة</label>
-                    <input type="text" id="co-city" class="input" />
+                    <label>اسم الشارع (Street Name)</label>
+                    <input type="text" id="co-street" class="input" placeholder="عامر الشعبي" />
                   </div>
                   <div class="form-group">
-                    <label>الرمز البريدي</label>
-                    <input type="text" id="co-zip" class="input mono" />
+                    <label>الحي (District)</label>
+                    <input type="text" id="co-district" class="input" placeholder="حي النزهة" />
                   </div>
                   <div class="form-group">
-                    <label>الدولة</label>
+                    <label>المدينة (City)</label>
+                    <input type="text" id="co-city" class="input" placeholder="ينبع" />
+                  </div>
+                </div>
+                <div class="grid-4 gap-16 mb-16">
+                  <div class="form-group">
+                    <label>رقم المبنى (Building No)</label>
+                    <input type="text" id="co-building-no" class="input mono" placeholder="7480" maxlength="8" />
+                  </div>
+                  <div class="form-group">
+                    <label>الرمز البريدي (Postal Code)</label>
+                    <input type="text" id="co-zip" class="input mono" placeholder="46424" maxlength="5" />
+                  </div>
+                  <div class="form-group">
+                    <label>الرقم الإضافي (Additional No)</label>
+                    <input type="text" id="co-additional-no" class="input mono" placeholder="3180" maxlength="4" />
+                  </div>
+                  <div class="form-group">
+                    <label>الدولة (Country)</label>
                     <input type="text" id="co-country" class="input" value="المملكة العربية السعودية" />
                   </div>
                 </div>
@@ -787,9 +801,12 @@ async function loadAllSettings() {
       $("co-vat")      && ($("co-vat").value       = s.vatNumber || "");
       $("co-phone")    && ($("co-phone").value     = s.phone   || "");
       $("co-email")    && ($("co-email").value     = s.email   || "");
-      $("co-address")  && ($("co-address").value   = s.address || "");
+      $("co-street")   && ($("co-street").value    = s.street  || "");
+      $("co-district") && ($("co-district").value  = s.district || "");
+      $("co-building-no") && ($("co-building-no").value = s.buildingNo || s.buildingNumber || "");
+      $("co-additional-no") && ($("co-additional-no").value = s.additionalNo || s.additionalNumber || "");
       $("co-city")     && ($("co-city").value      = s.city    || "");
-      $("co-zip")      && ($("co-zip").value       = s.zip     || "");
+      $("co-zip")      && ($("co-zip").value       = s.zip     || s.postalCode || "");
       $("co-country")  && ($("co-country").value   = s.country || "المملكة العربية السعودية");
       $("co-currency") && ($("co-currency").value  = s.currency || "SAR");
       $("co-vat-rate") && ($("co-vat-rate").value  = s.vatRate  || "15");
@@ -797,17 +814,21 @@ async function loadAllSettings() {
       // ── حفظ بيانات الشركة في localStorage فوراً للاستخدام في التصدير ──
       const cached = JSON.parse(localStorage.getItem("idham_company") || "{}");
       Object.assign(cached, {
-        name:      s.name      || "",
-        crNumber:  s.cr        || "",
-        vatNumber: s.vatNumber || "",
-        phone:     s.phone     || "",
-        email:     s.email     || "",
-        address:   s.address   || "",
-        city:      s.city      || "",
-        zip:       s.zip       || "",
-        country:   s.country   || "المملكة العربية السعودية",
-        currency:  s.currency  || "SAR",
-        vatRate:   s.vatRate   || "15",
+        name:          s.name      || "",
+        crNumber:      s.cr        || s.crNumber || "",
+        vatNumber:     s.vatNumber || "",
+        phone:         s.phone     || "",
+        email:         s.email     || "",
+        street:        s.street    || "",
+        district:      s.district  || "",
+        buildingNo:    s.buildingNo || s.buildingNumber || "",
+        additionalNo:  s.additionalNo || s.additionalNumber || "",
+        address:       s.address   || "",
+        city:          s.city      || "",
+        zip:           s.zip       || s.postalCode || "",
+        country:       s.country   || "المملكة العربية السعودية",
+        currency:      s.currency  || "SAR",
+        vatRate:       s.vatRate   || "15",
       });
       localStorage.setItem("idham_company", JSON.stringify(cached));
       window.ERP_COMPANY = cached;
@@ -885,11 +906,29 @@ window.saveCompanySettings = async () => {
   $("co-error").classList.add("hidden");
   $("save-co-btn").disabled = true;
   try {
+    const street = val("co-street");
+    const district = val("co-district");
+    const city = val("co-city");
+    const buildingNo = val("co-building-no");
+    const zip = val("co-zip");
+    const additionalNo = val("co-additional-no");
+    const country = val("co-country") || "المملكة العربية السعودية";
+
+    const addrParts = [];
+    if (buildingNo) addrParts.push(`مبنى ${buildingNo}`);
+    if (street) addrParts.push(`شارع ${street}`);
+    if (district) addrParts.push(`حي ${district}`);
+    if (city) addrParts.push(city);
+    if (zip) addrParts.push(`رمز ${zip}`);
+    const compositeAddress = addrParts.length > 0 ? addrParts.join(" — ") : "ينبع — المملكة العربية السعودية";
+
     const companyData = {
-      name, cr: val("co-cr"), vatNumber: val("co-vat"),
+      name, cr: val("co-cr"), crNumber: val("co-cr"), vatNumber: val("co-vat"),
       phone: val("co-phone"), email: val("co-email"),
-      address: val("co-address"), city: val("co-city"),
-      zip: val("co-zip"), country: val("co-country"),
+      street, district, buildingNo, buildingNumber: buildingNo,
+      additionalNo, additionalNumber: additionalNo,
+      address: compositeAddress, city,
+      zip, postalCode: zip, country,
       currency: $("co-currency").value, vatRate: $("co-vat-rate").value,
       updatedAt: serverTimestamp()
     };
@@ -899,17 +938,22 @@ window.saveCompanySettings = async () => {
     const cached = JSON.parse(localStorage.getItem("idham_company") || "{}");
     localStorage.setItem("idham_company", JSON.stringify({
       ...cached,
-      name:       companyData.name,
-      crNumber:   companyData.cr,
-      vatNumber:  companyData.vatNumber,
-      phone:      companyData.phone,
-      email:      companyData.email,
-      address:    companyData.address,
-      city:       companyData.city,
-      zip:        companyData.zip,
-      country:    companyData.country,
-      currency:   companyData.currency,
-      vatRate:    companyData.vatRate,
+      ...companyData,
+      name:         companyData.name,
+      crNumber:     companyData.cr,
+      vatNumber:    companyData.vatNumber,
+      phone:        companyData.phone,
+      email:        companyData.email,
+      street:       companyData.street,
+      district:     companyData.district,
+      buildingNo:   companyData.buildingNo,
+      additionalNo: companyData.additionalNo,
+      address:      companyData.address,
+      city:         companyData.city,
+      zip:          companyData.zip,
+      country:      companyData.country,
+      currency:     companyData.currency,
+      vatRate:      companyData.vatRate,
     }));
     window.ERP_COMPANY = JSON.parse(localStorage.getItem("idham_company"));
 

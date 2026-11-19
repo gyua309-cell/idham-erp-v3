@@ -76,11 +76,13 @@ export function startOfMonth() {
 
 // ── Numbers ───────────────────────────────────────────────
 export function formatQuantity(qty) {
-  if (qty === null || qty === undefined) return "—";
+  if (qty === null || qty === undefined || isNaN(qty)) return "—";
+  const num = parseFloat(qty);
+  const hasDecimals = num % 1 !== 0;
   return new Intl.NumberFormat("ar-SA-u-nu-latn", {
     minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(Math.round(qty));
+    maximumFractionDigits: hasDecimals ? 3 : 0,
+  }).format(num);
 }
 
 export function formatPercent(value) {
@@ -89,10 +91,15 @@ export function formatPercent(value) {
 }
 
 // ── Invoice Calculations ──────────────────────────────────
-export function calcLineTotal(qty, unitPrice, discountPct = 0) {
+export function calcLineTotal(qty, unitPrice, discountVal = 0, discountType = "percent") {
   const gross = (qty || 0) * (unitPrice || 0);
-  const discounted = gross * (1 - (discountPct || 0) / 100);
-  return discounted;
+  let discountAmt = 0;
+  if (discountType === "amount") {
+    discountAmt = Math.min(gross, Math.max(0, parseFloat(discountVal) || 0));
+  } else {
+    discountAmt = Math.min(gross, Math.max(0, gross * ((parseFloat(discountVal) || 0) / 100)));
+  }
+  return Math.max(0, gross - discountAmt);
 }
 
 export function calcInvoiceTotals(lines) {
@@ -100,9 +107,20 @@ export function calcInvoiceTotals(lines) {
 
   (lines || []).forEach(line => {
     const gross = (line.qty || 0) * (line.unitPrice || 0);
-    const discountAmt = gross * (line.discount || 0) / 100;
-    const afterDiscount = gross - discountAmt;
-    const vatRate = line.taxCategory === "S" ? 0.15 : 0;
+    let discountAmt = 0;
+    if (line.discountType === "amount") {
+      discountAmt = Math.min(gross, Math.max(0, parseFloat(line.discount) || 0));
+    } else {
+      discountAmt = Math.min(gross, Math.max(0, gross * ((parseFloat(line.discount) || 0) / 100)));
+    }
+    const afterDiscount = Math.max(0, gross - discountAmt);
+    // Default VAT rate is 15% (0.15) unless explicitly set to Zero (Z) or Exempt (E) or taxRate is 0
+    let vatRate = 0.15;
+    if (line.taxCategory === "E" || line.taxCategory === "Z" || line.taxRate === 0) {
+      vatRate = 0;
+    } else if (line.taxRate !== undefined && line.taxRate !== null && !isNaN(line.taxRate)) {
+      vatRate = parseFloat(line.taxRate) / 100;
+    }
     const lineVat = afterDiscount * vatRate;
 
     subtotal      += afterDiscount;
@@ -212,18 +230,95 @@ export function translateUnit(unit) {
   const map = {
     carton: "كرتون",
     ctn: "كرتون",
-    bag: "كيس / شيكارة",
+    bag: "كيس",
     bale: "شدة / كيس",
-    box: "علبة / كرتون",
+    box: "علبة",
     pkt: "باكت",
     packet: "باكت",
     piece: "حبة",
-    pcs: "قطعة / حبة",
+    pcs: "حبة",
     pallet: "باليت",
     plt: "باليت",
     kg: "كيلو",
     g: "جرام",
-    l: "لتر"
+    l: "لتر",
+    tin: "تنك",
+    can: "صفيحة / تنك",
+    gallon: "جالون",
+    gal: "جالون",
+    doz: "درزن",
+    dozen: "درزن",
+    bundle: "ربطة"
   };
   return map[u] || unit;
 }
+
+// ── Tafqeet (Arabic Amount in Words) ─────────────────────
+export function tafqeetArabic(amount) {
+  if (amount === null || amount === undefined || isNaN(amount) || amount === 0) return "فقط صفر ريال سعودي لا غير";
+  
+  const ones = ["", "واحد", "اثنان", "ثلاثة", "أربعة", "خمسة", "ستة", "سبعة", "ثمانية", "تسعة", "عشرة", "أحد عشر", "اثنا عشر", "ثلاثة عشر", "أربعة عشر", "خمسة عشر", "ستة عشر", "سبعة عشر", "ثمانية عشر", "تسعة عشر"];
+  const tens = ["", "", "عشرون", "ثلاثون", "أربعون", "خمسون", "ستون", "سبعون", "ثمانون", "تسعون"];
+  const hundreds = ["", "مائة", "مائتان", "ثلاثمائة", "أربعمائة", "خمسمائة", "ستمائة", "سبعمائة", "ثمانمائة", "تسعمائة"];
+
+  function convertGroup(n) {
+    let res = "";
+    const h = Math.floor(n / 100);
+    const remainder = n % 100;
+    if (h > 0) res += hundreds[h];
+    if (remainder > 0) {
+      if (res) res += " و";
+      if (remainder < 20) {
+        res += ones[remainder];
+      } else {
+        const o = remainder % 10;
+        const t = Math.floor(remainder / 10);
+        if (o > 0) res += ones[o] + " و" + tens[t];
+        else res += tens[t];
+      }
+    }
+    return res;
+  }
+
+  const num = Math.abs(parseFloat(amount));
+  const integerPart = Math.floor(num);
+  const decimalPart = Math.round((num - integerPart) * 100);
+
+  let parts = [];
+  const millions = Math.floor(integerPart / 1000000);
+  const thousands = Math.floor((integerPart % 1000000) / 1000);
+  const units = integerPart % 1000;
+
+  if (millions > 0) {
+    if (millions === 1) parts.push("مليون");
+    else if (millions === 2) parts.push("مليونان");
+    else if (millions >= 3 && millions <= 10) parts.push(convertGroup(millions) + " ملايين");
+    else parts.push(convertGroup(millions) + " مليون");
+  }
+
+  if (thousands > 0) {
+    if (thousands === 1) parts.push("ألف");
+    else if (thousands === 2) parts.push("ألفان");
+    else if (thousands >= 3 && thousands <= 10) parts.push(convertGroup(thousands) + " آلاف");
+    else parts.push(convertGroup(thousands) + " ألف");
+  }
+
+  if (units > 0 || parts.length === 0) {
+    const uStr = convertGroup(units);
+    if (uStr) parts.push(uStr);
+  }
+
+  let text = parts.join(" و") + " ريالاً سعودياً";
+  if (decimalPart > 0) {
+    text += " و" + convertGroup(decimalPart) + " هللة";
+  }
+  return "فقط " + text + " لا غير";
+}
+
+export function showToast(msg, type = "info") {
+  if (typeof window.showToast === "function") {
+    return window.showToast(msg, type);
+  }
+  console.log(`[Toast ${type}]:`, msg);
+}
+

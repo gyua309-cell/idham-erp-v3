@@ -34,12 +34,13 @@ import { getFunctions,
 // Get this from: Firebase Console → Project Settings → Your Apps
 // ──────────────────────────────────────────
 const firebaseConfig = {
-  apiKey:            "AIzaSyAike2lPO7VnFoRHevnGkbHpAQbKoDb5r8",
-  authDomain:        "idham-foodstuffs-sa.firebaseapp.com",
-  projectId:         "idham-foodstuffs-sa",
-  storageBucket:     "idham-foodstuffs-sa.firebasestorage.app",
-  messagingSenderId: "771445462953",
-  appId:             "1:771445462953:web:05d70fb7c36a385c9796b8",
+  apiKey:            "AIzaSyBFMGVZvuWBaxwrjGUJV3GQf7hoyVGB6wY",
+  authDomain:        "idham-b3a7e.firebaseapp.com",
+  projectId:         "idham-b3a7e",
+  storageBucket:     "idham-b3a7e.firebasestorage.app",
+  messagingSenderId: "915839133333",
+  appId:             "1:915839133333:web:fe472e01993025f08a9d9c",
+  measurementId:     "G-Y797B0GWYK"
 };
 
 // Named app instance to avoid conflicts if multiple Firebase instances

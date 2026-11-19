@@ -1,7 +1,7 @@
 // ============================================================
 // IDHAM ERP — Product Analytics Report (تحليل دوران وربحية الأصناف)
 // ============================================================
-import { COLS, getAll } from "../../utils/db.js";
+import { COLS } from "../../utils/db.js";
 import { query, orderBy, limit, getDocs, where } from "../../utils/db.js";
 import { formatCurrency, formatQuantity, startOfMonth, todayString } from "../../utils/formatters.js";
 
@@ -11,49 +11,23 @@ let _activeSection = "rotation"; // "rotation" | "margin" | "contribution"
 
 export async function render(container, user) {
   container.innerHTML = `
-    <style>
-      .print-only-header { display: none; }
-      @media print {
-        .print-only-header { display: block !important; }
-        .no-print { display: none !important; }
-      }
-    </style>
     <div class="filterbar no-print">
       <div class="date-range-group"><label>من</label>
         <input type="date" id="pa-from" value="${startOfMonth()}" onchange="loadProductAnalytics()" /></div>
       <div class="date-range-group"><label>إلى</label>
         <input type="date" id="pa-to" value="${todayString()}" onchange="loadProductAnalytics()" /></div>
       <div class="quick-filters">
-        <button class="quick-filter-btn" onclick="paRange('today', event)">اليوم</button>
-        <button class="quick-filter-btn active" onclick="paRange('month', event)">هذا الشهر</button>
-        <button class="quick-filter-btn" onclick="paRange('last_month', event)">الشهر الماضي</button>
+        <button class="quick-filter-btn" onclick="paRange('today')">اليوم</button>
+        <button class="quick-filter-btn active" onclick="paRange('month')">هذا الشهر</button>
+        <button class="quick-filter-btn" onclick="paRange('last_month')">الشهر الماضي</button>
       </div>
       <div style="margin-right:auto;display:flex;gap:8px;">
-        <button class="btn-export" onclick="exportPagePDF('#pa-table','تحليلات دوران وربحية الأصناف')" title="تصدير PDF"><span>📄</span> PDF</button>
-        <button class="btn-export excel" onclick="exportPageExcel('#pa-table','تحليلات دوران وربحية الأصناف')" title="تصدير Excel"><span>📊</span> Excel</button>
-        <button class="btn-export print" onclick="window.print()" title="طباعة"><span>🖨️</span> طباعة</button>
+        <button class="btn btn-secondary btn-sm" onclick="exportProductAnalyticsCSV()">📤 CSV</button>
       </div>
     </div>
 
     <div class="page-content">
-      <!-- Luxury Print Header -->
-      <div class="print-only-header" style="border-bottom:3px double var(--brand); padding-bottom:12px; margin-bottom:20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div style="display:flex; gap:16px; align-items:center;">
-            <img id="pa-print-logo" style="max-height:64px; max-width:120px;" src="" alt="شعار الشركة" />
-            <div>
-              <h2 id="pa-print-co-name" style="margin:0; font-family:var(--font-heading); color:var(--brand);"></h2>
-              <div id="pa-print-co-details" class="dim" style="font-size:11px; margin-top:4px;"></div>
-            </div>
-          </div>
-          <div style="text-align:left;">
-            <h3 style="margin:0; font-family:var(--font-heading);">تحليلات دوران وربحية الأصناف</h3>
-            <p style="margin:4px 0 0 0; font-size:11px; color:var(--text-2);" id="pa-print-period"></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="page-header no-print">
+      <div class="page-header">
         <h1 class="page-title">تحليلات دوران وربحية الأصناف</h1>
         <p class="page-subtitle" id="pa-period"></p>
       </div>
@@ -87,7 +61,7 @@ export async function render(container, user) {
         </div>
 
         <div class="table-container">
-          <table class="data-dense" id="pa-table">
+          <table class="data-dense">
             <thead>
               <tr>
                 <th>#</th>
@@ -117,8 +91,6 @@ export async function render(container, user) {
   await loadProductAnalytics();
 }
 
-let _productsList = [];
-
 async function loadProductAnalytics() {
   const from = document.getElementById("pa-from")?.value || "";
   const to = document.getElementById("pa-to")?.value || "";
@@ -127,55 +99,15 @@ async function loadProductAnalytics() {
   if (periodEl) periodEl.textContent = `الفترة من ${from || "البداية"} إلى ${to || "اليوم"}`;
 
   try {
-    const [prods, snap] = await Promise.all([
-      getAll(COLS.products()),
-      getDocs(query(COLS.salesInvoices(), where("date", ">=", from), where("date", "<=", to), limit(1500)))
-    ]);
-
-    _productsList = prods;
+    const q = query(COLS.salesInvoices(), where("date", ">=", from), where("date", "<=", to), limit(1500));
+    const snap = await getDocs(q);
     _salesInvoices = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
     calculateStats();
     renderStatsTable();
-    populatePrintHeader(from, to);
   } catch (err) {
     window.showToast("فشل تحميل تحليلات الأصناف: " + err.message, "danger");
   }
-}
-
-function populatePrintHeader(from, to) {
-  let co = {};
-  try {
-    const raw = localStorage.getItem("idham_company");
-    if (raw) co = JSON.parse(raw);
-    else if (window.ERP_COMPANY) co = window.ERP_COMPANY;
-  } catch {}
-
-  const logoEl = document.getElementById("pa-print-logo");
-  if (logoEl) {
-    if (co.logoBase64 || co.logoUrl) {
-      logoEl.src = co.logoBase64 || co.logoUrl;
-      logoEl.style.display = "block";
-    } else {
-      logoEl.style.display = "none";
-    }
-  }
-
-  const nameEl = document.getElementById("pa-print-co-name");
-  if (nameEl) nameEl.textContent = co.name || "مؤسسة إدهام للمواد الغذائية";
-
-  const detailsEl = document.getElementById("pa-print-co-details");
-  if (detailsEl) {
-    const parts = [];
-    if (co.address) parts.push(`📍 ${co.address}`);
-    if (co.phone) parts.push(`📞 ${co.phone}`);
-    if (co.vatNumber) parts.push(`🔢 الرقم الضريبي: ${co.vatNumber}`);
-    if (co.crNumber) parts.push(`📋 السجل التجاري: ${co.crNumber}`);
-    detailsEl.textContent = parts.join(" | ");
-  }
-
-  const periodEl = document.getElementById("pa-print-period");
-  if (periodEl) periodEl.textContent = `الفترة من ${from || "البداية"} إلى ${to || "اليوم"}`;
 }
 
 function calculateStats() {
@@ -183,12 +115,6 @@ function calculateStats() {
   let totalQty = 0;
   let totalRevenue = 0;
   let totalCost = 0;
-
-  // Build product cost price lookup map
-  const prodCostMap = {};
-  _productsList.forEach(p => {
-    prodCostMap[p.id] = parseFloat(p.purchasePrice || p.costPrice || p.averageCost || 0);
-  });
 
   _salesInvoices.forEach(inv => {
     if (inv.status === "cancelled") return;
@@ -204,9 +130,8 @@ function calculateStats() {
       const lineDisc = parseFloat(line.discount || 0);
       const lineRev = Math.max(0, lineSub - lineDisc);
       
-      // Calculate cost using line costPrice or product cost map
-      const costPrice = parseFloat(line.costPrice || prodCostMap[pId] || 0);
-      const lineCost = costPrice * qty;
+      // Calculate cost
+      const lineCost = (line.costPrice || 0) * qty;
 
       totalQty += qty;
       totalRevenue += lineRev;
@@ -314,7 +239,7 @@ function paSetSection(sec) {
   renderStatsTable();
 }
 
-function paRange(range, event) {
+function paRange(range) {
   const fromEl = document.getElementById("pa-from");
   const toEl = document.getElementById("pa-to");
   if (!fromEl || !toEl) return;
@@ -341,9 +266,7 @@ function paRange(range, event) {
   document.querySelectorAll(".quick-filter-btn").forEach(btn => {
     btn.classList.remove("active");
   });
-  if (event && event.target) {
-    event.target.classList.add("active");
-  }
+  event.target.classList.add("active");
 
   loadProductAnalytics();
 }

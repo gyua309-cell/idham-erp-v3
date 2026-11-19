@@ -1323,12 +1323,12 @@ async function printExpenseAnalysisPDF() {
 
   // Fetch company details
   let co = {
-    name: "شركة نظم الإمداد الحديثة",
-    vatNumber: "312448150500003",
-    crNumber: "4700123180",
+    name: "شركة نظم الإمداد المتطورة",
+    vatNumber: "314996148100003",
+    crNumber: "7054969006",
     phone: "0549141648",
     email: "Nuzmalamdad@gmail.com",
-    address: "7480 - الشارع: عامر الشعبي، ينبع",
+    address: "مبنى 7689 — شارع ينبع  الصناعية 2179 — حي غرناطة — ينبع — رمز 46414",
     logoUrl: ""
   };
 

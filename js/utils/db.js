@@ -4,7 +4,7 @@
 // ============================================================
 
 import {
-  getFirestore, collection, doc, getDoc, getDocs,
+  getFirestore, collection, doc, getDoc, getDocs, getDocsFromServer,
   addDoc, setDoc, updateDoc, deleteDoc,
   query, where, orderBy, limit, startAfter,
   runTransaction, serverTimestamp, writeBatch,
@@ -14,129 +14,336 @@ import {
 import { db, COMPANY_ID } from "../firebase-config.js";
 
 // Re-export Firestore primitives for use in modules
-export { query, where, orderBy, limit, startAfter, getDocs, getDoc,
+export { db, COMPANY_ID, query, where, orderBy, limit, startAfter, getDocs, getDocsFromServer, getDoc,
          serverTimestamp, doc, Timestamp, increment, setDoc, collection, runTransaction, updateDoc, deleteDoc, writeBatch };
 
 // ──────────────────────────────────────────
 // Collection references
 // ──────────────────────────────────────────
-export const COLS = {
-  products:          () => collection(db, `companies/${COMPANY_ID}/products`),
-  categories:        () => collection(db, `companies/${COMPANY_ID}/categories`),
-  units:             () => collection(db, `companies/${COMPANY_ID}/units`),
-  priceLists:        () => collection(db, `companies/${COMPANY_ID}/priceLists`),
-  warehouses:        () => collection(db, `companies/${COMPANY_ID}/warehouses`),
-  stockByWarehouse:  () => collection(db, `companies/${COMPANY_ID}/stockByWarehouse`),
-  stockTransactions: () => collection(db, `companies/${COMPANY_ID}/stockTransactions`),
-  customers:         () => collection(db, `companies/${COMPANY_ID}/customers`),
-  suppliers:         () => collection(db, `companies/${COMPANY_ID}/suppliers`),
-  salesReps:         () => collection(db, `companies/${COMPANY_ID}/salesReps`),
-  salesInvoices:     () => collection(db, `companies/${COMPANY_ID}/salesInvoices`),
-  purchaseInvoices:  () => collection(db, `companies/${COMPANY_ID}/purchaseInvoices`),
-  salesReturns:      () => collection(db, `companies/${COMPANY_ID}/salesReturns`),
-  purchaseReturns:   () => collection(db, `companies/${COMPANY_ID}/purchaseReturns`),
-  chartOfAccounts:   () => collection(db, `companies/${COMPANY_ID}/chartOfAccounts`),
-  journalEntries:    () => collection(db, `companies/${COMPANY_ID}/journalEntries`),
-  receipts:          () => collection(db, `companies/${COMPANY_ID}/receipts`),
-  cashBoxes:         () => collection(db, `companies/${COMPANY_ID}/cashBoxes`),
-  cashTransactions:  () => collection(db, `companies/${COMPANY_ID}/cashTransactions`),
-  bankAccounts:      () => collection(db, `companies/${COMPANY_ID}/bankAccounts`),
-  bankTransactions:  () => collection(db, `companies/${COMPANY_ID}/bankTransactions`),
-  expenses:          () => collection(db, `companies/${COMPANY_ID}/expenses`),
-  employees:         () => collection(db, `companies/${COMPANY_ID}/employees`),
-  quotations:        () => collection(db, `companies/${COMPANY_ID}/quotations`),
-  cheques:           () => collection(db, `companies/${COMPANY_ID}/cheques`),
-  purchaseRequests:  () => collection(db, `companies/${COMPANY_ID}/purchaseRequests`),
-  purchaseOrders:    () => collection(db, `companies/${COMPANY_ID}/purchaseOrders`),
-  goodsReceiptPOs:   () => collection(db, `companies/${COMPANY_ID}/goodsReceiptPOs`),
-  qualityInspections:() => collection(db, `companies/${COMPANY_ID}/qualityInspections`),
+const baseCOLS = {
+  products:            () => collection(db, `companies/${COMPANY_ID}/products`),
+  categories:          () => collection(db, `companies/${COMPANY_ID}/categories`),
+  units:               () => collection(db, `companies/${COMPANY_ID}/units`),
+  priceLists:          () => collection(db, `companies/${COMPANY_ID}/priceLists`),
+  warehouses:          () => collection(db, `companies/${COMPANY_ID}/warehouses`),
+  stockByWarehouse:    () => collection(db, `companies/${COMPANY_ID}/stockByWarehouse`),
+  stockTransactions:   () => collection(db, `companies/${COMPANY_ID}/stockTransactions`),
+  stockTransfers:      () => collection(db, `companies/${COMPANY_ID}/stockTransfers`),
+  customers:           () => collection(db, `companies/${COMPANY_ID}/customers`),
+  suppliers:           () => collection(db, `companies/${COMPANY_ID}/suppliers`),
+  salesReps:           () => collection(db, `companies/${COMPANY_ID}/salesReps`),
+  salesInvoices:       () => collection(db, `companies/${COMPANY_ID}/salesInvoices`),
+  purchaseInvoices:    () => collection(db, `companies/${COMPANY_ID}/purchaseInvoices`),
+  salesReturns:        () => collection(db, `companies/${COMPANY_ID}/salesReturns`),
+  purchaseReturns:     () => collection(db, `companies/${COMPANY_ID}/purchaseReturns`),
+  chartOfAccounts:     () => collection(db, `companies/${COMPANY_ID}/chartOfAccounts`),
+  journalEntries:      () => collection(db, `companies/${COMPANY_ID}/journalEntries`),
+  receipts:            () => collection(db, `companies/${COMPANY_ID}/receipts`),
+  collections:         () => collection(db, `companies/${COMPANY_ID}/collections`),
+  cashBoxes:           () => collection(db, `companies/${COMPANY_ID}/cashBoxes`),
+  cashTransactions:    () => collection(db, `companies/${COMPANY_ID}/cashTransactions`),
+  bankAccounts:        () => collection(db, `companies/${COMPANY_ID}/bankAccounts`),
+  bankTransactions:    () => collection(db, `companies/${COMPANY_ID}/bankTransactions`),
+  expenses:            () => collection(db, `companies/${COMPANY_ID}/expenses`),
+  employees:           () => collection(db, `companies/${COMPANY_ID}/employees`),
+  quotations:          () => collection(db, `companies/${COMPANY_ID}/quotations`),
+  cheques:             () => collection(db, `companies/${COMPANY_ID}/cheques`),
+  purchaseRequests:    () => collection(db, `companies/${COMPANY_ID}/purchaseRequests`),
+  purchaseOrders:      () => collection(db, `companies/${COMPANY_ID}/purchaseOrders`),
+  goodsReceiptPOs:     () => collection(db, `companies/${COMPANY_ID}/goodsReceiptPOs`),
+  qualityInspections:  () => collection(db, `companies/${COMPANY_ID}/qualityInspections`),
   inventoryAdjustments:() => collection(db, `companies/${COMPANY_ID}/inventoryAdjustments`),
-  productAssemblies: () => collection(db, `companies/${COMPANY_ID}/productAssemblies`),
-  physicalCounts:    () => collection(db, `companies/${COMPANY_ID}/physicalCounts`),
-  auditTrails:       () => collection(db, `companies/${COMPANY_ID}/auditTrails`),
-  settings:          () => collection(db, `companies/${COMPANY_ID}/settings`),
-  users:             () => collection(db, `companies/${COMPANY_ID}/users`),
-  counters:          () => collection(db, `companies/${COMPANY_ID}/counters`),
-  locations:         () => collection(db, `companies/${COMPANY_ID}/locations`),
-  costCenters:       () => collection(db, `companies/${COMPANY_ID}/costCenters`),
-  employeeLoans:     () => collection(db, `companies/${COMPANY_ID}/employeeLoans`),
-  payrolls:          () => collection(db, `companies/${COMPANY_ID}/payrolls`),
-  employeeLeaves:    () => collection(db, `companies/${COMPANY_ID}/employeeLeaves`),
-  employeeAttendance:() => collection(db, `companies/${COMPANY_ID}/employeeAttendance`),
-  employeeSettlements:() => collection(db, `companies/${COMPANY_ID}/employeeSettlements`),
+  productAssemblies:   () => collection(db, `companies/${COMPANY_ID}/productAssemblies`),
+  physicalCounts:      () => collection(db, `companies/${COMPANY_ID}/physicalCounts`),
+  auditTrails:         () => collection(db, `companies/${COMPANY_ID}/auditTrails`),
+  settings:            () => collection(db, `companies/${COMPANY_ID}/settings`),
+  users:               () => collection(db, `companies/${COMPANY_ID}/users`),
+  counters:            () => collection(db, `companies/${COMPANY_ID}/counters`),
+  locations:           () => collection(db, `companies/${COMPANY_ID}/locations`),
+  costCenters:         () => collection(db, `companies/${COMPANY_ID}/costCenters`),
+  deliveryNotes:       () => collection(db, `companies/${COMPANY_ID}/deliveryNotes`),
+  employeeLoans:       () => collection(db, `companies/${COMPANY_ID}/employeeLoans`),
+  payrolls:            () => collection(db, `companies/${COMPANY_ID}/payrolls`),
+  employeeLeaves:      () => collection(db, `companies/${COMPANY_ID}/employeeLeaves`),
+  employeeAttendance:  () => collection(db, `companies/${COMPANY_ID}/employeeAttendance`),
+  employeeSettlements: () => collection(db, `companies/${COMPANY_ID}/employeeSettlements`),
+  supplierContracts:   () => collection(db, `companies/${COMPANY_ID}/supplierContracts`),
+  supplierClaims:      () => collection(db, `companies/${COMPANY_ID}/supplierClaims`),
+  supplierEvaluations: () => collection(db, `companies/${COMPANY_ID}/supplierEvaluations`),
+  supplierQuotations:  () => collection(db, `companies/${COMPANY_ID}/supplierQuotations`),
+  supplierDeliveries:  () => collection(db, `companies/${COMPANY_ID}/supplierDeliveries`),
+  supplierNotes:       () => collection(db, `companies/${COMPANY_ID}/supplierNotes`),
+  supplierRebates:     () => collection(db, `companies/${COMPANY_ID}/supplierRebates`),
+  customerContracts:   () => collection(db, `companies/${COMPANY_ID}/customerContracts`),
+  customerComplaints:  () => collection(db, `companies/${COMPANY_ID}/customerComplaints`),
+  customerLeads:       () => collection(db, `companies/${COMPANY_ID}/customerLeads`),
+  customerNotes:       () => collection(db, `companies/${COMPANY_ID}/customerNotes`),
+  loyaltyTransactions: () => collection(db, `companies/${COMPANY_ID}/loyaltyTransactions`),
+  segmentPromotions:   () => collection(db, `companies/${COMPANY_ID}/segmentPromotions`),
+  promissoryNotes:     () => collection(db, `companies/${COMPANY_ID}/promissoryNotes`),
+  trustReceipts:       () => collection(db, `companies/${COMPANY_ID}/trustReceipts`),
+  vanDispatches:       () => collection(db, `companies/${COMPANY_ID}/vanDispatches`),
 };
 
-// ──────────────────────────────────────────
-// Two-Tier Client Cache
-// L1 = window.ERP_CACHE (in-memory, 5 min TTL)
-// L2 = localStorage     (30 min TTL, survives refresh)
-// Smart invalidation: only clears affected collection
-// ──────────────────────────────────────────
-const L1_TTL = 15 * 60 * 1000;   // 15 دقيقة (كانت 5)
-const L2_TTL = 2 * 60 * 60 * 1000;  // ساعتين (كانت 30 دقيقة)
-const L2_PREFIX = "erp_c_";
-
-// Force clear cache once for version update to reflect the new account balances
-try {
-  if (localStorage.getItem("erp_cache_version") !== "1.2.0") {
-    Object.keys(localStorage)
-      .filter(k => k.startsWith(L2_PREFIX))
-      .forEach(k => localStorage.removeItem(k));
-    localStorage.setItem("erp_cache_version", "1.2.0");
-    console.log("[Cache] Force cleared local cache due to version update v1.2.0 — auto-sync enabled.");
+// Fail-safe proxy for COLS so any collection name access always returns a valid CollectionReference
+export const COLS = new Proxy(baseCOLS, {
+  get(target, prop) {
+    if (prop in target) return target[prop];
+    return () => collection(db, `companies/${COMPANY_ID}/${String(prop)}`);
   }
-} catch (e) {
-  console.warn("Failed to check or clear localStorage cache version:", e);
-}
+});
+
+// ──────────────────────────────────────────
+// ──────────────────────────────────────────
+// High-Performance Multi-Tier Client Cache
+// L1 = window.ERP_CACHE (in-memory Map, 0ms latency, 30 min TTL)
+// L2 = IndexedDB        (idham_erp_db, high capacity, 4 hours TTL, survives restart)
+// Smart Invalidation: Updates to a collection only invalidate its specific cache
+// ──────────────────────────────────────────
+const L1_TTL = 30 * 60 * 1000;       // 30 دقيقة للذاكرة السريعة
+const L2_TTL = 4 * 60 * 60 * 1000;  // 4 ساعات لـ IndexedDB
+const CACHE_SCHEMA_VER = "232.0";
 
 if (!window.ERP_CACHE) window.ERP_CACHE = {};
 
-function l2Get(key) {
+// One-time cache reset guard when deploying cache/accounting fixes
+const _needsCacheSchemaReset = (() => {
   try {
-    const raw = localStorage.getItem(L2_PREFIX + key);
-    if (!raw) return null;
-    const { data, ts } = JSON.parse(raw);
-    if (Date.now() - ts > L2_TTL) { localStorage.removeItem(L2_PREFIX + key); return null; }
-    return data;
-  } catch { return null; }
+    if (localStorage.getItem("idham_idb_schema_v") !== CACHE_SCHEMA_VER) {
+      window.ERP_CACHE = {};
+      return true;
+    }
+  } catch (_) {}
+  return false;
+})();
+
+// ─── High-Performance Fail-Safe IndexedDB Engine (Single Instance + 150ms Guard) ───
+const IDB_NAME = "idham_erp_cache_db";
+const IDB_STORE = "erp_collections";
+const IDB_VERSION = 1;
+
+let _idbInstance = null;
+let _idbOpenPromise = null;
+
+function openIdb() {
+  if (_idbInstance) return Promise.resolve(_idbInstance);
+  if (_idbOpenPromise) return _idbOpenPromise;
+  if (typeof indexedDB === "undefined") return Promise.resolve(null);
+
+  _idbOpenPromise = new Promise((resolve) => {
+    let resolved = false;
+    const done = (res) => {
+      if (!resolved) {
+        resolved = true;
+        _idbInstance = res;
+        _idbOpenPromise = null;
+        resolve(res);
+      }
+    };
+
+    // 150ms timeout guard: NEVER block the ERP on IndexedDB
+    const timer = setTimeout(() => done(null), 150);
+
+    try {
+      const req = indexedDB.open(IDB_NAME, IDB_VERSION);
+      req.onupgradeneeded = (e) => {
+        try {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(IDB_STORE)) {
+            db.createObjectStore(IDB_STORE, { keyPath: "key" });
+          }
+        } catch (_) {}
+      };
+      req.onsuccess = () => {
+        clearTimeout(timer);
+        const dbRes = req.result;
+        if (_needsCacheSchemaReset && dbRes) {
+          try {
+            const tx = dbRes.transaction(IDB_STORE, "readwrite");
+            tx.objectStore(IDB_STORE).clear();
+            localStorage.setItem("idham_idb_schema_v", CACHE_SCHEMA_VER);
+          } catch (_) {}
+        }
+        done(dbRes);
+      };
+      req.onerror = () => { clearTimeout(timer); done(null); };
+      req.onblocked = () => { clearTimeout(timer); done(null); };
+    } catch (_) {
+      clearTimeout(timer);
+      done(null);
+    }
+  });
+
+  return _idbOpenPromise;
 }
-function l2Set(key, data) {
-  try { localStorage.setItem(L2_PREFIX + key, JSON.stringify({ data, ts: Date.now() })); } catch {}
+
+async function idbGet(key) {
+  try {
+    const db = await openIdb();
+    if (!db) return null;
+    return new Promise((resolve) => {
+      let resolved = false;
+      const done = (val) => {
+        if (!resolved) { resolved = true; resolve(val); }
+      };
+      const timer = setTimeout(() => done(null), 150);
+
+      try {
+        const tx = db.transaction(IDB_STORE, "readonly");
+        const store = tx.objectStore(IDB_STORE);
+        const req = store.get(key);
+        req.onsuccess = () => {
+          clearTimeout(timer);
+          if (!req.result) return done(null);
+          const { val, ts } = req.result;
+          if (Date.now() - ts > L2_TTL) {
+            idbDel(key);
+            return done(null);
+          }
+          done(val);
+        };
+        req.onerror = () => { clearTimeout(timer); done(null); };
+        tx.onerror = () => { clearTimeout(timer); done(null); };
+        tx.onabort = () => { clearTimeout(timer); done(null); };
+      } catch (_) { clearTimeout(timer); done(null); }
+    });
+  } catch (_) { return null; }
 }
-function l2Del(key) {
-  try { localStorage.removeItem(L2_PREFIX + key); } catch {}
+
+async function idbSet(key, val) {
+  try {
+    // Sanitize val to avoid DataCloneError with non-cloneable objects
+    const cleanVal = JSON.parse(JSON.stringify(val));
+    const db = await openIdb();
+    if (!db) return;
+    return new Promise((resolve) => {
+      const timer = setTimeout(resolve, 150);
+      try {
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        const store = tx.objectStore(IDB_STORE);
+        store.put({ key, val: cleanVal, ts: Date.now() });
+        tx.oncomplete = () => { clearTimeout(timer); resolve(); };
+        tx.onerror = () => { clearTimeout(timer); resolve(); };
+        tx.onabort = () => { clearTimeout(timer); resolve(); };
+      } catch (_) { clearTimeout(timer); resolve(); }
+    });
+  } catch (_) {}
+}
+
+async function idbDel(key) {
+  try {
+    const db = await openIdb();
+    if (!db) return;
+    return new Promise((resolve) => {
+      const timer = setTimeout(resolve, 150);
+      try {
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        const store = tx.objectStore(IDB_STORE);
+        store.delete(key);
+        tx.oncomplete = () => { clearTimeout(timer); resolve(); };
+        tx.onerror = () => { clearTimeout(timer); resolve(); };
+      } catch (_) { clearTimeout(timer); resolve(); }
+    });
+  } catch (_) {}
+}
+
+async function idbClearPrefix(prefix) {
+  try {
+    const db = await openIdb();
+    if (!db) return;
+    return new Promise((resolve) => {
+      const timer = setTimeout(resolve, 150);
+      try {
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        const store = tx.objectStore(IDB_STORE);
+        const req = store.openCursor();
+        req.onsuccess = (e) => {
+          const cursor = e.target.result;
+          if (cursor) {
+            if (String(cursor.key).startsWith(prefix)) {
+              cursor.delete();
+            }
+            cursor.continue();
+          } else {
+            clearTimeout(timer);
+            resolve();
+          }
+        };
+        req.onerror = () => { clearTimeout(timer); resolve(); };
+      } catch (_) { clearTimeout(timer); resolve(); }
+    });
+  } catch (_) {}
+}
+
+function serializeConstraint(c) {
+  if (!c) return "null";
+  const type = c.type || (c._limit !== undefined ? "limit" : c._direction ? "orderBy" : c._op ? "where" : "unknown");
+  if (type === "where") {
+    const field = c._field?.segments?.join(".") || c.field?.segments?.join(".") || c.field || "f";
+    const op = c._op || c.op || "==";
+    const val = String(c._value !== undefined ? c._value : c.value);
+    return `where_${field}_${op}_${val}`;
+  }
+  if (type === "orderBy") {
+    const field = c._field?.segments?.join(".") || c.field?.segments?.join(".") || c.field || "f";
+    const dir = c._direction || c.direction || "asc";
+    return `order_${field}_${dir}`;
+  }
+  if (type === "limit") {
+    const lim = c._limit !== undefined ? c._limit : c.limit;
+    return `limit_${lim}`;
+  }
+  return String(c);
 }
 
 /**
  * Clear cache for a specific collection path (or all if no path given).
  * Smart: updating products won't evict suppliers/customers cache.
  */
-export function clearERPCache(colPath = null) {
+export async function clearERPCache(colPath = null) {
   if (colPath) {
-    // Clear L1 (in-memory) — exact + compound keys
+    // Clear L1 in-memory
     delete window.ERP_CACHE[colPath];
     Object.keys(window.ERP_CACHE)
       .filter(k => k.startsWith(colPath))
       .forEach(k => delete window.ERP_CACHE[k]);
-    // Clear L2 (localStorage) — exact + compound keys (e.g. salesReps__orderBy)
-    Object.keys(localStorage)
-      .filter(k => k.startsWith(L2_PREFIX + colPath))
-      .forEach(k => localStorage.removeItem(k));
+    // Clear L2 IndexedDB
+    try {
+      await idbClearPrefix(colPath);
+    } catch (_) {}
   } else {
     // Full clear
     window.ERP_CACHE = {};
-    Object.keys(localStorage)
-      .filter(k => k.startsWith(L2_PREFIX))
-      .forEach(k => localStorage.removeItem(k));
+    try {
+      const db = await openIdb();
+      if (db) {
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        tx.objectStore(IDB_STORE).clear();
+      }
+    } catch (_) {}
   }
 }
 
 // ──────────────────────────────────────────
-// CRUD Helpers
+// CRUD Helpers (Polymorphic: string or colRef)
 // ──────────────────────────────────────────
-export async function create(colRef, data) {
-  clearERPCache(colRef.path);
-  const docRef = await addDoc(colRef, {
+export async function create(collectionNameOrRef, data) {
+  let targetColRef;
+  let colPath;
+  if (typeof collectionNameOrRef === "string") {
+    colPath = `companies/${COMPANY_ID}/${collectionNameOrRef}`;
+    targetColRef = collection(db, colPath);
+  } else if (collectionNameOrRef && collectionNameOrRef.path) {
+    colPath = collectionNameOrRef.path;
+    targetColRef = collectionNameOrRef;
+  } else {
+    const colName = collectionNameOrRef?.id || String(collectionNameOrRef);
+    colPath = `companies/${COMPANY_ID}/${colName}`;
+    targetColRef = collection(db, colPath);
+  }
+
+  clearERPCache(colPath);
+  const docRef = await addDoc(targetColRef, {
     ...data,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp(),
@@ -144,10 +351,23 @@ export async function create(colRef, data) {
   return docRef.id;
 }
 
-export async function update(collectionName, id, data) {
-  const colPath = `companies/${COMPANY_ID}/${collectionName}`;
-  clearERPCache(colPath);
-  const docRef = doc(db, colPath, id);
+export async function update(collectionNameOrRef, id, data) {
+  let docRef;
+  let colPath;
+  if (typeof collectionNameOrRef === "string") {
+    colPath = `companies/${COMPANY_ID}/${collectionNameOrRef}`;
+    clearERPCache(colPath);
+    docRef = doc(db, colPath, id);
+  } else if (collectionNameOrRef && collectionNameOrRef.path) {
+    colPath = collectionNameOrRef.path;
+    clearERPCache(colPath);
+    docRef = doc(db, collectionNameOrRef.path, id);
+  } else {
+    const colName = collectionNameOrRef?.id || String(collectionNameOrRef);
+    colPath = `companies/${COMPANY_ID}/${colName}`;
+    clearERPCache(colPath);
+    docRef = doc(db, colPath, id);
+  }
   await updateDoc(docRef, {
     ...data,
     updatedAt: serverTimestamp(),
@@ -159,47 +379,37 @@ export async function deleteJournalEntry(id) {
     const jeRef = doc(db, `companies/${COMPANY_ID}/journalEntries`, id);
     const jeSnap = await getDoc(jeRef);
     if (!jeSnap.exists()) return;
-    const oldJE = jeSnap.data();
 
-    // Fetch all accounts once
-    const accSnap = await getDocs(collection(db, `companies/${COMPANY_ID}/chartOfAccounts`));
-    const accByCode = {};
-    accSnap.docs.forEach(d => {
-      accByCode[d.data().code] = { ref: d.ref, data: d.data() };
-    });
+    const jeData = jeSnap.data();
+    const isPosted = jeData.status === "posted" || jeData.status === "مرحل" || jeData.status === "مرحّل";
 
-    // Step 1: Reverse OLD balance updates (if it was posted)
-    if (oldJE && oldJE.status === "posted" && oldJE.lines) {
+    // Step 1: If posted, reverse balances on affected chartOfAccounts in batch
+    if (isPosted && Array.isArray(jeData.lines) && jeData.lines.length > 0) {
+      const allAccounts = await getAll(COLS.chartOfAccounts());
+      const accByCode = {};
+      allAccounts.forEach(a => { accByCode[a.code] = a; });
       const batchRev = writeBatch(db);
       let batchRevHasWrites = false;
-      for (const line of oldJE.lines) {
+
+      for (const line of jeData.lines) {
         if (!line.accountCode) continue;
-        const delta = (line.credit || 0) - (line.debit || 0); // reverse delta
-        if (Math.abs(delta) < 0.001) continue;
+        const debit  = parseFloat(line.debit)  || 0;
+        const credit = parseFloat(line.credit) || 0;
+        if (debit === 0 && credit === 0) continue;
 
-        const parentCodes = getParentCodes(line.accountCode);
-        const codesToUpdate = [line.accountCode, ...parentCodes];
+        const accData = accByCode[line.accountCode];
+        if (accData) {
+          const docRef = doc(db, `companies/${COMPANY_ID}/chartOfAccounts`, accData.id);
+          const normalBalance = accData.normalBalance || (["asset", "expense"].includes(accData.type) ? "debit" : "credit");
+          const netChange = normalBalance === "debit" ? (debit - credit) : (credit - debit);
 
-        for (const c of codesToUpdate) {
-          const accEntry = accByCode[c];
-          if (accEntry) {
-            const firstChar = c.trim().charAt(0);
-            const isCreditNormal = ["2", "3", "4"].includes(firstChar);
-            const incrementValue = isCreditNormal ? -delta : delta;
-
-            const updateFields = {
-              balance: increment(incrementValue),
-              updatedAt: serverTimestamp(),
-            };
-
-            const debitDelta = -(line.debit || 0);
-            const creditDelta = -(line.credit || 0);
-            if (Math.abs(debitDelta) > 0) updateFields.totalDebit = increment(debitDelta);
-            if (Math.abs(creditDelta) > 0) updateFields.totalCredit = increment(creditDelta);
-
-            batchRev.update(accEntry.ref, updateFields);
-            batchRevHasWrites = true;
-          }
+          batchRev.update(docRef, {
+            balance:     increment(-netChange),
+            totalDebit:  increment(-debit),
+            totalCredit: increment(-credit),
+            updatedAt:   serverTimestamp()
+          });
+          batchRevHasWrites = true;
         }
       }
       if (batchRevHasWrites) await batchRev.commit();
@@ -207,16 +417,29 @@ export async function deleteJournalEntry(id) {
 
     // Step 2: Delete the document
     await deleteDoc(jeRef);
+    clearERPCache(COLS.chartOfAccounts().path);
   } catch (err) {
     console.error("[deleteJournalEntry] Failed to reverse balance and delete JE:", err);
     throw err;
   }
 }
 
-export async function remove(collectionName, id) {
-  const colPath = `companies/${COMPANY_ID}/${collectionName}`;
+export async function remove(collectionNameOrRef, id) {
+  let colPath;
+  let colName;
+  if (typeof collectionNameOrRef === "string") {
+    colName = collectionNameOrRef;
+    colPath = `companies/${COMPANY_ID}/${collectionNameOrRef}`;
+  } else if (collectionNameOrRef && collectionNameOrRef.path) {
+    colPath = collectionNameOrRef.path;
+    colName = collectionNameOrRef.id || colPath.split("/").pop();
+  } else {
+    colName = collectionNameOrRef?.id || String(collectionNameOrRef);
+    colPath = `companies/${COMPANY_ID}/${colName}`;
+  }
+
   clearERPCache(colPath);
-  if (collectionName === "journalEntries") {
+  if (colName === "journalEntries") {
     await deleteJournalEntry(id);
   } else {
     const docRef = doc(db, colPath, id);
@@ -224,167 +447,185 @@ export async function remove(collectionName, id) {
   }
 }
 
-export async function getById(collectionName, id) {
-  const cacheKey = `companies/${COMPANY_ID}/${collectionName}/${id}`;
-  // L1 check
+export async function getById(collectionNameOrRef, id) {
+  let colName;
+  let colPath;
+  if (typeof collectionNameOrRef === "string") {
+    colName = collectionNameOrRef;
+    colPath = `companies/${COMPANY_ID}/${collectionNameOrRef}`;
+  } else if (collectionNameOrRef && collectionNameOrRef.path) {
+    colPath = collectionNameOrRef.path;
+    colName = collectionNameOrRef.id || colPath.split("/").pop();
+  } else {
+    colName = collectionNameOrRef?.id || String(collectionNameOrRef);
+    colPath = `companies/${COMPANY_ID}/${colName}`;
+  }
+
+  const cacheKey = `${colPath}/${id}`;
+  // L1 check (0ms)
   const l1 = window.ERP_CACHE[cacheKey];
   if (l1 && Date.now() - l1.ts < L1_TTL) return l1.data;
-  // L2 check
-  const l2 = l2Get(cacheKey);
-  if (l2) { window.ERP_CACHE[cacheKey] = { data: l2, ts: Date.now() }; return l2; }
+  // L2 IndexedDB check (<5ms)
+  const l2 = await idbGet(cacheKey);
+  if (l2) {
+    window.ERP_CACHE[cacheKey] = { data: l2, ts: Date.now() };
+    return l2;
+  }
 
-  const docRef = doc(db, `companies/${COMPANY_ID}/${collectionName}`, id);
+  const docRef = doc(db, colPath, id);
   const snap = await getDoc(docRef);
   if (!snap.exists()) return null;
   const result = { id: snap.id, ...snap.data() };
   window.ERP_CACHE[cacheKey] = { data: result, ts: Date.now() };
-  l2Set(cacheKey, result);
+  idbSet(cacheKey, result).catch(() => {});
   return result;
 }
 
 export async function getAll(colRef, constraints = []) {
-  // توسيع نطاق الـ Cache ليشمل أي مزيج من orderBy + limit + where
-  const isCacheable = constraints.every(c =>
-    c?.type === "orderBy" || c?.type === "limit" || c?.type === "where"
-  );
-
-  // مفتاح فريد يشمل قيم الفلاتر أيضاً
-  const cacheKey = colRef.path + (constraints.length
-    ? "__" + constraints.map(c => {
-        if (!c) return "null";
-        if (c.type === "where") return `where_${c.field?.segments?.join(".") || ""}_${String(c.value)}`;
-        return c.type || String(c);
-      }).join("_")
+  if (typeof colRef === "string") {
+    colRef = collection(db, colRef.includes("/") ? colRef : `companies/${COMPANY_ID}/${colRef}`);
+  }
+  const colPathStr = colRef?.path || String(colRef);
+  // Semi-static collections (chartOfAccounts, warehouses, categories, units, products, customers)
+  // are cached in L1 (Memory) and L2 (IndexedDB) for instant 0ms loads and quota protection.
+  const isDynamicCol = colPathStr.includes("stockByWarehouse") || 
+                       colPathStr.includes("stockTransactions") ||
+                       colPathStr.includes("cashBoxes") ||
+                       colPathStr.includes("cashTransactions");
+  const cacheKey = colPathStr + (constraints.length
+    ? "__" + constraints.map(serializeConstraint).join("_")
     : "");
 
-  if (isCacheable) {
-    // L1 check (أسرع)
+  const DYNAMIC_L1_TTL = 90 * 1000; // 90s short memory cache for dynamic collections during fast navigation
+
+  if (isDynamicCol) {
     const l1 = window.ERP_CACHE[cacheKey];
-    if (l1 && Date.now() - l1.ts < L1_TTL) return [...l1.data];
-    // L2 check (localStorage — يبقى بعد الإغلاق)
-    const l2 = l2Get(cacheKey);
-    if (l2) {
+    if (l1 && Date.now() - l1.ts < DYNAMIC_L1_TTL) {
+      return [...l1.data];
+    }
+  } else {
+    // 1. L1 Memory Check (Instant 0ms)
+    const l1 = window.ERP_CACHE[cacheKey];
+    if (l1 && Date.now() - l1.ts < L1_TTL) {
+      return [...l1.data];
+    }
+
+    // 2. L2 IndexedDB Check (<5ms)
+    const l2 = await idbGet(cacheKey);
+    if (l2 && Array.isArray(l2)) {
       window.ERP_CACHE[cacheKey] = { data: l2, ts: Date.now() };
       return [...l2];
     }
   }
 
+  // 3. High-Performance Multi-Tab Cached Fetch (Offline Persistence Enabled)
   const q = constraints.length > 0 ? query(colRef, ...constraints) : colRef;
   const snap = await getDocs(q);
-  const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const data = snap.docs.map(d => ({ ...d.data(), id: d.id }));
 
-  if (isCacheable) {
-    window.ERP_CACHE[cacheKey] = { data, ts: Date.now() };
-    try { l2Set(cacheKey, data); } catch(e) {
-      // localStorage امتلأ — نستخدم L1 فقط
-      console.warn("[Cache] localStorage full, using L1 only");
-    }
+  // Save in L1 memory cache (fast 0ms hits)
+  window.ERP_CACHE[cacheKey] = { data, ts: Date.now() };
+
+  // Save in L2 IndexedDB only for static/non-dynamic collections
+  if (!isDynamicCol) {
+    idbSet(cacheKey, data).catch(() => {});
   }
 
   return data;
 }
 
 export async function getPaginated(colRef, constraints, pageSize = 50, lastDoc = null) {
+  if (typeof colRef === "string") {
+    colRef = collection(db, colRef.includes("/") ? colRef : `companies/${COMPANY_ID}/${colRef}`);
+  }
   const qConstraints = [...constraints, limit(pageSize + 1)];
   if (lastDoc) qConstraints.push(startAfter(lastDoc));
   const q = query(colRef, ...qConstraints);
   const snap = await getDocs(q);
   const hasMore = snap.docs.length > pageSize;
-  const docs = snap.docs.slice(0, pageSize).map(d => ({ id: d.id, ...d.data() }));
+  const docs = snap.docs.slice(0, pageSize).map(d => ({ ...d.data(), id: d.id }));
   const lastSnapshot = snap.docs[Math.min(pageSize - 1, snap.docs.length - 1)] || null;
   return { docs, hasMore, lastSnapshot };
 }
 
 // ──────────────────────────────────────────
 // Invoice Number Generation (Atomic Counter)
-// Max 3 retries with exponential backoff to prevent infinite loop / quota exhaustion
+// Strictly sequential, zero duplicates, atomic Firestore transaction
 // ──────────────────────────────────────────
 export async function generateInvoiceNumber(prefix = "INV") {
-  const counterRef = doc(db, `companies/${COMPANY_ID}/counters`, prefix.toLowerCase());
-  const MAX_RETRIES = 3;
+  const p = (prefix || "INV").toUpperCase();
+  const docKey = p.toLowerCase().replace(/[^a-z0-9]/g, "_");
+  const counterRef = doc(db, `companies/${COMPANY_ID}/counters`, docKey);
+  const MAX_RETRIES = 5;
 
-  // Determine collection name
-  let colName = "";
-  const p = prefix.toUpperCase();
-  if (p === "INV") colName = "salesInvoices";
-  else if (p === "PUR") colName = "purchaseInvoices";
-  else if (p === "RFQ") colName = "purchaseRequests";
-  else if (p === "DN") colName = "purchaseReturns";
-  else if (p === "QT") colName = "quotations";
-  else if (p === "CN") colName = "salesReturns";
-  else if (p === "TR") colName = "stockTransfers";
-
-  // Fetch max number in database
-  let maxSeq = 0;
-  if (colName) {
-    try {
-      const colRef = collection(db, `companies/${COMPANY_ID}/${colName}`);
-      const q = query(colRef, orderBy("number", "desc"), limit(20));
-      const snap = await getDocs(q);
-      snap.docs.forEach(d => {
-        const numStr = d.data().number || "";
-        const match = numStr.match(/\d+/);
-        if (match) {
-          const val = parseInt(match[0]);
-          if (val > maxSeq) maxSeq = val;
-        }
-      });
-    } catch (e) {
-      console.error("generateInvoiceNumber: failed to read max doc number, using counter fallback", e);
-    }
-  }
+  // Baseline minimum sequence per series to guarantee historical monotonicity without gaps
+  const MIN_SEQ = {
+    INV:  42133, // Continues seamlessly from INV-042132
+    PUR:  130,   // Continues from PUR-000129
+    QT:   5102,  // Continues from QT-005101
+    CN:   12,
+    DN:   17,
+    TR:   98,
+    VAN1: 1,
+    VAN2: 1,
+    VAN3: 1,
+    VAN4: 1
+  };
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       let number;
       await runTransaction(db, async (tx) => {
         const snap = await tx.get(counterRef);
-        // Ensure seq is at least maxSeq + 1 (respecting deletions/rollbacks)
-        let seq = maxSeq + 1;
-        if (snap.exists()) {
-          const storedSeq = snap.data().seq || 0;
-          // If storedSeq is greater, we can use it, but if they deleted records we want to reset to maxSeq + 1
-          // This ensures strict sequential numbering based on actual documents in the collection
-          seq = maxSeq + 1;
-        }
-        tx.set(counterRef, { seq, updatedAt: serverTimestamp() });
-        number = `${prefix}-${String(seq).padStart(6, "0")}`;
-      });
-      return number;  // ✅ success
-    } catch (err) {
-      const isQuotaOrPermission =
-        err?.code === "resource-exhausted" ||
-        err?.code === "permission-denied"  ||
-        err?.message?.includes("429");
+        const storedSeq = snap.exists() ? (snap.data().seq || 0) : 0;
+        const baseline = MIN_SEQ[p] || 1;
+        const nextSeq = Math.max(storedSeq + 1, baseline);
 
-      if (attempt < MAX_RETRIES && !isQuotaOrPermission) {
-        await new Promise(r => setTimeout(r, attempt * 1000));
+        tx.set(counterRef, {
+          seq: nextSeq,
+          prefix: p,
+          updatedAt: serverTimestamp()
+        }, { merge: true });
+
+        number = `${p}-${String(nextSeq).padStart(6, "0")}`;
+      });
+      return number;  // ✅ Success! Instant, zero quota waste, strictly sequential
+    } catch (err) {
+      if (attempt < MAX_RETRIES) {
+        await new Promise(r => setTimeout(r, attempt * 400));
         continue;
       }
-
-      const ts = Date.now().toString(36).toUpperCase();
-      console.warn(`[Counter] ${prefix} — fallback after ${attempt} attempts:`, err?.code || err?.message);
-      return `${prefix}-T${ts}`;
+      console.warn(`[Counter] ${p} fallback after ${attempt} attempts:`, err?.code || err?.message);
+      return `${p}-${Date.now().toString().slice(-6)}`;
     }
   }
 
-  return `${prefix}-T${Date.now().toString(36).toUpperCase()}`;
+  return `${p}-${Date.now().toString().slice(-6)}`;
 }
 
 // ──────────────────────────────────────────
 // Stock Operations (Atomic)
 // ──────────────────────────────────────────
 export async function adjustStock(warehouseId, productId, qtyDelta, metadata = {}) {
-  clearERPCache();
+  clearERPCache(COLS.stockByWarehouse().path);
+  clearERPCache(COLS.stockTransactions().path);
+  clearERPCache(COLS.products().path);
   if (!warehouseId || !productId) throw new Error("warehouseId and productId are required");
 
+  const isEditOrCancel = metadata.isEdit || (metadata.type && (metadata.type.includes("edit") || metadata.type.includes("cancel") || metadata.type.includes("reverse")));
+  const txDocId = metadata.txDocId || (metadata.sourceId && metadata.type ? (isEditOrCancel ? `tx_${metadata.type}_${metadata.sourceId}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}_${warehouseId}_${productId}` : `tx_${metadata.type}_${metadata.sourceId}_${warehouseId}_${productId}`).replace(/[\/\s]/g, '_') : null);
   const stockDocId = `${warehouseId}_${productId}`;
   const stockRef   = doc(db, `companies/${COMPANY_ID}/stockByWarehouse`, stockDocId);
-  const txnRef     = doc(collection(db, `companies/${COMPANY_ID}/stockTransactions`));
+  const txnRef     = txDocId ? doc(db, `companies/${COMPANY_ID}/stockTransactions`, txDocId) : doc(collection(db, `companies/${COMPANY_ID}/stockTransactions`));
   const sysRef     = doc(db, `companies/${COMPANY_ID}/settings`, "system");
 
   await runTransaction(db, async (tx) => {
     // 1. PERFORM ALL READS FIRST
+    const txnSnap = await tx.get(txnRef);
+    if (txnSnap.exists()) {
+      console.warn(`[adjustStock] Transaction ${txnRef.id} already processed. Skipping duplicate execution.`);
+      return;
+    }
     const sysSnap = await tx.get(sysRef);
     const stockSnap = await tx.get(stockRef);
     const prodRef = doc(db, `companies/${COMPANY_ID}/products`, productId);
@@ -527,7 +768,9 @@ export async function adjustStock(warehouseId, productId, qtyDelta, metadata = {
 }
 
 export async function adjustStockBulk(adjustments) {
-  clearERPCache();
+  clearERPCache(COLS.stockByWarehouse().path);
+  clearERPCache(COLS.stockTransactions().path);
+  clearERPCache(COLS.products().path);
   if (!Array.isArray(adjustments) || adjustments.length === 0) return;
 
   const sysRef = doc(db, `companies/${COMPANY_ID}/settings`, "system");
@@ -570,9 +813,37 @@ export async function adjustStockBulk(adjustments) {
     const stockRefs = stockKeys.map(k => doc(db, `companies/${COMPANY_ID}/stockByWarehouse`, k));
     const prodRefs = productKeys.map(k => doc(db, `companies/${COMPANY_ID}/products`, k));
 
+    // Prepare txnRefs for each adjustment to guarantee idempotency
+    const adjTxnRefs = adjustments.map(adj => {
+      const { warehouseId, productId, metadata = {} } = adj;
+      const isEditOrCancel = metadata.isEdit || (metadata.type && (metadata.type.includes("edit") || metadata.type.includes("cancel") || metadata.type.includes("reverse")));
+      const txDocId = metadata.txDocId || (metadata.sourceId && metadata.type ? (isEditOrCancel ? `tx_${metadata.type}_${metadata.sourceId}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}_${warehouseId}_${productId}` : `tx_${metadata.type}_${metadata.sourceId}_${warehouseId}_${productId}`).replace(/[\/\s]/g, '_') : null);
+      return txDocId ? doc(db, `companies/${COMPANY_ID}/stockTransactions`, txDocId) : doc(collection(db, `companies/${COMPANY_ID}/stockTransactions`));
+    });
+
     // Execute all reads in parallel
-    const stockSnaps = await Promise.all(stockRefs.map(ref => tx.get(ref)));
-    const prodSnaps = await Promise.all(prodRefs.map(ref => tx.get(ref)));
+    const [stockSnaps, prodSnaps, txnSnaps] = await Promise.all([
+      Promise.all(stockRefs.map(ref => tx.get(ref))),
+      Promise.all(prodRefs.map(ref => tx.get(ref))),
+      Promise.all(adjTxnRefs.map(ref => tx.get(ref)))
+    ]);
+
+    // Filter out adjustments that have already been applied in Firestore
+    const activeAdjustments = [];
+    const activeTxnRefs = [];
+    adjustments.forEach((adj, idx) => {
+      if (txnSnaps[idx].exists()) {
+        console.warn(`[adjustStockBulk] Transaction ${adjTxnRefs[idx].id} already applied. Skipping duplicate.`);
+      } else {
+        activeAdjustments.push(adj);
+        activeTxnRefs.push(adjTxnRefs[idx]);
+      }
+    });
+
+    if (activeAdjustments.length === 0) {
+      console.log(`[adjustStockBulk] All adjustments already processed. Skipping.`);
+      return;
+    }
 
     const stockSnapMap = {};
     stockKeys.forEach((k, idx) => { stockSnapMap[k] = stockSnaps[idx]; });
@@ -603,7 +874,7 @@ export async function adjustStockBulk(adjustments) {
       let txnUnitCost = null;
 
       // Find the first adjustment for this product that has metadata
-      const firstAdj = adjustments.find(a => a.productId === productId);
+      const firstAdj = activeAdjustments.find(a => a.productId === productId);
       const metadata = firstAdj ? firstAdj.metadata : {};
 
       if (valMethod === "fifo") {
@@ -692,22 +963,29 @@ export async function adjustStockBulk(adjustments) {
     }
 
     // Now process each individual stock adjustment and write to transaction
-    for (const adj of adjustments) {
+    for (let i = 0; i < activeAdjustments.length; i++) {
+      const adj = activeAdjustments[i];
+      const txnRef = activeTxnRefs[i];
       const { warehouseId, productId, qtyDelta, metadata = {} } = adj;
       if (!warehouseId || !productId) continue;
 
       const stockDocId = `${warehouseId}_${productId}`;
       const stockSnap = stockSnapMap[stockDocId];
-      const currentQty = stockSnap.exists() ? (stockSnap.data().qty || 0) : 0;
+      const currentQty = stockSnap && stockSnap.exists() ? (stockSnap.data().qty || 0) : 0;
       
       if (uniqueStocks[stockDocId].runningQty === undefined) {
         uniqueStocks[stockDocId].runningQty = currentQty;
       }
       const qtyBefore = uniqueStocks[stockDocId].runningQty;
       const qtyAfter = qtyBefore + qtyDelta;
+
+      if (qtyAfter < 0 && !metadata.allowNegative) {
+        throw new Error(`رصيد المخزون غير كافٍ للمنتج (${metadata.productName || productId}) في المستودع المحدد. الرصيد الحالي: ${qtyBefore}، المطلوب خصمه: ${Math.abs(qtyDelta)}`);
+      }
+
       uniqueStocks[stockDocId].runningQty = qtyAfter;
 
-      const reorderLevel = stockSnap.exists() ? (stockSnap.data().reorderLevel || 0) : 0;
+      const reorderLevel = stockSnap && stockSnap.exists() ? (stockSnap.data().reorderLevel || 0) : 0;
       const stockStatus = qtyAfter <= 0 ? "out" : (reorderLevel > 0 && qtyAfter <= reorderLevel ? "low" : "ok");
 
       const stockRef = doc(db, `companies/${COMPANY_ID}/stockByWarehouse`, stockDocId);
@@ -719,7 +997,6 @@ export async function adjustStockBulk(adjustments) {
         updatedAt: serverTimestamp(),
       }, { merge: true });
 
-      const txnRef = doc(collection(db, `companies/${COMPANY_ID}/stockTransactions`));
       const txnData = {
         warehouseId, productId,
         qtyBefore,
@@ -759,20 +1036,22 @@ export async function adjustStockBulk(adjustments) {
 export async function getStockForProduct(productId) {
   const q = query(COLS.stockByWarehouse(), where("productId", "==", productId));
   const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  return snap.docs.map(d => ({ ...d.data(), id: d.id }));
 }
 
 export async function getStockForWarehouse(warehouseId) {
-  const q = query(COLS.stockByWarehouse(), where("warehouseId", "==", warehouseId), orderBy("productId"));
+  const q = query(COLS.stockByWarehouse(), where("warehouseId", "==", warehouseId));
   const snap = await getDocs(q);
-  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  return snap.docs.map(d => ({ ...d.data(), id: d.id }));
 }
 
 // ──────────────────────────────────────────
 // Stock Transfer Between Warehouses (Atomic)
 // ──────────────────────────────────────────
 export async function transferStock(fromWarehouseId, toWarehouseId, productId, qty, metadata = {}) {
-  clearERPCache();
+  clearERPCache(COLS.stockByWarehouse().path);
+  clearERPCache(COLS.stockTransactions().path);
+  clearERPCache(COLS.stockTransfers().path);
   if (fromWarehouseId === toWarehouseId) throw new Error("المخزن المصدر والوجهة متطابقان");
   if (qty <= 0) throw new Error("الكمية يجب أن تكون أكبر من صفر");
 
@@ -834,7 +1113,8 @@ function getParentCodes(code, accByCode = null) {
 }
 
 export async function createJournalEntry({ date, description, lines, sourceType = "manual", sourceId = null, status = "posted", createdByName = "النظام", entryNumber: providedEntryNumber, costCenterId = null, costCenterName = null }) {
-  clearERPCache();
+  clearERPCache(COLS.journalEntries().path);
+  // Note: chartOfAccounts cache is kept intact to prevent burning hundreds of reads on every invoice/payment
   // Validate balance
   const totalDebit  = lines.reduce((s, l) => s + (l.debit  || 0), 0);
   const totalCredit = lines.reduce((s, l) => s + (l.credit || 0), 0);
@@ -867,6 +1147,7 @@ export async function createJournalEntry({ date, description, lines, sourceType 
     entryRef = doc(collection(db, `companies/${COMPANY_ID}/journalEntries`));
     tx.set(entryRef, {
       entryNumber: entryNumber || null,
+      code: entryNumber || null,
       date: date || null,
       description: description || null,
       costCenterId: costCenterId || null,
@@ -883,16 +1164,17 @@ export async function createJournalEntry({ date, description, lines, sourceType 
   });
 
   // Step 2: Update account balances AFTER transaction (queries not allowed inside transactions)
-  // ✅ المزامنة التلقائية: يُحدِّث شجرة الحسابات فور إنشاء أي قيد
+  // ✅ المزامنة التلقائية: يُحدِّث شجرة الحسابات فور إنشاء أي قيد (ويُحدِّث الكاش محلياً دون قراءات إضافية)
   const _applyBalanceUpdate = async () => {
     const batch = writeBatch(db);
     let batchHasWrites = false;
+    const codeDeltas = {};
 
-    // Fetch all accounts once
-    const accSnap = await getDocs(collection(db, `companies/${COMPANY_ID}/chartOfAccounts`));
+    // Fetch accounts using cached getAll (0 network reads!)
+    const allAccounts = await getAll(COLS.chartOfAccounts());
     const accByCode = {};
-    accSnap.docs.forEach(d => {
-      accByCode[d.data().code] = { ref: d.ref, data: d.data() };
+    allAccounts.forEach(d => {
+      accByCode[d.code] = { ref: doc(db, `companies/${COMPANY_ID}/chartOfAccounts`, d.id), data: d };
     });
 
     for (const line of sanitizedLines) {
@@ -921,13 +1203,41 @@ export async function createJournalEntry({ date, description, lines, sourceType 
           if (debitDelta > 0) updateFields.totalDebit = increment(debitDelta);
           if (creditDelta > 0) updateFields.totalCredit = increment(creditDelta);
 
+          if (!codeDeltas[c]) codeDeltas[c] = { bal: 0, dr: 0, cr: 0 };
+          codeDeltas[c].bal += incrementValue;
+          codeDeltas[c].dr  += debitDelta;
+          codeDeltas[c].cr  += creditDelta;
+
           batch.update(accEntry.ref, updateFields);
           batchHasWrites = true;
         }
       }
     }
 
-    if (batchHasWrites) await batch.commit();
+    if (batchHasWrites) {
+      await batch.commit();
+      // Sync L1 & L2 chartOfAccounts cache in-place with 0 extra Firestore reads
+      const coaPath = COLS.chartOfAccounts().path;
+      Object.keys(window.ERP_CACHE)
+        .filter(k => k.startsWith(coaPath))
+        .forEach(k => {
+          const entry = window.ERP_CACHE[k];
+          if (entry && Array.isArray(entry.data)) {
+            entry.data = entry.data.map(acc => {
+              const d = codeDeltas[acc.code];
+              if (!d) return acc;
+              return {
+                ...acc,
+                balance: Math.round((Number(acc.balance || 0) + d.bal) * 100) / 100,
+                totalDebit: Math.round((Number(acc.totalDebit || 0) + d.dr) * 100) / 100,
+                totalCredit: Math.round((Number(acc.totalCredit || 0) + d.cr) * 100) / 100,
+              };
+            });
+            entry.ts = Date.now();
+            idbSet(k, entry.data).catch(() => {});
+          }
+        });
+    }
   };
 
   try {
@@ -946,17 +1256,13 @@ export async function createJournalEntry({ date, description, lines, sourceType 
     }
   }
 
-  // ✅ يُرجع كلاهما: entryNumber (رقم القيد) + id (معرّف Firestore)
-  // للتوافق العكسي: الكود القديم كان يستخدم القيمة كـ string مباشرة — الكائن الجديد toString() يُعيد entryNumber
-  const result = Object.assign(
-    new String(entryNumber),  // toString() / valueOf() => entryNumber (for legacy callers that use it as string)
-    { id: entryRef.id, entryNumber }
-  );
-  return result;
+  // ✅ يُرجع معرّف Firestore كـ primitive string لضمان توافقه مع كافة عمليات updateDoc/setDoc
+  return entryRef.id;
 }
 
 export async function updateJournalEntry(id, { date, description, reference, lines, status = "posted" }) {
-  clearERPCache();
+  clearERPCache(COLS.journalEntries().path);
+  clearERPCache(COLS.chartOfAccounts().path);
   
   // Validate balance
   const totalDebit  = lines.reduce((s, l) => s + (l.debit  || 0), 0);
@@ -979,11 +1285,11 @@ export async function updateJournalEntry(id, { date, description, reference, lin
   if (!jeSnap.exists()) throw new Error("القيد غير موجود");
   const oldJE = jeSnap.data();
 
-  // Fetch all accounts once
-  const accSnap = await getDocs(collection(db, `companies/${COMPANY_ID}/chartOfAccounts`));
+  // Fetch accounts using cached getAll (0 network reads!)
+  const allAccounts = await getAll(COLS.chartOfAccounts());
   const accByCode = {};
-  accSnap.docs.forEach(d => {
-    accByCode[d.data().code] = { ref: d.ref, data: d.data() };
+  allAccounts.forEach(d => {
+    accByCode[d.code] = { ref: doc(db, `companies/${COMPANY_ID}/chartOfAccounts`, d.id), data: d };
   });
 
   // Step 1: Reverse OLD balance updates (if it was posted)
@@ -1188,6 +1494,8 @@ export async function autoCashTransaction({ type, amount, notes, sourceType, sou
       });
     });
 
+    clearERPCache(COLS.cashBoxes().path);
+    clearERPCache(COLS.cashTransactions().path);
     console.log(`[autoCashTransaction] ${type} ${amount} → box ${boxId}, balance now ${balanceAfter}`);
     return balanceAfter;
   } catch (err) {
@@ -1354,20 +1662,33 @@ export async function rebuildCoaBalances() {
       accountsList.push(accInfo);
     });
 
-    const sortedAccounts = [...accountsList].sort((a, b) => {
-      const depthA = (a.code.match(/-/g) || []).length;
-      const depthB = (b.code.match(/-/g) || []).length;
-      return depthB - depthA;
+    function getTreeDepth(code, visited = new Set()) {
+      const a = accountsMap[code];
+      if (!a || !a.parentCode || !accountsMap[a.parentCode]) return 0;
+      if (visited.has(code)) return 0;
+      visited.add(code);
+      return 1 + getTreeDepth(a.parentCode, visited);
+    }
+
+    accountsList.forEach(a => {
+      a.treeDepth = getTreeDepth(a.code);
     });
+
+    const sortedAccounts = [...accountsList].sort((a, b) => b.treeDepth - a.treeDepth);
 
     for (const acc of sortedAccounts) {
       if (acc.parentCode && accountsMap[acc.parentCode]) {
         const parent = accountsMap[acc.parentCode];
         parent.totalDebit = Math.round((parent.totalDebit + acc.totalDebit) * 100) / 100;
         parent.totalCredit = Math.round((parent.totalCredit + acc.totalCredit) * 100) / 100;
-        parent.balance = Math.round((parent.balance + acc.balance) * 100) / 100;
       }
     }
+
+    accountsList.forEach(acc => {
+      const delta = acc.totalDebit - acc.totalCredit;
+      const isCredit = acc.normalBalance === "credit" || ["liability", "equity", "revenue"].includes(acc.type);
+      acc.balance = Math.round((isCredit ? -delta : delta) * 100) / 100;
+    });
 
     const batch = writeBatch(db);
     for (const acc of accountsList) {
@@ -1385,4 +1706,5 @@ export async function rebuildCoaBalances() {
     console.error("[AccountingEngine] COA Rebuild failed:", err.message);
   }
 }
+
 

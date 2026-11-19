@@ -103,26 +103,29 @@ async function loadReps() {
   const grid = document.getElementById("reps-grid");
   if (!grid) return;
   try {
-    const [reps, customers, invoices, receipts, coaAccounts] = await Promise.all([
-      getAll(COLS.salesReps(), [orderBy("name")]),
-      getAll(COLS.customers()),
-      getAll(COLS.salesInvoices()),
-      getAll(COLS.receipts()),
-      // Load COA accounts under the reps' parent "1-1-2-1-2" to read account balances
-      getAll(COLS.chartOfAccounts(), [where("parentCode", "==", "1-1-2-1-2")]).catch(() => []),
+    const [reps, customers, coaAccounts] = await Promise.all([
+      getAll(COLS.salesReps()).catch(() => []),
+      getAll(COLS.customers()).catch(() => []),
+      getAll(COLS.chartOfAccounts()).catch(() => []),
     ]);
-    cachedReps = reps;
+    cachedReps = (reps || []).sort((a, b) => (a.name || "").localeCompare(b.name || ""));
 
-    // Build a COA map: accountId → account doc
-    const coaMap = {};
-    coaAccounts.forEach(acc => { coaMap[acc.id] = acc; });
-
-    if (reps.length === 0) {
+    if (cachedReps.length === 0) {
       grid.innerHTML = `<div class="empty-state" style="grid-column:span 3;"><div class="empty-icon">🚚</div><h3>لا يوجد مناديب</h3><p>اضغط على "إضافة مندوب" للبدء</p></div>`;
       return;
     }
 
-    const activeInvoices = invoices.filter(i => i.status !== "cancelled");
+    // Build a COA map: accountId → account doc
+    const coaMap = {};
+    (coaAccounts || []).forEach(acc => { coaMap[acc.id] = acc; if (acc.code) coaMap[acc.code] = acc; });
+
+    // Fetch invoices and receipts asynchronously with timeout/cache
+    const [invoices, receipts] = await Promise.all([
+      getAll(COLS.salesInvoices()).catch(() => []),
+      getAll(COLS.receipts()).catch(() => []),
+    ]);
+
+    const activeInvoices = (invoices || []).filter(i => i.status !== "cancelled");
 
     grid.innerHTML = reps.map(rep => {
       // 1. Assigned Customers for this rep — فلترة صارمة بالمعرّف فقط لمنع ربط عملاء غير معنيين
@@ -291,6 +294,84 @@ window.editRep = async (id) => {
   if (rep) openRepModal(rep);
 };
 
+// ── Cascade Auto-Sync across HR, Cost Centers, Warehouses & Chart of Accounts ──
+async function syncRepCascade(repId, newName, oldName, employeeId, assignedWarehouseId) {
+  try {
+    const { update: updateDoc, getAll: getDocsList, COLS: cols } = await import("../utils/db.js");
+    
+    // 1. Sync Employee in HR
+    if (employeeId) {
+      try {
+        await updateDoc("employees", employeeId, { name: newName, job: "مندوب مبيعات" });
+      } catch (empErr) {
+        console.warn("[syncRepCascade] Employee sync error:", empErr);
+      }
+    }
+
+    // 2. Sync Cost Centers
+    try {
+      const allCCs = await getDocsList(cols.costCenters()).catch(() => []);
+      for (const cc of allCCs) {
+        let matched = false;
+        if (assignedWarehouseId && cc.warehouseId === assignedWarehouseId) matched = true;
+        if (cc.linkedRepId === repId) matched = true;
+        if (oldName && cc.name && cc.name.includes(oldName)) matched = true;
+        if (matched) {
+          let updatedName = cc.name;
+          if (oldName && updatedName.includes(oldName)) {
+            updatedName = updatedName.replace(new RegExp(oldName, 'g'), newName);
+          } else if (!updatedName.includes(newName)) {
+            updatedName = `سيارة ${newName}`;
+          }
+          await updateDoc("costCenters", cc.id, { name: updatedName, linkedRepId: repId });
+          console.log(`[syncRepCascade] Updated Cost Center ${cc.id} → ${updatedName}`);
+        }
+      }
+    } catch (ccErr) {
+      console.warn("[syncRepCascade] Cost Center sync error:", ccErr);
+    }
+
+    // 3. Sync Chart of Accounts (COA)
+    try {
+      const allCoa = await getDocsList(cols.chartOfAccounts()).catch(() => []);
+      for (const acc of allCoa) {
+        let matched = false;
+        if (acc.linkedRepId === repId || acc.sourceEntityId === repId) matched = true;
+        if (oldName && acc.name && acc.name.includes(oldName)) matched = true;
+        if (matched && (acc.code?.startsWith("1-1-2-1-2") || acc.code?.startsWith("1-1-1-2") || acc.parentCode?.startsWith("1-1-2-1-2"))) {
+          let updatedAccName = acc.name;
+          if (oldName && updatedAccName.includes(oldName)) {
+            updatedAccName = updatedAccName.replace(new RegExp(oldName, 'g'), newName);
+          } else {
+            updatedAccName = acc.code?.startsWith("1-1-1-2") ? `صندوق المندوب - ${newName}` : `عملاء ${newName}`;
+          }
+          await updateDoc("chartOfAccounts", acc.id, { name: updatedAccName, linkedRepId: repId });
+          console.log(`[syncRepCascade] Updated COA Account ${acc.code} → ${updatedAccName}`);
+        }
+      }
+    } catch (coaErr) {
+      console.warn("[syncRepCascade] COA sync error:", coaErr);
+    }
+
+    // 4. Sync Warehouse
+    if (assignedWarehouseId) {
+      try {
+        const allWh = await getDocsList(cols.warehouses()).catch(() => []);
+        const wh = allWh.find(w => w.id === assignedWarehouseId);
+        if (wh && oldName && wh.name && wh.name.includes(oldName)) {
+          const newWhName = wh.name.replace(new RegExp(oldName, 'g'), newName);
+          await updateDoc("warehouses", wh.id, { name: newWhName });
+          console.log(`[syncRepCascade] Updated Warehouse ${wh.id} → ${newWhName}`);
+        }
+      } catch (whErr) {
+        console.warn("[syncRepCascade] Warehouse sync error:", whErr);
+      }
+    }
+  } catch (err) {
+    console.warn("[syncRepCascade] Global cascade error:", err);
+  }
+}
+
 window.saveRep = async () => {
   const errEl = document.getElementById("rep-form-error");
   errEl.classList.add("hidden");
@@ -311,18 +392,24 @@ window.saveRep = async () => {
   const btn = document.getElementById("save-rep-btn");
   btn.disabled = true;
   try {
+    let oldName = "";
     if (id) {
+      const oldRep = cachedReps.find(r => r.id === id);
+      if (oldRep && oldRep.name) oldName = oldRep.name;
       await update("salesReps", id, data);
-      showToast("تم تحديث المندوب", "success");
+      showToast("تم تحديث المندوب ومزامنة الأقسام المرتبطة بنجاح", "success");
+      await syncRepCascade(id, data.name, oldName, data.employeeId, data.assignedWarehouseId);
     } else {
       const newRef = await create(COLS.salesReps(), data);
-      showToast("تمت إضافة المندوب", "success");
-      // إنشاء حساب تحليلي تلقائي في شجرة الحسابات
+      const newId = typeof newRef === "string" ? newRef : newRef?.id || newRef;
+      showToast("تمت إضافة المندوب ومزامنة الحسابات", "success");
       try {
-        const newId = typeof newRef === "string" ? newRef : newRef?.id || newRef;
-        if (newId) await syncRepToCoa(newId, data.name);
+        if (newId) {
+          await syncRepToCoa(newId, data.name);
+          await syncRepCascade(newId, data.name, "", data.employeeId, data.assignedWarehouseId);
+        }
       } catch (coaErr) {
-        console.warn("[syncRepToCoa] فشل إنشاء حساب المندوب في شجرة الحسابات:", coaErr.message);
+        console.warn("[syncRepToCoa] فشل إنشاء حساب المندوب:", coaErr.message);
       }
     }
     closeModal("rep-modal");

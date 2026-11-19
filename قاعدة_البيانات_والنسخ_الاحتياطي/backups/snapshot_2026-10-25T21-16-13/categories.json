@@ -1,0 +1,312 @@
+[
+  {
+    "id": "baby",
+    "description": "أصناف تابعة لقسم أطفال وحفاضات",
+    "velocity": "slow",
+    "code": "baby",
+    "name": "أطفال وحفاضات",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "icon": "👶"
+  },
+  {
+    "id": "bakery",
+    "code": "bakery",
+    "name": "مخبوزات وخبز",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "description": "أصناف تابعة لقسم مخبوزات وخبز",
+    "icon": "🥖",
+    "velocity": "medium",
+    "createdAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "beverages",
+    "icon": "🧃",
+    "description": "أصناف تابعة لقسم مشروبات وعصائر",
+    "velocity": "fast",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "name": "مشروبات وعصائر",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "beverages"
+  },
+  {
+    "id": "biscuits",
+    "icon": "🍪",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "biscuits",
+    "description": "أصناف تابعة لقسم بسكويت وكيك",
+    "velocity": "medium",
+    "name": "بسكويت وكيك",
+    "createdAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "canned",
+    "icon": "🥫",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "code": "canned",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "name": "معلبات وصلصات",
+    "velocity": "medium",
+    "description": "أصناف تابعة لقسم معلبات وصلصات"
+  },
+  {
+    "id": "cleaning",
+    "icon": "🧴",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "velocity": "slow",
+    "code": "cleaning",
+    "name": "منظفات ومعطرات",
+    "description": "أصناف تابعة لقسم منظفات ومعطرات",
+    "createdAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "coffee_tea",
+    "velocity": "slow",
+    "name": "قهوة وشاي",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "code": "coffee_tea",
+    "description": "أصناف تابعة لقسم قهوة وشاي",
+    "icon": "☕",
+    "updatedAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "confectionery",
+    "icon": "🍫",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "velocity": "medium",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "confectionery",
+    "name": "حلويات وشوكولاتة",
+    "description": "أصناف تابعة لقسم حلويات وشوكولاتة"
+  },
+  {
+    "id": "dairy",
+    "code": "dairy",
+    "name": "ألبان ومنتجاتها",
+    "updatedAt": "2026-10-06T11:15:58.399Z",
+    "icon": "🥛",
+    "description": "أصناف تابعة لقسم ألبان ومنتجاتها",
+    "velocity": "fast",
+    "createdAt": "2026-10-06T11:15:58.399Z"
+  },
+  {
+    "id": "dates",
+    "icon": "🌴",
+    "velocity": "medium",
+    "description": "أصناف تابعة لقسم تمور ومنتجاتها",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "dates",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "name": "تمور ومنتجاتها"
+  },
+  {
+    "id": "disposables",
+    "description": "أصناف تابعة لقسم أكواب ومستلزمات ضيافة",
+    "code": "disposables",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "velocity": "medium",
+    "name": "أكواب ومستلزمات ضيافة",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "icon": "🥤"
+  },
+  {
+    "id": "dry_goods",
+    "description": "أصناف تابعة لقسم سكر ودقيق ومعجنات",
+    "velocity": "fast",
+    "code": "dry_goods",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "name": "سكر ودقيق ومعجنات",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "icon": "🍞"
+  },
+  {
+    "id": "egg",
+    "velocity": "fast",
+    "createdAt": "2026-10-06T11:15:58.401Z",
+    "name": "بيض طازج",
+    "code": "egg",
+    "description": "أصناف تابعة لقسم بيض طازج",
+    "updatedAt": "2026-10-06T11:15:58.401Z",
+    "icon": "🥚"
+  },
+  {
+    "id": "frozen",
+    "name": "أغذية مجمدة",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "code": "frozen",
+    "description": "أصناف تابعة لقسم أغذية مجمدة",
+    "velocity": "slow",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "icon": "🧊"
+  },
+  {
+    "id": "frozen_veg",
+    "icon": "🥦",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "frozen_veg",
+    "name": "خضروات مجمدة",
+    "velocity": "medium",
+    "description": "أصناف تابعة لقسم خضروات مجمدة",
+    "createdAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "honey_jam",
+    "icon": "🍯",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "description": "أصناف تابعة لقسم عسل ومربيات وطحينة",
+    "velocity": "medium",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "name": "عسل ومربيات وطحينة",
+    "code": "honey_jam"
+  },
+  {
+    "id": "ice_cream",
+    "icon": "🍦",
+    "velocity": "medium",
+    "createdAt": "2026-10-06T11:15:58.401Z",
+    "code": "ice_cream",
+    "description": "أصناف تابعة لقسم آيس كريم وحلويات باردة",
+    "name": "آيس كريم وحلويات باردة",
+    "updatedAt": "2026-10-06T11:15:58.401Z"
+  },
+  {
+    "id": "meat_poultry",
+    "velocity": "slow",
+    "code": "meat_poultry",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "description": "أصناف تابعة لقسم لحوم ودواجن مجمدة",
+    "name": "لحوم ودواجن مجمدة",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "icon": "🍗"
+  },
+  {
+    "id": "nuts_seeds",
+    "name": "مكسرات وبذور",
+    "code": "nuts_seeds",
+    "createdAt": "2026-10-06T11:15:58.401Z",
+    "updatedAt": "2026-10-06T11:15:58.401Z",
+    "icon": "🌰",
+    "description": "أصناف تابعة لقسم مكسرات وبذور",
+    "velocity": "medium"
+  },
+  {
+    "id": "oils",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "name": "زيوت وسمن",
+    "code": "oils",
+    "velocity": "fast",
+    "icon": "🌻",
+    "description": "أصناف تابعة لقسم زيوت وسمن",
+    "updatedAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "personal_care",
+    "velocity": "slow",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "description": "أصناف تابعة لقسم عناية شخصية وورقيات",
+    "icon": "🧻",
+    "name": "عناية شخصية وورقيات",
+    "code": "personal_care",
+    "updatedAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "pickles",
+    "icon": "🥒",
+    "velocity": "medium",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "pickles",
+    "description": "أصناف تابعة لقسم مخللات وأجبان مكشوفة",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "name": "مخللات وأجبان مكشوفة"
+  },
+  {
+    "id": "plastics",
+    "description": "أصناف تابعة لقسم بلاستيكيات ومستلزمات تغليف",
+    "icon": "🛍️",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "plastics",
+    "velocity": "medium",
+    "name": "بلاستيكيات ومستلزمات تغليف"
+  },
+  {
+    "id": "rice_grains",
+    "description": "أصناف تابعة لقسم أرز وحبوب",
+    "icon": "🌾",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "name": "أرز وحبوب",
+    "code": "rice_grains",
+    "velocity": "fast",
+    "updatedAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "sauces",
+    "updatedAt": "2026-10-06T11:15:58.401Z",
+    "description": "أصناف تابعة لقسم صلصات ومايونيز وتوابل سائلة",
+    "icon": "🍯",
+    "velocity": "medium",
+    "name": "صلصات ومايونيز وتوابل سائلة",
+    "code": "sauces",
+    "createdAt": "2026-10-06T11:15:58.401Z"
+  },
+  {
+    "id": "seafood",
+    "velocity": "slow",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "code": "seafood",
+    "name": "أسماك ومأكولات بحرية",
+    "description": "أصناف تابعة لقسم أسماك ومأكولات بحرية",
+    "icon": "🐟",
+    "updatedAt": "2026-10-06T11:15:58.400Z"
+  },
+  {
+    "id": "snacks",
+    "description": "أصناف تابعة لقسم شيبس ومكسرات",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "icon": "🥜",
+    "name": "شيبس ومكسرات",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "code": "snacks",
+    "velocity": "medium"
+  },
+  {
+    "id": "spices",
+    "description": "أصناف تابعة لقسم توابل وبهارات",
+    "icon": "🧂",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "name": "توابل وبهارات",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "spices",
+    "velocity": "slow"
+  },
+  {
+    "id": "tobacco",
+    "icon": "🚬",
+    "createdAt": "2026-10-06T11:15:58.401Z",
+    "velocity": "slow",
+    "description": "أصناف تابعة لقسم تبغ ومستلزمات تدخين",
+    "updatedAt": "2026-10-06T11:15:58.401Z",
+    "name": "تبغ ومستلزمات تدخين",
+    "code": "tobacco"
+  },
+  {
+    "id": "veg_fruits",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "name": "خضار وفواكه طازجة",
+    "code": "veg_fruits",
+    "description": "أصناف تابعة لقسم خضار وفواكه طازجة",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "velocity": "fast",
+    "icon": "🍅"
+  },
+  {
+    "id": "water",
+    "updatedAt": "2026-10-06T11:15:58.400Z",
+    "code": "water",
+    "velocity": "fast",
+    "name": "مياه معبأة",
+    "icon": "💧",
+    "createdAt": "2026-10-06T11:15:58.400Z",
+    "description": "أصناف تابعة لقسم مياه معبأة"
+  }
+]

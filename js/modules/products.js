@@ -19,6 +19,35 @@ let filterCategory = "";
 let filterStatus = "";
 let warehouses = [];
 let categories = [];
+let suppliers = [];
+
+async function loadSuppliersForProducts() {
+  if (!suppliers || suppliers.length === 0) {
+    try {
+      suppliers = await getAll(COLS.suppliers(), [orderBy("name")]);
+    } catch (e) {
+      console.warn("Failed to load suppliers with orderBy, falling back:", e);
+      try {
+        suppliers = await getAll(COLS.suppliers());
+        suppliers.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
+      } catch (err) {
+        suppliers = [];
+      }
+    }
+  }
+  populateProductSupplierDropdown();
+}
+
+function populateProductSupplierDropdown(selectedVal = null) {
+  const prodSupEl = document.getElementById("prod-supplier");
+  if (!prodSupEl) return;
+  const curVal = selectedVal !== null ? selectedVal : prodSupEl.value;
+  prodSupEl.innerHTML = '<option value="">اختر المورد الافتراضي...</option>' +
+    (suppliers || []).map(s => `<option value="${s.id}">${s.name}${s.code ? ` (${s.code})` : ''}</option>`).join("");
+  if (curVal) {
+    prodSupEl.value = curVal;
+  }
+}
 
 let sortFieldProd = "sku"; // Default sort by SKU
 let sortAscProd = true;   // Default ascending
@@ -69,8 +98,8 @@ function renderProductRowsHtml(docs) {
     );
     const status = getStockStatus(totalQty, p.reorderLevel || 0);
     const costVal     = p.costPrice || p.purchasePrice || 0;
-    const avgCostVal  = p.avgCostPrice || p.averageCost || costVal;   // المتوسط المرجح من الفواتير
-    const lastPurVal  = p.lastPurchasePrice || (p.lastPurchasePrice === 0 ? 0 : (p.avgCostPrice || (costVal > 0 ? costVal : null))); // آخر سعر شراء
+    const avgCostVal  = p.averageCost || p.avgCostPrice || costVal;   // المتوسط المرجح من الفواتير والمخزون
+    const lastPurVal  = p.lastPurchasePrice || (p.lastPurchasePrice === 0 ? 0 : (p.averageCost || p.avgCostPrice || (costVal > 0 ? costVal : null))); // آخر سعر شراء
     const saleVal = p.sellingPrice || p.salePrice || p.priceRetail || p.price || 0;
     // الهامش يُحسب من آخر سعر شراء كأولوية لحماية الأرباح من التآكل
     const effectiveCost = (lastPurVal && lastPurVal > 0) ? lastPurVal : (avgCostVal || costVal);
@@ -113,8 +142,8 @@ function renderProductRowsHtml(docs) {
 
         <td class="mono font-bold" style="text-align:left;"
             title="المتوسط المرجح المحسوب تلقائياً من فواتير الشراء">
-          ${p.avgCostPrice !== undefined && p.avgCostPrice !== null && p.avgCostPrice > 0
-            ? `<span style="color:var(--brand);">${formatCurrency(p.avgCostPrice)}</span>`
+          ${avgCostVal > 0
+            ? `<span style="color:var(--brand);">${formatCurrency(avgCostVal)}</span>`
             : (costVal > 0 ? `<span class="dim" style="font-size:11px;" title="التكلفة اليدوية">${formatCurrency(costVal)}</span>` : `<span class="dim" style="font-size:11px;">—</span>`)}
         </td>
 
@@ -239,14 +268,14 @@ export async function render(container, user) {
         <div class="inv-kpi-icon">💰</div>
         <div class="inv-kpi-body">
           <div class="inv-kpi-value" id="kpi-total-val">${cachedKPIs ? formatCurrency(cachedKPIs.totalValue) : '—'}</div>
-          <div class="inv-kpi-label">قيمة المخزون (سعر البيع)</div>
+          <div class="inv-kpi-label">قيمة المخزون (سعر البيع المتوقع)</div>
         </div>
       </div>
       <div class="inv-kpi-card g-teal">
         <div class="inv-kpi-icon">🏷️</div>
         <div class="inv-kpi-body">
           <div class="inv-kpi-value" id="kpi-total-cost">${cachedKPIs ? formatCurrency(cachedKPIs.totalCost) : '—'}</div>
-          <div class="inv-kpi-label">تكلفة المخزون (الشرائية)</div>
+          <div class="inv-kpi-label">تكلفة المخزون الشرائية (المطابقة للمحاسبة)</div>
         </div>
       </div>
       <div class="inv-kpi-card g-green">
@@ -687,17 +716,31 @@ export async function render(container, user) {
 
     <!-- Enhanced Stock Ledger & Batch Card Modal -->
     <div class="modal-overlay" id="stock-modal">
-      <div class="modal" style="max-width:1100px; width:97%; max-height:92vh; display:flex; flex-direction:column;">
-        <div class="modal-header" style="border-bottom:none; padding-bottom:0; flex-shrink:0;">
-          <h3 class="modal-title" id="stock-modal-title">تفاصيل بطاقة الصنف</h3>
-          <button class="modal-close" onclick="closeModal('stock-modal')">×</button>
+      <div class="modal" id="stock-modal-card" style="max-width:98vw; width:98vw; height:95vh; max-height:95vh; display:flex; flex-direction:column; border-radius:14px; box-shadow:0 15px 40px rgba(0,0,0,0.3); transition:all 0.2s ease;">
+        <div class="modal-header" style="border-bottom:none; padding:12px 20px 8px 20px; flex-shrink:0; display:flex; justify-content:space-between; align-items:center;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:22px;">📋</span>
+            <div>
+              <h3 class="modal-title" id="stock-modal-title" style="margin:0; font-size:16px; font-weight:900;">تفاصيل بطاقة الصنف</h3>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" class="btn btn-sm" onclick="window.openFullStockCardFromModal()" style="display:inline-flex; align-items:center; gap:5px; font-weight:800; font-size:11.5px; padding:5px 14px; background:linear-gradient(135deg, #0f3d19, #1e5a2a); color:#fff; border:none; border-radius:6px; cursor:pointer;" title="فتح كرت الصنف الشامل بحجم الشاشة الكاملة">
+              <span>📊</span>
+              <span>فتح الكرت الشامل المخصص</span>
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" id="stock-modal-fs-btn" onclick="window.toggleStockModalFullscreen()" style="font-size:14px; padding:4px 10px; font-weight:bold;" title="تكبير / استعادة">
+              ⛶
+            </button>
+            <button class="modal-close" onclick="closeModal('stock-modal')" style="font-size:20px; width:32px; height:32px; display:flex; align-items:center; justify-content:center; border-radius:8px;">×</button>
+          </div>
         </div>
-        <div class="modal-tabs" style="display:flex; border-bottom:1px solid var(--border-soft); margin: 0 24px 0 24px; flex-shrink:0;">
-          <button class="tab-btn active" id="tab-btn-balances" onclick="switchStockTab('balances')" style="padding:10px 18px; border:none; background:none; cursor:pointer; font-weight:bold; border-bottom:2px solid var(--brand); color:var(--brand);">📦 أرصدة المخازن</button>
-          <button class="tab-btn" id="tab-btn-batches" onclick="switchStockTab('batches')" style="padding:10px 18px; border:none; background:none; cursor:pointer; font-weight:bold; border-bottom:2px solid transparent; color:var(--text-2);">🧬 التشغيلات والتواريخ</button>
-          <button class="tab-btn" id="tab-btn-card" onclick="switchStockTab('card')" style="padding:10px 18px; border:none; background:none; cursor:pointer; font-weight:bold; border-bottom:2px solid transparent; color:var(--text-2);">📜 دفتر الحركة التفصيلي</button>
+        <div class="modal-tabs" style="display:flex; border-bottom:1px solid var(--border-soft); margin: 0 20px; flex-shrink:0; gap:4px;">
+          <button class="tab-btn active" id="tab-btn-balances" onclick="switchStockTab('balances')" style="padding:10px 18px; border:none; background:none; cursor:pointer; font-weight:800; border-bottom:2.5px solid var(--brand); color:var(--brand); font-size:12.5px;">📦 أرصدة المخازن والسيارات</button>
+          <button class="tab-btn" id="tab-btn-batches" onclick="switchStockTab('batches')" style="padding:10px 18px; border:none; background:none; cursor:pointer; font-weight:800; border-bottom:2.5px solid transparent; color:var(--text-2); font-size:12.5px;">🧬 التشغيلات والتواريخ</button>
+          <button class="tab-btn" id="tab-btn-card" onclick="switchStockTab('card')" style="padding:10px 18px; border:none; background:none; cursor:pointer; font-weight:800; border-bottom:2.5px solid transparent; color:var(--text-2); font-size:12.5px;">📜 دفتر الحركة وسلسلة الإمداد</button>
         </div>
-        <div class="modal-body" id="stock-modal-body" style="flex:1; overflow-y:auto; padding:0;">
+        <div class="modal-body" id="stock-modal-body" style="flex:1; display:flex; flex-direction:column; overflow:hidden; padding:0; height:100%;">
           <!-- Will be loaded dynamically -->
         </div>
       </div>
@@ -726,7 +769,9 @@ export async function render(container, user) {
   await loadProducts(true);
 }
 
-export async function loadProducts(reset = false) {
+window.refreshProducts = () => loadProducts(true, true);
+
+export async function loadProducts(reset = false, forceRefresh = false) {
   if (reset) {
     lastDocSnapshot = null;
     currentPage = 0;
@@ -808,34 +853,38 @@ export async function loadProducts(reset = false) {
         categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
     }
 
-    // ── 2. Load warehouses if not loaded yet ─────────────────────
-    if (!warehouses || warehouses.length === 0) {
-      warehouses = await getAll(COLS.warehouses());
+    // ── 1.b. Load suppliers and populate #prod-supplier ─────────────
+    loadSuppliersForProducts().catch(() => {});
+
+    // ── 2 & 3. Parallel fetch: warehouses, products and stock quantities ──────────────
+    if (forceRefresh) {
+      const { clearERPCache } = await import("../utils/db.js");
+      await Promise.all([
+        clearERPCache(COLS.stockByWarehouse().path),
+        clearERPCache(COLS.products().path)
+      ]);
     }
 
-    // ── 3. Fetch ALL products and stock quantities ──────────────────
-    const { clearERPCache } = await import("../utils/db.js");
-    await clearERPCache(COLS.stockByWarehouse().path);
-    await clearERPCache(COLS.products().path);
+    const [whs, docsRaw, stockDocs] = await Promise.all([
+      (!warehouses || warehouses.length === 0) ? getAll(COLS.warehouses()).catch(() => []) : Promise.resolve(warehouses),
+      getAll(COLS.products()),
+      getAll(COLS.stockByWarehouse()).catch(() => [])
+    ]);
 
-    let docs = await getAll(COLS.products());
+    if (whs && whs.length) warehouses = whs;
+
+    let docs = (docsRaw || []).filter(p => p && (p.name || p.nameAr || p.sku));
     docs.sort((a, b) => (a.sku || "").localeCompare(b.sku || "", undefined, { numeric: true }));
 
-    // ── Load live stock quantities from server ─────────────────────────────
-    try {
-      const stockDocs = await getAll(COLS.stockByWarehouse());
-      const stockMap = {};
-      stockDocs.forEach(data => {
-        if (data.productId) {
-          stockMap[data.productId] = (stockMap[data.productId] || 0) + (data.qty || 0);
-        }
-      });
-      docs.forEach(p => {
-        p._totalQty = stockMap[p.id] !== undefined ? stockMap[p.id] : (p.totalQty !== undefined ? p.totalQty : 0);
-      });
-    } catch (e) {
-      console.warn("Stock balances unavailable:", e);
-    }
+    const stockMap = {};
+    (stockDocs || []).forEach(data => {
+      if (data.productId) {
+        stockMap[data.productId] = (stockMap[data.productId] || 0) + (data.qty || 0);
+      }
+    });
+    docs.forEach(p => {
+      p._totalQty = stockMap[p.id] !== undefined ? stockMap[p.id] : (p.totalQty !== undefined ? p.totalQty : 0);
+    });
     allProducts = docs;
 
     // ── 4. Client-side filtering ──────────────────────────────────
@@ -926,7 +975,7 @@ export async function loadProducts(reset = false) {
       const qty    = p._totalQty  || 0;
       // avgCostPrice = المتوسط المرجح المُحسَب من الفواتير (يتطابق مع شجرة الحسابات)
       // إذا لم يُحسَب بعد، نرجع للـ costPrice اليدوي
-      const cPrice = p.avgCostPrice || p.costPrice  || p.purchasePrice || 0;
+      const cPrice = p.averageCost || p.costPrice || p.lastPurchasePrice || p.avgCostPrice || p.purchasePrice || 0;
       const sPrice = p.sellingPrice || p.salePrice  || p.priceRetail || p.price || 0;
       totalValue += qty * sPrice;
       totalCost  += qty * cPrice;
@@ -1228,16 +1277,41 @@ window.toggleTrackingFields = () => {
   }
 };
 
-window.openProductModal = (prod = null) => {
+window.openProductModal = async (prod = null) => {
   switchProdFormTab('basic');
   document.getElementById("prod-edit-id").value = prod?.id || "";
   document.getElementById("prod-modal-title").textContent = prod ? "تعديل بطاقة الصنف" : "إضافة صنف جديد";
-  
+
+  // Ensure categories are loaded in modal
+  const prodCatEl = document.getElementById("prod-category");
+  if (prodCatEl && (prodCatEl.options.length <= 1 && categories && categories.length > 0)) {
+    prodCatEl.innerHTML = '<option value="">اختر الفئة...</option>' +
+      categories.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+  }
+
+  // Ensure suppliers are loaded in modal
+  if (!suppliers || suppliers.length === 0) {
+    await loadSuppliersForProducts();
+  } else {
+    populateProductSupplierDropdown(prod?.supplierId || "");
+  }
+
+  const prodSupEl = document.getElementById("prod-supplier");
+
   document.getElementById("prod-sku").value = prod?.sku || "";
   document.getElementById("prod-name-ar").value = prod?.name || prod?.nameAr || "";
   document.getElementById("prod-name-en").value = prod?.nameEn || "";
-  document.getElementById("prod-category").value = prod?.category || "";
-  document.getElementById("prod-supplier").value = prod?.supplierId || "";
+  if (prodCatEl) prodCatEl.value = prod?.category || "";
+  if (prodSupEl) {
+    prodSupEl.value = prod?.supplierId || "";
+    if (prod?.supplierId && prodSupEl.value !== prod.supplierId) {
+      const opt = document.createElement("option");
+      opt.value = prod.supplierId;
+      opt.textContent = prod.supplierName || `مورد (${prod.supplierId})`;
+      prodSupEl.appendChild(opt);
+      prodSupEl.value = prod.supplierId;
+    }
+  }
   document.getElementById("prod-origin").value = prod?.country || "";
   document.getElementById("prod-barcode").value = prod?.barcode || "";
   document.getElementById("prod-barcodes-alt").value = (prod?.alternativeBarcodes || []).join(", ");
@@ -1369,6 +1443,8 @@ window.saveProduct = async () => {
 
   const catId = document.getElementById("prod-category").value;
   const cat = categories.find(c => c.id === catId);
+  const supId = document.getElementById("prod-supplier")?.value || "";
+  const selSup = (suppliers || []).find(s => s.id === supId);
 
   const locationsByWarehouse = {};
   document.querySelectorAll(".sc-wh-loc-input").forEach(inp => {
@@ -1387,7 +1463,8 @@ window.saveProduct = async () => {
     nameEn: document.getElementById("prod-name-en").value.trim(),
     category: catId,
     categoryName: cat?.name || "",
-    supplierId: document.getElementById("prod-supplier").value,
+    supplierId: supId,
+    supplierName: selSup?.name || "",
     country: document.getElementById("prod-origin").value.trim(),
     barcode: document.getElementById("prod-barcode").value.trim(),
     alternativeBarcodes: document.getElementById("prod-barcodes-alt").value.split(",").map(b => b.trim()).filter(Boolean),
@@ -1531,6 +1608,23 @@ let cachedPartyMap = new Map();
 let cachedDocMetaMap = new Map();
 let currentLedgerCalculated = [];
 let cachedLedgerSort = "desc"; // Default: newest first
+let cachedModalPathFilter = "all"; // "all" | "main" | "transfers" | "van_sales" | "clean"
+
+function isVehicleWhModal(whId, whName = "") {
+  if (!whId) return false;
+  const w = warehouses.find(x => x.id === whId);
+  const name = (w?.name || whName || "").toLowerCase();
+  const type = (w?.type || "").toLowerCase();
+  return type === "vehicle" || type === "distribution" || /سيارة|سياره|مندوب|vehicle|car|\brep\b|مصطفى|علي|ناجي/i.test(name);
+}
+
+function isMainWhModal(whId, whName = "") {
+  if (!whId) return true;
+  const w = warehouses.find(x => x.id === whId);
+  const name = (w?.name || whName || "").toLowerCase();
+  const type = (w?.type || "").toLowerCase();
+  return type === "main" || /رئيسي|رئيسى|main/i.test(name) || whId === "W5uANJjMgfFh2p3xU4bT";
+}
 
 window.switchStockTab = async (tab) => {
   const btnBal = document.getElementById("tab-btn-balances");
@@ -1577,10 +1671,10 @@ window.switchStockTab = async (tab) => {
     } else {
       if (!cachedStockTxs.length) {
         const [snap, siSnap, purSnap, transfersSnap, balSnap] = await Promise.all([
-          getDocs(query(COLS.stockTransactions(), where("productId", "==", currentProductId))),
-          getDocs(COLS.salesInvoices ? COLS.salesInvoices() : collection(db, `companies/${COMPANY_ID}/salesInvoices`)).catch(() => ({ docs: [] })),
-          getDocs(COLS.purchaseInvoices ? COLS.purchaseInvoices() : collection(db, `companies/${COMPANY_ID}/purchaseInvoices`)).catch(() => ({ docs: [] })),
-          getDocs(COLS.stockTransfers ? COLS.stockTransfers() : collection(db, `companies/${COMPANY_ID}/stockTransfers`)).catch(() => ({ docs: [] })),
+          getDocs(query(COLS.stockTransactions(), where("productId", "==", currentProductId), limit(200))),
+          getAll(COLS.salesInvoices ? COLS.salesInvoices() : "salesInvoices", [orderBy("date", "desc"), limit(100)]).catch(() => []),
+          getAll(COLS.purchaseInvoices ? COLS.purchaseInvoices() : "purchaseInvoices", [orderBy("date", "desc"), limit(100)]).catch(() => []),
+          getAll(COLS.stockTransfers ? COLS.stockTransfers() : "stockTransfers", [orderBy("date", "desc"), limit(100)]).catch(() => []),
           getStockForProduct(currentProductId).catch(() => [])
         ]);
 
@@ -1588,33 +1682,33 @@ window.switchStockTab = async (tab) => {
         cachedPartyMap = new Map();
         cachedDocMetaMap = new Map();
 
-        (siSnap.docs || []).forEach(d => {
-          const inv = d.data();
+        const siList = Array.isArray(siSnap) ? siSnap : (siSnap.docs ? siSnap.docs.map(d => ({ id: d.id, ...d.data() })) : []);
+        siList.forEach(inv => {
           const p = inv.customerName || inv.clientName || "عميل نقدي";
           const num = inv.invoiceNumber || inv.number || inv.code;
-          const data = { type: "sale", party: p, rep: inv.repName || "", status: inv.status, id: d.id, date: inv.date };
+          const data = { type: "sale", party: p, rep: inv.repName || "", status: inv.status, id: inv.id, date: inv.date };
           if (num) { cachedPartyMap.set(num, p); cachedDocMetaMap.set(num, data); }
-          if (d.id) { cachedPartyMap.set(d.id, p); cachedDocMetaMap.set(d.id, data); }
+          if (inv.id) { cachedPartyMap.set(inv.id, p); cachedDocMetaMap.set(inv.id, data); }
         });
 
-        (purSnap.docs || []).forEach(d => {
-          const pur = d.data();
+        const purList = Array.isArray(purSnap) ? purSnap : (purSnap.docs ? purSnap.docs.map(d => ({ id: d.id, ...d.data() })) : []);
+        purList.forEach(pur => {
           const p = pur.supplierName || pur.vendorName || "مورد معتمد";
           const num = pur.invoiceNumber || pur.number || pur.code;
-          const data = { type: "purchase", party: p, status: pur.status, id: d.id, date: pur.date };
+          const data = { type: "purchase", party: p, status: pur.status, id: pur.id, date: pur.date };
           if (num) { cachedPartyMap.set(num, p); cachedDocMetaMap.set(num, data); }
-          if (d.id) { cachedPartyMap.set(d.id, p); cachedDocMetaMap.set(d.id, data); }
+          if (pur.id) { cachedPartyMap.set(pur.id, p); cachedDocMetaMap.set(pur.id, data); }
         });
 
-        (transfersSnap.docs || []).forEach(d => {
-          const tr = d.data();
+        const trList = Array.isArray(transfersSnap) ? transfersSnap : (transfersSnap.docs ? transfersSnap.docs.map(d => ({ id: d.id, ...d.data() })) : []);
+        trList.forEach(tr => {
           const num = tr.number || tr.code || tr.transferNumber;
           const fromN = tr.fromWarehouseName || "المستودع الرئيسي";
           const toN = tr.toWarehouseName || "المستودع";
           const p = `${fromN} ⬅️ ${toN}`;
-          const data = { type: "transfer", party: p, fromN, toN, status: tr.status, id: d.id, date: tr.date };
+          const data = { type: "transfer", party: p, fromN, toN, status: tr.status, id: tr.id, date: tr.date };
           if (num) { cachedPartyMap.set(num, p); cachedDocMetaMap.set(num, data); }
-          if (d.id) { cachedPartyMap.set(d.id, p); cachedDocMetaMap.set(d.id, data); }
+          if (tr.id) { cachedPartyMap.set(tr.id, p); cachedDocMetaMap.set(tr.id, data); }
         });
 
         cachedStockTxs = snap.docs.map(d => {
@@ -1644,28 +1738,30 @@ function renderStockBalances() {
     body.innerHTML = `<div class="empty-state" style="padding:20px;"><div class="empty-icon">📦</div><p>لا يوجد رصيد في أي مخزن</p></div>`;
   } else {
     body.innerHTML = `
-      <table class="data-dense" style="width:100%;">
-        <thead><tr><th>المخزن / موقع الرف</th><th>الكمية المتوفرة</th><th>حد الطلب</th><th>الحالة</th></tr></thead>
-        <tbody>
-          ${cachedStockBalances.map(s => {
-            const wName = warehouseMap[s.warehouseId] || s.warehouseId;
-            const locVal = locations[s.warehouseId] || "";
-            const locStr = locVal ? `<span class="dim" style="font-size:10px; display:block; margin-top:2px;">📍 الرف/الموقع: ${locVal}</span>` : `<span class="dim" style="font-size:10px; display:block; margin-top:2px;">📍 الموقع غير محدد</span>`;
-            const st    = getStockStatus(s.qty, s.reorderLevel || 0);
-            return `<tr>
-              <td><strong>${wName}</strong>${locStr}</td>
-              <td class="mono font-bold">${formatQuantity(s.qty)}</td>
-              <td class="mono dim">${s.reorderLevel || 0}</td>
-              <td>${getStockStatusBadge(s.qty, s.reorderLevel)}</td>
-            </tr>`;
-          }).join("")}
-          <tr style="border-top:2px solid var(--border);">
-            <td class="font-bold">الإجمالي</td>
-            <td class="mono font-bold text-indigo">${formatQuantity(cachedStockBalances.reduce((s,r) => s + r.qty, 0))}</td>
-            <td></td><td></td>
-          </tr>
-        </tbody>
-      </table>`;
+      <div style="flex:1; overflow-y:auto; padding:16px;">
+        <table class="data-dense" style="width:100%;">
+          <thead><tr><th>المخزن / موقع الرف</th><th>الكمية المتوفرة</th><th>حد الطلب</th><th>الحالة</th></tr></thead>
+          <tbody>
+            ${cachedStockBalances.map(s => {
+              const wName = warehouseMap[s.warehouseId] || s.warehouseId;
+              const locVal = locations[s.warehouseId] || "";
+              const locStr = locVal ? `<span class="dim" style="font-size:10px; display:block; margin-top:2px;">📍 الرف/الموقع: ${locVal}</span>` : `<span class="dim" style="font-size:10px; display:block; margin-top:2px;">📍 الموقع غير محدد</span>`;
+              const st    = getStockStatus(s.qty, s.reorderLevel || 0);
+              return `<tr>
+                <td><strong>${wName}</strong>${locStr}</td>
+                <td class="mono font-bold">${formatQuantity(s.qty)}</td>
+                <td class="mono dim">${s.reorderLevel || 0}</td>
+                <td>${getStockStatusBadge(s.qty, s.reorderLevel)}</td>
+              </tr>`;
+            }).join("")}
+            <tr style="border-top:2px solid var(--border);">
+              <td class="font-bold">الإجمالي</td>
+              <td class="mono font-bold text-indigo">${formatQuantity(cachedStockBalances.reduce((s,r) => s + r.qty, 0))}</td>
+              <td></td><td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>`;
   }
 }
 
@@ -1675,23 +1771,25 @@ function renderBatches() {
     body.innerHTML = `<div class="empty-state" style="padding:20px;"><div class="empty-icon">🧬</div><p>لا توجد تشغيلات (Batches) فعالة أو منتهية الصلاحية مسجلة</p></div>`;
   } else {
     body.innerHTML = `
-      <table class="data-dense" style="width:100%;">
-        <thead><tr><th>رقم التشغيلة</th><th>تاريخ الإنتاج</th><th>تاريخ الانتهاء</th><th>الكمية المتبقية</th><th>الحالة</th></tr></thead>
-        <tbody>
-          ${cachedBatches.map(b => {
-            const isExpired = b.expiryDate && new Date(b.expiryDate) < new Date();
-            return `
-              <tr>
-                <td class="mono font-bold">${b.number}</td>
-                <td class="dim">${b.prodDate || "—"}</td>
-                <td class="mono ${isExpired ? 'text-bad font-bold' : ''}">${b.expiryDate || "—"}</td>
-                <td class="mono font-bold">${formatQuantity(b.qty)}</td>
-                <td>${isExpired ? '<span class="badge bad">منتهية الصلاحية</span>' : '<span class="badge good">صالحة</span>'}</td>
-              </tr>
-            `;
-          }).join("")}
-        </tbody>
-      </table>`;
+      <div style="flex:1; overflow-y:auto; padding:16px;">
+        <table class="data-dense" style="width:100%;">
+          <thead><tr><th>رقم التشغيلة</th><th>تاريخ الإنتاج</th><th>تاريخ الانتهاء</th><th>الكمية المتبقية</th><th>الحالة</th></tr></thead>
+          <tbody>
+            ${cachedBatches.map(b => {
+              const isExpired = b.expiryDate && new Date(b.expiryDate) < new Date();
+              return `
+                <tr>
+                  <td class="mono font-bold">${b.number}</td>
+                  <td class="dim">${b.prodDate || "—"}</td>
+                  <td class="mono ${isExpired ? 'text-bad font-bold' : ''}">${b.expiryDate || "—"}</td>
+                  <td class="mono font-bold">${formatQuantity(b.qty)}</td>
+                  <td>${isExpired ? '<span class="badge bad">منتهية الصلاحية</span>' : '<span class="badge good">صالحة</span>'}</td>
+                </tr>
+              `;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>`;
   }
 }
 
@@ -1705,10 +1803,12 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
 
   const typeLabels = {
     purchase_invoice: "فاتورة شراء", purchase_in: "فاتورة شراء",
-    sales_invoice: "فاتورة بيع", sale_out: "فاتورة بيع",
+    sales_invoice: "فاتورة بيع", sale_out: "فاتورة بيع", sale_out_edit: "فاتورة بيع (معدلة)",
     transfer_out: "تحويل صادر", transfer_in: "تحويل وارد",
     sales_return: "مرتجع مبيعات", return_in: "مرتجع مبيعات",
     purchase_return: "مرتجع مشتريات", return_out: "مرتجع مشتريات",
+    purchase_reverse: "🔁 تسوية تعديل شراء",
+    sale_reverse_edit: "🔄 عكس قيد (تعديل فاتورة)", reverse_edit: "🔄 عكس قيد (تعديل فاتورة)",
     adjustment: "تسوية مخزنية", damage: "إهلاك تالف",
     donation: "تبرعات وهبات", expired: "إعدام صلاحية",
     "return-damaged": "مرتجع تالف للمورد", assembly: "تجميع", disassembly: "تفكيك",
@@ -1720,10 +1820,12 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
 
   const typeIcons = {
     purchase_invoice: "🛒", purchase_in: "🛒",
-    sales_invoice: "💰", sale_out: "💰",
+    sales_invoice: "💰", sale_out: "💰", sale_out_edit: "💰",
     transfer_in: "📥", transfer_out: "📤",
     sales_return: "↩️", return_in: "↩️",
     purchase_return: "↩️", return_out: "↩️",
+    purchase_reverse: "🔁",
+    sale_reverse_edit: "🔄", reverse_edit: "🔄",
     adjustment: "⚖️", adjustment_in: "➕", adjustment_out: "➖",
     damage: "💔", expired: "🗑️", "spot-count": "🔢",
     "return-damaged": "↩️", assembly: "🔧", disassembly: "🔩",
@@ -1810,6 +1912,15 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
         </select>
       </div>
 
+      <!-- Live Search Box -->
+      <div style="display:flex;flex-direction:column;gap:4px;">
+        <label style="font-size:10px;color:var(--text-2);font-weight:700;">🔍 بحث فوري (عميل / مستند / بيان)</label>
+        <div style="position:relative; display:flex; align-items:center;">
+          <input type="text" id="modal-ledger-search" class="input" placeholder="اكتب اسم العميل أو الفاتورة..." style="padding:5px 8px; font-size:11.5px; width:200px; border-radius:6px;" oninput="window.filterModalTableRows(this.value)" />
+          <span id="modal-ledger-search-count" style="display:none; position:absolute; left:6px; font-size:10px; font-weight:800; color:var(--brand); background:rgba(16,185,129,0.15); padding:1px 5px; border-radius:4px;"></span>
+        </div>
+      </div>
+
       <!-- Sorting Toggle -->
       <div style="display:flex;flex-direction:column;gap:4px;">
         <label style="font-size:10px;color:var(--text-2);font-weight:700;">↕️ الترتيب</label>
@@ -1829,9 +1940,25 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
       <div style="display:flex;gap:6px;align-items:flex-end;margin-right:auto;flex-wrap:wrap;">
         <button class="btn btn-primary btn-sm" style="padding:6px 14px;font-size:11.5px;border-radius:6px;font-weight:700;" onclick="_applyLedgerFilters()">🔍 تطبيق</button>
         <button class="btn btn-secondary btn-sm" style="padding:6px 10px;font-size:11.5px;border-radius:6px;" onclick="_resetLedgerFilters()">↺ إعادة</button>
+        <button type="button" class="btn btn-sm btn-secondary" id="btn-toggle-summary" onclick="window.toggleModalSummaryVisibility()" style="padding:6px 11px; font-size:11.5px; border-radius:6px; font-weight:700;" title="إخفاء أو إظهار لوحة التحليل لتوسيع مساحة الجدول">👁️ طي التحليل</button>
         <button class="btn btn-sm" style="padding:6px 12px;font-size:11.5px;border-radius:6px;background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border:none;cursor:pointer;font-weight:700;" onclick="window.printCustodyReconciliationFromProductModal()" title="طباعة محضر مطابقة وجرد رسمي للسيارة أو المستودع">📋 محضر العهدة</button>
         <button class="btn btn-sm" style="padding:6px 10px;font-size:11.5px;border-radius:6px;background:linear-gradient(135deg,#16a34a,#15803d);color:#fff;border:none;cursor:pointer;font-weight:700;" onclick="_exportLedgerExcel()">📊 Excel</button>
         <button class="btn btn-sm" style="padding:6px 10px;font-size:11.5px;border-radius:6px;background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff;border:none;cursor:pointer;font-weight:700;" onclick="_exportLedgerPdf()">📄 PDF</button>
+      </div>
+    </div>
+
+    <!-- Smart Path Quick Filter Pills Sub-bar -->
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; padding:8px 18px; background:var(--bg-1); border-bottom:1px solid var(--border-soft);">
+      <span style="font-size:11px; font-weight:800; color:var(--text-1); display:flex; align-items:center; gap:4px;">
+        <span>🎯</span>
+        <span>تتبع مسار الصنف:</span>
+      </span>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-sm ${cachedModalPathFilter==='all'?'btn-primary':'btn-secondary'}" style="padding:4px 10px; font-size:11px; border-radius:15px; font-weight:700;" onclick="window.setModalPathFilter('all')">🌐 الدورة الشاملة (الكل)</button>
+        <button type="button" class="btn btn-sm ${cachedModalPathFilter==='main'?'btn-primary':'btn-secondary'}" style="padding:4px 10px; font-size:11px; border-radius:15px; font-weight:700;" onclick="window.setModalPathFilter('main')">🏢 المستودع الرئيسي فقط</button>
+        <button type="button" class="btn btn-sm ${cachedModalPathFilter==='transfers'?'btn-primary':'btn-secondary'}" style="padding:4px 10px; font-size:11px; border-radius:15px; font-weight:700;" onclick="window.setModalPathFilter('transfers')">🔄 شحنات تحويلات السيارات</button>
+        <button type="button" class="btn btn-sm ${cachedModalPathFilter==='van_sales'?'btn-primary':'btn-secondary'}" style="padding:4px 10px; font-size:11px; border-radius:15px; font-weight:700;" onclick="window.setModalPathFilter('van_sales')">🚐 مبيعات سيارات المناديب</button>
+        <button type="button" class="btn btn-sm ${cachedModalPathFilter==='clean'?'btn-primary':'btn-secondary'}" style="padding:4px 10px; font-size:11px; border-radius:15px; font-weight:700;" onclick="window.setModalPathFilter('clean')">✨ فواتير المبيعات الصافية</button>
       </div>
     </div>`;
 
@@ -1845,26 +1972,38 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
     return "2026-08-01";
   };
 
-  const getTxTypePriority = (type) => {
-    if (type === "opening" || type === "purchase_in" || type === "purchase_invoice") return 1;
-    if (type === "sales_return" || type === "return_in") return 2;
+  const getTxTypePriority = (type, qtyChange = 0) => {
+    if (type === "opening") return 0;
+    if (type === "purchase_in" || type === "purchase_invoice") return 1;
+    if (type === "sale_reverse_edit" || type === "reverse_edit" || type === "sales_return" || type === "return_in" || type === "sale_cancel" || type === "cancel_sale") return 2;
     if (type === "transfer_in" || type === "adjustment_in") return 3;
-    if (type === "sale_out" || type === "sales_invoice" || type === "pos_sale" || type === "pos_out") return 4;
+    if (type === "sale_out" || type === "sales_invoice" || type === "pos_sale" || type === "pos_out" || type === "delivery_note") return 4;
     if (type === "transfer_out") return 5;
     if (type === "adjustment_out" || type === "damage" || type === "expired") return 6;
-    return 7;
+    return (Number(qtyChange) > 0) ? 2 : 4;
   };
 
-  // Sort chronological (oldest first) to compute running balances
+  // Sort chronological (oldest first) to compute running balances with robust reversal precedence
   let allTxs = [...cachedStockTxs].sort((a, b) => {
     const dA = getDateStr(a);
     const dB = getDateStr(b);
     if (dA !== dB) return dA.localeCompare(dB);
-    const priDiff = getTxTypePriority(a.type) - getTxTypePriority(b.type);
-    if (priDiff !== 0) return priDiff;
+
     const secA = a.createdAt?.seconds || a.createdAt?._seconds || (a.createdAt?.toMillis ? a.createdAt.toMillis() / 1000 : 0);
     const secB = b.createdAt?.seconds || b.createdAt?._seconds || (b.createdAt?.toMillis ? b.createdAt.toMillis() / 1000 : 0);
-    return secA - secB;
+    if (secA !== secB) return secA - secB;
+
+    const priDiff = getTxTypePriority(a.type, a.qtyChange) - getTxTypePriority(b.type, b.qtyChange);
+    if (priDiff !== 0) return priDiff;
+
+    const nanoA = a.createdAt?.nanoseconds || a.createdAt?._nanoseconds || 0;
+    const nanoB = b.createdAt?.nanoseconds || b.createdAt?._nanoseconds || 0;
+    if (nanoA !== nanoB) return nanoA - nanoB;
+
+    // Simultaneous movements on exact same instant: Inward additions (+) always precede outward deductions (-)
+    const chgA = parseFloat(a.qtyChange || a.qtyDelta || 0);
+    const chgB = parseFloat(b.qtyChange || b.qtyDelta || 0);
+    return chgB - chgA;
   });
 
   const whRunningBalances = {};
@@ -1884,8 +2023,8 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
     const isBeforePeriod = filterDateFrom && dateStr < filterDateFrom;
 
     const tType = t.type || "";
-    const isPur = ["purchase_invoice", "purchase_in", "purchase_return", "sales_return", "return_in"].includes(tType);
-    const isSale = ["sales_invoice", "sale_out", "pos_sale", "pos_out", "sale_cancel", "cancel_sale"].includes(tType);
+    const isPur = ["purchase_invoice", "purchase_in", "purchase_return", "sales_return", "return_in", "purchase_reverse"].includes(tType);
+    const isSale = ["sales_invoice", "sale_out", "delivery_note", "pos_sale", "pos_out", "sale_cancel", "cancel_sale", "sale_reverse_edit", "reverse_edit"].includes(tType);
     const isTrans = ["transfer_out", "transfer_in", "transfer_cancel"].includes(tType);
     const isAdj = ["adjustment", "damage", "assembly", "disassembly", "opening", "adjustment_in", "adjustment_out", "spot-count"].includes(tType);
 
@@ -1913,14 +2052,17 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
       qtyChange = Number(qtyChange);
     }
 
-    // Reversal artifact check (reconcile old edit cancellation artifacts on active invoices)
-    const isReversalArtifact = (tType === "sale_cancel" || tType === "cancel_sale") && 
-      (String(t.notes || "").includes("إرجاع كمية التعديل") || String(t.notes || "").includes("تعديل"));
-    
+    // Audit Reversal Artifact Check:
+    // If a purchase_reverse was recorded as an edit/reversal step for a purchase invoice that is STILL active and posted,
+    // the purchase was NOT cancelled; the stock remains added in the warehouse.
+    // We keep the transaction for audit record, but reconcile effectiveChange to 0 so the ledger equals actual stock.
+    const isPurReversalArtifact = (tType === "purchase_reverse") && 
+      (String(t.notes || "").includes("حذف فاتورة الشراء") || String(t.notes || "").includes("تعديل") || String(t.notes || "").includes("عكس"));
+
     let isIgnoredReversal = false;
-    if (isReversalArtifact) {
-      const invMeta = cachedDocMetaMap.get(docNum) || cachedDocMetaMap.get(t.id);
-      if (invMeta && invMeta.status !== "cancelled") {
+    if (isPurReversalArtifact) {
+      const purMeta = cachedDocMetaMap.get(docNum) || cachedDocMetaMap.get(t.refId) || cachedDocMetaMap.get(t.sourceId);
+      if (purMeta && purMeta.status !== "cancelled") {
         isIgnoredReversal = true;
         qtyChange = 0;
       }
@@ -1946,10 +2088,7 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
 
     let inQty = 0;
     let outQty = 0;
-    if (!filterWarehouse && isTrans) {
-      inQty = qtyChange > 0 ? qtyChange : 0;
-      outQty = qtyChange < 0 ? Math.abs(qtyChange) : 0;
-    } else if (isIgnoredReversal) {
+    if (isIgnoredReversal) {
       inQty = 0;
       outQty = 0;
     } else {
@@ -1957,8 +2096,16 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
       outQty = qtyChange < 0 ? Math.abs(qtyChange) : 0;
     }
 
-    if (inQty) periodIn += inQty;
-    if (outQty) periodOut += outQty;
+    if (!filterWarehouse) {
+      // At company-wide level, internal transfers shift goods between locations without changing net external commercial inflow/outflow
+      if (!isTrans) {
+        if (inQty) periodIn += inQty;
+        if (outQty) periodOut += outQty;
+      }
+    } else {
+      if (inQty) periodIn += inQty;
+      if (outQty) periodOut += outQty;
+    }
 
     if (filterType === "sales_invoice" && !isSale) continue;
     if (filterType === "purchase_invoice" && !isPur) continue;
@@ -1967,6 +2114,11 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
     if (filterType === "adjustment" && !isAdj) continue;
 
     const whName = warehouseMap[wid] || wid || "—";
+    const isWhVehicle = isVehicleWhModal(wid, whName);
+    const isWhMain = isMainWhModal(wid, whName);
+    const isVanSale = isSale && isWhVehicle;
+    const isMainSale = isSale && isWhMain;
+    const isCleanCommercial = !isIgnoredReversal && !["sale_reverse_edit", "reverse_edit", "purchase_reverse", "sale_cancel"].includes(tType);
 
     txsCalculated.push({
       ...t,
@@ -1984,7 +2136,12 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
       isPur,
       isSale,
       isTrans,
-      isAdj
+      isAdj,
+      isWhVehicle,
+      isWhMain,
+      isVanSale,
+      isMainSale,
+      isCleanCommercial
     });
   }
 
@@ -2000,6 +2157,113 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
   const isMatch = Math.abs(finalRunningBal - activeBalance) < 0.001;
 
   currentLedgerCalculated = txsCalculated;
+
+  // ── 3.5 Calculate Supply Chain Flow Pipeline Metrics ───────────────────────
+  let pipeSupplierIn = 0;
+  let pipeSupplierInCount = 0;
+  let pipeCustReturns = 0;
+  let pipeMainSales = 0;
+  let pipeMainSalesCount = 0;
+  let pipeTransfersToVans = 0;
+  let pipeReturnsFromVans = 0;
+  let pipeVanSales = 0;
+  let pipeVanSalesCount = 0;
+  let pipeVanReceived = 0;
+
+  allTxs.forEach(t => {
+    const wid = t.warehouseId;
+    const isMain = isMainWhModal(wid);
+    const isVan = isVehicleWhModal(wid);
+    const tType = t.type || "";
+    const q = parseFloat(t.qtyChange || 0);
+
+    if (tType === "purchase_reverse") return;
+
+    if (tType === "purchase_invoice" || tType === "purchase_in") {
+      if (q > 0) { pipeSupplierIn += q; pipeSupplierInCount++; }
+    } else if (tType === "sales_return" || tType === "return_in") {
+      if (q > 0) pipeCustReturns += q;
+    }
+
+    if (["sales_invoice", "sale_out", "delivery_note", "pos_sale"].includes(tType)) {
+      if (q < 0) {
+        const absQ = Math.abs(q);
+        if (isMain) { pipeMainSales += absQ; pipeMainSalesCount++; }
+        else if (isVan) { pipeVanSales += absQ; pipeVanSalesCount++; }
+      }
+    }
+
+    if (tType === "transfer_out") {
+      const absQ = Math.abs(q);
+      if (isMain) pipeTransfersToVans += absQ;
+    } else if (tType === "transfer_in") {
+      if (isMain) pipeReturnsFromVans += q;
+      else if (isVan) pipeVanReceived += q;
+    }
+  });
+
+  let mainWhStock = 0;
+  let vanWhStock = 0;
+  (cachedStockBalances || []).forEach(s => {
+    const q = parseFloat(s.qty) || 0;
+    if (isVehicleWhModal(s.warehouseId)) vanWhStock += q;
+    else mainWhStock += q;
+  });
+
+  const pipelineStripHtml = `
+    <div style="margin:8px 18px; padding:12px 14px; background:var(--bg-2); border:1px solid var(--border-soft); border-radius:10px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+        <span style="font-size:11.5px; font-weight:800; color:var(--text-0); display:flex; align-items:center; gap:6px;">
+          <span>🔄</span>
+          <span><b>سلسلة إمداد الصنف:</b> توريد الموردين ➔ المستودع الرئيسي ➔ شحن السيارات ➔ مبيعات الميدان</span>
+        </span>
+        <span class="badge good" style="font-size:10px;">✅ دورة متطابقة ومغلقة محاسبياً</span>
+      </div>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:8px; font-size:11px;">
+        <!-- Inbound -->
+        <div style="background:var(--bg-card); border:1px solid rgba(16,185,129,0.3); border-radius:8px; padding:8px 10px;">
+          <div style="color:#059669; font-weight:800; margin-bottom:2px;">1. توريد المشتريات 🏭</div>
+          <div style="font-size:15px; font-weight:900;" class="mono text-good">+${formatQuantity(pipeSupplierIn)} ${unitStr}</div>
+          <div class="dim" style="font-size:9.5px; margin-top:2px;">${pipeSupplierInCount} فواتير شراء من الموردين</div>
+        </div>
+
+        <!-- Main Warehouse Hub -->
+        <div style="background:var(--bg-card); border:1px solid rgba(59,130,246,0.3); border-radius:8px; padding:8px 10px;">
+          <div style="color:#2563EB; font-weight:800; margin-bottom:2px;">2. المستودع الرئيسي 🏢</div>
+          <div style="display:flex; justify-content:space-between;">
+            <span class="dim">الرصيد بالمستودع:</span>
+            <b class="mono font-bold" style="color:#2563EB;">${formatQuantity(mainWhStock)}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:2px;">
+            <span class="dim">مبيعات مباشرة:</span>
+            <b class="mono font-bold text-bad">-${formatQuantity(pipeMainSales)}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:2px;">
+            <span class="dim">محول للسيارات:</span>
+            <b class="mono font-bold" style="color:#6366F1;">-${formatQuantity(pipeTransfersToVans)}</b>
+          </div>
+        </div>
+
+        <!-- Van Fleet Sales -->
+        <div style="background:var(--bg-card); border:1px solid rgba(139,92,246,0.3); border-radius:8px; padding:8px 10px;">
+          <div style="color:#7C3AED; font-weight:800; margin-bottom:2px;">3. سيارات المناديب (الميدان) 🚐</div>
+          <div style="display:flex; justify-content:space-between;">
+            <span class="dim">مبيعات المناديب:</span>
+            <b class="mono font-bold" style="color:#7C3AED;">-${formatQuantity(pipeVanSales)}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:2px;">
+            <span class="dim">شحنات مستلمة:</span>
+            <b class="mono font-bold text-good">+${formatQuantity(pipeVanReceived)}</b>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:2px;">
+            <span class="dim">المتبقي بالسيارات:</span>
+            <b class="mono font-bold">${formatQuantity(vanWhStock)}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
 
   // ── 4. Summary KPI Cards ───────────────────────────────────────────────────
   const kpiHtml = `
@@ -2049,30 +2313,41 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
         <span><b>تنبيه تدقيق:</b> رصيد الدفتر التراكمي (${formatQuantity(finalRunningBal)}) والرصيد المسجل بالمستودع (${formatQuantity(activeBalance)} ${unitStr}). الفارق: ${formatQuantity(finalRunningBal - activeBalance)}.</span>
       </div>`;
 
-  // ── 6. Display List based on sort order ────────────────────────────────────
+  // ── 6. Filter by Smart Path & Sort ─────────────────────────────────────────
+  let filteredForPath = [...txsCalculated];
+  if (cachedModalPathFilter === "main") {
+    filteredForPath = filteredForPath.filter(t => t.isWhMain);
+  } else if (cachedModalPathFilter === "transfers") {
+    filteredForPath = filteredForPath.filter(t => t.isTrans);
+  } else if (cachedModalPathFilter === "van_sales") {
+    filteredForPath = filteredForPath.filter(t => t.isVanSale);
+  } else if (cachedModalPathFilter === "clean") {
+    filteredForPath = filteredForPath.filter(t => t.isCleanCommercial);
+  }
+
   const displayTxs = cachedLedgerSort === "desc" 
-    ? [...txsCalculated].reverse() 
-    : [...txsCalculated];
+    ? [...filteredForPath].reverse() 
+    : [...filteredForPath];
 
   const tableHtml = displayTxs.length === 0
     ? `<div class="empty-state" style="padding:40px;"><div class="empty-icon">🔍</div><p>لا توجد حركات تطابق الفلاتر المحددة</p></div>`
-    : `<div style="overflow-x:auto;">
-      <table style="width:100%; border-collapse:collapse; font-size:12px;">
-        <thead>
-          <tr style="background:var(--bg-2); position:sticky; top:0; z-index:2;">
-            <th style="padding:9px 10px; width:35px; text-align:center; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">#</th>
-            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft); white-space:nowrap;">📅 التاريخ</th>
-            <th style="padding:9px 12px; text-align:center; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">نوع الحركة</th>
-            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">رقم المستند</th>
-            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">👤 الطرف الثاني (العميل / المورد / المسار)</th>
-            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">المخزن / الموقع</th>
-            <th style="padding:9px 10px; text-align:center; font-size:11px; font-weight:700; color:#10B981; border-bottom:2px solid var(--border-soft);">وارد (+)</th>
-            <th style="padding:9px 10px; text-align:center; font-size:11px; font-weight:700; color:#EF4444; border-bottom:2px solid var(--border-soft);">صادر (-)</th>
-            <th style="padding:9px 12px; text-align:center; font-size:11px; font-weight:700; color:var(--brand); border-bottom:2px solid var(--border-soft);">الرصيد بعد 📦</th>
-            <th style="padding:9px 12px; text-align:right; font-size:11px; font-weight:700; color:var(--text-2); border-bottom:2px solid var(--border-soft);">البيان والملاحظات</th>
+    : `
+      <table id="modal-ledger-table" style="width:100%; min-width:1250px; border-collapse:collapse; font-size:12px;">
+        <thead style="position:sticky; top:0; z-index:10; background:#0f3d19; color:#fff; box-shadow:0 2px 4px rgba(0,0,0,0.15);">
+          <tr style="background:#0f3d19; color:#fff;">
+            <th style="padding:10px 10px; width:45px; text-align:center; font-size:11.5px; font-weight:800; color:#fff; border-bottom:2px solid #165324;">#</th>
+            <th style="padding:10px 12px; width:105px; text-align:right; font-size:11.5px; font-weight:800; color:#fff; border-bottom:2px solid #165324; white-space:nowrap;">📅 التاريخ</th>
+            <th style="padding:10px 12px; width:135px; text-align:center; font-size:11.5px; font-weight:800; color:#fff; border-bottom:2px solid #165324;">نوع الحركة</th>
+            <th style="padding:10px 12px; width:115px; text-align:right; font-size:11.5px; font-weight:800; color:#fff; border-bottom:2px solid #165324;">رقم المستند</th>
+            <th style="padding:10px 12px; width:220px; text-align:right; font-size:11.5px; font-weight:800; color:#fff; border-bottom:2px solid #165324;">👤 الطرف الثاني (العميل / المورد / المسار)</th>
+            <th style="padding:10px 12px; width:140px; text-align:right; font-size:11.5px; font-weight:800; color:#fff; border-bottom:2px solid #165324;">المخزن / الموقع</th>
+            <th style="padding:10px 10px; width:95px; text-align:center; font-size:11.5px; font-weight:800; color:#86efac; border-bottom:2px solid #165324;">وارد (+)</th>
+            <th style="padding:10px 10px; width:95px; text-align:center; font-size:11.5px; font-weight:800; color:#fca5a5; border-bottom:2px solid #165324;">صادر (-)</th>
+            <th style="padding:10px 12px; width:115px; text-align:center; font-size:11.5px; font-weight:800; color:#fde047; border-bottom:2px solid #165324;">الرصيد بعد 📦</th>
+            <th style="padding:10px 12px; min-width:200px; text-align:right; font-size:11.5px; font-weight:800; color:#fff; border-bottom:2px solid #165324;">البيان والملاحظات</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="modal-ledger-tbody">
           ${displayTxs.map((t, idx) => {
             const rawType = t.type || t.refType || "adjustment";
             const labelText = typeLabels[rawType] || rawType;
@@ -2118,7 +2393,9 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
             // Commercial note
             let noteStr = t.notes || t.note || t.description || "";
             if (t.isIgnoredReversal) {
-              noteStr = "[حركة تعديل محاسبي دفتري — مسجلة لأغراض التدقيق بدون خصم مادي]";
+              noteStr = "[حركة تعديل دفتري سابقة — فاتورة الشراء معتمدة ومثبتة فعلياً بالمستودع]";
+            } else if (t.type === "sale_reverse_edit" || t.type === "reverse_edit") {
+              noteStr = noteStr || `تعديل الفاتورة ${t.documentNumber} (عكس القيد السابق لتطبيق التعديل — المحصلة صفر)`;
             } else if (!noteStr) {
               if (t.isSale) noteStr = `فاتورة بيع للعميل: ${t.partyName || 'نقدي'}`;
               else if (t.isPur) noteStr = `توريد مشتريات من المورد: ${t.partyName || 'معتمد'}`;
@@ -2126,8 +2403,11 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
               else noteStr = "—";
             }
 
+            const isEditRev = t.type === "sale_reverse_edit" || t.type === "reverse_edit" || t.type === "purchase_reverse" || t.isIgnoredReversal;
+            const searchTerms = `${t.documentNumber || ''} ${t.partyName || ''} ${t.whName || ''} ${noteStr} ${labelText}`.toLowerCase();
+
             return `
-              <tr style="background:${rowBg}; border-bottom:1px solid var(--border-soft); transition:background .15s;"
+              <tr class="modal-ledger-row" data-search="${searchTerms.replace(/"/g, '&quot;')}" style="background:${rowBg}; border-bottom:1px solid var(--border-soft); transition:background .15s;"
                 onmouseover="this.style.background='rgba(91,127,255,.06)'"
                 onmouseout="this.style.background='${rowBg}'">
                 <td style="padding:8px 10px; text-align:center; color:var(--text-3); font-family:var(--font-mono); font-size:11px;">${idx + 1}</td>
@@ -2135,32 +2415,51 @@ function renderItemLedgerCard(filterDateFrom, filterDateTo, filterType, filterWa
                 <td style="padding:8px 12px; white-space:nowrap; text-align:center;">
                   <span style="
                     display:inline-flex; align-items:center; gap:4px;
-                    background:${isIn ? 'rgba(16,185,129,.1)' : 'rgba(239,68,68,.08)'};
-                    color:${isIn ? '#059669' : '#DC2626'};
+                    background:${isEditRev ? 'rgba(245,158,11,.14)' : (isIn ? 'rgba(16,185,129,.1)' : 'rgba(239,68,68,.08)')};
+                    color:${isEditRev ? '#B45309' : (isIn ? '#059669' : '#DC2626')};
+                    border:${isEditRev ? '1px solid rgba(245,158,11,.3)' : 'none'};
                     padding:2px 8px; border-radius:12px; font-size:11px; font-weight:700;
                   ">${icon} ${labelText}</span>
                 </td>
                 <td style="padding:8px 12px; font-family:var(--font-mono); font-weight:700; color:var(--brand); font-size:12px;">${t.documentNumber || "—"}</td>
-                <td style="padding:8px 12px; white-space:nowrap;">${partyHtml}</td>
+                <td style="padding:8px 12px;">${partyHtml}</td>
                 <td style="padding:8px 12px; font-size:11.5px; color:var(--text-1);">${t.whName}</td>
                 <td style="padding:8px 10px; text-align:center;">${inBadge}</td>
                 <td style="padding:8px 10px; text-align:center;">${outBadge}</td>
                 <td style="padding:8px 12px; text-align:center;">${balHtml}</td>
-                <td style="padding:8px 12px; max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-2); font-size:11.5px;"
+                <td style="padding:8px 12px; max-width:320px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--text-2); font-size:11.5px;"
                   title="${noteStr.replace(/"/g, '&quot;')}">${noteStr}</td>
               </tr>
             `;
           }).join("")}
         </tbody>
-      </table>
-    </div>`;
+      </table>`;
 
-  body.innerHTML = filterBarHtml + kpiHtml + auditAlertHtml + tableHtml;
+  body.innerHTML = `
+    <div style="display:flex; flex-direction:column; height:100%; overflow:hidden;">
+      <div id="modal-ledger-header-panel" style="flex-shrink:0; background:var(--bg-1); border-bottom:1px solid var(--border-soft); max-height:48vh; overflow-y:auto; transition:max-height 0.25s ease;">
+        ${filterBarHtml}
+        <div id="modal-summary-collapsible">
+          ${kpiHtml}
+          ${pipelineStripHtml}
+          ${auditAlertHtml}
+        </div>
+      </div>
+      <div id="modal-ledger-table-wrap" style="flex:1; overflow-y:auto; overflow-x:auto; position:relative; background:var(--bg-card);">
+        ${tableHtml}
+      </div>
+    </div>
+  `;
 }
 
 // ── Toggle Sort Order in Modal ───────────────────────────────────────────────
 window.toggleProductModalSort = (dir) => {
   cachedLedgerSort = dir;
+  _applyLedgerFilters();
+};
+
+window.setModalPathFilter = (path) => {
+  cachedModalPathFilter = path;
   _applyLedgerFilters();
 };
 
@@ -2174,7 +2473,88 @@ window._applyLedgerFilters = () => {
 };
 
 window._resetLedgerFilters = () => {
+  cachedModalPathFilter = "all";
   renderItemLedgerCard("", "", "", "", false);
+};
+
+// ── Modal UI Helpers (Fullscreen, Quick Jump to Full Card, Toggle Summary, Live Search) ──
+window.toggleStockModalFullscreen = () => {
+  const modal = document.getElementById("stock-modal-card");
+  const fsBtn = document.getElementById("stock-modal-fs-btn");
+  if (!modal) return;
+  const isFs = modal.classList.toggle("modal-fullscreen");
+  if (isFs) {
+    modal.style.maxWidth = "100vw";
+    modal.style.width = "100vw";
+    modal.style.height = "100vh";
+    modal.style.maxHeight = "100vh";
+    modal.style.borderRadius = "0";
+    modal.style.margin = "0";
+    if (fsBtn) {
+      fsBtn.innerHTML = "🗗";
+      fsBtn.title = "تصغير / استعادة الحجم الافتراضي";
+    }
+  } else {
+    modal.style.maxWidth = "98vw";
+    modal.style.width = "98vw";
+    modal.style.height = "95vh";
+    modal.style.maxHeight = "95vh";
+    modal.style.borderRadius = "14px";
+    modal.style.margin = "auto";
+    if (fsBtn) {
+      fsBtn.innerHTML = "⛶";
+      fsBtn.title = "تكبير بحجم الشاشة الكاملة";
+    }
+  }
+};
+
+window.openFullStockCardFromModal = () => {
+  if (!currentProductId) return;
+  window._scPreselectProductId = currentProductId;
+  try {
+    localStorage.setItem("idham_sc_preselect_product_id", currentProductId);
+  } catch (e) {}
+  if (typeof closeModal === "function") {
+    closeModal("stock-modal");
+  }
+  window.location.hash = "#stock-card";
+};
+
+window.toggleModalSummaryVisibility = () => {
+  const panel = document.getElementById("modal-summary-collapsible");
+  const btn = document.getElementById("btn-toggle-summary");
+  if (!panel) return;
+  if (panel.style.display === "none") {
+    panel.style.display = "block";
+    if (btn) btn.innerHTML = "👁️ طي التحليل";
+  } else {
+    panel.style.display = "none";
+    if (btn) btn.innerHTML = "👁️ إظهار التحليل";
+  }
+};
+
+window.filterModalTableRows = (query) => {
+  const q = (query || "").trim().toLowerCase();
+  const rows = document.querySelectorAll(".modal-ledger-row");
+  const counterEl = document.getElementById("modal-ledger-search-count");
+  let matched = 0;
+  rows.forEach(r => {
+    const text = (r.getAttribute("data-search") || r.textContent || "").toLowerCase();
+    if (!q || text.includes(q)) {
+      r.style.display = "";
+      matched++;
+    } else {
+      r.style.display = "none";
+    }
+  });
+  if (counterEl) {
+    if (q) {
+      counterEl.style.display = "inline-block";
+      counterEl.textContent = `(${matched} مطابقة)`;
+    } else {
+      counterEl.style.display = "none";
+    }
+  }
 };
 
 // ── Export to Excel ──────────────────────────────────────────────────────────

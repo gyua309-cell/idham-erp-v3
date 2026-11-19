@@ -19,7 +19,7 @@ import {
   doc, getDoc, serverTimestamp, runTransaction
 } from "../utils/db.js";
 import { db, COMPANY_ID } from "../firebase-config.js";
-import { formatCurrency, todayString, startOfMonth } from "../utils/formatters.js";
+import { formatCurrency, todayString, startOfMonth, tafqeetArabic } from "../utils/formatters.js";
 
 // ──────────────────────────────────────────
 // State
@@ -38,11 +38,13 @@ export async function render(container, user) {
   container.innerHTML = buildLayout();
   bindGlobalHandlers();
 
-  // Load accounts from Firestore
-  accounts = await getAll(COLS.chartOfAccounts(), [orderBy("code")]);
-
-  // Pre-fetch next entry number
-  _nextNum = await getNextEntryNumber();
+  // Load accounts and pre-fetch next entry number in parallel
+  const [accs, nextNum] = await Promise.all([
+    getAll(COLS.chartOfAccounts(), [orderBy("code")]),
+    getNextEntryNumber()
+  ]);
+  accounts = accs;
+  _nextNum = nextNum;
 
   switchTab("log");
 
@@ -816,16 +818,12 @@ function switchTabLocal(tab) {
 // ──────────────────────────────────────────
 async function getNextEntryNumber() {
   try {
-    const q    = query(COLS.journalEntries(), orderBy("entryNumber","desc"), limit(1));
-    const snap = await getDocs(q);
-    if (!snap.empty) {
-      const last = snap.docs[0].data().entryNumber || "";
-      const num  = parseInt(last.replace(/\D/g,"")) || 0;
-      const year = new Date().getFullYear();
-      return `JE-${year}-${String(num + 1).padStart(4,"0")}`;
-    }
-  } catch {}
-  return `JE-${new Date().getFullYear()}-0001`;
+    const snap = await getDoc(doc(db, `companies/${COMPANY_ID}/counters`, "journal"));
+    const nextSeq = snap.exists() ? (snap.data().seq || 0) + 1 : 1;
+    return `JE-${String(nextSeq).padStart(6, "0")}`;
+  } catch {
+    return `JE-000001`;
+  }
 }
 
 // ──────────────────────────────────────────
@@ -847,7 +845,7 @@ window.loadJournalEntries = async (forceRefresh = false) => {
     const statusF = document.getElementById("je-status-filter")?.value;
 
     if (forceRefresh === true) {
-      clearERPCache();
+      await clearERPCache(COLS.journalEntries().path);
     }
 
     // جلب كل القيود من الـ Cache أو السيرفر بدون تحديد limit مجتزأ
@@ -960,7 +958,12 @@ function renderJETable(entries) {
       <td style="font-size:11px;color:var(--text-2)">${e.createdByName||"—"}</td>
       <td onclick="event.stopPropagation()" style="white-space:nowrap">
         <div style="display:flex;gap:5px;justify-content:flex-end;align-items:center">
-          <button class="je-row-action info" title="طباعة سند القيد" onclick="printSingleJournalVoucher('${e.id}')">
+          ${isSalaryRelatedEntry(e) ? `
+            <button class="je-row-action" style="color:#059669;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);" title="طباعة سند صرف واستلام راتب ومسير" onclick="printSalaryVoucherFromJE('${e.id}')">
+              <i class="fas fa-file-invoice-dollar"></i>
+            </button>
+          ` : ""}
+          <button class="je-row-action info" title="طباعة سند القيد المحاسبي" onclick="printSingleJournalVoucher('${e.id}')">
             <i class="fas fa-print"></i>
           </button>
           <button class="je-row-action warning" title="نسخ وتكرار القيد لشهر جديد" onclick="duplicateEntry('${e.id}')">
@@ -1359,7 +1362,10 @@ window.saveJournal = async (status = "posted") => {
     });
 
     const editId = document.getElementById("je-edit-id").value;
+    let savedEntryNum = "";
+    let savedEntryId = editId || "";
     if (editId) {
+      savedEntryNum = document.getElementById("je-number")?.value || "";
       // Edit mode
       await updateJournalEntry(editId, {
         date,
@@ -1373,24 +1379,26 @@ window.saveJournal = async (status = "posted") => {
       window.showToast?.(`تم تعديل و${status === "posted" ? "ترحيل" : "حفظ"} القيد بنجاح`, "success");
     } else {
       // Create mode
-      const entryNumber = _nextNum || await getNextEntryNumber();
-      await createJournalEntry({
+      savedEntryNum = _nextNum || await getNextEntryNumber();
+      savedEntryId = await createJournalEntry({
         date,
         description: desc,
         reference: ref,
         sourceType: "manual",
-        entryNumber,
+        entryNumber: savedEntryNum,
         status,
         costCenterId,
         costCenterName,
         lines: validLines,
       });
-      window.showToast?.(`تم ${status === "posted" ? "ترحيل" : "حفظ"} القيد ${entryNumber}`, "success");
+      window.showToast?.(`تم ${status === "posted" ? "ترحيل" : "حفظ"} القيد ${savedEntryNum}`, "success");
     }
     
-    // Auto-sync supplier & customer balances in real-time
+    // Auto-sync supplier, customer & bank balances in real-time
     if (status === "posted") {
-      syncBalancesForJournalLines(validLines).catch(() => {});
+      syncBalancesForJournalLines(validLines, { entryId: savedEntryId, entryNumber: savedEntryNum, date, description: desc }).catch(e => {
+        console.warn("[saveJournal] syncBalances error:", e);
+      });
     }
 
     closeModal("journal-modal");
@@ -1408,7 +1416,7 @@ window.saveJournal = async (status = "posted") => {
 // ──────────────────────────────────────────
 // Helper: Auto-sync Balances for Journal Lines
 // ──────────────────────────────────────────
-async function syncBalancesForJournalLines(lines = []) {
+async function syncBalancesForJournalLines(lines = [], entryMeta = {}) {
   if (!lines || !lines.length) return;
   try {
     const { recalculateSupplierBalance, recalculateCustomerBalance } = await import("../utils/balance-sync.js");
@@ -1458,6 +1466,73 @@ async function syncBalancesForJournalLines(lines = []) {
     for (const cId of custIdSet) {
       await recalculateCustomerBalance(cId).catch(() => {});
     }
+
+    // Auto-sync Bank Accounts & record bankTransactions for bank lines
+    try {
+      const allBanks = await getAll(COLS.bankAccounts()).catch(() => []);
+      const { doc: fsDoc, setDoc: fsSetDoc, updateDoc: fsUpdateDoc, serverTimestamp: fsServerTimestamp, increment: fsIncrement } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+      const { db, COMPANY_ID } = await import("../firebase-config.js");
+
+      const bankDeltas = new Map();
+      const refCode = entryMeta.entryNumber || "JE";
+
+      for (let idx = 0; idx < lines.length; idx++) {
+        const line = lines[idx];
+        const accCode = line.accountCode || "";
+        const accId = line.accountId || "";
+        const accName = (line.accountName || "").trim().toLowerCase();
+
+        // Explicitly exclude employee custodies (1-1-2-3), advances (1-1-5-4), receivables, payables, expenses, etc.
+        if (accCode.startsWith("1-1-2") || accCode.startsWith("1-1-5") || accCode.startsWith("1-1-3") || accCode.startsWith("2-1-1") || accCode.startsWith("5-") || accCode.startsWith("4-")) {
+          continue;
+        }
+
+        const bankMatch = (allBanks || []).find(b => {
+          if (b.id && (b.id === accId || b.accountId === accId)) return true;
+          if (b.accountCode && b.accountCode === accCode) return true;
+          const bName = (b.name || "").trim().toLowerCase().replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي");
+          const aName = accName.replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي");
+          if (bName && aName === bName) return true;
+          return false;
+        });
+
+        if (bankMatch) {
+          const dr = Number(line.debit || 0);
+          const cr = Number(line.credit || 0);
+          const amt = dr > 0 ? dr : cr;
+          if (amt > 0) {
+            const isIncome = dr > 0;
+            const delta = isIncome ? amt : -amt;
+            bankDeltas.set(bankMatch.id, (bankDeltas.get(bankMatch.id) || 0) + delta);
+
+            const txnId = `btx_je_${entryMeta.entryId || Date.now()}_${bankMatch.id}_${idx}`.replace(/[^a-zA-Z0-9_]/g, "_");
+            const noteText = line.note ? `${entryMeta.description || 'قيد محاسبي'} (${line.note})` : (entryMeta.description || 'قيد محاسبي');
+
+            await fsSetDoc(fsDoc(db, `companies/${COMPANY_ID}/bankTransactions`, txnId), {
+              bankAccountId: bankMatch.id,
+              amount: amt,
+              type: isIncome ? "in" : "out",
+              date: entryMeta.date || new Date().toISOString().split("T")[0],
+              refNumber: refCode,
+              notes: `قيد يومية: ${noteText}`,
+              sourceType: "manualJE",
+              sourceId: entryMeta.entryId || null,
+              createdAt: fsServerTimestamp()
+            }).catch(e => console.warn("Error creating bank transaction:", e));
+          }
+        }
+      }
+
+      // Update bank balances
+      for (const [bankId, delta] of bankDeltas.entries()) {
+        await fsUpdateDoc(fsDoc(db, `companies/${COMPANY_ID}/bankAccounts`, bankId), {
+          balance: fsIncrement(delta),
+          updatedAt: fsServerTimestamp()
+        }).catch(e => console.warn("Error updating bank balance:", e));
+      }
+    } catch (bErr) {
+      console.warn("[JournalEntries] Error auto-syncing bank accounts:", bErr);
+    }
   } catch(e) {
     console.warn("[JournalEntries] Error auto-syncing balances for journal lines:", e);
   }
@@ -1473,7 +1548,8 @@ window.postEntry = async (id) => {
     const snap = await getDoc(fsDoc(db, `companies/${COMPANY_ID}/journalEntries`, id));
     await updateDoc(fsDoc(db, `companies/${COMPANY_ID}/journalEntries`, id), { status: "posted" });
     if (snap.exists()) {
-      syncBalancesForJournalLines(snap.data().lines || []).catch(() => {});
+      const data = snap.data();
+      syncBalancesForJournalLines(data.lines || [], { entryId: id, entryNumber: data.entryNumber, date: data.date, description: data.description }).catch(() => {});
     }
     window.showToast?.("تم ترحيل القيد", "success");
     await loadJournalEntries();
@@ -1905,10 +1981,15 @@ window.viewJEEntry = async (id) => {
 
     const footer = document.getElementById("je-detail-footer");
     if (footer) {
+      const isSalary = isSalaryRelatedEntry(e);
       footer.innerHTML = `
         <button class="btn btn-ghost" onclick="closeModal('je-detail-modal')">إغلاق</button>
+        ${isSalary ? `
+          <button class="btn btn-primary" onclick="printSalaryVoucherFromJE('${id}')" style="background:#059669; border-color:#059669; color:#fff; font-weight:bold; display:inline-flex; align-items:center; gap:6px;">
+            <i class="fas fa-file-invoice-dollar"></i> 📄 طباعة سند صرف واستلام راتب الموظف
+          </button>` : ""}
         <button class="btn btn-secondary" onclick="printSingleJournalVoucher('${id}')">
-          <i class="fas fa-print"></i> طباعة سند القيد
+          <i class="fas fa-print"></i> طباعة سند القيد المحاسبي
         </button>
         <button class="btn btn-primary" onclick="closeModal('je-detail-modal'); duplicateEntry('${id}')">
           <i class="fas fa-copy"></i> نسخ وتكرار القيد
@@ -2125,13 +2206,13 @@ function bindGlobalHandlers() {
 
 async function fetchCompanyDetails() {
   let company = {
-    name: "شركة نظم الإمداد الحديثة",
+    name: "شركة نظم الإمداد المتطورة",
     nameEn: "Modern Supply Systems Co.",
-    crNumber: "4700123180",
-    vatNumber: "312448150500003",
+    crNumber: "7054969006",
+    vatNumber: "314996148100003",
     phone: "0549141648",
     email: "Nuzmalamdad@gmail.com",
-    address: "7480 — الشارع: عامر الشعبي — ينبع — 13315",
+    address: "مبنى 7689 — شارع ينبع  الصناعية 2179 — حي غرناطة — ينبع — رمز 46414",
     logoUrl: ""
   };
   try {
@@ -2168,13 +2249,13 @@ function _buildJournalVoucherHTML(je, company) {
     stockTransfer: "تحويل مخزني", salesCOGS: "تكلفة مبيعات"
   };
 
-  const coName    = company.name || "شركة نظم الإمداد الحديثة";
+  const coName    = company.name || "شركة نظم الإمداد المتطورة";
   const coNameEn  = company.nameEn || "Modern Supply Systems Co.";
-  const coAddress = company.address || "7480 — الشارع: عامر الشعبي — ينبع — 13315";
+  const coAddress = company.address || "مبنى 7689 — شارع ينبع  الصناعية 2179 — حي غرناطة — ينبع — رمز 46414";
   const coPhone   = company.phone || "0549141648";
   const coEmail   = company.email || "Nuzmalamdad@gmail.com";
-  const coVat     = company.vatNumber || "312448150500003";
-  const coCr      = company.crNumber || "4700123180";
+  const coVat     = company.vatNumber || "314996148100003";
+  const coCr      = company.crNumber || "7054969006";
   const coLogo    = company.logoUrl || "";
 
   const totalDr = (je.lines || []).reduce((sum, l) => sum + (l.debit || 0), 0);
@@ -2567,12 +2648,12 @@ function _buildJournalVoucherHTML(je, company) {
 }
 
 function _buildJournalLogReportHTML(entries, company, filters) {
-  const coName    = company.name || "شركة نظم الإمداد الحديثة";
+  const coName    = company.name || "شركة نظم الإمداد المتطورة";
   const coNameEn  = company.nameEn || "Modern Supply Systems Co.";
-  const coAddress = company.address || "7480 — الشارع: عامر الشعبي — ينبع — 13315";
+  const coAddress = company.address || "مبنى 7689 — شارع ينبع  الصناعية 2179 — حي غرناطة — ينبع — رمز 46414";
   const coPhone   = company.phone || "0549141648";
-  const coVat     = company.vatNumber || "312448150500003";
-  const coCr      = company.crNumber || "4700123180";
+  const coVat     = company.vatNumber || "314996148100003";
+  const coCr      = company.crNumber || "7054969006";
   const coLogo    = company.logoUrl || "";
 
   const typeLabels = {
@@ -2729,33 +2810,937 @@ function _buildJournalLogReportHTML(entries, company, filters) {
   `;
 }
 
+// ──────────────────────────────────────────
+// SALARY VOUCHER & PAYSLIP PRINTING ENGINE
+// سند صرف واستلام راتب ومسير موظف
+// ──────────────────────────────────────────
+
+export function isSalaryRelatedEntry(je) {
+  if (!je) return false;
+  const desc = (je.description || "").toLowerCase();
+  const salaryKeywords = ["راتب", "رواتب", "مسير", "مستحقات", "سلفة", "سلفه", "سلف", "مكافأة", "مكافآت", "مكافات", "أجور", "اجور", "حوافز", "بدل", "إكرامية", "اكرامية"];
+  if (salaryKeywords.some(k => desc.includes(k))) return true;
+
+  const lines = je.lines || [];
+  return lines.some(l => {
+    const code = l.accountCode || "";
+    const name = (l.accountName || "").toLowerCase();
+    if (code.startsWith("2-1-5") || code.startsWith("5-2-1") || code.startsWith("5-2-2") || code.startsWith("5-2-3") || code.startsWith("5-2-7") || code.startsWith("1-1-3")) return true;
+    return salaryKeywords.some(k => name.includes(k));
+  });
+}
+window.isSalaryRelatedEntry = isSalaryRelatedEntry;
+
+function _parseSalaryDataFromJE(je, employeesList = [], allEntries = [], accountsList = []) {
+  const lines = je.lines || [];
+  const desc = (je.description || "") + " " + (je.notes || "");
+  
+  // 1. Employee Name extraction
+  let empName = "";
+  let empDuesCode = "";
+  let empAdvCode = "";
+  let empObj = null;
+
+  for (const l of lines) {
+    const code = l.accountCode || "";
+    const name = l.accountName || "";
+    if (code.startsWith("2-1-5") || code.startsWith("1-1-5-4") || code.startsWith("1-1-3") || name.includes("مستحقات") || name.includes("سلف")) {
+      if (code.startsWith("2-1-5")) empDuesCode = code;
+      if (code.startsWith("1-1-5-4") || code.startsWith("1-1-3")) empAdvCode = code;
+      
+      let cleaned = name.replace(/مستحقات\s+الموظف\s*/g, "")
+                        .replace(/مستحقات\s+المندوب\s*/g, "")
+                        .replace(/مستحقات\s+الاستاذ\s*\/?\s*/g, "")
+                        .replace(/مستحقات\s*/g, "")
+                        .replace(/سلف\s+الموظف\s*/g, "")
+                        .replace(/سلف\s+المندوب\s*/g, "")
+                        .replace(/سلفة\s+الموظف\s*/g, "")
+                        .replace(/سلف\s*/g, "")
+                        .replace(/سلفة\s*/g, "")
+                        .replace(/الموظف\s*/g, "")
+                        .replace(/المندوب\s*/g, "")
+                        .trim();
+      if (cleaned && cleaned.length > 1 && !cleaned.includes("الموظفين")) {
+        empName = cleaned;
+      }
+    }
+  }
+
+  if (!empName && desc) {
+    const match = desc.match(/(?:للموظف|للمندوب|الموظف|المندوب|مرتب|راتب|الاستاذ)\s+([^\s,]+(?:\s+[^\s,]+)?)/);
+    if (match && match[1]) {
+      let cand = match[1].replace(/شهر\s*\d+/g, "").replace(/شهرين/g, "").trim();
+      if (cand) empName = cand;
+    }
+  }
+
+  // Match with employee master record
+  const allEmps = Array.isArray(employeesList) && employeesList.length > 0 ? employeesList : (window._cachedEmployees || []);
+  if (empName && allEmps.length > 0) {
+    empObj = allEmps.find(e => {
+      const en = (e.name || "").trim().toLowerCase();
+      const target = empName.toLowerCase();
+      return en === target || en.includes(target) || target.includes(en);
+    });
+  }
+
+  const finalEmpName = empObj?.name || empName || "الموظف المستحق";
+  const jobTitle = empObj?.job || empObj?.position || empObj?.role || "مندوب مبيعات / موظف";
+  const nid = empObj?.nid || empObj?.nationalId || empObj?.iqama || "—";
+  const empCode = empObj?.code || empObj?.empNumber || "—";
+  const iban = empObj?.iban || "—";
+  const contractSalary = parseFloat(empObj?.salary || 0) || 0;
+
+  // Month extraction (avoid false match with شهرين / شهريا)
+  let monthStr = "";
+  const mNames = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
+  const cleanDesc = desc.replace(/شهرين/g, "").replace(/شهرياً/g, "").replace(/شهريا/g, "");
+  const monthNumMatch = cleanDesc.match(/شهر\s*([0-9]{1,2})/);
+  const monthWordMatch = cleanDesc.match(/شهر\s*(يناير|فبراير|مارس|أبريل|مايو|يونيو|يوليو|أغسطس|سبتمبر|أكتوبر|نوفمبر|ديسمبر|محرم|صفر|رجب|شعبان|رمضان|شوال)/);
+
+  let targetYearMonth = "";
+  if (monthNumMatch && monthNumMatch[1]) {
+    const mInt = parseInt(monthNumMatch[1], 10);
+    const mFormatted = mInt < 10 ? `0${mInt}` : `${mInt}`;
+    const yr = je.date ? je.date.slice(0, 4) : new Date().getFullYear();
+    monthStr = `شهر ${mFormatted} (${mNames[mInt - 1] || ''}) / ${yr}`;
+    targetYearMonth = `${yr}-${mFormatted}`;
+  } else if (monthWordMatch && monthWordMatch[1]) {
+    monthStr = `شهر ${monthWordMatch[1]}`;
+  } else if (je.date) {
+    const parts = je.date.split("-");
+    if (parts.length >= 2) {
+      let mIdx = parseInt(parts[1], 10) - 1;
+      let yr = parts[0];
+      const day = parseInt(parts[2] || "15", 10);
+      if (day <= 7 && mIdx > 0) {
+        mIdx -= 1;
+      }
+      const mFormatted = (mIdx + 1) < 10 ? `0${mIdx + 1}` : `${mIdx + 1}`;
+      monthStr = `شهر ${mFormatted} (${mNames[mIdx] || ''}) / ${yr}`;
+      targetYearMonth = `${yr}-${mFormatted}`;
+    }
+  }
+
+  // Find related accounts from COA if not found
+  const poolAccounts = Array.isArray(accountsList) && accountsList.length > 0 ? accountsList : ((typeof accounts !== "undefined" && Array.isArray(accounts)) ? accounts : (window._accounts || []));
+  if (!empDuesCode && poolAccounts.length > 0) {
+    const da = poolAccounts.find(a => (a.code || '').startsWith('2-1-5') && ((a.nameAr || '').includes(finalEmpName) || (a.name || '').includes(finalEmpName)));
+    if (da) empDuesCode = da.code;
+  }
+  if (!empAdvCode && poolAccounts.length > 0) {
+    const aa = poolAccounts.find(a => (a.code || '').startsWith('1-1-5-4') && ((a.nameAr || '').includes(finalEmpName) || (a.name || '').includes(finalEmpName)));
+    if (aa) empAdvCode = aa.code;
+  }
+
+  // Calculate net disbursement in this JE
+  let voucherNetPaid = 0;
+  const paymentSources = [];
+  for (const l of lines) {
+    const cr = parseFloat(l.credit || 0) || 0;
+    const code = l.accountCode || "";
+    const name = l.accountName || "";
+    if (cr > 0 && !code.startsWith('1-1-5-4') && !name.includes('سلف')) {
+      let method = "نقدي / عهدة";
+      if (code.startsWith("1-1-1")) method = "نقداً من الصندوق الرئيسي";
+      else if (code.startsWith("1-1-2")) method = "تحويل بنكي رسمي";
+      else if (code.startsWith("3-1-4")) method = "جاري المالك / حساب الإدارة";
+      else method = name || "صرف مباشر";
+      paymentSources.push({ accountName: name, accountCode: code, method: method, amount: cr });
+      voucherNetPaid += cr;
+    }
+  }
+  if (voucherNetPaid === 0) {
+    for (const l of lines) {
+      const dr = parseFloat(l.debit || 0) || 0;
+      if (dr > 0) voucherNetPaid += dr;
+    }
+  }
+
+  // 2. Scan ledger entries up to voucher date
+  const poolEntries = Array.isArray(allEntries) && allEntries.length > 0 ? allEntries : (window._allEntries || []);
+  let accruedSalary = 0;
+  let otherDeductions = [];
+  let totalAdvancesIssued = 0;
+  let totalAdvancesRepaid = 0;
+
+  for (const oe of poolEntries) {
+    const od = oe.date || "";
+    const odesc = (oe.description || "") + " " + (oe.notes || "");
+    const isInTargetMonth = targetYearMonth ? od.startsWith(targetYearMonth) : true;
+
+    for (const ol of (oe.lines || [])) {
+      const c = ol.accountCode || "";
+      const n = ol.accountName || "";
+      const dr = parseFloat(ol.debit || 0) || 0;
+      const cr = parseFloat(ol.credit || 0) || 0;
+
+      const matchesEmpDues = (empDuesCode && c === empDuesCode) || (!empDuesCode && c.startsWith("2-1-5") && (n.includes(finalEmpName) || odesc.includes(finalEmpName)));
+      const matchesEmpAdv = (empAdvCode && c === empAdvCode) || (!empAdvCode && (c.startsWith("1-1-5-4") || c.startsWith("1-1-3") || n.includes("سلف")) && (n.includes(finalEmpName) || odesc.includes(finalEmpName)));
+
+      // Salary Accruals (Credit in Dues)
+      if (matchesEmpDues && cr > 0 && (isInTargetMonth || Math.abs((new Date(od) - new Date(je.date)) / (1000 * 3600 * 24)) <= 35)) {
+        if (cr > accruedSalary) accruedSalary = cr;
+      }
+
+      // Direct Deductions / Violations in this month
+      if (matchesEmpDues && dr > 0 && oe.id !== je.id && isInTargetMonth) {
+        if (odesc.includes("مخالف") || odesc.includes("جزاء") || odesc.includes("خصم") || n.includes("خصم") || (ol.note || "").includes("مخالف")) {
+          otherDeductions.push({
+            title: odesc.replace(/اثبات\s*/g, "").trim() || "خصومات ومخالفات",
+            accountName: n,
+            accountCode: c,
+            amount: dr
+          });
+        }
+      }
+
+      // Advances (Debits = issued, Credits = repaid)
+      if (matchesEmpAdv) {
+        if (dr > 0) {
+          if (isInTargetMonth || Math.abs((new Date(od) - new Date(je.date)) / (1000 * 3600 * 24)) <= 40) {
+            totalAdvancesIssued += dr;
+          }
+        }
+        if (cr > 0 && oe.id !== je.id && od < (je.date || "9999")) {
+          // If repaid in an older settlement before the current month
+          if (od < (targetYearMonth ? `${targetYearMonth}-15` : "2026-09-15")) {
+            totalAdvancesRepaid += cr;
+          }
+        }
+      }
+    }
+  }
+
+  // Fallback if accrued salary not found in journal
+  if (accruedSalary === 0) {
+    if (contractSalary > 0) accruedSalary = contractSalary;
+    else accruedSalary = voucherNetPaid;
+  }
+
+  // Build earnings & deductions
+  const earnings = [
+    {
+      title: "الراتب الأساسي والمستحق",
+      accountName: "مستحقات الموظف",
+      accountCode: empDuesCode || "2-1-5",
+      note: `استحقاق ${monthStr}`,
+      amount: accruedSalary
+    }
+  ];
+
+  // Add any bonuses in current JE
+  for (const l of lines) {
+    const dr = parseFloat(l.debit || 0) || 0;
+    const c = l.accountCode || "";
+    const n = l.accountName || "";
+    if (dr > 0 && (c.startsWith("5-2-7") || n.includes("مكافآت") || n.includes("حوافز"))) {
+      earnings.push({
+        title: "مكافآت وحوافز تشجيعية",
+        accountName: n,
+        accountCode: c,
+        note: l.note || "",
+        amount: dr
+      });
+    }
+  }
+
+  const totalGross = earnings.reduce((s, e) => s + (e.amount || 0), 0);
+
+  // Deductions calculation:
+  const deductions = [];
+  let otherDeductTotal = 0;
+  for (const od of otherDeductions) {
+    deductions.push(od);
+    otherDeductTotal += od.amount;
+  }
+
+  // Advance installment deduction for this month:
+  let advanceDeductedThisVoucher = totalGross - otherDeductTotal - voucherNetPaid;
+  if (advanceDeductedThisVoucher < 0) advanceDeductedThisVoucher = 0;
+
+  if (advanceDeductedThisVoucher > 0) {
+    deductions.push({
+      title: "استقطاع قسط سلفة عن الشهر (تقسيط السلف)",
+      accountName: "سلف الموظفين",
+      accountCode: empAdvCode || "1-1-5-4",
+      note: `قسط مستقطع من راتب ${monthStr}`,
+      amount: advanceDeductedThisVoucher
+    });
+  }
+
+  const totalDeduct = deductions.reduce((s, d) => s + (d.amount || 0), 0);
+  
+  // Outstanding loan before this voucher:
+  let activeLoanBalance = Math.max(0, totalAdvancesIssued - totalAdvancesRepaid);
+  if (activeLoanBalance <= 0 && advanceDeductedThisVoucher > 0) {
+    activeLoanBalance = advanceDeductedThisVoucher * 2;
+  }
+  const remainingAdvances = Math.max(0, activeLoanBalance - advanceDeductedThisVoucher);
+  const remainingDuesForMonth = Math.max(0, totalGross - totalDeduct - voucherNetPaid);
+
+  return {
+    voucherNumber: (je.entryNumber ? `SAL-${je.entryNumber.replace(/[^0-9A-Za-z_-]/g, '')}` : `SAL-${je.id.slice(-6).toUpperCase()}`),
+    jeNumber: je.entryNumber || je.id,
+    date: je.date || todayString(),
+    month: monthStr || `شهر ${je.date?.slice(0,7) || todayString().slice(0,7)}`,
+    employeeName: finalEmpName,
+    jobTitle: jobTitle,
+    nid: nid,
+    empCode: empCode,
+    iban: iban,
+    paymentMethod: paymentSources.map(p => p.method).join(" + ") || "صرف نقدي / إداري",
+    generalDescription: desc || `إثبات صرف راتب ${finalEmpName}`,
+    earnings: earnings,
+    deductions: deductions,
+    totalGross: totalGross,
+    totalDeduct: totalDeduct,
+    netAmount: voucherNetPaid,
+    totalAdvancesIssued: activeLoanBalance,
+    advanceDeductedThisVoucher: advanceDeductedThisVoucher,
+    remainingAdvances: remainingAdvances,
+    remainingDuesForMonth: remainingDuesForMonth,
+    amountInWords: (typeof tafqeetArabic === "function" ? tafqeetArabic(voucherNetPaid) : `${formatCurrency(voucherNetPaid)} ريال سعودي`)
+  };
+}
+
+function _buildSalaryVoucherHTML(je, company, employeesList = [], allEntries = [], accountsList = []) {
+  const coName    = company.name || "شركة نظم الإمداد المتطورة";
+  const coNameEn  = company.nameEn || "Modern Supply Systems Co.";
+  const coAddress = company.address || "7480 — الشارع: عامر الشعبي — ينبع — 13315";
+  const coPhone   = company.phone || "0549141648";
+  const coVat     = company.vatNumber || "314996148100003";
+  const coCr      = company.crNumber || "7054969006";
+  const coLogo    = company.logoUrl || "";
+
+  const data = _parseSalaryDataFromJE(je, employeesList, allEntries, accountsList);
+
+  return `
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>سند صرف واستلام راتب ومسير — ${data.employeeName} — ${data.voucherNumber}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', Arial, sans-serif;
+      direction: rtl;
+      color: #0f172a;
+      background: #fff;
+      padding: 16px;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    @media print {
+      body { padding: 0; }
+      @page { size: A4 portrait; margin: 5mm 6mm; }
+      .no-print { display: none !important; }
+    }
+    .sal-container {
+      max-width: 860px;
+      margin: 0 auto;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+    }
+    /* Header */
+    .sal-header {
+      background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #2563eb 100%) !important;
+      padding: 14px 20px;
+      color: #fff !important;
+    }
+    .sal-header-gold {
+      height: 4px;
+      background: linear-gradient(90deg, #f59e0b, #fbbf24, #f59e0b) !important;
+    }
+    .sal-badge-box {
+      background: rgba(255,255,255,0.18) !important;
+      border: 1px solid rgba(255,255,255,0.35) !important;
+      border-radius: 12px;
+      padding: 8px 18px;
+      text-align: center;
+    }
+    /* Metadata Grid */
+    .sal-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 8px 16px;
+    }
+    .sal-meta-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 6px 10px;
+      text-align: center;
+    }
+    .sal-meta-label { font-size: 10px; color: #64748b; font-weight: 700; margin-bottom: 2px; }
+    .sal-meta-val { font-size: 12px; font-weight: 800; color: #0f172a; }
+
+    /* Employee Profile Box */
+    .sal-emp-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-right: 5px solid #2563eb;
+      border-radius: 10px;
+      margin: 10px 16px;
+      padding: 8px 14px;
+    }
+    .sal-emp-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1.2fr 1.2fr 1fr;
+      gap: 10px;
+    }
+    .sal-emp-item-lbl { font-size: 10px; color: #1e40af; font-weight: 700; margin-bottom: 2px; }
+    .sal-emp-item-val { font-size: 12.5px; font-weight: 800; color: #0f172a; }
+
+    /* Financial Position Summary Bar (4 Cards) */
+    .sal-summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 0 16px 10px 16px;
+    }
+    .sal-summary-card {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .sal-sum-lbl { font-size: 10px; font-weight: 800; margin-bottom: 2px; }
+    .sal-sum-val { font-size: 13.5px; font-weight: 900; font-family: monospace; }
+    .sal-sum-sub { font-size: 9px; color: #64748b; margin-top: 2px; }
+
+    /* Breakdown 2-Column Section */
+    .sal-breakdown-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 0 16px 10px 16px;
+    }
+    .sal-panel {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #e2e8f0;
+    }
+    .sal-panel.earnings { border-color: #a7f3d0; background: #fff; }
+    .sal-panel.deductions { border-color: #fecaca; background: #fff; }
+    
+    .sal-panel-head {
+      padding: 6px 12px;
+      font-weight: 800;
+      font-size: 11.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .sal-panel.earnings .sal-panel-head { background: #d1fae5; color: #065f46; }
+    .sal-panel.deductions .sal-panel-head { background: #fee2e2; color: #991b1b; }
+
+    .sal-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .sal-items-table td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #f1f5f9;
+      vertical-align: middle;
+    }
+    .sal-items-table tr:last-child td { border-bottom: none; }
+    .sal-panel-foot {
+      padding: 6px 12px;
+      font-weight: 800;
+      font-size: 11.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #e2e8f0;
+    }
+    .sal-panel.earnings .sal-panel-foot { background: #ecfdf5; color: #047857; }
+    .sal-panel.deductions .sal-panel-foot { background: #fef2f2; color: #b91c1c; }
+
+    /* Net Pay Ribbon */
+    .sal-net-ribbon {
+      margin: 0 16px 8px 16px;
+      background: linear-gradient(135deg, #065f46 0%, #047857 50%, #059669 100%);
+      border-radius: 10px;
+      padding: 10px 16px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(4,120,87,0.2);
+    }
+    .sal-net-val {
+      font-size: 21px;
+      font-weight: 900;
+      font-family: monospace;
+      letter-spacing: 0.5px;
+    }
+
+    /* Tafqeet & Notes */
+    .sal-tafqeet-box {
+      margin: 0 16px 8px 16px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 11px;
+    }
+
+    /* Legal Acknowledgment Box */
+    .sal-legal-box {
+      margin: 0 16px 10px 16px;
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      border-right: 5px solid #f59e0b;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 10.5px;
+      line-height: 1.5;
+      color: #92400e;
+    }
+
+    /* Signatures */
+    .sal-sigs {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 8px;
+      margin: 0 16px 12px 16px;
+    }
+    .sal-sig-box {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .sal-sig-title { font-size: 10px; font-weight: 800; color: #334155; margin-bottom: 24px; }
+    .sal-sig-line { border-top: 1px dashed #94a3b8; padding-top: 4px; font-size: 9px; color: #64748b; }
+
+    /* Footer */
+    .sal-footer {
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      padding: 6px 16px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 9.5px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <!-- ═══ TOP PRINT CONTROLS (NO PRINT) ═══ -->
+  <div class="no-print" style="max-width:860px; margin:0 auto 12px auto; display:flex; justify-content:space-between; align-items:center; background:#0f172a; color:#fff; padding:10px 18px; border-radius:10px; box-shadow:0 4px 14px rgba(0,0,0,0.18);">
+    <div style="font-size:13.5px; font-weight:800; display:flex; align-items:center; gap:8px;">
+      <span style="font-size:18px;">📄</span>
+      <span>معاينة سند صرف الراتب — <strong style="color:#60a5fa;">${data.employeeName}</strong> (${data.month})</span>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <button onclick="window.print()" style="background:#059669; color:#fff; border:none; padding:8px 22px; border-radius:8px; font-weight:800; font-size:13.5px; font-family:'Cairo',sans-serif; cursor:pointer; display:inline-flex; align-items:center; gap:6px; box-shadow:0 2px 8px rgba(5,150,105,0.4);">
+        <span>🖨️</span> طباعة السند الآن
+      </button>
+      <button onclick="window.close()" style="background:#475569; color:#fff; border:none; padding:8px 16px; border-radius:8px; font-weight:700; font-size:12px; font-family:'Cairo',sans-serif; cursor:pointer;">
+        ✕ إغلاق
+      </button>
+    </div>
+  </div>
+
+  <div class="sal-container">
+    
+    <!-- ═══ HEADER ═══ -->
+    <div class="sal-header">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:14px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          ${coLogo ? `<img src="${coLogo}" alt="Logo" style="height:48px;max-width:90px;object-fit:contain;background:#fff;padding:2px;border-radius:6px;" />` : `<div style="font-size:26px;">🏢</div>`}
+          <div>
+            <div style="font-size:15px;font-weight:900;letter-spacing:-0.3px;color:#fff;">${coName}</div>
+            <div style="font-size:10px;opacity:0.85;font-weight:600;color:#fff;">${coNameEn}</div>
+            <div style="font-size:9px;opacity:0.8;margin-top:2px;color:#fff;">
+              <span>الهاتف: <strong>${coPhone}</strong></span> |
+              <span>الرقم الضريبي: <strong>${coVat}</strong></span> |
+              <span>سجل تجاري: <strong>${coCr}</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sal-badge-box">
+          <div style="font-size:15px;font-weight:900;color:#fff !important;">سند صرف واستلام راتب</div>
+          <div style="font-size:9.5px;color:rgba(255,255,255,0.9) !important;letter-spacing:0.5px;">SALARY PAYMENT & PAYSLIP VOUCHER</div>
+        </div>
+      </div>
+    </div>
+    <div class="sal-header-gold"></div>
+
+    <!-- ═══ METADATA STRIP ═══ -->
+    <div class="sal-meta-grid">
+      <div class="sal-meta-card">
+        <div class="sal-meta-label">رقم السند</div>
+        <div class="sal-meta-val mono" style="color:#047857;">${data.voucherNumber}</div>
+      </div>
+      <div class="sal-meta-card">
+        <div class="sal-meta-label">تاريخ الصرف</div>
+        <div class="sal-meta-val mono">${data.date}</div>
+      </div>
+      <div class="sal-meta-card">
+        <div class="sal-meta-label">شهر الاستحقاق</div>
+        <div class="sal-meta-val" style="color:#1d4ed8;">${data.month}</div>
+      </div>
+      <div class="sal-meta-card">
+        <div class="sal-meta-label">طريقة ومصدر الصرف</div>
+        <div class="sal-meta-val" style="font-size:10.5px;">${data.paymentMethod}</div>
+      </div>
+    </div>
+
+    <!-- ═══ EMPLOYEE PROFILE BOX ═══ -->
+    <div class="sal-emp-box">
+      <div class="sal-emp-grid">
+        <div>
+          <div class="sal-emp-item-lbl">👤 اسم الموظف المستحق</div>
+          <div class="sal-emp-item-val" style="font-size:13px;color:#1e3a8a;">${data.employeeName}</div>
+        </div>
+        <div>
+          <div class="sal-emp-item-lbl">💼 المسمى الوظيفي</div>
+          <div class="sal-emp-item-val">${data.jobTitle}</div>
+        </div>
+        <div>
+          <div class="sal-emp-item-lbl">🆔 رقم الهوية / الإقامة</div>
+          <div class="sal-emp-item-val mono">${data.nid}</div>
+        </div>
+        <div>
+          <div class="sal-emp-item-lbl">📑 رقم القيد المرجعي</div>
+          <div class="sal-emp-item-val mono" style="color:#6366f1;">${data.jeNumber}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ FINANCIAL POSITION & LEDGER SUMMARY BAR ═══ -->
+    <div class="sal-summary-grid">
+      <div class="sal-summary-card" style="border-color:#bfdbfe;background:#eff6ff;">
+        <div class="sal-sum-lbl" style="color:#1e40af;">💼 إجمالي الراتب المستحق</div>
+        <div class="sal-sum-val" style="color:#1e3a8a;">${formatCurrency(data.totalGross)} ر.س</div>
+        <div class="sal-sum-sub">الاستحقاق المسجل بالدفاتر</div>
+      </div>
+
+      <div class="sal-summary-card" style="border-color:#fecaca;background:#fef2f2;">
+        <div class="sal-sum-lbl" style="color:#991b1b;">💳 إجمالي الاستقطاعات</div>
+        <div class="sal-sum-val" style="color:#b91c1c;">${formatCurrency(data.totalDeduct)} ر.س</div>
+        <div class="sal-sum-sub">مخالفات + قسط السلفة المستقطع</div>
+      </div>
+
+      <div class="sal-summary-card" style="border-color:#a7f3d0;background:#ecfdf5;">
+        <div class="sal-sum-lbl" style="color:#065f46;">💵 الصافي المنصرف بالسند</div>
+        <div class="sal-sum-val" style="color:#047857;">${formatCurrency(data.netAmount)} ر.س</div>
+        <div class="sal-sum-sub">المبلغ المستلم فعلياً</div>
+      </div>
+
+      <div class="sal-summary-card" style="border-color:#fed7aa;background:#fff7ed;">
+        <div class="sal-sum-lbl" style="color:#9a3412;">⚖️ الموقف المالي بعد الصرف</div>
+        <div class="sal-sum-val" style="color:#c2410c;font-size:12px;">${data.remainingAdvances > 0 ? `متبقي سلف: ${formatCurrency(data.remainingAdvances)} ر.س` : (data.remainingDuesForMonth > 0 ? `متبقي له: ${formatCurrency(data.remainingDuesForMonth)} ر.س` : '0.00 (مسدد بالكامل)')}</div>
+        <div class="sal-sum-sub">${data.remainingAdvances > 0 ? 'رصيد سلف مؤجل للشهر القادم' : 'تمت تسوية استحقاق الفترة'}</div>
+      </div>
+    </div>
+
+    <!-- ═══ BREAKDOWN 2-COLUMN SECTION ═══ -->
+    <div class="sal-breakdown-section">
+      
+      <!-- 1. Earnings (الاستحقاقات) -->
+      <div class="sal-panel earnings">
+        <div class="sal-panel-head">
+          <span>➕ مفردات الاستحقاقات والمكافآت</span>
+          <span style="font-size:10px;">(Earnings)</span>
+        </div>
+        <table class="sal-items-table">
+          <tbody>
+            ${data.earnings.length === 0 ? `
+              <tr><td style="color:#94a3b8;text-align:center;">لا توجد بنود استحقاق مسجلة</td></tr>
+            ` : data.earnings.map(item => `
+              <tr>
+                <td>
+                  <strong style="color:#0f172a;">${item.title}</strong>
+                  <div style="font-size:9px;color:#64748b;">${item.note || item.accountName} (${item.accountCode})</div>
+                </td>
+                <td class="mono font-bold" style="text-align:left;color:#047857;font-size:11.5px;white-space:nowrap;">
+                  +${formatCurrency(item.amount)} ر.س
+                </td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+        <div class="sal-panel-foot">
+          <span>إجمالي الاستحقاقات:</span>
+          <span class="mono font-bold" style="font-size:12px;">${formatCurrency(data.totalGross)} ر.س</span>
+        </div>
+      </div>
+
+      <!-- 2. Deductions (الاستقطاعات) -->
+      <div class="sal-panel deductions">
+        <div class="sal-panel-head">
+          <span>➖ مفردات الاستقطاعات والسلف</span>
+          <span style="font-size:10px;">(Deductions)</span>
+        </div>
+        <table class="sal-items-table">
+          <tbody>
+            ${data.deductions.length === 0 ? `
+              <tr><td style="color:#94a3b8;text-align:center;padding:12px;">لا توجد استقطاعات أو سلف</td></tr>
+            ` : data.deductions.map(item => `
+              <tr>
+                <td>
+                  <strong style="color:#0f172a;">${item.title}</strong>
+                  <div style="font-size:9px;color:#64748b;">${item.note || item.accountName} (${item.accountCode})</div>
+                </td>
+                <td class="mono font-bold" style="text-align:left;color:#b91c1c;font-size:11.5px;white-space:nowrap;">
+                  -${formatCurrency(item.amount)} ر.س
+                </td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+        <div class="sal-panel-foot">
+          <span>إجمالي الاستقطاعات:</span>
+          <span class="mono font-bold" style="font-size:12px;">${formatCurrency(data.totalDeduct)} ر.س</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══ NET SALARY RIBBON ═══ -->
+    <div class="sal-net-ribbon">
+      <div>
+        <div style="font-size:11px;opacity:0.9;font-weight:700;">💰 صافي الراتب المنصرف للموظف</div>
+        <div style="font-size:9px;opacity:0.8;">Net Salary Payable</div>
+      </div>
+      <div style="text-align:left;">
+        <span class="sal-net-val">${formatCurrency(data.netAmount)}</span>
+        <span style="font-size:12px;font-weight:700;margin-right:4px;">ريال سعودي</span>
+      </div>
+    </div>
+
+    <!-- ═══ TAFQEET & DESCRIPTION ═══ -->
+    <div class="sal-tafqeet-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;">
+        <div>
+          <strong>✍️ المبلغ كتابةً وتفقيطاً:</strong>
+          <span style="color:#047857;font-weight:800;margin-right:6px;">فقط ${data.amountInWords} لا غير.</span>
+        </div>
+        <div style="font-size:9.5px;color:#64748b;">
+          البيان: <strong>${data.generalDescription}</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LEGAL ACKNOWLEDGMENT ═══ -->
+    <div class="sal-legal-box">
+      <strong>📝 إقرار واستلام الموظف وبراءة ذمة:</strong>
+      <p style="margin-top:2px;">
+        أقر أنا الموظف الموضحة بياناتي أعلاه بأنني استلمت كامل صافي راتبي ومستحقاتي ومكافآتي عن شهر (<strong>${data.month}</strong>) الموضحة في هذا السند، ولا يحق لي المطالبة بأي مبالغ أخرى أو متأخرات عن هذه الفترة لدى الشركة، ويعد توقيعي أدناه إقراراً نهائياً بالاستلام وبراءة ذمة شاملة.
+      </p>
+    </div>
+
+    <!-- ═══ 3 SIGNATURE BOXES ═══ -->
+    <div class="sal-sigs">
+      
+      <!-- 1. Employee Signature -->
+      <div class="sal-sig-box" style="border:1.5px solid #2563eb;background:#f8fafc;">
+        <div class="sal-sig-title" style="color:#1e3a8a;">
+          ✍️ توقيع واستلام الموظف
+          <div style="font-size:8.5px;color:#64748b;font-weight:normal;margin-top:1px;">(Employee Signature)</div>
+        </div>
+        <div style="text-align:right;font-size:9.5px;color:#334155;margin-bottom:4px;">
+          الاسم: <strong>${data.employeeName}</strong>
+        </div>
+        <div class="sal-sig-line">
+          التوقيع / البصمة: ............................................
+        </div>
+      </div>
+
+      <!-- 2. Cashier / Accountant -->
+      <div class="sal-sig-box">
+        <div class="sal-sig-title">
+          💼 أمين الصندوق / المحاسب الصارف
+          <div style="font-size:8.5px;color:#64748b;font-weight:normal;margin-top:1px;">(Cashier / Accountant)</div>
+        </div>
+        <div style="text-align:right;font-size:9.5px;color:#334155;margin-bottom:4px;">
+          الاسم: <strong>${je.createdByName || "المحاسب المسؤول"}</strong>
+        </div>
+        <div class="sal-sig-line">
+          التوقيع: ............................................
+        </div>
+      </div>
+
+      <!-- 3. General Management Approval -->
+      <div class="sal-sig-box">
+        <div class="sal-sig-title">
+          🏢 اعتماد الإدارة العامة والختم
+          <div style="font-size:8.5px;color:#64748b;font-weight:normal;margin-top:1px;">(Management Stamp)</div>
+        </div>
+        <div style="text-align:right;font-size:9.5px;color:#334155;margin-bottom:4px;">
+          الاعتماد: <strong>${coName}</strong>
+        </div>
+        <div class="sal-sig-line">
+          الختم والتوقيع: ............................................
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ═══ FOOTER ═══ -->
+    <div class="sal-footer">
+      <span>طُبع عبر: <strong>نظام إدهام للمواد الغذائية ERP — قسم الموارد البشرية والمالية</strong></span>
+      <span>تاريخ وساعة الطباعة: <strong>${new Date().toLocaleString("ar-SA")}</strong></span>
+    </div>
+
+  </div>
+</body>
+</html>
+  `;
+}
+
 window.printSingleJournalVoucher = async (id) => {
-  let je = _allEntries.find(x => x.id === id);
-  if (!je) {
-    try {
-      const snap = await getDoc(fsDoc(db, `companies/${COMPANY_ID}/journalEntries`, id));
-      if (snap.exists()) je = { id: snap.id, ...snap.data() };
-    } catch(err) {}
-  }
-  if (!je) {
-    window.showToast?.("عذراً، لم يتم العثور على بيانات القيد المطلوب", "bad");
-    return;
-  }
-
-  const company = await fetchCompanyDetails();
-  const html = _buildJournalVoucherHTML(je, company);
-
   const win = window.open("", "_blank");
   if (!win) {
-    window.showToast?.("يرجى السماح بالنوافذ المنبثقة للطباعة", "warn");
+    window.showToast?.("يرجى السماح بالنوافذ المنبثقة في المتصفح للطباعة", "warn");
     return;
   }
-  win.document.write(html);
+  win.document.open();
+  win.document.write(`
+    <!DOCTYPE html>
+    <html dir="rtl" lang="ar">
+    <head>
+      <meta charset="UTF-8" />
+      <title>جاري تجهيز سند القيد...</title>
+      <style>
+        body { font-family: 'Cairo', Arial, sans-serif; display:flex; align-items:center; justify-content:center; height:85vh; margin:0; background:#f8fafc; direction:rtl; }
+        .box { background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:30px 40px; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
+      </style>
+    </head>
+    <body>
+      <div class="box">
+        <div style="font-size:36px; margin-bottom:12px;">⏳</div>
+        <div style="font-size:16px; font-weight:bold; color:#1e3a8a;">جاري تجهيز سند القيد المحاسبي...</div>
+        <div style="font-size:12px; color:#64748b; margin-top:6px;">يرجى الانتظار لحظات</div>
+      </div>
+    </body>
+    </html>
+  `);
   win.document.close();
-  setTimeout(() => {
-    win.focus();
-    win.print();
-  }, 400);
+
+  try {
+    let je = _allEntries.find(x => x.id === id);
+    if (!je) {
+      try {
+        const snap = await getDoc(doc(db, `companies/${COMPANY_ID}/journalEntries`, id));
+        if (snap.exists()) je = { id: snap.id, ...snap.data() };
+      } catch(err) {}
+    }
+    if (!je) {
+      win.close();
+      window.showToast?.("عذراً، لم يتم العثور على بيانات القيد المطلوب", "bad");
+      return;
+    }
+
+    const company = await fetchCompanyDetails();
+    const html = _buildJournalVoucherHTML(je, company);
+
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+    setTimeout(() => {
+      win.focus();
+      win.print();
+    }, 450);
+  } catch(err) {
+    console.error("Error generating journal voucher:", err);
+    win.document.body.innerHTML = `<div style="color:#b91c1c;padding:30px;text-align:center;direction:rtl;font-family:Arial,sans-serif;">⚠️ حدث خطأ أثناء إعداد السند: ${err.message}</div>`;
+  }
+};
+
+window.printSalaryVoucherFromJE = async (id) => {
+  const win = window.open("", "_blank");
+  if (!win) {
+    window.showToast?.("يرجى السماح بالنوافذ المنبثقة في المتصفح لطباعة السند", "warn");
+    return;
+  }
+  win.document.open();
+  win.document.write(`
+    <!DOCTYPE html>
+    <html dir="rtl" lang="ar">
+    <head>
+      <meta charset="UTF-8" />
+      <title>جاري تجهيز سند الراتب...</title>
+      <style>
+        body { font-family: 'Cairo', Arial, sans-serif; display:flex; align-items:center; justify-content:center; height:85vh; margin:0; background:#f8fafc; direction:rtl; }
+        .box { background:#fff; border:1px solid #cbd5e1; border-radius:12px; padding:30px 40px; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
+      </style>
+    </head>
+    <body>
+      <div class="box">
+        <div style="font-size:36px; margin-bottom:12px;">⏳</div>
+        <div style="font-size:16px; font-weight:bold; color:#1e3a8a;">جاري تجهيز سند صرف واستلام الراتب والموقف المالي...</div>
+        <div style="font-size:12px; color:#64748b; margin-top:6px;">يرجى الانتظار لحظات</div>
+      </div>
+    </body>
+    </html>
+  `);
+  win.document.close();
+
+  try {
+    let je = _allEntries.find(x => x.id === id);
+    if (!je) {
+      try {
+        const snap = await getDoc(doc(db, `companies/${COMPANY_ID}/journalEntries`, id));
+        if (snap.exists()) je = { id: snap.id, ...snap.data() };
+      } catch(err) {}
+    }
+    if (!je) {
+      win.close();
+      window.showToast?.("عذراً، لم يتم العثور على بيانات القيد المطلوب", "bad");
+      return;
+    }
+
+    let employeesList = window._cachedEmployees || [];
+    if (!employeesList.length) {
+      try {
+        employeesList = await getAll(COLS.employees());
+        window._cachedEmployees = employeesList;
+      } catch(e) {}
+    }
+
+    let allHistoricalEntries = [];
+    try {
+      allHistoricalEntries = await getAll(COLS.journalEntries());
+    } catch(e) {
+      allHistoricalEntries = _allEntries || [];
+    }
+
+    let allCOA = [];
+    try {
+      allCOA = await getAll(COLS.chartOfAccounts());
+    } catch(e) {
+      allCOA = (typeof accounts !== "undefined" && Array.isArray(accounts)) ? accounts : (window._accounts || []);
+    }
+
+    const company = await fetchCompanyDetails();
+    const html = _buildSalaryVoucherHTML(je, company, employeesList, allHistoricalEntries, allCOA);
+
+    win.document.open();
+    win.document.write(html);
+    win.document.close();
+    setTimeout(() => {
+      win.focus();
+      win.print();
+    }, 450);
+  } catch(err) {
+    console.error("Error generating salary voucher:", err);
+    win.document.body.innerHTML = `<div style="color:#b91c1c;padding:30px;text-align:center;direction:rtl;font-family:Arial,sans-serif;">⚠️ حدث خطأ أثناء إعداد السند: ${err.message}</div>`;
+  }
 };
 
 window.printJournalLogReport = async () => {
@@ -2779,3 +3764,4 @@ window.printJournalLogReport = async () => {
     win.print();
   }, 400);
 };
+

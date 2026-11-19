@@ -1,0 +1,6503 @@
+[
+  {
+    "id": ".fieldPaths=qty&updateMask.fieldPaths=stockStatus&updateMask.fieldPaths=updatedAt",
+    "updatedAt": "2026-10-14T18:01:40.600Z",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_1EU9O4mqrEtwitQPnZ3o",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "1EU9O4mqrEtwitQPnZ3o",
+    "updatedAt": "2026-07-27T18:07:41.389Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_1YfL49HfqYRCA6nZTAKO",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:07:42.974Z",
+    "productId": "1YfL49HfqYRCA6nZTAKO"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_20XnPz3S3yGlqrJ0kqR8",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "20XnPz3S3yGlqrJ0kqR8",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_2EYPP2V6Nz8PrNAYdf5W",
+    "productId": "2EYPP2V6Nz8PrNAYdf5W",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:07:44.390Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_2NbmryZHvF4OFOPE19XG",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "2NbmryZHvF4OFOPE19XG",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_2da0AM4oiAg4oBCXBdEd",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:07:47.315Z",
+    "productId": "2da0AM4oiAg4oBCXBdEd"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_2yZvHDDqsgTAaUkW2BcJ",
+    "qty": 0,
+    "productId": "2yZvHDDqsgTAaUkW2BcJ",
+    "updatedAt": "2026-07-27T18:07:48.912Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_3CYNTCRyqTGGTj2ccAgH",
+    "stockStatus": "out",
+    "productId": "3CYNTCRyqTGGTj2ccAgH",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-17T15:53:38.166Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_3uRSHqrujg6wVrxXe3z0",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "3uRSHqrujg6wVrxXe3z0",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_4BYT6CVNb3Cc2VXvNhOX",
+    "productId": "4BYT6CVNb3Cc2VXvNhOX",
+    "updatedAt": "2026-07-27T18:07:54.560Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_4dEuAA80ziMLFUxH5aJO",
+    "productId": "4dEuAA80ziMLFUxH5aJO",
+    "updatedAt": "2026-07-27T18:07:58.862Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_5hFoTTktBTSAB9Fi9SLn",
+    "updatedAt": "2026-07-27T18:08:00.263Z",
+    "qty": 0,
+    "productId": "5hFoTTktBTSAB9Fi9SLn",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_7DvxzI5plNoCjy5gVPsz",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:01.625Z",
+    "productId": "7DvxzI5plNoCjy5gVPsz"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_7f7PJatqTIplHdulXTWd",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "7f7PJatqTIplHdulXTWd"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_7tCWhZq9UWRXwJxkRTTA",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "7tCWhZq9UWRXwJxkRTTA",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_8AZuD93GootRkJ1CigtI",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "8AZuD93GootRkJ1CigtI",
+    "updatedAt": "2026-07-27T18:08:04.506Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_94bTgCDFkYMJQaoETG3Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:06.025Z",
+    "productId": "94bTgCDFkYMJQaoETG3Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_9NtVvzhfnxB2Z9rDN3uN",
+    "productId": "9NtVvzhfnxB2Z9rDN3uN",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-19T08:21:06.932Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_9PeZIfHYdFJtZgsKzNbQ",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "9PeZIfHYdFJtZgsKzNbQ",
+    "updatedAt": "2026-07-27T18:08:08.748Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_9rXe9UCiqrJ4c97SXCJp",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "9rXe9UCiqrJ4c97SXCJp",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_A1yASYzpEy0S0M4xm1r8",
+    "updatedAt": "2026-07-27T18:08:10.125Z",
+    "qty": 0,
+    "productId": "A1yASYzpEy0S0M4xm1r8",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_AxokEQfHoYE6iSMXQuFy",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "AxokEQfHoYE6iSMXQuFy",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_BzDiuvdpbviaXhOG5N0N",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "BzDiuvdpbviaXhOG5N0N",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_C1ac8RMQhx2gXejGiyF3",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:12.849Z",
+    "qty": 0,
+    "productId": "C1ac8RMQhx2gXejGiyF3"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_C4uFJBEhleygJraDO5qH",
+    "updatedAt": "2026-07-27T18:08:14.227Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "C4uFJBEhleygJraDO5qH"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_CcXTqwIBYvF3O1XSa6v2",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:15.617Z",
+    "productId": "CcXTqwIBYvF3O1XSa6v2"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_CdgjhKMW761zK7C4v8CI",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "CdgjhKMW761zK7C4v8CI"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_CwXTkvyG6odoZzZuEDja",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "CwXTkvyG6odoZzZuEDja",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_DY5ADETYmJoMo354HbS6",
+    "productId": "DY5ADETYmJoMo354HbS6",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:18.267Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_DYAhGplYopMJF95oK0IS",
+    "qty": 0,
+    "productId": "DYAhGplYopMJF95oK0IS",
+    "updatedAt": "2026-07-27T18:08:19.626Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_Daq0kIm7IykV0OkO4oLa",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "Daq0kIm7IykV0OkO4oLa",
+    "updatedAt": "2026-07-27T18:08:21.032Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_DviRgNpE8LLhT5ASxST3",
+    "updatedAt": "2026-07-27T18:08:22.459Z",
+    "productId": "DviRgNpE8LLhT5ASxST3",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_EDm62noDcoaSqIWpOgdD",
+    "productId": "EDm62noDcoaSqIWpOgdD",
+    "updatedAt": "2026-07-27T18:08:23.755Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_ERMKWYiTKdyUihtCTePI",
+    "productId": "ERMKWYiTKdyUihtCTePI",
+    "updatedAt": "2026-07-27T18:08:25.148Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_EXLDPRwT8ppDGrKjmDBM",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "EXLDPRwT8ppDGrKjmDBM",
+    "updatedAt": "2026-07-27T18:08:26.531Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_FlofDooOmuOEFrQiCWFQ",
+    "updatedAt": "2026-07-27T18:08:27.910Z",
+    "productId": "FlofDooOmuOEFrQiCWFQ",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_G4OKtTeRu9W5SP4J0GKy",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "G4OKtTeRu9W5SP4J0GKy",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_GjMW892nmjpmLeV5Kx3c",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "GjMW892nmjpmLeV5Kx3c",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_H5l12QDSE7W2hZOdcl1C",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "H5l12QDSE7W2hZOdcl1C",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_HWiP60AueqeUffX1owt8",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:33.268Z",
+    "qty": 0,
+    "productId": "HWiP60AueqeUffX1owt8"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_HtXRAmejDzBMhxsYQEUy",
+    "qty": 0,
+    "productId": "HtXRAmejDzBMhxsYQEUy",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:34.668Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_IV8f71IUPMlWk4unzQas",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "stockStatus": "out",
+    "productId": "IV8f71IUPMlWk4unzQas",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_Kgqy5tEZswKnEJtaHB0P",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "Kgqy5tEZswKnEJtaHB0P",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_LYDz1hvYQAgGoTpbTOSw",
+    "qty": 0,
+    "productId": "LYDz1hvYQAgGoTpbTOSw",
+    "updatedAt": "2026-07-27T18:08:37.348Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_LecJvj5mC6WvkN8boroZ",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "LecJvj5mC6WvkN8boroZ",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_MNSnc8uULDA5wfiYIW99",
+    "productId": "MNSnc8uULDA5wfiYIW99",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_MrmWUHqDh6stxloRQNkT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "MrmWUHqDh6stxloRQNkT",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_NJn3bR8RLg1bAUcZvi32",
+    "productId": "NJn3bR8RLg1bAUcZvi32",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:42.848Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_OCbk2C3WCS6nrDpMeynA",
+    "stockStatus": "out",
+    "productId": "OCbk2C3WCS6nrDpMeynA",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_PmtB5uXbDG1nXnx8GMSJ",
+    "qty": 0,
+    "productId": "PmtB5uXbDG1nXnx8GMSJ",
+    "updatedAt": "2026-07-27T18:08:45.831Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_PnOdolAXPEcF2IfU4MMx",
+    "qty": 0,
+    "productId": "PnOdolAXPEcF2IfU4MMx",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:47.184Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_QPV4lrM9pSVlss2NDb9y",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "QPV4lrM9pSVlss2NDb9y",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_R1re9QOHWOUZX1cwZtRB",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "R1re9QOHWOUZX1cwZtRB",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-17T15:53:38.166Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_RcrtoSwuKI63talw1zuG",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "RcrtoSwuKI63talw1zuG",
+    "updatedAt": "2026-07-27T18:08:48.586Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_S48tSeUJz7vl4mPR5okg",
+    "productId": "S48tSeUJz7vl4mPR5okg",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_SQnrnOyRXWzq76NO3yXB",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "SQnrnOyRXWzq76NO3yXB",
+    "stockStatus": "out",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-19T08:10:06.698Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_Sg7k8Y5bVrlOa8zoD5yh",
+    "productId": "Sg7k8Y5bVrlOa8zoD5yh",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:51.389Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_SzHULsTeLonnDaH4vh4Y",
+    "updatedAt": "2026-07-27T18:08:52.790Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "SzHULsTeLonnDaH4vh4Y"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_U7X6AQz47gWcp5ShgLPO",
+    "stockStatus": "out",
+    "productId": "U7X6AQz47gWcp5ShgLPO",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-19T08:21:06.932Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_WruLvzM1VpCOZ6yEHf8Y",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-17T15:53:38.166Z",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "WruLvzM1VpCOZ6yEHf8Y"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_X2zgrRmnUXIXqZ6ytQS1",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "X2zgrRmnUXIXqZ6ytQS1",
+    "qty": 0,
+    "updatedAt": "2026-09-19T08:21:06.932Z",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_XCQOI94ocO903Gm0xeK8",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "XCQOI94ocO903Gm0xeK8",
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_YDGp6p8TPz1bqNnOue4N",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:08:56.949Z",
+    "productId": "YDGp6p8TPz1bqNnOue4N"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_YV2OumfkBeqlzRG2YruG",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:58.408Z",
+    "productId": "YV2OumfkBeqlzRG2YruG"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_ZINptjXdR8FmNmwaGo2t",
+    "productId": "ZINptjXdR8FmNmwaGo2t",
+    "updatedAt": "2026-07-27T18:08:59.744Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_Zpy1JPhHmUYrRbFao1IO",
+    "productId": "Zpy1JPhHmUYrRbFao1IO",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-19T08:10:06.698Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_a707N5zfeimbWrUe0AxE",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "a707N5zfeimbWrUe0AxE",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_afCATiCiSHOBFsMH1aLK",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "afCATiCiSHOBFsMH1aLK",
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_atrR6pMjwiEfK6Hdo2Oi",
+    "productId": "atrR6pMjwiEfK6Hdo2Oi",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_bJ7SHrAJrGUmxRXK5uIt",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "bJ7SHrAJrGUmxRXK5uIt",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_bYDk4gcZQhPBwWyPtnrr",
+    "updatedAt": "2026-07-27T18:09:03.830Z",
+    "productId": "bYDk4gcZQhPBwWyPtnrr",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_c1AGjekAaUO0zQchv0bK",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "productId": "c1AGjekAaUO0zQchv0bK",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-09-19T08:10:06.698Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_c7VkTk3H5pvcZB2tCGRN",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "c7VkTk3H5pvcZB2tCGRN",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_c87KVwQ4KpLT51MM3l1u",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "c87KVwQ4KpLT51MM3l1u",
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_cdQSjHVqLxAYqBMVUyLE",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "cdQSjHVqLxAYqBMVUyLE"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_cpOYrBAZbabLvo5DoZ6B",
+    "productId": "cpOYrBAZbabLvo5DoZ6B",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:08.025Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_dX04uuWrBhJhErR3U40T",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "dX04uuWrBhJhErR3U40T",
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_dtCMNYIhjGBZGCUE6Lr1",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "productId": "dtCMNYIhjGBZGCUE6Lr1",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_eAXoMt1UyFqPTMLZ4GAX",
+    "productId": "eAXoMt1UyFqPTMLZ4GAX",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-09-19T08:21:06.932Z",
+    "reorderLevel": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_fT46B3aWtLP1P85gLk8J",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "fT46B3aWtLP1P85gLk8J",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-17T15:53:38.166Z",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_fV6ZGU0s0fFiEluCLKje",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "fV6ZGU0s0fFiEluCLKje",
+    "reorderLevel": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_g0ZCXjRkQWyWCXy0qgN5",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:13.466Z",
+    "productId": "g0ZCXjRkQWyWCXy0qgN5"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_h2CTayjdEvjpld1Mc7WO",
+    "productId": "h2CTayjdEvjpld1Mc7WO",
+    "updatedAt": "2026-07-27T18:09:14.867Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_hsweOtlJmOZIBAB1tlu1",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "productId": "hsweOtlJmOZIBAB1tlu1",
+    "updatedAt": "2026-07-27T18:09:16.241Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_hvysP8vRqA8wXPIz75nN",
+    "productId": "hvysP8vRqA8wXPIz75nN",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:17.593Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_iFJ8JyexxPdWuYlzbU5Y",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "iFJ8JyexxPdWuYlzbU5Y",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_iht0utKRHl3JCWuI4D1E",
+    "productId": "iht0utKRHl3JCWuI4D1E",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:20.227Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_iqrB1dkzgtyvBOVVXl6q",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "iqrB1dkzgtyvBOVVXl6q",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_jTxUESxX83gV3ASNzhmT",
+    "stockStatus": "out",
+    "productId": "jTxUESxX83gV3ASNzhmT",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_k9SN4NfHIQJ1Qbzz9F8E",
+    "stockStatus": "out",
+    "productId": "k9SN4NfHIQJ1Qbzz9F8E",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_kAm09NsM5EPXF8UvrFeX",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "kAm09NsM5EPXF8UvrFeX",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:23.015Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_muaXACw0f09dXe4V1QY1",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:24.320Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "muaXACw0f09dXe4V1QY1"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_n4IW05Dc6fcoU0G6Ac2t",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "n4IW05Dc6fcoU0G6Ac2t",
+    "updatedAt": "2026-07-27T18:09:25.738Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_nE7UIt4vMdgbI4fhklhf",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "nE7UIt4vMdgbI4fhklhf"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_ndlDJpMG9hlBKQe4MauJ",
+    "updatedAt": "2026-07-27T18:09:27.216Z",
+    "qty": 0,
+    "productId": "ndlDJpMG9hlBKQe4MauJ",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_nn7SSyLySTxv0WgkoWf8",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:28.586Z",
+    "productId": "nn7SSyLySTxv0WgkoWf8",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_oILf9Ggdj8bYNt4Pl492",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:29.943Z",
+    "productId": "oILf9Ggdj8bYNt4Pl492",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_oJ9v6weiVvLu7VgYVp1i",
+    "productId": "oJ9v6weiVvLu7VgYVp1i",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:31.258Z",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_ofIJ9TeKlN756jzt61SW",
+    "productId": "ofIJ9TeKlN756jzt61SW",
+    "updatedAt": "2026-07-27T18:09:32.638Z",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_ols8aSnfOWwSSwgvIzp7",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "ols8aSnfOWwSSwgvIzp7",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-19T08:10:06.698Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_poGgeZhrDTm4eW0nHNK1",
+    "productId": "poGgeZhrDTm4eW0nHNK1",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:35.416Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_qTe6Vs5C1XurYecxJlB5",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:36.937Z",
+    "qty": 0,
+    "productId": "qTe6Vs5C1XurYecxJlB5"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_qjEiCz0kBP2AFa9Yt3D4",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-07-27T18:09:38.255Z",
+    "productId": "qjEiCz0kBP2AFa9Yt3D4"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_qtl4NmMLGPyRMA9E4Mi5",
+    "productId": "qtl4NmMLGPyRMA9E4Mi5",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:39.614Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_qwuMMK8xWSJhh2Q2KbV8",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "productId": "qwuMMK8xWSJhh2Q2KbV8",
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_rsK4qZNXiYsQYzw97O9W",
+    "qty": 0,
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "rsK4qZNXiYsQYzw97O9W",
+    "updatedAt": "2026-07-27T18:09:42.217Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_tAq8ENjtZ0cRpzhW6xFH",
+    "updatedAt": "2026-09-17T15:53:38.166Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "tAq8ENjtZ0cRpzhW6xFH",
+    "reorderLevel": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_thEesj4aPMBKJePRHTlE",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "thEesj4aPMBKJePRHTlE"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_vQkzxlzdOHu7z21s9SMV",
+    "qty": 0,
+    "productId": "vQkzxlzdOHu7z21s9SMV",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-17T15:53:38.166Z",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_wDrRu3ce1hpW4P4XXt0d",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:47.593Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "wDrRu3ce1hpW4P4XXt0d"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_wGEk0xKjCvX7pSSQGUU1",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:49.130Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "wGEk0xKjCvX7pSSQGUU1"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_wxepIAahN8ati3vwaa2L",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:50.482Z",
+    "productId": "wxepIAahN8ati3vwaa2L"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_x1cIL2f0tNMlLQWMw2ky",
+    "qty": 0,
+    "productId": "x1cIL2f0tNMlLQWMw2ky",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_xatSIYYexbA9vqwkiabB",
+    "updatedAt": "2026-07-27T18:09:53.164Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "productId": "xatSIYYexbA9vqwkiabB",
+    "qty": 0
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_yJJs2qLBiktzgf1yPlTF",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "yJJs2qLBiktzgf1yPlTF",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "updatedAt": "2026-09-09T09:58:17.922Z"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_yLOfiimlko7x0ORSKc5c",
+    "qty": 0,
+    "productId": "yLOfiimlko7x0ORSKc5c",
+    "updatedAt": "2026-07-27T18:09:55.815Z",
+    "warehouseId": "5spakstdxOmDW0dhLZgp"
+  },
+  {
+    "id": "5spakstdxOmDW0dhLZgp_z8t67CUmJnR9IT1pVAdW",
+    "productId": "z8t67CUmJnR9IT1pVAdW",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T09:58:17.922Z",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_1EU9O4mqrEtwitQPnZ3o",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "1EU9O4mqrEtwitQPnZ3o",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_2NbmryZHvF4OFOPE19XG",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "2NbmryZHvF4OFOPE19XG",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_3CYNTCRyqTGGTj2ccAgH",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "3CYNTCRyqTGGTj2ccAgH",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_7tCWhZq9UWRXwJxkRTTA",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "7tCWhZq9UWRXwJxkRTTA",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_9NtVvzhfnxB2Z9rDN3uN",
+    "qty": 0,
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "9NtVvzhfnxB2Z9rDN3uN",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_9rXe9UCiqrJ4c97SXCJp",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "9rXe9UCiqrJ4c97SXCJp",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-14T08:58:12.149Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_AxokEQfHoYE6iSMXQuFy",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "AxokEQfHoYE6iSMXQuFy",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_BzDiuvdpbviaXhOG5N0N",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "BzDiuvdpbviaXhOG5N0N",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-14T08:58:12.149Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_CcXTqwIBYvF3O1XSa6v2",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "CcXTqwIBYvF3O1XSa6v2",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_CwXTkvyG6odoZzZuEDja",
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "CwXTkvyG6odoZzZuEDja",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_DY5ADETYmJoMo354HbS6",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "DY5ADETYmJoMo354HbS6"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_Daq0kIm7IykV0OkO4oLa",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "productId": "Daq0kIm7IykV0OkO4oLa"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_ERMKWYiTKdyUihtCTePI",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "ERMKWYiTKdyUihtCTePI",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_EXLDPRwT8ppDGrKjmDBM",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "EXLDPRwT8ppDGrKjmDBM",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_FlofDooOmuOEFrQiCWFQ",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "FlofDooOmuOEFrQiCWFQ",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_G4OKtTeRu9W5SP4J0GKy",
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "productId": "G4OKtTeRu9W5SP4J0GKy",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_GjMW892nmjpmLeV5Kx3c",
+    "stockStatus": "out",
+    "productId": "GjMW892nmjpmLeV5Kx3c",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_H5l12QDSE7W2hZOdcl1C",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "H5l12QDSE7W2hZOdcl1C",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_IV8f71IUPMlWk4unzQas",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "productId": "IV8f71IUPMlWk4unzQas"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_KH4VsMfbVjboRlPsCKpz",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "KH4VsMfbVjboRlPsCKpz",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_Kgqy5tEZswKnEJtaHB0P",
+    "stockStatus": "out",
+    "productId": "Kgqy5tEZswKnEJtaHB0P",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-09-14T08:58:12.149Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_MNSnc8uULDA5wfiYIW99",
+    "qty": 0,
+    "productId": "MNSnc8uULDA5wfiYIW99",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_NJn3bR8RLg1bAUcZvi32",
+    "productId": "NJn3bR8RLg1bAUcZvi32",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_O5Pc4ZP3ks1TWq2AfhOo",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "reorderLevel": 0,
+    "productId": "O5Pc4ZP3ks1TWq2AfhOo",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_OCbk2C3WCS6nrDpMeynA",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "OCbk2C3WCS6nrDpMeynA",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_PmtB5uXbDG1nXnx8GMSJ",
+    "stockStatus": "out",
+    "productId": "PmtB5uXbDG1nXnx8GMSJ",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_QPV4lrM9pSVlss2NDb9y",
+    "productId": "QPV4lrM9pSVlss2NDb9y",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_RcrtoSwuKI63talw1zuG",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "RcrtoSwuKI63talw1zuG",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-14T09:32:21.836Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_RpOpicdA58y2aqs4IA8q",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "RpOpicdA58y2aqs4IA8q",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_SQnrnOyRXWzq76NO3yXB",
+    "stockStatus": "out",
+    "productId": "SQnrnOyRXWzq76NO3yXB",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-09-14T08:58:12.149Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_SzHULsTeLonnDaH4vh4Y",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "SzHULsTeLonnDaH4vh4Y",
+    "updatedAt": "2026-08-24T15:42:15.298Z",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_U7X6AQz47gWcp5ShgLPO",
+    "productId": "U7X6AQz47gWcp5ShgLPO",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_WruLvzM1VpCOZ6yEHf8Y",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out",
+    "productId": "WruLvzM1VpCOZ6yEHf8Y",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_WxGec0F3udluHDEFApv7",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "WxGec0F3udluHDEFApv7",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_XCQOI94ocO903Gm0xeK8",
+    "productId": "XCQOI94ocO903Gm0xeK8",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_YDGp6p8TPz1bqNnOue4N",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "YDGp6p8TPz1bqNnOue4N",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_YV2OumfkBeqlzRG2YruG",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out",
+    "productId": "YV2OumfkBeqlzRG2YruG",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_ZINptjXdR8FmNmwaGo2t",
+    "qty": 0,
+    "productId": "ZINptjXdR8FmNmwaGo2t",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_Zpy1JPhHmUYrRbFao1IO",
+    "reorderLevel": 0,
+    "productId": "Zpy1JPhHmUYrRbFao1IO",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_atrR6pMjwiEfK6Hdo2Oi",
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "stockStatus": "out",
+    "productId": "atrR6pMjwiEfK6Hdo2Oi",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_bJ7SHrAJrGUmxRXK5uIt",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "bJ7SHrAJrGUmxRXK5uIt",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_c1AGjekAaUO0zQchv0bK",
+    "productId": "c1AGjekAaUO0zQchv0bK",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-09-14T09:32:21.836Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_c7VkTk3H5pvcZB2tCGRN",
+    "qty": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "productId": "c7VkTk3H5pvcZB2tCGRN",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_c87KVwQ4KpLT51MM3l1u",
+    "qty": 0,
+    "productId": "c87KVwQ4KpLT51MM3l1u",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_cdQSjHVqLxAYqBMVUyLE",
+    "qty": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "productId": "cdQSjHVqLxAYqBMVUyLE",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_cpOYrBAZbabLvo5DoZ6B",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0,
+    "productId": "cpOYrBAZbabLvo5DoZ6B",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_d17p96xsHv7Vmpyc9Toy",
+    "qty": 0,
+    "productId": "d17p96xsHv7Vmpyc9Toy",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_dtCMNYIhjGBZGCUE6Lr1",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "dtCMNYIhjGBZGCUE6Lr1",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_eAXoMt1UyFqPTMLZ4GAX",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "eAXoMt1UyFqPTMLZ4GAX",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_fT46B3aWtLP1P85gLk8J",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "fT46B3aWtLP1P85gLk8J",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_fV6ZGU0s0fFiEluCLKje",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "fV6ZGU0s0fFiEluCLKje"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_ido9rzLwUEIyH8cBoKJJ",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "ido9rzLwUEIyH8cBoKJJ",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_iqrB1dkzgtyvBOVVXl6q",
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "iqrB1dkzgtyvBOVVXl6q",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_jTxUESxX83gV3ASNzhmT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "jTxUESxX83gV3ASNzhmT"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_jcvBhus9KJxTvFOKPYea",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "jcvBhus9KJxTvFOKPYea",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_k9SN4NfHIQJ1Qbzz9F8E",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "k9SN4NfHIQJ1Qbzz9F8E",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-09-14T09:32:21.836Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_ndlDJpMG9hlBKQe4MauJ",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "stockStatus": "out",
+    "productId": "ndlDJpMG9hlBKQe4MauJ",
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_nn7SSyLySTxv0WgkoWf8",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "productId": "nn7SSyLySTxv0WgkoWf8"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_oJ9v6weiVvLu7VgYVp1i",
+    "productId": "oJ9v6weiVvLu7VgYVp1i",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-09-13T11:01:04.138Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_oU8yH7WDRu2ZBKLVYg1A",
+    "qty": 0,
+    "updatedAt": "2026-08-29T16:15:43.952Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "oU8yH7WDRu2ZBKLVYg1A"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_poGgeZhrDTm4eW0nHNK1",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "poGgeZhrDTm4eW0nHNK1",
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_qtl4NmMLGPyRMA9E4Mi5",
+    "productId": "qtl4NmMLGPyRMA9E4Mi5",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_qwuMMK8xWSJhh2Q2KbV8",
+    "productId": "qwuMMK8xWSJhh2Q2KbV8",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-02T07:42:32.176Z",
+    "warehouseId": "7egAcDBCbCctJyO4LH91"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_tAq8ENjtZ0cRpzhW6xFH",
+    "productId": "tAq8ENjtZ0cRpzhW6xFH",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-09-13T11:01:04.138Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_thEesj4aPMBKJePRHTlE",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "reorderLevel": 0,
+    "productId": "thEesj4aPMBKJePRHTlE",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_vQkzxlzdOHu7z21s9SMV",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "vQkzxlzdOHu7z21s9SMV",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_wDrRu3ce1hpW4P4XXt0d",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "wDrRu3ce1hpW4P4XXt0d",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_wGEk0xKjCvX7pSSQGUU1",
+    "updatedAt": "2026-09-02T07:42:32.176Z",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "wGEk0xKjCvX7pSSQGUU1"
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_wxepIAahN8ati3vwaa2L",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "productId": "wxepIAahN8ati3vwaa2L",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_x1cIL2f0tNMlLQWMw2ky",
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "x1cIL2f0tNMlLQWMw2ky",
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_yJJs2qLBiktzgf1yPlTF",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-14T09:32:21.836Z",
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "productId": "yJJs2qLBiktzgf1yPlTF",
+    "qty": 0
+  },
+  {
+    "id": "7egAcDBCbCctJyO4LH91_z8t67CUmJnR9IT1pVAdW",
+    "stockStatus": "out",
+    "productId": "z8t67CUmJnR9IT1pVAdW",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "7egAcDBCbCctJyO4LH91",
+    "updatedAt": "2026-08-26T11:26:31.010Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_08xA9TOPkrwcl7jcE0YF",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T19:27:46.220Z",
+    "reorderLevel": 0,
+    "productId": "08xA9TOPkrwcl7jcE0YF",
+    "qty": 10,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_0KFyB9TM8HlFKAlfMI7J",
+    "updatedAt": "2026-10-08T09:03:15.016Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 5,
+    "productId": "0KFyB9TM8HlFKAlfMI7J"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_0LvN11Sl2mJQzLtZrY0u",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-06T19:18:35.536Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "0LvN11Sl2mJQzLtZrY0u",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_0bWD1Rs208zvN4zv4AiS",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "0bWD1Rs208zvN4zv4AiS",
+    "qty": 5,
+    "updatedAt": "2026-10-23T14:01:54.548Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_0cniV5I2oOQBqUJLlu39",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-08-08T16:47:28.116Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "0cniV5I2oOQBqUJLlu39",
+    "qty": 5
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_0e8Mo2xnDl4SuqQT1wVE",
+    "reorderLevel": 0,
+    "qty": 55,
+    "updatedAt": "2026-10-22T13:56:22.620Z",
+    "stockStatus": "ok",
+    "productId": "0e8Mo2xnDl4SuqQT1wVE",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_0zeLn6dWFDYDgl10qbic",
+    "stockStatus": "out",
+    "productId": "0zeLn6dWFDYDgl10qbic",
+    "updatedAt": "2026-10-10T15:23:42.137Z",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_1EU9O4mqrEtwitQPnZ3o",
+    "stockStatus": "ok",
+    "productId": "1EU9O4mqrEtwitQPnZ3o",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 8,
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T10:04:10.081Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_1YfL49HfqYRCA6nZTAKO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "1YfL49HfqYRCA6nZTAKO",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-24T09:12:20.595Z",
+    "qty": 38,
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_1oHUWzPe2Jcsmw1eNxZU",
+    "productId": "1oHUWzPe2Jcsmw1eNxZU",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T14:28:51.251Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 10
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_1zzb2xRZ8xJ1no9UCbsP",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "1zzb2xRZ8xJ1no9UCbsP",
+    "updatedAt": "2026-07-30T20:22:08.163Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 10
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_20XnPz3S3yGlqrJ0kqR8",
+    "updatedAt": "2026-10-06T12:49:18.259Z",
+    "qty": 11,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "20XnPz3S3yGlqrJ0kqR8",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_24AElwegGXc5oo8YQBt5",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "24AElwegGXc5oo8YQBt5",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:25:23.637Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_2EYPP2V6Nz8PrNAYdf5W",
+    "updatedAt": "2026-07-28T09:17:41.870Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "2EYPP2V6Nz8PrNAYdf5W",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_2NbmryZHvF4OFOPE19XG",
+    "reorderLevel": 0,
+    "qty": 10,
+    "stockStatus": "ok",
+    "productId": "2NbmryZHvF4OFOPE19XG",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-13T15:01:27.905Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_2Oe6V7JDXI8Hd6rc3GN8",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-22T16:56:30.101Z",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "2Oe6V7JDXI8Hd6rc3GN8"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_2ai0tmIyP6GugmBuB4oc",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-30T20:21:43.411Z",
+    "reorderLevel": 0,
+    "qty": 10,
+    "stockStatus": "ok",
+    "productId": "2ai0tmIyP6GugmBuB4oc"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_2da0AM4oiAg4oBCXBdEd",
+    "reorderLevel": 0,
+    "productId": "2da0AM4oiAg4oBCXBdEd",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-28T09:17:36.997Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_2opKhttqo0iekFasJe6J",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 3,
+    "productId": "2opKhttqo0iekFasJe6J",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_2yZvHDDqsgTAaUkW2BcJ",
+    "updatedAt": "2026-07-28T09:16:59.686Z",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "2yZvHDDqsgTAaUkW2BcJ"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_375wyAJYX7Np6wEpd5vA",
+    "productId": "375wyAJYX7Np6wEpd5vA",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-13T14:24:53.499Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_39KzHOrIIhFulgoC328F",
+    "updatedAt": "2026-09-09T19:34:40.949Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "39KzHOrIIhFulgoC328F",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_3CYNTCRyqTGGTj2ccAgH",
+    "stockStatus": "ok",
+    "productCode": "45004",
+    "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه",
+    "productId": "3CYNTCRyqTGGTj2ccAgH",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "companyId": "idham-main",
+    "updatedAt": "2026-10-22T07:32:42.603Z",
+    "reorderLevel": 0,
+    "qty": 59
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_3XGUzzJdEPegRRDncn0V",
+    "productId": "3XGUzzJdEPegRRDncn0V",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_3mHYTiJFrJfxkOuskcIW",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "qty": 9,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "3mHYTiJFrJfxkOuskcIW",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_3pMnvEU5y9xV4jY77m9y",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-14T15:35:18.327Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "3pMnvEU5y9xV4jY77m9y"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_3uRSHqrujg6wVrxXe3z0",
+    "updatedAt": "2026-10-11T19:20:12.267Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 7,
+    "productId": "3uRSHqrujg6wVrxXe3z0",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_49j3vUnSMUNsfP7qojHd",
+    "updatedAt": "2026-10-08T09:03:15.016Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 10,
+    "stockStatus": "ok",
+    "productId": "49j3vUnSMUNsfP7qojHd"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_4BYT6CVNb3Cc2VXvNhOX",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-28T09:16:58.520Z",
+    "productId": "4BYT6CVNb3Cc2VXvNhOX",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_4F1zPkjk7V5XR4Cf7eep",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-25T20:31:36.672Z",
+    "qty": 3,
+    "stockStatus": "ok",
+    "productId": "4F1zPkjk7V5XR4Cf7eep",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_4KTyYQnmjnjjWDbqefbC",
+    "updatedAt": "2026-10-24T19:01:13.039Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 2,
+    "productId": "4KTyYQnmjnjjWDbqefbC",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_4NzCCNfozK7Vy1tIyEHA",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-08-07T21:51:53.118Z",
+    "stockStatus": "out",
+    "productId": "4NzCCNfozK7Vy1tIyEHA",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_4dEuAA80ziMLFUxH5aJO",
+    "productId": "4dEuAA80ziMLFUxH5aJO",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-11T19:26:28.309Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_5hFoTTktBTSAB9Fi9SLn",
+    "productId": "5hFoTTktBTSAB9Fi9SLn",
+    "stockStatus": "out",
+    "qty": 1,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-01T12:29:30.052Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_5lrwQRnX0TZmlNB4J4Dw",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "productId": "5lrwQRnX0TZmlNB4J4Dw",
+    "qty": 2,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_694TWqa1GHvBmPqsR10Q",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "694TWqa1GHvBmPqsR10Q",
+    "qty": 31,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-22T15:49:48.370Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_6AUCrNQTnVxbtz7mgLWj",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-10T16:24:13.087Z",
+    "stockStatus": "ok",
+    "productId": "6AUCrNQTnVxbtz7mgLWj",
+    "qty": 17,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_6mastRHecQbzn8s2mL6q",
+    "qty": 0,
+    "updatedAt": "2026-10-08T18:23:53.786Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "6mastRHecQbzn8s2mL6q",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_6vKquSlpiAKebqbCgenc",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-15T14:29:13.867Z",
+    "qty": 4,
+    "productId": "6vKquSlpiAKebqbCgenc",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_76tptqcKQG7kdvT7gvO7",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "76tptqcKQG7kdvT7gvO7"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7C3W5vyu1Ch0RKOrSUBH",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-22T15:49:48.370Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 9,
+    "productId": "7C3W5vyu1Ch0RKOrSUBH"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7DvxzI5plNoCjy5gVPsz",
+    "stockStatus": "out",
+    "productId": "7DvxzI5plNoCjy5gVPsz",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-07-28T09:16:57.320Z",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7KTJCq1CgDZzrwPWOoep",
+    "qty": 10,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "7KTJCq1CgDZzrwPWOoep",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-15T14:29:41.596Z",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7VoQuak6nsd83yBxV95N",
+    "productId": "7VoQuak6nsd83yBxV95N",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 10,
+    "updatedAt": "2026-10-15T14:28:54.468Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7VwalP8GbKIAYjdoRMP0",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-24T10:37:30.177Z",
+    "qty": 28,
+    "productId": "7VwalP8GbKIAYjdoRMP0",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7X2KJUvZfYdh8LXNxg9Z",
+    "productId": "7X2KJUvZfYdh8LXNxg9Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T08:41:22.336Z",
+    "qty": 23
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7f7PJatqTIplHdulXTWd",
+    "reorderLevel": 0,
+    "qty": 7,
+    "updatedAt": "2026-10-13T10:34:24.863Z",
+    "stockStatus": "ok",
+    "productId": "7f7PJatqTIplHdulXTWd",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7fyCzC0EBYXL3aovMMiX",
+    "updatedAt": "2026-10-15T14:29:45.154Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "7fyCzC0EBYXL3aovMMiX",
+    "stockStatus": "ok",
+    "qty": 5
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7tCWhZq9UWRXwJxkRTTA",
+    "qty": 8,
+    "updatedAt": "2026-10-07T18:47:34.143Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "7tCWhZq9UWRXwJxkRTTA",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_7ty5VeY9ebD9ljF6VuAB",
+    "updatedAt": "2026-08-07T21:51:45.188Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "7ty5VeY9ebD9ljF6VuAB",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_802Jt3OEr3Myx8fAmEE2",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "802Jt3OEr3Myx8fAmEE2",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_89tzHza07nnWHQRv2u2J",
+    "productId": "89tzHza07nnWHQRv2u2J",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-17T08:50:12.186Z",
+    "qty": 18
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_8AZuD93GootRkJ1CigtI",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "8AZuD93GootRkJ1CigtI",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 1,
+    "updatedAt": "2026-08-13T14:39:49.369Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_8BkckMIT0XFsCOrmFfcW",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T13:36:59.709Z",
+    "reorderLevel": 0,
+    "qty": 8,
+    "stockStatus": "ok",
+    "productId": "8BkckMIT0XFsCOrmFfcW"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_8IE6gW2hpwWcoFBhdb4Z",
+    "qty": 10,
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "8IE6gW2hpwWcoFBhdb4Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-13T09:02:25.377Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_8JeRmS5f4tkKPfE4WgmA",
+    "productId": "8JeRmS5f4tkKPfE4WgmA",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:03:15.016Z",
+    "reorderLevel": 0,
+    "qty": 3
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_8i29c5YJPmxhhwGnJY1d",
+    "stockStatus": "ok",
+    "productId": "8i29c5YJPmxhhwGnJY1d",
+    "qty": 10,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-30T20:22:10.501Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_8ketVRE11az62I0f2vqn",
+    "reorderLevel": 0,
+    "productId": "8ketVRE11az62I0f2vqn",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-08T08:42:47.140Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_8r6SsyuFVkdtsgaUVykI",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 30,
+    "productId": "8r6SsyuFVkdtsgaUVykI",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-18T15:20:49.362Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_94bTgCDFkYMJQaoETG3Z",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "94bTgCDFkYMJQaoETG3Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 18
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_9NtVvzhfnxB2Z9rDN3uN",
+    "productCode": "03002",
+    "productId": "9NtVvzhfnxB2Z9rDN3uN",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-25T15:36:56.966Z",
+    "reorderLevel": 5,
+    "stockStatus": "ok",
+    "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+    "qty": 91
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_9PeZIfHYdFJtZgsKzNbQ",
+    "productId": "9PeZIfHYdFJtZgsKzNbQ",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-09T07:38:33.724Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_9VwPv7UVZsbQQdqVJtzA",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "9VwPv7UVZsbQQdqVJtzA",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "qty": 22
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_9Vx5dM87V714Wem73A0S",
+    "productId": "9Vx5dM87V714Wem73A0S",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-08T09:25:23.637Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_9emGBomCaZlOWAEeegxi",
+    "stockStatus": "ok",
+    "qty": 49,
+    "updatedAt": "2026-09-06T17:22:33.666Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "9emGBomCaZlOWAEeegxi",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_9rXe9UCiqrJ4c97SXCJp",
+    "updatedAt": "2026-10-19T16:25:56.284Z",
+    "stockStatus": "ok",
+    "qty": 31,
+    "reorderLevel": 0,
+    "productId": "9rXe9UCiqrJ4c97SXCJp",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_A1m1Xm85uNuF8Yo0JO1Z",
+    "qty": 17,
+    "productId": "A1m1Xm85uNuF8Yo0JO1Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-21T10:04:10.081Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_A1yASYzpEy0S0M4xm1r8",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": "2026-08-01T07:56:53.062Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "A1yASYzpEy0S0M4xm1r8"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_AFfMPhuP9VNwZFY2Ypu4",
+    "productId": "AFfMPhuP9VNwZFY2Ypu4",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-08-10T11:14:23.813Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_AXoBWyLsJPpGHGBucyZw",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-24T07:56:24.278Z",
+    "qty": 0,
+    "productId": "AXoBWyLsJPpGHGBucyZw",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_AYrglqA4thCNkq6KpgoT",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 15,
+    "productId": "AYrglqA4thCNkq6KpgoT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-15T14:29:38.117Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_AlP9b6HKCkQMUsIRbGt6",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-11T20:10:37.044Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "warehouseName": "المستودع الرئيسى",
+    "productName": "ماء صفا 5 لتر",
+    "stockStatus": "ok",
+    "productId": "AlP9b6HKCkQMUsIRbGt6"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_AxRFFKgFKWkmUj0QVWWK",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-13T08:41:22.336Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 14,
+    "productId": "AxRFFKgFKWkmUj0QVWWK"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_AxokEQfHoYE6iSMXQuFy",
+    "stockStatus": "ok",
+    "productId": "AxokEQfHoYE6iSMXQuFy",
+    "qty": 36,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T10:04:10.081Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_BNTmkCdGBdYZM3NvXM0u",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "BNTmkCdGBdYZM3NvXM0u",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 14,
+    "updatedAt": "2026-10-13T08:41:22.336Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_BRYy3jvl6JJOqON0PnPr",
+    "updatedAt": "2026-08-12T08:15:45.939Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "BRYy3jvl6JJOqON0PnPr",
+    "qty": 10,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_BtdalAZXXYvzODU9Jk3G",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "BtdalAZXXYvzODU9Jk3G",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_BzDiuvdpbviaXhOG5N0N",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-20T14:48:40.598Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "productId": "BzDiuvdpbviaXhOG5N0N"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_C1ac8RMQhx2gXejGiyF3",
+    "updatedAt": "2026-08-09T07:38:33.724Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "C1ac8RMQhx2gXejGiyF3",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_C2qgCHPlCqeAxudziRTx",
+    "updatedAt": "2026-08-27T17:14:18.384Z",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "C2qgCHPlCqeAxudziRTx",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_C4uFJBEhleygJraDO5qH",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 17,
+    "productId": "C4uFJBEhleygJraDO5qH",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-24T09:12:20.595Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_C7O4C5paowvy6a6eQXmQ",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "C7O4C5paowvy6a6eQXmQ",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-06T19:14:43.468Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_CcXTqwIBYvF3O1XSa6v2",
+    "updatedAt": "2026-10-17T09:25:14.143Z",
+    "qty": 2,
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "CcXTqwIBYvF3O1XSa6v2",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_CdgjhKMW761zK7C4v8CI",
+    "updatedAt": "2026-10-19T16:06:34.180Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "CdgjhKMW761zK7C4v8CI",
+    "qty": 121,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_CmRpTW3CU8373Prfkxa0",
+    "stockStatus": "ok",
+    "productId": "CmRpTW3CU8373Prfkxa0",
+    "qty": 8,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-13T15:01:27.905Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_CqVjGpx0uDzRera7vZsJ",
+    "qty": 21,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-15T19:28:07.919Z",
+    "stockStatus": "ok",
+    "productId": "CqVjGpx0uDzRera7vZsJ"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_CwXTkvyG6odoZzZuEDja",
+    "updatedAt": "2026-10-17T08:27:55.322Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 26,
+    "productId": "CwXTkvyG6odoZzZuEDja",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_DIDbLCRYzIxYw2IIQgEQ",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-10T15:23:42.137Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "productId": "DIDbLCRYzIxYw2IIQgEQ"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_DY5ADETYmJoMo354HbS6",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-13T09:02:25.377Z",
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 5,
+    "productId": "DY5ADETYmJoMo354HbS6"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_DYAhGplYopMJF95oK0IS",
+    "qty": 46,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "DYAhGplYopMJF95oK0IS",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_DZe4WdAPSGklrw6NBFQo",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-04T15:49:56.012Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 48,
+    "productId": "DZe4WdAPSGklrw6NBFQo"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Daq0kIm7IykV0OkO4oLa",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 3,
+    "productId": "Daq0kIm7IykV0OkO4oLa",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_DmiuiCSrrwzLqNmKKYHS",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-08-27T17:14:18.384Z",
+    "productId": "DmiuiCSrrwzLqNmKKYHS",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_DrHO1wgcFIAfXqtoTjO0",
+    "updatedAt": "2026-10-08T09:40:35.401Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "DrHO1wgcFIAfXqtoTjO0"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_DviRgNpE8LLhT5ASxST3",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "DviRgNpE8LLhT5ASxST3",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-27T09:00:49.038Z",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_DvpPu7IoClmFq6OyuHSl",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "DvpPu7IoClmFq6OyuHSl",
+    "stockStatus": "ok",
+    "qty": 1,
+    "updatedAt": "2026-10-17T15:55:25.761Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Dz9bCtKwr8twJ5faEuoM",
+    "updatedAt": "2026-10-15T14:29:19.896Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 10,
+    "stockStatus": "ok",
+    "productId": "Dz9bCtKwr8twJ5faEuoM"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_E4MILTeOSWGv3NanzP2U",
+    "updatedAt": "2026-10-08T09:03:15.016Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "E4MILTeOSWGv3NanzP2U",
+    "reorderLevel": 0,
+    "qty": 1
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_EDm62noDcoaSqIWpOgdD",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-18T19:22:39.775Z",
+    "stockStatus": "ok",
+    "productId": "EDm62noDcoaSqIWpOgdD",
+    "qty": 58,
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_EQivOLqFeCAqtyzC8P7X",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-07T18:47:34.143Z",
+    "qty": 9,
+    "stockStatus": "ok",
+    "productId": "EQivOLqFeCAqtyzC8P7X",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ERMKWYiTKdyUihtCTePI",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "ERMKWYiTKdyUihtCTePI",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-07T19:51:29.902Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_EXLDPRwT8ppDGrKjmDBM",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "EXLDPRwT8ppDGrKjmDBM",
+    "qty": 5,
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-08-26T11:32:13.962Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_EZM7P4o8fuuHllcaskVy",
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "EZM7P4o8fuuHllcaskVy",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_EbMOr0wK8MmS7nTrrkLN",
+    "stockStatus": "out",
+    "productId": "EbMOr0wK8MmS7nTrrkLN",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-08T17:36:10.943Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_FFntInScWOENSPxwHiMX",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-10-17T09:23:14.551Z",
+    "stockStatus": "out",
+    "productId": "FFntInScWOENSPxwHiMX",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_FNVeFZX3n2A43O4VLdK8",
+    "productId": "FNVeFZX3n2A43O4VLdK8",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-07T19:58:41.665Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Ff4mhdjkvccal29EVcYO",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "productId": "Ff4mhdjkvccal29EVcYO",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Fkpb98j0ZvdrSjExh0VF",
+    "stockStatus": "ok",
+    "productId": "Fkpb98j0ZvdrSjExh0VF",
+    "reorderLevel": 0,
+    "qty": 12,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T19:28:04.386Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_FlofDooOmuOEFrQiCWFQ",
+    "qty": 76,
+    "productId": "FlofDooOmuOEFrQiCWFQ",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-24T09:12:20.595Z",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Fv0oid1EgFrofzHOMJGl",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-22T07:11:46.575Z",
+    "qty": 8,
+    "productId": "Fv0oid1EgFrofzHOMJGl",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_FvWk9Bio56bO2RWhnZTf",
+    "updatedAt": "2026-08-07T21:51:34.601Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "FvWk9Bio56bO2RWhnZTf",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_G4OKtTeRu9W5SP4J0GKy",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-19T12:06:24.630Z",
+    "qty": 26,
+    "stockStatus": "ok",
+    "productId": "G4OKtTeRu9W5SP4J0GKy",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_G6oNDloeA4oXtc7B9Mx0",
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "G6oNDloeA4oXtc7B9Mx0"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_GjMW892nmjpmLeV5Kx3c",
+    "productId": "GjMW892nmjpmLeV5Kx3c",
+    "stockStatus": "ok",
+    "qty": 19,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-24T15:42:06.677Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_GvIxuqtNErlUhnE2xfBN",
+    "stockStatus": "out",
+    "productId": "GvIxuqtNErlUhnE2xfBN",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:40:35.401Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_H5l12QDSE7W2hZOdcl1C",
+    "updatedAt": "2026-10-15T15:59:57.849Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "H5l12QDSE7W2hZOdcl1C",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_H9M4uK9DwAfcwXhpDRDo",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "H9M4uK9DwAfcwXhpDRDo",
+    "updatedAt": "2026-10-15T14:30:13.912Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 5
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_HRXVwP2qWLMGhBM6gcF2",
+    "updatedAt": "2026-10-18T15:01:36.089Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "HRXVwP2qWLMGhBM6gcF2",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_HWiP60AueqeUffX1owt8",
+    "productId": "HWiP60AueqeUffX1owt8",
+    "updatedAt": "2026-07-27T18:08:32.569Z",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_HYTUthpUuHZ6AtqtR6Rr",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "stockStatus": "out",
+    "productId": "HYTUthpUuHZ6AtqtR6Rr",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_HtXRAmejDzBMhxsYQEUy",
+    "stockStatus": "ok",
+    "qty": 48,
+    "updatedAt": "2026-10-17T08:50:12.186Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "HtXRAmejDzBMhxsYQEUy"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_IQ8m9TtQMbUP59JT280Z",
+    "productId": "IQ8m9TtQMbUP59JT280Z",
+    "qty": 0,
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T08:42:44.654Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_IV8f71IUPMlWk4unzQas",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-11T19:20:12.267Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "IV8f71IUPMlWk4unzQas",
+    "qty": 9
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_IcToo8LA1xqDkAotIavx",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-27T17:14:18.384Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "IcToo8LA1xqDkAotIavx",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_IvJc8UyxydxcFnvfoX5Q",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-21T12:58:32.759Z",
+    "productId": "IvJc8UyxydxcFnvfoX5Q",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_IwA3P6yoNI7WgvJGe1oG",
+    "qty": 0,
+    "productId": "IwA3P6yoNI7WgvJGe1oG",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-07T10:07:10.472Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Ixifa75AnvhwtO2P8lx0",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:40:35.401Z",
+    "qty": 0,
+    "productId": "Ixifa75AnvhwtO2P8lx0",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_IzOaSKtIQBkEhXfWq42b",
+    "qty": 1,
+    "stockStatus": "ok",
+    "productId": "IzOaSKtIQBkEhXfWq42b",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T12:57:21.712Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_JGaepZOseisiYbAq3o8W",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T08:41:22.336Z",
+    "reorderLevel": 0,
+    "productId": "JGaepZOseisiYbAq3o8W",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 25
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_JwECXw4VTinmrGoEF7MY",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-08T17:42:44.159Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "JwECXw4VTinmrGoEF7MY",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_KH4VsMfbVjboRlPsCKpz",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "KH4VsMfbVjboRlPsCKpz",
+    "stockStatus": "ok",
+    "qty": 6,
+    "updatedAt": "2026-08-29T08:18:09.159Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_KKa4b83ZeQ7Bw3oB1isJ",
+    "stockStatus": "ok",
+    "productId": "KKa4b83ZeQ7Bw3oB1isJ",
+    "reorderLevel": 0,
+    "qty": 8,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-22T15:49:48.370Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_KPESAU2IR3TPZpEnCsZg",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "KPESAU2IR3TPZpEnCsZg",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-09-06T19:14:43.468Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_KPv78zgVevBkFyJeRcCF",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "KPv78zgVevBkFyJeRcCF",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-09T19:34:53.584Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_KPxLtIE8DyOQghtkRkJO",
+    "qty": 4,
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "KPxLtIE8DyOQghtkRkJO",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Kgqy5tEZswKnEJtaHB0P",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 17,
+    "updatedAt": "2026-10-23T14:01:54.548Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "Kgqy5tEZswKnEJtaHB0P"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_L1GFtavpJUbBigWTfduV",
+    "stockStatus": "out",
+    "updatedAt": "2026-10-07T10:47:16.382Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "L1GFtavpJUbBigWTfduV"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_LL5a49ARgDEA4QbPvXRp",
+    "qty": 10,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-25T20:31:39.537Z",
+    "stockStatus": "ok",
+    "productId": "LL5a49ARgDEA4QbPvXRp",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_LQ7qcjU0LxGkA8zhd4zz",
+    "updatedAt": "2026-09-14T07:52:34.857Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "LQ7qcjU0LxGkA8zhd4zz",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_LYDz1hvYQAgGoTpbTOSw",
+    "updatedAt": "2026-09-27T09:00:46.819Z",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "LYDz1hvYQAgGoTpbTOSw",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_LecJvj5mC6WvkN8boroZ",
+    "updatedAt": "2026-10-15T15:54:57.490Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "LecJvj5mC6WvkN8boroZ",
+    "qty": 6,
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_LoLpb95BMKnAbYkMhPhP",
+    "updatedAt": "2026-10-20T14:28:56.869Z",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "LoLpb95BMKnAbYkMhPhP",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_M9oCZn0intk0kcPhZXN2",
+    "productId": "M9oCZn0intk0kcPhZXN2",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-10-12T14:18:39.794Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_MGvam0giNIBu97AyBL3C",
+    "updatedAt": "2026-10-22T08:55:23.875Z",
+    "qty": 2,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "MGvam0giNIBu97AyBL3C",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_MNSnc8uULDA5wfiYIW99",
+    "productId": "MNSnc8uULDA5wfiYIW99",
+    "stockStatus": "ok",
+    "qty": 18,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_MWXMvWA35h2AHzrUVO71",
+    "productId": "MWXMvWA35h2AHzrUVO71",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-08T08:15:25.830Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_MfVGbhCCslV2mvwtwbD6",
+    "updatedAt": "2026-08-17T14:57:45.902Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "MfVGbhCCslV2mvwtwbD6",
+    "qty": 55,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_MrmWUHqDh6stxloRQNkT",
+    "updatedAt": "2026-09-09T09:59:22.425Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "MrmWUHqDh6stxloRQNkT",
+    "stockStatus": "ok",
+    "qty": 2
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_NCaERXqkmN4F3KYYdhJj",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-08-27T17:14:18.384Z",
+    "qty": 0,
+    "productId": "NCaERXqkmN4F3KYYdhJj",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_NJn3bR8RLg1bAUcZvi32",
+    "qty": 5,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "NJn3bR8RLg1bAUcZvi32",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-26T11:32:13.962Z",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_NmaRT7e4848hSUGRgfAj",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "NmaRT7e4848hSUGRgfAj",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_O5Pc4ZP3ks1TWq2AfhOo",
+    "updatedAt": "2026-09-12T15:11:33.159Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "O5Pc4ZP3ks1TWq2AfhOo"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_OCbk2C3WCS6nrDpMeynA",
+    "qty": 2,
+    "updatedAt": "2026-10-22T07:32:42.603Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "OCbk2C3WCS6nrDpMeynA",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_OQw06toNnn8labUB8doO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-30T20:21:50.658Z",
+    "qty": 3,
+    "productId": "OQw06toNnn8labUB8doO",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_OgeRBQR2KP1T8wSuZfei",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "OgeRBQR2KP1T8wSuZfei",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 19,
+    "updatedAt": "2026-10-11T19:20:12.267Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_OpWjOYVzE5ObcAkqHcix",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "OpWjOYVzE5ObcAkqHcix",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-27T17:14:18.384Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_OvQAQw4UrvVqisWzMxFi",
+    "stockStatus": "ok",
+    "updatedAt": "2026-09-28T13:59:49.688Z",
+    "qty": 8,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "OvQAQw4UrvVqisWzMxFi"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_P3u9zQgrd9zMrdfxwfKO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "stockStatus": "ok",
+    "productId": "P3u9zQgrd9zMrdfxwfKO",
+    "qty": 8,
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_PF7zEaTfD2GoNCbizIQX",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "PF7zEaTfD2GoNCbizIQX",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T10:04:10.081Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_PmtB5uXbDG1nXnx8GMSJ",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 3,
+    "productId": "PmtB5uXbDG1nXnx8GMSJ",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-18T17:40:10.368Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_PnOdolAXPEcF2IfU4MMx",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "PnOdolAXPEcF2IfU4MMx",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-28T09:17:24.231Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_QPV4lrM9pSVlss2NDb9y",
+    "qty": 12,
+    "stockStatus": "ok",
+    "productId": "QPV4lrM9pSVlss2NDb9y",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_QaGhl2RqDNWkztsnytUs",
+    "qty": 5,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T14:29:52.326Z",
+    "stockStatus": "ok",
+    "productId": "QaGhl2RqDNWkztsnytUs",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_QiWdlskNytP5yHkNFWvk",
+    "updatedAt": "2026-10-24T15:42:06.677Z",
+    "stockStatus": "ok",
+    "qty": 11,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "QiWdlskNytP5yHkNFWvk"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_R1re9QOHWOUZX1cwZtRB",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-22T07:32:42.603Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "R1re9QOHWOUZX1cwZtRB",
+    "stockStatus": "ok",
+    "qty": 69
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_RF0aufZODVrEuyO0KCSF",
+    "updatedAt": "2026-10-22T16:56:30.101Z",
+    "stockStatus": "out",
+    "productId": "RF0aufZODVrEuyO0KCSF",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_RGIKPnqDK2EVjBm86Xd5",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 50,
+    "productId": "RGIKPnqDK2EVjBm86Xd5",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-07T11:02:40.631Z",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_RcoMY094R9fVU0YZaHp0",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "stockStatus": "out",
+    "productId": "RcoMY094R9fVU0YZaHp0",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_RcrtoSwuKI63talw1zuG",
+    "stockStatus": "ok",
+    "productId": "RcrtoSwuKI63talw1zuG",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 7.75,
+    "updatedAt": "2026-09-14T09:27:57.727Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_RjOwuAi5vB44PMtjgYHH",
+    "qty": 41,
+    "updatedAt": "2026-10-24T09:12:20.595Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "RjOwuAi5vB44PMtjgYHH",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Ronvj4u2vzdxVDsKhhi5",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 2,
+    "productId": "Ronvj4u2vzdxVDsKhhi5",
+    "stockStatus": "ok",
+    "updatedAt": "2026-09-28T13:59:49.688Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_RpOpicdA58y2aqs4IA8q",
+    "updatedAt": "2026-08-26T11:32:13.962Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 5,
+    "productId": "RpOpicdA58y2aqs4IA8q",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_S48tSeUJz7vl4mPR5okg",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "S48tSeUJz7vl4mPR5okg",
+    "updatedAt": "2026-10-24T19:01:13.039Z",
+    "companyId": "idham-main",
+    "productName": "مكرونة رنا خواتم مخططه  400 ج * 20",
+    "productCode": "03029",
+    "reorderLevel": 0,
+    "qty": 8,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_SQnrnOyRXWzq76NO3yXB",
+    "stockStatus": "ok",
+    "productId": "SQnrnOyRXWzq76NO3yXB",
+    "qty": 63,
+    "updatedAt": "2026-10-21T12:20:27.151Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Sg7k8Y5bVrlOa8zoD5yh",
+    "productId": "Sg7k8Y5bVrlOa8zoD5yh",
+    "stockStatus": "ok",
+    "qty": 25,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-22T07:11:46.575Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Sm2wp2KuBg61uqAwTKpX",
+    "updatedAt": "2026-10-08T09:40:35.401Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "Sm2wp2KuBg61uqAwTKpX",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Sn5pgF0JIXwxhTJFZ1xa",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-08-27T17:14:18.384Z",
+    "stockStatus": "out",
+    "productId": "Sn5pgF0JIXwxhTJFZ1xa",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_SzHULsTeLonnDaH4vh4Y",
+    "productId": "SzHULsTeLonnDaH4vh4Y",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_TYYNGnbpm79ztfPikSIL",
+    "updatedAt": "2026-10-15T19:28:09.900Z",
+    "qty": 6,
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "TYYNGnbpm79ztfPikSIL",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_U7X6AQz47gWcp5ShgLPO",
+    "stockStatus": "ok",
+    "qty": 42,
+    "reorderLevel": 0,
+    "productId": "U7X6AQz47gWcp5ShgLPO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-13T15:01:27.905Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_UIyr9n1nw0alGOBEmpBu",
+    "updatedAt": "2026-08-27T17:14:18.384Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "UIyr9n1nw0alGOBEmpBu",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_V3PBhe2Ge6SQm3lIgXOj",
+    "qty": 0,
+    "productId": "V3PBhe2Ge6SQm3lIgXOj",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T12:58:36.438Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_V8mWI603UHV0SQNuyFsI",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "V8mWI603UHV0SQNuyFsI",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-10-08T09:40:35.401Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_V9nosVMDdh4s4vkTCMUI",
+    "stockStatus": "out",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "V9nosVMDdh4s4vkTCMUI"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_VNLZosaMgxRhngp0NFBC",
+    "productId": "VNLZosaMgxRhngp0NFBC",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_VPRHU7KIXJ3YA4nsVVEx",
+    "updatedAt": "2026-10-22T07:27:30.005Z",
+    "qty": 3,
+    "stockStatus": "ok",
+    "productId": "VPRHU7KIXJ3YA4nsVVEx",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_VR7jS37atTl5VvHcOls9",
+    "productId": "VR7jS37atTl5VvHcOls9",
+    "qty": 5,
+    "stockStatus": "ok",
+    "updatedAt": "2026-07-30T19:51:36.578Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_VebnsAN1qDALoKsheWkP",
+    "stockStatus": "out",
+    "productId": "VebnsAN1qDALoKsheWkP",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-11T18:33:24.684Z",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Vf8sipSuxheAB2vDrA2f",
+    "stockStatus": "ok",
+    "productId": "Vf8sipSuxheAB2vDrA2f",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 48
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Vtt8maL3kEWKH6SP25UY",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "Vtt8maL3kEWKH6SP25UY"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_VuJ3Jl1mMs0DtdGtiFgS",
+    "productId": "VuJ3Jl1mMs0DtdGtiFgS",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-08T18:23:53.786Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 4
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_WhPJOhKwVcaTpx7qsyrl",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "WhPJOhKwVcaTpx7qsyrl",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-15T16:14:26.134Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_WruLvzM1VpCOZ6yEHf8Y",
+    "stockStatus": "ok",
+    "productId": "WruLvzM1VpCOZ6yEHf8Y",
+    "reorderLevel": 0,
+    "productCode": "09008",
+    "qty": 54,
+    "companyId": "idham-main",
+    "updatedAt": "2026-10-24T15:42:06.677Z",
+    "productName": "شطة رنا عريض كبير 4.5 * 4 جالون",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_WtsyR0MH8UVBbnj3ymRT",
+    "productId": "WtsyR0MH8UVBbnj3ymRT",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "stockStatus": "ok",
+    "qty": 14
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_WxGec0F3udluHDEFApv7",
+    "qty": 2,
+    "updatedAt": "2026-09-19T08:33:55.753Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "WxGec0F3udluHDEFApv7",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_X2zgrRmnUXIXqZ6ytQS1",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 5,
+    "updatedAt": "2026-10-22T07:11:46.575Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "X2zgrRmnUXIXqZ6ytQS1"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_XCQOI94ocO903Gm0xeK8",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-09-09T09:59:22.425Z",
+    "qty": 45,
+    "productId": "XCQOI94ocO903Gm0xeK8",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_XEFSzlQdM9V3CYHPApx8",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "XEFSzlQdM9V3CYHPApx8",
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_XMgpric1T3xkzjaViWKs",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "XMgpric1T3xkzjaViWKs",
+    "qty": 2,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_XbTmNwJ3hSbLjRs5tIhD",
+    "productId": "XbTmNwJ3hSbLjRs5tIhD",
+    "stockStatus": "ok",
+    "qty": 12,
+    "updatedAt": "2026-10-15T19:27:44.468Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_XrRq3JA1at89EX1NMlhA",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-08T09:40:35.401Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "XrRq3JA1at89EX1NMlhA"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Y0RPqsKKW8HyRCPzU6OT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-17T16:04:38.354Z",
+    "productId": "Y0RPqsKKW8HyRCPzU6OT",
+    "qty": 3,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_YDGp6p8TPz1bqNnOue4N",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "YDGp6p8TPz1bqNnOue4N",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-08-26T11:32:13.962Z",
+    "qty": 9
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_YV2OumfkBeqlzRG2YruG",
+    "qty": 8,
+    "updatedAt": "2026-10-07T18:47:34.143Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "YV2OumfkBeqlzRG2YruG",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_YlwI00IA8R9A0wGcQtpN",
+    "stockStatus": "ok",
+    "productName": "ماء صفا 600 مل",
+    "productId": "YlwI00IA8R9A0wGcQtpN",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-10-11T20:10:37.044Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "warehouseName": "المستودع الرئيسى"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_YqMaZbpNx0wT6uB1XOKd",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "YqMaZbpNx0wT6uB1XOKd",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-12T14:18:39.794Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ZB8JNbqQrQgQzTGAw5O1",
+    "stockStatus": "out",
+    "productId": "ZB8JNbqQrQgQzTGAw5O1",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-08T17:42:44.159Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ZINptjXdR8FmNmwaGo2t",
+    "stockStatus": "out",
+    "productId": "ZINptjXdR8FmNmwaGo2t",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-08T18:23:53.786Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ZP0ynGGNAcg1fIQrdshT",
+    "updatedAt": "2026-09-14T07:52:34.857Z",
+    "stockStatus": "out",
+    "productId": "ZP0ynGGNAcg1fIQrdshT",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ZjuGOgAbnTqp50FG6tkr",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "ZjuGOgAbnTqp50FG6tkr",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-10T15:23:42.137Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_Zpy1JPhHmUYrRbFao1IO",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "Zpy1JPhHmUYrRbFao1IO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-24T09:12:20.595Z",
+    "qty": 101
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ZroO0Ydghb0KM9g4iQC1",
+    "stockStatus": "ok",
+    "productId": "ZroO0Ydghb0KM9g4iQC1",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-13T08:41:22.336Z",
+    "qty": 26
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_a707N5zfeimbWrUe0AxE",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "a707N5zfeimbWrUe0AxE",
+    "qty": 35,
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_aBtcD50Y7ZKiy8bstp6P",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "aBtcD50Y7ZKiy8bstp6P",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:25:23.637Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_aOtA1iZHMJmAWl41LZQ2",
+    "updatedAt": "2026-10-22T07:11:46.575Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "aOtA1iZHMJmAWl41LZQ2",
+    "qty": 8,
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_afCATiCiSHOBFsMH1aLK",
+    "updatedAt": "2026-09-09T09:59:22.425Z",
+    "reorderLevel": 0,
+    "qty": 2,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "stockStatus": "ok",
+    "productId": "afCATiCiSHOBFsMH1aLK"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_aibj644bYqbfTJLJEtwF",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "aibj644bYqbfTJLJEtwF",
+    "qty": 54,
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-08T09:25:23.637Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_atrR6pMjwiEfK6Hdo2Oi",
+    "qty": 159,
+    "updatedAt": "2026-10-24T09:12:20.595Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "atrR6pMjwiEfK6Hdo2Oi",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_aw5mS2Mw15W4tQvq1256",
+    "stockStatus": "ok",
+    "productId": "aw5mS2Mw15W4tQvq1256",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-24T09:12:20.595Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 52
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_b3DAkxZGKXVVuY00Zl1d",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "b3DAkxZGKXVVuY00Zl1d",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bCHFqmbanNCcBn9YGaAn",
+    "productId": "bCHFqmbanNCcBn9YGaAn",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 5,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-30T19:51:34.560Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bGBNVtU3HVRMWdbCv0ha",
+    "updatedAt": "2026-10-11T20:10:37.044Z",
+    "qty": 0,
+    "stockStatus": "ok",
+    "productName": "ماء صفا 1.5 لتر",
+    "warehouseName": "المستودع الرئيسى",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "bGBNVtU3HVRMWdbCv0ha",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bHh9nPmTd2ORv6IBnxxi",
+    "productId": "bHh9nPmTd2ORv6IBnxxi",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-15T14:29:10.424Z",
+    "qty": 8,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bJ7SHrAJrGUmxRXK5uIt",
+    "stockStatus": "ok",
+    "productId": "bJ7SHrAJrGUmxRXK5uIt",
+    "qty": 4.5,
+    "updatedAt": "2026-10-10T08:35:03.496Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bS9dMjuN9LzclGdjxHJ6",
+    "qty": 5,
+    "stockStatus": "ok",
+    "productId": "bS9dMjuN9LzclGdjxHJ6",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-24T09:12:20.595Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bT8MjIL9N5oADgQ3fovZ",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "bT8MjIL9N5oADgQ3fovZ"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bYDk4gcZQhPBwWyPtnrr",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-07-28T09:17:31.676Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "bYDk4gcZQhPBwWyPtnrr"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bakqpPzhQ6YuUtDBGAxe",
+    "productId": "bakqpPzhQ6YuUtDBGAxe",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T19:27:53.851Z",
+    "stockStatus": "ok",
+    "qty": 10
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_beXxTsnefRyHdex6cB0E",
+    "updatedAt": "2026-08-07T21:51:50.476Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "beXxTsnefRyHdex6cB0E",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bf1IW16slJQh1BzkCoSL",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-08T08:42:46.441Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "productId": "bf1IW16slJQh1BzkCoSL",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_bkX49MpzXrDcrss3tN5i",
+    "qty": 0,
+    "productId": "bkX49MpzXrDcrss3tN5i",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-18T15:20:49.362Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_boRQeDrHgl8gXhSHLoUk",
+    "productId": "boRQeDrHgl8gXhSHLoUk",
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-08T09:25:23.637Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_btU1tB74SVGzP7W6j412",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T08:42:45.465Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 0,
+    "productId": "btU1tB74SVGzP7W6j412"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_c1AGjekAaUO0zQchv0bK",
+    "productId": "c1AGjekAaUO0zQchv0bK",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 150,
+    "updatedAt": "2026-10-19T20:11:34.846Z",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_c2DiqjXonJolE8VbizR6",
+    "updatedAt": "2026-10-07T18:47:34.143Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 1,
+    "productId": "c2DiqjXonJolE8VbizR6",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_c5E9LqyK0WLuhV6CjjR7",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 10,
+    "updatedAt": "2026-10-15T13:37:09.731Z",
+    "stockStatus": "ok",
+    "productId": "c5E9LqyK0WLuhV6CjjR7",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_c7VkTk3H5pvcZB2tCGRN",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "c7VkTk3H5pvcZB2tCGRN",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-18T16:13:46.325Z",
+    "qty": 11
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_c87KVwQ4KpLT51MM3l1u",
+    "productId": "c87KVwQ4KpLT51MM3l1u",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 1.5,
+    "updatedAt": "2026-10-15T10:25:26.778Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_cdQSjHVqLxAYqBMVUyLE",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "cdQSjHVqLxAYqBMVUyLE",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-24T09:12:20.595Z",
+    "stockStatus": "ok",
+    "qty": 59
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_cpOYrBAZbabLvo5DoZ6B",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-11T19:20:12.267Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 11,
+    "productId": "cpOYrBAZbabLvo5DoZ6B",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_d17p96xsHv7Vmpyc9Toy",
+    "productId": "d17p96xsHv7Vmpyc9Toy",
+    "stockStatus": "ok",
+    "productCode": "09012",
+    "updatedAt": "2026-09-14T08:24:39.202Z",
+    "companyId": "idham-main",
+    "productName": "رنا تونه خفيف 185* 48 زيت دوار الشمس",
+    "qty": 6,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_dX04uuWrBhJhErR3U40T",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "dX04uuWrBhJhErR3U40T",
+    "updatedAt": "2026-10-22T07:32:42.603Z",
+    "stockStatus": "ok",
+    "qty": 19
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_dtCMNYIhjGBZGCUE6Lr1",
+    "productId": "dtCMNYIhjGBZGCUE6Lr1",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 1,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_eAXoMt1UyFqPTMLZ4GAX",
+    "updatedAt": "2026-10-25T08:08:34.245Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "eAXoMt1UyFqPTMLZ4GAX",
+    "qty": 144,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_eRL82HYnqIRFBJXy57RP",
+    "qty": 4,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "eRL82HYnqIRFBJXy57RP",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-17T09:17:30.600Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_eV0aPPJUGtWKXzHSrREv",
+    "reorderLevel": 0,
+    "productId": "eV0aPPJUGtWKXzHSrREv",
+    "stockStatus": "out",
+    "updatedAt": "2026-10-08T09:40:35.401Z",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_fAagIyyNNHGJFJ12CfJ9",
+    "stockStatus": "out",
+    "productId": "fAagIyyNNHGJFJ12CfJ9",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-22T16:56:30.101Z",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_fLTt9zHDbOC7GKFzZWZV",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "stockStatus": "ok",
+    "productId": "fLTt9zHDbOC7GKFzZWZV",
+    "reorderLevel": 0,
+    "qty": 46,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_fT46B3aWtLP1P85gLk8J",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+    "productCode": "45002",
+    "productId": "fT46B3aWtLP1P85gLk8J",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "companyId": "idham-main",
+    "reorderLevel": 0,
+    "qty": 34
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_fV6ZGU0s0fFiEluCLKje",
+    "productName": "خل رنا ابيض طبيعى  474 مل *12",
+    "productId": "fV6ZGU0s0fFiEluCLKje",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "companyId": "idham-main",
+    "updatedAt": "2026-09-09T09:59:22.425Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 10,
+    "productCode": "45006"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_g0HM02LRWJYAJrRWUdum",
+    "productId": "g0HM02LRWJYAJrRWUdum",
+    "qty": 5,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-08-20T18:42:37.594Z",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_g0ZCXjRkQWyWCXy0qgN5",
+    "productId": "g0ZCXjRkQWyWCXy0qgN5",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "updatedAt": "2026-07-28T09:17:02.133Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_gPOGi4hnkfIeBqWmdTUj",
+    "updatedAt": "2026-10-08T09:40:35.401Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "gPOGi4hnkfIeBqWmdTUj",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_gS5LZNGjTrBOuwhoB7uA",
+    "qty": 10,
+    "productName": "كيس نايلون (8) 20 كيلو",
+    "sku": "43070",
+    "updatedAt": "2026-10-25T20:31:40.592Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "warehouseName": "المستودع الرئيسى",
+    "productId": "gS5LZNGjTrBOuwhoB7uA"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_gtOkpFC26meAhlHSgLQj",
+    "reorderLevel": 0,
+    "qty": 9,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "gtOkpFC26meAhlHSgLQj",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-17T08:50:12.186Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_h2CTayjdEvjpld1Mc7WO",
+    "qty": 18,
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-17T08:20:25.380Z",
+    "stockStatus": "ok",
+    "productId": "h2CTayjdEvjpld1Mc7WO",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_hsweOtlJmOZIBAB1tlu1",
+    "stockStatus": "ok",
+    "updatedAt": "2026-07-30T19:51:49.641Z",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "hsweOtlJmOZIBAB1tlu1",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_hvysP8vRqA8wXPIz75nN",
+    "stockStatus": "ok",
+    "updatedAt": "2026-08-18T17:35:17.989Z",
+    "reorderLevel": 0,
+    "qty": 2,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "hvysP8vRqA8wXPIz75nN"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_iFJ8JyexxPdWuYlzbU5Y",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "iFJ8JyexxPdWuYlzbU5Y",
+    "stockStatus": "ok",
+    "updatedAt": "2026-09-09T09:59:22.425Z",
+    "qty": 10,
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_iJGqX0VW0EZIUAMJtMT2",
+    "productId": "iJGqX0VW0EZIUAMJtMT2",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "stockStatus": "ok",
+    "qty": 1
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_iNTAY01gkXC26uceT1h6",
+    "stockStatus": "ok",
+    "productId": "iNTAY01gkXC26uceT1h6",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 26,
+    "updatedAt": "2026-10-13T08:41:22.336Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ido9rzLwUEIyH8cBoKJJ",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 5,
+    "productId": "ido9rzLwUEIyH8cBoKJJ",
+    "stockStatus": "ok",
+    "updatedAt": "2026-08-26T11:32:13.962Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_iht0utKRHl3JCWuI4D1E",
+    "updatedAt": "2026-07-27T18:09:19.542Z",
+    "productId": "iht0utKRHl3JCWuI4D1E",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_iooiaVoYJCiBMMg2w22j",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-04T15:38:30.975Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "iooiaVoYJCiBMMg2w22j",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_iqrB1dkzgtyvBOVVXl6q",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "iqrB1dkzgtyvBOVVXl6q",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 25,
+    "updatedAt": "2026-10-21T10:04:10.081Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_j9UBCQ8UAyup7w1JU6C0",
+    "updatedAt": "2026-10-17T14:59:07.343Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "j9UBCQ8UAyup7w1JU6C0",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_jDBN2zR04WB6afMGzMEj",
+    "productId": "jDBN2zR04WB6afMGzMEj",
+    "qty": 25,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T08:41:22.336Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_jOuDfLOVdV4D1a0zVMxu",
+    "qty": 0,
+    "productId": "jOuDfLOVdV4D1a0zVMxu",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-11T20:10:37.044Z",
+    "productName": "ماء صفا 330 مل",
+    "stockStatus": "ok",
+    "warehouseName": "المستودع الرئيسى"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_jTxUESxX83gV3ASNzhmT",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "jTxUESxX83gV3ASNzhmT",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-23T14:01:54.548Z",
+    "qty": 2
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_jcXWt1tl35zU0Bgl2246",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 3,
+    "productId": "jcXWt1tl35zU0Bgl2246",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-17T16:04:38.354Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_jcvBhus9KJxTvFOKPYea",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "jcvBhus9KJxTvFOKPYea",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-24T20:46:30.698Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_jvCPmY9xNl7ia5IcRoYV",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "jvCPmY9xNl7ia5IcRoYV",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_k9SN4NfHIQJ1Qbzz9F8E",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-10T19:07:56.974Z",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "k9SN4NfHIQJ1Qbzz9F8E",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_kAm09NsM5EPXF8UvrFeX",
+    "stockStatus": "ok",
+    "qty": 10,
+    "productId": "kAm09NsM5EPXF8UvrFeX",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-24T09:12:20.595Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_kzfW625YNEkkHxp6vWiu",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-08T08:42:47.961Z",
+    "productId": "kzfW625YNEkkHxp6vWiu",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_lLXftnOXhrabtECrK5tL",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-12T14:18:39.794Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "lLXftnOXhrabtECrK5tL",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_lifMlNAMPETCW4kFmY7t",
+    "stockStatus": "ok",
+    "productId": "lifMlNAMPETCW4kFmY7t",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 7,
+    "updatedAt": "2026-10-22T15:36:10.287Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_m9qzjahiJEYTNmbfF5Xe",
+    "updatedAt": "2026-09-14T17:57:35.994Z",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "m9qzjahiJEYTNmbfF5Xe",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_mDZqj6UlPIdws9JU9WY6",
+    "stockStatus": "ok",
+    "qty": 16,
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "mDZqj6UlPIdws9JU9WY6"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_mJgHc4x2IMwe7N8cFsP9",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T17:26:52.362Z",
+    "productId": "mJgHc4x2IMwe7N8cFsP9",
+    "qty": 4,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_mLncMbj6xjnpwSIv98JC",
+    "updatedAt": "2026-10-18T15:20:49.362Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "mLncMbj6xjnpwSIv98JC",
+    "qty": 35,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_mX9vV57bZjDsRDwMppLK",
+    "productId": "mX9vV57bZjDsRDwMppLK",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 10,
+    "updatedAt": "2026-07-30T19:51:43.356Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_mXtAhMr6lwZuFpG66ZPW",
+    "productId": "mXtAhMr6lwZuFpG66ZPW",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-10T15:23:42.137Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_mZIv7uKape9o2d2OCGjz",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "reorderLevel": 0,
+    "productId": "mZIv7uKape9o2d2OCGjz",
+    "stockStatus": "ok",
+    "qty": 47
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_maCZpJZhumrjcZH1pQ0f",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-11T18:33:24.684Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "maCZpJZhumrjcZH1pQ0f",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_mltUHPqHHv8b5vqemWRi",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "mltUHPqHHv8b5vqemWRi",
+    "qty": 5,
+    "stockStatus": "ok",
+    "updatedAt": "2026-09-23T10:44:48.124Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_muaXACw0f09dXe4V1QY1",
+    "stockStatus": "out",
+    "productId": "muaXACw0f09dXe4V1QY1",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-28T09:17:45.626Z",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_myiVbPahZ8sKHdTaZ9rx",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "myiVbPahZ8sKHdTaZ9rx",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-08T17:42:44.159Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_n4IW05Dc6fcoU0G6Ac2t",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "n4IW05Dc6fcoU0G6Ac2t",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T08:41:22.336Z",
+    "qty": 23
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_n56a62xK7wsWQqfQsVFr",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "n56a62xK7wsWQqfQsVFr",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_nE7UIt4vMdgbI4fhklhf",
+    "updatedAt": "2026-10-08T08:53:12.302Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "nE7UIt4vMdgbI4fhklhf",
+    "qty": 7,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_nOMnxCQ0IKrWIZVidkHc",
+    "productId": "nOMnxCQ0IKrWIZVidkHc",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-22T13:56:22.620Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 3
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ndlDJpMG9hlBKQe4MauJ",
+    "updatedAt": "2026-10-15T19:28:00.884Z",
+    "stockStatus": "ok",
+    "qty": 11,
+    "productId": "ndlDJpMG9hlBKQe4MauJ",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_nlJqqpoaOJIr8xev6Wyf",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 18,
+    "productId": "nlJqqpoaOJIr8xev6Wyf"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_nn7SSyLySTxv0WgkoWf8",
+    "stockStatus": "ok",
+    "productId": "nn7SSyLySTxv0WgkoWf8",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-22T15:49:48.370Z",
+    "reorderLevel": 0,
+    "qty": 7
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_nxXxQqrOKMdP1xxK4xss",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "nxXxQqrOKMdP1xxK4xss",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-09T19:34:47.241Z",
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_oILf9Ggdj8bYNt4Pl492",
+    "productId": "oILf9Ggdj8bYNt4Pl492",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 18,
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-14T14:22:41.043Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_oJ9v6weiVvLu7VgYVp1i",
+    "updatedAt": "2026-10-07T08:53:01.727Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 9,
+    "productId": "oJ9v6weiVvLu7VgYVp1i",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_oU8yH7WDRu2ZBKLVYg1A",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-24T15:42:06.677Z",
+    "qty": 145,
+    "productId": "oU8yH7WDRu2ZBKLVYg1A",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_oa7Pk931kBXinMoSbeoq",
+    "stockStatus": "out",
+    "updatedAt": "2026-10-20T21:31:53.527Z",
+    "reorderLevel": 0,
+    "productId": "oa7Pk931kBXinMoSbeoq",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ofIJ9TeKlN756jzt61SW",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-07-28T09:17:03.281Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "ofIJ9TeKlN756jzt61SW"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_oh4Mz5GGCj5QFPLdqysY",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-01T14:36:35.886Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 19,
+    "productId": "oh4Mz5GGCj5QFPLdqysY",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ojCmBP3zV5Rlfhtcv90x",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T19:28:02.618Z",
+    "reorderLevel": 0,
+    "qty": 8,
+    "stockStatus": "ok",
+    "productId": "ojCmBP3zV5Rlfhtcv90x"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ols8aSnfOWwSSwgvIzp7",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-15T15:53:22.414Z",
+    "stockStatus": "ok",
+    "productId": "ols8aSnfOWwSSwgvIzp7",
+    "qty": 54
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_p0FPy6EDM1EKc0MEVFgK",
+    "productId": "p0FPy6EDM1EKc0MEVFgK",
+    "stockStatus": "ok",
+    "qty": 41,
+    "updatedAt": "2026-10-22T15:52:09.028Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_p0xtk6qxq7oElTtQL54I",
+    "stockStatus": "ok",
+    "productId": "p0xtk6qxq7oElTtQL54I",
+    "reorderLevel": 0,
+    "qty": 49,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-05T17:45:11.098Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_poGgeZhrDTm4eW0nHNK1",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "poGgeZhrDTm4eW0nHNK1",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-14T14:22:41.043Z",
+    "qty": 9
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_pqkkX8d4sM9Gm0E4oBXq",
+    "qty": 0,
+    "updatedAt": "2026-09-09T19:34:59.426Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "pqkkX8d4sM9Gm0E4oBXq",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_q2tZaPlKzV3e494rozAp",
+    "updatedAt": "2026-10-10T15:43:46.125Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "q2tZaPlKzV3e494rozAp",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_q5osLssA0myKm9xqpC0I",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "q5osLssA0myKm9xqpC0I"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_qTe6Vs5C1XurYecxJlB5",
+    "reorderLevel": 0,
+    "updatedAt": "2026-07-28T09:17:43.109Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "qTe6Vs5C1XurYecxJlB5",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_qjEiCz0kBP2AFa9Yt3D4",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "qjEiCz0kBP2AFa9Yt3D4",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-07-28T09:17:20.553Z",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_qntdBU9oGV9dX49AvZBK",
+    "productId": "qntdBU9oGV9dX49AvZBK",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 20,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-23T10:52:10.736Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_qtl4NmMLGPyRMA9E4Mi5",
+    "reorderLevel": 0,
+    "qty": 16,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "qtl4NmMLGPyRMA9E4Mi5",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-21T10:04:10.081Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_qwuMMK8xWSJhh2Q2KbV8",
+    "updatedAt": "2026-09-09T09:59:22.425Z",
+    "reorderLevel": 0,
+    "qty": 9,
+    "stockStatus": "ok",
+    "productId": "qwuMMK8xWSJhh2Q2KbV8",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_rG0o2hIQys8YJoScdu58",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "rG0o2hIQys8YJoScdu58",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-08T17:42:44.159Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_rTM0ucwIMZSYIC5O1gH9",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "rTM0ucwIMZSYIC5O1gH9",
+    "stockStatus": "ok",
+    "qty": 20,
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-15T14:29:50.572Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_rTvJhB051paqgETVeDSq",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 8,
+    "productId": "rTvJhB051paqgETVeDSq",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-21T10:04:10.081Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_rsK4qZNXiYsQYzw97O9W",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-09-20T14:48:40.598Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "rsK4qZNXiYsQYzw97O9W",
+    "qty": 2
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_sA7qEvdsg0z6WxCXFwfD",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T13:11:36.972Z",
+    "qty": 5,
+    "stockStatus": "ok",
+    "productId": "sA7qEvdsg0z6WxCXFwfD",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_sJI1opRNNj9qzcFyCoyg",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "sJI1opRNNj9qzcFyCoyg",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ssc4ozqGTQlvYerEMDkZ",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "ssc4ozqGTQlvYerEMDkZ",
+    "qty": 5,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T15:01:27.905Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_t1YbyUE5NsYNGxlJWTqp",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-24T19:01:13.039Z",
+    "stockStatus": "ok",
+    "qty": 64,
+    "reorderLevel": 0,
+    "productId": "t1YbyUE5NsYNGxlJWTqp"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_t2iAle9HGi8XxbQAAGob",
+    "updatedAt": "2026-10-08T18:23:53.786Z",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "t2iAle9HGi8XxbQAAGob",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_tAq8ENjtZ0cRpzhW6xFH",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productName": "شطة رنا قوارير صغير  36*88 مل",
+    "productCode": "12001",
+    "reorderLevel": 5,
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "companyId": "idham-main",
+    "productId": "tAq8ENjtZ0cRpzhW6xFH",
+    "qty": 81,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_tBEpkVkPbnEcNT87JANk",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "tBEpkVkPbnEcNT87JANk"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_tMs0vT31NQlZ8wxoCR0l",
+    "productId": "tMs0vT31NQlZ8wxoCR0l",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-17T16:04:38.354Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_tNJtRN8XlYs6Sxsodsvw",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-01T14:36:35.886Z",
+    "stockStatus": "ok",
+    "qty": 3,
+    "productId": "tNJtRN8XlYs6Sxsodsvw",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_thEesj4aPMBKJePRHTlE",
+    "productId": "thEesj4aPMBKJePRHTlE",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-15T19:27:59.129Z",
+    "stockStatus": "ok",
+    "qty": 24
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_tkgjwvljS7IKGfpkueOm",
+    "qty": 15,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "tkgjwvljS7IKGfpkueOm",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-22T07:12:16.965Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_v5MASC9wBPP20xMRoJPQ",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "v5MASC9wBPP20xMRoJPQ",
+    "stockStatus": "out",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-08T09:40:35.401Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_vQkzxlzdOHu7z21s9SMV",
+    "productCode": "45005",
+    "reorderLevel": 5,
+    "stockStatus": "ok",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "vQkzxlzdOHu7z21s9SMV",
+    "companyId": "idham-main",
+    "updatedAt": "2026-10-22T07:32:42.603Z",
+    "qty": 79,
+    "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_wDrRu3ce1hpW4P4XXt0d",
+    "stockStatus": "ok",
+    "qty": 4,
+    "productId": "wDrRu3ce1hpW4P4XXt0d",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-02T16:11:18.758Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_wGEk0xKjCvX7pSSQGUU1",
+    "productId": "wGEk0xKjCvX7pSSQGUU1",
+    "qty": 161,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-19T16:25:55.064Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_wSOqYqj2l6pOFVGYNL35",
+    "productId": "wSOqYqj2l6pOFVGYNL35",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-07-30T20:21:46.078Z",
+    "qty": 10
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_wXktTSF142IZEb6R3gGv",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 10,
+    "updatedAt": "2026-10-15T14:30:10.494Z",
+    "stockStatus": "ok",
+    "productId": "wXktTSF142IZEb6R3gGv",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_wi9oHOSSoGminu1zPPex",
+    "qty": 3,
+    "reorderLevel": 0,
+    "updatedAt": "2026-07-30T20:21:48.328Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "wi9oHOSSoGminu1zPPex",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_wxepIAahN8ati3vwaa2L",
+    "stockStatus": "ok",
+    "productId": "wxepIAahN8ati3vwaa2L",
+    "qty": 10,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-08-26T11:32:13.962Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_x1cIL2f0tNMlLQWMw2ky",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-14T08:38:29.840Z",
+    "productId": "x1cIL2f0tNMlLQWMw2ky",
+    "qty": 16,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_xCQS7ITVl9GfwamF0ufo",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-21T12:20:27.151Z",
+    "qty": 25,
+    "stockStatus": "ok",
+    "productId": "xCQS7ITVl9GfwamF0ufo",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_xFZZ2Pk6Qhj9vFMT1TDs",
+    "updatedAt": "2026-10-15T14:29:54.090Z",
+    "stockStatus": "ok",
+    "qty": 10,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "xFZZ2Pk6Qhj9vFMT1TDs",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_xRun3SF1zVyWFFOYAW8g",
+    "qty": 23,
+    "updatedAt": "2026-10-13T08:41:22.336Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "productId": "xRun3SF1zVyWFFOYAW8g",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_xatSIYYexbA9vqwkiabB",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "stockStatus": "out",
+    "productId": "xatSIYYexbA9vqwkiabB",
+    "qty": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_yJJs2qLBiktzgf1yPlTF",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-21T10:04:10.081Z",
+    "qty": 26,
+    "reorderLevel": 0,
+    "productId": "yJJs2qLBiktzgf1yPlTF",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_yKhEQH1t0XuHg7LdAttT",
+    "productId": "yKhEQH1t0XuHg7LdAttT",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 21,
+    "updatedAt": "2026-10-08T08:53:12.302Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_yLOfiimlko7x0ORSKc5c",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "yLOfiimlko7x0ORSKc5c",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-06T19:14:43.468Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_yNGhEcHKaekNzKZBejuu",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "yNGhEcHKaekNzKZBejuu",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-09-06T19:14:43.468Z",
+    "qty": 0
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ycEwyn2aAf4FfCqI3qkP",
+    "updatedAt": "2026-10-08T09:25:23.637Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "ycEwyn2aAf4FfCqI3qkP",
+    "stockStatus": "out"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ydKSXXu03a9KkMjZt71q",
+    "updatedAt": "2026-10-25T20:31:38.108Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productId": "ydKSXXu03a9KkMjZt71q",
+    "reorderLevel": 0,
+    "qty": 3,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_ylkpCSA7BrDJAneIZckQ",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-09T19:34:34.729Z",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "ylkpCSA7BrDJAneIZckQ"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_z7P9nI9RfnuBTO7fNPT3",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "z7P9nI9RfnuBTO7fNPT3",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-08T09:40:35.401Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_z8t67CUmJnR9IT1pVAdW",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "productName": "مكرونة رنا اقلام كبيرة 400 جرام * 20",
+    "reorderLevel": 0,
+    "productId": "z8t67CUmJnR9IT1pVAdW",
+    "productCode": "03028",
+    "qty": 14,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-22T07:32:42.603Z",
+    "companyId": "idham-main"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_zD1064Tc2mfyfwsnJQ1K",
+    "reorderLevel": 0,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "qty": 0,
+    "productId": "zD1064Tc2mfyfwsnJQ1K",
+    "stockStatus": "ok",
+    "updatedAt": "2026-08-16T07:42:44.621Z"
+  },
+  {
+    "id": "W5uANJjMgfFh2p3xU4bT_zdhGScGzNhZWL73yZF5X",
+    "stockStatus": "out",
+    "productId": "zdhGScGzNhZWL73yZF5X",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "updatedAt": "2026-10-11T18:33:24.684Z",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_0cniV5I2oOQBqUJLlu39",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-08T10:12:39.226Z",
+    "qty": 0,
+    "productId": "0cniV5I2oOQBqUJLlu39",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_0e8Mo2xnDl4SuqQT1wVE",
+    "stockStatus": "ok",
+    "qty": 1,
+    "updatedAt": "2026-10-18T16:25:52.855Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "productId": "0e8Mo2xnDl4SuqQT1wVE"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_1EU9O4mqrEtwitQPnZ3o",
+    "reorderLevel": 0,
+    "productId": "1EU9O4mqrEtwitQPnZ3o",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-13T08:49:49.812Z",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_1YfL49HfqYRCA6nZTAKO",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "1YfL49HfqYRCA6nZTAKO",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-25T08:05:10.551Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_2EYPP2V6Nz8PrNAYdf5W",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "2EYPP2V6Nz8PrNAYdf5W",
+    "updatedAt": "2026-07-27T18:07:44.023Z",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_2NbmryZHvF4OFOPE19XG",
+    "reorderLevel": 0,
+    "productId": "2NbmryZHvF4OFOPE19XG",
+    "stockStatus": "out",
+    "productName": "ارز علمين الشعلان مزه 8*5 كجم",
+    "qty": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-10-18T19:32:45.493Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_2da0AM4oiAg4oBCXBdEd",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:07:46.977Z",
+    "productId": "2da0AM4oiAg4oBCXBdEd",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_2yZvHDDqsgTAaUkW2BcJ",
+    "productId": "2yZvHDDqsgTAaUkW2BcJ",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:07:48.590Z",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_3CYNTCRyqTGGTj2ccAgH",
+    "productId": "3CYNTCRyqTGGTj2ccAgH",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-22T07:32:29.584Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_3mHYTiJFrJfxkOuskcIW",
+    "stockStatus": "ok",
+    "productId": "3mHYTiJFrJfxkOuskcIW",
+    "reorderLevel": 0,
+    "qty": 3,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-20T20:01:06.573Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_3uRSHqrujg6wVrxXe3z0",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-14T08:02:20.939Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "3uRSHqrujg6wVrxXe3z0"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_4BYT6CVNb3Cc2VXvNhOX",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "4BYT6CVNb3Cc2VXvNhOX",
+    "updatedAt": "2026-07-27T18:07:53.705Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_4dEuAA80ziMLFUxH5aJO",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-08-11T19:32:49.189Z",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "productId": "4dEuAA80ziMLFUxH5aJO",
+    "stockStatus": "out",
+    "productName": "زيت قلى  جوالين دلال 1.5*6 لتر"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_5hFoTTktBTSAB9Fi9SLn",
+    "qty": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-07-27T18:07:59.906Z",
+    "productId": "5hFoTTktBTSAB9Fi9SLn",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_694TWqa1GHvBmPqsR10Q",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 6,
+    "updatedAt": "2026-10-25T20:41:37.851Z",
+    "stockStatus": "ok",
+    "productId": "694TWqa1GHvBmPqsR10Q"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_6AUCrNQTnVxbtz7mgLWj",
+    "stockStatus": "ok",
+    "qty": 1,
+    "reorderLevel": 0,
+    "productId": "6AUCrNQTnVxbtz7mgLWj",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-01T14:37:07.180Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_7C3W5vyu1Ch0RKOrSUBH",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-22T15:49:56.621Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "7C3W5vyu1Ch0RKOrSUBH",
+    "qty": 1
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_7DvxzI5plNoCjy5gVPsz",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:01.264Z",
+    "productId": "7DvxzI5plNoCjy5gVPsz",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_7X2KJUvZfYdh8LXNxg9Z",
+    "updatedAt": "2026-10-22T18:44:07.230Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "7X2KJUvZfYdh8LXNxg9Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_7tCWhZq9UWRXwJxkRTTA",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "7tCWhZq9UWRXwJxkRTTA",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-13T08:49:49.812Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_89tzHza07nnWHQRv2u2J",
+    "productId": "89tzHza07nnWHQRv2u2J",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-17T08:50:56.295Z",
+    "qty": 1,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_8AZuD93GootRkJ1CigtI",
+    "updatedAt": "2026-08-16T09:44:37.805Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "productId": "8AZuD93GootRkJ1CigtI",
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_8IE6gW2hpwWcoFBhdb4Z",
+    "productId": "8IE6gW2hpwWcoFBhdb4Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-09-13T08:49:49.812Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_94bTgCDFkYMJQaoETG3Z",
+    "qty": 0,
+    "productId": "94bTgCDFkYMJQaoETG3Z",
+    "updatedAt": "2026-07-27T18:08:05.525Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_9NtVvzhfnxB2Z9rDN3uN",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-25T20:43:22.470Z",
+    "productCode": "03002",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "9NtVvzhfnxB2Z9rDN3uN",
+    "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_9PeZIfHYdFJtZgsKzNbQ",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "productId": "9PeZIfHYdFJtZgsKzNbQ",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+    "updatedAt": "2026-08-09T14:32:45.029Z",
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_9VwPv7UVZsbQQdqVJtzA",
+    "updatedAt": "2026-10-17T09:23:50.379Z",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "productId": "9VwPv7UVZsbQQdqVJtzA",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_9emGBomCaZlOWAEeegxi",
+    "updatedAt": "2026-09-07T14:37:00.324Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "productId": "9emGBomCaZlOWAEeegxi",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_9rXe9UCiqrJ4c97SXCJp",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "9rXe9UCiqrJ4c97SXCJp",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-27T16:10:39.924Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_A1yASYzpEy0S0M4xm1r8",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+    "stockStatus": "out",
+    "updatedAt": "2026-08-03T09:18:16.358Z",
+    "qty": 0,
+    "productId": "A1yASYzpEy0S0M4xm1r8",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_AxRFFKgFKWkmUj0QVWWK",
+    "stockStatus": "ok",
+    "productId": "AxRFFKgFKWkmUj0QVWWK",
+    "qty": 1,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-18T19:32:45.493Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_AxokEQfHoYE6iSMXQuFy",
+    "updatedAt": "2026-10-25T14:36:54.875Z",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "AxokEQfHoYE6iSMXQuFy",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_BNTmkCdGBdYZM3NvXM0u",
+    "updatedAt": "2026-10-14T17:21:21.550Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "BNTmkCdGBdYZM3NvXM0u",
+    "qty": 1
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_BRYy3jvl6JJOqON0PnPr",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "BRYy3jvl6JJOqON0PnPr",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-20T15:16:49.136Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_BzDiuvdpbviaXhOG5N0N",
+    "productId": "BzDiuvdpbviaXhOG5N0N",
+    "qty": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-09-14T17:09:31.160Z",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_C1ac8RMQhx2gXejGiyF3",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-08-22T14:39:46.954Z",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "C1ac8RMQhx2gXejGiyF3"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_C4uFJBEhleygJraDO5qH",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productId": "C4uFJBEhleygJraDO5qH",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "updatedAt": "2026-10-24T09:13:04.504Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_CcXTqwIBYvF3O1XSa6v2",
+    "qty": 1,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-11T19:20:31.558Z",
+    "reorderLevel": 0,
+    "productId": "CcXTqwIBYvF3O1XSa6v2",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_CdgjhKMW761zK7C4v8CI",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "CdgjhKMW761zK7C4v8CI",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-21T16:03:46.927Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_CmRpTW3CU8373Prfkxa0",
+    "updatedAt": "2026-10-22T15:41:28.752Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "stockStatus": "ok",
+    "productId": "CmRpTW3CU8373Prfkxa0",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_CwXTkvyG6odoZzZuEDja",
+    "productId": "CwXTkvyG6odoZzZuEDja",
+    "stockStatus": "out",
+    "productName": "ارز علمين  الشعلان مزه 40 كجم",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": "2026-08-01T08:17:25.193Z",
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_DY5ADETYmJoMo354HbS6",
+    "productId": "DY5ADETYmJoMo354HbS6",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-09-13T08:49:49.812Z",
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_DYAhGplYopMJF95oK0IS",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "اندومى مقلية 60*80 جرام",
+    "stockStatus": "ok",
+    "productId": "DYAhGplYopMJF95oK0IS",
+    "qty": 1,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-22T18:44:07.230Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_Daq0kIm7IykV0OkO4oLa",
+    "updatedAt": "2026-10-14T17:21:21.550Z",
+    "reorderLevel": 0,
+    "productName": "بيرفتو طويل 220 - 450 جرام * 24 بكت",
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "Daq0kIm7IykV0OkO4oLa",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_DviRgNpE8LLhT5ASxST3",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "DviRgNpE8LLhT5ASxST3",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-29T09:12:48.930Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_EDm62noDcoaSqIWpOgdD",
+    "qty": 0,
+    "productId": "EDm62noDcoaSqIWpOgdD",
+    "productName": "طماطم  مقشرة الطائى 24*400",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-10-20T20:01:06.573Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_ERMKWYiTKdyUihtCTePI",
+    "qty": 0,
+    "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-05T19:53:14.599Z",
+    "productId": "ERMKWYiTKdyUihtCTePI",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_EXLDPRwT8ppDGrKjmDBM",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "EXLDPRwT8ppDGrKjmDBM",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-10-20T20:01:06.573Z",
+    "stockStatus": "ok",
+    "productName": "سفر رول بن سلمان 110*100 ملون 10 لفة",
+    "qty": 1
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_EbMOr0wK8MmS7nTrrkLN",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-09-12T18:08:47.568Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "EbMOr0wK8MmS7nTrrkLN"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_FlofDooOmuOEFrQiCWFQ",
+    "reorderLevel": 0,
+    "productId": "FlofDooOmuOEFrQiCWFQ",
+    "stockStatus": "ok",
+    "qty": 1,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-24T18:35:48.038Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_Fv0oid1EgFrofzHOMJGl",
+    "stockStatus": "ok",
+    "productId": "Fv0oid1EgFrofzHOMJGl",
+    "updatedAt": "2026-10-22T09:22:41.551Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_G4OKtTeRu9W5SP4J0GKy",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "productName": "مناديل رول مطعم طبقة 5 كيلو",
+    "productId": "G4OKtTeRu9W5SP4J0GKy",
+    "qty": 2,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-20T20:01:06.573Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_GjMW892nmjpmLeV5Kx3c",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "GjMW892nmjpmLeV5Kx3c",
+    "qty": 0,
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-25T08:05:10.551Z",
+    "stockStatus": "out",
+    "productName": "طحينة سائلة الجميل 14 كيلو"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_H5l12QDSE7W2hZOdcl1C",
+    "productId": "H5l12QDSE7W2hZOdcl1C",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "qty": 0,
+    "updatedAt": "2026-10-14T14:22:26.112Z",
+    "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_HWiP60AueqeUffX1owt8",
+    "updatedAt": "2026-07-27T18:08:32.909Z",
+    "qty": 0,
+    "productId": "HWiP60AueqeUffX1owt8",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_HYTUthpUuHZ6AtqtR6Rr",
+    "updatedAt": "2026-09-12T18:38:47.905Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "productId": "HYTUthpUuHZ6AtqtR6Rr",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_HtXRAmejDzBMhxsYQEUy",
+    "qty": 2,
+    "productId": "HtXRAmejDzBMhxsYQEUy",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-17T08:50:56.295Z",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_IV8f71IUPMlWk4unzQas",
+    "updatedAt": "2026-10-14T17:21:21.550Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "IV8f71IUPMlWk4unzQas",
+    "productName": "قودى طويل رقم 20 - 24*450 ج",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_JGaepZOseisiYbAq3o8W",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "JGaepZOseisiYbAq3o8W",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T08:42:31.854Z",
+    "qty": 2,
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_KH4VsMfbVjboRlPsCKpz",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "KH4VsMfbVjboRlPsCKpz",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-29T08:17:13.890Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_KKa4b83ZeQ7Bw3oB1isJ",
+    "updatedAt": "2026-10-25T08:05:10.551Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "KKa4b83ZeQ7Bw3oB1isJ",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_KPxLtIE8DyOQghtkRkJO",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-20T20:01:06.573Z",
+    "productId": "KPxLtIE8DyOQghtkRkJO",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_Kgqy5tEZswKnEJtaHB0P",
+    "updatedAt": "2026-10-20T20:01:06.573Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "Kgqy5tEZswKnEJtaHB0P",
+    "qty": 1,
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_LQ7qcjU0LxGkA8zhd4zz",
+    "updatedAt": "2026-09-14T07:52:15.417Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "LQ7qcjU0LxGkA8zhd4zz"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_LYDz1hvYQAgGoTpbTOSw",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-09T14:17:52.302Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productName": "ارز ابو كاس 8*5 كجم",
+    "productId": "LYDz1hvYQAgGoTpbTOSw",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_LecJvj5mC6WvkN8boroZ",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-01T17:33:11.895Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productName": "مرقة دجاج ماجى مصرى 24 بكت * 24 ح",
+    "productId": "LecJvj5mC6WvkN8boroZ"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_LoLpb95BMKnAbYkMhPhP",
+    "stockStatus": "ok",
+    "productId": "LoLpb95BMKnAbYkMhPhP",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 2,
+    "updatedAt": "2026-10-25T08:05:10.551Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_MGvam0giNIBu97AyBL3C",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": "2026-10-22T09:22:41.551Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "MGvam0giNIBu97AyBL3C"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_MNSnc8uULDA5wfiYIW99",
+    "updatedAt": "2026-10-18T19:32:45.493Z",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "MNSnc8uULDA5wfiYIW99",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productName": "ارز علمين الشعلان مزه 4 ×10",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_MWXMvWA35h2AHzrUVO71",
+    "stockStatus": "out",
+    "productId": "MWXMvWA35h2AHzrUVO71",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-08T16:47:35.871Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_MrmWUHqDh6stxloRQNkT",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-01T14:14:10.857Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "productId": "MrmWUHqDh6stxloRQNkT",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_NJn3bR8RLg1bAUcZvi32",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "NJn3bR8RLg1bAUcZvi32",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:08:42.509Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_O5Pc4ZP3ks1TWq2AfhOo",
+    "productId": "O5Pc4ZP3ks1TWq2AfhOo",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "updatedAt": "2026-08-08T10:12:42.180Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_OCbk2C3WCS6nrDpMeynA",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "OCbk2C3WCS6nrDpMeynA",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-22T07:32:29.584Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_OgeRBQR2KP1T8wSuZfei",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "OgeRBQR2KP1T8wSuZfei",
+    "updatedAt": "2026-10-14T17:21:21.550Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_OvQAQw4UrvVqisWzMxFi",
+    "productId": "OvQAQw4UrvVqisWzMxFi",
+    "qty": 1,
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-07T15:58:31.988Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_PmtB5uXbDG1nXnx8GMSJ",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "productId": "PmtB5uXbDG1nXnx8GMSJ",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-05T17:40:11.270Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_PnOdolAXPEcF2IfU4MMx",
+    "productId": "PnOdolAXPEcF2IfU4MMx",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:08:46.863Z",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_QPV4lrM9pSVlss2NDb9y",
+    "productId": "QPV4lrM9pSVlss2NDb9y",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-10-14T17:21:21.550Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_QiWdlskNytP5yHkNFWvk",
+    "productId": "QiWdlskNytP5yHkNFWvk",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 1,
+    "updatedAt": "2026-10-24T18:35:48.038Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_R1re9QOHWOUZX1cwZtRB",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-22T07:32:29.584Z",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "R1re9QOHWOUZX1cwZtRB"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_RcrtoSwuKI63talw1zuG",
+    "qty": 0,
+    "updatedAt": "2026-09-05T19:53:07.059Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "productId": "RcrtoSwuKI63talw1zuG",
+    "productName": "كمامات 3 طبقات 50*40 بكت",
+    "stockStatus": "out",
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_RjOwuAi5vB44PMtjgYHH",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "RjOwuAi5vB44PMtjgYHH",
+    "stockStatus": "ok",
+    "qty": 1,
+    "updatedAt": "2026-10-25T08:05:10.551Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_Ronvj4u2vzdxVDsKhhi5",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-04T09:17:21.494Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "Ronvj4u2vzdxVDsKhhi5",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_S48tSeUJz7vl4mPR5okg",
+    "stockStatus": "out",
+    "updatedAt": "2026-10-22T07:32:29.584Z",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "productId": "S48tSeUJz7vl4mPR5okg"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_SQnrnOyRXWzq76NO3yXB",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-24T18:31:15.691Z",
+    "qty": 1,
+    "productId": "SQnrnOyRXWzq76NO3yXB",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_Sg7k8Y5bVrlOa8zoD5yh",
+    "updatedAt": "2026-10-22T09:22:41.551Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "Sg7k8Y5bVrlOa8zoD5yh",
+    "reorderLevel": 0,
+    "qty": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_SzHULsTeLonnDaH4vh4Y",
+    "updatedAt": "2026-08-24T18:24:02.933Z",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "SzHULsTeLonnDaH4vh4Y"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_U7X6AQz47gWcp5ShgLPO",
+    "qty": 1,
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "productId": "U7X6AQz47gWcp5ShgLPO",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-14T17:21:21.550Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_VPRHU7KIXJ3YA4nsVVEx",
+    "productId": "VPRHU7KIXJ3YA4nsVVEx",
+    "qty": 1,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-22T07:27:40.492Z",
+    "stockStatus": "ok",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_Vf8sipSuxheAB2vDrA2f",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "Vf8sipSuxheAB2vDrA2f",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-18T08:58:39.304Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_WruLvzM1VpCOZ6yEHf8Y",
+    "productId": "WruLvzM1VpCOZ6yEHf8Y",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-24T18:35:48.038Z",
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_WxGec0F3udluHDEFApv7",
+    "productId": "WxGec0F3udluHDEFApv7",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-09-06T19:32:17.184Z",
+    "qty": 0,
+    "reorderLevel": 0,
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_X2zgrRmnUXIXqZ6ytQS1",
+    "qty": 1,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "X2zgrRmnUXIXqZ6ytQS1",
+    "updatedAt": "2026-10-22T09:22:41.551Z",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_XCQOI94ocO903Gm0xeK8",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "XCQOI94ocO903Gm0xeK8",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-24T18:23:59.802Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_Y0RPqsKKW8HyRCPzU6OT",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "productId": "Y0RPqsKKW8HyRCPzU6OT",
+    "stockStatus": "out",
+    "updatedAt": "2026-10-22T09:22:41.551Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_YDGp6p8TPz1bqNnOue4N",
+    "qty": 0,
+    "productId": "YDGp6p8TPz1bqNnOue4N",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-19T18:18:05.165Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_YV2OumfkBeqlzRG2YruG",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "YV2OumfkBeqlzRG2YruG",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": "2026-09-13T08:49:49.812Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_ZINptjXdR8FmNmwaGo2t",
+    "productId": "ZINptjXdR8FmNmwaGo2t",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-27T16:10:44.864Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_ZP0ynGGNAcg1fIQrdshT",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-14T07:52:15.417Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "productId": "ZP0ynGGNAcg1fIQrdshT",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_Zpy1JPhHmUYrRbFao1IO",
+    "updatedAt": "2026-10-25T14:36:54.875Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "stockStatus": "ok",
+    "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+    "productId": "Zpy1JPhHmUYrRbFao1IO",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_ZroO0Ydghb0KM9g4iQC1",
+    "reorderLevel": 0,
+    "productId": "ZroO0Ydghb0KM9g4iQC1",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": "2026-10-18T19:32:45.493Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_a707N5zfeimbWrUe0AxE",
+    "updatedAt": "2026-08-24T18:23:55.358Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "a707N5zfeimbWrUe0AxE",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_aOtA1iZHMJmAWl41LZQ2",
+    "stockStatus": "ok",
+    "qty": 1,
+    "productId": "aOtA1iZHMJmAWl41LZQ2",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-22T09:22:41.551Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_afCATiCiSHOBFsMH1aLK",
+    "qty": 0,
+    "updatedAt": "2026-08-06T15:09:37.250Z",
+    "stockStatus": "out",
+    "productName": "طحينة سائلة الجميل 500 جرام *12",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "afCATiCiSHOBFsMH1aLK",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_atrR6pMjwiEfK6Hdo2Oi",
+    "productId": "atrR6pMjwiEfK6Hdo2Oi",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-10-25T08:05:10.551Z",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_aw5mS2Mw15W4tQvq1256",
+    "updatedAt": "2026-10-24T18:35:48.038Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "aw5mS2Mw15W4tQvq1256",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_bJ7SHrAJrGUmxRXK5uIt",
+    "updatedAt": "2026-10-10T08:56:09.657Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "bJ7SHrAJrGUmxRXK5uIt",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_bS9dMjuN9LzclGdjxHJ6",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-25T08:05:10.551Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "bS9dMjuN9LzclGdjxHJ6",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_bT8MjIL9N5oADgQ3fovZ",
+    "stockStatus": "out",
+    "updatedAt": "2026-09-13T17:46:03.116Z",
+    "productId": "bT8MjIL9N5oADgQ3fovZ",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_bYDk4gcZQhPBwWyPtnrr",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "bYDk4gcZQhPBwWyPtnrr",
+    "updatedAt": "2026-07-27T18:09:03.482Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_bkX49MpzXrDcrss3tN5i",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "reorderLevel": 0,
+    "productId": "bkX49MpzXrDcrss3tN5i",
+    "stockStatus": "out",
+    "updatedAt": "2026-10-19T19:47:38.741Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_c1AGjekAaUO0zQchv0bK",
+    "updatedAt": "2026-10-20T14:29:04.699Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "stockStatus": "out",
+    "productName": "زيت تنك نسرين *17 لتر",
+    "productId": "c1AGjekAaUO0zQchv0bK",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_c7VkTk3H5pvcZB2tCGRN",
+    "stockStatus": "out",
+    "productId": "c7VkTk3H5pvcZB2tCGRN",
+    "updatedAt": "2026-10-20T20:01:06.573Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_c87KVwQ4KpLT51MM3l1u",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "productId": "c87KVwQ4KpLT51MM3l1u",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-10-15T10:37:32.851Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_cdQSjHVqLxAYqBMVUyLE",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-25T08:05:10.551Z",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "cdQSjHVqLxAYqBMVUyLE"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_cpOYrBAZbabLvo5DoZ6B",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 1,
+    "productId": "cpOYrBAZbabLvo5DoZ6B",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-11T19:20:31.558Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_d17p96xsHv7Vmpyc9Toy",
+    "qty": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-09-14T17:09:31.160Z",
+    "reorderLevel": 0,
+    "productId": "d17p96xsHv7Vmpyc9Toy",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_dX04uuWrBhJhErR3U40T",
+    "productId": "dX04uuWrBhJhErR3U40T",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-22T07:32:29.584Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_dtCMNYIhjGBZGCUE6Lr1",
+    "updatedAt": "2026-10-14T08:02:20.939Z",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "stockStatus": "ok",
+    "productName": "معجون طماطم لونا 8*6 ربطة * 135 ح",
+    "reorderLevel": 0,
+    "qty": 2,
+    "productId": "dtCMNYIhjGBZGCUE6Lr1",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_eAXoMt1UyFqPTMLZ4GAX",
+    "productId": "eAXoMt1UyFqPTMLZ4GAX",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-25T20:43:22.470Z",
+    "stockStatus": "ok",
+    "qty": 1
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_fLTt9zHDbOC7GKFzZWZV",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-14T17:21:21.550Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "productId": "fLTt9zHDbOC7GKFzZWZV",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_fT46B3aWtLP1P85gLk8J",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-16T14:37:53.711Z",
+    "productId": "fT46B3aWtLP1P85gLk8J",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_fV6ZGU0s0fFiEluCLKje",
+    "updatedAt": "2026-08-25T09:14:14.110Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "fV6ZGU0s0fFiEluCLKje"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_g0HM02LRWJYAJrRWUdum",
+    "stockStatus": "out",
+    "productId": "g0HM02LRWJYAJrRWUdum",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-20T18:42:15.343Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_g0ZCXjRkQWyWCXy0qgN5",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "g0ZCXjRkQWyWCXy0qgN5",
+    "updatedAt": "2026-07-27T18:09:13.107Z",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_gtOkpFC26meAhlHSgLQj",
+    "updatedAt": "2026-10-17T08:50:56.295Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "gtOkpFC26meAhlHSgLQj",
+    "stockStatus": "ok",
+    "qty": 1,
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_h2CTayjdEvjpld1Mc7WO",
+    "qty": 0,
+    "productId": "h2CTayjdEvjpld1Mc7WO",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:09:14.509Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_hsweOtlJmOZIBAB1tlu1",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-08-05T23:34:53.099Z",
+    "productId": "hsweOtlJmOZIBAB1tlu1",
+    "stockStatus": "out",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_hvysP8vRqA8wXPIz75nN",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-08-18T17:42:56.157Z",
+    "qty": 8,
+    "productId": "hvysP8vRqA8wXPIz75nN",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_iFJ8JyexxPdWuYlzbU5Y",
+    "stockStatus": "out",
+    "productName": "ارز ابو كاس مزه 40 كجم",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-08-01T08:17:30.540Z",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "iFJ8JyexxPdWuYlzbU5Y",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_iNTAY01gkXC26uceT1h6",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "productId": "iNTAY01gkXC26uceT1h6",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T08:42:31.854Z",
+    "qty": 2
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_iht0utKRHl3JCWuI4D1E",
+    "updatedAt": "2026-08-05T08:58:59.680Z",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "iht0utKRHl3JCWuI4D1E",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productName": "اندومى خضار 60*75 جرام",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_iqrB1dkzgtyvBOVVXl6q",
+    "updatedAt": "2026-10-03T14:19:04.070Z",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "iqrB1dkzgtyvBOVVXl6q",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_jDBN2zR04WB6afMGzMEj",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-13T08:42:31.854Z",
+    "reorderLevel": 0,
+    "productId": "jDBN2zR04WB6afMGzMEj",
+    "stockStatus": "ok",
+    "qty": 2
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_jTxUESxX83gV3ASNzhmT",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "productId": "jTxUESxX83gV3ASNzhmT",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-20T20:01:06.573Z",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_jcXWt1tl35zU0Bgl2246",
+    "updatedAt": "2026-10-17T16:06:16.126Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 2,
+    "productId": "jcXWt1tl35zU0Bgl2246",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_jcvBhus9KJxTvFOKPYea",
+    "stockStatus": "ok",
+    "qty": 1,
+    "productId": "jcvBhus9KJxTvFOKPYea",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-24T20:47:15.059Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_k9SN4NfHIQJ1Qbzz9F8E",
+    "updatedAt": "2026-10-11T08:45:11.622Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "k9SN4NfHIQJ1Qbzz9F8E",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_kAm09NsM5EPXF8UvrFeX",
+    "productId": "kAm09NsM5EPXF8UvrFeX",
+    "productName": "ارز دلفين بسمتى 8*5 كجم",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "qty": 1,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-10-24T09:13:04.504Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_lifMlNAMPETCW4kFmY7t",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-22T16:38:21.790Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "lifMlNAMPETCW4kFmY7t",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_mZIv7uKape9o2d2OCGjz",
+    "reorderLevel": 0,
+    "productId": "mZIv7uKape9o2d2OCGjz",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-10-18T08:58:39.304Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_muaXACw0f09dXe4V1QY1",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:24.014Z",
+    "productId": "muaXACw0f09dXe4V1QY1"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_n4IW05Dc6fcoU0G6Ac2t",
+    "updatedAt": "2026-10-21T08:27:43.912Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "n4IW05Dc6fcoU0G6Ac2t",
+    "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_nE7UIt4vMdgbI4fhklhf",
+    "updatedAt": "2026-09-20T17:45:09.822Z",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "nE7UIt4vMdgbI4fhklhf",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_ndlDJpMG9hlBKQe4MauJ",
+    "productId": "ndlDJpMG9hlBKQe4MauJ",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-12T18:09:06.160Z",
+    "qty": 1,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_nlJqqpoaOJIr8xev6Wyf",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-13T15:21:04.918Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "nlJqqpoaOJIr8xev6Wyf",
+    "qty": 1
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_nn7SSyLySTxv0WgkoWf8",
+    "stockStatus": "ok",
+    "productName": "سائل صحون شاينكس بالليمون *30",
+    "reorderLevel": 0,
+    "productId": "nn7SSyLySTxv0WgkoWf8",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "updatedAt": "2026-10-22T15:49:56.621Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_oILf9Ggdj8bYNt4Pl492",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "qty": 0,
+    "productId": "oILf9Ggdj8bYNt4Pl492",
+    "stockStatus": "out",
+    "updatedAt": "2026-10-14T14:22:26.112Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_oJ9v6weiVvLu7VgYVp1i",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "updatedAt": "2026-07-27T18:09:30.934Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "oJ9v6weiVvLu7VgYVp1i",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_oU8yH7WDRu2ZBKLVYg1A",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-24T15:52:11.809Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok",
+    "qty": 10,
+    "productId": "oU8yH7WDRu2ZBKLVYg1A"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_ofIJ9TeKlN756jzt61SW",
+    "productId": "ofIJ9TeKlN756jzt61SW",
+    "updatedAt": "2026-07-27T18:09:32.298Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_oh4Mz5GGCj5QFPLdqysY",
+    "stockStatus": "ok",
+    "qty": 1,
+    "updatedAt": "2026-10-01T14:37:07.180Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "oh4Mz5GGCj5QFPLdqysY",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_ols8aSnfOWwSSwgvIzp7",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-01T17:33:13.135Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "ols8aSnfOWwSSwgvIzp7",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_p0FPy6EDM1EKc0MEVFgK",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-22T18:44:07.230Z",
+    "stockStatus": "ok",
+    "qty": 1,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "p0FPy6EDM1EKc0MEVFgK"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_p0xtk6qxq7oElTtQL54I",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-09-05T19:53:01.931Z",
+    "stockStatus": "out",
+    "productId": "p0xtk6qxq7oElTtQL54I",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_poGgeZhrDTm4eW0nHNK1",
+    "updatedAt": "2026-10-14T17:21:21.550Z",
+    "qty": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "ارز صنوايت كالروز 20* 1 كجم",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "productId": "poGgeZhrDTm4eW0nHNK1",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_qTe6Vs5C1XurYecxJlB5",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "qTe6Vs5C1XurYecxJlB5",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:36.455Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_qjEiCz0kBP2AFa9Yt3D4",
+    "productId": "qjEiCz0kBP2AFa9Yt3D4",
+    "qty": 0,
+    "updatedAt": "2026-07-27T18:09:37.936Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_qtl4NmMLGPyRMA9E4Mi5",
+    "productId": "qtl4NmMLGPyRMA9E4Mi5",
+    "updatedAt": "2026-07-27T18:09:39.266Z",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_qwuMMK8xWSJhh2Q2KbV8",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-07-27T18:09:40.562Z",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "qwuMMK8xWSJhh2Q2KbV8",
+    "stockStatus": "out",
+    "productName": "ارز دلفين مزه بسمتى 40 كجم",
+    "qty": 0,
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_rsK4qZNXiYsQYzw97O9W",
+    "updatedAt": "2026-08-08T08:32:04.610Z",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "rsK4qZNXiYsQYzw97O9W",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productName": "زبيب ذهبى  رقم 1  - 10 كيلو"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_ssc4ozqGTQlvYerEMDkZ",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "updatedAt": "2026-10-18T19:32:45.493Z",
+    "stockStatus": "ok",
+    "productId": "ssc4ozqGTQlvYerEMDkZ",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_t1YbyUE5NsYNGxlJWTqp",
+    "stockStatus": "ok",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-19T14:18:47.232Z",
+    "qty": 4,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "t1YbyUE5NsYNGxlJWTqp"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_tAq8ENjtZ0cRpzhW6xFH",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productCode": "12001",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "qty": 0,
+    "updatedAt": "2026-10-24T18:35:48.038Z",
+    "productName": "شطة رنا قوارير صغير  36*88 مل",
+    "productId": "tAq8ENjtZ0cRpzhW6xFH",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_tBEpkVkPbnEcNT87JANk",
+    "productId": "tBEpkVkPbnEcNT87JANk",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-20T22:40:23.081Z",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_tMs0vT31NQlZ8wxoCR0l",
+    "updatedAt": "2026-10-17T17:20:39.125Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "stockStatus": "out",
+    "productId": "tMs0vT31NQlZ8wxoCR0l",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_tNJtRN8XlYs6Sxsodsvw",
+    "updatedAt": "2026-10-18T19:32:45.493Z",
+    "qty": 1,
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "tNJtRN8XlYs6Sxsodsvw",
+    "stockStatus": "ok"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_tVRMm8FcjqwhnypSVgHh",
+    "productId": "tVRMm8FcjqwhnypSVgHh",
+    "stockStatus": "ok",
+    "updatedAt": "2026-10-22T09:22:41.551Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 1,
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_thEesj4aPMBKJePRHTlE",
+    "productName": "سكر الاسرة وسط 10*2 كيلو",
+    "stockStatus": "out",
+    "productId": "thEesj4aPMBKJePRHTlE",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "updatedAt": "2026-10-01T21:38:27.390Z"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_tkgjwvljS7IKGfpkueOm",
+    "productId": "tkgjwvljS7IKGfpkueOm",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-25T20:41:37.851Z",
+    "qty": 2,
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_vQkzxlzdOHu7z21s9SMV",
+    "productId": "vQkzxlzdOHu7z21s9SMV",
+    "reorderLevel": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-10-22T07:32:29.584Z",
+    "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+    "stockStatus": "out",
+    "qty": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_wDrRu3ce1hpW4P4XXt0d",
+    "qty": 0,
+    "stockStatus": "out",
+    "updatedAt": "2026-09-02T16:51:47.158Z",
+    "reorderLevel": 0,
+    "productId": "wDrRu3ce1hpW4P4XXt0d",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_wGEk0xKjCvX7pSSQGUU1",
+    "productId": "wGEk0xKjCvX7pSSQGUU1",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "updatedAt": "2026-08-27T17:49:27.556Z",
+    "stockStatus": "out"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_wxepIAahN8ati3vwaa2L",
+    "productName": "ورق برشمان كبير اصلى جيلانى 20 ربطه",
+    "stockStatus": "out",
+    "reorderLevel": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-08-06T15:09:37.250Z",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "productId": "wxepIAahN8ati3vwaa2L"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_x1cIL2f0tNMlLQWMw2ky",
+    "productId": "x1cIL2f0tNMlLQWMw2ky",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productName": "سكر الاسرة صغير 20*1 كيلو",
+    "stockStatus": "out",
+    "qty": 0,
+    "updatedAt": "2026-10-14T09:14:36.801Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_xRun3SF1zVyWFFOYAW8g",
+    "qty": 1,
+    "productId": "xRun3SF1zVyWFFOYAW8g",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "updatedAt": "2026-10-14T17:21:21.550Z",
+    "reorderLevel": 0,
+    "stockStatus": "ok"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_xatSIYYexbA9vqwkiabB",
+    "productId": "xatSIYYexbA9vqwkiabB",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "updatedAt": "2026-10-06T06:28:52.038Z",
+    "productName": "جوانتى طبى فينيل + اى او تى كبير جدا 70*10 بكت",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_yJJs2qLBiktzgf1yPlTF",
+    "stockStatus": "out",
+    "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "productId": "yJJs2qLBiktzgf1yPlTF",
+    "reorderLevel": 0,
+    "qty": 0,
+    "updatedAt": "2026-10-11T08:45:11.622Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_yKhEQH1t0XuHg7LdAttT",
+    "updatedAt": "2026-08-29T15:14:32.548Z",
+    "stockStatus": "out",
+    "productId": "yKhEQH1t0XuHg7LdAttT",
+    "reorderLevel": 0,
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_yLOfiimlko7x0ORSKc5c",
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "qty": 0,
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "reorderLevel": 0,
+    "updatedAt": "2026-09-07T14:36:57.621Z",
+    "productName": "ارز دلفين مزة  بسمتى 4*10 كجم",
+    "stockStatus": "out",
+    "productId": "yLOfiimlko7x0ORSKc5c"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_z8t67CUmJnR9IT1pVAdW",
+    "reorderLevel": 0,
+    "updatedAt": "2026-10-22T07:32:29.584Z",
+    "qty": 0,
+    "stockStatus": "out",
+    "productId": "z8t67CUmJnR9IT1pVAdW",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "Zyltw7uwvd0aKejdeqQq_zD1064Tc2mfyfwsnJQ1K",
+    "updatedAt": "2026-08-22T14:39:43.235Z",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "qty": 0,
+    "productId": "zD1064Tc2mfyfwsnJQ1K",
+    "stockStatus": "out",
+    "reorderLevel": 0
+  }
+]

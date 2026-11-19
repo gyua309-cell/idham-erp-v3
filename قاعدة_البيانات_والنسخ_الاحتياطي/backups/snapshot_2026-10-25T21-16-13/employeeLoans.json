@@ -1,0 +1,44 @@
+[
+  {
+    "id": "2Hi7T2qg2DRsMpcAKlC3",
+    "sourceId": "cashBox_owner_current",
+    "remainingBalance": 300,
+    "date": "2026-08-11",
+    "createdAt": "2026-08-12T08:53:31.408Z",
+    "notes": "سلفة للمندوب مصطفى",
+    "status": "active",
+    "empName": "مصطفى الاسيوطى",
+    "method": "cash",
+    "empId": "wOxNLDnyefMxOkvqrNSo",
+    "paidAmount": 0,
+    "amount": 300
+  },
+  {
+    "id": "loan_mustafa_100_active",
+    "amount": 100,
+    "employeeName": "مصطفى الاسيوطى",
+    "paidAmount": 0,
+    "empId": "wOxNLDnyefMxOkvqrNSo",
+    "method": "journal",
+    "empName": "مصطفى الاسيوطى",
+    "status": "active",
+    "notes": "سلفة بيد الاستاذ محمود لمصطفى (قيد رقم: FHRPR0)",
+    "remainingAmount": 100,
+    "date": "2026-08-06",
+    "remainingBalance": 100
+  },
+  {
+    "id": "loan_mustafa_500_settled",
+    "date": "2026-08-01",
+    "empId": "wOxNLDnyefMxOkvqrNSo",
+    "amount": 500,
+    "empName": "مصطفى الاسيوطى",
+    "method": "cash",
+    "employeeName": "مصطفى الاسيوطى",
+    "remainingBalance": 0,
+    "status": "paid",
+    "remainingAmount": 0,
+    "paidAmount": 500,
+    "notes": "سلفة شخصية وتسوية عهد وسلف سابقة للمندوب مصطفى الأسيوطي"
+  }
+]

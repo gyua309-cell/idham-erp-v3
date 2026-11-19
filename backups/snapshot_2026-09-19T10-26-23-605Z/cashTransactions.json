@@ -1,0 +1,2418 @@
+[
+  {
+    "_id": "01R90VtFS9RV78Ld8xqs",
+    "type": "in",
+    "balanceAfter": 4610.5,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289768,
+      "nanoseconds": 151000000
+    },
+    "notes": "سند قبض — نقدى",
+    "sourceId": "aNP6EvTAXSCPfFNdnRsx",
+    "amount": 300,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "064kGm8wTQlz6XuBLwOd",
+    "sourceId": "ceLNXM8CBpJuHWPaQvUu",
+    "amount": 100,
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788304407,
+      "nanoseconds": 17000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 6843.5,
+    "type": "in"
+  },
+  {
+    "_id": "09vKPXQDLp7Zq77CzMcx",
+    "sourceId": "GZpEjKm2oPqonQH6paYb",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788033723,
+      "nanoseconds": 134000000
+    },
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 50,
+    "type": "in",
+    "balanceAfter": 657,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "0fsSkOR4OZt5AwESfEhC",
+    "sourceId": "eNwwj7UGcjaPw3P3Eaeg",
+    "amount": 200,
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787472984,
+      "nanoseconds": 555000000
+    },
+    "type": "in",
+    "balanceAfter": 457,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "0gssmPtefaN8YxuotP61",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 457.5,
+    "sourceId": "OVptemd32xfwsxEOkhNv",
+    "amount": 357,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789553668,
+      "nanoseconds": 47000000
+    }
+  },
+  {
+    "_id": "0pv5qL9CI7qbp7ageaKk",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992024,
+      "nanoseconds": 764000000
+    },
+    "balanceAfter": 1580,
+    "type": "in",
+    "amount": 550,
+    "sourceId": "4iQVnhAR0pzkmYkAJUNg"
+  },
+  {
+    "_id": "16CaafeM8RzUPQuVUn6Q",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 7169.5,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788386774,
+      "nanoseconds": 828000000
+    },
+    "amount": 100,
+    "sourceId": "Ec5manKX6SeDJdMhZ0ob"
+  },
+  {
+    "_id": "1xbafeQmThqrRWA0NJJW",
+    "sourceType": "receipt",
+    "balanceAfter": 500.5,
+    "sourceId": "m0emUg8XoQFh7knW7McV",
+    "notes": "سند قبض — نقدى",
+    "amount": 300,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788773724,
+      "nanoseconds": 42000000
+    }
+  },
+  {
+    "_id": "21TinTVH2f730BAUshVK",
+    "sourceType": "receipt",
+    "amount": 3300,
+    "sourceId": "U4MeMNOkORlsJmFFzxV2",
+    "balanceAfter": 6343.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788304081,
+      "nanoseconds": 539000000
+    },
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "2Cmc1rJ3MjIyok7V3qmf",
+    "notes": "سند قبض — نقدى",
+    "amount": 200,
+    "balanceAfter": 1216,
+    "sourceId": "lmvKDPKj7vPFHHrKe1vh",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787043135,
+      "nanoseconds": 922000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "2SwiaSCZQYpBUZCSFDAS",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "g21OaKrzKvUwvZ1dCJiU",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473023,
+      "nanoseconds": 799000000
+    },
+    "amount": 350,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 807,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "2c22PMTePmym7fA5FbUv",
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788386706,
+      "nanoseconds": 403000000
+    },
+    "sourceId": "jWMgEQ1NraUL2VkSn1Hu",
+    "type": "in",
+    "balanceAfter": 6719.5,
+    "notes": "سند قبض — نقدى",
+    "amount": 250
+  },
+  {
+    "_id": "3ALKi4f1Kkft68tLkfPD",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787042907,
+      "nanoseconds": 852000000
+    },
+    "sourceType": "receipt",
+    "sourceId": "Cq0D3bwvITEyTqlm39Au",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "notes": "سند قبض — تحصيل نقدى",
+    "balanceAfter": 166,
+    "amount": 166
+  },
+  {
+    "_id": "3Z2SrmthNHMXDyV2mFmS",
+    "balanceAfter": 2399,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 300,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787818997,
+      "nanoseconds": 373000000
+    },
+    "type": "in",
+    "sourceId": "uxidZbcoKJVtOacog8fi",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "4pOHWJmsIp6j2LiSWSVj",
+    "date": "2026-09-17",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "to78BJ6rd3gePD1GNNfn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789808019,
+      "nanoseconds": 7000000
+    },
+    "amount": 450,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "userName": "النظام",
+    "balanceAfter": 450.5,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "4uMMpMbXOdt3QKb4Urml",
+    "balanceAfter": 1799,
+    "sourceType": "receipt",
+    "type": "in",
+    "sourceId": "IqV9BOfF6a3XpwQ72jEY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787774794,
+      "nanoseconds": 404000000
+    },
+    "amount": 752,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "51Fru1kJ8xEtGdFBnAeU",
+    "sourceId": "FBhGtjQZNDTWPkuSmVOK",
+    "amount": 827,
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "balanceAfter": 827,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788714802,
+      "nanoseconds": 313000000
+    },
+    "cashBoxId": "G0J71JsRCFqc354AoZEv"
+  },
+  {
+    "_id": "5IN9tSht3iOwXziBhyIC",
+    "sourceId": "RQYVarHPYu83KlsJhwNj",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 720,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787213303,
+      "nanoseconds": 299000000
+    },
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "amount": 100
+  },
+  {
+    "_id": "5a9j5Yv0A4ZJ4AgQeT4x",
+    "amount": 100,
+    "balanceAfter": 1487,
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "sourceId": "AYmCD98WpTCA7xRqNdDf",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473437,
+      "nanoseconds": 265000000
+    }
+  },
+  {
+    "_id": "6K5AqEzCjOKUTb4mNMfq",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "CXa6wR8lU4VEalyq8JzV",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789553615,
+      "nanoseconds": 499000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "amount": 100,
+    "type": "in",
+    "balanceAfter": 100.5
+  },
+  {
+    "_id": "6zF0Uw6Fucz2Pni304oI",
+    "type": "in",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789379200,
+      "nanoseconds": 412000000
+    },
+    "amount": 500,
+    "balanceAfter": 5620.5,
+    "sourceId": "WsmuXXyHLZvdLCqVhnRR"
+  },
+  {
+    "_id": "7z0wXInyp3tkLmUtJWmv",
+    "balanceAfter": 7136.5,
+    "sourceType": "receipt",
+    "sourceId": "KCirZQXuYsr06Ouerydt",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 200,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788597777,
+      "nanoseconds": 840000000
+    }
+  },
+  {
+    "_id": "80u1HiVAcvuNMoa0DmQe",
+    "type": "in",
+    "balanceAfter": 2702,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787991863,
+      "nanoseconds": 431000000
+    },
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "amount": 100,
+    "sourceId": "GAelOjvdzbHF3PSLCWF8"
+  },
+  {
+    "_id": "91HvQQXL09nZexhmPe7z",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 720.5,
+    "sourceId": "ICSMbRZwhPgklu1IdoAR",
+    "userName": "النظام",
+    "amount": 70,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789808086,
+      "nanoseconds": 811000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "date": "2026-09-17",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "9LYjz8jBpZuHGGNUuoJy",
+    "type": "in",
+    "sourceId": "jQ9d11Jepbkmjf3YGBSl",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786961968,
+      "nanoseconds": 358000000
+    },
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "balanceAfter": 865,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 585
+  },
+  {
+    "_id": "9R2umkMSbD7n5XoNfhfr",
+    "type": "in",
+    "balanceAfter": 1870.5,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "16wn2WZ8YPxxjQhYpfr7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289896,
+      "nanoseconds": 294000000
+    },
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "amount": 220
+  },
+  {
+    "_id": "9kE4fI1H7erUBvN4Bqrj",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788253695,
+      "nanoseconds": 119000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 2657,
+    "sourceId": "PNhsEu5WOUVY9hJCLKNG",
+    "amount": 100,
+    "sourceType": "receipt",
+    "type": "in"
+  },
+  {
+    "_id": "ABJWYvwhsoDSRWodwqos",
+    "type": "in",
+    "amount": 700,
+    "sourceId": "FMm82ldwo8afD8qY2HdY",
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "balanceAfter": 700,
+    "cashBoxId": "G0J71JsRCFqc354AoZEv",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788373709,
+      "nanoseconds": 726000000
+    }
+  },
+  {
+    "_id": "ACexU6UStgCiQ7zCTfEJ",
+    "type": "in",
+    "balanceAfter": 3257,
+    "amount": 300,
+    "sourceId": "EN9nxhUuoLxWfjDkBoZw",
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254079,
+      "nanoseconds": 885000000
+    }
+  },
+  {
+    "_id": "ANIW9sHzJy3jlEMkNC05",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786961936,
+      "nanoseconds": 94000000
+    },
+    "amount": 180,
+    "type": "in",
+    "sourceType": "receipt",
+    "sourceId": "SoLewRXGlPNQPcBYYR3r",
+    "balanceAfter": 280
+  },
+  {
+    "_id": "AleUhABu0vZNfOC2SIVz",
+    "type": "in",
+    "balanceAfter": 570,
+    "notes": "سند قبض — نقدى",
+    "amount": 570,
+    "cashBoxId": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "sourceId": "F9sfKA2mZJgIAVjhitFf",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788373485,
+      "nanoseconds": 769000000
+    }
+  },
+  {
+    "_id": "AtuB0X97bOXehEw7Ty4S",
+    "date": "2026-09-16",
+    "sourceId": "NGgKQQT4vm2cW7JCpFxN",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "userName": "النظام",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 3881.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789632874,
+      "nanoseconds": 129000000
+    },
+    "amount": 1300,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "BCCQCRX7YWhDSgOTJI5J",
+    "sourceId": "7LeI39mmYUJ7iL2D1zm4",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789553781,
+      "nanoseconds": 111000000
+    },
+    "type": "in",
+    "balanceAfter": 1907.5,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 1000,
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "BeckU9rSGLo57wOs78NL",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289483,
+      "nanoseconds": 416000000
+    },
+    "sourceType": "receipt",
+    "type": "in",
+    "balanceAfter": 3810.5,
+    "notes": "سند قبض — نقدى",
+    "amount": 300,
+    "sourceId": "FgDF4ZXW6FFn1AybwIey"
+  },
+  {
+    "_id": "CPMrwxZMCqBhZOGbxDgG",
+    "type": "in",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "date": "2026-09-16",
+    "sourceId": "0mJYp4nXTfvtBrEMeyEj",
+    "userName": "النظام",
+    "balanceAfter": 2281.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789632735,
+      "nanoseconds": 658000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 200
+  },
+  {
+    "_id": "CdpUz1BDPPavexvP9s4Q",
+    "sourceId": "zB8BNskaQ8SqDNkJfrd4",
+    "sourceType": "receipt",
+    "balanceAfter": 3973,
+    "amount": 616,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254152,
+      "nanoseconds": 572000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "type": "in"
+  },
+  {
+    "_id": "Cn17Tg3HAQljeyrUc1Uz",
+    "userName": "النظام",
+    "balanceAfter": 650.5,
+    "sourceId": "PQyphZpggpkQ4MNWGMgv",
+    "date": "2026-09-17",
+    "type": "in",
+    "sourceType": "receipt",
+    "amount": 200,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789808052,
+      "nanoseconds": 556000000
+    }
+  },
+  {
+    "_id": "DBt8zbwKKIm2azJoVF2R",
+    "type": "in",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "xMmpEhBxsDE59qPFeogr",
+    "amount": 110,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1225.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789495777,
+      "nanoseconds": 185000000
+    }
+  },
+  {
+    "_id": "Det7ZahcdgqAsZUEz19t",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787043024,
+      "nanoseconds": 922000000
+    },
+    "sourceType": "receipt",
+    "amount": 100,
+    "balanceAfter": 816,
+    "notes": "سند قبض — نقدى",
+    "sourceId": "VZYswLjwtVjLmztlZrVH",
+    "type": "in"
+  },
+  {
+    "_id": "EXpjQDyQnjvyjyKQWNYj",
+    "balanceAfter": 2081.5,
+    "sourceType": "receipt",
+    "date": "2026-09-16",
+    "type": "in",
+    "amount": 500,
+    "userName": "النظام",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "WR0iTGafPFm3HtaU5NV6",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789632651,
+      "nanoseconds": 591000000
+    }
+  },
+  {
+    "_id": "FETZ5KqLpPuRgqk6idTr",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "yNoAfKO4cxJbBFTYmVyy",
+    "sourceType": "receipt",
+    "amount": 80,
+    "balanceAfter": 887,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473134,
+      "nanoseconds": 670000000
+    },
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "FQbavRG9DsHjMElFuu4g",
+    "sourceType": "receipt",
+    "type": "in",
+    "balanceAfter": 1016,
+    "sourceId": "rDiFaS7DHHHE8V4bRSkI",
+    "amount": 200,
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787043063,
+      "nanoseconds": 281000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "GDUnmqUvJuZ9Wu6YXSBR",
+    "balanceAfter": 2072,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787732882,
+      "nanoseconds": 489000000
+    },
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "lA1nsLUU2Z3YiScuVCvw",
+    "type": "in",
+    "amount": 300
+  },
+  {
+    "_id": "GJFrL0BXfXR3HYT7AHIX",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788855115,
+      "nanoseconds": 78000000
+    },
+    "balanceAfter": 915.5,
+    "notes": "سند قبض — نقدى",
+    "amount": 200,
+    "type": "in",
+    "sourceId": "1LRONmn5Dxjp3NCssGtE"
+  },
+  {
+    "_id": "Gi6J0a6pdXWOqQOgzs9X",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473638,
+      "nanoseconds": 866000000
+    },
+    "amount": 465,
+    "sourceId": "kQdYzCtCo1VZZ9fpgxGb",
+    "balanceAfter": 1952,
+    "type": "in"
+  },
+  {
+    "_id": "Gxav70H5hIlULgsKhZA9",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789379260,
+      "nanoseconds": 586000000
+    },
+    "amount": 170,
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "balanceAfter": 5790.5,
+    "sourceType": "receipt",
+    "sourceId": "AXUl55D0QLIJ1zTiEfHw"
+  },
+  {
+    "_id": "HDH9SKpMucagC44Lscix",
+    "balanceAfter": 7436.5,
+    "amount": 100,
+    "sourceId": "GeBc9XWm6E2UqpeX22Nw",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788597856,
+      "nanoseconds": 664000000
+    },
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "HSJ0zES7FIdLQpIySbyp",
+    "sourceId": "KZKwjWaJAkq8QNuBko4k",
+    "balanceAfter": 3357,
+    "amount": 100,
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254114,
+      "nanoseconds": 277000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "HXb5fwZrbAgVGqZba3tu",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787732839,
+      "nanoseconds": 884000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 347,
+    "type": "in",
+    "balanceAfter": 1772,
+    "sourceId": "Dt45un8j8Ks9FNq3f6NT",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "Hj3W6cIjnu7hWC4WH5On",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "date": "2026-09-15",
+    "balanceAfter": 1481.5,
+    "amount": 200,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789553741,
+      "nanoseconds": 308000000
+    },
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "GrBTJC4LK61g0ROudAN4",
+    "userName": "النظام"
+  },
+  {
+    "_id": "I8UhULWpjEE6K3W7jYEW",
+    "sourceId": "GqQkLVKHY947hUzycMmv",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "balanceAfter": 400,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787991945,
+      "nanoseconds": 306000000
+    },
+    "sourceType": "receipt",
+    "amount": 200,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "J8jkRpL4n07OVnm9IQjW",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "IMiw8nercTH3nxCysOwG",
+    "amount": 200,
+    "balanceAfter": 2070.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289941,
+      "nanoseconds": 701000000
+    },
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in"
+  },
+  {
+    "_id": "JJtxMAopcw9BNUNIRZ95",
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788034095,
+      "nanoseconds": 353000000
+    },
+    "amount": 500,
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "TMBXuHqEx0vOLMgkH6Qk",
+    "balanceAfter": 1957
+  },
+  {
+    "_id": "JhwZbFYtsWyj5x9urejB",
+    "sourceId": "xMUruThybARars978sKy",
+    "amount": 200,
+    "balanceAfter": 2457,
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788167734,
+      "nanoseconds": 644000000
+    },
+    "type": "in"
+  },
+  {
+    "_id": "JknfODMDEhPB1Ws23fOp",
+    "sourceType": "receipt",
+    "sourceId": "RNwWg6K93FlCNiyVxZhT",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788855444,
+      "nanoseconds": 21000000
+    },
+    "balanceAfter": 1415.5,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "amount": 500
+  },
+  {
+    "_id": "JqBhq5RCQW91BspjVH7Y",
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "oje0wjh2Fi0p3R3svAgP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788949266,
+      "nanoseconds": 714000000
+    },
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "amount": 400,
+    "balanceAfter": 1700.5
+  },
+  {
+    "_id": "K1ApONzbpgJG9oarygkA",
+    "amount": 100,
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 200,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "jvT3yLwbKic78WJjfix5",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787991912,
+      "nanoseconds": 430000000
+    },
+    "type": "in",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "K1UHZyGowqgxqFaDJ7Q7",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1075,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787560243,
+      "nanoseconds": 664000000
+    },
+    "amount": 350,
+    "sourceId": "ZgpXgPCV9NxqPeIdg0mR",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "K9EA8y5SdpH3kbFPqOZk",
+    "type": "in",
+    "amount": 200,
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787134924,
+      "nanoseconds": 569000000
+    },
+    "sourceId": "WXb0qWTVDbw6QuUOYjv2",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 200,
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "KFPNthueAhMxitOcupDs",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1673.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788686888,
+      "nanoseconds": 758000000
+    },
+    "sourceId": "CRNB5Iva18lTOJPcipvx",
+    "amount": 350,
+    "type": "in"
+  },
+  {
+    "_id": "KQ82IAv08PrUFB1UKQlb",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473285,
+      "nanoseconds": 991000000
+    },
+    "amount": 450,
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "konU6ivXAv7y8dnouyOo",
+    "balanceAfter": 1337
+  },
+  {
+    "_id": "Kl2oomGyqsxSu03obFbB",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788773767,
+      "nanoseconds": 630000000
+    },
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 215,
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "matAEXEmU27ZMFqC8WLW",
+    "balanceAfter": 715.5
+  },
+  {
+    "_id": "L1rlSuDZb1TjrJmLc0Dc",
+    "sourceType": "receipt",
+    "type": "in",
+    "amount": 150,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "iLUk8QyVnzfDpl8xWM1x",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788167631,
+      "nanoseconds": 320000000
+    },
+    "balanceAfter": 2257
+  },
+  {
+    "_id": "LGARkz2DUd2hQGHXWk3Y",
+    "type": "in",
+    "sourceType": "receipt",
+    "balanceAfter": 1260,
+    "sourceId": "ezP4Ht2rx6h890cIilZR",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 395,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786962201,
+      "nanoseconds": 542000000
+    }
+  },
+  {
+    "_id": "LbGoMLsSduwP74HOFokN",
+    "balanceAfter": 670,
+    "notes": "سند قبض — نقدى",
+    "amount": 670,
+    "sourceType": "receipt",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789410130,
+      "nanoseconds": 36000000
+    },
+    "cashBoxId": "G0J71JsRCFqc354AoZEv",
+    "sourceId": "xoB5RjNWDsN9bdNk0Qgd"
+  },
+  {
+    "_id": "MKl7kj1JBpF3JCzOecTC",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789379402,
+      "nanoseconds": 881000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "amount": 200,
+    "sourceType": "receipt",
+    "sourceId": "M1IuIP6tX2giuQwJnqH7",
+    "balanceAfter": 6190.5,
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "MiW441aZEiw3GsbJkK9d",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788686750,
+      "nanoseconds": 640000000
+    },
+    "sourceId": "VPLKc3XY3sGhIQBhj86t",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "type": "in",
+    "balanceAfter": 1323.5,
+    "amount": 200,
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "Nbr3l30piVaVupZoUslx",
+    "amount": 800,
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789807910,
+      "nanoseconds": 511000000
+    },
+    "cashBoxId": "G0J71JsRCFqc354AoZEv",
+    "balanceAfter": 800,
+    "date": "2026-09-19",
+    "type": "in",
+    "sourceId": "qtQgIf8YfyN5rZIldpVs",
+    "userName": "النظام",
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "NjtLs6GKKfl4uxVyhsZX",
+    "sourceType": "receipt",
+    "sourceId": "ZRG7E21rKQKNuB6zPGRn",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788598039,
+      "nanoseconds": 555000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 8059.5,
+    "amount": 173,
+    "type": "in"
+  },
+  {
+    "_id": "Nt9GYDpztSp7D26huHAt",
+    "balanceAfter": 2350.5,
+    "sourceType": "receipt",
+    "sourceId": "aH28rGHmwRVduel6EChA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788949325,
+      "nanoseconds": 216000000
+    },
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 650,
+    "type": "in"
+  },
+  {
+    "_id": "PG2uK2bnzIwm7UocP1t5",
+    "balanceAfter": 707.5,
+    "type": "in",
+    "sourceType": "receipt",
+    "amount": 250,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "3E5kkaF1eHjWzK4Zxego",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789553702,
+      "nanoseconds": 983000000
+    }
+  },
+  {
+    "_id": "QcxftcLPDdXmYv66aqpi",
+    "sourceId": "dTC9rcGlvFdkvLGQTzrv",
+    "amount": 150,
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "balanceAfter": 1375.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789495815,
+      "nanoseconds": 30000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "QxV6GZ7OQ8qi5vyDLgUK",
+    "sourceId": "rdAjgDRL3vU5ybnko3vn",
+    "amount": 70,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788386543,
+      "nanoseconds": 264000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "sourceType": "receipt",
+    "balanceAfter": 6369.5
+  },
+  {
+    "_id": "ROV2ngj2FXMk573P2EgF",
+    "sourceId": "7Ro5M0doqbcAgU3OG2oY",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787384606,
+      "nanoseconds": 642000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "balanceAfter": 507,
+    "amount": 357
+  },
+  {
+    "_id": "RPSNx1EiwXUBcprmCaOj",
+    "sourceType": "receipt",
+    "amount": 50,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473385,
+      "nanoseconds": 955000000
+    },
+    "sourceId": "y4ZEiAkknWxClNhuBJK7",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1387,
+    "type": "in"
+  },
+  {
+    "_id": "RzftFoKdrE6bag9ESPLk",
+    "amount": 818,
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788983278,
+      "nanoseconds": 550000000
+    },
+    "sourceId": "R2UztBaHyXejTG0FXFwz",
+    "cashBoxId": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "balanceAfter": 1026,
+    "type": "in",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "S5xdXeq8gZXJYA0s9DQE",
+    "type": "in",
+    "sourceId": "1igqa732gO9RvZuBE2d8",
+    "balanceAfter": 2599,
+    "amount": 200,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787819062,
+      "nanoseconds": 3000000
+    }
+  },
+  {
+    "_id": "Sc1vMXMD6sGRrOSnX1z9",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "YcKccnzeH27zKbJP424z",
+    "balanceAfter": 6743.5,
+    "amount": 200,
+    "type": "in",
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788304359,
+      "nanoseconds": 255000000
+    }
+  },
+  {
+    "_id": "SmTxNP2fGk8u02abnV1L",
+    "notes": "سند قبض — نقدى",
+    "amount": 276,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788983199,
+      "nanoseconds": 833000000
+    },
+    "cashBoxId": "G0J71JsRCFqc354AoZEv",
+    "sourceId": "9OGGWk5jYZ0mQQZjbm2V",
+    "balanceAfter": 276,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "TAsNgnqZlJyKWxo1lLU0",
+    "balanceAfter": 1180.5,
+    "sourceType": "receipt",
+    "date": "2026-09-17",
+    "type": "in",
+    "amount": 360,
+    "userName": "النظام",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "ClMEJRodTE87hXw7dyYu",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789808155,
+      "nanoseconds": 615000000
+    }
+  },
+  {
+    "_id": "U05mCgrppt0qeZHgA0WK",
+    "amount": 225,
+    "sourceId": "Wy6kZiO7IChB6vQxcUq6",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788855537,
+      "nanoseconds": 11000000
+    },
+    "balanceAfter": 1840.5,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in"
+  },
+  {
+    "_id": "UAxO2JjhDLJxV6xt4fxt",
+    "balanceAfter": 3310.5,
+    "amount": 350,
+    "sourceId": "gd7a8LM2q9ZyL29Zz6Sn",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289379,
+      "nanoseconds": 639000000
+    }
+  },
+  {
+    "_id": "UM3wCqnl3eYzKJRK9pQ2",
+    "type": "in",
+    "balanceAfter": 3549,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787819135,
+      "nanoseconds": 680000000
+    },
+    "sourceId": "3VdHEooh9b2qGgGBNh0g",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "amount": 850
+  },
+  {
+    "_id": "UN6bO11HgWtZjxPlX4pQ",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788598000,
+      "nanoseconds": 583000000
+    },
+    "sourceId": "WVbgWhncIdRnQH4Kskf4",
+    "balanceAfter": 7886.5,
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "amount": 150
+  },
+  {
+    "_id": "UY511SMytbuWHe1fDI2t",
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289440,
+      "nanoseconds": 771000000
+    },
+    "sourceId": "oaOYOAnEPpNjaiUw8l2y",
+    "type": "in",
+    "balanceAfter": 3510.5,
+    "amount": 200,
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "VUmcTKw656NaMR1c62DO",
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788304115,
+      "nanoseconds": 131000000
+    },
+    "amount": 200,
+    "sourceType": "receipt",
+    "sourceId": "44GN7jGC6yZVEVmZEs9y",
+    "balanceAfter": 6543.5
+  },
+  {
+    "_id": "VVvKvQelDhZ2lVQFB1di",
+    "amount": 200,
+    "sourceId": "CQUj61W8Xb5TG5IC90hd",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789554173,
+      "nanoseconds": 936000000
+    },
+    "sourceType": "receipt",
+    "balanceAfter": 1281.5,
+    "date": "2026-09-14",
+    "notes": "سند قبض — نقدى",
+    "type": "in"
+  },
+  {
+    "_id": "VY1zKB75lTIzUID9Wyz2",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 3943.5,
+    "type": "out",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788254578,
+      "nanoseconds": 132000000
+    },
+    "amount": 29.5,
+    "userName": "المستخدم",
+    "notes": "سند صرف رقم JVQYJM — فاتورة 1 مكرونه"
+  },
+  {
+    "_id": "Wdla3JbLh9Ryx3X96qcK",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788034162,
+      "nanoseconds": 893000000
+    },
+    "amount": 130,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "sourceId": "161BD83FAIIiwZC1xkHu",
+    "balanceAfter": 2087,
+    "type": "in"
+  },
+  {
+    "_id": "WtIpNtqKbBZ1FY3ZN2QH",
+    "type": "in",
+    "sourceId": "oUTVAmEDV7WNTcPfZ0Ha",
+    "amount": 400,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788019144,
+      "nanoseconds": 852000000
+    },
+    "sourceType": "receipt",
+    "balanceAfter": 400
+  },
+  {
+    "_id": "Xou1CJXMKMgDR3zfAX0J",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788687682,
+      "nanoseconds": 894000000
+    },
+    "sourceId": "PRUorqJAj8rsQwjD4IrH",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1973.5,
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "amount": 100
+  },
+  {
+    "_id": "YLvYrg7V9iUY2qpNfbRh",
+    "sourceType": "receipt",
+    "balanceAfter": 1020,
+    "sourceId": "TCq6PAVCC9HSciV8zpvP",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787213237,
+      "nanoseconds": 551000000
+    },
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "amount": 100
+  },
+  {
+    "_id": "YZICylZhQL90y1CPjcDt",
+    "type": "in",
+    "sourceType": "receipt",
+    "sourceId": "Lo5dl3KRN6qODGafut3j",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788949134,
+      "nanoseconds": 818000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1000.5,
+    "notes": "سند قبض — نقدى",
+    "amount": 100
+  },
+  {
+    "_id": "YaWVvJAfUaq3P4dRmDcp",
+    "type": "out",
+    "userName": "المستخدم",
+    "amount": 620,
+    "notes": "سند صرف رقم 3OXSNN — نقدى صرف فاتورة",
+    "balanceAfter": 50,
+    "cashBoxId": "G0J71JsRCFqc354AoZEv",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789410199,
+      "nanoseconds": 590000000
+    }
+  },
+  {
+    "_id": "YggQeAj6zeojejkrCPFj",
+    "sourceType": "receipt",
+    "balanceAfter": 425,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787559991,
+      "nanoseconds": 734000000
+    },
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 300,
+    "sourceId": "pejJVs9eiwRNcNUOForj",
+    "type": "in"
+  },
+  {
+    "_id": "Yr0F63wmx2QnMJab2fW7",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789805651,
+      "nanoseconds": 439000000
+    },
+    "cashBoxId": "cashBox_i6qFzXabMQq8R7j7GxgL",
+    "sourceType": "receipt",
+    "balanceAfter": 1600,
+    "sourceId": "CCzCPPdO2TV6lQRvW1Po",
+    "notes": "سند قبض — نقدى",
+    "userName": "النظام",
+    "type": "in",
+    "date": "2026-09-19",
+    "amount": 1600
+  },
+  {
+    "_id": "a9UVjVcfnLczbL7R3rkU",
+    "amount": 300,
+    "balanceAfter": 2107,
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788167580,
+      "nanoseconds": 862000000
+    },
+    "type": "in",
+    "sourceId": "MZjOUEzrNk6wCZruSOqQ"
+  },
+  {
+    "_id": "amHNFk5K8mIodVRSdLbn",
+    "balanceAfter": 500,
+    "amount": 500,
+    "sourceType": "receipt",
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788033552,
+      "nanoseconds": 420000000
+    },
+    "notes": "سند قبض — نقدى",
+    "sourceId": "DI9C3I7pCD88SZOgZJT2"
+  },
+  {
+    "_id": "aqTQWbCUirD9SZglaUHW",
+    "notes": "سند قبض — نقدى",
+    "date": "2026-09-17",
+    "type": "in",
+    "sourceType": "receipt",
+    "balanceAfter": 820.5,
+    "amount": 100,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789808114,
+      "nanoseconds": 808000000
+    },
+    "userName": "النظام",
+    "sourceId": "cvgfmfKpI0iNGzOk8zWg"
+  },
+  {
+    "_id": "b2UWWjXYQMmOGmMYDh1f",
+    "amount": 208,
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788983050,
+      "nanoseconds": 57000000
+    },
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "sourceId": "0aEFpHZDHXaV2HqVQzYH",
+    "type": "in",
+    "balanceAfter": 208
+  },
+  {
+    "_id": "bIjltVCRc3kx7AMEs1a3",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 200,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788253890,
+      "nanoseconds": 829000000
+    },
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "balanceAfter": 2957,
+    "sourceId": "py5Xp1b2FFIc1nuO49lF",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "bO48lfSm0jGN2uD4t3Ki",
+    "sourceId": "odNbDrAPrazv2RfcDGOq",
+    "type": "in",
+    "amount": 200,
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 716,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787042987,
+      "nanoseconds": 523000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "bgwabwc37hqhAjyVcsCf",
+    "type": "in",
+    "balanceAfter": 2099,
+    "notes": "سند قبض — نقدى",
+    "amount": 300,
+    "sourceId": "ihhNnEEDCNqKmkTtUdIS",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787774907,
+      "nanoseconds": 430000000
+    }
+  },
+  {
+    "_id": "cJFDyFy55lZVqJiKQGe6",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787647969,
+      "nanoseconds": 430000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "Qtyq4Oda6ODLs3tTOlIR",
+    "amount": 150,
+    "balanceAfter": 1425,
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "type": "in"
+  },
+  {
+    "_id": "ca6GvdjTbbhDfJXLbq5c",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 7536.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788597895,
+      "nanoseconds": 640000000
+    },
+    "sourceType": "receipt",
+    "type": "in",
+    "amount": 100,
+    "notes": "سند قبض — نقدى",
+    "sourceId": "IgLpDkndrvW0Ri3zBZCg"
+  },
+  {
+    "_id": "ck0Kgfn9AX1nltTK5HTy",
+    "balanceAfter": 72,
+    "type": "in",
+    "cashBoxId": "G0J71JsRCFqc354AoZEv",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789062150,
+      "nanoseconds": 277000000
+    },
+    "sourceId": "eSP7spedMigsU8IDYlFg",
+    "amount": 72,
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "cojMtbJtRJcAPZDv4xvR",
+    "balanceAfter": 2495.5,
+    "amount": 1120,
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789495853,
+      "nanoseconds": 16000000
+    },
+    "sourceId": "wHhLoOycoXLcX3hPRulO"
+  },
+  {
+    "_id": "d5iJFJwyuOuOBoFdwUbJ",
+    "balanceAfter": 920,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787212178,
+      "nanoseconds": 900000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 170,
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "sourceId": "D3cGh1KwN5xClydmtZe4",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "dEAnrKidE66S2DSwjXv9",
+    "notes": "سند قبض — نقدى",
+    "amount": 300,
+    "balanceAfter": 600.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789040006,
+      "nanoseconds": 854000000
+    },
+    "sourceId": "yuaQoEEptcqTM7s8aVqY",
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "dHeSr0DNGgV1v9cyZKjv",
+    "sourceId": "7o5jsj4WFr1G9dsur8OD",
+    "sourceType": "receipt",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788949173,
+      "nanoseconds": 373000000
+    },
+    "balanceAfter": 1300.5,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "amount": 300
+  },
+  {
+    "_id": "dfZkKPRASio0rmQBKGVf",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 3570.5,
+    "sourceId": "S3QIQeI1eO9KvcGDk4Et",
+    "amount": 500,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290212,
+      "nanoseconds": 594000000
+    },
+    "sourceType": "receipt",
+    "type": "in"
+  },
+  {
+    "_id": "djeIEHriZNDhwvayHhAa",
+    "amount": 200,
+    "sourceId": "4Graq3Lik1Yg2OdyXZGw",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788773690,
+      "nanoseconds": 925000000
+    },
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 200.5,
+    "type": "in"
+  },
+  {
+    "_id": "dsIhYZbaaLEEwDEE8uhw",
+    "sourceType": "receipt",
+    "amount": 100,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "dRAtj0gB1n3FpgscMj9D",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788167793,
+      "nanoseconds": 16000000
+    },
+    "balanceAfter": 2557,
+    "type": "in"
+  },
+  {
+    "_id": "e9G9ebVNSoatM2H36GK7",
+    "sourceType": "receipt",
+    "sourceId": "bNxEtWRjhOrF4mPd6xNH",
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788033748,
+      "nanoseconds": 635000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 100,
+    "balanceAfter": 757,
+    "type": "in"
+  },
+  {
+    "_id": "eiS0SXNf98bb9Gh8s9dK",
+    "sourceType": "receipt",
+    "sourceId": "EfdKZt4OyS4g6rVmezUM",
+    "amount": 565,
+    "type": "in",
+    "balanceAfter": 565,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788773410,
+      "nanoseconds": 50000000
+    },
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_61pG3jXw8Ps7HCJc9ljI"
+  },
+  {
+    "_id": "fFKLNbcSpcGrF74X8Tif",
+    "amount": 200,
+    "sourceType": "receipt",
+    "balanceAfter": 7336.5,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788597818,
+      "nanoseconds": 379000000
+    },
+    "sourceId": "MZ79fa2HUUn3ZFoXtzIK"
+  },
+  {
+    "_id": "fap2A24fNKVbhBEJPLlZ",
+    "sourceId": "uJfPPJknApDKcuildpfX",
+    "amount": 100,
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "balanceAfter": 1047,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787774658,
+      "nanoseconds": 412000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in"
+  },
+  {
+    "_id": "gAdDzWffro8V8sbPDYlL",
+    "type": "in",
+    "balanceAfter": 5990.5,
+    "sourceId": "ca9NXs6cGxilqINka09T",
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "amount": 200,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789379366,
+      "nanoseconds": 683000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "gPqgHscvMd9HoVJRxYje",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788982938,
+      "nanoseconds": 490000000
+    },
+    "cashBoxId": "fldAOs5swMd3RCbxVi8a",
+    "sourceType": "receipt",
+    "amount": 200,
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 201,
+    "sourceId": "djo4iCcOyolba0VuffBI"
+  },
+  {
+    "_id": "hBWn1hq91S0YwoxcfPRN",
+    "amount": 200,
+    "notes": "سند قبض — نقدى",
+    "sourceId": "ncXoGbMK5UuQCJLPWKzu",
+    "balanceAfter": 1873.5,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788686916,
+      "nanoseconds": 470000000
+    },
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "hXMZA8HEwkPCm0Ewl1xM",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1157,
+    "amount": 400,
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788033778,
+      "nanoseconds": 721000000
+    },
+    "type": "in",
+    "sourceId": "eaA8gUNjewvG6wuob3DF"
+  },
+  {
+    "_id": "iAnAdXoTvtfpGd1dS3vc",
+    "amount": 500,
+    "notes": "سند قبض — نقدى",
+    "sourceId": "Gtnb3TA244fodNAoIgrI",
+    "balanceAfter": 4310.5,
+    "sourceType": "receipt",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789289689,
+      "nanoseconds": 991000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "jDQ0SJGAdH8GbmQOMmND",
+    "balanceAfter": 2757,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788253729,
+      "nanoseconds": 540000000
+    },
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 100,
+    "sourceId": "Js7NwV6jggDdKHgHYLuG",
+    "type": "in"
+  },
+  {
+    "_id": "kN1BIgIrQRDmytZbZxzi",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787992068,
+      "nanoseconds": 970000000
+    },
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1710,
+    "notes": "سند قبض — نقدى",
+    "sourceId": "NV8Agneh5ZhUzIaOUjGR",
+    "type": "in",
+    "amount": 130
+  },
+  {
+    "_id": "l5l3CEYJLamg3NGIOfsi",
+    "isAuto": true,
+    "sourceType": "salesInvoice",
+    "balanceAfter": 565.9,
+    "notes": "مبيعات نقدية — فاتورة REP-06757514",
+    "sourceId": "REP-06757514",
+    "cashBoxId": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788706769,
+      "nanoseconds": 170000000
+    },
+    "type": "in",
+    "date": "2026-09-06",
+    "amount": 565.9
+  },
+  {
+    "_id": "lSLiCJvITm9fg1Rakz4D",
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789039967,
+      "nanoseconds": 844000000
+    },
+    "balanceAfter": 300.5,
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "amount": 300,
+    "sourceId": "Mjd7mZB5jkYj6tI3JK1f"
+  },
+  {
+    "_id": "m0jYtEvJHO2wzetmk228",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787559857,
+      "nanoseconds": 391000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "sourceId": "0k5f24QK4cVqBNA7iO73",
+    "balanceAfter": 125,
+    "amount": 125
+  },
+  {
+    "_id": "mltKIMDH5UIMW8aHinaD",
+    "sourceId": "CR1mwbvPgYoQpMJpp7Va",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 750.5,
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789040034,
+      "nanoseconds": 536000000
+    },
+    "amount": 150,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "npjzjQid9PNbobsyjisE",
+    "amount": 565.9,
+    "balanceAfter": 0,
+    "sourceId": "REP-06757514",
+    "date": "2026-09-06",
+    "cashBoxId": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "type": "out",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788707982,
+      "nanoseconds": 52000000
+    },
+    "notes": "عكس/تعديل سداد الفاتورة REP-06757514",
+    "sourceType": "salesInvoice_reverse",
+    "isAuto": true
+  },
+  {
+    "_id": "oDujSyLpwvJkgJMXVtUx",
+    "amount": 300,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787732933,
+      "nanoseconds": 343000000
+    },
+    "sourceId": "F6ewLzQquQHRxkMgb9fO",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 2372,
+    "type": "in",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "oi843W5OyPsJApBNpGMN",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787991982,
+      "nanoseconds": 229000000
+    },
+    "type": "in",
+    "balanceAfter": 1030,
+    "sourceId": "DFk3v6mCb2y2cgd8cCQT",
+    "amount": 630,
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "pEG1xfnvoWfZjkTFJJRe",
+    "balanceAfter": 750,
+    "sourceType": "receipt",
+    "type": "in",
+    "amount": 100,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787211829,
+      "nanoseconds": 708000000
+    },
+    "sourceId": "DELcZQ0zXGPRSTiBOUMj",
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "qWIHhBTI1wW9rC9Bghvk",
+    "amount": 100,
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 100,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786961825,
+      "nanoseconds": 940000000
+    },
+    "sourceId": "LqaGgHfzZ0iWQzedslCR",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "s2vLipg3W0UNZ99TpB7Y",
+    "sourceId": "WDESZhXtwutf3vJJTsHy",
+    "type": "in",
+    "amount": 100,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787473710,
+      "nanoseconds": 824000000
+    },
+    "balanceAfter": 2052,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "sUlbU1tA6zIrxYCYPFqC",
+    "notes": "سند قبض — نقدى",
+    "sourceType": "receipt",
+    "sourceId": "EYjw5OeFtRxZkhN2ExxS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788386743,
+      "nanoseconds": 8000000
+    },
+    "amount": 350,
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 7069.5
+  },
+  {
+    "_id": "tSCWi8cVb2x8HipRgwtr",
+    "amount": 350,
+    "balanceAfter": 516,
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787042943,
+      "nanoseconds": 148000000
+    },
+    "sourceId": "I9shPtaXDu8BsPLvfZ2E",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "uDN9cVSzeVniZMspDaKB",
+    "balanceAfter": 5120.5,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 300,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290731,
+      "nanoseconds": 669000000
+    },
+    "notes": "سند قبض — نقدى",
+    "sourceId": "nqhwDDJJV4VFBGynUOff",
+    "sourceType": "receipt",
+    "type": "in"
+  },
+  {
+    "_id": "uNw8Nt64cjOqnYzB8rYS",
+    "balanceAfter": 1000,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789807957,
+      "nanoseconds": 797000000
+    },
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "G0J71JsRCFqc354AoZEv",
+    "amount": 200,
+    "date": "2026-09-19",
+    "sourceId": "PhSLuMPdpC3OYs8eZRr1",
+    "type": "in",
+    "userName": "النظام",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "uPlcuacMSnWTff2wXT8V",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788033684,
+      "nanoseconds": 631000000
+    },
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 107,
+    "balanceAfter": 607,
+    "sourceId": "onfN1G3iw80RnfHarn0N",
+    "notes": "سند قبض — نقدى",
+    "type": "in"
+  },
+  {
+    "_id": "uVHGpAC871p9OH6mSsmS",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787211698,
+      "nanoseconds": 67000000
+    },
+    "balanceAfter": 650,
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "YzpkKCAF2tqifw1mRgvu",
+    "amount": 250,
+    "sourceType": "receipt",
+    "type": "in"
+  },
+  {
+    "_id": "uevmAvWTmvWS20xyddzY",
+    "sourceId": "6CcMagBt4Ab7YwEPYLgt",
+    "date": "2026-09-16",
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "userName": "النظام",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789632821,
+      "nanoseconds": 543000000
+    },
+    "amount": 300,
+    "balanceAfter": 2581.5,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "v1BqhKdslr7Xb9Gg9pbR",
+    "sourceType": "receipt",
+    "sourceId": "yP9aWO99Gmvld6zeCP86",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787384570,
+      "nanoseconds": 669000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "balanceAfter": 150,
+    "amount": 150,
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "vaVMLVGVdasj22ciFYBI",
+    "balanceAfter": 7636.5,
+    "sourceId": "5EXz7aUKuQ6dpmUem74x",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788597930,
+      "nanoseconds": 873000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "amount": 100
+  },
+  {
+    "_id": "w9CbqmWMQADEN2TZFt2m",
+    "amount": 150,
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 150,
+    "sourceId": "LGLTBPi2lQp2iuxg4Pf2",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788088035,
+      "nanoseconds": 55000000
+    },
+    "cashBoxId": "cashBox_61pG3jXw8Ps7HCJc9ljI",
+    "sourceType": "receipt",
+    "type": "in"
+  },
+  {
+    "_id": "wZAFFS09RotzTBXPn8yh",
+    "amount": 1500,
+    "balanceAfter": 5070.5,
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290248,
+      "nanoseconds": 765000000
+    },
+    "sourceId": "XoVjh9PIvvjkQZJdvVTt",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "waZ7S978DthwRxLSHxhP",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787560212,
+      "nanoseconds": 194000000
+    },
+    "amount": 300,
+    "type": "in",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 725,
+    "sourceType": "receipt",
+    "sourceId": "XO3xb6AUxHIYdEuU00Cv"
+  },
+  {
+    "_id": "weyLeXZqTFV5dkRzhtQW",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788386589,
+      "nanoseconds": 138000000
+    },
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "amount": 100,
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 6469.5,
+    "sourceId": "1JnRJZn2jW2ZD2zU3TMV"
+  },
+  {
+    "_id": "x90NRx9k3H5esVddGk3b",
+    "sourceId": "TvbQOtYDUz4i26XrlwJ6",
+    "type": "in",
+    "balanceAfter": 2699,
+    "amount": 100,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787819100,
+      "nanoseconds": 379000000
+    },
+    "notes": "سند قبض — نقدى"
+  },
+  {
+    "_id": "xJlPVRacwoRy7DdM09si",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788034035,
+      "nanoseconds": 12000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "balanceAfter": 1457,
+    "sourceId": "jVjnPvO9mpZpdprODeyx",
+    "sourceType": "receipt",
+    "notes": "سند قبض — نقدى",
+    "amount": 300
+  },
+  {
+    "_id": "xRcXPopkMqYWWxeKl0Bv",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789632513,
+      "nanoseconds": 717000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceType": "receipt",
+    "sourceId": "BSr3vRBVV3Xz3MlkoNN9",
+    "notes": "سند قبض — نقدى",
+    "amount": 100,
+    "userName": "النظام",
+    "type": "in",
+    "date": "2026-09-16",
+    "balanceAfter": 1581.5
+  },
+  {
+    "_id": "xhiFBeT2neXRa9mHRfWF",
+    "sourceType": "receipt",
+    "type": "in",
+    "balanceAfter": 3250.5,
+    "notes": "سند قبض — نقدى",
+    "sourceId": "OU8n87E4TNAOEBUrgGp5",
+    "amount": 2500,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789040067,
+      "nanoseconds": 224000000
+    }
+  },
+  {
+    "_id": "xkaLypU148A7zY5WbB8L",
+    "type": "out",
+    "amount": 376,
+    "balanceAfter": 1531.5,
+    "userName": "المستخدم",
+    "notes": "سند صرف رقم KEBK8B — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789553906,
+      "nanoseconds": 331000000
+    }
+  },
+  {
+    "_id": "y4rJLI4vHBiwBLJ3eltl",
+    "amount": 150,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789495747,
+      "nanoseconds": 873000000
+    },
+    "notes": "سند قبض — نقدى",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "balanceAfter": 1115.5,
+    "sourceId": "ifijLdFHC1JnYDzItY8u",
+    "sourceType": "receipt",
+    "type": "in"
+  },
+  {
+    "_id": "yYPcmvOpqhULVw13S1qg",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787647501,
+      "nanoseconds": 46000000
+    },
+    "type": "in",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "notes": "سند قبض — نقدى",
+    "balanceAfter": 1275,
+    "sourceId": "plsIEkC9K3JdHTWVTRn8",
+    "amount": 200,
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "yYmAX4hFFK33J1OXvQTr",
+    "notes": "مبيعات نقدية — فاتورة REP-73507550",
+    "amount": 110.93,
+    "date": "2026-09-02",
+    "sourceType": "salesInvoice",
+    "type": "in",
+    "sourceId": "REP-73507550",
+    "isAuto": true,
+    "balanceAfter": 6104.43,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788373514,
+      "nanoseconds": 800000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA"
+  },
+  {
+    "_id": "z5aCx62vQ8ArqhLcyuOo",
+    "balanceAfter": 7736.5,
+    "type": "in",
+    "amount": 100,
+    "notes": "سند قبض — نقدى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788597965,
+      "nanoseconds": 386000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "sourceId": "5wGvSGdqawa5eUvEXI6M",
+    "sourceType": "receipt"
+  },
+  {
+    "_id": "zJhaIg1jouI4zT16ILcM",
+    "amount": 196,
+    "notes": "سند قبض (معدّل) — نقدى تم تحصيل فاتورة نقدى ب 110 + 196 تحصيل يبقى الكل 306",
+    "sourceId": "ahNbtJ2MOMgzq308GwHo",
+    "sourceType": "receipt",
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "type": "in",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788387101,
+      "nanoseconds": 621000000
+    }
+  },
+  {
+    "_id": "znHTWtXX4tUnL2CxNFHD",
+    "amount": 200,
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1788855495,
+      "nanoseconds": 590000000
+    },
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "sourceId": "FMqFYT7eMhiHtckWj3W6",
+    "sourceType": "receipt",
+    "balanceAfter": 1615.5
+  },
+  {
+    "_id": "zuG0QrFMSRbS9fpPjfje",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1789290169,
+      "nanoseconds": 165000000
+    },
+    "cashBoxId": "cashBox_Z8vkxuOfaumR63DMz7vA",
+    "amount": 1000,
+    "sourceId": "xdNw3UbRZCYqjniLKRnx",
+    "notes": "سند قبض — نقدى",
+    "type": "in",
+    "balanceAfter": 3070.5,
+    "sourceType": "receipt"
+  }
+]

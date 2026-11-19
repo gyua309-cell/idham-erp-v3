@@ -1,0 +1,27 @@
+[
+  {
+    "id": "EOUiRtisJFfbg56u3dKN",
+    "capacity": 0,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786271755,
+      "nanoseconds": 451000000
+    },
+    "name": "تيست",
+    "type": "storage",
+    "status": "active",
+    "bin": "",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786271755,
+      "nanoseconds": 451000000
+    },
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "code": "001",
+    "tempRange": "",
+    "notes": "",
+    "zone": "",
+    "rack": "",
+    "aisle": ""
+  }
+]

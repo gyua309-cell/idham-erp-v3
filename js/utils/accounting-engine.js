@@ -19,9 +19,18 @@
 //
 // ============================================================
 
-import { COLS, createJournalEntry } from "./db.js";
+import { COLS, createJournalEntry, getAll } from "./db.js";
 import { query, where, limit, getDocs, orderBy, doc, getDoc } from "./db.js";
 import { db, COMPANY_ID } from "../firebase-config.js";
+
+// Module-level cache for Chart of Accounts to avoid re-fetching on every invoice/payment
+let _sharedAccountsMap = null;
+let _sharedAccountsMapTime = 0;
+
+export function invalidateAccountingAccountsCache() {
+  _sharedAccountsMap = null;
+  _sharedAccountsMapTime = 0;
+}
 
 // ──────────────────────────────────────────
 // الخريطة المحاسبية — Account Code Mapping
@@ -63,6 +72,7 @@ const ACCT = {
   PURCHASES_IMPORT:       "5-1-1-2",     // مشتريات استيراد
   PURCHASE_RETURNS:       "5-1-2",       // مردودات المشتريات
   FREIGHT_IN:             "5-1-7",       // مصروفات نقل بضاعة (للداخل) — جزء من COGS
+  EARNED_DISCOUNT:        "5-1-9",       // خصومات مشتريات مكتسبة (دائن)
 };
 
 // ──────────────────────────────────────────
@@ -93,13 +103,18 @@ export class AccountingEngine {
   // ─── Initialize: load all accounts into memory map ───
   async init() {
     if (this._accountsMap) return;   // already loaded
+    if (_sharedAccountsMap && (Date.now() - _sharedAccountsMapTime < 30 * 60 * 1000)) {
+      this._accountsMap = _sharedAccountsMap;
+      return;
+    }
     try {
-      const snap = await getDocs(COLS.chartOfAccounts());
+      const accountsList = await getAll(COLS.chartOfAccounts());
       this._accountsMap = {};
-      snap.docs.forEach(d => {
-        const data = { id: d.id, ...d.data() };
-        this._accountsMap[data.code] = data;
+      accountsList.forEach(d => {
+        this._accountsMap[d.code] = d;
       });
+      _sharedAccountsMap = this._accountsMap;
+      _sharedAccountsMapTime = Date.now();
     } catch(err) {
       console.warn("[AccountingEngine] Failed to load chart of accounts:", err.message);
       this._accountsMap = {};
@@ -251,14 +266,40 @@ export class AccountingEngine {
   }
 
   // ─── Resolve Customer/Supplier dynamic sub-account code ───
-  _getEntityAccountCode(entityId, defaultParentCode) {
-    if (!entityId || !this._accountsMap) return defaultParentCode;
-    for (const code in this._accountsMap) {
-      const acc = this._accountsMap[code];
-      if (acc.sourceEntityId === entityId) {
-        return code;
+  _getEntityAccountCode(entityId, defaultParentCode, entityName = "") {
+    if (!this._accountsMap) return defaultParentCode;
+    
+    // 1. Search by sourceEntityId
+    if (entityId) {
+      for (const code in this._accountsMap) {
+        const acc = this._accountsMap[code];
+        if (acc.sourceEntityId === entityId || acc.id === entityId) {
+          return code;
+        }
       }
     }
+
+    // 2. Search by matching name under same parent/category
+    const cleanName = (entityName || "").trim().toLowerCase();
+    if (cleanName) {
+      for (const code in this._accountsMap) {
+        const acc = this._accountsMap[code];
+        if (defaultParentCode && !code.startsWith(defaultParentCode) && acc.parentCode !== defaultParentCode) continue;
+        const accName = (acc.name || "").trim().toLowerCase();
+        if (accName === cleanName || accName.includes(cleanName) || cleanName.includes(accName)) {
+          return code;
+        }
+      }
+      // General name search if not found under defaultParentCode
+      for (const code in this._accountsMap) {
+        const acc = this._accountsMap[code];
+        const accName = (acc.name || "").trim().toLowerCase();
+        if (accName === cleanName || accName.includes(cleanName) || cleanName.includes(accName)) {
+          return code;
+        }
+      }
+    }
+
     return defaultParentCode;
   }
 
@@ -397,10 +438,16 @@ export class AccountingEngine {
         `فاتورة ${invNum} — ${invoice.customerName || "عميل"}`, costCenterId));
     }
 
-    // Line 2: المبيعات (دائن)
-    if (subtotal > 0)
-      lines.push(this._line(salesCode, salesName, 0, subtotal,
-        `مبيعات فاتورة ${invNum}`, costCenterId));
+    // Line 2: المبيعات والخصم المسموح به
+    const discountTotal = parseFloat(invoice.discountTotal || invoice.globalDiscountAmount || 0);
+    const grossSubtotal = parseFloat(invoice.grossSubtotal || (subtotal + discountTotal));
+
+    if (discountTotal > 0.01) {
+      lines.push(this._line("4-1-3-1", this._acc("4-1-3-1")?.name || "الخصم المسموح به (خصم تجاري)", discountTotal, 0, `خصم مبيعات فاتورة ${invNum}`, costCenterId));
+      lines.push(this._line(salesCode, salesName, 0, grossSubtotal, `إيراد مبيعات فاتورة ${invNum}`, costCenterId));
+    } else if (subtotal > 0) {
+      lines.push(this._line(salesCode, salesName, 0, subtotal, `مبيعات فاتورة ${invNum}`, costCenterId));
+    }
 
     // Line 3: ضريبة القيمة المضافة (دائن)
     if (vatAmount > 0.01)
@@ -412,8 +459,11 @@ export class AccountingEngine {
     const totalCr = lines.reduce((s,l) => s + l.credit, 0);
     const diff    = Math.round((totalDr - totalCr) * 100) / 100;
     if (Math.abs(diff) > 0.001 && Math.abs(diff) < 1) {
-      // apply rounding to first credit line
-      lines[1].credit = Math.round((lines[1].credit + diff) * 100) / 100;
+      // apply rounding to sales credit line
+      const salesLine = lines.find(l => l.accountCode === salesCode && l.credit > 0) || lines.find(l => l.credit > 0);
+      if (salesLine) {
+        salesLine.credit = Math.round((salesLine.credit + diff) * 100) / 100;
+      }
     }
 
     try {
@@ -543,44 +593,80 @@ export class AccountingEngine {
     const invName   = this._acc(invCode)?.name || "المخزون";
     let payCode   = this._paymentCode(payMethod, "purchase");
     if (payMethod === "credit" || payMethod === "deferred" || payMethod === "آجل") {
-      payCode = this._getEntityAccountCode(invoice.supplierId, payCode);
+      payCode = this._getEntityAccountCode(invoice.supplierId, payCode, invoice.supplierName);
     }
     const payName   = this._acc(payCode)?.name || "المورد";
     const purchCode = isImport ? ACCT.PURCHASES_IMPORT : ACCT.PURCHASES_LOCAL;
 
     const lines = [];
+    const discountTotal = parseFloat(invoice.discountTotal || invoice.totalDiscount || (parseFloat(invoice.lineDiscountTotal || 0) + parseFloat(invoice.globalDiscountAmount || 0)) || 0);
+    const grossSubtotal = parseFloat(invoice.grossSubtotal || (subtotal + discountTotal));
+    const earnedDiscCode = ACCT.EARNED_DISCOUNT || "5-1-9";
+    const earnedDiscName = this._acc(earnedDiscCode)?.name || "خصومات مشتريات مكتسبة";
 
-    // Line 1: المخزون (مدين)
-    lines.push(this._line(invCode, invName, subtotal, 0,
-      `مشتريات فاتورة ${invNum} — ${invoice.supplierName || "مورد"}`));
+    // الطرف المدين 1: المخزون (بالإجمالي قبل الخصم ليعكس قيمة البضاعة كاملة، أو بالصافي إذا لم يوجد خصم)
+    if (discountTotal > 0.009) {
+      lines.push(this._line(invCode, invName, grossSubtotal, 0,
+        `مشتريات فاتورة ${invNum} — ${invoice.supplierName || "مورد"}`));
+      // الطرف الدائن: الخصم المكتسب من المورد (إيراد/تخفيض تكلفة COGS)
+      lines.push(this._line(earnedDiscCode, earnedDiscName, 0, discountTotal,
+        `خصم مكتسب فاتورة شراء ${invNum} — ${invoice.supplierName || "مورد"}`));
+    } else {
+      lines.push(this._line(invCode, invName, subtotal, 0,
+        `مشتريات فاتورة ${invNum} — ${invoice.supplierName || "مورد"}`));
+    }
 
-    // Line 2: ضريبة القيمة المضافة - مدخلات (مدين)
-    if (vatAmt > 0.01)
+    // الطرف المدين 2: ضريبة القيمة المضافة - مدخلات (على الأساس الخاضع الصافي بعد الخصم)
+    if (vatAmt > 0.009)
       lines.push(this._line(ACCT.VAT_INPUT, this._acc(ACCT.VAT_INPUT)?.name || "ض.ق.م - مدخلات",
         vatAmt, 0, `ضريبة مشتريات فاتورة ${invNum}`));
 
-    // Line 3: الدائن (مورد أو صندوق)
+    // الطرف المدين 3: مصاريف شحن/نقل البضاعة للداخل (إن وجدت)
+    const freightAmt = parseFloat(invoice.freightCharge || invoice.freight || 0);
+    if (freightAmt > 0.009)
+      lines.push(this._line(ACCT.FREIGHT_IN, this._acc(ACCT.FREIGHT_IN)?.name || "مصروفات نقل بضاعة (للداخل)",
+        freightAmt, 0, `مصاريف شحن فاتورة شراء ${invNum}`));
+
+    // الطرف الدائن: المورد أو الصندوق/البنك (بصافي المستحق الإجمالي)
     const totalDr = lines.reduce((s,l) => s + l.debit, 0);
-    lines.push(this._line(payCode, payName, 0, totalDr,
+    const totalCr = lines.reduce((s,l) => s + l.credit, 0);
+    const netCreditNeeded = Math.round((totalDr - totalCr) * 100) / 100;
+    lines.push(this._line(payCode, payName, 0, netCreditNeeded,
       `سداد/التزام فاتورة شراء ${invNum}`));
 
     try {
-      // ─── منع تكرار قيد الشراء ───
-      const existingSnap = await getDocs(
+      // ─── منع تكرار قيد الشراء أو تحديث القيد إذا كان موجوداً ───
+      let existingSnap = await getDocs(
         query(COLS.journalEntries(), where("sourceType", "==", "purchaseInvoice"), where("sourceId", "==", invoice.id), limit(1))
       );
-      if (!existingSnap.empty) {
-        console.warn(`[AccountingEngine] Purchase JE already exists for ${invoice.id} — skipping duplicate`);
-        return existingSnap.docs[0].id;
+      if (existingSnap.empty && invoice.invoiceNumber && invoice.invoiceNumber !== invoice.id) {
+        existingSnap = await getDocs(
+          query(COLS.journalEntries(), where("sourceType", "==", "purchaseInvoice"), where("sourceId", "==", invoice.invoiceNumber), limit(1))
+        );
       }
+
+      if (!existingSnap.empty) {
+        const existingDoc = existingSnap.docs[0];
+        const { updateJournalEntry } = await import("./db.js");
+        await updateJournalEntry(existingDoc.id, {
+          date,
+          description: `مشتريات — فاتورة ${invNum} — ${invoice.supplierName || ""}`,
+          lines,
+          status: "posted"
+        });
+        console.log(`[AccountingEngine] Purchase JE updated: ${existingDoc.id}`);
+        return existingDoc.id;
+      }
+
       const je = await createJournalEntry({
         date, description: `مشتريات — فاتورة ${invNum} — ${invoice.supplierName || ""}`,
         lines, sourceType: "purchaseInvoice", sourceId: invoice.id,
         status: "posted",
         createdByName: user.displayName || user.name || "النظام",
       });
-      console.log(`[AccountingEngine] Purchase JE created: ${je}`);
-      return je;
+      const jeId = typeof je === "object" && je ? (je.id || String(je)) : String(je);
+      console.log(`[AccountingEngine] Purchase JE created: ${jeId}`);
+      return jeId;
     } catch(err) {
       console.error("[AccountingEngine] Purchase JE error:", err.message);
       throw err;
@@ -604,13 +690,17 @@ export class AccountingEngine {
     const date      = ret.date || new Date().toISOString().slice(0,10);
     const retNum    = ret.returnNumber || ret.id?.slice(0,8) || "—";
     const subtotal  = parseFloat(ret.subtotal   || ret.totalBeforeTax || 0);
-    const vatAmt    = parseFloat(ret.taxAmount   || ret.vatAmount      || 0);
-    const total     = parseFloat(ret.total       || ret.grandTotal      || (subtotal + vatAmt));
+    const vatAmt    = parseFloat(ret.taxAmount   || ret.vatAmount      || ret.totalVat || 0);
+    const total     = parseFloat(ret.total       || ret.grandTotal      || ret.totalWithVat || (subtotal + vatAmt));
     const cogs      = parseFloat(ret.totalCost  || ret.cogsAmount      || 0);
     const payMethod = (ret.paymentMethod || "credit").toLowerCase();
     const custType  = ret.customerType === "wholesale" ? "wholesale" : "retail";
 
-    const payCode     = this._paymentCode(payMethod, "sales", custType);
+    const defaultPayCode = this._paymentCode(payMethod, "sales", custType);
+    let payCode = defaultPayCode;
+    if (payMethod === "credit") {
+      payCode = this._getCustomerCoaCode(ret.customerId, ret.repId, defaultPayCode);
+    }
     const payName     = this._acc(payCode)?.name || "العميل";
     // ✅ حساب المردودات موحد (لا تفريق بين تجزئة وجملة)
     const returnCode  = ACCT.SALES_RETURN;   // 4-1-2 — مردودات ومسموحات المبيعات
@@ -682,32 +772,44 @@ export class AccountingEngine {
 
     const invCode   = this._inventoryCode(ret.warehouseId, warehouses);
     const invName   = this._acc(invCode)?.name || "المخزون";
-    const payCode   = this._paymentCode(payMethod, "purchase");
+    let payCode   = this._paymentCode(payMethod, "purchase");
+    if (payMethod === "credit" || payMethod === "deferred" || payMethod === "آجل") {
+      payCode = this._getEntityAccountCode(ret.supplierId, payCode, ret.supplierName);
+    }
     const payName   = this._acc(payCode)?.name || "المورد";
 
     const lines = [];
 
-    // المورد (مدين)
+    // الطرف المدين: حساب المورد (أو الصندوق/البنك) لتخفيض الالتزام أو استرداد النقدية
     lines.push(this._line(payCode, payName, total, 0,
       `مردود شراء ${retNum} — ${ret.supplierName || "مورد"}`));
 
-    // المخزون (دائن)
+    // الطرف الدائن: المخزون (تخفيض قيمة بضاعة المخزن)
     if (subtotal > 0)
       lines.push(this._line(invCode, invName, 0, subtotal,
         `إرجاع مخزون مردود ${retNum}`));
 
-    // ضريبة القيمة المضافة (دائن)
+    // الطرف الدائن: ضريبة القيمة المضافة - مدخلات (رد الضريبة)
     if (vatAmt > 0.01)
       lines.push(this._line(ACCT.VAT_INPUT, this._acc(ACCT.VAT_INPUT)?.name || "ض.ق.م - مدخلات",
         0, vatAmt, `رد ضريبة مردود شراء ${retNum}`));
 
     try {
-      await createJournalEntry({
+      const existingSnap = await getDocs(
+        query(COLS.journalEntries(), where("sourceType", "==", "purchaseReturn"), where("sourceId", "==", ret.id), limit(1))
+      );
+      if (!existingSnap.empty) {
+        console.warn(`[AccountingEngine] Purchase Return JE already exists for ${ret.id} — skipping duplicate`);
+        return existingSnap.docs[0].id;
+      }
+      const je = await createJournalEntry({
         date, description: `مردود مشتريات — ${retNum} — ${ret.supplierName || ""}`,
         lines, sourceType: "purchaseReturn", sourceId: ret.id,
         status: "posted",
         createdByName: user.displayName || user.name || "النظام",
       });
+      console.log(`[AccountingEngine] Purchase Return JE created: ${je}`);
+      return je;
     } catch(err) {
       console.error("[AccountingEngine] Purchase Return JE error:", err.message);
       throw err;
@@ -725,27 +827,48 @@ export class AccountingEngine {
 
     const date      = payment.date  || new Date().toISOString().slice(0,10);
     const amount    = parseFloat(payment.amount || 0);
-    const payMethod = (payment.paymentMethod || "cash").toLowerCase();
+    const payMethod = (payment.paymentMethod || payment.method || "cash").toLowerCase();
     const custType  = payment.customerType === "wholesale" ? "wholesale" : "retail";
-    const ref       = payment.reference || payment.invoiceNumber || payment.id?.slice(0,8) || "—";
+    const ref       = payment.reference || payment.invoiceNumber || payment.sourceInvoiceId || payment.id?.slice(0,8) || "—";
 
     if (amount <= 0) throw new Error("مبلغ التحصيل يجب أن يكون أكبر من صفر");
 
-    const cashCode  = PAYMENT_ACCOUNT[payMethod] || ACCT.CASH_MAIN;
+    let cashCode = payment.cashAccountCode || payment.accountCode || null;
+    if (!cashCode) {
+      if (payment.repId) {
+        cashCode = await this._getRepCashBoxCode(payment.repId);
+      } else if (payment.cashBoxId || (payment.sourceId && payment.sourceId.startsWith("cashBox_"))) {
+        const cbId = payment.cashBoxId || payment.sourceId.replace("cashBox_", "");
+        cashCode = await this._getRepCashBoxCode(cbId);
+      }
+    }
+    if (!cashCode) {
+      cashCode = PAYMENT_ACCOUNT[payMethod] || ACCT.CASH_MAIN;
+    }
     const cashName  = this._acc(cashCode)?.name || "الصندوق";
+
+    const customerId = payment.customerId || payment.targetId || null;
+    const repId = payment.repId || (payment.sourceId && payment.sourceId.startsWith("cashBox_") ? payment.sourceId.replace("cashBox_", "") : null);
     const defaultCustCode = custType === "wholesale" ? ACCT.RECEIVABLES_WHOLESALE : ACCT.RECEIVABLES_RETAIL;
-    const custCode  = this._getEntityAccountCode(payment.customerId, defaultCustCode);
-    const custName  = this._acc(custCode)?.name || "ذمم العملاء";
+    const custCode  = this._getCustomerCoaCode(customerId, repId, defaultCustCode);
+    const custName  = this._acc(custCode)?.name || payment.customerName || payment.accountName || "ذمم العملاء";
+
+    const costCenterId = payment.costCenterId || null;
+    const costCenterName = payment.costCenterName || null;
 
     try {
       return await createJournalEntry({
-        date, description: `تحصيل من ${payment.customerName || "عميل"} — ${ref}`,
+        date,
+        description: `تحصيل من ${payment.customerName || payment.accountName || "عميل"} — ${ref}`,
         lines: [
-          this._line(cashCode, cashName, amount, 0, `تحصيل ${payment.customerName || ""}`),
-          this._line(custCode, custName, 0, amount, `تخفيض ذمة ${payment.customerName || ""}`),
+          this._line(cashCode, cashName, amount, 0, `تحصيل ${payment.customerName || payment.accountName || ""}`, costCenterId),
+          this._line(custCode, custName, 0, amount, `تخفيض ذمة ${payment.customerName || payment.accountName || ""}`, costCenterId),
         ],
-        sourceType: "customerPayment", sourceId: payment.id,
+        sourceType: "receipt",
+        sourceId: payment.id,
         status: "posted",
+        costCenterId,
+        costCenterName,
         createdByName: user.displayName || user.name || "النظام",
       });
     } catch(err) {
@@ -773,7 +896,7 @@ export class AccountingEngine {
 
     const cashCode  = PAYMENT_ACCOUNT[payMethod] || ACCT.BANK_DEFAULT;
     const cashName  = this._acc(cashCode)?.name || "البنك";
-    const suppCode  = this._getEntityAccountCode(payment.supplierId || payment.sourceEntityId, ACCT.PAYABLES_LOCAL);
+    const suppCode  = this._getEntityAccountCode(payment.supplierId || payment.sourceEntityId, ACCT.PAYABLES_LOCAL, payment.supplierName || payment.name || "");
     const suppName  = this._acc(suppCode)?.name || "ذمم الموردين";
 
     try {
@@ -852,6 +975,123 @@ export class AccountingEngine {
       // Don't throw — POS should succeed even if accounting fails
     }
   }
+
+  // ──────────────────────────────────────────
+  // 7. DELIVERY NOTE — سند تسليم بضاعة (غير ضريبي)
+  // ──────────────────────────────────────────
+  // القيد المحاسبي:
+  //   مدين: حساب العميل الفردي أو الصندوق (بإجمالي سند التسليم)
+  //   دائن: إيرادات مبيعات المواد الغذائية (4-1-1)
+  // + قيد تكلفة البضاعة المباعة (COGS) إن توفرت التكلفة:
+  //   مدين: تكلفة البضاعة المباعة (5-1-8)
+  //   دائن: حساب المخزون (المستودع المصدر)
+  // ──────────────────────────────────────────
+  async createDeliveryNoteJE(dn, user = {}, warehouses = []) {
+    await this.init();
+
+    const date         = dn.date || new Date().toISOString().slice(0, 10);
+    const dnNum        = dn.number || dn.dnNumber || dn.id?.slice(0, 8) || "—";
+    const totalAmount  = parseFloat(dn.totalAmount || dn.grandTotal || dn.total || 0);
+    const payMethod    = (dn.paymentMethod || "credit").toLowerCase();
+    const customerId   = dn.customerId || null;
+    const repId        = dn.repId || dn.salesRepId || null;
+    const sourceKey    = dn.id;
+
+    if (totalAmount <= 0) return null;
+
+    try {
+      // 1. Check if JE already exists
+      let existingSnap = await getDocs(
+        query(COLS.journalEntries(), where("sourceType", "==", "deliveryNote"), where("sourceId", "==", sourceKey), limit(1))
+      );
+      if (existingSnap.empty && dn.number && dn.number !== sourceKey) {
+        existingSnap = await getDocs(
+          query(COLS.journalEntries(), where("sourceType", "==", "deliveryNote"), where("refNumber", "==", dn.number), limit(1))
+        );
+      }
+
+      let je1Id = null;
+      if (!existingSnap.empty) {
+        console.warn(`[AccountingEngine] DeliveryNote JE already exists for ${dnNum} — skipping`);
+        je1Id = existingSnap.docs[0].id;
+      } else {
+        let payCode = this._paymentCode(payMethod, "sales", "retail");
+        if (customerId) {
+          const defaultCreditCode = this._paymentCode("credit", "sales", "retail");
+          payCode = this._getCustomerCoaCode(customerId, repId, defaultCreditCode);
+        } else if (payMethod === "cash" && repId) {
+          payCode = await this._getRepCashBoxCode(repId);
+        }
+
+        const payName   = this._acc(payCode)?.name || dn.customerName || "العميل";
+        const salesCode = ACCT.SALES_ALL;
+        const salesName = this._acc(salesCode)?.name || "إيرادات المبيعات";
+
+        const lines = [
+          this._line(payCode, payName, totalAmount, 0, `سند تسليم بضاعة ${dnNum} — ${dn.customerName || "عميل"}`),
+          this._line(salesCode, salesName, 0, totalAmount, `إيراد تسليم بضاعة سند ${dnNum}`)
+        ];
+
+        je1Id = await createJournalEntry({
+          date,
+          refNumber: dnNum,
+          description: `سند تسليم بضاعة مبيعات رقم ${dnNum} — ${dn.customerName || ""}`,
+          sourceType: "deliveryNote",
+          sourceId: sourceKey,
+          lines,
+          status: "posted",
+          createdByName: user.displayName || user.name || "النظام"
+        });
+        console.log(`[AccountingEngine] DeliveryNote JE created: ${je1Id}`);
+      }
+
+      // 2. COGS Journal Entry if cost is available
+      let cogs = parseFloat(dn.totalCost || 0);
+      if (!cogs && Array.isArray(dn.lines)) {
+        cogs = dn.lines.reduce((s, l) => s + (parseFloat(l.qty || 0) * parseFloat(l.costPrice || l.cost || 0)), 0);
+      }
+
+      if (cogs > 0.01) {
+        let existingCOGS = await getDocs(
+          query(COLS.journalEntries(), where("sourceType", "==", "deliveryNote_cogs"), where("sourceId", "==", sourceKey), limit(1))
+        );
+        if (existingCOGS.empty && dn.number && dn.number !== sourceKey) {
+          existingCOGS = await getDocs(
+            query(COLS.journalEntries(), where("sourceType", "==", "deliveryNote_cogs"), where("refNumber", "==", dn.number), limit(1))
+          );
+        }
+
+        if (existingCOGS.empty) {
+          const invCode = this._inventoryCode(dn.warehouseId, warehouses, dn.warehouseName);
+          const invName = this._acc(invCode)?.name || "المخزون";
+          const cogsCode = ACCT.COGS;
+          const cogsName = this._acc(cogsCode)?.name || "تكلفة البضاعة المباعة";
+
+          const cogsLines = [
+            this._line(cogsCode, cogsName, cogs, 0, `تكلفة بضاعة مسلّمة سند ${dnNum}`),
+            this._line(invCode, invName, 0, cogs, `صرف مخزون تسليم بضاعة سند ${dnNum}`)
+          ];
+
+          await createJournalEntry({
+            date,
+            refNumber: dnNum,
+            description: `تكلفة بضاعة مباعة — سند تسليم ${dnNum}`,
+            sourceType: "deliveryNote_cogs",
+            sourceId: sourceKey,
+            lines: cogsLines,
+            status: "posted",
+            createdByName: user.displayName || user.name || "النظام"
+          });
+          console.log(`[AccountingEngine] DeliveryNote COGS JE created for ${dnNum}`);
+        }
+      }
+
+      return je1Id;
+    } catch (err) {
+      console.error("[AccountingEngine] DeliveryNote JE error:", err.message);
+      throw err;
+    }
+  }
 }
 
 // ──────────────────────────────────────────
@@ -900,6 +1140,10 @@ export async function autoSupplierPaymentJE(payment, user) {
 export async function autoPOSJE(sale, user) {
   const eng = new AccountingEngine();
   return eng.createPOSJE(sale, user);
+}
+export async function autoDeliveryNoteJE(dn, user, warehouses) {
+  const eng = new AccountingEngine();
+  return eng.createDeliveryNoteJE(dn, user, warehouses);
 }
 
 // ──────────────────────────────────────────

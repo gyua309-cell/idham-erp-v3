@@ -1,0 +1,19 @@
+[
+  {
+    "id": "EOUiRtisJFfbg56u3dKN",
+    "capacity": 0,
+    "name": "تيست",
+    "bin": "",
+    "zone": "",
+    "status": "active",
+    "code": "001",
+    "aisle": "",
+    "notes": "",
+    "type": "storage",
+    "warehouseId": "5spakstdxOmDW0dhLZgp",
+    "tempRange": "",
+    "rack": "",
+    "updatedAt": "2026-08-09T10:35:55.451Z",
+    "createdAt": "2026-08-09T10:35:55.451Z"
+  }
+]

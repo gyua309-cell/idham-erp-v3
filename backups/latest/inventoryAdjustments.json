@@ -1,0 +1,3425 @@
+[
+  {
+    "id": "08tUx8cnp3zzwi5J3gGA",
+    "totalCost": 926.12,
+    "notes": "تسوية جردية لمخزن سيارة المندوب مصطفى لمبيعات سابقة لم تخصم من رصيد السيارة (التكلفة مثبتة محاسبياً مسبقاً بفواتير المبيعات)",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq",
+    "lines": [
+      {
+        "qty": 0.5,
+        "totalCost": 199,
+        "sku": "12006",
+        "productId": "bJ7SHrAJrGUmxRXK5uIt",
+        "cost": 398,
+        "productName": "كارى مهران مشكل 36*400 جرام"
+      },
+      {
+        "productName": "كارى مهران مشكل 18 ح * 1000 جم",
+        "productId": "c87KVwQ4KpLT51MM3l1u",
+        "sku": "12007",
+        "totalCost": 229,
+        "cost": 458,
+        "qty": 0.5
+      },
+      {
+        "totalCost": 88.5,
+        "productId": "tAq8ENjtZ0cRpzhW6xFH",
+        "cost": 29.5001,
+        "sku": "12001",
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "qty": 3
+      },
+      {
+        "sku": "03003",
+        "cost": 204.809,
+        "totalCost": 409.62,
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "qty": 2,
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو"
+      }
+    ],
+    "type": "deduct",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791622569,
+      "nanoseconds": 657000000
+    },
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "date": "2026-10-10",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791622569,
+      "nanoseconds": 657000000
+    }
+  },
+  {
+    "id": "67tJPcpk7UPVX2SBZRVi",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786207657,
+      "nanoseconds": 373000000
+    },
+    "notes": "",
+    "lines": [
+      {
+        "bookQty1": 9,
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم",
+        "actualQty1": 9,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "12004"
+      },
+      {
+        "productId": "H5l12QDSE7W2hZOdcl1C",
+        "bookQty1": 3,
+        "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+        "actualQty2": 1,
+        "bookQty2": 1,
+        "actualQty1": 3,
+        "sku": "12003"
+      },
+      {
+        "productName": "ارز ابو بنت امريكى 40 كجم",
+        "bookQty1": 0,
+        "sku": "03008",
+        "productId": "ols8aSnfOWwSSwgvIzp7",
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "bookQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "sku": "03011",
+        "productId": "DviRgNpE8LLhT5ASxST3",
+        "productName": "ارز ابو كاس 4*10 كجم"
+      },
+      {
+        "productId": "LYDz1hvYQAgGoTpbTOSw",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "03012",
+        "actualQty1": 1,
+        "bookQty1": 1,
+        "productName": "ارز ابو كاس 8*5 كجم"
+      },
+      {
+        "actualQty1": 10,
+        "productName": "ارز ابو كاس مزه 40 كجم",
+        "bookQty1": 10,
+        "actualQty2": 0,
+        "productId": "iFJ8JyexxPdWuYlzbU5Y",
+        "bookQty2": 0,
+        "sku": "03010"
+      },
+      {
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "bookQty1": 9,
+        "sku": "03003",
+        "bookQty2": 0,
+        "actualQty1": 9,
+        "actualQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "productId": "wGEk0xKjCvX7pSSQGUU1",
+        "actualQty2": 0,
+        "sku": "03004",
+        "bookQty1": 13,
+        "productName": "ارز الرواسى هندى مزة 40 كجم",
+        "actualQty1": 13
+      },
+      {
+        "bookQty1": 138,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "bookQty2": 0,
+        "actualQty1": 138,
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "actualQty2": 0
+      },
+      {
+        "sku": "03014",
+        "productId": "kAm09NsM5EPXF8UvrFeX",
+        "bookQty2": 0,
+        "actualQty1": 5,
+        "productName": "ارز دلفين بسمتى 8*5 كجم",
+        "bookQty1": 5,
+        "actualQty2": 0
+      },
+      {
+        "productId": "yLOfiimlko7x0ORSKc5c",
+        "bookQty1": 5,
+        "sku": "03015",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 5,
+        "productName": "ارز دلفين مزة  بسمتى 4*10 كجم"
+      },
+      {
+        "productName": "ارز دلفين مزه بسمتى 40 كجم",
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "bookQty1": 10,
+        "sku": "03013",
+        "productId": "qwuMMK8xWSJhh2Q2KbV8",
+        "bookQty2": 0
+      },
+      {
+        "sku": "03009",
+        "bookQty2": 0,
+        "productId": "poGgeZhrDTm4eW0nHNK1",
+        "bookQty1": 4,
+        "actualQty2": 0,
+        "productName": "ارز صنوايت كالروز 20* 1 كجم",
+        "actualQty1": 4
+      },
+      {
+        "actualQty1": 9,
+        "bookQty2": 0,
+        "sku": "03005",
+        "actualQty2": 0,
+        "productId": "CwXTkvyG6odoZzZuEDja",
+        "productName": "ارز علمين  الشعلان مزه 40 كجم",
+        "bookQty1": 9
+      },
+      {
+        "productId": "MNSnc8uULDA5wfiYIW99",
+        "actualQty2": 0,
+        "productName": "ارز علمين الشعلان مزه 4 ×10",
+        "sku": "03006",
+        "bookQty1": 1,
+        "actualQty1": 1,
+        "bookQty2": 0
+      },
+      {
+        "bookQty1": 0,
+        "sku": "03007",
+        "actualQty1": 0,
+        "productId": "2NbmryZHvF4OFOPE19XG",
+        "bookQty2": 0,
+        "productName": "ارز علمين الشعلان مزه 8*5 كجم",
+        "actualQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 8,
+        "productName": "اكياس قمامة  سابك 70 جالون",
+        "productId": "wDrRu3ce1hpW4P4XXt0d",
+        "bookQty1": 8,
+        "sku": "43005"
+      },
+      {
+        "productId": "AFfMPhuP9VNwZFY2Ypu4",
+        "bookQty1": 1,
+        "sku": "02011",
+        "productName": "المرعى الاخضر سمن بقرى نقى",
+        "actualQty2": 0,
+        "actualQty1": 1,
+        "bookQty2": 0
+      },
+      {
+        "bookQty1": 19,
+        "sku": "43001",
+        "productId": "cdQSjHVqLxAYqBMVUyLE",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productName": "المنيوم برست جودى 1635 غطا مطبوع 800 جرام",
+        "actualQty1": 19
+      },
+      {
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "actualQty2": 1,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "sku": "43010",
+        "bookQty1": 4,
+        "actualQty1": 4,
+        "bookQty2": 1
+      },
+      {
+        "actualQty2": 0,
+        "productId": "iht0utKRHl3JCWuI4D1E",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "productName": "اندومى خضار 60*75 جرام",
+        "bookQty2": 0,
+        "sku": "03018"
+      },
+      {
+        "sku": "03017",
+        "productName": "اندومى مقلية 60*80 جرام",
+        "bookQty2": 0,
+        "actualQty1": 2,
+        "actualQty2": 0,
+        "bookQty1": 2,
+        "productId": "DYAhGplYopMJF95oK0IS"
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 2,
+        "actualQty2": 0,
+        "bookQty1": 2,
+        "productName": "اندومى نكهة دجاج 60*70 جرام",
+        "sku": "03019",
+        "productId": "C1ac8RMQhx2gXejGiyF3"
+      },
+      {
+        "productName": "بيرفتو طويل 220 - 450 جرام * 24 بكت",
+        "bookQty1": 4,
+        "sku": "03020",
+        "productId": "Daq0kIm7IykV0OkO4oLa",
+        "actualQty2": 0,
+        "actualQty1": 4,
+        "bookQty2": 0
+      },
+      {
+        "sku": "30002",
+        "bookQty2": 0,
+        "productId": "7ty5VeY9ebD9ljF6VuAB",
+        "actualQty1": 0,
+        "productName": "تمر الاحساء الخماش 8*1 كيلو",
+        "bookQty1": 0,
+        "actualQty2": 0
+      },
+      {
+        "productName": "تونة الوها صغير 48 *100 جم",
+        "sku": "09002",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productId": "1EU9O4mqrEtwitQPnZ3o",
+        "actualQty1": 10,
+        "bookQty1": 10
+      },
+      {
+        "productId": "7tCWhZq9UWRXwJxkRTTA",
+        "bookQty1": 10,
+        "sku": "09003",
+        "productName": "تونة شاهين صغير 48 95 جرام",
+        "actualQty2": 0,
+        "actualQty1": 10,
+        "bookQty2": 0
+      },
+      {
+        "bookQty1": 5,
+        "productName": "تونة فرشكو صغير 48* 90 جم",
+        "actualQty1": 5,
+        "bookQty2": 0,
+        "productId": "DY5ADETYmJoMo354HbS6",
+        "sku": "09001",
+        "actualQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "productName": "تونه الطائى صغير  تايلاندى 48*90",
+        "bookQty1": 10,
+        "actualQty1": 10,
+        "sku": "09004",
+        "productId": "YV2OumfkBeqlzRG2YruG",
+        "actualQty2": 0
+      },
+      {
+        "productId": "MrmWUHqDh6stxloRQNkT",
+        "bookQty1": 2,
+        "sku": "09006",
+        "productName": "تونه فريشكو 48*100 جم",
+        "actualQty2": 0,
+        "actualQty1": 2,
+        "bookQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productId": "ERMKWYiTKdyUihtCTePI",
+        "actualQty1": 3,
+        "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+        "bookQty1": 3,
+        "sku": "43007"
+      },
+      {
+        "sku": "43017",
+        "bookQty1": 4,
+        "productId": "xatSIYYexbA9vqwkiabB",
+        "actualQty1": 4,
+        "bookQty2": 1,
+        "productName": "جوانتى طبى فينيل + اى او تى كبير جدا 70*10 بكت",
+        "actualQty2": 1
+      },
+      {
+        "actualQty2": 0,
+        "sku": "04005",
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "productId": "oILf9Ggdj8bYNt4Pl492",
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت",
+        "bookQty1": 0
+      },
+      {
+        "bookQty2": 1,
+        "sku": "39001",
+        "actualQty1": 8,
+        "productName": "زبيب اخضر 10 ك",
+        "actualQty2": 1,
+        "productId": "jcvBhus9KJxTvFOKPYea",
+        "bookQty1": 8
+      },
+      {
+        "productName": "زبيب ذهبى  رقم 1  - 10 كيلو",
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "bookQty1": 0,
+        "productId": "rsK4qZNXiYsQYzw97O9W",
+        "sku": "30001"
+      },
+      {
+        "sku": "43015",
+        "bookQty2": 0,
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "productName": "زنابيل الماس قناطب صغير  15* 12 كيلو",
+        "actualQty2": 0,
+        "productId": "4BYT6CVNb3Cc2VXvNhOX"
+      },
+      {
+        "productName": "زنابيل الماس قناطب كبير 22* 12 كيلو",
+        "bookQty2": 0,
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "bookQty1": 0,
+        "productId": "2yZvHDDqsgTAaUkW2BcJ",
+        "sku": "43014"
+      },
+      {
+        "productName": "زنابيل الماس قناطب وسط مقاس  18 *12 كيلو",
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "sku": "43013",
+        "bookQty1": 0,
+        "productId": "7DvxzI5plNoCjy5gVPsz",
+        "bookQty2": 0
+      },
+      {
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "43008",
+        "bookQty1": 0,
+        "productId": "2EYPP2V6Nz8PrNAYdf5W",
+        "productName": "زنابيل النسيم صغير 15*1000"
+      },
+      {
+        "sku": "43009",
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "productId": "qTe6Vs5C1XurYecxJlB5",
+        "productName": "زنابيل النسيم كبير  مقاس 22 - 600 حبة *20 ربطة",
+        "actualQty2": 0,
+        "bookQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "productId": "bYDk4gcZQhPBwWyPtnrr",
+        "productName": "زنابيل النسيم وسط  1200*18",
+        "sku": "43002"
+      },
+      {
+        "actualQty1": 53,
+        "productName": "زيت تنك الرائد 17 لتر",
+        "bookQty1": 53,
+        "actualQty2": 2,
+        "bookQty2": 2,
+        "productId": "oU8yH7WDRu2ZBKLVYg1A",
+        "sku": "02010"
+      },
+      {
+        "actualQty2": 0,
+        "sku": "02004",
+        "bookQty2": 0,
+        "actualQty1": 178,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "bookQty1": 178,
+        "productName": "زيت تنك دلال * 17 لتر"
+      },
+      {
+        "actualQty2": 6,
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "sku": "02009",
+        "actualQty1": 10,
+        "bookQty1": 11,
+        "productName": "زيت تنك شيف 17 لتر",
+        "bookQty2": 6
+      },
+      {
+        "sku": "02008",
+        "productName": "زيت تنك نسرين *17 لتر",
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "bookQty1": 100,
+        "actualQty1": 100,
+        "bookQty2": 0,
+        "actualQty2": 0
+      },
+      {
+        "bookQty2": 1,
+        "actualQty2": 1,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "bookQty1": 7,
+        "sku": "02005",
+        "actualQty1": 7,
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر"
+      },
+      {
+        "productId": "HtXRAmejDzBMhxsYQEUy",
+        "bookQty1": 0,
+        "productName": "زيت ذرة عافية وسط 6* 1.5 لتر",
+        "bookQty2": 0,
+        "sku": "02001",
+        "actualQty2": 0,
+        "actualQty1": 0
+      },
+      {
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "bookQty1": 5,
+        "actualQty1": 5,
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "02006"
+      },
+      {
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "productName": "سائل صحون رافد ليمون  برميل *30 لتر",
+        "productId": "g0ZCXjRkQWyWCXy0qgN5",
+        "bookQty2": 0,
+        "sku": "14002"
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 4,
+        "productId": "nn7SSyLySTxv0WgkoWf8",
+        "productName": "سائل صحون شاينكس بالليمون *30",
+        "sku": "14004",
+        "bookQty1": 4
+      },
+      {
+        "productId": "ZINptjXdR8FmNmwaGo2t",
+        "productName": "سفر رول 85*110 الربيع 20 لفة",
+        "bookQty2": 1,
+        "actualQty1": 8,
+        "actualQty2": 1,
+        "bookQty1": 8,
+        "sku": "31009"
+      },
+      {
+        "bookQty2": 2,
+        "productName": "سفر رول بن سلمان 110*100 ملون 10 لفة",
+        "actualQty1": 5,
+        "sku": "31010",
+        "productId": "EXLDPRwT8ppDGrKjmDBM",
+        "bookQty1": 5,
+        "actualQty2": 2
+      },
+      {
+        "actualQty2": 0,
+        "actualQty1": 2,
+        "bookQty2": 0,
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "sku": "43006",
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "bookQty1": 2
+      },
+      {
+        "bookQty2": 0,
+        "productId": "x1cIL2f0tNMlLQWMw2ky",
+        "actualQty2": 1,
+        "bookQty1": 13,
+        "sku": "04003",
+        "productName": "سكر الاسرة صغير 20*1 كيلو",
+        "actualQty1": 14
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "sku": "04006",
+        "productId": "ndlDJpMG9hlBKQe4MauJ",
+        "actualQty1": 3,
+        "bookQty1": 3,
+        "productName": "سكر الاسرة كرتون 4*5 كيلو"
+      },
+      {
+        "productId": "thEesj4aPMBKJePRHTlE",
+        "bookQty1": 13,
+        "actualQty2": 0,
+        "actualQty1": 13,
+        "sku": "04004",
+        "bookQty2": 1,
+        "productName": "سكر الاسرة وسط 10*2 كيلو"
+      },
+      {
+        "bookQty2": 0,
+        "productName": "سكر ناعم كبير جدا سعودى 50 كيلو",
+        "productId": "1YfL49HfqYRCA6nZTAKO",
+        "actualQty2": 0,
+        "bookQty1": 0,
+        "sku": "04001",
+        "actualQty1": 0
+      },
+      {
+        "productName": "سمن القمرية علب 12* 900 جرام",
+        "actualQty1": 3,
+        "bookQty1": 3,
+        "actualQty2": 1,
+        "productId": "CcXTqwIBYvF3O1XSa6v2",
+        "sku": "02007",
+        "bookQty2": 1
+      },
+      {
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productId": "qjEiCz0kBP2AFa9Yt3D4",
+        "productName": "سمن تنك شوكة وملعقة *15 لتر",
+        "actualQty1": 0,
+        "sku": "02002"
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "سمن فارم وسط 12* 800 جرام",
+        "productId": "94bTgCDFkYMJQaoETG3Z",
+        "actualQty1": 0,
+        "sku": "02003",
+        "bookQty1": 0
+      },
+      {
+        "bookQty2": 0,
+        "productId": "FvWk9Bio56bO2RWhnZTf",
+        "actualQty2": 0,
+        "productName": "شاهى الربيع اكسبريس 24*100 خيط",
+        "bookQty1": 0,
+        "sku": "13001",
+        "actualQty1": 0
+      },
+      {
+        "productId": "WruLvzM1VpCOZ6yEHf8Y",
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "sku": "09008",
+        "bookQty2": 0,
+        "productName": "شطة رنا عريض كبير 4.5 * 4 جالون"
+      },
+      {
+        "productId": "tAq8ENjtZ0cRpzhW6xFH",
+        "actualQty2": 4,
+        "actualQty1": 1,
+        "bookQty1": 1,
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "sku": "12001",
+        "bookQty2": 4
+      },
+      {
+        "productName": "شطة سومطره حار كبير 340 ح*24",
+        "bookQty2": 1,
+        "actualQty1": 3,
+        "sku": "12005",
+        "actualQty2": 1,
+        "productId": "PmtB5uXbDG1nXnx8GMSJ",
+        "bookQty1": 3
+      },
+      {
+        "actualQty1": 5,
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+        "bookQty1": 5,
+        "actualQty2": 0,
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "bookQty2": 0,
+        "sku": "45002"
+      },
+      {
+        "sku": "31027",
+        "productName": "صحن المونيوم برستيج مقسم 3- 3377- 1074- 600 حبة",
+        "bookQty2": 0,
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "actualQty2": 0,
+        "productId": "bCHFqmbanNCcBn9YGaAn"
+      },
+      {
+        "actualQty2": 0,
+        "sku": "31028",
+        "productName": "صحن المونيوم برستيج/ فالكون مقسم طبق فويل 8582/2- C 1080",
+        "bookQty2": 0,
+        "productId": "VR7jS37atTl5VvHcOls9",
+        "actualQty1": 5,
+        "bookQty1": 5
+      },
+      {
+        "sku": "31029",
+        "productId": "aibj644bYqbfTJLJEtwF",
+        "actualQty2": 0,
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "productName": "صحن سيرفيس جودى / السعودية  - 150 بى 6550",
+        "bookQty2": 0
+      },
+      {
+        "productName": "صحن سيرفيس جودى / بريستيج - 50 حبة -65180",
+        "productId": "0KFyB9TM8HlFKAlfMI7J",
+        "bookQty1": 5,
+        "sku": "31030",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 5
+      },
+      {
+        "productId": "RjOwuAi5vB44PMtjgYHH",
+        "bookQty1": 5,
+        "productName": "صحن قصدير بريستيج  رقم 890  عدد 1000 حبة",
+        "sku": "31023",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 5
+      },
+      {
+        "productId": "aw5mS2Mw15W4tQvq1256",
+        "bookQty1": 5,
+        "actualQty2": 0,
+        "actualQty1": 5,
+        "sku": "31024",
+        "productName": "صحن قصدير بريستيج  رقم1076-8389   عدد 1000 حبة",
+        "bookQty2": 0
+      },
+      {
+        "productName": "صحن قصدير جودى  1030",
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productId": "Ronvj4u2vzdxVDsKhhi5",
+        "sku": "31025"
+      },
+      {
+        "actualQty1": 5,
+        "productName": "صحن قصدير سيرفيس جودى/ بريستيج 100 حبة - 6586",
+        "bookQty2": 0,
+        "sku": "31031",
+        "actualQty2": 0,
+        "bookQty1": 5,
+        "productId": "MfVGbhCCslV2mvwtwbD6"
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 5,
+        "actualQty2": 0,
+        "productName": "صحن قمح فويل  1065-8 رفاهية",
+        "bookQty1": 5,
+        "sku": "31026",
+        "productId": "g0HM02LRWJYAJrRWUdum"
+      },
+      {
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "bookQty2": 0,
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "productName": "صلصة طماطم الفخامه 12* 850 جم",
+        "sku": "45003",
+        "actualQty2": 0
+      },
+      {
+        "sku": "45001",
+        "bookQty1": 0,
+        "productId": "C4uFJBEhleygJraDO5qH",
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "productName": "صلصة كبير تركى توسان 830 *12 علبة",
+        "actualQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "productId": "GjMW892nmjpmLeV5Kx3c",
+        "actualQty1": 1,
+        "bookQty1": 1,
+        "sku": "19001"
+      },
+      {
+        "actualQty1": 2,
+        "actualQty2": 0,
+        "bookQty1": 2,
+        "productName": "طحينة سائلة الجميل 500 جرام *12",
+        "sku": "19002",
+        "productId": "afCATiCiSHOBFsMH1aLK",
+        "bookQty2": 0
+      },
+      {
+        "productName": "طماطم  مقشرة الطائى 24*400",
+        "sku": "35001",
+        "actualQty1": 3,
+        "bookQty1": 3,
+        "actualQty2": 0,
+        "productId": "EDm62noDcoaSqIWpOgdD",
+        "bookQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "sku": "31016",
+        "bookQty1": 10,
+        "actualQty1": 10,
+        "productName": "علب 16 اونز 450 ملى اسود دائرى عبوه 150",
+        "bookQty2": 0,
+        "productId": "BRYy3jvl6JJOqON0PnPr"
+      },
+      {
+        "actualQty1": 6,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "bookQty1": 7,
+        "sku": "31020",
+        "productName": "علب 50 جرام 2 اونز اسود ارنون عبوة 200",
+        "productId": "atrR6pMjwiEfK6Hdo2Oi"
+      },
+      {
+        "bookQty1": 4,
+        "productId": "FlofDooOmuOEFrQiCWFQ",
+        "actualQty2": 0,
+        "productName": "علب 50 جرام 2 اونز شفاف ارنون عبوة 200",
+        "actualQty1": 4,
+        "sku": "31004",
+        "bookQty2": 0
+      },
+      {
+        "bookQty1": 10,
+        "sku": "31018",
+        "productId": "1zzb2xRZ8xJ1no9UCbsP",
+        "productName": "علب اسود 4636 سادة  FCB1ارنون عبوة 250",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 10
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 3,
+        "bookQty1": 3,
+        "productName": "علب اسود مقسم 4  سي4  ارنون عبوة 250",
+        "actualQty2": 0,
+        "sku": "31014",
+        "productId": "wi9oHOSSoGminu1zPPex"
+      },
+      {
+        "actualQty2": 0,
+        "sku": "43004",
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "productId": "2da0AM4oiAg4oBCXBdEd",
+        "productName": "علب زبادى  ترى بى  250 مل *20 ربطه",
+        "bookQty1": 0
+      },
+      {
+        "productName": "علب شفاف 205 ارنون عبوة 500",
+        "actualQty1": 4,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "31006",
+        "bookQty1": 5,
+        "productId": "iqrB1dkzgtyvBOVVXl6q"
+      },
+      {
+        "productId": "XCQOI94ocO903Gm0xeK8",
+        "bookQty1": 7,
+        "productName": "علب شفاف 206 ارنون عبوة 500",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 7,
+        "sku": "31007"
+      },
+      {
+        "productId": "5hFoTTktBTSAB9Fi9SLn",
+        "bookQty1": 1,
+        "productName": "علب شفاف 207 ارنون عبوة 500",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "sku": "31008",
+        "actualQty1": 1
+      },
+      {
+        "bookQty1": 2,
+        "bookQty2": 0,
+        "actualQty1": 2,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "sku": "43012",
+        "actualQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty1": 8,
+        "actualQty1": 8,
+        "sku": "31017",
+        "productId": "KH4VsMfbVjboRlPsCKpz",
+        "bookQty2": 0,
+        "productName": "علب ميكرويف دائرى اسود 250 مل 10 - اونز 18"
+      },
+      {
+        "sku": "31022",
+        "actualQty2": 0,
+        "bookQty1": 5,
+        "actualQty1": 5,
+        "productName": "علب ميكرويف مستطيل اسود 1000 مل 18387",
+        "bookQty2": 0,
+        "productId": "RpOpicdA58y2aqs4IA8q"
+      },
+      {
+        "actualQty2": 0,
+        "productId": "ido9rzLwUEIyH8cBoKJJ",
+        "bookQty1": 5,
+        "actualQty1": 5,
+        "sku": "31021",
+        "productName": "علب ميكرويف مستطيل اسود 500 مل 18385",
+        "bookQty2": 0
+      },
+      {
+        "bookQty1": 10,
+        "sku": "31012",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 10,
+        "productName": "علب ميكرويف مقسم سى C الجيلانى عبوة 3",
+        "productId": "2ai0tmIyP6GugmBuB4oc"
+      },
+      {
+        "bookQty2": 3,
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "actualQty2": 3,
+        "sku": "31005",
+        "bookQty1": 8,
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "actualQty1": 10
+      },
+      {
+        "productId": "8i29c5YJPmxhhwGnJY1d",
+        "bookQty1": 10,
+        "actualQty2": 0,
+        "sku": "31019",
+        "bookQty2": 0,
+        "actualQty1": 10,
+        "productName": "غطاء شفاف 4636 سادة FCB1 ارنون عبوة 250"
+      },
+      {
+        "bookQty1": 3,
+        "productName": "غطاء شفاف مقسم 4 سى 4 ارنون عبوة 250",
+        "productId": "OQw06toNnn8labUB8doO",
+        "actualQty1": 3,
+        "bookQty2": 0,
+        "sku": "31015",
+        "actualQty2": 0
+      },
+      {
+        "productId": "wSOqYqj2l6pOFVGYNL35",
+        "sku": "31013",
+        "actualQty2": 0,
+        "actualQty1": 10,
+        "bookQty1": 10,
+        "productName": "غطاء علب ميكرويف مقسم سى Cالجيلانى 3",
+        "bookQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "productId": "0cniV5I2oOQBqUJLlu39",
+        "productName": "فلين رقم 2 - 500 حبة",
+        "actualQty2": 0,
+        "sku": "31034",
+        "bookQty1": 4,
+        "actualQty1": 5
+      },
+      {
+        "actualQty1": 0,
+        "productName": "فلين سادة 100 حبة LB2",
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "bookQty2": 1,
+        "productId": "MWXMvWA35h2AHzrUVO71",
+        "sku": "31033"
+      },
+      {
+        "productName": "فلين مقسم 100 حبة - LB2/3",
+        "actualQty1": 10,
+        "bookQty1": 10,
+        "actualQty2": 0,
+        "sku": "31032",
+        "bookQty2": 0,
+        "productId": "mX9vV57bZjDsRDwMppLK"
+      },
+      {
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productId": "4NzCCNfozK7Vy1tIyEHA",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "productName": "فول صينى مالينج 24*400 ج",
+        "sku": "03021"
+      },
+      {
+        "bookQty1": 13,
+        "actualQty1": 13,
+        "actualQty2": 0,
+        "sku": "09005",
+        "bookQty2": 0,
+        "productId": "cpOYrBAZbabLvo5DoZ6B",
+        "productName": "قشطة ريفونى اقتصادى  155 *48 علبة"
+      },
+      {
+        "bookQty2": 0,
+        "productName": "قصدير فالكون 1500 جرام 45سم 6 شد",
+        "sku": "43016",
+        "actualQty1": 9,
+        "actualQty2": 0,
+        "bookQty1": 9,
+        "productId": "YDGp6p8TPz1bqNnOue4N"
+      },
+      {
+        "productId": "HWiP60AueqeUffX1owt8",
+        "bookQty1": 0,
+        "productName": "قصدير فالكون 1500 جرام 45سم شد 6",
+        "actualQty2": 0,
+        "sku": "43016",
+        "bookQty2": 0,
+        "actualQty1": 0
+      },
+      {
+        "productId": "muaXACw0f09dXe4V1QY1",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "sku": "43011",
+        "actualQty2": 0,
+        "productName": "قصدير فالكون 450 مل * 6 رول",
+        "bookQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "productName": "قودى طويل رقم 20 - 24*450 ج",
+        "bookQty2": 0,
+        "sku": "03016",
+        "productId": "IV8f71IUPMlWk4unzQas",
+        "actualQty1": 10,
+        "bookQty1": 10
+      },
+      {
+        "productId": "vQkzxlzdOHu7z21s9SMV",
+        "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+        "bookQty2": 0,
+        "sku": "45005",
+        "actualQty1": 5,
+        "actualQty2": 0,
+        "bookQty1": 5
+      },
+      {
+        "bookQty1": 10,
+        "productId": "3CYNTCRyqTGGTj2ccAgH",
+        "bookQty2": 0,
+        "sku": "45004",
+        "actualQty2": 0,
+        "actualQty1": 10,
+        "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه"
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 10,
+        "bookQty1": 10,
+        "sku": "31002",
+        "productId": "oJ9v6weiVvLu7VgYVp1i",
+        "productName": "كاسات شاهى قدح 20 ربطة * 50 كاسة",
+        "actualQty2": 0
+      },
+      {
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+        "actualQty1": 1,
+        "bookQty1": 1,
+        "actualQty2": 1,
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "sku": "31001",
+        "bookQty2": 1
+      },
+      {
+        "bookQty2": 0,
+        "productId": "ofIJ9TeKlN756jzt61SW",
+        "productName": "كلور رافد  برميل *30 لتر",
+        "actualQty2": 0,
+        "sku": "14003",
+        "bookQty1": 0,
+        "actualQty1": 0
+      },
+      {
+        "productId": "qtl4NmMLGPyRMA9E4Mi5",
+        "bookQty1": 20,
+        "sku": "14005",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "actualQty1": 20,
+        "productName": "كلوركس برميل كبير جدا *30 لتر"
+      },
+      {
+        "actualQty1": 10,
+        "sku": "14001",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "كمامات 3 طبقات 50*40 بكت",
+        "bookQty1": 10,
+        "productId": "RcrtoSwuKI63talw1zuG"
+      },
+      {
+        "bookQty1": 3,
+        "sku": "09009",
+        "productName": "مرقة دجاج ماجى مصرى 24 بكت * 24 ح",
+        "bookQty2": 1,
+        "actualQty1": 3,
+        "actualQty2": 1,
+        "productId": "LecJvj5mC6WvkN8boroZ"
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "sku": "12002",
+        "productId": "h2CTayjdEvjpld1Mc7WO",
+        "actualQty1": 0,
+        "productName": "مرقة ماجى اصلى 18 بكت *24 + 6",
+        "bookQty1": 0
+      },
+      {
+        "actualQty2": 0,
+        "productName": "مصاص مغلف  ملون  سفانه 250 ح * 16 ربطه",
+        "bookQty2": 0,
+        "productId": "NJn3bR8RLg1bAUcZvi32",
+        "sku": "31003",
+        "actualQty1": 5,
+        "bookQty1": 5
+      },
+      {
+        "productName": "معجون طماطم لونا 8*6 ربطة * 135 ح",
+        "actualQty2": 1,
+        "sku": "09007",
+        "actualQty1": 4,
+        "productId": "dtCMNYIhjGBZGCUE6Lr1",
+        "bookQty2": 1,
+        "bookQty1": 4
+      },
+      {
+        "productName": "مكرونة اورين 24*400 جرام",
+        "bookQty2": 0,
+        "sku": "03022",
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "bookQty1": 0,
+        "productId": "beXxTsnefRyHdex6cB0E"
+      },
+      {
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "03001",
+        "productId": "PnOdolAXPEcF2IfU4MMx",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "productName": "مكرونة طويل معين 20*400جرام"
+      },
+      {
+        "sku": "31011",
+        "bookQty1": 12,
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+        "actualQty1": 12,
+        "productId": "SzHULsTeLonnDaH4vh4Y",
+        "bookQty2": 1,
+        "actualQty2": 1
+      },
+      {
+        "sku": "43003",
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "bookQty2": 0
+      },
+      {
+        "sku": "04007",
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "productId": "fLTt9zHDbOC7GKFzZWZV",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productName": "ملح ساسا 700 ج"
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "ملح فرط سولتى 50 كيلو",
+        "productId": "Sg7k8Y5bVrlOa8zoD5yh",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "sku": "04002"
+      },
+      {
+        "productName": "مناديل رول مطعم طبقة 4 كيلو",
+        "bookQty2": 0,
+        "productId": "hsweOtlJmOZIBAB1tlu1",
+        "actualQty2": 0,
+        "sku": "15001",
+        "bookQty1": 5,
+        "actualQty1": 5
+      },
+      {
+        "sku": "15002",
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "bookQty1": 80,
+        "productName": "مناديل رول مطعم طبقة 5 كيلو",
+        "actualQty2": 4,
+        "actualQty1": 80,
+        "bookQty2": 4
+      },
+      {
+        "bookQty1": 10,
+        "productName": "ورق برشمان كبير اصلى جيلانى 20 ربطه",
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "productId": "wxepIAahN8ati3vwaa2L",
+        "bookQty2": 0,
+        "sku": "43018"
+      },
+      {
+        "bookQty2": 1,
+        "actualQty1": 2,
+        "sku": "43019",
+        "bookQty1": 2,
+        "productName": "ورق بنى  مقاس 5",
+        "actualQty2": 1,
+        "productId": "O5Pc4ZP3ks1TWq2AfhOo"
+      },
+      {
+        "actualQty1": 4,
+        "productId": "WxGec0F3udluHDEFApv7",
+        "bookQty1": 4,
+        "actualQty2": 1,
+        "sku": "43020",
+        "bookQty2": 1,
+        "productName": "ورق بنى مقاس 4"
+      }
+    ],
+    "opType": "spot-count",
+    "warehouseName": "المستودع الرئيسى",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "variances": 9,
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786207657,
+      "nanoseconds": 373000000
+    },
+    "warehouseName2": "مخزن سيارة 1 مصطفى",
+    "warehouseId2": "Zyltw7uwvd0aKejdeqQq",
+    "date": "2026-08-08"
+  },
+  {
+    "id": "BCTUbnBr2yCz8ksXO0WB",
+    "totalCost": 2311,
+    "date": "2026-08-07",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786139486,
+      "nanoseconds": 436000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "warehouseName": "المستودع الرئيسى",
+    "type": "donation",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786139486,
+      "nanoseconds": 436000000
+    },
+    "lines": [
+      {
+        "sku": "04006",
+        "qty": 5,
+        "productName": "سكر الاسرة كرتون 4*5 كيلو",
+        "cost": 50,
+        "totalCost": 250,
+        "productId": "ndlDJpMG9hlBKQe4MauJ"
+      },
+      {
+        "totalCost": 264,
+        "cost": 66,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005",
+        "qty": 4
+      },
+      {
+        "cost": 221,
+        "productId": "FvWk9Bio56bO2RWhnZTf",
+        "productName": "شاهى الربيع اكسبريس 24*100 خيط",
+        "totalCost": 442,
+        "sku": "13001",
+        "qty": 2
+      },
+      {
+        "sku": "03012",
+        "productName": "ارز ابو كاس 8*5 كجم",
+        "qty": 3,
+        "cost": 237,
+        "totalCost": 711,
+        "productId": "LYDz1hvYQAgGoTpbTOSw"
+      },
+      {
+        "totalCost": 64,
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت",
+        "productId": "oILf9Ggdj8bYNt4Pl492",
+        "sku": "04005",
+        "cost": 16,
+        "qty": 4
+      },
+      {
+        "qty": 4,
+        "totalCost": 204,
+        "productName": "معجون طماطم لونا 8*6 ربطة * 135 ح",
+        "sku": "09007",
+        "productId": "dtCMNYIhjGBZGCUE6Lr1",
+        "cost": 51
+      },
+      {
+        "cost": 46,
+        "productName": "تمر الاحساء الخماش 8*1 كيلو",
+        "productId": "7ty5VeY9ebD9ljF6VuAB",
+        "qty": 3,
+        "totalCost": 138,
+        "sku": "30002"
+      },
+      {
+        "sku": "04007",
+        "productName": "ملح ساسا 700 ج",
+        "cost": 64,
+        "qty": 2,
+        "productId": "fLTt9zHDbOC7GKFzZWZV",
+        "totalCost": 128
+      },
+      {
+        "qty": 2,
+        "sku": "03022",
+        "cost": 21,
+        "productName": "مكرونة اورين 24*400 جرام",
+        "totalCost": 42,
+        "productId": "beXxTsnefRyHdex6cB0E"
+      },
+      {
+        "qty": 2,
+        "cost": 34,
+        "productName": "فول صينى مالينج 24*400 ج",
+        "sku": "03021",
+        "productId": "4NzCCNfozK7Vy1tIyEHA",
+        "totalCost": 68
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "id": "EYZnv41PhWLkbPBpp508",
+    "warehouseName": "المستودع الرئيسى",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791451446,
+      "nanoseconds": 55000000
+    },
+    "date": "2026-10-08",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1791451446,
+      "nanoseconds": 55000000
+    },
+    "totalCost": 25,
+    "notes": "",
+    "type": "add",
+    "lines": [
+      {
+        "totalCost": 25,
+        "sku": "31011",
+        "productId": "SzHULsTeLonnDaH4vh4Y",
+        "cost": 25,
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+        "qty": 1
+      }
+    ]
+  },
+  {
+    "id": "Eu78eksrsgYSfwODhAMe",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786360461,
+      "nanoseconds": 121000000
+    },
+    "type": "donation",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1786360461,
+      "nanoseconds": 121000000
+    },
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "notes": "",
+    "lines": [
+      {
+        "qty": 1,
+        "productName": "المرعى الاخضر سمن بقرى نقى",
+        "totalCost": 620,
+        "sku": "02011",
+        "productId": "AFfMPhuP9VNwZFY2Ypu4",
+        "cost": 620
+      }
+    ],
+    "warehouseName": "المستودع الرئيسى",
+    "date": "2026-08-10",
+    "totalCost": 620
+  },
+  {
+    "id": "HoHxJmRW3Jei4pDYDEaa",
+    "status": "approved",
+    "adjustmentNumber": "ADJ-VAN1-03002",
+    "items": [
+      {
+        "physicalQty": 9,
+        "systemQty": 10,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "sku": "03002",
+        "diffQty": -1,
+        "unit": "Bag"
+      }
+    ],
+    "type": "decrease",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1787750485,
+      "nanoseconds": 989000000
+    },
+    "warehouseName": "مخزن سيارة 1 مصطفى",
+    "date": "2026-08-26",
+    "reason": "مطابقة رصيد الجرد الفعلي للمندوب",
+    "warehouseId": "Zyltw7uwvd0aKejdeqQq"
+  },
+  {
+    "id": "XIGFqXMOlNBJKkxecfFl",
+    "warehouseName2": "مخزن سيارة 1 مصطفى",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785579538,
+      "nanoseconds": 631000000
+    },
+    "variances": 2,
+    "notes": "",
+    "warehouseName": "المستودع الرئيسى",
+    "lines": [
+      {
+        "sku": "12004",
+        "bookQty1": 10,
+        "actualQty1": 10,
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "bookQty2": 1,
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم",
+        "actualQty2": 1
+      },
+      {
+        "bookQty2": 2,
+        "bookQty1": 2,
+        "productId": "H5l12QDSE7W2hZOdcl1C",
+        "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+        "actualQty2": 2,
+        "actualQty1": 2,
+        "sku": "12003"
+      },
+      {
+        "productId": "ols8aSnfOWwSSwgvIzp7",
+        "sku": "03008",
+        "bookQty1": 9,
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 9,
+        "productName": "ارز ابو بنت امريكى 40 كجم"
+      },
+      {
+        "bookQty1": 5,
+        "actualQty1": 5,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productName": "ارز ابو كاس 4*10 كجم",
+        "productId": "DviRgNpE8LLhT5ASxST3",
+        "sku": "03011"
+      },
+      {
+        "bookQty2": 0,
+        "productId": "LYDz1hvYQAgGoTpbTOSw",
+        "actualQty2": 0,
+        "bookQty1": 5,
+        "sku": "03012",
+        "actualQty1": 5,
+        "productName": "ارز ابو كاس 8*5 كجم"
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "sku": "03010",
+        "productName": "ارز ابو كاس مزه 40 كجم",
+        "bookQty1": 10,
+        "productId": "iFJ8JyexxPdWuYlzbU5Y"
+      },
+      {
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "actualQty2": 0,
+        "actualQty1": 15,
+        "bookQty1": 15,
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "sku": "03003",
+        "bookQty2": 0
+      },
+      {
+        "bookQty1": 14,
+        "productId": "wGEk0xKjCvX7pSSQGUU1",
+        "sku": "03004",
+        "productName": "ارز الرواسى هندى مزة 40 كجم",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "actualQty1": 14
+      },
+      {
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "bookQty2": 2,
+        "sku": "03002",
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "actualQty2": 2,
+        "bookQty1": 155,
+        "actualQty1": 155
+      },
+      {
+        "bookQty2": 0,
+        "sku": "03014",
+        "bookQty1": 5,
+        "actualQty1": 5,
+        "productId": "kAm09NsM5EPXF8UvrFeX",
+        "actualQty2": 0,
+        "productName": "ارز دلفين بسمتى 8*5 كجم"
+      },
+      {
+        "actualQty1": 5,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productName": "ارز دلفين مزة  بسمتى 4*10 كجم",
+        "bookQty1": 5,
+        "productId": "yLOfiimlko7x0ORSKc5c",
+        "sku": "03015"
+      },
+      {
+        "bookQty1": 10,
+        "sku": "03013",
+        "productId": "qwuMMK8xWSJhh2Q2KbV8",
+        "productName": "ارز دلفين مزه بسمتى 40 كجم",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "actualQty1": 10
+      },
+      {
+        "actualQty2": 1,
+        "productName": "ارز صنوايت كالروز 20* 1 كجم",
+        "bookQty2": 1,
+        "productId": "poGgeZhrDTm4eW0nHNK1",
+        "actualQty1": 3,
+        "sku": "03009",
+        "bookQty1": 3
+      },
+      {
+        "productId": "CwXTkvyG6odoZzZuEDja",
+        "bookQty1": 9,
+        "sku": "03005",
+        "productName": "ارز علمين  الشعلان مزه 40 كجم",
+        "actualQty2": 0,
+        "actualQty1": 9,
+        "bookQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "sku": "03006",
+        "actualQty1": 2,
+        "productId": "MNSnc8uULDA5wfiYIW99",
+        "bookQty1": 2,
+        "productName": "ارز علمين الشعلان مزه 4 ×10",
+        "actualQty2": 0
+      },
+      {
+        "bookQty1": 1,
+        "productName": "ارز علمين الشعلان مزه 8*5 كجم",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "03007",
+        "productId": "2NbmryZHvF4OFOPE19XG",
+        "actualQty1": 1
+      },
+      {
+        "productId": "wDrRu3ce1hpW4P4XXt0d",
+        "productName": "اكياس قمامة  سابك 70 جالون",
+        "actualQty2": 0,
+        "actualQty1": 8,
+        "bookQty1": 8,
+        "sku": "43005",
+        "bookQty2": 0
+      },
+      {
+        "productName": "المنيوم برست جودى 1635 غطا مطبوع 800 جرام",
+        "bookQty2": 0,
+        "sku": "43001",
+        "actualQty1": 20,
+        "actualQty2": 0,
+        "bookQty1": 23,
+        "productId": "cdQSjHVqLxAYqBMVUyLE"
+      },
+      {
+        "sku": "43010",
+        "actualQty1": 14,
+        "bookQty2": 4,
+        "actualQty2": 4,
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "bookQty1": 11,
+        "productId": "Zpy1JPhHmUYrRbFao1IO"
+      },
+      {
+        "actualQty2": 2,
+        "productId": "iht0utKRHl3JCWuI4D1E",
+        "actualQty1": 0,
+        "sku": "03018",
+        "bookQty1": 0,
+        "productName": "اندومى خضار 60*75 جرام",
+        "bookQty2": 2
+      },
+      {
+        "actualQty1": 3,
+        "sku": "03017",
+        "bookQty2": 1,
+        "actualQty2": 1,
+        "productName": "اندومى مقلية 60*80 جرام",
+        "bookQty1": 3,
+        "productId": "DYAhGplYopMJF95oK0IS"
+      },
+      {
+        "sku": "03019",
+        "actualQty1": 3,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productName": "اندومى نكهة دجاج 60*70 جرام",
+        "bookQty1": 3,
+        "productId": "C1ac8RMQhx2gXejGiyF3"
+      },
+      {
+        "bookQty1": 3,
+        "productId": "Daq0kIm7IykV0OkO4oLa",
+        "actualQty2": 1,
+        "sku": "03020",
+        "bookQty2": 1,
+        "actualQty1": 3,
+        "productName": "بيرفتو طويل 220 - 450 جرام * 24 بكت"
+      },
+      {
+        "productId": "1EU9O4mqrEtwitQPnZ3o",
+        "bookQty2": 0,
+        "productName": "تونة الوها صغير 48 *100 جم",
+        "actualQty1": 10,
+        "bookQty1": 10,
+        "sku": "09002",
+        "actualQty2": 0
+      },
+      {
+        "productName": "تونة شاهين صغير 48 95 جرام",
+        "actualQty1": 10,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "09003",
+        "productId": "7tCWhZq9UWRXwJxkRTTA",
+        "bookQty1": 10
+      },
+      {
+        "productName": "تونة فرشكو صغير 48* 90 جم",
+        "bookQty2": 0,
+        "productId": "DY5ADETYmJoMo354HbS6",
+        "actualQty1": 5,
+        "sku": "09001",
+        "bookQty1": 5,
+        "actualQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "productId": "YV2OumfkBeqlzRG2YruG",
+        "bookQty1": 10,
+        "actualQty2": 0,
+        "productName": "تونه الطائى صغير  تايلاندى 48*90",
+        "sku": "09004",
+        "actualQty1": 10
+      },
+      {
+        "productId": "MrmWUHqDh6stxloRQNkT",
+        "bookQty2": 1,
+        "sku": "09006",
+        "productName": "تونه فريشكو 48*100 جم",
+        "bookQty1": 2,
+        "actualQty1": 2,
+        "actualQty2": 1
+      },
+      {
+        "bookQty1": 3,
+        "actualQty1": 3,
+        "actualQty2": 1,
+        "sku": "43007",
+        "productId": "ERMKWYiTKdyUihtCTePI",
+        "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+        "bookQty2": 1
+      },
+      {
+        "productId": "xatSIYYexbA9vqwkiabB",
+        "actualQty2": 1,
+        "bookQty1": 4,
+        "actualQty1": 4,
+        "sku": "43017",
+        "productName": "جوانتى طبى فينيل + اى او تى كبير جدا 70*10 بكت",
+        "bookQty2": 1
+      },
+      {
+        "bookQty2": 0,
+        "productName": "حلب ميكرويف مستطيل اسود 1000 مل 18387",
+        "sku": "31022",
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "actualQty2": 0,
+        "productId": "RpOpicdA58y2aqs4IA8q"
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 6,
+        "productId": "oILf9Ggdj8bYNt4Pl492",
+        "sku": "04005",
+        "bookQty1": 6,
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت"
+      },
+      {
+        "sku": "30001",
+        "bookQty2": 1,
+        "productId": "rsK4qZNXiYsQYzw97O9W",
+        "actualQty2": 1,
+        "productName": "زبيب ذهبى  رقم 1  - 10 كيلو",
+        "bookQty1": 1,
+        "actualQty1": 1
+      },
+      {
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "productId": "4BYT6CVNb3Cc2VXvNhOX",
+        "bookQty2": 0,
+        "productName": "زنابيل الماس قناطب صغير  15* 12 كيلو",
+        "sku": "43015",
+        "actualQty2": 0
+      },
+      {
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "productId": "2yZvHDDqsgTAaUkW2BcJ",
+        "productName": "زنابيل الماس قناطب كبير 22* 12 كيلو",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "43014"
+      },
+      {
+        "productId": "7DvxzI5plNoCjy5gVPsz",
+        "bookQty1": 0,
+        "productName": "زنابيل الماس قناطب وسط مقاس  18 *12 كيلو",
+        "sku": "43013",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "actualQty1": 0
+      },
+      {
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "productName": "زنابيل النسيم صغير 15*1000",
+        "actualQty2": 0,
+        "productId": "2EYPP2V6Nz8PrNAYdf5W",
+        "bookQty2": 0,
+        "sku": "43008"
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "زنابيل النسيم كبير  مقاس 22 - 600 حبة *20 ربطة",
+        "productId": "qTe6Vs5C1XurYecxJlB5",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "sku": "43009"
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "زنابيل النسيم وسط  1200*18",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "productId": "bYDk4gcZQhPBwWyPtnrr",
+        "sku": "43002"
+      },
+      {
+        "bookQty1": 58,
+        "sku": "02010",
+        "productId": "oU8yH7WDRu2ZBKLVYg1A",
+        "actualQty1": 58,
+        "bookQty2": 2,
+        "productName": "زيت تنك الرائد 17 لتر",
+        "actualQty2": 2
+      },
+      {
+        "bookQty1": 184,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX",
+        "actualQty2": 0,
+        "productName": "زيت تنك دلال * 17 لتر",
+        "actualQty1": 184,
+        "bookQty2": 0,
+        "sku": "02004"
+      },
+      {
+        "actualQty1": 48,
+        "productId": "tkgjwvljS7IKGfpkueOm",
+        "sku": "02009",
+        "actualQty2": 4,
+        "bookQty2": 4,
+        "productName": "زيت تنك شيف 17 لتر",
+        "bookQty1": 48
+      },
+      {
+        "productName": "زيت تنك نسرين *17 لتر",
+        "bookQty2": 1,
+        "actualQty1": 100,
+        "sku": "02008",
+        "actualQty2": 1,
+        "bookQty1": 100,
+        "productId": "c1AGjekAaUO0zQchv0bK"
+      },
+      {
+        "actualQty2": 1,
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "bookQty1": 14,
+        "actualQty1": 14,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t",
+        "sku": "02005",
+        "bookQty2": 1
+      },
+      {
+        "sku": "02001",
+        "productId": "HtXRAmejDzBMhxsYQEUy",
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 0,
+        "productName": "زيت ذرة عافية وسط 6* 1.5 لتر"
+      },
+      {
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "bookQty1": 10,
+        "actualQty2": 2,
+        "sku": "02006",
+        "actualQty1": 10,
+        "bookQty2": 2,
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر"
+      },
+      {
+        "actualQty2": 0,
+        "sku": "14002",
+        "productId": "g0ZCXjRkQWyWCXy0qgN5",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "productName": "سائل صحون رافد ليمون  برميل *30 لتر",
+        "bookQty2": 0
+      },
+      {
+        "bookQty1": 6,
+        "productId": "nn7SSyLySTxv0WgkoWf8",
+        "actualQty2": 0,
+        "actualQty1": 6,
+        "sku": "14004",
+        "bookQty2": 0,
+        "productName": "سائل صحون شاينكس بالليمون *30"
+      },
+      {
+        "bookQty1": 8,
+        "actualQty1": 8,
+        "productId": "ZINptjXdR8FmNmwaGo2t",
+        "productName": "سفر رول 85*110 الربيع 20 لفة",
+        "sku": "31009",
+        "actualQty2": 1,
+        "bookQty2": 1
+      },
+      {
+        "bookQty2": 2,
+        "sku": "31010",
+        "productName": "سفر رول بن سلمان 110*100 ملون 10 لفة",
+        "productId": "EXLDPRwT8ppDGrKjmDBM",
+        "actualQty2": 2,
+        "bookQty1": 5,
+        "actualQty1": 5
+      },
+      {
+        "sku": "43006",
+        "actualQty1": 6,
+        "bookQty2": 4,
+        "actualQty2": 4,
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "bookQty1": 6,
+        "productId": "9PeZIfHYdFJtZgsKzNbQ"
+      },
+      {
+        "bookQty1": 14,
+        "productId": "x1cIL2f0tNMlLQWMw2ky",
+        "productName": "سكر الاسرة صغير 20*1 كيلو",
+        "sku": "04003",
+        "bookQty2": 2,
+        "actualQty2": 2,
+        "actualQty1": 14
+      },
+      {
+        "bookQty2": 0,
+        "productName": "سكر الاسرة كرتون 4*5 كيلو",
+        "sku": "04006",
+        "bookQty1": 8,
+        "actualQty1": 8,
+        "productId": "ndlDJpMG9hlBKQe4MauJ",
+        "actualQty2": 0
+      },
+      {
+        "sku": "04004",
+        "productName": "سكر الاسرة وسط 10*2 كيلو",
+        "bookQty2": 2,
+        "productId": "thEesj4aPMBKJePRHTlE",
+        "actualQty2": 2,
+        "bookQty1": 13,
+        "actualQty1": 13
+      },
+      {
+        "bookQty1": 0,
+        "productId": "1YfL49HfqYRCA6nZTAKO",
+        "productName": "سكر ناعم كبير جدا سعودى 50 كيلو",
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "sku": "04001",
+        "bookQty2": 0
+      },
+      {
+        "actualQty1": 4,
+        "bookQty2": 1,
+        "actualQty2": 1,
+        "bookQty1": 4,
+        "sku": "02007",
+        "productId": "CcXTqwIBYvF3O1XSa6v2",
+        "productName": "سمن القمرية علب 12* 900 جرام"
+      },
+      {
+        "sku": "02002",
+        "productId": "qjEiCz0kBP2AFa9Yt3D4",
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "productName": "سمن تنك شوكة وملعقة *15 لتر",
+        "bookQty2": 0
+      },
+      {
+        "sku": "02003",
+        "actualQty2": 0,
+        "productName": "سمن فارم وسط 12* 800 جرام",
+        "productId": "94bTgCDFkYMJQaoETG3Z",
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "bookQty1": 0
+      },
+      {
+        "actualQty2": 4,
+        "bookQty2": 4,
+        "actualQty1": 3,
+        "productName": "شطة رنا عريض كبير 4.5 * 4 جالون",
+        "productId": "WruLvzM1VpCOZ6yEHf8Y",
+        "bookQty1": 3,
+        "sku": "09008"
+      },
+      {
+        "productId": "tAq8ENjtZ0cRpzhW6xFH",
+        "bookQty1": 10,
+        "actualQty2": 6,
+        "actualQty1": 10,
+        "sku": "12001",
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "bookQty2": 6
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productId": "PmtB5uXbDG1nXnx8GMSJ",
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "productName": "شطة سومطره حار كبير 340 ح*24",
+        "sku": "12005"
+      },
+      {
+        "bookQty2": 0,
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "actualQty2": 0,
+        "sku": "45002",
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف",
+        "bookQty1": 5,
+        "actualQty1": 5
+      },
+      {
+        "productName": "صحن المونيوم برستيج مقسم 3- 3377- 1074- 600 حبة",
+        "actualQty1": 5,
+        "actualQty2": 0,
+        "bookQty1": 5,
+        "productId": "bCHFqmbanNCcBn9YGaAn",
+        "sku": "31027",
+        "bookQty2": 0
+      },
+      {
+        "actualQty1": 5,
+        "sku": "31028",
+        "bookQty2": 0,
+        "productId": "VR7jS37atTl5VvHcOls9",
+        "actualQty2": 0,
+        "productName": "صحن المونيوم برستيج/ فالكون مقسم طبق فويل 8582/2- C 1080",
+        "bookQty1": 5
+      },
+      {
+        "actualQty2": 0,
+        "productId": "aibj644bYqbfTJLJEtwF",
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "productName": "صحن سيرفيس جودى / السعودية  - 150 بى 6550",
+        "bookQty2": 0,
+        "sku": "31029"
+      },
+      {
+        "sku": "31030",
+        "bookQty1": 5,
+        "productId": "0KFyB9TM8HlFKAlfMI7J",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 5,
+        "productName": "صحن سيرفيس جودى / بريستيج - 50 حبة -65180"
+      },
+      {
+        "productName": "صحن قصدير بريستيج  رقم 890  عدد 1000 حبة",
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "actualQty2": 0,
+        "productId": "RjOwuAi5vB44PMtjgYHH",
+        "bookQty2": 0,
+        "sku": "31023"
+      },
+      {
+        "productId": "aw5mS2Mw15W4tQvq1256",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "31024",
+        "productName": "صحن قصدير بريستيج  رقم1076-8389   عدد 1000 حبة",
+        "actualQty1": 5,
+        "bookQty1": 5
+      },
+      {
+        "bookQty2": 0,
+        "sku": "31025",
+        "productId": "Ronvj4u2vzdxVDsKhhi5",
+        "actualQty2": 0,
+        "productName": "صحن قصدير جودى  1030",
+        "bookQty1": 5,
+        "actualQty1": 5
+      },
+      {
+        "actualQty2": 0,
+        "sku": "31031",
+        "bookQty1": 5,
+        "productId": "MfVGbhCCslV2mvwtwbD6",
+        "actualQty1": 5,
+        "productName": "صحن قصدير سيرفيس جودى/ بريستيج 100 حبة - 6586",
+        "bookQty2": 0
+      },
+      {
+        "productId": "g0HM02LRWJYAJrRWUdum",
+        "actualQty2": 0,
+        "bookQty1": 5,
+        "actualQty1": 5,
+        "sku": "31026",
+        "bookQty2": 0,
+        "productName": "صحن قمح فويل  1065-8 رفاهية"
+      },
+      {
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "bookQty1": 7,
+        "productName": "صلصة طماطم الفخامه 12* 850 جم",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 7,
+        "sku": "45003"
+      },
+      {
+        "productName": "صلصة كبير تركى توسان 830 *12 علبة",
+        "sku": "45001",
+        "productId": "C4uFJBEhleygJraDO5qH",
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "actualQty2": 0
+      },
+      {
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "actualQty1": 4,
+        "productId": "GjMW892nmjpmLeV5Kx3c",
+        "actualQty2": 0,
+        "bookQty1": 4,
+        "sku": "19001",
+        "bookQty2": 0
+      },
+      {
+        "productId": "afCATiCiSHOBFsMH1aLK",
+        "bookQty1": 1,
+        "sku": "19002",
+        "productName": "طحينة سائلة الجميل 500 جرام *12",
+        "bookQty2": 1,
+        "actualQty2": 1,
+        "actualQty1": 1
+      },
+      {
+        "actualQty1": 5,
+        "actualQty2": 2,
+        "bookQty2": 2,
+        "sku": "35001",
+        "bookQty1": 5,
+        "productName": "طماطم  مقشرة الطائى 24*400",
+        "productId": "EDm62noDcoaSqIWpOgdD"
+      },
+      {
+        "productName": "علب 16 اونز 450 ملى اسود دائرى عبوه 150",
+        "bookQty2": 2,
+        "actualQty1": 8,
+        "sku": "31016",
+        "bookQty1": 8,
+        "productId": "BRYy3jvl6JJOqON0PnPr",
+        "actualQty2": 2
+      },
+      {
+        "actualQty2": 1,
+        "actualQty1": 6,
+        "bookQty2": 1,
+        "productId": "atrR6pMjwiEfK6Hdo2Oi",
+        "sku": "31020",
+        "bookQty1": 6,
+        "productName": "علب 50 جرام 2 اونز اسود ارنون عبوة 200"
+      },
+      {
+        "sku": "31004",
+        "bookQty1": 4,
+        "actualQty1": 4,
+        "productId": "FlofDooOmuOEFrQiCWFQ",
+        "productName": "علب 50 جرام 2 اونز شفاف ارنون عبوة 200",
+        "actualQty2": 0,
+        "bookQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "علب اسود 4636 سادة  FCB1ارنون عبوة 250",
+        "productId": "1zzb2xRZ8xJ1no9UCbsP",
+        "actualQty1": 10,
+        "bookQty1": 10,
+        "sku": "31018"
+      },
+      {
+        "bookQty1": 3,
+        "productName": "علب اسود مقسم 4  سي4  ارنون عبوة 250",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "31014",
+        "productId": "wi9oHOSSoGminu1zPPex",
+        "actualQty1": 3
+      },
+      {
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "productName": "علب زبادى  ترى بى  250 مل *20 ربطه",
+        "productId": "2da0AM4oiAg4oBCXBdEd",
+        "bookQty2": 0,
+        "sku": "43004"
+      },
+      {
+        "productName": "علب شفاف 205 ارنون عبوة 500",
+        "bookQty2": 0,
+        "productId": "iqrB1dkzgtyvBOVVXl6q",
+        "sku": "31006",
+        "actualQty1": 6,
+        "actualQty2": 0,
+        "bookQty1": 6
+      },
+      {
+        "productId": "XCQOI94ocO903Gm0xeK8",
+        "actualQty2": 0,
+        "bookQty1": 7,
+        "productName": "علب شفاف 206 ارنون عبوة 500",
+        "actualQty1": 7,
+        "sku": "31007",
+        "bookQty2": 0
+      },
+      {
+        "sku": "31008",
+        "bookQty1": 1,
+        "actualQty1": 1,
+        "productId": "5hFoTTktBTSAB9Fi9SLn",
+        "bookQty2": 0,
+        "productName": "علب شفاف 207 ارنون عبوة 500",
+        "actualQty2": 0
+      },
+      {
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "bookQty1": 5,
+        "actualQty2": 1,
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "actualQty1": 5,
+        "sku": "43012",
+        "bookQty2": 1
+      },
+      {
+        "actualQty2": 0,
+        "productId": "KH4VsMfbVjboRlPsCKpz",
+        "actualQty1": 8,
+        "bookQty1": 8,
+        "sku": "31017",
+        "productName": "علب ميكرويف دائرى اسود 250 مل 10 - اونز 18",
+        "bookQty2": 0
+      },
+      {
+        "sku": "31021",
+        "actualQty1": 5,
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "علب ميكرويف مستطيل اسود 500 مل 18385",
+        "bookQty1": 5,
+        "productId": "ido9rzLwUEIyH8cBoKJJ"
+      },
+      {
+        "bookQty1": 10,
+        "productId": "2ai0tmIyP6GugmBuB4oc",
+        "productName": "علب ميكرويف مقسم سى C الجيلانى عبوة 3",
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "sku": "31012"
+      },
+      {
+        "bookQty1": 10,
+        "actualQty2": 1,
+        "sku": "31005",
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "actualQty1": 10,
+        "bookQty2": 1,
+        "productId": "hvysP8vRqA8wXPIz75nN"
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "productId": "8i29c5YJPmxhhwGnJY1d",
+        "productName": "غطاء شفاف 4636 سادة FCB1 ارنون عبوة 250",
+        "sku": "31019",
+        "bookQty1": 10
+      },
+      {
+        "bookQty2": 0,
+        "bookQty1": 3,
+        "sku": "31015",
+        "actualQty1": 3,
+        "actualQty2": 0,
+        "productName": "غطاء شفاف مقسم 4 سى 4 ارنون عبوة 250",
+        "productId": "OQw06toNnn8labUB8doO"
+      },
+      {
+        "bookQty1": 10,
+        "productName": "غطاء علب ميكرويف مقسم سى Cالجيلانى 3",
+        "actualQty2": 0,
+        "productId": "wSOqYqj2l6pOFVGYNL35",
+        "sku": "31013",
+        "actualQty1": 10,
+        "bookQty2": 0
+      },
+      {
+        "sku": "31034",
+        "bookQty2": 3,
+        "productName": "فلين رقم 2 - 500 حبة",
+        "bookQty1": 2,
+        "actualQty1": 2,
+        "productId": "0cniV5I2oOQBqUJLlu39",
+        "actualQty2": 3
+      },
+      {
+        "sku": "31033",
+        "bookQty1": 3,
+        "actualQty1": 3,
+        "productId": "MWXMvWA35h2AHzrUVO71",
+        "productName": "فلين سادة 100 حبة LB2",
+        "bookQty2": 2,
+        "actualQty2": 2
+      },
+      {
+        "bookQty2": 0,
+        "productName": "فلين مقسم 100 حبة - LB2/3",
+        "productId": "mX9vV57bZjDsRDwMppLK",
+        "bookQty1": 10,
+        "sku": "31032",
+        "actualQty1": 10,
+        "actualQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productId": "cpOYrBAZbabLvo5DoZ6B",
+        "productName": "قشطة ريفونى اقتصادى  155 *48 علبة",
+        "sku": "09005",
+        "actualQty1": 13,
+        "bookQty1": 13
+      },
+      {
+        "productName": "قصدير فالكون 1500 جرام 45سم 6 شد",
+        "productId": "YDGp6p8TPz1bqNnOue4N",
+        "bookQty1": 9,
+        "actualQty1": 9,
+        "sku": "43016",
+        "bookQty2": 0,
+        "actualQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productName": "قصدير فالكون 1500 جرام 45سم شد 6",
+        "productId": "HWiP60AueqeUffX1owt8",
+        "actualQty1": 0,
+        "sku": "43016",
+        "bookQty1": 0
+      },
+      {
+        "bookQty2": 0,
+        "sku": "43011",
+        "productId": "muaXACw0f09dXe4V1QY1",
+        "actualQty2": 0,
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "productName": "قصدير فالكون 450 مل * 6 رول"
+      },
+      {
+        "bookQty2": 1,
+        "actualQty1": 9,
+        "productName": "قودى طويل رقم 20 - 24*450 ج",
+        "actualQty2": 1,
+        "sku": "03016",
+        "bookQty1": 9,
+        "productId": "IV8f71IUPMlWk4unzQas"
+      },
+      {
+        "bookQty2": 0,
+        "sku": "45005",
+        "actualQty1": 5,
+        "actualQty2": 0,
+        "bookQty1": 5,
+        "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+        "productId": "vQkzxlzdOHu7z21s9SMV"
+      },
+      {
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "bookQty1": 10,
+        "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه",
+        "sku": "45004",
+        "productId": "3CYNTCRyqTGGTj2ccAgH",
+        "bookQty2": 0
+      },
+      {
+        "bookQty1": 10,
+        "productName": "كاسات شاهى قدح 20 ربطة * 50 كاسة",
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "productId": "oJ9v6weiVvLu7VgYVp1i",
+        "bookQty2": 0,
+        "sku": "31002"
+      },
+      {
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "actualQty2": 1,
+        "bookQty1": 3,
+        "actualQty1": 3,
+        "sku": "31001",
+        "bookQty2": 1,
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة"
+      },
+      {
+        "bookQty1": 0,
+        "sku": "14003",
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "productId": "ofIJ9TeKlN756jzt61SW",
+        "productName": "كلور رافد  برميل *30 لتر",
+        "actualQty2": 0
+      },
+      {
+        "productName": "كلوركس برميل كبير جدا *30 لتر",
+        "actualQty1": 20,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "14005",
+        "bookQty1": 20,
+        "productId": "qtl4NmMLGPyRMA9E4Mi5"
+      },
+      {
+        "bookQty2": 0,
+        "sku": "14001",
+        "bookQty1": 10,
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "productId": "RcrtoSwuKI63talw1zuG",
+        "productName": "كمامات 3 طبقات 50*40 بكت"
+      },
+      {
+        "actualQty1": 4,
+        "productName": "مرقة دجاج ماجى مصرى 24 بكت * 24 ح",
+        "bookQty1": 4,
+        "actualQty2": 1,
+        "productId": "LecJvj5mC6WvkN8boroZ",
+        "sku": "09009",
+        "bookQty2": 1
+      },
+      {
+        "bookQty2": 0,
+        "productName": "مرقة ماجى اصلى 18 بكت *24 + 6",
+        "productId": "h2CTayjdEvjpld1Mc7WO",
+        "actualQty2": 0,
+        "bookQty1": 0,
+        "sku": "12002",
+        "actualQty1": 0
+      },
+      {
+        "productId": "NJn3bR8RLg1bAUcZvi32",
+        "bookQty1": 5,
+        "actualQty2": 0,
+        "actualQty1": 5,
+        "productName": "مصاص مغلف  ملون  سفانه 250 ح * 16 ربطه",
+        "sku": "31003",
+        "bookQty2": 0
+      },
+      {
+        "actualQty2": 2,
+        "bookQty2": 2,
+        "sku": "09007",
+        "productId": "dtCMNYIhjGBZGCUE6Lr1",
+        "actualQty1": 8,
+        "productName": "معجون طماطم لونا 8*6 ربطة * 135 ح",
+        "bookQty1": 8
+      },
+      {
+        "sku": "03001",
+        "bookQty2": 0,
+        "productId": "PnOdolAXPEcF2IfU4MMx",
+        "actualQty2": 0,
+        "productName": "مكرونة طويل معين 20*400جرام",
+        "bookQty1": 0,
+        "actualQty1": 0
+      },
+      {
+        "sku": "31011",
+        "bookQty1": 17,
+        "productId": "SzHULsTeLonnDaH4vh4Y",
+        "actualQty1": 17,
+        "bookQty2": 2,
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة",
+        "actualQty2": 2
+      },
+      {
+        "bookQty1": 0,
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "bookQty2": 1,
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "actualQty1": 0,
+        "sku": "43003",
+        "actualQty2": 1
+      },
+      {
+        "productId": "Sg7k8Y5bVrlOa8zoD5yh",
+        "bookQty1": 0,
+        "sku": "04002",
+        "productName": "ملح فرط سولتى 50 كيلو",
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "bookQty2": 0
+      },
+      {
+        "actualQty2": 5,
+        "actualQty1": 5,
+        "bookQty2": 5,
+        "sku": "15001",
+        "productId": "hsweOtlJmOZIBAB1tlu1",
+        "productName": "مناديل رول مطعم طبقة 4 كيلو",
+        "bookQty1": 5
+      },
+      {
+        "bookQty2": 5,
+        "actualQty2": 5,
+        "productName": "مناديل رول مطعم طبقة 5 كيلو",
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "actualQty1": 85,
+        "bookQty1": 85,
+        "sku": "15002"
+      },
+      {
+        "actualQty2": 1,
+        "bookQty2": 1,
+        "productId": "wxepIAahN8ati3vwaa2L",
+        "actualQty1": 9,
+        "bookQty1": 9,
+        "productName": "ورق برشمان كبير اصلى جيلانى 20 ربطه",
+        "sku": "43018"
+      },
+      {
+        "actualQty2": 3,
+        "productName": "ورق بنى  مقاس 5",
+        "productId": "O5Pc4ZP3ks1TWq2AfhOo",
+        "bookQty1": 2,
+        "actualQty1": 2,
+        "bookQty2": 3,
+        "sku": "43019"
+      },
+      {
+        "productId": "WxGec0F3udluHDEFApv7",
+        "bookQty2": 0,
+        "sku": "43020",
+        "productName": "ورق بنى مقاس 4",
+        "actualQty2": 0,
+        "bookQty1": 5,
+        "actualQty1": 5
+      }
+    ],
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "warehouseId2": "Zyltw7uwvd0aKejdeqQq",
+    "date": "2026-08-01",
+    "opType": "spot-count",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785579538,
+      "nanoseconds": 631000000
+    }
+  },
+  {
+    "id": "e76ut3lQPYPobq0sBcqI",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790795115,
+      "nanoseconds": 408000000
+    },
+    "totalCost": 50,
+    "type": "add",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "notes": "",
+    "lines": [
+      {
+        "productName": "سكر الاسرة كرتون 4*5 كيلو",
+        "qty": 1,
+        "totalCost": 50,
+        "productId": "ndlDJpMG9hlBKQe4MauJ",
+        "sku": "04006",
+        "cost": 50
+      }
+    ],
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1790795115,
+      "nanoseconds": 408000000
+    },
+    "warehouseName": "المستودع الرئيسى",
+    "date": "2026-09-30"
+  },
+  {
+    "id": "jzJN3ucop1t6BPDh5Bb9",
+    "createdAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785248471,
+      "nanoseconds": 92000000
+    },
+    "variances": 16,
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "notes": "",
+    "opType": "spot-count",
+    "lines": [
+      {
+        "actualQty2": 0,
+        "actualQty1": 11,
+        "productId": "AxokEQfHoYE6iSMXQuFy",
+        "bookQty1": 11,
+        "sku": "12004",
+        "productName": "اجى نموتو باوزير شد 20 * 454 جم",
+        "bookQty2": 0
+      },
+      {
+        "productId": "H5l12QDSE7W2hZOdcl1C",
+        "actualQty2": 1,
+        "sku": "12003",
+        "bookQty1": 3,
+        "actualQty1": 3,
+        "productName": "اجى نموتو كبير جدا 20*1 كيلو",
+        "bookQty2": 1
+      },
+      {
+        "bookQty2": 0,
+        "sku": "03008",
+        "productName": "ارز ابو بنت امريكى 40 كجم",
+        "bookQty1": 10,
+        "actualQty1": 10,
+        "productId": "ols8aSnfOWwSSwgvIzp7",
+        "actualQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "sku": "03011",
+        "actualQty2": 1,
+        "productId": "DviRgNpE8LLhT5ASxST3",
+        "bookQty1": 5,
+        "productName": "ارز ابو كاس 4*10 كجم",
+        "actualQty1": 4
+      },
+      {
+        "productId": "LYDz1hvYQAgGoTpbTOSw",
+        "bookQty1": 3,
+        "productName": "ارز ابو كاس 8*5 كجم",
+        "actualQty2": 1,
+        "actualQty1": 4,
+        "bookQty2": 2,
+        "sku": "03012"
+      },
+      {
+        "productName": "ارز ابو كاس مزه 40 كجم",
+        "bookQty2": 1,
+        "actualQty1": 9,
+        "actualQty2": 1,
+        "sku": "03010",
+        "bookQty1": 9,
+        "productId": "iFJ8JyexxPdWuYlzbU5Y"
+      },
+      {
+        "bookQty2": 0,
+        "sku": "03003",
+        "productName": "ارز الديوان بسمتى مزة ذهبى 40 كيلو",
+        "productId": "SQnrnOyRXWzq76NO3yXB",
+        "bookQty1": 16,
+        "actualQty2": 0,
+        "actualQty1": 16
+      },
+      {
+        "productId": "wGEk0xKjCvX7pSSQGUU1",
+        "sku": "03004",
+        "actualQty2": 0,
+        "productName": "ارز الرواسى هندى مزة 40 كجم",
+        "actualQty1": 14,
+        "bookQty1": 14,
+        "bookQty2": 0
+      },
+      {
+        "sku": "03002",
+        "productName": "ارز اوماكو ذهبى مزه بسمتى 40 كجم خط احمر",
+        "bookQty2": 0,
+        "actualQty1": 28,
+        "productId": "9NtVvzhfnxB2Z9rDN3uN",
+        "bookQty1": 28,
+        "actualQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "sku": "03014",
+        "actualQty1": 5,
+        "bookQty1": 5,
+        "productId": "kAm09NsM5EPXF8UvrFeX",
+        "actualQty2": 0,
+        "productName": "ارز دلفين بسمتى 8*5 كجم"
+      },
+      {
+        "productName": "ارز دلفين مزة  بسمتى 4*10 كجم",
+        "sku": "03015",
+        "actualQty1": 4,
+        "bookQty2": 1,
+        "actualQty2": 1,
+        "bookQty1": 4,
+        "productId": "yLOfiimlko7x0ORSKc5c"
+      },
+      {
+        "productName": "ارز دلفين مزه بسمتى 40 كجم",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "03013",
+        "bookQty1": 10,
+        "productId": "qwuMMK8xWSJhh2Q2KbV8",
+        "actualQty1": 10
+      },
+      {
+        "actualQty2": 1,
+        "productName": "ارز صنوايت كالروز 20* 1 كجم",
+        "bookQty2": 1,
+        "productId": "poGgeZhrDTm4eW0nHNK1",
+        "actualQty1": 3,
+        "sku": "03009",
+        "bookQty1": 3
+      },
+      {
+        "actualQty1": 8,
+        "bookQty1": 8,
+        "actualQty2": 1,
+        "productId": "CwXTkvyG6odoZzZuEDja",
+        "productName": "ارز علمين  الشعلان مزه 40 كجم",
+        "bookQty2": 1,
+        "sku": "03005"
+      },
+      {
+        "sku": "03006",
+        "bookQty2": 1,
+        "productId": "MNSnc8uULDA5wfiYIW99",
+        "bookQty1": 1,
+        "actualQty2": 1,
+        "productName": "ارز علمين الشعلان مزه 4 ×10",
+        "actualQty1": 1
+      },
+      {
+        "sku": "03007",
+        "bookQty2": 1,
+        "bookQty1": 0,
+        "actualQty1": 0,
+        "productId": "2NbmryZHvF4OFOPE19XG",
+        "actualQty2": 1,
+        "productName": "ارز علمين الشعلان مزه 8*5 كجم"
+      },
+      {
+        "bookQty1": 8,
+        "productId": "wDrRu3ce1hpW4P4XXt0d",
+        "actualQty2": 0,
+        "actualQty1": 8,
+        "bookQty2": 0,
+        "productName": "اكياس قمامة  سابك 70 جالون",
+        "sku": "43005"
+      },
+      {
+        "bookQty2": 0,
+        "sku": "43001",
+        "bookQty1": 15,
+        "actualQty1": 15,
+        "actualQty2": 0,
+        "productId": "cdQSjHVqLxAYqBMVUyLE",
+        "productName": "المنيوم برست جودى 1635 غطا مطبوع 800 جرام"
+      },
+      {
+        "sku": "43010",
+        "bookQty1": 11,
+        "actualQty1": 11,
+        "productId": "Zpy1JPhHmUYrRbFao1IO",
+        "bookQty2": 1,
+        "productName": "المنيوم برست صغير  1335* 8 ربطة (غطاء مقفل)",
+        "actualQty2": 1
+      },
+      {
+        "bookQty1": 0,
+        "actualQty2": 2,
+        "productName": "اندومى خضار 60*75 جرام",
+        "productId": "iht0utKRHl3JCWuI4D1E",
+        "actualQty1": 0,
+        "bookQty2": 2,
+        "sku": "03018"
+      },
+      {
+        "productId": "DYAhGplYopMJF95oK0IS",
+        "bookQty2": 1,
+        "productName": "اندومى مقلية 60*80 جرام",
+        "actualQty1": 3,
+        "bookQty1": 4,
+        "sku": "03017",
+        "actualQty2": 1
+      },
+      {
+        "productId": "C1ac8RMQhx2gXejGiyF3",
+        "productName": "اندومى نكهة دجاج 60*70 جرام",
+        "sku": "03019",
+        "bookQty1": 2,
+        "actualQty1": 3,
+        "bookQty2": 0,
+        "actualQty2": 0
+      },
+      {
+        "actualQty1": 3,
+        "productId": "Daq0kIm7IykV0OkO4oLa",
+        "sku": "03020",
+        "bookQty2": 1,
+        "actualQty2": 1,
+        "productName": "بيرفتو طويل 220 - 450 جرام * 24 بكت",
+        "bookQty1": 3
+      },
+      {
+        "productName": "تونة الوها صغير 48 *100 جم",
+        "bookQty2": 0,
+        "sku": "09002",
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "productId": "1EU9O4mqrEtwitQPnZ3o",
+        "bookQty1": 10
+      },
+      {
+        "bookQty2": 0,
+        "productId": "7tCWhZq9UWRXwJxkRTTA",
+        "sku": "09003",
+        "bookQty1": 10,
+        "actualQty2": 0,
+        "productName": "تونة شاهين صغير 48 95 جرام",
+        "actualQty1": 10
+      },
+      {
+        "bookQty2": 0,
+        "productId": "DY5ADETYmJoMo354HbS6",
+        "productName": "تونة فرشكو صغير 48* 90 جم",
+        "actualQty2": 0,
+        "sku": "09001",
+        "bookQty1": 5,
+        "actualQty1": 5
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 10,
+        "actualQty2": 0,
+        "bookQty1": 10,
+        "productName": "تونه الطائى صغير  تايلاندى 48*90",
+        "sku": "09004",
+        "productId": "YV2OumfkBeqlzRG2YruG"
+      },
+      {
+        "sku": "09006",
+        "productId": "MrmWUHqDh6stxloRQNkT",
+        "productName": "تونه فريشكو 48*100 جم",
+        "actualQty2": 1,
+        "actualQty1": 2,
+        "bookQty1": 2,
+        "bookQty2": 1
+      },
+      {
+        "productName": "جوانتى طبى جولدن باك كبير 70*10 بكت",
+        "bookQty1": 2,
+        "actualQty1": 2,
+        "productId": "ERMKWYiTKdyUihtCTePI",
+        "sku": "43007",
+        "bookQty2": 2,
+        "actualQty2": 2
+      },
+      {
+        "bookQty2": 1,
+        "productName": "جوانتى طبى فينيل + اى او تى كبير جدا 70*10 بكت",
+        "bookQty1": 4,
+        "productId": "xatSIYYexbA9vqwkiabB",
+        "sku": "43017",
+        "actualQty2": 1,
+        "actualQty1": 4
+      },
+      {
+        "bookQty2": 0,
+        "sku": "04005",
+        "productName": "دقيق بكتات فوم فاخر 1 كيلو *10 بكت",
+        "bookQty1": 6,
+        "actualQty1": 6,
+        "actualQty2": 0,
+        "productId": "oILf9Ggdj8bYNt4Pl492"
+      },
+      {
+        "productId": "rsK4qZNXiYsQYzw97O9W",
+        "bookQty1": 1,
+        "actualQty2": 1,
+        "productName": "زبيب ذهبى  رقم 1  - 10 كيلو",
+        "actualQty1": 1,
+        "sku": "30001",
+        "bookQty2": 1
+      },
+      {
+        "productId": "4BYT6CVNb3Cc2VXvNhOX",
+        "bookQty1": 0,
+        "productName": "زنابيل الماس قناطب صغير  15* 12 كيلو",
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "sku": "43015",
+        "bookQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "sku": "43014",
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "productName": "زنابيل الماس قناطب كبير 22* 12 كيلو",
+        "productId": "2yZvHDDqsgTAaUkW2BcJ",
+        "bookQty1": 0
+      },
+      {
+        "productName": "زنابيل الماس قناطب وسط مقاس  18 *12 كيلو",
+        "bookQty2": 0,
+        "actualQty1": 0,
+        "sku": "43013",
+        "actualQty2": 0,
+        "bookQty1": 0,
+        "productId": "7DvxzI5plNoCjy5gVPsz"
+      },
+      {
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "productId": "2EYPP2V6Nz8PrNAYdf5W",
+        "sku": "43008",
+        "productName": "زنابيل النسيم صغير 15*1000",
+        "bookQty1": 0
+      },
+      {
+        "productName": "زنابيل النسيم كبير  مقاس 22 - 600 حبة *20 ربطة",
+        "actualQty1": 0,
+        "sku": "43009",
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "productId": "qTe6Vs5C1XurYecxJlB5",
+        "bookQty2": 0
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "sku": "43002",
+        "bookQty1": 0,
+        "productName": "زنابيل النسيم وسط  1200*18",
+        "productId": "bYDk4gcZQhPBwWyPtnrr"
+      },
+      {
+        "productName": "زيت تنك دلال * 17 لتر",
+        "actualQty1": 10,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "02004",
+        "bookQty1": 10,
+        "productId": "eAXoMt1UyFqPTMLZ4GAX"
+      },
+      {
+        "bookQty2": 2,
+        "productName": "زيت تنك نسرين *17 لتر",
+        "sku": "02008",
+        "actualQty1": 2,
+        "bookQty1": 2,
+        "productId": "c1AGjekAaUO0zQchv0bK",
+        "actualQty2": 2
+      },
+      {
+        "bookQty2": 1,
+        "actualQty1": 14,
+        "actualQty2": 1,
+        "productName": "زيت دوار الشمس شروق 6ح *1.5 لتر",
+        "sku": "02005",
+        "bookQty1": 14,
+        "productId": "n4IW05Dc6fcoU0G6Ac2t"
+      },
+      {
+        "productId": "HtXRAmejDzBMhxsYQEUy",
+        "bookQty1": 0,
+        "productName": "زيت ذرة عافية وسط 6* 1.5 لتر",
+        "sku": "02001",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "actualQty1": 0
+      },
+      {
+        "actualQty2": 2,
+        "sku": "02006",
+        "actualQty1": 10,
+        "productId": "4dEuAA80ziMLFUxH5aJO",
+        "bookQty2": 2,
+        "productName": "زيت قلى  جوالين دلال 1.5*6 لتر",
+        "bookQty1": 10
+      },
+      {
+        "bookQty2": 0,
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "productName": "سائل صحون رافد ليمون  برميل *30 لتر",
+        "bookQty1": 0,
+        "sku": "14002",
+        "productId": "g0ZCXjRkQWyWCXy0qgN5"
+      },
+      {
+        "actualQty1": 6,
+        "actualQty2": 1,
+        "sku": "14004",
+        "bookQty2": 1,
+        "productName": "سائل صحون شاينكس بالليمون *30",
+        "bookQty1": 6,
+        "productId": "nn7SSyLySTxv0WgkoWf8"
+      },
+      {
+        "bookQty1": 8,
+        "actualQty1": 8,
+        "productId": "ZINptjXdR8FmNmwaGo2t",
+        "bookQty2": 0,
+        "productName": "سفر رول 85*110 الربيع 20 لفة",
+        "sku": "31009",
+        "actualQty2": 1
+      },
+      {
+        "bookQty2": 1,
+        "productId": "EXLDPRwT8ppDGrKjmDBM",
+        "actualQty2": 0,
+        "bookQty1": 7,
+        "sku": "31010",
+        "productName": "سفر رول بن سلمان 110*100 ملون 10 لفة",
+        "actualQty1": 7
+      },
+      {
+        "bookQty2": 1,
+        "sku": "43006",
+        "productId": "9PeZIfHYdFJtZgsKzNbQ",
+        "bookQty1": 10,
+        "actualQty2": 1,
+        "productName": "سفر مربعات الربيع 40 س* 20 ربطه",
+        "actualQty1": 10
+      },
+      {
+        "productName": "سكر الاسرة صغير 20*1 كيلو",
+        "actualQty1": 14,
+        "bookQty2": 1,
+        "actualQty2": 2,
+        "bookQty1": 14,
+        "sku": "04003",
+        "productId": "x1cIL2f0tNMlLQWMw2ky"
+      },
+      {
+        "bookQty2": 0,
+        "productId": "ndlDJpMG9hlBKQe4MauJ",
+        "sku": "04006",
+        "actualQty2": 0,
+        "bookQty1": 8,
+        "actualQty1": 8,
+        "productName": "سكر الاسرة كرتون 4*5 كيلو"
+      },
+      {
+        "sku": "04004",
+        "bookQty2": 3,
+        "productId": "thEesj4aPMBKJePRHTlE",
+        "productName": "سكر الاسرة وسط 10*2 كيلو",
+        "bookQty1": 13,
+        "actualQty2": 2,
+        "actualQty1": 13
+      },
+      {
+        "actualQty1": 0,
+        "productName": "سكر ناعم كبير جدا سعودى 50 كيلو",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "04001",
+        "bookQty1": 0,
+        "productId": "1YfL49HfqYRCA6nZTAKO"
+      },
+      {
+        "actualQty2": 0,
+        "productId": "CcXTqwIBYvF3O1XSa6v2",
+        "bookQty2": 0,
+        "actualQty1": 5,
+        "sku": "02007",
+        "bookQty1": 5,
+        "productName": "سمن القمرية علب 12* 900 جرام"
+      },
+      {
+        "productName": "سمن تنك شوكة وملعقة *15 لتر",
+        "productId": "qjEiCz0kBP2AFa9Yt3D4",
+        "bookQty2": 0,
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "bookQty1": 0,
+        "sku": "02002"
+      },
+      {
+        "actualQty1": 0,
+        "actualQty2": 0,
+        "sku": "02003",
+        "bookQty1": 0,
+        "productName": "سمن فارم وسط 12* 800 جرام",
+        "bookQty2": 0,
+        "productId": "94bTgCDFkYMJQaoETG3Z"
+      },
+      {
+        "bookQty2": 1,
+        "sku": "09008",
+        "actualQty2": 2,
+        "actualQty1": 3,
+        "bookQty1": 3,
+        "productName": "شطة رنا عريض كبير 4.5 * 4 جالون",
+        "productId": "WruLvzM1VpCOZ6yEHf8Y"
+      },
+      {
+        "actualQty1": 12,
+        "productId": "tAq8ENjtZ0cRpzhW6xFH",
+        "sku": "12001",
+        "productName": "شطة رنا قوارير صغير  36*88 مل",
+        "bookQty1": 12,
+        "actualQty2": 1,
+        "bookQty2": 0
+      },
+      {
+        "sku": "12005",
+        "actualQty1": 5,
+        "actualQty2": 0,
+        "productName": "شطة سومطره حار كبير 340 ح*24",
+        "bookQty2": 0,
+        "productId": "PmtB5uXbDG1nXnx8GMSJ",
+        "bookQty1": 5
+      },
+      {
+        "productId": "fT46B3aWtLP1P85gLk8J",
+        "actualQty2": 0,
+        "bookQty1": 5,
+        "actualQty1": 5,
+        "sku": "45002",
+        "bookQty2": 0,
+        "productName": "شطة شفرات رنا 10 ح * 1000 ظرف"
+      },
+      {
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productId": "OCbk2C3WCS6nrDpMeynA",
+        "actualQty1": 7,
+        "bookQty1": 7,
+        "sku": "45003",
+        "productName": "صلصة طماطم الفخامه 12* 850 جم"
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 0,
+        "productId": "C4uFJBEhleygJraDO5qH",
+        "sku": "45001",
+        "productName": "صلصة كبير تركى توسان 830 *12 علبة",
+        "bookQty1": 0
+      },
+      {
+        "productId": "GjMW892nmjpmLeV5Kx3c",
+        "bookQty2": 2,
+        "productName": "طحينة سائلة الجميل 14 كيلو",
+        "actualQty2": 2,
+        "sku": "19001",
+        "actualQty1": 3,
+        "bookQty1": 3
+      },
+      {
+        "bookQty2": 1,
+        "sku": "19002",
+        "productName": "طحينة سائلة الجميل 500 جرام *12",
+        "bookQty1": 1,
+        "actualQty1": 1,
+        "productId": "afCATiCiSHOBFsMH1aLK",
+        "actualQty2": 1
+      },
+      {
+        "actualQty2": 1,
+        "bookQty1": 7,
+        "actualQty1": 7,
+        "productName": "طماطم  مقشرة الطائى 24*400",
+        "bookQty2": 1,
+        "sku": "35001",
+        "productId": "EDm62noDcoaSqIWpOgdD"
+      },
+      {
+        "bookQty2": 0,
+        "sku": "31004",
+        "productId": "FlofDooOmuOEFrQiCWFQ",
+        "productName": "علب 50 جرام 2 اونز شفاف ارنون عبوة 200",
+        "bookQty1": 4,
+        "actualQty2": 0,
+        "actualQty1": 4
+      },
+      {
+        "bookQty1": 0,
+        "sku": "43004",
+        "productName": "علب زبادى  ترى بى  250 مل *20 ربطه",
+        "actualQty1": 0,
+        "productId": "2da0AM4oiAg4oBCXBdEd",
+        "bookQty2": 0,
+        "actualQty2": 0
+      },
+      {
+        "bookQty1": 1,
+        "sku": "31006",
+        "productId": "iqrB1dkzgtyvBOVVXl6q",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "productName": "علب شفاف 205 ارنون عبوة 500",
+        "actualQty1": 1
+      },
+      {
+        "sku": "31007",
+        "bookQty2": 0,
+        "productId": "XCQOI94ocO903Gm0xeK8",
+        "productName": "علب شفاف 206 ارنون عبوة 500",
+        "actualQty1": 2,
+        "bookQty1": 2,
+        "actualQty2": 0
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productId": "5hFoTTktBTSAB9Fi9SLn",
+        "actualQty1": 1,
+        "productName": "علب شفاف 207 ارنون عبوة 500",
+        "sku": "31008",
+        "bookQty1": 0
+      },
+      {
+        "bookQty1": 5,
+        "productName": "علب شفاف دانة 50 جم * 20 ربطة",
+        "sku": "43012",
+        "actualQty1": 5,
+        "productId": "8AZuD93GootRkJ1CigtI",
+        "bookQty2": 1,
+        "actualQty2": 1
+      },
+      {
+        "actualQty2": 0,
+        "productName": "غطاء 50 جرام 2 اونز شفاف ارنون عبوة 2",
+        "actualQty1": 4,
+        "bookQty2": 0,
+        "productId": "hvysP8vRqA8wXPIz75nN",
+        "bookQty1": 4,
+        "sku": "31005"
+      },
+      {
+        "sku": "09005",
+        "productId": "cpOYrBAZbabLvo5DoZ6B",
+        "productName": "قشطة ريفونى اقتصادى  155 *48 علبة",
+        "actualQty2": 0,
+        "bookQty1": 13,
+        "actualQty1": 13,
+        "bookQty2": 0
+      },
+      {
+        "sku": "43016",
+        "productName": "قصدير فالكون 1500 جرام 45سم 6 شد",
+        "bookQty2": 0,
+        "productId": "YDGp6p8TPz1bqNnOue4N",
+        "actualQty2": 0,
+        "bookQty1": 9,
+        "actualQty1": 9
+      },
+      {
+        "productName": "قصدير فالكون 1500 جرام 45سم شد 6",
+        "bookQty1": 0,
+        "productId": "HWiP60AueqeUffX1owt8",
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "sku": "43016"
+      },
+      {
+        "sku": "43011",
+        "bookQty2": 0,
+        "productName": "قصدير فالكون 450 مل * 6 رول",
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "productId": "muaXACw0f09dXe4V1QY1"
+      },
+      {
+        "bookQty2": 1,
+        "actualQty1": 9,
+        "actualQty2": 1,
+        "productName": "قودى طويل رقم 20 - 24*450 ج",
+        "bookQty1": 9,
+        "productId": "IV8f71IUPMlWk4unzQas",
+        "sku": "03016"
+      },
+      {
+        "productName": "كاتشب رنا عريض كبير  5 كيلو *4 جالون",
+        "bookQty2": 1,
+        "sku": "45005",
+        "actualQty1": 5,
+        "actualQty2": 0,
+        "productId": "vQkzxlzdOHu7z21s9SMV",
+        "bookQty1": 4
+      },
+      {
+        "sku": "45004",
+        "actualQty1": 9,
+        "actualQty2": 1,
+        "bookQty2": 1,
+        "productName": "كاتشب شفرات رنا 9 ح* 1000 حبه",
+        "productId": "3CYNTCRyqTGGTj2ccAgH",
+        "bookQty1": 9
+      },
+      {
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "productId": "oJ9v6weiVvLu7VgYVp1i",
+        "actualQty1": 10,
+        "sku": "31002",
+        "productName": "كاسات شاهى قدح 20 ربطة * 50 كاسة",
+        "bookQty1": 10
+      },
+      {
+        "bookQty2": 1,
+        "productId": "yJJs2qLBiktzgf1yPlTF",
+        "actualQty1": 3,
+        "sku": "31001",
+        "productName": "كاسات ماء ماس 20 ربطة * 50 كاسة",
+        "actualQty2": 1,
+        "bookQty1": 3
+      },
+      {
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "sku": "14003",
+        "bookQty2": 0,
+        "productName": "كلور رافد  برميل *30 لتر",
+        "productId": "ofIJ9TeKlN756jzt61SW"
+      },
+      {
+        "bookQty2": 0,
+        "productId": "qtl4NmMLGPyRMA9E4Mi5",
+        "sku": "14005",
+        "actualQty2": 0,
+        "bookQty1": 20,
+        "actualQty1": 20,
+        "productName": "كلوركس برميل كبير جدا *30 لتر"
+      },
+      {
+        "productName": "كمامات 3 طبقات 50*40 بكت",
+        "actualQty1": 9,
+        "actualQty2": 1,
+        "sku": "14001",
+        "bookQty2": 1,
+        "bookQty1": 9,
+        "productId": "RcrtoSwuKI63talw1zuG"
+      },
+      {
+        "sku": "09009",
+        "bookQty1": 4,
+        "actualQty1": 4,
+        "productName": "مرقة دجاج ماجى مصرى 24 بكت * 24 ح",
+        "productId": "LecJvj5mC6WvkN8boroZ",
+        "actualQty2": 1,
+        "bookQty2": 1
+      },
+      {
+        "actualQty2": 0,
+        "actualQty1": 0,
+        "bookQty2": 0,
+        "productId": "h2CTayjdEvjpld1Mc7WO",
+        "sku": "12002",
+        "productName": "مرقة ماجى اصلى 18 بكت *24 + 6",
+        "bookQty1": 0
+      },
+      {
+        "productId": "NJn3bR8RLg1bAUcZvi32",
+        "productName": "مصاص مغلف  ملون  سفانه 250 ح * 16 ربطه",
+        "bookQty1": 5,
+        "sku": "31003",
+        "bookQty2": 0,
+        "actualQty2": 0,
+        "actualQty1": 5
+      },
+      {
+        "bookQty1": 8,
+        "sku": "09007",
+        "actualQty1": 8,
+        "productName": "معجون طماطم لونا 8*6 ربطة * 135 ح",
+        "productId": "dtCMNYIhjGBZGCUE6Lr1",
+        "bookQty2": 2,
+        "actualQty2": 2
+      },
+      {
+        "productName": "مكرونة طويل معين 20*400جرام",
+        "actualQty1": 0,
+        "sku": "03001",
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "productId": "PnOdolAXPEcF2IfU4MMx",
+        "bookQty2": 0
+      },
+      {
+        "actualQty1": 18,
+        "actualQty2": 1,
+        "bookQty1": 18,
+        "productId": "SzHULsTeLonnDaH4vh4Y",
+        "sku": "31011",
+        "bookQty2": 1,
+        "productName": "ملاعق اكل اسود صينى  2.5 جرام 1000 حبة"
+      },
+      {
+        "actualQty2": 1,
+        "bookQty1": 1,
+        "actualQty1": 1,
+        "productId": "A1yASYzpEy0S0M4xm1r8",
+        "productName": "ملاعق اكل فالكون ابيض 50ح* 20 ربطه",
+        "bookQty2": 2,
+        "sku": "43003"
+      },
+      {
+        "actualQty1": 0,
+        "bookQty1": 0,
+        "actualQty2": 0,
+        "sku": "04002",
+        "productName": "ملح فرط سولتى 50 كيلو",
+        "bookQty2": 0,
+        "productId": "Sg7k8Y5bVrlOa8zoD5yh"
+      },
+      {
+        "productId": "hsweOtlJmOZIBAB1tlu1",
+        "sku": "15001",
+        "bookQty1": 0,
+        "productName": "مناديل رول مطعم طبقة 4 كيلو",
+        "actualQty2": 0,
+        "bookQty2": 0,
+        "actualQty1": 0
+      },
+      {
+        "actualQty2": 3,
+        "bookQty2": 3,
+        "productId": "G4OKtTeRu9W5SP4J0GKy",
+        "actualQty1": 90,
+        "bookQty1": 90,
+        "productName": "مناديل رول مطعم طبقة 5 كيلو",
+        "sku": "15002"
+      },
+      {
+        "bookQty2": 1,
+        "productName": "ورق برشمان كبير اصلى جيلانى 20 ربطه",
+        "sku": "43018",
+        "bookQty1": 9,
+        "actualQty1": 9,
+        "actualQty2": 1,
+        "productId": "wxepIAahN8ati3vwaa2L"
+      }
+    ],
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1785248471,
+      "nanoseconds": 92000000
+    },
+    "warehouseName": "المستودع الرئيسى",
+    "warehouseId2": "Zyltw7uwvd0aKejdeqQq",
+    "date": "2026-07-28",
+    "warehouseName2": "مخزن سيارة 1 مصطفى"
+  }
+]

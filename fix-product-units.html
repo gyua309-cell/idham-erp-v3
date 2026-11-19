@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>تبسيط وحدات الأصناف</title>
+<style>
+  body { font-family: Arial; background:#0f172a; color:#e2e8f0; padding:30px; direction:rtl; }
+  .card { background:#1e293b; border-radius:12px; padding:20px; margin:15px 0; border:1px solid #334155; }
+  .btn { background:#3b82f6; color:white; border:none; padding:12px 24px; border-radius:8px; cursor:pointer; font-size:16px; margin-top:15px; }
+  .log { background:#0f172a; border:1px solid #334155; border-radius:8px; padding:15px; margin-top:15px; font-family:monospace; font-size:13px; min-height:100px; white-space:pre-wrap; }
+  .ok { color:#10b981; } .err { color:#ef4444; } .info { color:#60a5fa; }
+</style>
+</head>
+<body>
+<h2>تبسيط وحدات الاصناف - البيع بالكرتون</h2>
+<div class="card">
+  <p>سيتم تحديث 4 اصناف: كمامات، مصاصات، كارى مهران 18ح، كارى مهران 36ح</p>
+  <p style="color:#94a3b8">unit=Carton | altUnit="" | factor=1 | يضاف boxesPerCarton للعرض فقط</p>
+</div>
+<button class="btn" id="runBtn" onclick="runUpdate()">تحديث الاصناف الان</button>
+<div class="log" id="log">في انتظار الضغط...</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getFirestore, doc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+const app = initializeApp({ apiKey:"AIzaSyBFMGVZvuWBaxwrjGUJV3GQf7hoyVGB6wY", authDomain:"idham-b3a7e.firebaseapp.com", projectId:"idham-b3a7e" });
+const db = getFirestore(app);
+const auth = getAuth(app);
+const CID = "idham-main";
+const PRODUCTS = [
+  { id:"RcrtoSwuKI63talw1zuG", name:"كمامات 3 طبقات", boxesPerCarton:40 },
+  { id:"NJn3bR8RLg1bAUcZvi32", name:"مصاصات سفانه", boxesPerCarton:16 },
+  { id:"c87KVwQ4KpLT51MM3l1u", name:"كارى مهران 18ح", boxesPerCarton:18 },
+  { id:"bJ7SHrAJrGUmxRXK5uIt", name:"كارى مهران 36ح", boxesPerCarton:36 },
+];
+const log = (m,c="") => { document.getElementById("log").innerHTML += `<span class="${c}">${m}</span>\n`; };
+window.runUpdate = async () => {
+  document.getElementById("runBtn").disabled = true;
+  document.getElementById("log").innerHTML = "";
+  const user = auth.currentUser;
+  if (!user) { log("يجب تسجيل الدخول اولا - افتح النظام في تبويب آخر ثم ارجع","err"); document.getElementById("runBtn").disabled=false; return; }
+  log("مسجل الدخول: " + user.email, "ok");
+  for (const p of PRODUCTS) {
+    try {
+      const ref = doc(db, `companies/${CID}/products`, p.id);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) { log("لم يعثر على: " + p.name, "err"); continue; }
+      await updateDoc(ref, { unit:"Carton", altUnit:"", unitFactor:1, boxesPerCarton:p.boxesPerCarton });
+      log("تم تحديث: " + p.name + " (" + p.boxesPerCarton + " في الكرتون)", "ok");
+    } catch(e) { log("خطا في " + p.name + ": " + e.message, "err"); }
+  }
+  log("", ""); log("اكتمل! الان البيع بالكرتون كامل او كسري", "ok");
+  document.getElementById("runBtn").disabled = false;
+};
+onAuthStateChanged(auth, u => { document.getElementById("log").innerHTML = u ? `<span class="ok">جاهز - مسجل كـ ${u.email}</span>` : `<span class="err">افتح النظام في تبويب آخر ثم حدث هذه الصفحة</span>`; });
+</script>
+</body>
+</html>

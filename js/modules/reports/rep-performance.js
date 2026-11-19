@@ -1,64 +1,58 @@
 // ============================================================
-// IDHAM ERP — Rep Performance Report & Daily Target Planner
+// IDHAM ERP — Rep Performance Report & Comprehensive Daily Report
 // ============================================================
-import { COLS, getAll } from "../../utils/db.js";
-import { query, orderBy, limit, getDocs, where } from "../../utils/db.js";
-import { formatCurrency, formatPercent, getTargetColor } from "../../utils/formatters.js";
-import { db, COMPANY_ID } from "../../firebase-config.js";
-import { collection, doc, updateDoc } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+import { COLS, getAll, collection, db, COMPANY_ID } from "../../utils/db.js";
+import { query, orderBy, limit, getDocs, where, doc, updateDoc } from "../../utils/db.js";
+import { formatCurrency, formatPercent, getTargetColor, todayString } from "../../utils/formatters.js";
 
 let allProducts = [];
 let allReps = [];
-let activeTab = "kpis"; // "kpis" or "daily"
-let selectedRepPlanner = null;
-let currentPlannerMix = []; // Array of { productId, productName, price, weight }
+let currentPlannerMix = [];
 
 export async function render(container, user) {
-  // Save representatives globally
-  allReps = await getAll(COLS.salesReps(), [orderBy("name")]);
-  allProducts = await getAll(COLS.products(), [orderBy("name")]);
+  allReps = await getAll(COLS.salesReps(), [orderBy("name")]).catch(() => []);
+  allProducts = await getAll(COLS.products(), [orderBy("name")]).catch(() => []);
 
-  container.innerHTML = buildShell();
+  container.innerHTML = getTemplateHTML();
 
-  // Populate product selector in planner modal
+  // Populate product select for planner
   const prodSelect = document.getElementById("planner-product-select");
   if (prodSelect) {
     prodSelect.innerHTML = '<option value="">-- اختر صنف --</option>' +
       allProducts.map(p => `<option value="${p.id}" data-price="${p.salePrice || 0}">${p.name} (${formatCurrency(p.salePrice)})</option>`).join("");
   }
 
-  // Populate representative selector in daily report
+  // Populate rep select for daily report
   const repSelect = document.getElementById("daily-rep-select");
   if (repSelect) {
     repSelect.innerHTML = '<option value="">-- الكل (بدون تحديد) --</option>' +
       allReps.map(r => `<option value="${r.id}">${r.name}</option>`).join("");
   }
 
-  // Set default date range for KPIs (start of month to today)
-  const kpiFromInput = document.getElementById("kpi-filter-from");
-  const kpiToInput = document.getElementById("kpi-filter-to");
-  if (kpiFromInput && kpiToInput) {
-    const d = new Date();
-    const startOfMonth = new Date(d.getFullYear(), d.getMonth(), 1);
-    const formatLocal = (date) => {
-      const yr = date.getFullYear();
-      const mon = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      return `${yr}-${mon}-${day}`;
+  // Set default dates for KPI filters
+  const fromEl = document.getElementById("kpi-filter-from");
+  const toEl = document.getElementById("kpi-filter-to");
+  if (fromEl && toEl) {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const fmt = d => {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
     };
-    kpiFromInput.value = formatLocal(startOfMonth);
-    kpiToInput.value = formatLocal(d);
+    fromEl.value = fmt(firstDay);
+    toEl.value = fmt(now);
   }
 
-  // Set default date range for daily report to today
+  // Set default dates for daily report
   const dailyFrom = document.getElementById("daily-report-from");
   const dailyTo = document.getElementById("daily-report-to");
   const todayStr = new Date().toISOString().split("T")[0];
   if (dailyFrom) dailyFrom.value = todayStr;
   if (dailyTo) dailyTo.value = todayStr;
 
-
-  // Attach global actions to window
+  // Global window functions
   window.openTargetPlanner = openTargetPlanner;
   window.addProductToPlannerMix = addProductToPlannerMix;
   window.removeProductFromPlannerMix = removeProductFromPlannerMix;
@@ -69,11 +63,11 @@ export async function render(container, user) {
   window.setKpiRange = setKpiRange;
   window.loadRepPerformance = loadRepPerformance;
 
-  // Load default tab
+  // Default to KPIs tab
   switchRepTab("kpis");
 }
 
-function buildShell() {
+function getTemplateHTML() {
   return `
     <div class="page-content">
       <div class="page-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom: 24px;">
@@ -85,7 +79,7 @@ function buildShell() {
         <!-- Tab switcher -->
         <div class="no-print" style="display:flex; background:var(--bg-2); padding:4px; border-radius:10px; border:1px solid var(--border-soft);">
           <button class="btn btn-sm" id="tab-rep-kpis" onclick="switchRepTab('kpis')" style="border-radius:8px; padding:6px 16px; border:none; cursor:pointer;">📊 تقييم الأهداف (KPIs)</button>
-          <button class="btn btn-sm" id="tab-rep-daily" onclick="switchRepTab('daily')" style="border-radius:8px; padding:6px 16px; border:none; cursor:pointer;">📅 التقرير اليومي التفصيلي</button>
+          <button class="btn btn-sm" id="tab-rep-daily" onclick="switchRepTab('daily')" style="border-radius:8px; padding:6px 16px; border:none; cursor:pointer;">📑 التقرير اليومي التفصيلي</button>
         </div>
       </div>
 
@@ -132,9 +126,9 @@ function buildShell() {
             <label style="font-size:11px; margin-bottom:4px; display:block; font-weight:bold;">التاريخ إلى</label>
             <input type="date" id="daily-report-to" class="input" style="height:38px;" onchange="loadRepDailyReport()" />
           </div>
-          <div style="margin-right:auto; display:flex; gap:8px;">
+          <div style="margin-right:auto; display:flex; gap:8px; margin-top:20px;">
             <button class="btn btn-secondary" onclick="window.print()">🖨️ طباعة التقرير</button>
-            <button class="btn btn-primary" onclick="loadRepDailyReport(true)">🔄 تحديث</button>
+            <button class="btn btn-primary" id="update-report-btn" onclick="loadRepDailyReport(true)">🔄 تحديث</button>
           </div>
         </div>
 
@@ -223,38 +217,37 @@ function buildShell() {
 }
 
 function setKpiRange(range) {
-  const kpiFromInput = document.getElementById("kpi-filter-from");
-  const kpiToInput = document.getElementById("kpi-filter-to");
-  if (!kpiFromInput || !kpiToInput) return;
+  const fromEl = document.getElementById("kpi-filter-from");
+  const toEl = document.getElementById("kpi-filter-to");
+  if (!fromEl || !toEl) return;
 
   const now = new Date();
-  const formatLocal = (date) => {
-    const yr = date.getFullYear();
-    const mon = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${yr}-${mon}-${day}`;
+  const fmt = d => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
   };
 
   if (range === "month") {
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
-    kpiFromInput.value = formatLocal(start);
-    kpiToInput.value = formatLocal(now);
+    fromEl.value = fmt(start);
+    toEl.value = fmt(now);
   } else if (range === "last_month") {
     const start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const end = new Date(now.getFullYear(), now.getMonth(), 0);
-    kpiFromInput.value = formatLocal(start);
-    kpiToInput.value = formatLocal(end);
+    fromEl.value = fmt(start);
+    toEl.value = fmt(end);
   } else if (range === "year") {
     const start = new Date(now.getFullYear(), 0, 1);
-    kpiFromInput.value = formatLocal(start);
-    kpiToInput.value = formatLocal(now);
+    fromEl.value = fmt(start);
+    toEl.value = fmt(now);
   }
 
   loadRepPerformance();
 }
 
 function switchRepTab(tab) {
-  activeTab = tab;
   const kpisContent = document.getElementById("rep-kpis-tab-content");
   const dailyContent = document.getElementById("rep-daily-tab-content");
   const kpisBtn = document.getElementById("tab-rep-kpis");
@@ -266,7 +259,7 @@ function switchRepTab(tab) {
     kpisContent.classList.remove("hidden");
     dailyContent.classList.add("hidden");
     kpisBtn.style.background = "var(--brand)";
-    kpisBtn.style.color = "#fff";
+    kpisBtn.style.color = "#ffffff";
     kpisBtn.style.fontWeight = "bold";
     dailyBtn.style.background = "transparent";
     dailyBtn.style.color = "var(--text-1)";
@@ -276,7 +269,7 @@ function switchRepTab(tab) {
     kpisContent.classList.add("hidden");
     dailyContent.classList.remove("hidden");
     dailyBtn.style.background = "var(--brand)";
-    dailyBtn.style.color = "#fff";
+    dailyBtn.style.color = "#ffffff";
     dailyBtn.style.fontWeight = "bold";
     kpisBtn.style.background = "transparent";
     kpisBtn.style.color = "var(--text-1)";
@@ -285,54 +278,43 @@ function switchRepTab(tab) {
   }
 }
 
-async function loadRepPerformance(force = false) {
+async function loadRepPerformance(forceRefresh = false) {
   const cardsEl = document.getElementById("perf-cards");
   if (!cardsEl) return;
 
   try {
     const reps = allReps;
-    const fromStr = document.getElementById("kpi-filter-from")?.value || "";
-    const toStr = document.getElementById("kpi-filter-to")?.value || "";
+    const from = document.getElementById("kpi-filter-from")?.value || "";
+    const to = document.getElementById("kpi-filter-to")?.value || "";
 
-    const { clearERPCache } = await import("../../utils/db.js");
-    if (force) {
-      clearERPCache(`companies/${COMPANY_ID}/salesInvoices`);
-      clearERPCache(`companies/${COMPANY_ID}/receipts`);
-      clearERPCache(`companies/${COMPANY_ID}/customers`);
-    }
-
-    const [invoices, receipts, customers] = await Promise.all([
+    const [salesSnap, rcptSnap, custSnap] = await Promise.all([
       getAll(COLS.salesInvoices()),
       getAll(COLS.receipts()),
-      getAll(COLS.customers()),
+      getAll(COLS.customers())
     ]);
 
-    // Filter by selected range in-memory
-    const filteredInvoices = invoices.filter(inv => {
-      return (!fromStr || inv.date >= fromStr) && (!toStr || inv.date <= toStr) && inv.status !== "cancelled";
-    });
-    const filteredReceipts = receipts.filter(rcpt => {
-      return (!fromStr || rcpt.date >= fromStr) && (!toStr || rcpt.date <= toStr) && rcpt.entityType === "customer";
-    });
+    const invoices = salesSnap.filter(inv => (!from || inv.date >= from) && (!to || inv.date <= to) && inv.status !== "cancelled");
+    const receipts = rcptSnap.filter(r => (!from || r.date >= from) && (!to || r.date <= to) && r.entityType === "customer");
 
     const custRepMap = {};
-    customers.forEach(c => { custRepMap[c.id] = c.repId || null; });
+    custSnap.forEach(c => { custRepMap[c.id] = c.repId || null; });
 
     const salesByRep = {};
     const paidByRep  = {};
     const countByRep = {};
 
-    filteredInvoices.forEach(inv => {
-      if (!inv.repId) return;
-      salesByRep[inv.repId] = (salesByRep[inv.repId] || 0) + (inv.totalWithVat || 0);
-      paidByRep[inv.repId]  = (paidByRep[inv.repId] || 0) + (inv.amountPaid || inv.paidAmount || 0);
-      countByRep[inv.repId] = (countByRep[inv.repId] || 0) + 1;
+    invoices.forEach(inv => {
+      if (inv.repId) {
+        salesByRep[inv.repId] = (salesByRep[inv.repId] || 0) + (inv.totalWithVat || 0);
+        paidByRep[inv.repId]  = (paidByRep[inv.repId] || 0) + (inv.amountPaid || inv.paidAmount || 0);
+        countByRep[inv.repId] = (countByRep[inv.repId] || 0) + 1;
+      }
     });
 
-    filteredReceipts.forEach(rcpt => {
-      const repId = custRepMap[rcpt.targetId];
+    receipts.forEach(r => {
+      const repId = custRepMap[r.targetId];
       if (repId) {
-        paidByRep[repId] = (paidByRep[repId] || 0) + (rcpt.amount || 0);
+        paidByRep[repId] = (paidByRep[repId] || 0) + (r.amount || 0);
       }
     });
 
@@ -347,8 +329,8 @@ async function loadRepPerformance(force = false) {
       const count    = countByRep[r.id] || 0;
       const target   = r.monthlyTarget  || 1;
       const pct      = (sales / target) * 100;
-      const commRate = sales < target ? 1.0 : (r.commissionRate || 0);
-      const comm     = paid * (commRate / 100);
+      const rate     = sales < target ? 1 : (r.commissionRate || 0);
+      const comm     = paid * (rate / 100);
       const color    = getTargetColor(pct);
 
       return `
@@ -399,318 +381,315 @@ async function loadRepPerformance(force = false) {
   }
 }
 
-async function loadRepDailyReport(force = false) {
-  const resultsEl = document.getElementById("daily-report-results");
-  if (!resultsEl) return;
+async function loadRepDailyReport(forceRefresh = false) {
+  const resEl = document.getElementById("daily-report-results");
+  if (!resEl) return;
 
-  resultsEl.innerHTML = `<div class="page-loading"><div class="loading-spinner"></div><span>جارٍ إعداد التقرير اليومي للمبيعات والتحصيلات...</span></div>`;
+  resEl.innerHTML = '<div class="page-loading"><div class="loading-spinner"></div><span>جارٍ إعداد التقرير اليومي للمبيعات والتحصيلات...</span></div>';
 
   const repId = document.getElementById("daily-rep-select")?.value || "";
   const todayStr = new Date().toISOString().split("T")[0];
-  const fromDate = document.getElementById("daily-report-from")?.value || todayStr;
-  const toDate = document.getElementById("daily-report-to")?.value || todayStr;
+  const from = document.getElementById("daily-report-from")?.value || todayStr;
+  const to = document.getElementById("daily-report-to")?.value || todayStr;
 
   try {
-    const { clearERPCache } = await import("../../utils/db.js");
-    if (force) {
-      clearERPCache(`companies/idham-main/salesInvoices`);
-      clearERPCache(`companies/idham-main/receipts`);
-      clearERPCache(`companies/idham-main/customers`);
-      clearERPCache(`companies/idham-main/employees`);
-    }
-
-    const [invoices, receipts, customers, employees, journalEntries, coaRepsAccounts] = await Promise.all([
+    const [invoicesAll, receiptsAll, customersAll, salesReturnsAll, employeesAll, journalEntriesAll, repAccountsAll, hrLoansSnap, collectionsAll] = await Promise.all([
       getAll(COLS.salesInvoices()),
       getAll(COLS.receipts()),
-      getAll(COLS.customers()),
+      getDocs(collection(db, `companies/${COMPANY_ID}/customers`)).then(snap => snap.docs.map(d => ({ id: d.id, ...d.data() }))),
+      getAll(COLS.salesReturns ? COLS.salesReturns() : "salesReturns").catch(() => []),
       getAll(COLS.employees()),
-      // Load all journal entries to detect rep loans recorded as JEs
-      getAll(COLS.journalEntries(), [orderBy("date", "desc")]).catch(() => []),
-      // Load COA sub-accounts under 1-1-2-1-2 (rep personal accounts)
+      getAll(COLS.journalEntries(), [where("date", ">=", "2026-08-01")]).catch(() => []),
       getAll(COLS.chartOfAccounts(), [where("parentCode", "==", "1-1-2-1-2")]).catch(() => []),
+      getDocs(collection(db, `companies/${COMPANY_ID}/employeeLoans`)).catch(() => ({ docs: [] })),
+      getDocs(collection(db, `companies/${COMPANY_ID}/collections`)).then(snap => snap.docs.map(d => ({ id: d.id, ...d.data() }))).catch(() => [])
     ]);
 
-    // Load active loans from employeeLoans collection
-    const loansSnap = await getDocs(collection(db, `companies/${COMPANY_ID}/employeeLoans`));
-    const employeeLoans = loansSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+    const hrLoansList = (hrLoansSnap.docs || []).map(d => ({ id: d.id, ...d.data() }));
 
-    // Build rep → COA account map (match by name)
+    // ============================================================
+    // TRUE BALANCE CALCULATION — same logic as consolidated-balances.js
+    // كحساب الرصيد الحقيقي من الفواتير+المرتجعات+التحصيلات+السندات
+    // بدلاً من الاعتماد على cust.balance المخزون الذي يتضخم
+    // ============================================================
+    const custTrueBalanceMap = {}; // custId → computed closing balance
+    const nonCancelledInvoices = invoicesAll.filter(i => i.status !== "cancelled");
+    const nonCancelledReturns = (salesReturnsAll || []).filter(r => r.status !== "cancelled");
+    const customerReceipts = receiptsAll.filter(r => r.entityType === "customer");
+
+    for (const c of customersAll) {
+      let balance = parseFloat(c.openingBalance || 0);
+
+      // + فواتير المبيعات
+      nonCancelledInvoices.filter(i => i.customerId === c.id).forEach(inv => {
+        balance += parseFloat(inv.totalWithVat || inv.total || 0);
+      });
+
+      // − مرتجعات المبيعات
+      nonCancelledReturns.filter(r => r.customerId === c.id).forEach(ret => {
+        balance -= parseFloat(ret.totalWithVat !== undefined ? ret.totalWithVat : (ret.total !== undefined ? ret.total : (ret.subtotal || 0)));
+      });
+
+      // − سندات القبض (admin receipts)
+      customerReceipts.filter(r => r.targetId === c.id).forEach(rcpt => {
+        balance -= parseFloat(rcpt.amount || 0);
+      });
+
+      // − تحصيلات المناديب (collections)
+      (collectionsAll || []).filter(col => col.customerId === c.id).forEach(col => {
+        balance -= parseFloat(col.amount || 0);
+      });
+
+      custTrueBalanceMap[c.id] = Math.round(balance * 100) / 100;
+    }
+    // ============================================================
+
+    // Map rep chart of accounts
     const repCoaMap = {};
     allReps.forEach(rep => {
-      const repNameNorm = (rep.name || "").trim().toLowerCase();
-      const match = coaRepsAccounts.find(acc => {
-        const accName = (acc.name || "").toLowerCase();
-        return accName.includes(repNameNorm) ||
-               repNameNorm.split(" ").some(w => w.length > 1 && accName.includes(w));
+      const repNameLower = (rep.name || "").trim().toLowerCase();
+      const match = repAccountsAll.find(acc => {
+        const accNameLower = (acc.name || "").toLowerCase();
+        return accNameLower.includes(repNameLower) || repNameLower.split(" ").some(w => w.length > 1 && accNameLower.includes(w));
       });
       if (match) repCoaMap[rep.id] = match;
     });
 
-
     const custRepMap = {};
-    customers.forEach(c => { custRepMap[c.id] = c.repId || null; });
+    customersAll.forEach(c => { custRepMap[c.id] = c.repId || null; });
 
-    // Filter invoices by representative and date in-memory
-    const filteredInvoices = invoices.filter(inv => {
+    // Filter invoices & receipts
+    const filteredInvoices = invoicesAll.filter(inv => {
       if (inv.status === "cancelled") return false;
-      if (inv.date < fromDate || inv.date > toDate) return false;
+      if (inv.date < from || inv.date > to) return false;
       if (repId && inv.repId !== repId) return false;
       return true;
     });
 
-    // Filter receipts by representative and date in-memory
-    const filteredReceipts = receipts.filter(rcpt => {
-      if (rcpt.entityType !== "customer") return false;
-      if (!rcpt.date || rcpt.date < fromDate || rcpt.date > toDate) return false;
-      if (repId) {
-        return custRepMap[rcpt.targetId] === repId;
-      }
+    const filteredReceipts = receiptsAll.filter(r => {
+      if (r.entityType !== "customer") return false;
+      if (!r.date || r.date < from || r.date > to) return false;
+      if (repId) return custRepMap[r.targetId] === repId;
       return true;
     });
 
-    // Calculate metrics and profit using latest catalog purchasePrice
     let totalSales = 0;
     let totalCollected = 0;
-    let totalProfit = 0;
+    let totalNetProfit = 0;
 
     filteredInvoices.forEach(inv => {
-      totalSales += (inv.totalWithVat || 0);
-      totalCollected += (inv.paidAmount || 0);
-      
-      // Calculate cost and profit dynamically from lines using last purchase price
+      totalSales += inv.totalWithVat || 0;
+      totalCollected += inv.paidAmount || 0;
+
       let invCost = 0;
-      let invRev = inv.subtotal || 0;
-      (inv.lines || []).forEach(l => {
-        const prod = allProducts.find(p => p.id === l.productId);
-        const lCostPrice = prod ? (prod.purchasePrice !== undefined ? prod.purchasePrice : (prod.costPrice !== undefined ? prod.costPrice : (prod.averageCost || 0))) : (l.averageCost || l.costPrice || l.purchasePrice || 0);
-        const lQty = l.qty || 0;
-        invCost += (lCostPrice * lQty);
+      const invSubtotal = inv.subtotal || 0;
+      (inv.lines || []).forEach(line => {
+        const prod = allProducts.find(p => p.id === line.productId);
+        const cost = prod ? (prod.purchasePrice !== undefined ? prod.purchasePrice : (prod.costPrice !== undefined ? prod.costPrice : (prod.averageCost || 0)))
+                          : (line.averageCost || line.costPrice || line.purchasePrice || 0);
+        const qty = line.qty || 0;
+        invCost += cost * qty;
       });
-      totalProfit += (invRev - invCost);
+      totalNetProfit += (invSubtotal - invCost);
     });
 
-    filteredReceipts.forEach(rcpt => {
-      totalCollected += (rcpt.amount || 0);
+    filteredReceipts.forEach(r => {
+      totalCollected += (r.amount || 0);
     });
 
-    // Calculate Net Debt Change (Option 2): Sales - Collections (which can be positive or negative)
-    const netDebtChange = totalSales - totalCollected;
-    const isReduction = netDebtChange < 0;
-    const debtCardColor = isReduction ? "good" : "bad";
-    const debtCardTitle = isReduction ? "صافي تخفيض المديونية" : "إجمالي المديونية الجديدة";
-    const debtCardSubtitle = isReduction ? "التحصيلات تفوق مبيعات اليوم" : "صافي الزيادة في المديونية اليوم";
-    const debtCardValue = Math.abs(netDebtChange);
+    const netDebtDiff = totalSales - totalCollected;
+    const isDebtReduced = netDebtDiff < 0;
+    const debtColor = isDebtReduced ? "good" : "bad";
+    const debtTitle = isDebtReduced ? "صافي تخفيض المديونية" : "إجمالي المديونية الجديدة";
+    const debtSub = isDebtReduced ? "التحصيلات تفوق مبيعات اليوم" : "صافي الزيادة في المديونية اليوم";
+    const absDebtDiff = Math.abs(netDebtDiff);
 
-    // Calculate Total Current Debt for all customers belonging to the representative
-    let totalCurrentDebt = 0;
-    customers.forEach(cust => {
+    // Current Customers Total Debt — مربوط بمجمع الأرصدة (الرصيد الحقيقي)
+    let currentCustomersDebt = 0;
+    customersAll.forEach(cust => {
+      const trueBalance = custTrueBalanceMap[cust.id] || 0;
+      if (trueBalance <= 0) return; // لا نحسب الأرصدة السالبة أو الصفرية
       if (repId) {
-        if (cust.repId === repId || cust.assignedRepId === repId) {
-          totalCurrentDebt += (cust.balance || 0);
+        if ((cust.repId || cust.assignedRepId) === repId) {
+          currentCustomersDebt += trueBalance;
         }
       } else {
-        // If "All reps" is selected, only sum customers assigned to *some* representative (not empty)
         if (cust.repId || cust.assignedRepId) {
-          totalCurrentDebt += (cust.balance || 0);
+          currentCustomersDebt += trueBalance;
         }
       }
     });
 
-    // Determine target employee for loan linkage
-    const selectedRepObj = allReps.find(r => r.id === repId);
-    let targetEmpId = selectedRepObj ? selectedRepObj.employeeId : null;
-    if (selectedRepObj && !targetEmpId) {
-      // Fuzzy fallback: find employee whose name starts with or contains the rep name
-      const repNameNormalized = selectedRepObj.name.trim();
-      const matchedEmp = employees.find(e => e.name.includes(repNameNormalized) || repNameNormalized.includes(e.name));
-      if (matchedEmp) {
-        targetEmpId = matchedEmp.id;
-      }
-    }
-
-    // ── Journal-Entry-based loans ─────────────────────────────────────────
-    // Detect loans recorded only as JEs (not in employeeLoans collection)
-    let jeLoansList = [];
-    let jeLoansBySalesman = {}; // repId → [{...}]
+    // Detect JE Loans
+    const stopWords = new Set(["المندوب", "مندوب", "السيد", "أحمد", "احمد", "شركة", "مؤسسة", "السيارة", "سيارة"]);
 
     const _detectJeLoan = (je, rep) => {
-      const desc     = (je.description || "").toLowerCase();
-      const repCoa   = repCoaMap[rep.id];
-      const repWords = (rep.name || "").trim().toLowerCase().split(" ").filter(w => w.length > 1);
-      const loanKw   = ["سلفة", "سلف", "قرض", "استلاف", "advance", "loan"];
-      const isLoanDesc = loanKw.some(kw => desc.includes(kw)) &&
-                         repWords.some(w => desc.includes(w));
-      const hasRepAccountDebit = repCoa && (je.lines || []).some(l =>
-        (l.accountId === repCoa.id || l.accountCode === repCoa.code) && (l.debit || 0) > 0
-      );
-      return isLoanDesc || hasRepAccountDebit;
+      const desc = (je.description || "").toLowerCase();
+      // Exclude settlements, closings, reversals, paybacks, and credit entries
+      if (desc.includes("تقفيل") || desc.includes("إقفال") || desc.includes("اقفال") || desc.includes("اققال") || 
+          desc.includes("سداد") || desc.includes("عكس") || desc.includes("تسوية") || desc.includes("خصم") || desc.includes("مقاصة")) return false;
+      if (je.date && je.date < "2026-08-01") return false;
+      
+      const repCoa = repCoaMap[rep.id];
+      const repWords = (rep.name || "").trim().toLowerCase().split(" ").filter(w => w.length > 1 && !stopWords.has(w));
+      const hasLoanKw = ["سلفة", "سلف", "قرض", "استلاف", "advance", "loan"].some(kw => desc.includes(kw));
+
+      // MUST have debit on loan/advance account (credit means repayment/settlement)
+      const hasRepAccountDebit = repCoa && (je.lines || []).some(l => (l.accountId === repCoa.id || l.accountCode === repCoa.code) && (l.debit || 0) > 0);
+      const hasLineNoteMatch = (je.lines || []).some(l => {
+        const lineNote = (l.notes || l.note || l.accountName || "").toLowerCase();
+        return hasLoanKw && repWords.length > 0 && repWords.some(w => lineNote.includes(w)) && (l.debit || 0) > 0;
+      });
+
+      const isLoanDesc = hasLoanKw && repWords.length > 0 && repWords.some(w => desc.includes(w));
+
+      // Strictly verify that there is NO credit on rep account (if credit exists, it's a settlement)
+      const hasRepAccountCredit = repCoa && (je.lines || []).some(l => (l.accountId === repCoa.id || l.accountCode === repCoa.code) && (l.credit || 0) > 0);
+      if (hasRepAccountCredit) return false;
+
+      return isLoanDesc || hasRepAccountDebit || hasLineNoteMatch;
     };
 
+    let jeLoansList = [];
     if (repId) {
       const repObj = allReps.find(r => r.id === repId);
       if (repObj) {
-        jeLoansList = journalEntries
+        jeLoansList = journalEntriesAll
           .filter(je => _detectJeLoan(je, repObj))
           .map(je => {
-            const repCoa  = repCoaMap[repId];
-            // Amount = debit on rep's account line; fallback = total debit
+            const repCoa = repCoaMap[repId];
             let amount = 0;
             if (repCoa) {
-              const repLine = (je.lines || []).find(l =>
-                (l.accountId === repCoa.id || l.accountCode === repCoa.code) && (l.debit || 0) > 0
-              );
+              const repLine = (je.lines || []).find(l => (l.accountId === repCoa.id || l.accountCode === repCoa.code) && (l.debit || 0) > 0);
               amount = repLine ? (repLine.debit || 0) : 0;
             }
             if (!amount) amount = (je.lines || []).reduce((s, l) => s + (l.debit || 0), 0);
             return {
-              id: je.id, entryNumber: je.entryNumber || je.id.slice(0, 8),
-              date: je.date, description: je.description, amount, status: je.status || "posted",
+              id: je.id,
+              entryNumber: je.entryNumber || je.id.slice(0, 8),
+              date: je.date,
+              description: je.description,
+              amount,
+              status: je.status || "posted",
+              repName: repObj.name
             };
           });
       }
     } else {
-      // All reps
       allReps.forEach(rep => {
-        const list = journalEntries
+        const list = journalEntriesAll
           .filter(je => _detectJeLoan(je, rep))
           .map(je => {
             const repCoa = repCoaMap[rep.id];
             let amount = 0;
             if (repCoa) {
-              const repLine = (je.lines || []).find(l =>
-                (l.accountId === repCoa.id || l.accountCode === repCoa.code) && (l.debit || 0) > 0
-              );
+              const repLine = (je.lines || []).find(l => (l.accountId === repCoa.id || l.accountCode === repCoa.code) && (l.debit || 0) > 0);
               amount = repLine ? (repLine.debit || 0) : 0;
             }
             if (!amount) amount = (je.lines || []).reduce((s, l) => s + (l.debit || 0), 0);
             return {
-              id: je.id, entryNumber: je.entryNumber || je.id.slice(0, 8),
-              date: je.date, description: je.description, amount, status: je.status || "posted",
-              repName: rep.name,
+              id: je.id,
+              entryNumber: je.entryNumber || je.id.slice(0, 8),
+              date: je.date,
+              description: je.description,
+              amount,
+              status: je.status || "posted",
+              repName: rep.name
             };
           });
-        if (list.length) jeLoansBySalesman[rep.id] = list;
         jeLoansList.push(...list);
       });
     }
-    const totalJeLoans = jeLoansList.reduce((s, l) => s + l.amount, 0);
-    // ── end JE loans detection ────────────────────────────────────────────
 
-    // Filter and calculate personal outstanding loans/advances
-    let totalRemainingLoans = 0;
+    const jeTotal = (jeLoansList || []).reduce((s, j) => s + (j.amount || 0), 0);
+
+    // Filter HR Loans
     let repLoansList = [];
-    if (repId) {
-      if (targetEmpId) {
-        repLoansList = employeeLoans.filter(l => l.empId === targetEmpId && l.status === "active" && l.remainingBalance > 0);
-        totalRemainingLoans = repLoansList.reduce((sum, l) => sum + (l.remainingBalance || 0), 0);
-      }
-    } else {
-      // All reps: sum loans of all employees linked to representatives
-      const repEmpIds = new Set(allReps.map(r => r.employeeId).filter(Boolean));
-      repLoansList = employeeLoans.filter(l => {
-        if (l.status !== "active" || !(l.remainingBalance > 0)) return false;
-        if (repEmpIds.has(l.empId)) return true;
-        // fallback match by representative name in database
-        return allReps.some(r => l.empName.includes(r.name) || r.name.includes(l.empName));
-      });
-      totalRemainingLoans = repLoansList.reduce((sum, l) => sum + (l.remainingBalance || 0), 0);
+    let totalHrLoansBalance = 0;
+
+    const repObj = allReps.find(r => r.id === repId);
+    let targetEmpId = repObj ? repObj.employeeId : null;
+    if (repObj && !targetEmpId) {
+      const matchEmp = employeesAll.find(e => e.name.includes(repObj.name.trim()) || repObj.name.trim().includes(e.name));
+      if (matchEmp) targetEmpId = matchEmp.id;
     }
 
-    // Filter customers:
-    // 1. If specific rep: show all customers of that rep (active + inactive)
-    // 2. If "All reps": only show active customers of today (who had sales or receipts today) OR have an assigned representative
-    const repCustomers = customers.filter(c => {
-      if (repId) {
-        return c.repId === repId || c.assignedRepId === repId;
+    if (repId) {
+      if (targetEmpId) {
+        repLoansList = hrLoansList.filter(l => l.empId === targetEmpId && l.status === "active" && (l.remainingBalance > 0));
+        totalHrLoansBalance = repLoansList.reduce((sum, l) => sum + (l.remainingBalance || 0), 0);
       }
-      // If "All", we only list customers belonging to *some* representative to exclude main warehouse directly,
-      // and we will filter out inactive ones below.
-      return c.repId || c.assignedRepId;
-    });
-
-    const customerList = repCustomers.map(cust => {
-      let todayCustSales = 0;
-      filteredInvoices.forEach(inv => {
-        if (inv.customerId === cust.id) {
-          todayCustSales += (inv.totalWithVat || 0);
-        }
+    } else {
+      const repEmpIds = new Set(allReps.map(r => r.employeeId).filter(Boolean));
+      repLoansList = hrLoansList.filter(l => {
+        if (l.status !== "active" || !(l.remainingBalance > 0)) return false;
+        if (repEmpIds.has(l.empId)) return true;
+        return allReps.some(r => l.empName?.includes(r.name) || r.name?.includes(l.empName));
       });
+      totalHrLoansBalance = repLoansList.reduce((sum, l) => sum + (l.remainingBalance || 0), 0);
+    }
 
-      let todayCustCollections = 0;
-      filteredInvoices.forEach(inv => {
-        if (inv.customerId === cust.id) {
-          todayCustCollections += (inv.paidAmount || 0);
-        }
-      });
-      filteredReceipts.forEach(rcpt => {
-        if (rcpt.targetId === cust.id) {
-          todayCustCollections += (rcpt.amount || 0);
-        }
-      });
+    // Customer Movements Table
+    const repCustomers = customersAll.filter(c => repId ? ((c.repId || c.assignedRepId) === repId) : (c.repId || c.assignedRepId)).map(cust => {
+      let custSales = 0;
+      filteredInvoices.forEach(inv => { if (inv.customerId === cust.id) custSales += (inv.totalWithVat || 0); });
 
-      const currentBal = cust.balance || 0;
-      const prevBal = currentBal - todayCustSales + todayCustCollections;
-      const hasActivity = todayCustSales > 0 || todayCustCollections > 0;
+      let custCollections = 0;
+      filteredInvoices.forEach(inv => { if (inv.customerId === cust.id) custCollections += (inv.paidAmount || 0); });
+      (salesReturnsAll || []).forEach(ret => { if (ret.customerId === cust.id && ret.status !== "cancelled") custCollections += (ret.totalWithVat || ret.total || ret.amount || 0); });
+      filteredReceipts.forEach(rcpt => { if (rcpt.targetId === cust.id) custCollections += (rcpt.amount || 0); });
+
+      // استخدام الرصيد الحقيقي المحسوب من مجمع الأرصدة
+      const currentBal = custTrueBalanceMap[cust.id] ?? 0;
+      const prevBal = currentBal - custSales + custCollections;
+      const hasActivity = custSales > 0 || custCollections > 0;
 
       return {
         cust,
         prevBal,
-        todayCustSales,
-        todayCustCollections,
+        todayCustSales: custSales,
+        todayCustCollections: custCollections,
         currentBal,
         hasActivity
       };
-    }).filter(item => {
-      // If no representative is selected (All view), only show active customers of today!
-      // This completely excludes inactive customers belonging to main warehouse / other divisions.
-      if (!repId) {
-        return item.hasActivity;
-      }
-      return true;
-    });
+    }).filter(item => repId ? true : item.hasActivity);
 
-    // Sort: active first, then by current balance descending
-    customerList.sort((a, b) => {
+    repCustomers.sort((a, b) => {
       if (a.hasActivity && !b.hasActivity) return -1;
       if (!a.hasActivity && b.hasActivity) return 1;
       return b.currentBal - a.currentBal;
     });
 
-    let customerMovementRows = customerList.map(item => {
-      const activeBadge = item.hasActivity 
-        ? `<span class="badge good" style="font-size:9px; padding:2px 6px;">نشط بالفترة</span>` 
-        : `<span class="badge secondary" style="font-size:9px; padding:2px 6px; background:#e0e0e0; color:#555;">لا توجد حركة</span>`;
-
-      const rowBg = item.hasActivity ? "rgba(46, 204, 113, 0.06)" : "var(--bg-1)";
-
-      // Forcing the row background color on every td cell explicitly overrides global CSS overrides (column coloring differences)
+    const custRowsHTML = repCustomers.map(item => {
+      const badge = item.hasActivity ? '<span class="badge good" style="font-size:9px; padding:2px 6px;">نشط بالفترة</span>' : '<span class="badge secondary" style="font-size:9px; padding:2px 6px; background:#e0e0e0; color:#555;">لا توجد حركة</span>';
+      const bg = item.hasActivity ? 'rgba(46, 204, 113, 0.06)' : 'var(--bg-1)';
       return `
-        <tr style="background: ${rowBg};">
-          <td style="font-weight:bold; color:var(--text-1); background: ${rowBg} !important;">${item.cust.name}</td>
-          <td class="mono font-bold" style="background: ${rowBg} !important;">${formatCurrency(item.prevBal)}</td>
-          <td class="mono font-bold ${item.todayCustSales > 0 ? "text-brand" : ""}" style="background: ${rowBg} !important;">+ ${formatCurrency(item.todayCustSales)}</td>
-          <td class="mono font-bold ${item.todayCustCollections > 0 ? "text-good" : ""}" style="background: ${rowBg} !important;">- ${formatCurrency(item.todayCustCollections)}</td>
-          <td class="mono font-bold text-indigo" style="font-size:13px; background: ${rowBg} !important;">${formatCurrency(item.currentBal)}</td>
-          <td class="no-print" style="text-align:center; background: ${rowBg} !important;">${activeBadge}</td>
+        <tr style="background: ${bg};">
+          <td style="font-weight:bold; color:var(--text-1); background: ${bg} !important;">${item.cust.name}</td>
+          <td class="mono font-bold" style="background: ${bg} !important;">${formatCurrency(item.prevBal)}</td>
+          <td class="mono font-bold ${item.todayCustSales > 0 ? "text-brand" : ""}" style="background: ${bg} !important;">+ ${formatCurrency(item.todayCustSales)}</td>
+          <td class="mono font-bold ${item.todayCustCollections > 0 ? "text-good" : ""}" style="background: ${bg} !important;">- ${formatCurrency(item.todayCustCollections)}</td>
+          <td class="mono font-bold text-indigo" style="font-size:13px; background: ${bg} !important;">${formatCurrency(item.currentBal)}</td>
+          <td class="no-print" style="text-align:center; background: ${bg} !important;">${badge}</td>
         </tr>
       `;
     }).join("");
 
-    const repName = repId ? (allReps.find(r => r.id === repId)?.name || "المندوب") : "جميع المناديب";
+    const activeRepName = repId ? (allReps.find(r => r.id === repId)?.name || "المندوب") : "جميع المناديب";
 
-    // Generate detailed outstanding loans list section
-    let loansTableHtml = `
+    // HR Loans Section HTML
+    let hrLoansSectionHTML = `
       <h3 class="font-heading mb-12" style="font-size:15px; border-bottom: 2px solid #64748b; padding-bottom: 6px; margin-top: 24px; color:#475569;">💸 سلف وقروض المناديب القائمة (الربط المالي مع شؤون الموظفين)</h3>
     `;
     if (repLoansList.length === 0) {
-      loansTableHtml += `<div class="alert info" style="text-align:center;">لا توجد سلف شخصية أو قروض قائمة مسجلة بذمة المندوب حالياً في شؤون الموظفين.</div>`;
+      hrLoansSectionHTML += '<div class="alert info" style="text-align:center;">لا توجد سلف شخصية أو قروض قائمة مسجلة بذمة المندوب حالياً في شؤون الموظفين.</div>';
     } else {
-      loansTableHtml += `
+      hrLoansSectionHTML += `
         <div class="table-container mb-24">
           <table class="data-dense" style="width:100%;">
             <thead>
               <tr style="background:#475569;">
-                ${!repId ? '<th style="background:#475569 !important; color:#fff;">المندوب</th>' : ''}
+                ${repId ? "" : '<th style="background:#475569 !important; color:#fff;">المندوب</th>'}
                 <th style="background:#475569 !important; color:#fff;">تاريخ الصرف</th>
                 <th style="background:#475569 !important; color:#fff;">البيان والملاحظات</th>
                 <th style="background:#475569 !important; color:#fff;" class="mono">قيمة السلفة الكلية</th>
@@ -720,19 +699,19 @@ async function loadRepDailyReport(force = false) {
               </tr>
             </thead>
             <tbody>
-              ${repLoansList.map(l => {
-                const rowBg = "var(--bg-1)";
+              ${repLoansList.map(loan => {
+                const bg = "var(--bg-1)";
                 return `
-                  <tr style="background:${rowBg};">
-                    ${!repId ? `<td style="font-weight:bold; color:var(--text-1); background:${rowBg} !important;">${l.empName}</td>` : ''}
-                    <td class="mono font-bold" style="background:${rowBg} !important;">${l.date}</td>
-                    <td style="background:${rowBg} !important;">${l.notes || "سلفة شخصية"}</td>
-                    <td class="mono" style="background:${rowBg} !important;">${formatCurrency(l.amount || 0)}</td>
-                    <td class="mono text-good" style="background:${rowBg} !important;">${formatCurrency(l.paidAmount || 0)}</td>
-                    <td class="mono font-bold text-bad" style="font-size:13px; color:#ef4444 !important; background:${rowBg} !important;">${formatCurrency(l.remainingBalance || 0)}</td>
-                    <td style="background:${rowBg} !important; text-align:center;">
+                  <tr style="background:${bg};">
+                    ${repId ? "" : `<td style="font-weight:bold; color:var(--text-1); background:${bg} !important;">${loan.empName}</td>`}
+                    <td class="mono font-bold" style="background:${bg} !important;">${loan.date}</td>
+                    <td style="background:${bg} !important;">${loan.notes || "سلفة شخصية"}</td>
+                    <td class="mono" style="background:${bg} !important;">${formatCurrency(loan.amount || 0)}</td>
+                    <td class="mono text-good" style="background:${bg} !important;">${formatCurrency(loan.paidAmount || 0)}</td>
+                    <td class="mono font-bold text-bad" style="font-size:13px; color:#ef4444 !important; background:${bg} !important;">${formatCurrency(loan.remainingBalance || 0)}</td>
+                    <td style="background:${bg} !important; text-align:center;">
                       <button
-                        onclick="settleRepLoanByJournal('${l.id}', ${l.amount || 0}, '${l.empName || ''}')"
+                        onclick="settleRepLoanByJournal('${loan.id}', ${loan.amount || 0}, '${loan.empName || ""}')"
                         style="background:#10b981;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer;font-weight:700;"
                         title="تسوية السلفة بقيد محاسبي — تصفير الرصيد">✓ تسوية بقيد</button>
                     </td>
@@ -745,193 +724,108 @@ async function loadRepDailyReport(force = false) {
       `;
     }
 
-    // ── Section 2: JE-based loans ───────────────────────────────────────
-    let jeLoansHtml = `
-      <h3 class="font-heading mb-12" style="font-size:15px; border-bottom:2px solid #6366f1;
-          padding-bottom:6px; margin-top:24px; color:#818cf8;">
+    // JE Loans Section HTML
+    let jeLoansSectionHTML = `
+      <h3 class="font-heading mb-12" style="font-size:15px; border-bottom:2px solid #6366f1; padding-bottom:6px; margin-top:24px; color:#818cf8;">
         📒 سلف مسجّلة بالقيود المحاسبية (مباشرة من دفتر اليومية)
       </h3>
     `;
     if (jeLoansList.length === 0) {
-      jeLoansHtml += `<div class="alert info" style="text-align:center;">
-        لا توجد سلف مُسجَّلة بقيود محاسبية لهذا المندوب.
-        <br><small style="opacity:.7">يُكتشف القيد تلقائياً إذا تضمّن كلمة «سلفة» مع اسم المندوب، أو إذا استخدم حسابه في شجرة الحسابات.</small>
-      </div>`;
+      jeLoansSectionHTML += `
+        <div class="alert info" style="text-align:center;">
+          لا توجد سلف مُسجَّلة بقيود محاسبية لهذا المندوب.
+          <br><small style="opacity:.7">يُكتشف القيد تلقائياً إذا تضمّن كلمة «سلفة» مع اسم المندوب، أو إذا استخدم حسابه في شجرة الحسابات.</small>
+        </div>`;
     } else {
-      const totalJeDisplay = jeLoansList.reduce((s, l) => s + l.amount, 0);
-      jeLoansHtml += `
+      // jeTotal calculated at outer scope
+      jeLoansSectionHTML += `
         <div class="table-container mb-24">
           <table class="data-dense" style="width:100%;">
             <thead>
               <tr style="background:#4f46e5;">
-                ${!repId ? '<th style="background:#4f46e5 !important; color:#fff;">المندوب</th>' : ''}
+                ${repId ? "" : '<th style="background:#4f46e5 !important; color:#fff;">المندوب</th>'}
                 <th style="background:#4f46e5 !important; color:#fff;">رقم القيد</th>
                 <th style="background:#4f46e5 !important; color:#fff;">التاريخ</th>
                 <th style="background:#4f46e5 !important; color:#fff;">البيان</th>
                 <th style="background:#4f46e5 !important; color:#fff;" class="mono">المبلغ</th>
                 <th style="background:#4f46e5 !important; color:#fff;">الحالة</th>
+                <th style="background:#4f46e5 !important; color:#fff; text-align:center;">إجراء التسوية</th>
               </tr>
             </thead>
             <tbody>
-              ${jeLoansList.map(l => {
-                const rowBg = "var(--bg-1)";
+              ${jeLoansList.map(je => {
+                const bg = "var(--bg-1)";
                 return `
-                  <tr style="background:${rowBg};">
-                    ${!repId ? `<td style="font-weight:bold;color:var(--text-1);background:${rowBg} !important;">${l.repName || ""}</td>` : ''}
-                    <td class="mono font-bold" style="color:#818cf8;background:${rowBg} !important;">${l.entryNumber}</td>
-                    <td class="mono" style="background:${rowBg} !important;">${l.date || ""}</td>
-                    <td style="background:${rowBg} !important;">${l.description || "سلفة"}</td>
-                    <td class="mono font-bold text-bad" style="font-size:13px;color:#ef4444 !important;background:${rowBg} !important;">${formatCurrency(l.amount)}</td>
-                    <td style="background:${rowBg} !important;">
+                  <tr style="background:${bg};">
+                    ${repId ? "" : `<td style="font-weight:bold;color:var(--text-1);background:${bg} !important;">${je.repName || ""}</td>`}
+                    <td class="mono font-bold" style="color:#818cf8;background:${bg} !important;">${je.entryNumber}</td>
+                    <td class="mono" style="background:${bg} !important;">${je.date || ""}</td>
+                    <td style="background:${bg} !important;">${je.description || "سلفة"}</td>
+                    <td class="mono font-bold text-bad" style="font-size:13px;color:#ef4444 !important;background:${bg} !important;">${formatCurrency(je.amount)}</td>
+                    <td style="background:${bg} !important;">
                       <span style="background:rgba(16,185,129,.15);color:#10b981;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:800;">
-                        ${l.status === "posted" ? "✅ مرحّل" : "📝 مسودة"}
+                        ${je.status === "posted" ? "✅ مرحّل" : "📝 مسودة"}
                       </span>
+                    </td>
+                    <td style="background:${bg} !important; text-align:center;">
+                      <button
+                        onclick="window.settleJeLoanInteractive('${je.id}', ${je.amount}, '${(je.repName || "").replace(/'/g, "\\'")}', '${je.entryNumber}')"
+                        style="background:#10b981; color:#fff; border:none; border-radius:6px; padding:4px 10px; font-size:11px; cursor:pointer; font-weight:700;"
+                        title="تسوية هذه السلفة بقيد محاسبي">✓ تسوية السلفة</button>
                     </td>
                   </tr>
                 `;
               }).join("")}
             </tbody>
             <tfoot>
-              <tr style="background:#1e1b4b;">
-                ${!repId ? '<td style="background:#1e1b4b !important;"></td>' : ''}
-                <td colspan="3" style="background:#1e1b4b !important;font-weight:800;color:#a5b4fc;text-align:right;">الإجمالي</td>
-                <td class="mono font-bold" style="background:#1e1b4b !important;color:#ef4444;font-size:14px;">${formatCurrency(totalJeDisplay)}</td>
-                <td style="background:#1e1b4b !important;"></td>
+              <tr style="background:var(--bg-3); border-top:2px solid #6366f1;">
+                ${repId ? "" : '<td style="background:var(--bg-3) !important;"></td>'}
+                <td colspan="3" style="background:var(--bg-3) !important; font-weight:900; color:var(--text-0); text-align:right; font-size:13px;">إجمالي السلف المسجلة بالقيود المحاسبية</td>
+                <td class="mono font-bold text-bad" style="background:var(--bg-3) !important; color:#dc2626 !important; font-size:16px;">${formatCurrency(jeTotal)}</td>
+                <td style="background:var(--bg-3) !important;"></td>
+                <td style="background:var(--bg-3) !important;"></td>
               </tr>
             </tfoot>
           </table>
         </div>
       `;
     }
-    // ── end JE loans section ────────────────────────────────────────────
 
+    // Build Main Output
     let html = `
       <style>
         @media print {
-          /* Force Chrome to render color graphics, backgrounds and borders */
-          * {
-            -webkit-print-color-adjust: exact !important;
-            print-color-adjust: exact !important;
-          }
-          body {
-            background: #fff !important;
-            color: #000 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-          }
-          .no-print, .filterbar, .tab-switcher, button, .modal-overlay, .page-header {
-            display: none !important;
-          }
-          .page-content {
-            padding: 0 !important;
-            margin: 0 !important;
-            box-shadow: none !important;
-          }
-          .card {
-            border: 1px solid #e2e8f0 !important;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
-            background: #f8fafc !important;
-            page-break-inside: avoid;
-            margin-bottom: 12px !important;
-            padding: 12px !important;
-          }
-          /* Show print header */
-          .print-only-header {
-            display: block !important;
-          }
-          /* Print KPIs side-by-side in columns instead of stacking */
-          .kpi-container-print {
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            justify-content: space-between !important;
-            gap: 6px !important;
-            margin-bottom: 20px !important;
-          }
-          .kpi-card-print {
-            flex: 1 !important;
-            min-width: 90px !important;
-            padding: 12px 4px !important;
-            background: #f8fafc !important;
-            text-align: center !important;
-            border-radius: 8px !important;
-            box-shadow: none !important;
-            border: 1px solid #cbd5e1 !important;
-          }
-          .kpi-card-print:nth-child(1) { border-top: 4px solid #3b82f6 !important; }
-          .kpi-card-print:nth-child(2) { border-top: 4px solid #10b981 !important; }
-          .kpi-card-print:nth-child(3) { border-top: 4px solid ${isReduction ? "#10b981" : "#ef4444"} !important; }
-          .kpi-card-print:nth-child(4) { border-top: 4px solid #6366f1 !important; }
-          .kpi-card-print:nth-child(5) { border-top: 4px solid #f59e0b !important; }
-          .kpi-card-print:nth-child(6) { border-top: 4px solid #64748b !important; }
-
-          .kpi-card-print div {
-            font-size: 8px !important;
-            color: #475569 !important;
-            font-weight: bold !important;
-          }
-          .kpi-card-print .mono {
-            font-size: 11px !important;
-            margin-top: 4px !important;
-            font-weight: bold !important;
-          }
-          /* Make table headers colorful and premium */
-          table {
-            width: 100% !important;
-            border-collapse: collapse !important;
-            page-break-inside: auto;
-          }
-          tr {
-            page-break-inside: avoid;
-            page-break-after: auto;
-          }
-          th {
-            background-color: #1e3c72 !important;
-            color: #ffffff !important;
-            font-weight: bold !important;
-            font-size: 9px !important;
-            text-align: center !important;
-            border: 1px solid #cbd5e1 !important;
-            padding: 6px !important;
-          }
-          td {
-            border: 1px solid #e2e8f0 !important;
-            padding: 5px !important;
-            font-size: 9px !important;
-          }
-          h1, h2, h3, h4 {
-            color: #0f172a !important;
-            font-family: Arial, sans-serif !important;
-          }
-          h3 {
-            font-size: 11px !important;
-            margin-top: 15px !important;
-            border-bottom: 2px solid #1e3c72 !important;
-            padding-bottom: 4px !important;
-            color: #1e3c72 !important;
-          }
+          * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+          body { background: #fff !important; color: #000 !important; padding: 0 !important; margin: 0 !important; }
+          .no-print, .filterbar, .tab-switcher, button, .modal-overlay, .page-header { display: none !important; }
+          .page-content { padding: 0 !important; margin: 0 !important; box-shadow: none !important; }
+          .card { border: 1px solid #e2e8f0 !important; box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important; background: #f8fafc !important; page-break-inside: avoid; margin-bottom: 12px !important; padding: 12px !important; }
+          .print-only-header { display: block !important; }
+          .kpi-container-print { display: flex !important; flex-direction: row !important; flex-wrap: nowrap !important; justify-content: space-between !important; gap: 6px !important; margin-bottom: 20px !important; }
+          .kpi-card-print { flex: 1 !important; min-width: 90px !important; padding: 12px 4px !important; background: #f8fafc !important; text-align: center !important; border-radius: 8px !important; box-shadow: none !important; border: 1px solid #cbd5e1 !important; }
+          table { width: 100% !important; border-collapse: collapse !important; }
+          th { background-color: #1e3c72 !important; color: #ffffff !important; font-weight: bold !important; font-size: 9px !important; text-align: center !important; border: 1px solid #cbd5e1 !important; padding: 6px !important; }
+          td { border: 1px solid #e2e8f0 !important; padding: 5px !important; font-size: 9px !important; }
         }
       </style>
 
-      <!-- Print Only Header -->
+      <!-- Print Header -->
       <div class="print-only-header" style="display:none; margin-bottom:24px; border-radius:8px; overflow:hidden; border:1px solid #cbd5e1;">
-        <!-- Top colored band with corporate gradients -->
         <div style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); padding: 16px 20px; color: #fff; display: flex; justify-content: space-between; align-items: center;">
           <div style="text-align: right;">
-            <div style="font-size: 18px; font-weight: bold; font-family: var(--font-heading); color: #00f2fe; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">نظم الامداد الحديثة</div>
-            <div style="font-size: 10px; color: rgba(255,255,255,0.85); margin-top: 4px; text-align: right;">نظام التوزيع وإدارة المناديب</div>
+            <div style="font-size: 18px; font-weight: bold; color: #00f2fe;">نظم الإمداد المتطورة</div>
+            <div style="font-size: 10px; color: rgba(255,255,255,0.85); margin-top: 4px;">نظام التوزيع وإدارة المناديب</div>
           </div>
           <div style="text-align: left;">
-            <div style="font-size: 14px; font-weight: bold; font-family: var(--font-heading); color: #fff; letter-spacing: 0.5px;">سجل تجاري: 4625072049</div>
-            <div style="font-size: 10px; color: rgba(255,255,255,0.85); margin-top: 4px; text-align: left;">الرقم الضريبي: 310061596700003</div>
+            <div style="font-size: 14px; font-weight: bold; color: #fff;">سجل تجاري: 7054969006</div>
+            <div style="font-size: 10px; color: rgba(255,255,255,0.85); margin-top: 4px;">الرقم الضريبي: 314996148100003</div>
           </div>
         </div>
-        <!-- Sub-bar with metadata -->
         <div style="background: #f8fafc; padding: 10px 20px; border-bottom: 2px solid #cbd5e1; display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: #334155; font-weight: bold;">
           <div>تقرير مبيعات وحركة المديونيات اليومي</div>
-          <div>الفترة: من ${fromDate} إلى ${toDate}</div>
-          <div>المندوب: ${repName}</div>
-          <div>تاريخ الطباعة: ${new Date().toLocaleDateString('ar-SA')}</div>
+          <div>الفترة: من ${from} إلى ${to}</div>
+          <div>المندوب: ${activeRepName}</div>
+          <div>تاريخ الطباعة: ${new Date().toLocaleDateString("ar-SA")}</div>
         </div>
       </div>
 
@@ -947,40 +841,29 @@ async function loadRepDailyReport(force = false) {
           <div class="mono font-bold text-good" style="font-size:20px;">${formatCurrency(totalCollected)}</div>
           <div style="font-size:10px; color:var(--text-3); margin-top:4px;">دفعات الفواتير + سندات القبض</div>
         </div>
-        <div class="card kpi-card-print" style="padding:16px; border-left: 4px solid var(--${debtCardColor}); border-radius:14px;">
-          <div class="text-2 mb-4" style="font-size:11px; font-weight:bold; color:var(--text-2);">${debtCardTitle}</div>
-          <div class="mono font-bold text-${debtCardColor}" style="font-size:20px;">${formatCurrency(debtCardValue)}</div>
-          <div style="font-size:10px; color:var(--text-3); margin-top:4px;">${debtCardSubtitle}</div>
+        <div class="card kpi-card-print" style="padding:16px; border-left: 4px solid var(--${debtColor}); border-radius:14px;">
+          <div class="text-2 mb-4" style="font-size:11px; font-weight:bold; color:var(--text-2);">${debtTitle}</div>
+          <div class="mono font-bold text-${debtColor}" style="font-size:20px;">${formatCurrency(absDebtDiff)}</div>
+          <div style="font-size:10px; color:var(--text-3); margin-top:4px;">${debtSub}</div>
         </div>
         <div class="card kpi-card-print" style="padding:16px; border-left: 4px solid var(--indigo); border-radius:14px;">
           <div class="text-2 mb-4" style="font-size:11px; font-weight:bold; color:var(--text-2);">صافي أرباح المبيعات</div>
-          <div class="mono font-bold text-indigo" style="font-size:20px;">${formatCurrency(totalProfit)}</div>
+          <div class="mono font-bold text-indigo" style="font-size:20px;">${formatCurrency(totalNetProfit)}</div>
           <div style="font-size:10px; color:var(--text-3); margin-top:4px;">الكمية × (سعر البيع - سعر الشراء)</div>
         </div>
         <div class="card kpi-card-print" style="padding:16px; border-left: 4px solid #f59e0b; border-radius:14px;">
           <div class="text-2 mb-4" style="font-size:11px; font-weight:bold; color:var(--text-2);">إجمالي مديونية العملاء الحالية</div>
-          <div class="mono font-bold" style="font-size:20px; color:#d97706;">${formatCurrency(totalCurrentDebt)}</div>
+          <div class="mono font-bold" style="font-size:20px; color:#d97706;">${formatCurrency(currentCustomersDebt)}</div>
           <div style="font-size:10px; color:var(--text-3); margin-top:4px;">الرصيد القائم لعملاء المندوب حالياً</div>
         </div>
-        <div class="card kpi-card-print" style="padding:16px; border-left: 4px solid #64748b; border-radius:14px;">
-          <div class="text-2 mb-4" style="font-size:11px; font-weight:bold; color:var(--text-2);">سلف المندوب القائمة (شؤون الموظفين)</div>
-          <div class="mono font-bold text-bad" style="font-size:20px; color:#ef4444 !important;">${formatCurrency(totalRemainingLoans)}</div>
-          <div style="font-size:10px; color:var(--text-3); margin-top:4px;">السلف النشطة: ${repLoansList.length} سلفة قائمة</div>
-        </div>
       </div>
-
-      <!-- Outstanding Loans Details Section (from HR module) -->
-      ${loansTableHtml}
-
-      <!-- JE-Based Loans Section (from Journal Entries) -->
-      ${jeLoansHtml}
 
       <!-- Invoices and Items Section -->
       <h3 class="font-heading mb-12" style="font-size:15px; border-bottom: 1px solid var(--border-soft); padding-bottom: 6px; margin-top: 24px;">📄 فواتير مبيعات المندوب وتفاصيل الأصناف والربحية</h3>
     `;
 
     if (filteredInvoices.length === 0) {
-      html += `<div class="alert info mb-24" style="text-align:center;">لا توجد فواتير مبيعات مسجلة لـ ${repName} في الفترة من ${fromDate} إلى ${toDate}</div>`;
+      html += `<div class="alert info mb-24" style="text-align:center;">لا توجد فواتير مبيعات مسجلة لـ ${activeRepName} في الفترة من ${from} إلى ${to}</div>`;
     } else {
       html += `
         <div class="table-container mb-24">
@@ -1002,57 +885,57 @@ async function loadRepDailyReport(force = false) {
       `;
 
       filteredInvoices.forEach(inv => {
-        const invNo = inv.number || inv.invoiceNumber || inv.id;
-        const custName = customers.find(c => c.id === inv.customerId)?.name || inv.customerName || "عميل نقدي";
-        const methodStr = inv.paymentMethod === "cash" ? "نقدي" : inv.paymentMethod === "credit" ? "آجل" : "جزئي";
-        
-        let invCost = 0;
-        let invRev = inv.subtotal || 0;
-        
-        const lineRows = (inv.lines || []).map(l => {
-          const prod = allProducts.find(p => p.id === l.productId);
-          const lCostPrice = prod ? (prod.purchasePrice !== undefined ? prod.purchasePrice : (prod.costPrice !== undefined ? prod.costPrice : (prod.averageCost || 0))) : (l.averageCost || l.costPrice || l.purchasePrice || 0);
-          const lQty = l.qty || 0;
-          const lCost = lQty * lCostPrice;
-          invCost += lCost;
+        const invNum = inv.number || inv.invoiceNumber || inv.id;
+        const custName = customersAll.find(c => c.id === inv.customerId)?.name || inv.customerName || "عميل نقدي";
+        const method = inv.paymentMethod === "cash" ? "نقدي" : (inv.paymentMethod === "credit" ? "آجل" : "جزئي");
 
-          const lPrice = l.unitPrice !== undefined ? l.unitPrice : (l.price || 0);
-          const lDisc = l.discount || 0;
-          const lRev = lQty * lPrice * (1 - lDisc / 100);
-          const lProfit = lRev - lCost;
-          const lProfitColor = lProfit >= 0 ? "text-good" : "text-bad";
+        let invCost = 0;
+        const subtotal = inv.subtotal || 0;
+        const itemRows = (inv.lines || []).map(line => {
+          const prod = allProducts.find(p => p.id === line.productId);
+          const cost = prod ? (prod.purchasePrice !== undefined ? prod.purchasePrice : (prod.costPrice !== undefined ? prod.costPrice : (prod.averageCost || 0)))
+                            : (line.averageCost || line.costPrice || line.purchasePrice || 0);
+          const qty = line.qty || 0;
+          const totalLineCost = qty * cost;
+          invCost += totalLineCost;
+
+          const unitPrice = line.unitPrice !== undefined ? line.unitPrice : (line.price || 0);
+          const disc = line.discount || 0;
+          const lineSales = qty * unitPrice * (1 - disc / 100);
+          const lineProfit = lineSales - totalLineCost;
+          const pCol = lineProfit >= 0 ? "text-good" : "text-bad";
 
           return `
             <tr>
-              <td style="padding:6px 12px; text-align:right; font-weight:bold; color:var(--text-1);">${l.productName || "صنف غير معروف"}</td>
-              <td style="padding:6px 12px;" class="mono">${lQty}</td>
-              <td style="padding:6px 12px;" class="mono">${formatCurrency(lPrice)}</td>
-              <td style="padding:6px 12px;" class="mono">${lDisc}%</td>
-              <td style="padding:6px 12px;" class="mono font-bold">${formatCurrency(lRev)}</td>
-              <td style="padding:6px 12px;" class="mono">${formatCurrency(lCost)}</td>
-              <td style="padding:6px 12px;" class="mono font-bold ${lProfitColor}">${formatCurrency(lProfit)}</td>
+              <td style="padding:6px 12px; text-align:right; font-weight:bold; color:var(--text-1);">${line.productName || "صنف غير معروف"}</td>
+              <td style="padding:6px 12px;" class="mono">${qty}</td>
+              <td style="padding:6px 12px;" class="mono">${formatCurrency(unitPrice)}</td>
+              <td style="padding:6px 12px;" class="mono">${disc}%</td>
+              <td style="padding:6px 12px;" class="mono font-bold">${formatCurrency(lineSales)}</td>
+              <td style="padding:6px 12px;" class="mono">${formatCurrency(totalLineCost)}</td>
+              <td style="padding:6px 12px;" class="mono font-bold ${pCol}">${formatCurrency(lineProfit)}</td>
             </tr>
           `;
         }).join("");
 
-        const invTotal = inv.totalWithVat || 0;
-        const invPaid = inv.paidAmount || 0;
-        const invRem = inv.remainingAmount || 0;
-        const profit = invRev - invCost;
-        const profitPct = invRev > 0 ? (profit / invRev) * 100 : 0;
-        const profitColor = profit >= 0 ? "text-good" : "text-bad";
+        const totalWithVat = inv.totalWithVat || 0;
+        const paidAmount = inv.paidAmount || 0;
+        const remAmount = inv.remainingAmount || 0;
+        const profit = subtotal - invCost;
+        const profitPct = subtotal > 0 ? (profit / subtotal * 100) : 0;
+        const prfCol = profit >= 0 ? "text-good" : "text-bad";
 
         html += `
           <tr style="background:var(--bg-1); font-weight:bold; border-top: 2px solid var(--border-soft);">
-            <td><a href="javascript:void(0)" onclick="window.viewInvoice && window.viewInvoice('${inv.id}')" style="color:var(--brand); text-decoration:underline;">${invNo}</a></td>
+            <td><a href="javascript:void(0)" onclick="window.viewInvoice && window.viewInvoice('${inv.id}')" style="color:var(--brand); text-decoration:underline;">${invNum}</a></td>
             <td>${custName}</td>
-            <td><span class="badge ${inv.paymentMethod === "cash" ? "good" : "warning"}">${methodStr}</span></td>
-            <td class="mono font-bold">${formatCurrency(invTotal)}</td>
-            <td class="mono text-good">${formatCurrency(invPaid)}</td>
-            <td class="mono text-bad">${formatCurrency(invRem)}</td>
+            <td><span class="badge ${inv.paymentMethod === "cash" ? "good" : "warning"}">${method}</span></td>
+            <td class="mono font-bold">${formatCurrency(totalWithVat)}</td>
+            <td class="mono text-good">${formatCurrency(paidAmount)}</td>
+            <td class="mono text-bad">${formatCurrency(remAmount)}</td>
             <td class="mono">${formatCurrency(invCost)}</td>
-            <td class="mono ${profitColor}">${formatCurrency(profit)}</td>
-            <td class="mono ${profitColor}">${profitPct.toFixed(1)}%</td>
+            <td class="mono ${prfCol}">${formatCurrency(profit)}</td>
+            <td class="mono ${prfCol}">${profitPct.toFixed(1)}%</td>
           </tr>
           <!-- Invoice items details -->
           <tr style="background:var(--bg-2);">
@@ -1071,7 +954,7 @@ async function loadRepDailyReport(force = false) {
                   </tr>
                 </thead>
                 <tbody>
-                  ${lineRows}
+                  ${itemRows}
                 </tbody>
               </table>
             </td>
@@ -1086,14 +969,14 @@ async function loadRepDailyReport(force = false) {
       `;
     }
 
-    // Comprehensive Customer Balances Report Table (Following Filters)
+    // Customer Debts Section
     html += `
       <!-- Full Representative Customer Debts Report -->
       <h3 class="font-heading mb-12" style="font-size:15px; border-bottom: 1px solid var(--border-soft); padding-bottom: 6px; margin-top: 24px;">📊 تقرير حركة مديونيات وأرصدة كافة عملاء المندوب</h3>
     `;
 
-    if (customerList.length === 0) {
-      html += `<div class="alert info mb-24" style="text-align:center;">لا يوجد عملاء مسجلين للمندوب ${repName}</div>`;
+    if (repCustomers.length === 0) {
+      html += `<div class="alert info mb-24" style="text-align:center;">لا يوجد عملاء مسجلين للمندوب ${activeRepName}</div>`;
     } else {
       html += `
         <div class="table-container mb-24">
@@ -1109,18 +992,18 @@ async function loadRepDailyReport(force = false) {
               </tr>
             </thead>
             <tbody>
-              ${customerMovementRows}
+              ${custRowsHTML}
             </tbody>
           </table>
         </div>
       `;
     }
 
-    // Receipts section
+    // Receipts Section
     html += `<h3 class="font-heading mb-12" style="font-size:15px; border-bottom: 1px solid var(--border-soft); padding-bottom: 6px;">💵 سندات القبض والتحصيلات اللاحقة لعملاء المندوب خلال الفترة</h3>`;
 
     if (filteredReceipts.length === 0) {
-      html += `<div class="alert info" style="text-align:center;">لا توجد سندات قبض مسجلة لـ ${repName} في الفترة من ${fromDate} إلى ${toDate}</div>`;
+      html += `<div class="alert info" style="text-align:center;">لا توجد سندات قبض مسجلة لـ ${activeRepName} في الفترة من ${from} إلى ${to}</div>`;
     } else {
       html += `
         <div class="table-container">
@@ -1137,20 +1020,20 @@ async function loadRepDailyReport(force = false) {
             <tbody>
       `;
 
-      filteredReceipts.forEach(rcpt => {
-        const rcptNo = rcpt.id?.slice(0, 8) || "—";
-        const rcptCustName = rcpt.accountName || "عميل";
-        const methodStr = rcpt.method === "cash" ? "نقدي" : rcpt.method === "bank" ? "تحويل بنكي" : "شيك";
-        const rcptNotes = rcpt.notes || "سداد حساب";
-        const rcptAmount = rcpt.amount || 0;
+      filteredReceipts.forEach(r => {
+        const docNum = r.receiptNumber || r.number || r.code || r.id?.slice(0, 8) || "—";
+        const custName = r.accountName || r.targetName || r.customerName || "عميل";
+        const method = r.method === "cash" ? "نقدي" : (r.method === "bank" ? "تحويل بنكي" : "شيك");
+        const note = r.notes || "سداد حساب";
+        const amt = r.amount || 0;
 
         html += `
           <tr style="background:var(--bg-1);">
-            <td class="mono font-bold">${rcptNo}</td>
-            <td style="font-weight:bold;">${rcptCustName}</td>
-            <td><span class="badge ${rcpt.method === "cash" ? "good" : "info"}">${methodStr}</span></td>
-            <td>${rcptNotes}</td>
-            <td class="mono font-bold text-good" style="font-size:15px;">${formatCurrency(rcptAmount)}</td>
+            <td class="mono font-bold">${docNum}</td>
+            <td style="font-weight:bold;">${custName}</td>
+            <td><span class="badge ${r.method === "cash" ? "good" : "info"}">${method}</span></td>
+            <td>${note}</td>
+            <td class="mono font-bold text-good" style="font-size:15px;">${formatCurrency(amt)}</td>
           </tr>
         `;
       });
@@ -1162,22 +1045,21 @@ async function loadRepDailyReport(force = false) {
       `;
     }
 
-    resultsEl.innerHTML = html;
+    resEl.innerHTML = html;
 
   } catch (err) {
-    resultsEl.innerHTML = `<div class="alert bad">حدث خطأ في تحميل التقرير اليومي: ${err.message}</div>`;
+    resEl.innerHTML = `<div class="alert bad">حدث خطأ في تحميل التقرير اليومي: ${err.message}</div>`;
   }
 }
 
+// ────────────────────────────────────────────────────────────
+// PLANNER FUNCTIONS
+// ────────────────────────────────────────────────────────────
 function openTargetPlanner(repId, repName, targetAmount) {
-  selectedRepPlanner = repId;
   document.getElementById("planner-rep-name").textContent = repName;
   document.getElementById("planner-monthly-target").value = targetAmount;
   
-  // Reset product mix to some defaults or empty
   currentPlannerMix = [];
-  
-  // Try to pre-populate with first 2 products as sample if available
   if (allProducts.length > 0) {
     currentPlannerMix.push({
       productId: allProducts[0].id,
@@ -1211,11 +1093,11 @@ function recalculatePlannerDaily() {
 
 function addProductToPlannerMix() {
   const sel = document.getElementById("planner-product-select");
-  const pId = sel.value;
+  const pId = sel?.value;
   if (!pId) return;
 
   if (currentPlannerMix.some(x => x.productId === pId)) {
-    window.showToast("هذا الصنف مضاف بالفعل للمزيج", "warning");
+    if (window.showToast) window.showToast("هذا الصنف مضاف بالفعل للمزيج", "warning");
     return;
   }
 
@@ -1223,7 +1105,6 @@ function addProductToPlannerMix() {
   const name = opt.textContent.split(" (")[0];
   const price = parseFloat(opt.dataset.price) || 100;
 
-  // Split remaining weight among items or default to 0
   const currentTotalWeight = currentPlannerMix.reduce((s, x) => s + x.weight, 0);
   const remaining = Math.max(0, 100 - currentTotalWeight);
 
@@ -1246,7 +1127,6 @@ function removeProductFromPlannerMix(index) {
 function updateMixRowWeight(index, val) {
   currentPlannerMix[index].weight = parseFloat(val) || 0;
   
-  // Recalculate totals and check warning without fully re-rendering immediately to protect cursor focus
   const target = parseFloat(document.getElementById("planner-monthly-target").value) || 0;
   const days = parseFloat(document.getElementById("planner-work-days").value) || 26;
   const dailyNeeded = days > 0 ? (target / days) : 0;
@@ -1263,19 +1143,16 @@ function updateMixRowWeight(index, val) {
     const rowCartons = item.price > 0 ? (rowAmount / item.price) : 0;
     totalCartons += rowCartons;
 
-    // Dynamically update individual row cells to preserve input state
     const amtEl = document.getElementById(`planner-row-amt-${i}`);
     const cartEl = document.getElementById(`planner-row-cart-${i}`);
     if (amtEl) amtEl.textContent = formatCurrency(rowAmount);
     if (cartEl) cartEl.textContent = `${rowCartons.toFixed(1)} كرتونة / وحدة`;
   });
 
-  // Update footer cells
   document.getElementById("planner-total-weight-cell").textContent = `${totalWeight}%`;
   document.getElementById("planner-total-amount-cell").textContent = formatCurrency(totalAmount);
   document.getElementById("planner-total-cartons-cell").textContent = `${totalCartons.toFixed(1)} كرتونة`;
 
-  // Warning check
   const warnEl = document.getElementById("planner-weight-warning");
   const sumEl = document.getElementById("planner-current-weight-sum");
   if (warnEl && sumEl) {
@@ -1333,7 +1210,6 @@ function renderPlannerMix(dailyNeeded) {
   document.getElementById("planner-total-amount-cell").textContent = formatCurrency(totalAmount);
   document.getElementById("planner-total-cartons-cell").textContent = `${totalCartons.toFixed(1)} كرتونة`;
 
-  // Warning check
   const warnEl = document.getElementById("planner-weight-warning");
   const sumEl = document.getElementById("planner-current-weight-sum");
   if (warnEl && sumEl) {
@@ -1346,41 +1222,28 @@ function renderPlannerMix(dailyNeeded) {
   }
 }
 
-// ── تسوية السلفة بقيد محاسبي (بدون مسير رواتب) ─────────────────────
-// يُستدعى من زر "✓ تسوية بقيد" في جدول سلف المناديب
+// Settle loan function
 window.settleRepLoanByJournal = async (loanId, amount, empName) => {
-  const confirmed = await (typeof showConfirm === "function"
-    ? showConfirm(
-        `تسوية سلفة ${empName} بمبلغ ${amount} ر.س عبر القيد المحاسبي؟\nسيتم تصفير الرصيد المتبقي وتغيير حالة السلفة إلى "مسوّاة".`,
-        "تأكيد التسوية"
-      )
-    : confirm(`تسوية سلفة ${empName} بمبلغ ${amount} ر.س ؟`));
+  const confirmed = typeof showConfirm === "function" 
+    ? await showConfirm(`تسوية سلفة ${empName} بمبلغ ${amount} ر.س عبر القيد المحاسبي؟\nسيتم تصفير الرصيد المتبقي وتغيير حالة السلفة إلى "مسوّاة".`, "تأكيد التسوية")
+    : confirm(`تسوية سلفة ${empName} بمبلغ ${amount} ر.س ؟`);
 
-  if (!confirmed) return;
-
-  try {
-    const loanRef = doc(db, `companies/${COMPANY_ID}/employeeLoans`, loanId);
-    await updateDoc(loanRef, {
-      paidAmount:       amount,
-      remainingBalance: 0,
-      status:           "settled_journal",
-      settledAt:        new Date().toISOString(),
-      settledNote:      `تمت التسوية بقيد محاسبي — ${new Date().toLocaleDateString("ar-SA")}`,
-    });
-
-    if (typeof showToast === "function") {
-      showToast(`✅ تمت تسوية سلفة ${empName} — الرصيد صفر الآن`, "success");
-    }
-
-    // Refresh the report automatically
-    const updateBtn = document.getElementById("update-report-btn");
-    if (updateBtn) updateBtn.click();
-
-  } catch (err) {
-    console.error("[settleRepLoanByJournal]", err);
-    if (typeof showToast === "function") {
-      showToast("حدث خطأ أثناء التسوية: " + err.message, "error");
+  if (confirmed) {
+    try {
+      const loanRef = doc(db, `companies/${COMPANY_ID}/employeeLoans`, loanId);
+      await updateDoc(loanRef, {
+        paidAmount: amount,
+        remainingBalance: 0,
+        status: "settled_journal",
+        settledAt: new Date().toISOString(),
+        settledNote: `تمت التسوية بقيد محاسبي — ${new Date().toLocaleDateString("ar-SA")}`
+      });
+      if (typeof showToast === "function") showToast(`✅ تمت تسوية سلفة ${empName} — الرصيد صفر الآن`, "success");
+      const btn = document.getElementById("update-report-btn");
+      if (btn) btn.click();
+    } catch (e) {
+      console.error("[settleRepLoanByJournal]", e);
+      if (typeof showToast === "function") showToast("حدث خطأ أثناء التسوية: " + e.message, "error");
     }
   }
 };
-

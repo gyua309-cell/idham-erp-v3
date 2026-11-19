@@ -172,20 +172,53 @@ export function applyRoleVisibility(selector, visibleFor) {
 }
 
 /**
- * Applies all role-based visibility rules in bulk.
- * Call this after the DOM is rendered.
+ * Maps each role to the nav sections it can see.
+ * Sections match the data-role-section attribute on .nav-section divs in index.html.
+ */
+const ROLE_SECTIONS = {
+  admin:        ["sales", "purchases", "inventory", "finance", "admin"],
+  accountant:   ["sales", "purchases", "inventory", "finance"],
+  sales_rep:    ["sales"],
+  purchase_mgr: ["purchases", "inventory"],
+  warehouse_mgr:["inventory"],
+};
+
+/**
+ * Hides/shows nav section blocks based on the current user's role.
+ * Elements must have data-role-section="sales|purchases|inventory|finance|admin".
+ * Call this once after showApp().
+ */
+export function applyNavVisibility() {
+  const session = JSON.parse(localStorage.getItem("erp_session") || "null");
+  const role = session?.role || "admin"; // admin sees everything (incl. legacy sessions)
+
+  const allowed = new Set(ROLE_SECTIONS[role] || ROLE_SECTIONS["admin"]);
+
+  document.querySelectorAll("[data-role-section]").forEach(el => {
+    const section = el.getAttribute("data-role-section");
+    el.style.display = allowed.has(section) ? "" : "none";
+  });
+
+  // Also show role badge in sidebar
+  const roleEl = document.getElementById("user-role");
+  if (roleEl) {
+    const roleLabels = {
+      admin:        "مدير النظام",
+      accountant:   "محاسب",
+      sales_rep:    "مندوب مبيعات",
+      purchase_mgr: "مدير مشتريات",
+      warehouse_mgr:"مدير مخازن",
+    };
+    if (roleLabels[role]) roleEl.textContent = roleLabels[role];
+  }
+}
+
+/**
+ * Applies all role-based visibility rules in bulk (legacy - kept for compatibility).
  * Elements use data attributes: data-min-role="accountant"
  */
 export function applyAllRoleVisibility() {
-  const role = getCurrentRole();
-  const hierarchy = { admin: 3, accountant: 2, rep: 1 };
-  const userLevel = hierarchy[role] ?? 0;
-
-  document.querySelectorAll("[data-min-role]").forEach(el => {
-    const required = el.getAttribute("data-min-role");
-    const requiredLevel = hierarchy[required] ?? 0;
-    el.style.display = userLevel >= requiredLevel ? "" : "none";
-  });
+  applyNavVisibility(); // delegate to new function
 }
 
 // ──────────────────────────────────────────

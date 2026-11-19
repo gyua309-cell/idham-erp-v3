@@ -109,27 +109,40 @@ export function decodeZATCAQR(base64) {
  * @param {number} size - QR size in px
  */
 export async function renderZATCAQR(base64TLV, container, size = 120) {
-  if (!window.QRCode) {
+  if (typeof container === "string") {
+    container = document.getElementById(container);
+  }
+  if (!container) return;
+
+  container.innerHTML = "";
+
+  if (typeof window.QRCode === "undefined") {
     console.warn("QRCode.js not loaded");
+    container.innerHTML = '<div style="font-size:10px;color:#9ca3af;text-align:center;">QR ZATCA</div>';
     return;
   }
 
-  // Clear container
-  container.innerHTML = "";
-
   try {
-    const canvas = document.createElement("canvas");
-    container.appendChild(canvas);
-
-    await QRCode.toCanvas(canvas, base64TLV, {
-      width: size,
-      margin: 1,
-      color: { dark: "#000000", light: "#FFFFFF" },
-      errorCorrectionLevel: "M",
-    });
+    if (typeof QRCode.toCanvas === "function") {
+      const canvas = document.createElement("canvas");
+      container.appendChild(canvas);
+      await QRCode.toCanvas(canvas, base64TLV, {
+        width: size,
+        margin: 1,
+        color: { dark: "#000000", light: "#FFFFFF" },
+        errorCorrectionLevel: "M",
+      });
+    } else {
+      new QRCode(container, {
+        text: base64TLV,
+        width: size,
+        height: size,
+        correctLevel: QRCode.CorrectLevel ? QRCode.CorrectLevel.M : 0
+      });
+    }
   } catch (err) {
     console.error("QR generation failed:", err);
-    container.innerHTML = `<div class="alert warn" style="font-size:11px;">تعذر توليد QR</div>`;
+    container.innerHTML = '<div class="alert warn" style="font-size:10px;">تعذر توليد QR</div>';
   }
 }
 
@@ -172,7 +185,7 @@ export function generateInvoiceXML(invoice, company, qrBase64, previousInvoiceHa
 
   const lines = (invoice.lines || []).map((line, idx) => {
     const lineTotal = (line.qty * line.unitPrice * (1 - (line.discount || 0) / 100));
-    const vatPct    = line.taxCategory === "S" ? 15 : 0;
+    const vatPct    = (line.taxCategory === "E" || line.taxCategory === "Z" || line.taxRate === 0) ? 0 : 15;
     const vatAmt    = lineTotal * (vatPct / 100);
     return `
   <cac:InvoiceLine>

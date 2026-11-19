@@ -8,19 +8,122 @@ import { showRecordPreview, printRecord } from "../utils/record-actions.js";
 import { syncSupplierNameEverywhere, syncSupplierBalanceToCoa } from "../utils/sync-engine.js";
 
 let cachedSuppliers = [];
+let cachedCategories = [];
+
+const STANDARD_SUP_CATS = [
+  { id: "services", name: "موردو الخدمات والمرافق (إيجار، كهرباء، صيانة)" },
+  { id: "logistics", name: "موردو النقل والشحن واللوجستيات" },
+  { id: "packaging", name: "مستلزمات التعبئة والتغليف والبلاستيك" },
+  { id: "maintenance", name: "صيانة أجهزة ومعدات ومستودعات" },
+  { id: "it_software", name: "تقنية معلومات وبرمجيات واستشارات" },
+  { id: "other", name: "موردون آخرون / عام" }
+];
+
+const LEGACY_CAT_MAP = {
+  rice: "موردو الأرز",
+  sugar_oil: "موردو السكر والزيت",
+  flour: "موردو الدقيق والمواد الأساسية",
+  services: "موردو الخدمات والمرافق",
+  other: "موردون آخرون / عام"
+};
+
+function getCategoryColor(catKey) {
+  const PRESET_COLORS = {
+    rice: "#2563eb",
+    sugar_oil: "#d97706",
+    flour: "#059669",
+    services: "#7c3aed",
+    other: "#4b5563",
+    logistics: "#0891b2",
+    packaging: "#c026d3",
+    maintenance: "#ea580c"
+  };
+  if (catKey && PRESET_COLORS[catKey]) return PRESET_COLORS[catKey];
+  let hash = 0;
+  for (let i = 0; i < (catKey || "").length; i++) {
+    hash = catKey.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const hues = [210, 160, 280, 30, 340, 190, 80, 250];
+  const hue = hues[Math.abs(hash) % hues.length];
+  return `hsl(${hue}, 70%, 40%)`;
+}
+
+export function getSupplierCategoryLabel(catKey) {
+  if (!catKey) return "مورد عام";
+  const cat = (cachedCategories || []).find(c => c.id === catKey || c.code === catKey);
+  if (cat) return cat.name;
+  const std = STANDARD_SUP_CATS.find(s => s.id === catKey);
+  if (std) return std.name;
+  if (LEGACY_CAT_MAP[catKey]) return LEGACY_CAT_MAP[catKey];
+  return catKey;
+}
+
+async function loadCategoriesForSuppliers() {
+  if (!cachedCategories || cachedCategories.length === 0) {
+    try {
+      cachedCategories = await getAll(COLS.categories());
+      cachedCategories.sort((a, b) => (a.name || "").localeCompare(b.name || "", "ar"));
+    } catch (e) {
+      console.warn("Failed to load categories for suppliers:", e);
+      cachedCategories = [];
+    }
+  }
+  populateSupplierCategoryDropdowns();
+}
+
+function populateSupplierCategoryDropdowns() {
+  const filterEl = document.getElementById("sup-category-filter");
+  const modalSelectEl = document.getElementById("sup-category");
+
+  const buildOptionsHtml = (includeAllOption = false) => {
+    let html = includeAllOption ? '<option value="">كل التصنيفات</option>' : '<option value="">اختر التصنيف...</option>';
+    
+    // 1. Categories from company catalog
+    if (cachedCategories && cachedCategories.length > 0) {
+      html += `<optgroup label="📦 فئات البضائع والمنتجات">`;
+      cachedCategories.forEach(c => {
+        html += `<option value="${c.id}">${c.name}</option>`;
+      });
+      html += `</optgroup>`;
+    }
+    
+    // 2. Service & general classifications
+    html += `<optgroup label="🏢 خدمات ومجالات عامة">`;
+    STANDARD_SUP_CATS.forEach(s => {
+      html += `<option value="${s.id}">${s.name}</option>`;
+    });
+    html += `</optgroup>`;
+
+    // 3. Legacy categories
+    html += `<optgroup label="🏷️ تصنيفات سابقة">`;
+    html += `<option value="rice">موردو الأرز (سابق)</option>`;
+    html += `<option value="sugar_oil">موردو السكر والزيت (سابق)</option>`;
+    html += `<option value="flour">موردو الدقيق (سابق)</option>`;
+    html += `</optgroup>`;
+
+    return html;
+  };
+
+  if (filterEl) {
+    const curFilterVal = filterEl.value;
+    filterEl.innerHTML = buildOptionsHtml(true);
+    if (curFilterVal) filterEl.value = curFilterVal;
+  }
+
+  if (modalSelectEl) {
+    const curModalVal = modalSelectEl.value;
+    modalSelectEl.innerHTML = buildOptionsHtml(false);
+    if (curModalVal) modalSelectEl.value = curModalVal;
+  }
+}
 
 export async function render(container, user) {
   container.innerHTML = `
     <div class="filterbar">
       <div class="search-bar" style="max-width:240px;"><input type="text" id="sup-search" class="input" placeholder="🔍  بحث في الموردين…" /></div>
-      <div class="filter-select-group" style="max-width:180px;">
+      <div class="filter-select-group" style="max-width:240px; min-width:180px;">
         <select id="sup-category-filter" class="input">
           <option value="">كل التصنيفات</option>
-          <option value="rice">موردو الأرز</option>
-          <option value="sugar_oil">موردو السكر والزيت</option>
-          <option value="flour">موردو الدقيق والمواد الأساسية</option>
-          <option value="services">موردو الخدمات (مرافق وإيجار)</option>
-          <option value="other">موردون آخرون</option>
         </select>
       </div>
       <div style="margin-right:auto;display:flex;gap:8px;">
@@ -63,11 +166,7 @@ export async function render(container, user) {
           <div class="form-group">
             <label>تصنيف المورد *</label>
             <select id="sup-category" class="input">
-              <option value="other">موردون آخرون</option>
-              <option value="rice">موردو الأرز</option>
-              <option value="sugar_oil">موردو السكر والزيت</option>
-              <option value="flour">موردو الدقيق والمواد الأساسية</option>
-              <option value="services">موردو الخدمات (مرافق وإيجار)</option>
+              <option value="other">موردون آخرون / عام</option>
             </select>
           </div>
           <div class="form-group">
@@ -103,7 +202,10 @@ export async function render(container, user) {
   if (catFilterInput) {
     catFilterInput.addEventListener("change", () => loadSuppliers());
   }
-  await loadSuppliers();
+  await Promise.all([
+    loadCategoriesForSuppliers(),
+    loadSuppliers()
+  ]);
 }
 
 async function loadSuppliers() {
@@ -115,22 +217,6 @@ async function loadSuppliers() {
     let sups = await getAll(COLS.suppliers(), [orderBy("name")]);
     cachedSuppliers = sups;
     renderSuppliersTable(sups, tbody, term);
-
-    // Auto-sync balances in background for zero/uncalculated balances (e.g. initial opening balances from JEs)
-    Promise.resolve().then(async () => {
-      const { recalculateSupplierBalance } = await import("../utils/balance-sync.js");
-      let changed = false;
-      for (const s of sups) {
-        if (s.balance === undefined || s.balance === null || s.balance === 0) {
-          const b = await recalculateSupplierBalance(s.id).catch(() => null);
-          if (b !== null && b !== s.balance) {
-            s.balance = b;
-            changed = true;
-          }
-        }
-      }
-      if (changed) renderSuppliersTable(sups, tbody, term);
-    }).catch(() => {});
   } catch (err) {
     tbody.innerHTML = `<tr><td colspan="5"><div class="alert bad">${err.message}</div></td></tr>`;
   }
@@ -154,28 +240,16 @@ function renderSuppliersTable(sups, tbody, term) {
   const countEl = document.getElementById("sup-count");
   if (countEl) countEl.textContent = `${filtered.length} مورد`;
 
-  const CAT_LABELS = {
-    rice: "الأرز",
-    sugar_oil: "السكر والزيت",
-    flour: "الدقيق والمواد الأساسية",
-    services: "الخدمات",
-    other: "أخرى"
-  };
-  const CAT_COLORS = {
-    rice: "#6366f1",
-    sugar_oil: "#f59e0b",
-    flour: "#10b981",
-    services: "#8b5cf6",
-    other: "#6b7280"
-  };
-
   tbody.innerHTML = filtered.length === 0
     ? `<tr><td colspan="5" style="text-align:center;padding:32px;color:var(--text-2);">لا يوجد موردون</td></tr>`
-    : filtered.map(s => `<tr>
+    : filtered.map(s => {
+        const catLabel = getSupplierCategoryLabel(s.category);
+        const catColor = getCategoryColor(s.category);
+        return `<tr>
         <td>
           <div style="display:flex;align-items:center;gap:6px;">
             <div class="font-semibold font-heading" style="cursor:pointer; color:var(--brand);" onclick="viewSupplierIntelligence360('${s.id}')">${s.name}</div>
-            ${s.category ? `<span class="coa-badge" style="background:${CAT_COLORS[s.category]}22;color:${CAT_COLORS[s.category]};padding:1px 5px;border-radius:4px;font-size:9px;font-weight:bold;">${CAT_LABELS[s.category] || s.category}</span>` : ""}
+            ${s.category ? `<span class="coa-badge" style="background:${catColor}1a;color:${catColor};border:1px solid ${catColor}33;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:bold;">${catLabel}</span>` : ""}
           </div>
           ${s.code ? `<div style="font-size:11px;color:var(--text-2);">${s.code}</div>` : ""}
         </td>
@@ -195,10 +269,12 @@ function renderSuppliersTable(sups, tbody, term) {
             <button class="btn btn-icon sm btn-ghost" onclick="delSupplier('${s.id}','${s.name.replace(/'/g, "\\'")}')" style="color:var(--bad);" title="حذف">🗑️</button>
           </div>
         </td>
-      </tr>`).join("");
+      </tr>`;
+      }).join("");
 }
 
-window.openSupplierModal = (s=null) => {
+window.openSupplierModal = async (s=null) => {
+  await loadCategoriesForSuppliers();
   document.getElementById("sup-edit-id").value = s?.id||"";
   document.getElementById("sup-modal-title").textContent = s?"تعديل المورد":"إضافة مورد";
   document.getElementById("sup-name").value    = s?.name||"";
@@ -207,7 +283,19 @@ window.openSupplierModal = (s=null) => {
   document.getElementById("sup-vat").value     = s?.vatNumber||s?.vat||"";
   document.getElementById("sup-national-id").value = s?.nationalId||"";
   document.getElementById("sup-address").value = s?.address||"";
-  document.getElementById("sup-category").value = s?.category||"other";
+
+  const catSelectEl = document.getElementById("sup-category");
+  if (catSelectEl) {
+    catSelectEl.value = s?.category || "other";
+    if (s?.category && catSelectEl.value !== s.category) {
+      const opt = document.createElement("option");
+      opt.value = s.category;
+      opt.textContent = getSupplierCategoryLabel(s.category) || s.category;
+      catSelectEl.appendChild(opt);
+      catSelectEl.value = s.category;
+    }
+  }
+
   document.getElementById("sup-bank").value    = s?.bankName||"";
   document.getElementById("sup-iban").value    = s?.iban||"";
   document.getElementById("sup-maps-url").value = s?.googleMapsUrl||"";
@@ -256,6 +344,7 @@ window.saveSupplier = async()=>{
     nationalId: document.getElementById("sup-national-id").value.trim(),
     address: document.getElementById("sup-address").value.trim(),
     category: document.getElementById("sup-category").value,
+    categoryName: getSupplierCategoryLabel(document.getElementById("sup-category").value),
     bankName: document.getElementById("sup-bank").value.trim(),
     iban: document.getElementById("sup-iban").value.trim(),
     googleMapsUrl: document.getElementById("sup-maps-url").value.trim(),
@@ -417,6 +506,7 @@ window.viewSupplierIntelligence360 = async (id) => {
             ${s.iban ? `<button class="btn btn-secondary btn-sm" onclick="navigator.clipboard.writeText('${s.iban}'); alert('تم نسخ الآيبان ✅');">📋 نسخ الآيبان</button>` : ""}
           </div>
           <div style="display:flex; gap:8px; align-items:center;">
+            ${s.category ? `<span class="badge" style="background:${getCategoryColor(s.category)}22; color:${getCategoryColor(s.category)}; font-weight:800; border:1px solid ${getCategoryColor(s.category)}44;">🏷️ ${getSupplierCategoryLabel(s.category)}</span>` : ""}
             ${latestEval ? `<span class="badge good" style="font-weight:800; font-size:11.5px;">🌟 الفئة: ${latestEval.tier || 'A'} (${latestEval.overallScore || 90}%)</span>` : ""}
             <span class="badge" style="background:rgba(99,102,241,0.1); color:var(--brand); font-weight:800;">📜 العقود: ${contracts.length}</span>
             <span class="badge" style="background:rgba(239,68,68,0.1); color:#EF4444; font-weight:800;">🔍 المطالبات: ${claims.length}</span>
@@ -500,20 +590,13 @@ function getSupplierById(id) {
 }
 
 function buildSupplierSections(s) {
-  const CAT_LABELS = {
-    rice: "موردو الأرز",
-    sugar_oil: "موردو السكر والزيت",
-    flour: "موردو الدقيق والمواد الأساسية",
-    services: "موردو الخدمات (مرافق وإيجار)",
-    other: "موردون آخرون"
-  };
   return [
     {
       heading: 'بيانات المورد',
       rows: [
         { label: 'اسم المورد', value: s.name, bold: true },
         { label: 'كود المورد', value: s.code, mono: true },
-        { label: 'تصنيف المورد', value: CAT_LABELS[s.category] || s.category || 'موردون آخرون' },
+        { label: 'تصنيف المورد', value: getSupplierCategoryLabel(s.category) || 'مورد عام' },
         { label: 'رقم الهاتف', value: s.phone, mono: true },
         { label: 'الرقم الضريبي (VAT)', value: s.vatNumber, mono: true },
         { label: 'الهوية الوطنية / السجل التجاري', value: s.nationalId, mono: true },

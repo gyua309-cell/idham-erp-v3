@@ -1,0 +1,82 @@
+[
+  {
+    "id": "rAOBcpmRaQ8TOnr7Q8Rm",
+    "totalCost": 982.5,
+    "vatAmount": 0,
+    "date": "2026-10-08",
+    "notes": "",
+    "grandTotal": 1080,
+    "lines": [
+      {
+        "discountPct": 0,
+        "expiryDate": "",
+        "productId": "bGBNVtU3HVRMWdbCv0ha",
+        "unitPrice": 14,
+        "batchNumber": "",
+        "lineTotal": 420,
+        "qty": 30,
+        "unit": "Carton",
+        "sku": "05021",
+        "productName": "ماء صفا 1.5 لتر"
+      },
+      {
+        "unit": "Carton",
+        "productName": "ماء صفا 330 مل",
+        "expiryDate": "",
+        "unitPrice": 15.5,
+        "lineTotal": 232.5,
+        "productId": "jOuDfLOVdV4D1a0zVMxu",
+        "batchNumber": "",
+        "sku": "05023",
+        "discountPct": 0,
+        "qty": 15
+      },
+      {
+        "discountPct": 0,
+        "unit": "Carton",
+        "expiryDate": "",
+        "productId": "AlP9b6HKCkQMUsIRbGt6",
+        "lineTotal": 210,
+        "batchNumber": "",
+        "unitPrice": 14,
+        "sku": "05020",
+        "qty": 15,
+        "productName": "ماء صفا 5 لتر"
+      },
+      {
+        "productId": "YlwI00IA8R9A0wGcQtpN",
+        "discountPct": 0,
+        "unitPrice": 14.5,
+        "lineTotal": 217.5,
+        "expiryDate": "",
+        "batchNumber": "",
+        "unit": "Carton",
+        "sku": "05022",
+        "productName": "ماء صفا 600 مل",
+        "qty": 15
+      }
+    ],
+    "receiverName": "",
+    "journalEntryId": "8zMigWxfgK9MYj5hUviV",
+    "dnNumber": "DN-000001",
+    "warehouseName": "المستودع الرئيسى",
+    "updatedAt": "2026-10-08T20:04:51.791Z",
+    "customerName": "تموينات ريف رضوى",
+    "createdAt": "2026-10-08T19:51:20.691Z",
+    "paymentMethod": "credit",
+    "journalEntryNumber": "JE-001936",
+    "warehouseId": "W5uANJjMgfFh2p3xU4bT",
+    "repName": "السيد رضا",
+    "cogsJournalEntryNumber": "JE-001937",
+    "taxAmount": 0,
+    "status": "confirmed",
+    "isNonVat": true,
+    "totalDiscount": 0,
+    "subtotal": 1080,
+    "customerId": "9UdJsvHGzgqdmJQ7UHzL",
+    "cogsJournalEntryId": "ZPHcfSIxHIvBUIvnwjYi",
+    "docType": "delivery_note",
+    "totalAmount": 1080,
+    "number": "DN-000001"
+  }
+]

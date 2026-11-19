@@ -28,17 +28,57 @@ const COMPANY_ID = "idham-main";
 const COL = (name) => collection(db, `companies/${COMPANY_ID}/${name}`);
 const VAT = 0.15;
 
+
 // ── Session ──────────────────────────────────────────────────
 let REP = null; // current rep object
+const SESSION_TIMEOUT_MS = 12 * 60 * 60 * 1000; // 12 ساعة
 
-function loadSession() {
-  try {
-    const s = localStorage.getItem("rep_session");
-    if (s) { REP = JSON.parse(s); }
-  } catch(e) { REP = null; }
+// مفتاح الجلسة مرتبط برقم هاتف المندوب — ليس مشتركاً
+function sessionKey(repId) { return `rep_session_${repId}`; }
+
+function clearAllInMemoryData() {
+  // مسح كل البيانات المحفوظة في الذاكرة لمنع تسرّب بيانات مندوب لآخر
+  try { _customers  = []; } catch(_) {}
+  try { _invLines   = []; } catch(_) {}
+  try { _selCust    = null; } catch(_) {}
+  try { _payMethod  = "credit"; } catch(_) {}
+  try { _discount   = 0; } catch(_) {}
+  try { _discType   = "pct"; } catch(_) {}
+  if (window._stockProducts) window._stockProducts = [];
+  if (window._stockMap)      window._stockMap      = {};
 }
-function saveSession(rep) { REP = rep; localStorage.setItem("rep_session", JSON.stringify(rep)); }
-function clearRepSession() { REP = null; localStorage.removeItem("rep_session"); }
+
+function loadSession(repId) {
+  try {
+    if (!repId) return false;
+    const s = localStorage.getItem(sessionKey(repId));
+    if (!s) return false;
+    const parsed = JSON.parse(s);
+    // تحقق من انتهاء الجلسة (12 ساعة)
+    if (parsed._savedAt && (Date.now() - parsed._savedAt) > SESSION_TIMEOUT_MS) {
+      localStorage.removeItem(sessionKey(repId));
+      return false;
+    }
+    REP = parsed;
+    return true;
+  } catch(e) { return false; }
+}
+
+function saveSession(rep) {
+  REP = rep;
+  // حفظ وقت آخر نشاط مع بيانات المندوب
+  const toSave = { ...rep, _savedAt: Date.now() };
+  localStorage.setItem(sessionKey(rep.id), JSON.stringify(toSave));
+}
+
+function clearRepSession() {
+  if (REP?.id) {
+    localStorage.removeItem(sessionKey(REP.id));
+  }
+  REP = null;
+  clearAllInMemoryData();
+}
+
 
 // ── Toast ────────────────────────────────────────────────────
 function toast(msg, type = "info") {
@@ -102,6 +142,9 @@ window.repLogin = async () => {
     const repDoc = { id: snap.docs[0].id, ...snap.docs[0].data() };
     if (!repDoc.pin) throw new Error("لم يتم تفعيل الـ PIN. تواصل مع المدير");
     if (repDoc.pin !== pin) throw new Error("رقم PIN غير صحيح");
+
+    // مسح بيانات أي مندوب سابق في الذاكرة قبل تحميل المندوب الجديد
+    clearAllInMemoryData();
 
     saveSession(repDoc);
     initApp();
@@ -1148,14 +1191,40 @@ function escapeHtml(s) { return String(s || "").replace(/'/g, "\\'").replace(/"/
 // BOOTSTRAP
 // ══════════════════════════════════════════════════════════════
 
-loadSession();
-if (REP) {
-  initApp();
-} else {
-  showScreen("rep-login-screen");
-}
+// ── Bootstrap ─────────────────────────────────────────────────
+// منطق ذكي:
+// - إذا وُجدت جلسة واحدة فقط صالحة في الجهاز → دخول تلقائي (تجربة مريحة)
+// - إذا وُجدت جلستان أو أكثر (جهاز مشترك) → شاشة PIN للأمان
+// - إذا لا توجد جلسات أو انتهت → شاشة PIN
+(function () {
+  const validSessions = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (!key || !key.startsWith("rep_session_")) continue;
+    try {
+      const parsed = JSON.parse(localStorage.getItem(key));
+      if (!parsed || !parsed.id) continue;
+      // تحقق من انتهاء الجلسة
+      if (parsed._savedAt && (Date.now() - parsed._savedAt) > SESSION_TIMEOUT_MS) {
+        localStorage.removeItem(key); // احذف الجلسات المنتهية
+        continue;
+      }
+      validSessions.push(parsed);
+    } catch (_) {}
+  }
+
+  if (validSessions.length === 1) {
+    // جهاز خاص بمندوب واحد — دخول تلقائي مريح
+    REP = validSessions[0];
+    initApp();
+  } else {
+    // لا جلسات أو جهاز مشترك بين مندوبين — يجب تسجيل الدخول
+    showScreen("rep-login-screen");
+  }
+})();
 
 // Register Service Worker for PWA
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("/sw-rep.js").catch(() => {});
 }
+
