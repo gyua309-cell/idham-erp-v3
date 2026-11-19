@@ -8,193 +8,155 @@ import { formatCurrency, formatDate, getCreditStatus, debounce } from "../utils/
 import { exportToExcel, importFromExcel, downloadTemplate } from "../utils/excel.js";
 import { showRecordPreview, printRecord } from "../utils/record-actions.js";
 import { syncCustomerNameEverywhere, syncCustomerBalanceToCoa } from "../utils/sync-engine.js";
-import { openCustomerAgreementModal } from "./customer-agreement.js?v=4.0";
+import { openCustomerAgreementModal } from "./customer-agreement.js?v=4.2";
 
 window.openCustomerAgreement = openCustomerAgreementModal;
 window.openBlankCustomerAgreement = () => openCustomerAgreementModal(null, true);
 
-export const ACTIVITY_CATEGORIES = {
-  all: {
-    key: "all",
-    label: "الكل",
-    icon: "🌟",
-    color: "var(--brand)",
-    bg: "rgba(37,99,235,0.12)",
-    border: "rgba(37,99,235,0.3)"
-  },
-  restaurants: {
-    key: "restaurants",
-    label: "مطاعم ومأكولات",
-    icon: "🍔",
-    color: "#ef4444",
-    bg: "rgba(239,68,68,0.12)",
-    border: "rgba(239,68,68,0.35)",
-    keywords: [
-      "مطعم", "مطاعم", "شواية", "شوايه", "مشويات", "شوايات", "وجبات", "وجبة", "برجر", "بيتزا",
-      "بوفيه", "شاورما", "شاورمر", "مطبخ", "مطابخ", "طباخ", "كباب", "مندي", "بخاري", "فول",
-      "فلافل", "أكلات", "اكلات", "مأكولات", "ماكولات", "عصيرات", "عصير", "سندوتش", "ساندوتش",
-      "فطائر", "فطاير", "طازج", "لحوم", "ملحمة", "ملحمه", "أسماك", "اسماك", "سمك", "دجاج",
-      "بروست", "بروستد", "كفتة", "كفته", "حنيذ", "مضبي", "باستا", "فطاطري", "حمام", "كوارع"
-    ]
-  },
-  groceries: {
-    key: "groceries",
-    label: "تموينات وبقالات",
-    icon: "🛒",
-    color: "#10b981",
-    bg: "rgba(16,185,129,0.12)",
-    border: "rgba(16,185,129,0.35)",
-    keywords: [
-      "تموينات", "تموين", "بقالة", "بقاله", "سوبرماركت", "سوبر ماركت", "ميني ماركت", "اسواق", "أسواق",
-      "سوق", "استهلاكية", "استهلاكيه", "مركز تسوق", "مواد غذائية", "غذائية", "غذائيه",
-      "ماركت", "مارت", "دكان", "دكاكين", "خضار", "فواكه"
-    ]
-  },
-  hotels: {
-    key: "hotels",
-    label: "فنادق وضيافة",
-    icon: "🏨",
-    color: "#6366f1",
-    bg: "rgba(99,102,241,0.12)",
-    border: "rgba(99,102,241,0.35)",
-    keywords: [
-      "فندق", "فنادق", "أجنحة", "اجنحة", "اجنحه", "أجنحه", "شقق مفروشة", "شقق مفروشه",
-      "شقق", "منتجع", "منتجعات", "نزل", "ريزورت", "ضيافة", "ضيافه", "فندقية", "فندقيه",
-      "إيواء", "ايواء", "شاليه", "شاليهات", "سكن", "أبراج", "ابراج"
-    ]
-  },
-  cafes: {
-    key: "cafes",
-    label: "كافيهات ومقاهي",
-    icon: "☕",
-    color: "#b45309",
-    bg: "rgba(180,83,9,0.12)",
-    border: "rgba(180,83,9,0.35)",
-    keywords: [
-      "كافيه", "كافية", "مقهى", "مقهي", "مقاهي", "قهوة", "قهوه", "لاونج", "محمصة",
-      "محمصه", "روستري", "كوفي", "شاي", "ديوانية", "ديوانيه", "باريستا"
-    ]
-  },
-  bakeries: {
-    key: "bakeries",
-    label: "مخابز وحلويات",
-    icon: "🥖",
-    color: "#ec4899",
-    bg: "rgba(236,72,153,0.12)",
-    border: "rgba(236,72,153,0.35)",
-    keywords: [
-      "مخبز", "مخابز", "أفران", "افران", "فرن", "حلويات", "معجنات", "كيك",
-      "حلوى", "حلا", "تميس", "معمول", "شابورة", "بسكويت", "فطائر ومعجنات"
-    ]
-  },
-  companies: {
-    key: "companies",
-    label: "شركات ومؤسسات",
-    icon: "🏢",
-    color: "#3b82f6",
-    bg: "rgba(59,130,246,0.12)",
-    border: "rgba(59,130,246,0.35)",
-    keywords: [
-      "شركة", "شركه", "مؤسسة", "مؤسسه", "مصنع", "تعهدات", "مقاولات", "توريدات",
-      "خدمات", "توزيع", "مجموعة", "مجموعه", "القابضة", "القابضه", "المحدودة", "المحدوده"
-    ]
-  },
-  other: {
-    key: "other",
-    label: "أخرى / عامة",
-    icon: "🏷️",
-    color: "#64748b",
-    bg: "rgba(100,116,139,0.12)",
-    border: "rgba(100,116,139,0.35)",
-    keywords: []
-  }
-};
-
-export function detectCustomerCategory(customer) {
-  if (!customer) return ACTIVITY_CATEGORIES.other;
-
-  if (customer.activityCategory && ACTIVITY_CATEGORIES[customer.activityCategory] && customer.activityCategory !== 'auto') {
-    return ACTIVITY_CATEGORIES[customer.activityCategory];
-  }
-  if (customer.category && ACTIVITY_CATEGORIES[customer.category] && customer.category !== 'auto') {
-    return ACTIVITY_CATEGORIES[customer.category];
-  }
-
-  const text = `${customer.name || ''} ${customer.notes || ''} ${customer.commercialName || ''}`.toLowerCase();
-
-  // Test industry-specific categories BEFORE generic company legal entity keywords
-  const order = ['bakeries', 'cafes', 'hotels', 'restaurants', 'groceries', 'companies'];
-  for (const catKey of order) {
-    const cat = ACTIVITY_CATEGORIES[catKey];
-    for (const kw of cat.keywords) {
-      if (text.includes(kw.toLowerCase())) {
-        return cat;
-      }
-    }
-  }
-
-  return ACTIVITY_CATEGORIES.other;
-}
-
-export const SALES_PERIODS = {
-  last30: { key: "last30", label: "آخر 30 يوماً", icon: "⏱️" },
-  currentMonth: { key: "currentMonth", label: "الشهر الحالي", icon: "🗓️" },
-  prevMonth: { key: "prevMonth", label: "الشهر السابق", icon: "⏮️" },
-  all: { key: "all", label: "كامل الفترة", icon: "🌐" },
-  custom: { key: "custom", label: "فترة مخصصة", icon: "⚙️" },
-};
-
-export function getPeriodRange(periodKey, customFrom = null, customTo = null) {
-  const now = new Date();
-  const todayStr = now.toISOString().slice(0, 10);
-
-  if (periodKey === "last30") {
-    const fromStr = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
-    return { from: fromStr, to: todayStr, label: "آخر 30 يوماً" };
-  }
-
-  if (periodKey === "currentMonth") {
-    const y = now.getFullYear();
-    const m = String(now.getMonth() + 1).padStart(2, '0');
-    const fromStr = `${y}-${m}-01`;
-    return { from: fromStr, to: todayStr, label: `الشهر الحالي (${m}/${y})` };
-  }
-
-  if (periodKey === "prevMonth") {
-    const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const py = prevDate.getFullYear();
-    const pm = String(prevDate.getMonth() + 1).padStart(2, '0');
-    const lastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-    const fromStr = `${py}-${pm}-01`;
-    const toStr = `${py}-${pm}-${String(lastDay).padStart(2, '0')}`;
-    return { from: fromStr, to: toStr, label: `الشهر السابق (${pm}/${py})` };
-  }
-
-  if (periodKey === "all") {
-    return { from: null, to: null, label: "كامل الفترة (تراكمي)" };
-  }
-
-  if (periodKey === "custom") {
-    const f = customFrom || document.getElementById("cust-date-from")?.value || "";
-    const t = customTo || document.getElementById("cust-date-to")?.value || "";
-    const label = (f && t) ? `${f} إلى ${t}` : f ? `من ${f}` : t ? `حتى ${t}` : "فترة مخصصة";
-    return { from: f || null, to: t || null, label };
-  }
-
-  const fromStr = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
-  return { from: fromStr, to: todayStr, label: "آخر 30 يوماً" };
-}
-
 let cachedCustomers = [];
 let cachedInvoices = [];
+let _cachedInvoicesEarliestDate = "";
 let custSortField = "date";
 let custSortDir = "desc";
 let currentTierFilter = "all";
 let currentActivityFilter = "all";
-let currentSalesPeriod = "last30";
-let customPeriodFrom = "";
-let customPeriodTo = "";
-let allInvoicesLoaded = false;
+let currentSalesPeriod = "last30"; // "last30" | "currentMonth" | "lastMonth" | "allTime" | "custom"
+let customSalesFrom = "";
+let customSalesTo = "";
+
+export function normalizeArabicText(str) {
+  if (!str) return "";
+  return String(str)
+    .trim()
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/[إأآا]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/[ىي]/g, "ي")
+    .replace(/[()\[\]{}\-_\/\\.,:;+*="']/g, " ")
+    .replace(/\s+/g, " ")
+    .toLowerCase();
+}
+
+export function matchArabicSearch(target, query) {
+  if (!query) return true;
+  const normTarget = normalizeArabicText(target);
+  const normQuery = normalizeArabicText(query);
+  if (normTarget.includes(normQuery)) return true;
+
+  const tokens = normQuery.split(" ").filter(Boolean);
+  return tokens.every(token => {
+    if (normTarget.includes(token)) return true;
+    if (token.startsWith("ال") && token.length > 3) {
+      const stripped = token.slice(2);
+      if (normTarget.includes(stripped)) return true;
+    }
+    return false;
+  });
+}
+
+export function getCustomerActivityInfo(rawName) {
+  const n = (rawName || "").toLowerCase()
+    .replace(/[\u064B-\u065F\u0670]/g, "")
+    .replace(/[إأآا]/g, "ا")
+    .replace(/[ىي]/g, "ي")
+    .replace(/ة/g, "ه");
+
+  if (/مطعم|شواي|مشوي|وجبات|برجر|بخاري|مندي|فطائر|فطاير|اسماك|سمك|حلواني|مطبخ|كبس|شاورما|بيتزا|اكلات|طباخ|اعاش|إعاش/.test(n)) {
+    return { key: "restaurant", label: "مطاعم وإعاشة", icon: "🍽️", color: "#ea580c", bg: "rgba(234,88,12,0.1)" };
+  }
+  if (/تموين|ماركت|اسواق|سوبرماركت/.test(n)) {
+    return { key: "catering", label: "تموينات وأسواق", icon: "🏪", color: "#0284c7", bg: "rgba(2,132,199,0.1)" };
+  }
+  if (/بقال|دكان/.test(n)) {
+    return { key: "grocery", label: "بقالات", icon: "🛒", color: "#16a34a", bg: "rgba(22,163,74,0.1)" };
+  }
+  if (/فندق|فنادق|منتجع|ايواء|شقق|نزل|سياحي|اجنح|شاليه/.test(n)) {
+    return { key: "hotel", label: "فنادق وإيواء", icon: "🏨", color: "#7c3aed", bg: "rgba(124,58,237,0.1)" };
+  }
+  if (/كافيه|مقهى|مقهي|كوفي|شاي|عصير|عصائر/.test(n)) {
+    return { key: "cafe", label: "كافيهات ومقاهي", icon: "☕", color: "#b45309", bg: "rgba(180,83,9,0.1)" };
+  }
+  return { key: "other", label: "تجارية وأخرى", icon: "🏢", color: "#64748b", bg: "rgba(100,116,139,0.1)" };
+}
+
+export function getPeriodDateBounds(periodKey, customFrom = "", customTo = "") {
+  const now = new Date();
+  const todayStr = now.toISOString().slice(0, 10);
+  
+  const arMonths = ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"];
+  const curMonthName = arMonths[now.getMonth()];
+  const prevMonthDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+  const prevMonthName = arMonths[prevMonthDate.getMonth()];
+
+  if (periodKey === "currentMonth") {
+    const from = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+    return { from, to: todayStr, label: `مسحوبات الشهر الحالي (${curMonthName})`, shortLabel: `الشهر الحالي (${curMonthName})`, curMonthName, prevMonthName };
+  }
+  if (periodKey === "lastMonth") {
+    const from = `${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth() + 1).padStart(2, "0")}-01`;
+    const lastDayPrev = new Date(now.getFullYear(), now.getMonth(), 0);
+    const to = `${lastDayPrev.getFullYear()}-${String(lastDayPrev.getMonth() + 1).padStart(2, "0")}-${String(lastDayPrev.getDate()).padStart(2, "0")}`;
+    return { from, to, label: `مسحوبات الشهر السابق (${prevMonthName})`, shortLabel: `الشهر السابق (${prevMonthName})`, curMonthName, prevMonthName };
+  }
+  if (periodKey === "allTime") {
+    return { from: "2000-01-01", to: "9999-12-31", label: "إجمالي المسحوبات (كامل الفترة)", shortLabel: "كامل الفترة", curMonthName, prevMonthName };
+  }
+  if (periodKey === "custom" && customFrom) {
+    return { from: customFrom, to: customTo || todayStr, label: `مسحوبات الفترة (${customFrom} إلى ${customTo || todayStr})`, shortLabel: "فترة مخصصة", curMonthName, prevMonthName };
+  }
+  // Default: last 30 days
+  const thirtyDaysAgoStr = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
+  return { from: thirtyDaysAgoStr, to: todayStr, label: "مسحوبات الشهر (آخر ٣٠ يوماً)", shortLabel: "آخر ٣٠ يوماً", curMonthName, prevMonthName };
+}
+
+export async function applyCustomerSalesPeriod(periodKey, customFrom = "", customTo = "") {
+  currentSalesPeriod = periodKey;
+  customSalesFrom = customFrom;
+  customSalesTo = customTo;
+
+  const bounds = getPeriodDateBounds(periodKey, customFrom, customTo);
+
+  if (bounds.from && bounds.from < _cachedInvoicesEarliestDate) {
+    try {
+      const constraints = bounds.from === "2000-01-01" ? [] : [where("date", ">=", bounds.from)];
+      const moreInvs = await getAll(COLS.salesInvoices(), constraints);
+      cachedInvoices = moreInvs || [];
+      _cachedInvoicesEarliestDate = bounds.from;
+    } catch (_) {}
+  }
+
+  // Compute sales per customer within bounds
+  const custSalesMap = {};
+  (cachedInvoices || []).forEach(inv => {
+    if (inv.status === "cancelled" || !inv.customerId) return;
+    const d = inv.date || (inv.createdAt?.toDate ? inv.createdAt.toDate().toISOString().slice(0, 10) : typeof inv.createdAt === "string" ? inv.createdAt.slice(0, 10) : "");
+    if (d >= bounds.from && d <= bounds.to) {
+      custSalesMap[inv.customerId] = (custSalesMap[inv.customerId] || 0) + (inv.totalWithVat || inv.total || 0);
+    }
+  });
+
+  // Update customer objects
+  cachedCustomers.forEach(c => {
+    c.monthlySales = custSalesMap[c.id] || 0;
+    c.tier = getCustomerTierInfo(c.monthlySales, c.tierOverride || c.manualTier);
+  });
+
+  // Update header text in table
+  const thEl = document.getElementById("th-sales-period");
+  if (thEl) thEl.textContent = bounds.label;
+
+  // Update quick filter label
+  const tierTitleEl = document.getElementById("tier-filter-title");
+  if (tierTitleEl) tierTitleEl.textContent = `🎯 تصنيف العملاء (حسب ${bounds.shortLabel}):`;
+
+  // Update Tier & Activity counters
+  updateTierCounters(cachedCustomers);
+  updateActivityCounters(cachedCustomers);
+
+  // Re-render
+  const tbody = document.getElementById("cust-tbody");
+  if (tbody) renderCustomersTable(cachedCustomers, tbody);
+}
 
 export function getCustomerTierInfo(monthlySales = 0, manualTier = null) {
   const sales = Number(monthlySales) || 0;
@@ -311,7 +273,7 @@ export function getCustomerTierInfo(monthlySales = 0, manualTier = null) {
       bg: "rgba(148,163,184,0.12)",
       border: "rgba(148,163,184,0.3)",
       isManual: false,
-      desc: "بلا مسحوبات خلال هذه الفترة",
+      desc: "بلا مسحوبات خلال آخر 30 يوماً",
       nextTierText: "يحتاج لشراء 1 ر.س لدخول فئة D"
     };
   }
@@ -358,8 +320,8 @@ function renderCustomerRowsHtml(docs) {
     const cs = getCreditStatus(c.balance || 0, c.creditLimit || 0);
     const cDate = getCustomerDateStr(c);
     const tier = c.tier || getCustomerTierInfo(c.monthlySales || 0, c.tierOverride);
+    const act = getCustomerActivityInfo(c.name);
     const mSales = c.monthlySales || 0;
-    const cat = c.activity || detectCustomerCategory(c);
 
     return `<tr>
       <td>
@@ -370,10 +332,8 @@ function renderCustomerRowsHtml(docs) {
                title="🧠 عرض لوحة ذكاء العميل والتحليل الإحصائي">
             ${c.name}
           </div>
-          <span class="activity-badge" 
-                style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:6px;font-size:10.5px;font-weight:700;background:${cat.bg};color:${cat.color};border:1px solid ${cat.border};" 
-                title="النشاط التجاري المكتشف: ${cat.label}">
-            ${cat.icon} ${cat.label}
+          <span class="activity-badge" style="background:${act.bg}; color:${act.color}; border:1px solid ${act.color}45; padding:2px 7px; border-radius:6px; font-size:10px; font-weight:700;" title="النشاط المقدر من الاسم: ${act.label}">
+            ${act.icon} ${act.label}
           </span>
           <span class="tier-badge ${tier.badgeClass}" title="${tier.desc}">
             ${tier.label} ${tier.isManual ? '🔒' : ''}
@@ -383,6 +343,12 @@ function renderCustomerRowsHtml(docs) {
           <span class="mono">${c.code||""}</span>
           ${cDate !== "—" ? `<span style="font-size:10px;color:var(--text-2);background:rgba(0,0,0,0.05);padding:1px 5px;border-radius:4px;" title="تاريخ إضافة العميل">📅 ${cDate}</span>` : ""}
           ${c.hasBrokerCommission ? `<span class="badge" style="background:#e0f2fe; color:#0369a1; font-weight:800; font-size:10px; cursor:pointer;" onclick="event.stopPropagation(); navigate('broker-statement');" title="كشف حساب الوسيط">💼 وسيط: ${c.brokerName || 'زياد'} (${c.brokerRate || 1}%)</span>` : ''}
+          ${(c.status === "pending_approval" || c.approvalStatus === "pending") ? `<span class="badge" style="background:#fffbeb; color:#d97706; border:1px solid #fde68a; font-weight:800; font-size:10px;">🟡 بانتظار الاعتماد المالي</span>` : ''}
+          ${Array.isArray(c.attachments) && c.attachments.length > 0 ? `
+            <button type="button" class="btn btn-sm" style="background:#0284c7; color:#fff; border:none; padding:2px 8px; border-radius:6px; font-weight:800; font-size:10.5px; cursor:pointer; display:inline-flex; align-items:center; gap:4px; box-shadow:0 1px 4px rgba(2,132,199,0.35);" onclick="window.openCustomerAttachmentsModal('${c.id}')" title="عرض وفحص المستندات الرسمية المرفوعة للعميل">
+              📁 المستندات (${c.attachments.length})
+            </button>
+          ` : ''}
         </div>
       </td>
       <td class="mono dim" style="white-space:nowrap;">
@@ -416,6 +382,8 @@ function renderCustomerRowsHtml(docs) {
       <td><span class="badge neutral" style="font-size:10px;">${c.priceList === "wholesale" ? "الجملة" : c.priceList === "retail" ? "التجزئة" : "الأساسي"}</span></td>
       <td>
         <div class="row-actions">
+          ${(c.status === "pending_approval" || c.approvalStatus === "pending") ? `<button class="btn btn-icon sm" style="background:#059669; color:#fff; font-weight:bold; box-shadow:0 2px 8px rgba(5,150,105,0.4);" onclick="window.approveSalesManagerCustomer('${c.id}', '${c.name.replace(/'/g, "\\'")}')" title="اعتماد العميل وتفعيل حسابه بالشجرة">✅</button>` : ''}
+          ${Array.isArray(c.attachments) && c.attachments.length > 0 ? `<button class="btn btn-icon sm" style="background:#0284c7; color:#fff; border:1px solid #0369a1; font-weight:bold; box-shadow:0 1px 4px rgba(2,132,199,0.3);" onclick="window.openCustomerAttachmentsModal('${c.id}')" title="عرض الأوراق والمستندات الرسمية (KYC)">📁</button>` : ''}
           <button class="btn btn-icon sm btn-ghost" onclick="previewCustomer('${c.id}')" title="معاينة">👁️</button>
           <button class="btn btn-icon sm btn-ghost" onclick="editCustomer('${c.id}')" title="تعديل">✏️</button>
           <button class="btn btn-icon sm" style="background:rgba(30,58,138,.12);color:#1E3A8A;border:1px solid rgba(30,58,138,.3);" onclick="openCustomerAgreement('${c.id}')" title="اتفاقية فتح / تحديث حساب">📝</button>
@@ -453,137 +421,6 @@ window.setCustomerTierFilter = (tier) => {
   }
 };
 
-window.setCustomerActivityFilter = (catKey) => {
-  currentActivityFilter = catKey;
-  document.querySelectorAll(".act-filter-btn").forEach(b => b.classList.remove("active"));
-  const btn = document.getElementById(`act-btn-${catKey}`);
-  if (btn) btn.classList.add("active");
-  const tbody = document.getElementById("cust-tbody");
-  if (tbody && cachedCustomers.length > 0) {
-    renderCustomersTable(cachedCustomers, tbody);
-  }
-};
-
-async function ensureInvoicesForPeriod(periodKey, fromDate, toDate) {
-  if (allInvoicesLoaded) return cachedInvoices;
-
-  if (periodKey === "all") {
-    try {
-      const allInvs = await getAll(COLS.salesInvoices(), [orderBy("date", "desc"), limit(3000)]).catch(() =>
-        getAll(COLS.salesInvoices(), [limit(2500)]).catch(() => [])
-      );
-      cachedInvoices = allInvs || [];
-      allInvoicesLoaded = true;
-    } catch (e) {
-      console.warn("Failed to load all invoices:", e);
-    }
-    return cachedInvoices;
-  }
-
-  if (fromDate) {
-    const hasOldEnough = cachedInvoices.length > 0 && cachedInvoices.some(inv => {
-      const d = inv.date || (inv.createdAt?.toDate ? inv.createdAt.toDate().toISOString().slice(0, 10) : typeof inv.createdAt === 'string' ? inv.createdAt.slice(0, 10) : '');
-      return d && d <= fromDate;
-    });
-
-    if (!hasOldEnough) {
-      try {
-        const olderInvs = await getAll(COLS.salesInvoices(), [where("date", ">=", fromDate), limit(2500)]).catch(() =>
-          getAll(COLS.salesInvoices(), [limit(1500)]).catch(() => [])
-        );
-        const map = new Map();
-        (cachedInvoices || []).forEach(i => map.set(i.id, i));
-        (olderInvs || []).forEach(i => map.set(i.id, i));
-        cachedInvoices = Array.from(map.values());
-      } catch (e) {
-        console.warn("Failed to load older invoices:", e);
-      }
-    }
-  }
-
-  return cachedInvoices;
-}
-
-export async function recalculateCustomerSales(periodKey, customFrom = null, customTo = null) {
-  const range = getPeriodRange(periodKey, customFrom, customTo);
-  await ensureInvoicesForPeriod(periodKey, range.from, range.to);
-
-  const custSalesMap = {};
-  (cachedInvoices || []).forEach(inv => {
-    if (inv.status === 'cancelled' || !inv.customerId) return;
-    const d = inv.date || (inv.createdAt?.toDate ? inv.createdAt.toDate().toISOString().slice(0, 10) : typeof inv.createdAt === 'string' ? inv.createdAt.slice(0, 10) : '');
-
-    if (range.from && d && d < range.from) return;
-    if (range.to && d && d > range.to) return;
-
-    const amount = Number(inv.totalWithVat || inv.total || 0);
-    custSalesMap[inv.customerId] = (custSalesMap[inv.customerId] || 0) + amount;
-  });
-
-  (cachedCustomers || []).forEach(c => {
-    c.monthlySales = custSalesMap[c.id] || 0;
-    c.tier = getCustomerTierInfo(c.monthlySales, c.tierOverride || c.manualTier);
-  });
-
-  const colHeader = document.getElementById("cust-sales-col-header");
-  if (colHeader) {
-    colHeader.textContent = `مسحوبات (${range.label})`;
-  }
-}
-
-window.setCustomerSalesPeriod = async (period) => {
-  currentSalesPeriod = period;
-  document.querySelectorAll(".period-filter-btn").forEach(b => b.classList.remove("active"));
-  const btn = document.getElementById(`period-btn-${period}`);
-  if (btn) btn.classList.add("active");
-
-  const customBox = document.getElementById("cust-custom-dates");
-  if (customBox) {
-    customBox.style.display = (period === "custom") ? "inline-flex" : "none";
-  }
-
-  if (period !== "custom") {
-    const colHeader = document.getElementById("cust-sales-col-header");
-    if (colHeader) colHeader.textContent = "⏳ جاري التحديث…";
-    await recalculateCustomerSales(period);
-    const tbody = document.getElementById("cust-tbody");
-    if (tbody && cachedCustomers.length > 0) {
-      renderCustomersTable(cachedCustomers, tbody);
-    }
-  }
-};
-
-window.applyCustomerCustomDates = async () => {
-  const f = document.getElementById("cust-date-from")?.value;
-  const t = document.getElementById("cust-date-to")?.value;
-  if (!f && !t) {
-    if (window.showToast) window.showToast("يرجى إدخال تاريخ من أو إلى", "warning");
-    return;
-  }
-  customPeriodFrom = f;
-  customPeriodTo = t;
-  const colHeader = document.getElementById("cust-sales-col-header");
-  if (colHeader) colHeader.textContent = "⏳ جاري التحديث…";
-  await recalculateCustomerSales("custom", f, t);
-  const tbody = document.getElementById("cust-tbody");
-  if (tbody && cachedCustomers.length > 0) {
-    renderCustomersTable(cachedCustomers, tbody);
-  }
-};
-
-function updateActivityCounters(custs) {
-  const allCusts = custs || cachedCustomers || [];
-  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-  setEl('actcount-all', allCusts.length);
-  setEl('actcount-restaurants', allCusts.filter(c => (c.activity?.key || detectCustomerCategory(c).key) === 'restaurants').length);
-  setEl('actcount-groceries',   allCusts.filter(c => (c.activity?.key || detectCustomerCategory(c).key) === 'groceries').length);
-  setEl('actcount-hotels',      allCusts.filter(c => (c.activity?.key || detectCustomerCategory(c).key) === 'hotels').length);
-  setEl('actcount-cafes',       allCusts.filter(c => (c.activity?.key || detectCustomerCategory(c).key) === 'cafes').length);
-  setEl('actcount-bakeries',    allCusts.filter(c => (c.activity?.key || detectCustomerCategory(c).key) === 'bakeries').length);
-  setEl('actcount-companies',   allCusts.filter(c => (c.activity?.key || detectCustomerCategory(c).key) === 'companies').length);
-  setEl('actcount-other',       allCusts.filter(c => (c.activity?.key || detectCustomerCategory(c).key) === 'other').length);
-}
-
 export async function render(container, user) {
   const hasCache = cachedCustomers && cachedCustomers.length > 0;
 
@@ -609,38 +446,51 @@ export async function render(container, user) {
       .tier-filter-btn:hover { background: var(--bg-3); color: var(--text-1); }
       .tier-filter-btn.active { background: var(--brand); color: #fff !important; border-color: var(--brand) !important; box-shadow: 0 2px 8px rgba(37,99,235,0.3); }
 
-      .activity-badge {
-        display: inline-flex; align-items: center; gap: 3px;
-        padding: 2px 7px; border-radius: 6px; font-size: 10.5px; font-weight: 700;
-        white-space: nowrap; line-height: 1.2;
-      }
-      .act-filter-btn {
+      .activity-filter-btn {
         display: inline-flex; align-items: center; gap: 5px;
-        padding: 4px 11px; border-radius: 20px; font-size: 11px; font-weight: 700;
+        padding: 5px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 700;
         border: 1px solid var(--border-soft); background: var(--bg-1); color: var(--text-2);
         cursor: pointer; transition: all 0.2s ease;
       }
-      .act-filter-btn:hover { background: var(--bg-3); color: var(--text-1); }
-      .act-filter-btn.active {
-        background: var(--brand); color: #fff !important; border-color: var(--brand) !important;
-        box-shadow: 0 2px 8px rgba(37,99,235,0.3);
-      }
-      .period-filter-btn {
-        display: inline-flex; align-items: center; gap: 5px;
-        padding: 4px 11px; border-radius: 8px; font-size: 11px; font-weight: 700;
-        border: 1px solid var(--border-soft); background: var(--bg-1); color: var(--text-2);
-        cursor: pointer; transition: all 0.2s ease;
-      }
-      .period-filter-btn:hover { background: var(--bg-3); color: var(--text-1); }
-      .period-filter-btn.active {
-        background: #1e3a8a; color: #fff !important; border-color: #1e3a8a !important;
-        box-shadow: 0 2px 8px rgba(30,58,138,0.3);
-      }
+      .activity-filter-btn:hover { background: var(--bg-3); color: var(--text-1); }
+      .activity-filter-btn.active { background: #0284c7; color: #fff !important; border-color: #0284c7 !important; box-shadow: 0 2px 8px rgba(2,132,199,0.3); }
     </style>
 
     <div class="filterbar">
       <div class="search-bar" style="max-width:280px;">
-        <input type="text" id="cust-search" class="input" placeholder="🔍  بحث في العملاء…" />
+        <input type="text" id="cust-search" class="input" placeholder="🔍  بحث في العملاء والأنشطة…" />
+      </div>
+      <div class="filter-select-group">
+        <label>فترة المسحوبات</label>
+        <select id="cust-period-filter" onchange="window.changeCustomerSalesPeriod(this.value)">
+          <option value="last30" selected>آخر ٣٠ يوماً</option>
+          <option value="currentMonth">الشهر الحالي (أكتوبر)</option>
+          <option value="lastMonth">الشهر السابق (سبتمبر)</option>
+          <option value="allTime">كامل الفترة (كل المبيعات)</option>
+          <option value="custom">📅 فترة مخصصة…</option>
+        </select>
+      </div>
+      <div class="filter-select-group" id="cust-custom-dates" style="display:none; flex-direction:row; align-items:flex-end; gap:6px;">
+        <div>
+          <label style="font-size:10px;">من تاريخ</label>
+          <input type="date" id="cust-from-date" class="input sm" style="font-size:11px; padding:3px 6px;" onchange="window.recalcCustomerPeriodSales()" />
+        </div>
+        <div>
+          <label style="font-size:10px;">إلى تاريخ</label>
+          <input type="date" id="cust-to-date" class="input sm" style="font-size:11px; padding:3px 6px;" onchange="window.recalcCustomerPeriodSales()" />
+        </div>
+      </div>
+      <div class="filter-select-group">
+        <label>نشاط العميل</label>
+        <select id="cust-activity-filter" onchange="window.onCustomerActivitySelectChange(this.value)">
+          <option value="all">كل الأنشطة</option>
+          <option value="restaurant">🍽️ مطاعم وإعاشة</option>
+          <option value="catering">🏪 تموينات وأسواق</option>
+          <option value="grocery">🛒 بقالات</option>
+          <option value="hotel">🏨 فنادق وإيواء</option>
+          <option value="cafe">☕ كافيهات ومقاهي</option>
+          <option value="other">🏢 تجارية وأخرى</option>
+        </select>
       </div>
       <div class="filter-select-group">
         <label>المنطقة</label>
@@ -670,52 +520,30 @@ export async function render(container, user) {
         <button class="btn-export" style="background:#10B981;color:#fff;" onclick="openCustomerImportModal()" title="استيراد من Excel"><span>📤</span> استيراد Excel</button>
         <button class="btn-export print" onclick="window.print()" title="طباعة"><span>🖨️</span> طباعة</button>
         <button class="btn-export" style="background:#7C3AED;color:#fff;" onclick="runCustomerCoaMigration()" title="ربط العملاء بشجرة الحسابات حسب مندوبيهم (مرة واحدة فقط)" id="btn-migrate-coa"><span>🔗</span> ترحيل ذمم العملاء</button>
+        <a href="sales-manager.html" target="_blank" class="btn-export" style="background:#0284c7;color:#fff;text-decoration:none;" title="فتح بوابة مدير المبيعات الميدانية"><span>💼</span> بوابة مدير المبيعات</a>
         <button class="btn btn-primary" onclick="openCustomerModal()">+ إضافة عميل</button>
       </div>
     </div>
 
     <div class="page-content">
-      <!-- 1. Timeframe / Sales Period Filter -->
-      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:10px; background:var(--bg-2); padding:10px 14px; border-radius:12px; border:1px solid var(--border-soft);">
-        <span style="font-weight:800; font-size:12px; color:var(--text-1); margin-left:4px; display:inline-flex; align-items:center; gap:4px;">
-          <span>📅</span> فترة مسحوبات العملاء:
-        </span>
-        <button class="period-filter-btn active" id="period-btn-last30" onclick="window.setCustomerSalesPeriod('last30')">⏱️ آخر 30 يوماً</button>
-        <button class="period-filter-btn" id="period-btn-currentMonth" onclick="window.setCustomerSalesPeriod('currentMonth')">🗓️ الشهر الحالي</button>
-        <button class="period-filter-btn" id="period-btn-prevMonth" onclick="window.setCustomerSalesPeriod('prevMonth')">⏮️ الشهر السابق</button>
-        <button class="period-filter-btn" id="period-btn-all" onclick="window.setCustomerSalesPeriod('all')">🌐 كامل الفترة (تراكمي)</button>
-        <button class="period-filter-btn" id="period-btn-custom" onclick="window.setCustomerSalesPeriod('custom')">⚙️ فترة مخصصة</button>
-        
-        <div id="cust-custom-dates" style="display:none; align-items:center; gap:6px; margin-right:6px; background:var(--bg-1); padding:3px 8px; border-radius:8px; border:1px solid var(--border-soft);">
-          <span style="font-size:11px; font-weight:700; color:var(--text-2);">من:</span>
-          <input type="date" id="cust-date-from" class="input" style="padding:2px 6px; font-size:11px; height:26px; width:125px;" />
-          <span style="font-size:11px; font-weight:700; color:var(--text-2);">إلى:</span>
-          <input type="date" id="cust-date-to" class="input" style="padding:2px 6px; font-size:11px; height:26px; width:125px;" />
-          <button class="btn btn-primary sm" onclick="window.applyCustomerCustomDates()" style="padding:2px 10px; font-size:11px; height:26px;">تطبيق</button>
-        </div>
+      <!-- Business Activity Quick Filter Pills -->
+      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:10px; background:var(--bg-1); padding:10px 14px; border-radius:12px; border:1px solid var(--border-soft);">
+        <span style="font-weight:800; font-size:12px; color:var(--text-1); margin-left:4px;">🏢 نشاط العميل (مشتق من الاسم):</span>
+        <button class="activity-filter-btn active" id="act-btn-all" onclick="window.setCustomerActivityFilter('all')">🌟 كل الأنشطة (<span id="acount-all">0</span>)</button>
+        <button class="activity-filter-btn" id="act-btn-restaurant" onclick="window.setCustomerActivityFilter('restaurant')" style="border-color:rgba(234,88,12,0.3); color:#ea580c;">🍽️ مطاعم وإعاشة (<span id="acount-restaurant">0</span>)</button>
+        <button class="activity-filter-btn" id="act-btn-catering" onclick="window.setCustomerActivityFilter('catering')" style="border-color:rgba(2,132,199,0.3); color:#0284c7;">🏪 تموينات وأسواق (<span id="acount-catering">0</span>)</button>
+        <button class="activity-filter-btn" id="act-btn-grocery" onclick="window.setCustomerActivityFilter('grocery')" style="border-color:rgba(22,163,74,0.3); color:#16a34a;">🛒 بقالات (<span id="acount-grocery">0</span>)</button>
+        <button class="activity-filter-btn" id="act-btn-hotel" onclick="window.setCustomerActivityFilter('hotel')" style="border-color:rgba(124,58,237,0.3); color:#7c3aed;">🏨 فنادق وإيواء (<span id="acount-hotel">0</span>)</button>
+        <button class="activity-filter-btn" id="act-btn-cafe" onclick="window.setCustomerActivityFilter('cafe')" style="border-color:rgba(180,83,9,0.3); color:#b45309;">☕ كافيهات ومقاهي (<span id="acount-cafe">0</span>)</button>
+        <button class="activity-filter-btn" id="act-btn-other" onclick="window.setCustomerActivityFilter('other')" style="color:#64748b;">🏢 تجارية وأخرى (<span id="acount-other">0</span>)</button>
       </div>
 
-      <!-- 2. Smart Activity Classification Filter -->
-      <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:10px; background:var(--bg-2); padding:10px 14px; border-radius:12px; border:1px solid var(--border-soft);">
-        <span style="font-weight:800; font-size:12px; color:var(--text-1); margin-left:4px; display:inline-flex; align-items:center; gap:4px;">
-          <span>🏷️</span> تصنيف النشاط (اكتشاف ذكي من الاسم):
-        </span>
-        <button class="act-filter-btn active" id="act-btn-all" onclick="window.setCustomerActivityFilter('all')">🌟 الكل (<span id="actcount-all">0</span>)</button>
-        <button class="act-filter-btn" id="act-btn-restaurants" onclick="window.setCustomerActivityFilter('restaurants')" style="border-color:rgba(239,68,68,0.35); color:#ef4444;">🍔 مطاعم ومأكولات (<span id="actcount-restaurants">0</span>)</button>
-        <button class="act-filter-btn" id="act-btn-groceries" onclick="window.setCustomerActivityFilter('groceries')" style="border-color:rgba(16,185,129,0.35); color:#10b981;">🛒 تموينات وبقالات (<span id="actcount-groceries">0</span>)</button>
-        <button class="act-filter-btn" id="act-btn-hotels" onclick="window.setCustomerActivityFilter('hotels')" style="border-color:rgba(99,102,241,0.35); color:#6366f1;">🏨 فنادق وضيافة (<span id="actcount-hotels">0</span>)</button>
-        <button class="act-filter-btn" id="act-btn-cafes" onclick="window.setCustomerActivityFilter('cafes')" style="border-color:rgba(180,83,9,0.35); color:#b45309;">☕ كافيهات ومقاهي (<span id="actcount-cafes">0</span>)</button>
-        <button class="act-filter-btn" id="act-btn-bakeries" onclick="window.setCustomerActivityFilter('bakeries')" style="border-color:rgba(236,72,153,0.35); color:#ec4899;">🥖 مخابز وحلويات (<span id="actcount-bakeries">0</span>)</button>
-        <button class="act-filter-btn" id="act-btn-companies" onclick="window.setCustomerActivityFilter('companies')" style="border-color:rgba(59,130,246,0.35); color:#3b82f6;">🏢 شركات ومؤسسات (<span id="actcount-companies">0</span>)</button>
-        <button class="act-filter-btn" id="act-btn-other" onclick="window.setCustomerActivityFilter('other')" style="color:#64748b;">🏷️ أخرى (<span id="actcount-other">0</span>)</button>
-      </div>
-
-      <!-- 3. Tier Quick Filter Pills -->
+      <!-- Tier Quick Filter Pills -->
       <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-bottom:14px; background:var(--bg-2); padding:10px 14px; border-radius:12px; border:1px solid var(--border-soft);">
-        <span style="font-weight:800; font-size:12px; color:var(--text-1); margin-left:4px; display:inline-flex; align-items:center; gap:4px;">
-          <span>🎯</span> تصنيف الشرائح (حسب مسحوبات الفترة):
-        </span>
+        <span style="font-weight:800; font-size:12px; color:var(--text-1); margin-left:4px;" id="tier-filter-title">🎯 تصنيف العملاء (حسب مسحوبات ٣٠ يوماً):</span>
         <button class="tier-filter-btn active" id="tier-btn-all" onclick="window.setCustomerTierFilter('all')">🌟 الكل (<span id="tcount-all">0</span>)</button>
+        <button class="tier-filter-btn" id="tier-btn-pending" onclick="window.setCustomerTierFilter('pending')" style="border-color:#f59e0b; color:#d97706; background:#fffbeb;">🟡 بانتظار الاعتماد (<span id="tcount-pending">0</span>)</button>
+        <button class="tier-filter-btn" id="tier-btn-kyc" onclick="window.setCustomerTierFilter('kyc')" style="border-color:#0284c7; color:#0284c7; background:#f0f9ff; font-weight:800;">📁 بمرفقات KYC (<span id="tcount-kyc">0</span>)</button>
         <button class="tier-filter-btn" id="tier-btn-A" onclick="window.setCustomerTierFilter('A')" style="border-color:rgba(212,175,55,0.4); color:#D4AF37;">👑 فئة A (> 20 ألف) (<span id="tcount-A">0</span>)</button>
         <button class="tier-filter-btn" id="tier-btn-B" onclick="window.setCustomerTierFilter('B')" style="border-color:rgba(99,102,241,0.4); color:#818CF8;">💎 فئة B (10 - 20 ألف) (<span id="tcount-B">0</span>)</button>
         <button class="tier-filter-btn" id="tier-btn-C" onclick="window.setCustomerTierFilter('C')" style="border-color:rgba(16,185,129,0.4); color:#34D399;">🚀 فئة C (5 - 10 آلاف) (<span id="tcount-C">0</span>)</button>
@@ -737,7 +565,7 @@ export async function render(container, user) {
         <div class="table-container">
           <table class="data-dense">
             <thead><tr>
-              <th>اسم العميل والشريحة</th>
+              <th>اسم العميل والنشاط والشريحة</th>
               <th style="cursor:pointer; user-select:none; white-space:nowrap;" onclick="window.toggleCustomerDateSort()" title="اضغط للترتيب حسب تاريخ الإضافة">
                 <div style="display:inline-flex; align-items:center; gap:6px; color:var(--brand); font-weight:700;">
                   <span>تاريخ الإضافة</span>
@@ -746,7 +574,7 @@ export async function render(container, user) {
                   </span>
                 </div>
               </th>
-              <th id="cust-sales-col-header" title="إجمالي المسحوبات المحققة خلال الفترة المحددة">مسحوبات (آخر 30 يوماً)</th>
+              <th id="th-sales-period">مسحوبات (آخر ٣٠ يوماً)</th>
               <th>الهاتف</th><th>المنطقة</th>
               <th>المندوب</th><th>الرصيد الحالي</th><th>حد الائتمان</th>
               <th>استخدام الائتمان</th><th>قائمة الأسعار</th><th></th>
@@ -854,20 +682,7 @@ export async function render(container, user) {
               </select>
             </div>
           </div>
-          <div class="grid-3 gap-16 mb-16">
-            <div class="form-group">
-              <label>النشاط التجاري</label>
-              <select id="cust-activity-category" class="input">
-                <option value="auto">🤖 اكتشاف تلقائي ذكي من الاسم</option>
-                <option value="restaurants">🍔 مطاعم ومأكولات</option>
-                <option value="groceries">🛒 تموينات وبقالات</option>
-                <option value="hotels">🏨 فنادق وضيافة</option>
-                <option value="cafes">☕ كافيهات ومقاهي</option>
-                <option value="bakeries">🥖 مخابز وحلويات</option>
-                <option value="companies">🏢 شركات ومؤسسات</option>
-                <option value="other">🏷️ أخرى / عامة</option>
-              </select>
-            </div>
+          <div class="grid-2 gap-16 mb-16">
             <div class="form-group">
               <label>خط السير / المسار</label>
               <input type="text" id="cust-route-group" class="input" placeholder="مسار ينبع الصناعية" />
@@ -941,8 +756,8 @@ export async function render(container, user) {
               <div class="form-group">
                 <label style="font-size:11px; font-weight:800;">شرط الاستحقاق والترحيل *</label>
                 <select id="cust-broker-trigger" class="input">
-                  <option value="on_payment" selected>عند سداد العميل للفاتورة (موصى به)</option>
-                  <option value="on_invoice">فور إصدار الفاتورة</option>
+                  <option value="on_invoice" selected>فور إصدار الفاتورة (الاستحقاق الفوري المباشر)</option>
+                  <option value="on_payment">عند سداد العميل للفاتورة</option>
                 </select>
               </div>
             </div>
@@ -991,14 +806,37 @@ function updateTierCounters(custs) {
   const countC   = custs.filter(c => c.tier?.key === 'C').length;
   const countD   = custs.filter(c => c.tier?.key === 'D').length;
   const countInact = custs.filter(c => c.tier?.key === 'inactive').length;
+  const countPending = custs.filter(c => c.status === 'pending_approval' || c.approvalStatus === 'pending').length;
+  const countKyc = custs.filter(c => Array.isArray(c.attachments) && c.attachments.length > 0).length;
 
   const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
   setEl('tcount-all', countAll);
+  setEl('tcount-pending', countPending);
+  setEl('tcount-kyc', countKyc);
   setEl('tcount-A', countA);
   setEl('tcount-B', countB);
   setEl('tcount-C', countC);
   setEl('tcount-D', countD);
   setEl('tcount-inactive', countInact);
+}
+
+function updateActivityCounters(custs) {
+  const list = custs || cachedCustomers || [];
+  const counts = { all: list.length, restaurant: 0, catering: 0, grocery: 0, hotel: 0, cafe: 0, other: 0 };
+  list.forEach(c => {
+    const act = getCustomerActivityInfo(c.name);
+    if (counts[act.key] !== undefined) counts[act.key]++;
+    else counts.other++;
+  });
+
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  setEl("acount-all", counts.all);
+  setEl("acount-restaurant", counts.restaurant);
+  setEl("acount-catering", counts.catering);
+  setEl("acount-grocery", counts.grocery);
+  setEl("acount-hotel", counts.hotel);
+  setEl("acount-cafe", counts.cafe);
+  setEl("acount-other", counts.other);
 }
 
 async function loadCustomers(reset = false) {
@@ -1014,57 +852,78 @@ async function loadCustomers(reset = false) {
   }
 
   try {
-    const thirtyDaysAgoStr = new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10);
-    // جلب العملاء وفواتير آخر 30 يوماً فقط بالتوازي لتسريع الاستجابة
+    const d35 = new Date(Date.now() - 35 * 86400000).toISOString().slice(0, 10);
+    _cachedInvoicesEarliestDate = d35;
     const [custs, invoices] = await Promise.all([
       getAll(COLS.customers(), [orderBy("name"), limit(1000)]),
-      getAll(COLS.salesInvoices(), [where("date", ">=", thirtyDaysAgoStr)]).catch(() =>
-        getAll(COLS.salesInvoices(), [limit(400)]).catch(() => [])
-      )
+      getAll(COLS.salesInvoices(), [where("date", ">=", d35)]).catch(() => [])
     ]);
 
-    // حساب مسحوبات آخر 30 يوماً لكل عميل
-    const custSalesMap = {};
-    (invoices || []).forEach(inv => {
-      if (inv.status === 'cancelled' || !inv.customerId) return;
-      const d = inv.date || (inv.createdAt?.toDate ? inv.createdAt.toDate().toISOString().slice(0, 10) : typeof inv.createdAt === 'string' ? inv.createdAt.slice(0, 10) : '');
-      if (d >= thirtyDaysAgoStr) {
-        custSalesMap[inv.customerId] = (custSalesMap[inv.customerId] || 0) + (inv.totalWithVat || inv.total || 0);
-      }
-    });
-
+    cachedCustomers = custs || [];
     cachedInvoices = invoices || [];
-
-    custs.forEach(c => {
-      c.activity = detectCustomerCategory(c);
-      c.monthlySales = custSalesMap[c.id] || 0;
-      c.tier = getCustomerTierInfo(c.monthlySales, c.tierOverride || c.manualTier);
-    });
-
-    cachedCustomers = custs;
-
-    // Recalculate if user had selected a different sales period before refresh
-    if (currentSalesPeriod && currentSalesPeriod !== "last30") {
-      await recalculateCustomerSales(currentSalesPeriod, customPeriodFrom, customPeriodTo);
-    }
 
     // تعبئة خيارات فلتر المناطق تلقائياً
     const zoneSel = document.getElementById("cust-zone-filter");
     if (zoneSel && zoneSel.options.length <= 1) {
       const curZone = zoneSel.value;
-      const zones = [...new Set(custs.map(c => (c.zone || "").trim()).filter(Boolean))].sort();
+      const zones = [...new Set(cachedCustomers.map(c => (c.zone || "").trim()).filter(Boolean))].sort();
       zones.forEach(z => {
         zoneSel.innerHTML += `<option value="${z}">${z}</option>`;
       });
       if (curZone) zoneSel.value = curZone;
     }
 
-    renderCustomersTable(cachedCustomers, tbody);
+    applyCustomerSalesPeriod(currentSalesPeriod, customSalesFrom, customSalesTo);
   } catch (err) {
     console.error("loadCustomers error:", err);
     tbody.innerHTML = `<tr><td colspan="11"><div class="alert bad" style="margin:8px;">${err.message}</div></td></tr>`;
   }
 }
+
+window.changeCustomerSalesPeriod = (val) => {
+  const customBox = document.getElementById("cust-custom-dates");
+  if (val === "custom") {
+    if (customBox) customBox.style.display = "inline-flex";
+    const fromVal = document.getElementById("cust-from-date")?.value || "";
+    const toVal = document.getElementById("cust-to-date")?.value || "";
+    if (fromVal) applyCustomerSalesPeriod("custom", fromVal, toVal);
+  } else {
+    if (customBox) customBox.style.display = "none";
+    applyCustomerSalesPeriod(val);
+  }
+};
+
+window.recalcCustomerPeriodSales = () => {
+  const fromVal = document.getElementById("cust-from-date")?.value || "";
+  const toVal = document.getElementById("cust-to-date")?.value || "";
+  if (fromVal) applyCustomerSalesPeriod("custom", fromVal, toVal);
+};
+
+window.setCustomerActivityFilter = (actKey) => {
+  currentActivityFilter = actKey;
+  document.querySelectorAll(".activity-filter-btn").forEach(btn => btn.classList.remove("active"));
+  const btn = document.getElementById(`act-btn-${actKey}`);
+  if (btn) btn.classList.add("active");
+  const actSelect = document.getElementById("cust-activity-filter");
+  if (actSelect) actSelect.value = actKey;
+  filterCustomersList();
+};
+
+window.onCustomerActivitySelectChange = (val) => {
+  currentActivityFilter = val;
+  document.querySelectorAll(".activity-filter-btn").forEach(btn => btn.classList.remove("active"));
+  const btn = document.getElementById(`act-btn-${val}`);
+  if (btn) btn.classList.add("active");
+  filterCustomersList();
+};
+
+window.setCustomerTierFilter = (tierKey) => {
+  currentTierFilter = tierKey;
+  document.querySelectorAll(".tier-filter-btn").forEach(btn => btn.classList.remove("active"));
+  const btn = document.getElementById(`tier-btn-${tierKey}`);
+  if (btn) btn.classList.add("active");
+  filterCustomersList();
+};
 
 window.filterCustomersList = () => {
   const tbody = document.getElementById("cust-tbody");
@@ -1080,12 +939,13 @@ window.refreshCustomers = async () => {
   const btn = document.getElementById("cust-refresh-btn");
   if (btn) { btn.disabled = true; btn.textContent = "⏳ جاري…"; }
   cachedCustomers = []; 
+  cachedInvoices = [];
   if (window.ERP_CACHE) {
     for (const key of Object.keys(window.ERP_CACHE)) {
       if (key.includes("customers") || key.includes("salesInvoices")) delete window.ERP_CACHE[key];
     }
   }
-  await loadCustomers();
+  await loadCustomers(true);
   if (btn) { btn.disabled = false; btn.textContent = "🔄  تحديث"; }
 };
 
@@ -1111,18 +971,21 @@ function renderCustomersTable(custs, tbody) {
   if (!tbody) return;
 
   let filtered = [...(custs || cachedCustomers || [])];
-  const searchVal = document.getElementById("cust-search")?.value?.toLowerCase().trim();
+  
+  // Search query with Arabic Normalization & multi-token matching
+  const searchVal = document.getElementById("cust-search")?.value?.trim();
   if (searchVal) {
-    filtered = filtered.filter(c => 
-      (c.name || "").toLowerCase().includes(searchVal) || 
-      (c.code || "").toLowerCase().includes(searchVal) ||
-      (c.phone || "").includes(searchVal) ||
-      (c.vatNumber || "").includes(searchVal) ||
-      (c.nationalId || "").includes(searchVal) ||
-      (c.crNumber || "").includes(searchVal) ||
-      (c.repName || "").toLowerCase().includes(searchVal) ||
-      (c.zone || "").toLowerCase().includes(searchVal)
-    );
+    filtered = filtered.filter(c => {
+      const act = getCustomerActivityInfo(c.name);
+      return matchArabicSearch(c.name || "", searchVal) ||
+             (c.code || "").toLowerCase().includes(searchVal.toLowerCase()) ||
+             matchArabicSearch(c.repName || "", searchVal) ||
+             matchArabicSearch(c.zone || "", searchVal) ||
+             (c.phone || "").includes(searchVal) ||
+             (c.vatNumber || "").includes(searchVal) ||
+             (c.nationalId || c.crNumber || "").includes(searchVal) ||
+             matchArabicSearch(act.label || "", searchVal);
+    });
   }
 
   const zoneF = document.getElementById("cust-zone-filter")?.value;
@@ -1134,7 +997,7 @@ function renderCustomersTable(custs, tbody) {
     const repSelect = document.getElementById("cust-rep-filter");
     const repName = repSelect?.options[repSelect.selectedIndex]?.text?.trim();
     filtered = filtered.filter(c => {
-      if (c.repId === repF || c.salesRepId === repF) return true;
+      if (c.repId === repF || c.salesRepId === repF || c.assignedRepId === repF) return true;
       if (repName && (c.repName === repName || c.salesRepName === repName)) return true;
       return false;
     });
@@ -1143,18 +1006,24 @@ function renderCustomersTable(custs, tbody) {
   const creditF = document.getElementById("cust-credit-filter")?.value;
   if (creditF) filtered = filtered.filter(c => getCreditStatus(c.balance || 0, c.creditLimit || 0).color === creditF);
 
-  // تصفية حسب النشاط التجاري
+  // Filter by Activity (مطاعم، تموينات، بقالات، فنادق، كافيهات، أخرى)
   if (currentActivityFilter && currentActivityFilter !== "all") {
-    filtered = filtered.filter(c => (c.activity?.key || detectCustomerCategory(c).key) === currentActivityFilter);
+    filtered = filtered.filter(c => getCustomerActivityInfo(c.name).key === currentActivityFilter);
   }
 
   // تحديث عدادات الشرائح والأنشطة فورياً لتوافق التصفية الحالية
   updateTierCounters(filtered);
-  updateActivityCounters(cachedCustomers);
+  updateActivityCounters(filtered);
 
   // Filter by Tier
   if (currentTierFilter && currentTierFilter !== "all") {
-    filtered = filtered.filter(c => c.tier?.key === currentTierFilter);
+    if (currentTierFilter === "pending") {
+      filtered = filtered.filter(c => c.status === "pending_approval" || c.approvalStatus === "pending");
+    } else if (currentTierFilter === "kyc") {
+      filtered = filtered.filter(c => Array.isArray(c.attachments) && c.attachments.length > 0);
+    } else {
+      filtered = filtered.filter(c => c.tier?.key === currentTierFilter);
+    }
   }
 
   // ── ترتيب حسب تاريخ الإضافة ──
@@ -1222,8 +1091,6 @@ window.openCustomerModal = (cust = null) => {
   document.getElementById("cust-rep").value          = cust?.repId       || "";
   document.getElementById("cust-price-list").value   = cust?.priceList   || "default";
   document.getElementById("cust-tier-override").value = cust?.tierOverride || cust?.manualTier || "auto";
-  const actSelect = document.getElementById("cust-activity-category");
-  if (actSelect) actSelect.value = cust?.activityCategory || cust?.category || "auto";
   document.getElementById("cust-form-error").classList.add("hidden");
 
   // Handle Broker Commission settings
@@ -1237,7 +1104,7 @@ window.openCustomerModal = (cust = null) => {
   const bRateEl = document.getElementById("cust-broker-rate");
   if (bRateEl) bRateEl.value = cust?.brokerRate !== undefined ? cust.brokerRate : "1.0";
   const bTrigEl = document.getElementById("cust-broker-trigger");
-  if (bTrigEl) bTrigEl.value = cust?.brokerTrigger || "on_payment";
+  if (bTrigEl) bTrigEl.value = cust?.brokerTrigger || "on_invoice";
 
   // Handle COA toggle visibility
   const toggleWrap = document.getElementById("cust-coa-toggle-wrap");
@@ -1329,7 +1196,7 @@ window.saveCustomer = async () => {
   const hasBrokerCommission = document.getElementById("cust-has-broker")?.checked || false;
   const brokerName = document.getElementById("cust-broker-name")?.value?.trim() || "زياد";
   const brokerRate = parseFloat(document.getElementById("cust-broker-rate")?.value) || 1.0;
-  const brokerTrigger = document.getElementById("cust-broker-trigger")?.value || "on_payment";
+  const brokerTrigger = document.getElementById("cust-broker-trigger")?.value || "on_invoice";
 
   const data = {
     name, code: document.getElementById("cust-code").value.trim(),
@@ -1346,7 +1213,6 @@ window.saveCustomer = async () => {
     priceList:   document.getElementById("cust-price-list").value,
     deliveryDay: document.getElementById("cust-delivery-day").value,
     tierOverride: document.getElementById("cust-tier-override")?.value || "auto",
-    activityCategory: document.getElementById("cust-activity-category")?.value || "auto",
     routeGroup:  document.getElementById("cust-route-group").value.trim(),
     googleMapsUrl: document.getElementById("cust-maps-url").value.trim(),
     hasBrokerCommission,
@@ -1456,39 +1322,22 @@ window.exportCustomersExcel = async () => {
   try {
     const custs = cachedCustomers.length > 0 ? cachedCustomers : await getAll(COLS.customers(), [orderBy('name')]);
     showToast('جاري تجهيز ملف Excel…', 'info');
-    const range = getPeriodRange(currentSalesPeriod, customPeriodFrom, customPeriodTo);
-    const rows = custs.map(c => {
-      const act = c.activity || detectCustomerCategory(c);
-      const tier = c.tier || getCustomerTierInfo(c.monthlySales || 0, c.tierOverride);
-      return [
-        c.name || '',
-        act.label || '',
-        tier.label || '',
-        c.monthlySales || 0,
-        c.code || '',
-        c.phone || '',
-        c.zone || '',
-        c.repName || '',
-        c.priceList === "wholesale" ? "الجملة" : c.priceList === "retail" ? "التجزئة" : "الأساسي",
-        c.balance || 0,
-        c.creditLimit || 0,
-        c.paymentTerms || '',
-        c.vatNumber || '',
-        c.notes || ''
-      ];
-    });
+    const rows = custs.map(c => [
+      c.name || '', c.code || '', getCustomerActivityInfo(c.name).label, c.phone || '', c.email || '',
+      c.zone || '', c.repName || '', c.priceList || '',
+      c.balance || 0, c.creditLimit || 0,
+      c.paymentTerms || '', c.vatNumber || '', c.notes || ''
+    ]);
     await exportToExcel({
-      title: 'دليل_العملاء_وتصنيف_الأنشطة',
-      headers: [
-        'اسم العميل*', 'النشاط التجاري', 'الشريحة', `مسحوبات (${range.label})`,
-        'كود العميل', 'رقم الهاتف', 'المنطقة', 'المندوب', 'قائمة الأسعار',
+      title: 'العملاء',
+      headers: ['اسم العميل*', 'كود العميل', 'نشاط العميل', 'رقم الهاتف', 'البريد الإلكتروني',
+        'المنطقة', 'المندوب', 'قائمة الأسعار',
         'الرصيد الحالي', 'حد الائتمان',
-        'شروط الدفع', 'الرقم الضريبي', 'ملاحظات'
-      ],
+        'شروط الدفع', 'الرقم الضريبي', 'ملاحظات'],
       rows,
-      colWidths: [28, 18, 16, 18, 14, 14, 14, 18, 14, 14, 14, 14, 18, 26],
+      colWidths: [28, 14, 18, 14, 26, 14, 18, 14, 14, 14, 14, 18, 26],
     });
-    showToast(`تم تصدير ${rows.length} عميل ببيانات الأنشطة والمسحوبات ✅`, 'success');
+    showToast(`تم تصدير ${rows.length} عميل ✅`, 'success');
   } catch (err) { showToast('خطأ: ' + err.message, 'error'); }
 };
 
@@ -1640,9 +1489,29 @@ function buildCustomerSections(c) {
         { label: 'نسبة استهلاك الحد', value: c.creditLimit > 0 ? `${cs.pct.toFixed(1)}%` : 'بلا حد' },
         { label: 'أيام الائتمان (مهلة السداد)', value: c.creditDays ? `${c.creditDays} يوم` : 'فوري (كاش)' },
         { label: 'الرقم الضريبي', value: c.vatNumber, mono: true },
-        { label: 'الهوية الوطنية / السجل التجاري', value: c.nationalId, mono: true },
+        { label: 'السجل التجاري', value: c.crNumber || c.nationalId, mono: true },
+        { label: 'مصدر التسجيل', value: c.source === 'sales_manager_portal' ? '💼 بوابة مدير المبيعات الميدانية' : 'الإدارة العامة' },
         { label: 'ملاحظات', value: c.notes },
       ]
+    },
+    {
+      heading: `الأوراق والمستندات الرسمية (KYC) — (${(c.attachments || []).length} مستند)`,
+      rows: [
+        {
+          label: 'حالة المستندات المرفوعة',
+          value: Array.isArray(c.attachments) && c.attachments.length > 0
+            ? c.attachments.map(a => `📄 ${a.title || a.fileName || 'مستند'}`).join(' &nbsp;|&nbsp; ')
+            : '<span style="color:#f59e0b; font-weight:700;">لا توجد مستندات مرفوعة بعد</span>'
+        },
+        c.signatureDataUrl ? {
+          label: 'التوقيع الحي المعتمد',
+          value: '✍️ تم التوقيع الرقمي بنجاح وموثق بالاتفاقية'
+        } : null,
+        {
+          label: 'عرض وفحص الملفات',
+          value: `<button class="btn btn-sm" style="background:#0284c7;color:#fff;border:none;padding:4px 12px;border-radius:6px;font-weight:bold;cursor:pointer;" onclick="document.getElementById('record-preview-overlay')?.remove(); window.openCustomerAttachmentsModal('${c.id}')">📁 فتح ملف المستندات والصور (KYC)</button>`
+        }
+      ].filter(Boolean)
     }
   ];
 }
@@ -1651,6 +1520,7 @@ window.previewCustomer = (id) => {
   const c = getCustomerById(id);
   if (!c) { showToast('لم يتم إيجاد العميل', 'error'); return; }
   const cs = getCreditStatus(c.balance || 0, c.creditLimit || 0);
+  const attachmentsCount = (c.attachments || []).length;
   showRecordPreview({
     title: c.name,
     icon: '👤',
@@ -1658,6 +1528,7 @@ window.previewCustomer = (id) => {
     badgeColor: cs.color === 'good' ? 'good' : cs.color === 'warn' ? 'warn' : 'bad',
     sections: buildCustomerSections(c),
     actions: [
+      { icon: '📁', label: `المستندات الرسمية (${attachmentsCount})`, fn: `document.getElementById('record-preview-overlay')?.remove(); window.openCustomerAttachmentsModal('${id}')`, style: 'background:#0284c7;color:#fff;font-weight:bold;' },
       { icon: '✏️', label: 'تعديل', fn: `document.getElementById('record-preview-overlay').remove();editCustomer('${id}')`, style: 'background:var(--brand);color:#fff;' },
       { icon: '📝', label: 'اتفاقية الحساب', fn: `document.getElementById('record-preview-overlay').remove();openCustomerAgreement('${id}')`, style: 'background:#1E3A8A;color:#fff;' },
       { icon: '🛡️', label: 'سند أمانة وعهدة مالية', fn: `document.getElementById('record-preview-overlay').remove();issueTrustReceiptFromCustomers('${id}')`, style: 'background:#0369A1;color:#fff;' },
@@ -1675,6 +1546,192 @@ window.printCustomer = (id) => {
 
 window.exportCustomerPDF = (id) => {
   openCustomerAgreementModal(id);
+};
+
+// ─── اعتماد عميل جديد قادم من مدير المبيعات وربطه بالشجرة ───
+window.approveSalesManagerCustomer = async (customerId, customerName) => {
+  const cust = cachedCustomers.find(c => c.id === customerId);
+  if (!cust) {
+    showToast("لم يتم العثور على بيانات العميل", "error");
+    return;
+  }
+
+  const confirm = window.confirm(
+    `هل تريد اعتماد العميل: "${customerName}" وتفعيل حسابه رسمياً في النظام؟\n\n` +
+    `• الحد الائتماني: ${formatCurrency(cust.creditLimit || 0)}\n` +
+    `• المندوب المسؤول: ${cust.repName || 'غير محدد'}\n` +
+    `• سيتم ربطه تلقائياً بشجرة الحسابات (COA) ليصبح متاحاً للبيع فوراً.`
+  );
+  if (!confirm) return;
+
+  try {
+    showToast("جاري اعتماد العميل وربطه بالشجرة...", "info");
+    const { doc, updateDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+    const { db, COMPANY_ID } = await import("../firebase-config.js");
+    const { syncEntityToCoa } = await import("../utils/coa-connector.js");
+
+    // 1. تحديث حالة العميل
+    const custRef = doc(db, `companies/${COMPANY_ID}/customers`, customerId);
+    await updateDoc(custRef, {
+      status: "active",
+      approvalStatus: "approved",
+      approvedAt: serverTimestamp()
+    });
+
+    // 2. مزامنة وربط العميل بشجرة الحسابات (COA)
+    try {
+      await syncEntityToCoa("customers", customerId, cust.name, { repId: cust.repId || cust.assignedRepId });
+    } catch (coaErr) {
+      console.warn("COA sync warning:", coaErr);
+    }
+
+    showToast(`✅ تم اعتماد العميل "${customerName}" وتفعيل حسابه بنجاح!`, "success");
+    await loadCustomers();
+  } catch (err) {
+    console.error("Approval error:", err);
+    showToast("حدث خطأ أثناء اعتماد العميل: " + err.message, "error");
+  }
+};
+
+// ─── نافذة استعراض المستندات القانونية والمرفقات (KYC) ───
+window.openCustomerAttachmentsModal = (customerId) => {
+  const c = cachedCustomers.find(x => x.id === customerId);
+  if (!c) return;
+
+  const overlay = document.createElement("div");
+  overlay.className = "modal-overlay active";
+  overlay.id = "cust-kyc-overlay";
+  overlay.style.zIndex = "1200";
+
+  const attachments = Array.isArray(c.attachments) ? c.attachments : [];
+
+  overlay.innerHTML = `
+    <div class="modal-window" style="max-width:720px; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.3); font-family:var(--font-body,'Cairo',sans-serif); direction:rtl; text-align:right;">
+      <div style="background:linear-gradient(135deg, #004d80, #0284c7); color:#fff; padding:16px 20px; display:flex; justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:22px;">📂</span>
+          <div>
+            <h3 style="margin:0; font-size:16px; font-weight:800;">الأوراق والمستندات القانونية (KYC) — ${c.name}</h3>
+            <div style="font-size:11px; opacity:0.85;">كود العميل: ${c.code || '—'} &nbsp;|&nbsp; المندوب: ${c.repName || '—'}</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" style="background:rgba(255,255,255,0.18); border:none; color:#fff; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:16px;" onclick="document.getElementById('cust-kyc-overlay').remove()">✕</button>
+      </div>
+
+      <div style="padding:20px; max-height:75vh; overflow-y:auto;">
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:16px; font-size:12px; display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:8px;">
+          <div>📜 السجل التجاري: <strong class="mono">${c.crNumber || 'غير مدون'}</strong></div>
+          <div>🏢 الرقم الضريبي: <strong class="mono">${c.vatNumber || 'غير مدون'}</strong></div>
+          <div>📞 الجوال: <strong class="mono">${c.phone || c.mobile || '—'}</strong></div>
+          <div>💳 التسهيلات المقررة: <strong>${formatCurrency(c.creditLimit || 0)}</strong> (${c.creditDays || 30} يوماً)</div>
+          ${c.googleMapsUrl ? `<div style="grid-column:1/-1;"><a href="${c.googleMapsUrl}" target="_blank" style="color:#0284c7; font-weight:bold;">📍 فتح موقع المنشأة الميداني على خرائط جوجل</a></div>` : ''}
+        </div>
+
+        <h4 style="font-size:13px; font-weight:800; margin-bottom:10px; color:#004d80;">المستندات والملفات المرفوعة (${attachments.length}):</h4>
+        ${attachments.length === 0 ? `
+          <div style="text-align:center; padding:32px; color:var(--text-muted); border:1px dashed #cbd5e1; border-radius:10px;">
+            لا توجد مستندات قانونية مرفقة لهذا العميل حتى الآن.
+          </div>
+        ` : `
+          <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr)); gap:12px;">
+            ${attachments.map(a => `
+              <div style="border:1.5px solid #e2e8f0; border-radius:10px; padding:10px; background:#fff; text-align:center;">
+                <div style="font-size:11.5px; font-weight:800; color:#0f172a; margin-bottom:6px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${a.title || a.fileName}">
+                  ${a.title || a.fileName || 'مستند قانوني'}
+                </div>
+                ${a.dataUrl?.startsWith('data:image') ? `
+                  <a href="${a.dataUrl}" target="_blank" title="اضغط للتكبير وعرض الصورة">
+                    <img src="${a.dataUrl}" style="width:100%; height:110px; object-fit:cover; border-radius:6px; border:1px solid #cbd5e1;" />
+                  </a>
+                ` : `
+                  <div style="padding:20px; background:#f1f5f9; border-radius:6px; margin-bottom:6px; font-size:24px;">📄</div>
+                  <a href="${a.dataUrl}" target="_blank" class="btn btn-secondary btn-sm" style="font-size:11px;">عرض الملف / PDF</a>
+                `}
+              </div>
+            `).join('')}
+          </div>
+        `}
+
+        ${c.signatureDataUrl ? `
+          <div style="margin-top:16px; padding:12px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:12px; font-weight:800; color:#004d80;">✍️ نموذج توقيع العميل الحي على الاتفاقية:</div>
+              <div style="font-size:10.5px; color:#475569;">موثق إلكترونياً ومربوط بالاتفاقية الائتمانية الرسمية</div>
+            </div>
+            <img src="${c.signatureDataUrl}" style="max-height:55px; background:#fff; padding:4px; border:1px solid #cbd5e1; border-radius:6px;" />
+          </div>
+        ` : ''}
+        <!-- خانة رفع مستند جديد مباشرة من البرنامج الرئيسي -->
+        <div style="margin-top:16px; padding:12px; background:#f8fafc; border:1.5px dashed #cbd5e1; border-radius:10px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div style="font-size:12px; font-weight:800; color:#0f172a;">➕ إرفاق مستند أو وثيقة رسمية للملف:</div>
+            <div style="font-size:10.5px; color:#64748b;">سجل تجاري، شهادة ضريبية، رخصة، هوية، عقد إيجار، آيبان (صور أو PDF)</div>
+          </div>
+          <div>
+            <input type="file" id="cust-upload-kyc-input" accept="image/*,.pdf" style="display:none;" onchange="window.uploadNewCustomerKycDoc('${c.id}', this)" />
+            <button type="button" class="btn btn-primary sm" onclick="document.getElementById('cust-upload-kyc-input').click()" style="background:#0284c7; font-weight:800; font-size:11.5px; padding:6px 14px; border-radius:6px; cursor:pointer;">
+              📤 رفع مستند جديد
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding:12px 20px; border-top:1px solid #e2e8f0; background:#f8fafc; display:flex; justify-content:space-between; align-items:center;">
+        <button class="btn btn-secondary" onclick="document.getElementById('cust-kyc-overlay').remove()">إغلاق</button>
+        <button class="btn btn-primary" onclick="document.getElementById('cust-kyc-overlay').remove(); openCustomerAgreement('${c.id}')" style="background:#0284c7;">
+          🖨️ طباعة الاتفاقية القانونية A4
+        </button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+};
+
+// ─── رفع مستند KYC جديد لملف العميل وحفظه في Firestore ───
+window.uploadNewCustomerKycDoc = async (customerId, input) => {
+  const file = input?.files?.[0];
+  if (!file) return;
+
+  const docTitle = prompt("أدخل اسم / نوع المستند المرفوع (مثلاً: رخصة البلدية، عقد الإيجار، السجل التجاري):", file.name) || file.name;
+
+  try {
+    showToast("جاري معالجة ورفع المستند...", "info");
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      const dataUrl = e.target.result;
+      const { doc, updateDoc, arrayUnion } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
+      const { db, COMPANY_ID } = await import("../firebase-config.js");
+
+      const newAttachment = {
+        docId: "doc_" + Date.now(),
+        title: docTitle,
+        fileName: file.name,
+        dataUrl: dataUrl,
+        uploadedAt: new Date().toISOString()
+      };
+
+      const custRef = doc(db, `companies/${COMPANY_ID}/customers`, customerId);
+      await updateDoc(custRef, {
+        attachments: arrayUnion(newAttachment)
+      });
+
+      // تحديث العميل في الذاكرة
+      const custInCache = cachedCustomers.find(x => x.id === customerId);
+      if (custInCache) {
+        if (!Array.isArray(custInCache.attachments)) custInCache.attachments = [];
+        custInCache.attachments.push(newAttachment);
+      }
+
+      showToast("✅ تم رفع المستند وحفظه بملف العميل بنجاح!", "success");
+      document.getElementById("cust-kyc-overlay")?.remove();
+      window.openCustomerAttachmentsModal(customerId);
+    };
+    reader.readAsDataURL(file);
+  } catch (err) {
+    console.error("Upload error:", err);
+    showToast("حدث خطأ أثناء رفع المستند: " + err.message, "error");
+  }
 };
 
 // ─── ترحيل ذمم العملاء لشجرة الحسابات (مرة واحدة) ───
@@ -1761,7 +1818,16 @@ window.showCustomerIntelligence = async (customerId, customerName) => {
     const totalInvoicesCount = invoices.length;
     const totalSalesExclVat = invoices.reduce((s, i) => s + (i.subtotal || 0), 0);
     const totalSalesInclVat = invoices.reduce((s, i) => s + (i.totalWithVat || 0), 0);
-    const totalCost = invoices.reduce((s, i) => s + (i.totalCost || 0), 0);
+    let totalCost = 0;
+    invoices.forEach(i => {
+      const lines = i.lines || i.items || [];
+      const linesCost = lines.reduce((sum, l) => {
+        const qty = parseFloat(l.qty || l.quantity || 1) || 0;
+        const uCost = parseFloat(l.costPrice !== undefined ? l.costPrice : (l.purchasePrice !== undefined ? l.purchasePrice : (l.unitCost || 0))) || 0;
+        return sum + (qty * uCost);
+      }, 0);
+      totalCost += (linesCost > 0 ? linesCost : (parseFloat(i.totalCost) || 0));
+    });
     const totalProfit = totalSalesExclVat - totalCost;
     const profitMargin = totalSalesExclVat > 0 ? (totalProfit / totalSalesExclVat) * 100 : 0;
 
@@ -1915,12 +1981,9 @@ window.showCustomerIntelligence = async (customerId, customerName) => {
               ${tierInfo.key === 'A' ? '👑' : tierInfo.key === 'B' ? '💎' : tierInfo.key === 'C' ? '🚀' : tierInfo.key === 'D' ? '📦' : '⚪'}
             </div>
             <div>
-              <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:8px;">
                 <span style="font-size:18px; font-weight:800; color:${tierInfo.color}; font-family:var(--font-heading);">
                   ${tierInfo.label}
-                </span>
-                <span class="activity-badge" style="background:${(customerDoc.activity || detectCustomerCategory(customerDoc)).bg}; color:${(customerDoc.activity || detectCustomerCategory(customerDoc)).color}; border:1px solid ${(customerDoc.activity || detectCustomerCategory(customerDoc)).border}; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:800;" title="النشاط المكتشف: ${(customerDoc.activity || detectCustomerCategory(customerDoc)).label}">
-                  ${(customerDoc.activity || detectCustomerCategory(customerDoc)).icon} ${(customerDoc.activity || detectCustomerCategory(customerDoc)).label}
                 </span>
                 ${tierInfo.isManual ? '<span class="badge neutral" style="font-size:10px;">🔒 تثبيت يدوي</span>' : '<span class="badge neutral" style="font-size:10px;">⚡ تصنيف ديناميكي</span>'}
               </div>
@@ -2028,7 +2091,13 @@ window.showCustomerIntelligence = async (customerId, customerName) => {
                 ${invoices.map(inv => {
                   const valIncl = inv.totalWithVat || 0;
                   const valExcl = inv.subtotal || 0;
-                  const cost = inv.totalCost || 0;
+                  const lines = inv.lines || inv.items || [];
+                  const linesCost = lines.reduce((sum, l) => {
+                    const qty = parseFloat(l.qty || l.quantity || 1) || 0;
+                    const uCost = parseFloat(l.costPrice !== undefined ? l.costPrice : (l.purchasePrice !== undefined ? l.purchasePrice : (l.unitCost || 0))) || 0;
+                    return sum + (qty * uCost);
+                  }, 0);
+                  const cost = linesCost > 0 ? linesCost : (parseFloat(inv.totalCost) || 0);
                   const profit = valExcl - cost;
                   const margin = valExcl > 0 ? (profit / valExcl) * 100 : 0;
                   return `
@@ -2038,8 +2107,8 @@ window.showCustomerIntelligence = async (customerId, customerName) => {
                       <td style="padding:10px;" class="mono">${formatCurrency(valIncl)}</td>
                       <td style="padding:10px;" class="mono">${formatCurrency(valExcl)}</td>
                       <td style="padding:10px; color:var(--text-3);" class="mono">${formatCurrency(cost)}</td>
-                      <td style="padding:10px; font-weight:600; color:${profit >= 0 ? "var(--good)" : "var(--bad)"}" class="mono">${formatCurrency(profit)}</td>
-                      <td style="padding:10px;" class="mono"><span class="badge ${profit >= 0 ? "good" : "bad"}" style="font-size:11px; padding:2px 8px;">${margin.toFixed(1)}%</span></td>
+                      <td style="padding:10px; font-weight:600; color:${profit >= 0 ? "var(--good)" : "var(--bad)"}" class="mono">${profit >= 0 ? "+" : ""}${formatCurrency(profit)}</td>
+                      <td style="padding:10px;" class="mono"><span class="badge ${profit >= 0 ? "good" : "bad"}" style="font-size:11px; padding:2px 8px;">${margin >= 0 ? "+" : ""}${margin.toFixed(1)}%</span></td>
                     </tr>
                   `;
                 }).join("")}

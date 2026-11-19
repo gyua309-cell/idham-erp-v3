@@ -113,22 +113,22 @@ window.openGoodsReceiptAckModal = async (opts) => {
 // Modules (lazy imports)
 // ──────────────────────────────────────────
 const ROUTES = {
-  "dashboard":                () => import("./modules/dashboard.js?v=39.2"),
-  "expenses":                 () => import("./modules/expenses.js?v=42.0"),
-  "receipts":                 () => import("./modules/receipts.js?v=45.0"),
-  "payments":                 () => import("./modules/expenses.js?v=42.0"),
+  "dashboard":                () => import("./modules/dashboard.js?v=39.5"),
+  "expenses":                 () => import("./modules/expenses.js?v=42.1"),
+  "receipts":                 () => import("./modules/receipts.js?v=46.1"),
+  "payments":                 () => import("./modules/expenses.js?v=42.1"),
   "products":                 () => import("./modules/products.js?v=48.0"),
   "categories":               () => import("./modules/categories.js?v=40.0"),
-  "warehouses":               () => import("./modules/warehouses.js?v=39.6"),
-  "inventory-ops":            () => import("./modules/inventory-ops.js?v=41.1"),
+  "warehouses":               () => import("./modules/warehouses.js?v=39.7"),
+  "inventory-ops":            () => import("./modules/inventory-ops.js?v=50.3"),
   "inventory-closing":        () => import("./modules/inventory-closing.js?v=39.2"),
   "inventory-dashboard":      () => import("./modules/inventory-dashboard.js?v=39.2"),
-  "stock-transfer":           () => import("./modules/stock-transfer.js?v=45.3"),
+  "stock-transfer":           () => import("./modules/stock-transfer.js?v=45.4"),
   "stock-card":               () => import("./modules/stock-card.js?v=55.1"),
   "inventory-locations":      () => import("./modules/inventory-locations.js?v=47.0"),
   "reorder-points":           () => import("./modules/reorder-points.js?v=39.2"),
   "expiry-tracking":          () => import("./modules/expiry-tracking.js?v=39.2"),
-  "van-loading-dispatch":     () => import("./modules/van-loading-dispatch.js?v=1.0"),
+  "van-loading-dispatch":     () => import("./modules/van-loading-dispatch.js?v=48.0"),
   "barcode-label-printer":    () => import("./modules/barcode-label-printer.js?v=1.0"),
   "product-bundles-kitting":  () => import("./modules/product-bundles-kitting.js?v=1.0"),
   "inventory-waste-clearance":() => import("./modules/inventory-waste-clearance.js?v=2.6"),
@@ -136,7 +136,7 @@ const ROUTES = {
   "product-profit-margins":   () => import("./modules/product-profit-margins.js?v=1.0"),
   "stock-movement-balance":   () => import("./modules/stock-movement-balance.js?v=1.0"),
   "inventory-replenishment":  () => import("./modules/inventory-replenishment.js?v=1.1"),
-  "customers":                () => import("./modules/customers.js?v=47.0"),
+  "customers":                () => import("./modules/customers.js?v=50.0"),
   "customer-crm":             () => import("./modules/customer-crm.js?v=1.0"),
   "customer-segments":        () => import("./modules/customer-segments.js?v=1.0"),
   "customer-complaints":      () => import("./modules/customer-complaints.js?v=1.0"),
@@ -144,7 +144,7 @@ const ROUTES = {
   "customer-contracts":       () => import("./modules/customer-contracts.js?v=1.0"),
   "customer-statement":       () => import("./modules/customer-statement.js?v=2.2"),
   "suppliers":                () => import("./modules/suppliers.js?v=41.0"),
-  "supplier-statement":       () => import("./modules/supplier-statement.js?v=3.0"),
+  "supplier-statement":       () => import("./modules/supplier-statement.js?v=4.0"),
   "supplier-contracts":       () => import("./modules/supplier-contracts.js?v=1.0"),
   "supplier-evaluations":     () => import("./modules/supplier-evaluations.js?v=1.0"),
   "supplier-performance":     () => import("./modules/supplier-performance.js?v=1.1"),
@@ -158,48 +158,48 @@ const ROUTES = {
   "price-lists":              () => import("./modules/price-lists.js?v=39.2"),
   "sales-reps":               () => import("./modules/sales-reps.js?v=41.0"),
   "rep-performance":          () => import("./modules/reports/rep-performance.js?v=47.0"),
-  "rep-daily-journal":        () => import("./modules/reports/rep-daily-journal.js?v=15.0"),
-  "cash-boxes":               () => import("./modules/cash-boxes.js?v=46.0"),
-  "bank-accounts":            () => import("./modules/bank-accounts.js?v=41.0"),
+  "rep-daily-journal":        () => import("./modules/reports/rep-daily-journal.js?v=16.1"),
+  "cash-boxes":               () => import("./modules/cash-boxes.js?v=49.0"),
+  "bank-accounts":            () => import("./modules/bank-accounts.js?v=44.0"),
   "cheques":                  () => import("./modules/cheques.js?v=39.2"),
   "promissory-notes":         () => import("./modules/promissory-notes.js?v=2.4"),
   "trust-receipts":           () => import("./modules/trust-receipts.js?v=2.6"),
   "goods-receipt-ack":        () => import("./modules/goods-receipt-ack.js?v=2.3"),
-  "sales-invoices":           () => import("./modules/sales-invoices.js?v=59.0"),
-  "broker-statement":         () => import("./modules/broker-statement.js?v=1.0"),
+  "sales-invoices":           () => import("./modules/sales-invoices.js?v=66.0"),
+  "broker-statement":         () => import("./modules/broker-statement.js?v=1.4"),
   "delivery-notes":           () => import("./modules/delivery-notes.js?v=2.3"),
   "sales-returns":            () => import("./modules/sales-returns.js?v=39.5"),
-  "quotations":               () => import("./modules/quotations.js?v=68.0"),
+  "quotations":               () => import("./modules/quotations.js?v=70.0"),
   "pos":                      () => import("./modules/pos.js?v=39.2"),
-  "purchase-invoices":        () => import("./modules/purchase-invoices.js?v=49.0"),
+  "purchase-invoices":        () => import("./modules/purchase-invoices.js?v=50.1"),
   "purchase-returns":         () => import("./modules/purchase-returns.js?v=44.0"),
   "chart-of-accounts":        () => import("./modules/chart-of-accounts.js?v=43.1"),
-  "journal-entries":          () => import("./modules/journal-entries.js?v=52.0"),
-  "financial-reports":        () => import("./modules/financial-reports.js?v=43.2"),
+  "journal-entries":          () => import("./modules/journal-entries.js?v=54.0"),
+  "financial-reports":        () => import("./modules/financial-reports.js?v=46.0"),
   "report-sales-product":     () => import("./modules/reports/sales-by-product.js?v=39.2"),
   "report-sales-rep":         () => import("./modules/reports/sales-by-rep.js?v=39.2"),
   "report-sales-customer":    () => import("./modules/reports/sales-by-customer.js?v=39.2"),
   "report-customer-matrix":   () => import("./modules/reports/customer-monthly-matrix.js?v=1.1"),
   "report-stock":             () => import("./modules/reports/stock-report.js?v=39.2"),
   "report-customer-statement":() => import("./modules/reports/customer-statement.js?v=41.1"),
-  "report-hierarchical-debt": () => import("./modules/reports/hierarchical-debt.js?v=1.2"),
-  "report-consolidated-balances":() => import("./modules/reports/consolidated-balances.js?v=46.0"),
+  "report-hierarchical-debt": () => import("./modules/reports/hierarchical-debt.js?v=3.0"),
+  "report-consolidated-balances":() => import("./modules/reports/consolidated-balances.js?v=47.0"),
   "report-warehouse-comparison":() => import("./modules/reports/warehouse-comparison.js?v=44.0"),
-  "report-profit-loss":       () => import("./modules/reports/profit-loss.js?v=39.2"),
+  "report-profit-loss":       () => import("./modules/reports/profit-loss.js?v=40.0"),
   "report-expense-analysis":  () => import("./modules/reports/expense-analysis.js?v=43.0"),
   "report-product-analytics": () => import("./modules/reports/product-analytics.js?v=42.0"),
-  "report-expense-tracking":  () => import("./modules/reports/expense-tracking.js?v=42.0"),
+  "report-expense-tracking":  () => import("./modules/reports/expense-tracking.js?v=43.0"),
   "settings-company":         () => import("./modules/settings-company.js?v=43.0"),
   "settings-zatca":           () => import("./modules/settings-zatca.js?v=39.2"),
-  "settings-users":           () => import("./modules/settings-users.js?v=42.0"),
+  "settings-users":           () => import("./modules/settings-users.js?v=44.0"),
   "hr-payroll":               () => import("./modules/hr-payroll.js?v=45.0"),
-  "vat-zakat":                 () => import("./modules/vat-zakat.js?v=42.0"),
+  "vat-zakat":                 () => import("./modules/vat-zakat.js?v=43.0"),
   "financial-analysis":       () => import("./modules/financial-analysis.js?v=43.0"),
   "realtime-cogs":           () => import("./modules/reports/realtime-cogs.js?v=1.0"),
   "inventory-reports":        () => import("./modules/reports/inventory-reports.js?v=39.2"),
   "purchase-requests":        () => import("./modules/purchase-requests.js?v=39.7"),
   "cost-centers":             () => import("./modules/cost-centers.js?v=50.0"),
-  "data-reset":               () => import("./modules/data-reset.js?v=42.0"),
+  "data-reset":               () => import("./modules/data-reset.js?v=43.0"),
   "archive":                  () => import("./modules/archive.js?v=42.0"),
 };
 
@@ -545,7 +545,7 @@ function showApp(user) {
   // Background preloader — starts immediately after UI shows
   setTimeout(() => {
     // 0. Automatic Cache Invalidation on Version Bump
-    const APP_CACHE_VERSION = "55.0";
+    const APP_CACHE_VERSION = "60.0";
     if (localStorage.getItem("idham_erp_cache_version") !== APP_CACHE_VERSION) {
       localStorage.setItem("idham_erp_cache_version", APP_CACHE_VERSION);
       import("./utils/db.js").then(m => m.clearERPCache()).catch(() => {});
@@ -588,64 +588,30 @@ function showApp(user) {
           } catch(e) { console.warn("Company preload:", e); }
         };
         loadCompany();
-        revertAndClean1142();
-        // تشغيل دوال الإصلاح مرة واحدة فقط — محمية بالفلاج localStorage
-        fixRepSalesCOGSOneTime();
-        fixMissingTransferJEsOneTime();
-        fixMissingTransferStockOneTime();
       }).catch(() => {});
     }).catch(() => {});
 
-    // 1.5 Stock Operations Health Check (Alert for pending/dropped deductions or transfers)
+    // 1.5 Stock Operations Health Check — runs once silently in background, never blocks UI
     setTimeout(async () => {
       try {
-        const { checkStockOperationsHealth } = await import("./utils/stock-health-checker.js?v=2.1");
+        const { checkStockOperationsHealth } = await import("./utils/stock-health-checker.js?v=2.2");
         await checkStockOperationsHealth();
       } catch (_) {}
-    }, 2000);
+    }, 5000);
 
-    // 2. Pre-cache the most-used Firestore collections (background, no await)
-    import("./utils/db.js").then(({ getAll, COLS }) => {
-      // تحميل البيانات الأكثر استخداماً بشكل متوازٍ (parallel) لتسريع الـ warmup
-      const warmupTasks = [
-        getAll(COLS.categories()),
-        getAll(COLS.units()),
-        getAll(COLS.suppliers()),
-        getAll(COLS.customers()),
-        getAll(COLS.warehouses()),
-        getAll(COLS.salesReps()),
-        getAll(COLS.priceLists()),
-        getAll(COLS.products()),  // الأصناف — مهمة للفواتير وPOS
-      ].map(p => p.catch(() => [])); // أي خطأ لا يوقف البقية
-
-      Promise.all(warmupTasks).then(() => {
-        console.log("%c✅ ERP Cache warmed up (parallel)", "color:#22c55e;font-weight:bold;");
-
-        // 3. Module Preloading — بعد الـ warmup مباشرةً
-        // نُحمّل كل الـ JS modules في الخلفية حتى تصبح جاهزة
-        // فور الضغط على أي قسم يكون الكود محلل (parsed) ومخزن في الـ browser module cache
-        setTimeout(() => {
-          const criticalRoutes = [
-            "sales-invoices", "purchase-invoices", "customers", "suppliers",
-            "products", "journal-entries", "chart-of-accounts",
-            "receipts", "expenses", "stock-transfer", "quotations",
-            "financial-reports", "cheques", "cash-boxes",
-          ];
-          let loaded = 0;
-          criticalRoutes.forEach(route => {
-            if (ROUTES[route]) {
-              ROUTES[route]().then(() => {
-                loaded++;
-                if (loaded === criticalRoutes.length) {
-                  console.log("%c⚡ All modules preloaded — navigation is now instant!", "color:#6366f1;font-weight:bold;");
-                }
-              }).catch(() => {});
-            }
-          });
-        }, 2000); // بعد ثانيتين من الـ warmup
+    // 2. Pre-cache reference collections sequentially to avoid connection choke
+    setTimeout(() => {
+      import("./utils/db.js").then(async ({ getAll, COLS }) => {
+        try {
+          // Warm up primary lookups sequentially with error resilience
+          await getAll(COLS.categories()).catch(() => []);
+          await getAll(COLS.warehouses()).catch(() => []);
+          await getAll(COLS.units()).catch(() => []);
+          console.log("%c✅ Core reference caches ready", "color:#22c55e;font-weight:bold;");
+        } catch (_) {}
       });
-    });
-  }, 200); // تبدأ فوراً بعد ظهور الواجهة
+    }, 3000);
+  }, 300);
 }
 
 function showAuth() {
@@ -729,8 +695,16 @@ window.navigate = async (route, pushState = true) => {
   document.querySelectorAll(".modal-overlay.active, .f8-modal-overlay.active").forEach(m => m.classList.remove("active"));
   document.getElementById("sidebar-overlay")?.classList.remove("visible");
 
-  // Update active nav item
+  // Mobile: auto-close sidebar on navigate for smooth mobile experience
+  if (window.innerWidth <= 768 && sidebar) {
+    sidebar.classList.add("mobile-hidden");
+  }
+
+  // Update active nav item & mobile bottom navigation
   document.querySelectorAll(".nav-item").forEach(el => {
+    el.classList.toggle("active", el.dataset.route === route);
+  });
+  document.querySelectorAll(".mb-nav-btn").forEach(el => {
     el.classList.toggle("active", el.dataset.route === route);
   });
 
@@ -774,15 +748,20 @@ window.navigate = async (route, pushState = true) => {
   // —— INSTANT SKELETON: show structure in <16ms ———————————————
   outlet.innerHTML = _buildSkeleton(route);
 
-  // —— Load module (deferred, non-blocking) ——————————————————
+  // —— Load module (deferred, non-blocking with 6s timeout guard) ──
+  const withTimeout = (promise, ms) => Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout loading module")), ms))
+  ]);
+
   try {
     let module;
     try {
-      module = await ROUTES[route]();
+      module = await withTimeout(ROUTES[route](), 6000);
     } catch (importErr) {
-      console.warn(`[Router] Initial module import for '${route}' failed, retrying with cache buster...`, importErr);
-      const fileUrl = `./js/modules/${route}.js?t=${Date.now()}`;
-      module = await import(fileUrl);
+      console.warn(`[Router] Initial module import for '${route}' failed or timed out, retrying with cache buster...`, importErr);
+      const fileUrl = `./modules/${route}.js?t=${Date.now()}`;
+      module = await withTimeout(import(fileUrl), 8000);
     }
     if (module && module.render) {
       // Create a detached container for caching
@@ -802,12 +781,16 @@ window.navigate = async (route, pushState = true) => {
       completeProgressBar();
 
       if (["dashboard", "sales-invoices", "stock-transfer"].includes(route)) {
-        setTimeout(async () => {
-          try {
-            const { checkStockOperationsHealth } = await import("./utils/stock-health-checker.js?v=2.1");
-            await checkStockOperationsHealth();
-          } catch (_) {}
-        }, 800);
+        const now = Date.now();
+        if (!window._lastStockCheck || now - window._lastStockCheck > 10 * 60 * 1000) {
+          window._lastStockCheck = now;
+          setTimeout(async () => {
+            try {
+              const { checkStockOperationsHealth } = await import("./utils/stock-health-checker.js?v=2.2");
+              await checkStockOperationsHealth();
+            } catch (_) {}
+          }, 3000);
+        }
       }
     } else {
       completeProgressBar();
@@ -944,9 +927,13 @@ if (toggleBtn) {
   }
 }
 
-// Mobile
+// Mobile Sidebar Controls
 window.toggleMobileSidebar = () => {
-  sidebar.classList.toggle("mobile-hidden");
+  const isHidden = sidebar.classList.toggle("mobile-hidden");
+  const overlay = document.getElementById("sidebar-overlay");
+  if (overlay) {
+    overlay.classList.toggle("visible", !isHidden);
+  }
 };
 
 // Detect mobile
@@ -956,6 +943,7 @@ function checkMobile() {
   if (mobileBtn) mobileBtn.style.display = isMobile ? "flex" : "none";
   if (isMobile && !sidebar.classList.contains("mobile-hidden")) {
     sidebar.classList.add("mobile-hidden");
+    document.getElementById("sidebar-overlay")?.classList.remove("visible");
   }
 }
 window.addEventListener("resize", checkMobile);

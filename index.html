@@ -19,11 +19,16 @@
   <link rel="manifest" href="manifest.json" />
   <link rel="apple-touch-icon" href="icons/icon-192.png" />
   <link rel="icon" href="icons/icon-192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="إدهام ERP" />
+  <meta name="theme-color" content="#0B0D18" />
+  <meta name="format-detection" content="telephone=no" />
 
   <!-- Stylesheets -->
-  <link rel="stylesheet" href="css/design-system.css?v=25.1" />
-  <link rel="stylesheet" href="css/layout.css?v=24.0" />
-  <link rel="stylesheet" href="css/components.css?v=24.0" />
+  <link rel="stylesheet" href="css/design-system.css?v=25.4" />
+  <link rel="stylesheet" href="css/layout.css?v=24.2" />
+  <link rel="stylesheet" href="css/components.css?v=25.0" />
 
   <!-- ══ Unified Export Button Styles ══ -->
   <style>
@@ -93,14 +98,17 @@
   <!-- Barcode Generator -->
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
+  <!-- ExcelJS for Advanced Formatted Multi-Tab Excel Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+
   <!-- High Performance PWA & Asset Cache Manager -->
   <script>
     (function() {
-      // Auto-update Service Worker for new assets without wiping user data or IndexedDB
+      // Clean up any stale service workers to prevent cache lock
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
           for (var reg of registrations) {
-            reg.update();
+            reg.unregister();
           }
         }).catch(function() {});
       }
@@ -160,7 +168,7 @@
       <!-- Typography -->
       <div>
         <div style="font-size:32px;font-weight:900;background:linear-gradient(135deg, #fff 0%, #f7df94 50%, #D4AF37 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.5px;line-height:1.25;filter:drop-shadow(0 2px 10px rgba(212,175,55,0.2));">
-          نُظم الإمداد الحديثة
+          نُظم الإمداد المتطورة
         </div>
         <div style="font-size:14px;font-weight:600;color:#4ade80;margin:6px 0 0 0;letter-spacing:0.2px;">
           توزيع المواد الغذائية بالجملة — المنظومة السحابية المتكاملة
@@ -327,7 +335,7 @@
               </svg>
             </div>
             <div>
-              <div style="font-size:22px;font-weight:900;color:#D4AF37;letter-spacing:-0.3px;">نُظم الإمداد الحديثة</div>
+              <div style="font-size:22px;font-weight:900;color:#D4AF37;letter-spacing:-0.3px;">نُظم الإمداد المتطورة</div>
               <div style="font-size:12px;color:#4ade80;font-weight:600;margin-top:2px;">توزيع المواد الغذائية بالجملة</div>
             </div>
           </div>
@@ -391,7 +399,7 @@
               <span style="font-size:20px;">🔐</span>
             </div>
             <div>
-              <div style="font-size:14px;font-weight:900;color:#D4AF37;">نُظم الإمداد الحديثة</div>
+              <div style="font-size:14px;font-weight:900;color:#D4AF37;">نُظم الإمداد المتطورة</div>
               <div style="font-size:11px;color:#4ade80;font-weight:600;">بوابة تسجيل الدخول الآمن</div>
             </div>
           </div>
@@ -424,7 +432,7 @@
           </form>
 
           <div style="margin-top:24px;padding-top:16px;border-top:1px solid rgba(212,175,55,.12);text-align:center;">
-            <p style="font-size:11px;color:#64748b;margin:3px 0;">نظام إدارة موارد المؤسسات (ERP) &middot; <span style="color:#D4AF37;font-weight:700;">نُظم الإمداد الحديثة</span></p>
+            <p style="font-size:11px;color:#64748b;margin:3px 0;">نظام إدارة موارد المؤسسات (ERP) &middot; <span style="color:#D4AF37;font-weight:700;">نُظم الإمداد المتطورة</span></p>
             <p style="font-size:10.5px;color:#475569;margin-top:3px;">محمي بتشفير 256-bit SSL &middot; متوافق مع هيئة الزكاة والضريبة</p>
           </div>
         </div>
@@ -435,6 +443,8 @@
   <!-- Main App Shell -->
   <!-- ══════════════════════════════════════ -->
   <div id="app" class="hidden">
+    <!-- Top Progress Bar (YouTube/GitHub-style instant feedback) -->
+    <div id="top-progress-bar" style="position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg, #4f46e5, #06b6d4, #10b981, #f59e0b);z-index:99999;transition:width 0.22s ease-out, opacity 0.25s ease;width:0%;opacity:0;pointer-events:none;box-shadow:0 0 10px rgba(79,70,229,0.5);"></div>
 
     <!-- ═══════ SIDEBAR ═══════ -->
     <nav id="sidebar" class="sidebar">
@@ -447,6 +457,9 @@
         </div>
         <button class="sidebar-toggle" id="sidebar-toggle" title="طي / توسيع القائمة">
           <span class="toggle-icon">&#9664;</span>
+        </button>
+        <button class="sidebar-close-mobile" id="sidebar-close-mobile" onclick="toggleMobileSidebar()" title="إغلاق القائمة">
+          <span>✕</span>
         </button>
       </div>
 
@@ -484,8 +497,15 @@
               <span class="nav-section-arrow">&#9662;</span>
             </div>
             <div class="nav-section-body">
+              <!-- 1. المدخلات والعمليات اليومية -->
+              <div class="nav-sub-divider inputs">
+                <span>📝 المدخلات والعمليات اليومية</span>
+              </div>
               <a class="nav-item" data-route="sales-invoices" onclick="navigate('sales-invoices')">
                 <span class="nav-icon">&#128196;</span><span class="nav-label">فواتير المبيعات</span>
+              </a>
+              <a class="nav-item" data-route="delivery-notes" onclick="navigate('delivery-notes')">
+                <span class="nav-icon">📦</span><span class="nav-label">سندات تسليم البضاعة (DN)</span>
               </a>
               <a class="nav-item" data-route="quotations" onclick="navigate('quotations')">
                 <span class="nav-icon">&#128220;</span><span class="nav-label">عروض الأسعار</span>
@@ -496,8 +516,16 @@
               <a class="nav-item" data-route="pos" onclick="navigate('pos')">
                 <span class="nav-icon">&#128722;</span><span class="nav-label">نقطة البيع (POS)</span>
               </a>
+
+              <!-- 2. العملاء والبيانات الأساسية -->
+              <div class="nav-sub-divider master">
+                <span>👥 العملاء والبيانات الأساسية</span>
+              </div>
+              <a class="nav-item" href="sales-manager.html" target="_blank" style="background:rgba(2,132,199,0.08); border:1px dashed rgba(2,132,199,0.3); margin-bottom:4px;">
+                <span class="nav-icon">💼</span><span class="nav-label" style="font-weight:800; color:#0284c7;">بوابة مدير المبيعات الميدانية</span>
+              </a>
               <a class="nav-item" data-route="customers" onclick="navigate('customers')">
-                <span class="nav-icon">&#128100;</span><span class="nav-label">العملاء</span>
+                <span class="nav-icon">&#128100;</span><span class="nav-label">دليل العملاء</span>
               </a>
               <a class="nav-item" data-route="customer-crm" onclick="navigate('customer-crm')">
                 <span class="nav-icon">🎯</span><span class="nav-label">متابعة العملاء CRM</span>
@@ -514,27 +542,27 @@
               <a class="nav-item" data-route="customer-contracts" onclick="navigate('customer-contracts')">
                 <span class="nav-icon">📜</span><span class="nav-label">العقود</span>
               </a>
-              <a class="nav-item" data-route="customer-statement" onclick="navigate('customer-statement')">
-                <span class="nav-icon">📊</span><span class="nav-label">كشف حساب عميل</span>
-              </a>
               <a class="nav-item" data-route="customer-notes" onclick="navigate('customer-notes')">
                 <span class="nav-icon">📝</span><span class="nav-label">ملاحظات العملاء</span>
               </a>
               <a class="nav-item" data-route="sales-reps" onclick="navigate('sales-reps')">
                 <span class="nav-icon">&#128694;</span><span class="nav-label">المناديب</span>
               </a>
-              <a class="nav-item" data-route="rep-daily-journal" onclick="navigate('rep-daily-journal')" style="border-right:3px solid #6366f1;">
-                <span class="nav-icon">&#128203;</span><span class="nav-label">يومية المندوب</span>
-              </a>
               <a class="nav-item" data-route="price-lists" onclick="navigate('price-lists')">
                 <span class="nav-icon">&#128178;</span><span class="nav-label">قوائم الأسعار</span>
               </a>
 
-              <!-- تقارير المبيعات والعملاء -->
-              <div style="margin:10px 8px 4px; padding-top:6px; border-top:1px dashed var(--border-soft); font-size:10.5px; font-weight:800; color:var(--text-3); display:flex; align-items:center; gap:5px;">
-                <span>📈 تقارير المبيعات والعملاء</span>
+              <!-- 3. تقارير المبيعات والعملاء -->
+              <div class="nav-sub-divider reports">
+                <span>📊 تقارير المبيعات والعملاء</span>
               </div>
-              <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports'); setTimeout(()=>window.switchFinTab&&window.switchFinTab('custperf'),400)" style="background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(139,92,246,.06));border:1px solid rgba(99,102,241,.2);border-radius:8px;margin:2px 0;">
+              <a class="nav-item" data-route="customer-statement" onclick="navigate('customer-statement')">
+                <span class="nav-icon">📊</span><span class="nav-label">كشف حساب عميل</span>
+              </a>
+              <a class="nav-item" data-route="broker-statement" onclick="navigate('broker-statement')">
+                <span class="nav-icon">💼</span><span class="nav-label">مستحقات الوسيط (زياد)</span>
+              </a>
+              <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports'); setTimeout(()=>window.switchFinTab&&window.switchFinTab('custperf'),400)">
                 <span class="nav-icon">🏆</span><span class="nav-label">أداء العملاء</span>
               </a>
               <a class="nav-item" data-route="rep-performance" onclick="navigate('rep-performance')">
@@ -549,13 +577,13 @@
               <a class="nav-item" data-route="report-sales-customer" onclick="navigate('report-sales-customer')">
                 <span class="nav-icon">&#128100;</span><span class="nav-label">مبيعات حسب العميل</span>
               </a>
-              <a class="nav-item" data-route="report-customer-matrix" onclick="navigate('report-customer-matrix')" style="background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(5,150,105,.06));border:1px solid rgba(16,185,129,.25);border-radius:8px;margin:2px 0;">
+              <a class="nav-item" data-route="report-customer-matrix" onclick="navigate('report-customer-matrix')">
                 <span class="nav-icon">📅</span><span class="nav-label">مصفوفة ومقارنات مبيعات العملاء</span>
               </a>
               <a class="nav-item" data-route="report-sales-rep" onclick="navigate('report-sales-rep')">
                 <span class="nav-icon">&#128694;</span><span class="nav-label">مبيعات حسب المندوب</span>
               </a>
-              <a class="nav-item" data-route="report-hierarchical-debt" onclick="navigate('report-hierarchical-debt')" style="border-right:3px solid #3b82f6;">
+              <a class="nav-item" data-route="report-hierarchical-debt" onclick="navigate('report-hierarchical-debt')">
                 <span class="nav-icon">📊</span><span class="nav-label">المديونيات الهرمي الشجري</span>
               </a>
               <a class="nav-item" data-route="report-consolidated-balances" onclick="navigate('report-consolidated-balances')">
@@ -572,29 +600,21 @@
               <span class="nav-section-arrow">&#9662;</span>
             </div>
             <div class="nav-section-body">
+              <!-- 1. المدخلات والعمليات اليومية -->
+              <div class="nav-sub-divider inputs">
+                <span>📝 المدخلات والعمليات اليومية</span>
+              </div>
               <a class="nav-item" data-route="purchase-invoices" onclick="navigate('purchase-invoices')">
                 <span class="nav-icon">&#128203;</span><span class="nav-label">فواتير الشراء</span>
               </a>
               <a class="nav-item" data-route="purchase-requests" onclick="navigate('purchase-requests')">
                 <span class="nav-icon">&#128196;</span><span class="nav-label">طلب أسعار من مورد</span>
               </a>
+              <a class="nav-item" data-route="purchase-orders" onclick="navigate('purchase-orders')">
+                <span class="nav-icon">📋</span><span class="nav-label">أوامر الشراء (PO)</span>
+              </a>
               <a class="nav-item" data-route="purchase-returns" onclick="navigate('purchase-returns')">
                 <span class="nav-icon">&#8617;&#65039;</span><span class="nav-label">مردودات الشراء</span>
-              </a>
-              <a class="nav-item" data-route="suppliers" onclick="navigate('suppliers')">
-                <span class="nav-icon">&#127981;</span><span class="nav-label">دليل الموردين</span>
-              </a>
-              <a class="nav-item" data-route="supplier-statement" onclick="navigate('supplier-statement')">
-                <span class="nav-icon">📊</span><span class="nav-label">كشف حساب مورد</span>
-              </a>
-              <a class="nav-item" data-route="supplier-contracts" onclick="navigate('supplier-contracts')">
-                <span class="nav-icon">📜</span><span class="nav-label">عقود الموردين</span>
-              </a>
-              <a class="nav-item" data-route="supplier-evaluations" onclick="navigate('supplier-evaluations')">
-                <span class="nav-icon">⭐</span><span class="nav-label">تقييم أداء الموردين</span>
-              </a>
-              <a class="nav-item" data-route="supplier-performance" onclick="navigate('supplier-performance')">
-                <span class="nav-icon">📊</span><span class="nav-label">تصريف الموردين</span>
               </a>
               <a class="nav-item" data-route="supplier-quotations" onclick="navigate('supplier-quotations')">
                 <span class="nav-icon">📑</span><span class="nav-label">مقارنة عروض الأسعار</span>
@@ -602,14 +622,36 @@
               <a class="nav-item" data-route="supplier-claims" onclick="navigate('supplier-claims')">
                 <span class="nav-icon">🔍</span><span class="nav-label">مطالبات وتوالف الموردين</span>
               </a>
-              <a class="nav-item" data-route="supplier-price-history" onclick="navigate('supplier-price-history')">
-                <span class="nav-icon">📈</span><span class="nav-label">تتبع أسعار الشراء</span>
+
+              <!-- 2. الموردين والبيانات الأساسية -->
+              <div class="nav-sub-divider master">
+                <span>🏭 الموردين والبيانات الأساسية</span>
+              </div>
+              <a class="nav-item" data-route="suppliers" onclick="navigate('suppliers')">
+                <span class="nav-icon">&#127981;</span><span class="nav-label">دليل الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-contracts" onclick="navigate('supplier-contracts')">
+                <span class="nav-icon">📜</span><span class="nav-label">عقود الموردين</span>
               </a>
               <a class="nav-item" data-route="supplier-notes" onclick="navigate('supplier-notes')">
                 <span class="nav-icon">📝</span><span class="nav-label">الحسابات البنكية والملاحظات</span>
               </a>
-              <a class="nav-item" data-route="purchase-orders" onclick="navigate('purchase-orders')">
-                <span class="nav-icon">📋</span><span class="nav-label">أوامر الشراء (PO)</span>
+
+              <!-- 3. تقارير المشتريات والموردين -->
+              <div class="nav-sub-divider reports">
+                <span>📊 تقارير المشتريات والموردين</span>
+              </div>
+              <a class="nav-item" data-route="supplier-statement" onclick="navigate('supplier-statement')">
+                <span class="nav-icon">📊</span><span class="nav-label">كشف حساب مورد</span>
+              </a>
+              <a class="nav-item" data-route="supplier-evaluations" onclick="navigate('supplier-evaluations')">
+                <span class="nav-icon">⭐</span><span class="nav-label">تقييم أداء الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-performance" onclick="navigate('supplier-performance')">
+                <span class="nav-icon">📊</span><span class="nav-label">تصريف الموردين</span>
+              </a>
+              <a class="nav-item" data-route="supplier-price-history" onclick="navigate('supplier-price-history')">
+                <span class="nav-icon">📈</span><span class="nav-label">مشتريات وتقلبات أسعار الموردين</span>
               </a>
               <a class="nav-item" data-route="supplier-deliveries" onclick="navigate('supplier-deliveries')">
                 <span class="nav-icon">🚚</span><span class="nav-label">جدولة شحنات الموردين</span>
@@ -628,21 +670,10 @@
               <span class="nav-section-arrow">&#9662;</span>
             </div>
             <div class="nav-section-body">
-              <a class="nav-item" data-route="products" onclick="navigate('products')">
-                <span class="nav-icon">&#127991;&#65039;</span><span class="nav-label">الأصناف</span>
-              </a>
-              <a class="nav-item" data-route="categories" onclick="navigate('categories')">
-                <span class="nav-icon">&#128194;</span><span class="nav-label">الفئات والوحدات</span>
-              </a>
-              <a class="nav-item" data-route="warehouses" onclick="navigate('warehouses')">
-                <span class="nav-icon">&#127981;</span><span class="nav-label">المخازن</span>
-              </a>
-              <a class="nav-item" data-route="inventory-locations" onclick="navigate('inventory-locations')">
-                <span class="nav-icon">&#128205;</span><span class="nav-label">مواقع ورفوف التخزين</span>
-              </a>
-              <a class="nav-item" data-route="stock-card" onclick="navigate('stock-card')">
-                <span class="nav-icon">&#128202;</span><span class="nav-label">كرت حركة الصنف التفصيلي</span>
-              </a>
+              <!-- 1. العمليات والمدخلات اليومية -->
+              <div class="nav-sub-divider inputs">
+                <span>📝 العمليات والمدخلات اليومية</span>
+              </div>
               <a class="nav-item" data-route="stock-transfer" onclick="navigate('stock-transfer')">
                 <span class="nav-icon">&#128196;</span><span class="nav-label">تحويل بضاعة</span>
               </a>
@@ -652,11 +683,14 @@
               <a class="nav-item" data-route="van-loading-dispatch" onclick="navigate('van-loading-dispatch')">
                 <span class="nav-icon">🚚</span><span class="nav-label">تحميل وجرد سيارات التوزيع</span>
               </a>
+              <a class="nav-item" data-route="product-bundles-kitting" onclick="navigate('product-bundles-kitting')">
+                <span class="nav-icon">🍱</span><span class="nav-label">عروض وتجميع الباكجات</span>
+              </a>
               <a class="nav-item" data-route="barcode-label-printer" onclick="navigate('barcode-label-printer')">
                 <span class="nav-icon">🏷️</span><span class="nav-label">طباعة باركود وملصقات الرفوف</span>
               </a>
-              <a class="nav-item" data-route="product-bundles-kitting" onclick="navigate('product-bundles-kitting')">
-                <span class="nav-icon">🍱</span><span class="nav-label">عروض وتجميع الباكجات</span>
+              <a class="nav-item" data-route="inventory-closing" onclick="navigate('inventory-closing')">
+                <span class="nav-icon">&#128274;</span><span class="nav-label">الجرد والقفلات المخزنية</span>
               </a>
               <a class="nav-item" data-route="inventory-waste-clearance" onclick="navigate('inventory-waste-clearance')">
                 <span class="nav-icon">⚠️</span><span class="nav-label">رادار الرواكد والتوالف</span>
@@ -664,8 +698,22 @@
               <a class="nav-item" data-route="batch-traceability-report" onclick="navigate('batch-traceability-report')">
                 <span class="nav-icon">🔍</span><span class="nav-label">تتبع اللوت وسحب المنتجات</span>
               </a>
-              <a class="nav-item" data-route="inventory-closing" onclick="navigate('inventory-closing')">
-                <span class="nav-icon">&#128274;</span><span class="nav-label">الجرد والقفلات المخزنية</span>
+
+              <!-- 2. الأصناف والمخازن والبيانات الأساسية -->
+              <div class="nav-sub-divider master">
+                <span>🏷️ الأصناف والمخازن والبيانات الأساسية</span>
+              </div>
+              <a class="nav-item" data-route="products" onclick="navigate('products')">
+                <span class="nav-icon">&#127991;&#65039;</span><span class="nav-label">دليل الأصناف</span>
+              </a>
+              <a class="nav-item" data-route="categories" onclick="navigate('categories')">
+                <span class="nav-icon">&#128194;</span><span class="nav-label">الفئات والوحدات</span>
+              </a>
+              <a class="nav-item" data-route="warehouses" onclick="navigate('warehouses')">
+                <span class="nav-icon">&#127981;</span><span class="nav-label">المخازن والمستودعات</span>
+              </a>
+              <a class="nav-item" data-route="inventory-locations" onclick="navigate('inventory-locations')">
+                <span class="nav-icon">&#128205;</span><span class="nav-label">مواقع ورفوف التخزين</span>
               </a>
               <a class="nav-item" data-route="reorder-points" onclick="navigate('reorder-points')">
                 <span class="nav-icon">&#128276;</span><span class="nav-label">نقاط إعادة الطلب والأمان</span>
@@ -674,10 +722,13 @@
                 <span class="nav-icon">&#9200;</span><span class="nav-label">متابعة تواريخ الصلاحية</span>
               </a>
 
-              <!-- تقارير المخزون والأصناف -->
-              <div style="margin:10px 8px 4px; padding-top:6px; border-top:1px dashed var(--border-soft); font-size:10.5px; font-weight:800; color:var(--text-3); display:flex; align-items:center; gap:5px;">
+              <!-- 3. تقارير المخزون والربحية الذكية -->
+              <div class="nav-sub-divider reports">
                 <span>📊 تقارير المخزون والربحية الذكية</span>
               </div>
+              <a class="nav-item" data-route="stock-card" onclick="navigate('stock-card')">
+                <span class="nav-icon">&#128202;</span><span class="nav-label">كرت حركة الصنف التفصيلي</span>
+              </a>
               <a class="nav-item" data-route="product-profit-margins" onclick="navigate('product-profit-margins')">
                 <span class="nav-icon">🏆</span><span class="nav-label">مصفوفة ربحية وهوامش الأصناف</span>
               </a>
@@ -708,20 +759,18 @@
             </div>
           </div>
 
-          <!-- 4. الخزينة والمحاسبة -->
+          <!-- 4. الخزينة والمحاسبة والمالية -->
           <div class="nav-section" data-section="mod-finance" data-role-section="finance">
             <div class="nav-section-header" onclick="toggleSection('mod-finance')">
               <span class="nav-section-icon">💰</span>
-              <span class="nav-section-label">الخزينة والمحاسبة</span>
+              <span class="nav-section-label">الخزينة والمحاسبة والمالية</span>
               <span class="nav-section-arrow">&#9662;</span>
             </div>
             <div class="nav-section-body">
-              <a class="nav-item" data-route="cash-boxes" onclick="navigate('cash-boxes')">
-                <span class="nav-icon">&#128181;</span><span class="nav-label">الصناديق النقدية</span>
-              </a>
-              <a class="nav-item" data-route="bank-accounts" onclick="navigate('bank-accounts')">
-                <span class="nav-icon">&#127974;</span><span class="nav-label">الحسابات البنكية</span>
-              </a>
+              <!-- 1. حركة النقدية والمقبوضات اليومية -->
+              <div class="nav-sub-divider inputs">
+                <span>💵 حركة النقدية والمقبوضات اليومية</span>
+              </div>
               <a class="nav-item" data-route="receipts" onclick="navigate('receipts')">
                 <span class="nav-icon">&#128188;</span><span class="nav-label">سندات القبض</span>
               </a>
@@ -732,36 +781,50 @@
                 <span class="nav-icon">&#128209;</span><span class="nav-label">أوراق القبض والدفع (شيكات)</span>
               </a>
               <a class="nav-item" data-route="promissory-notes" onclick="navigate('promissory-notes')">
-                <span class="nav-icon">📜</span><span class="nav-label">سندات الأمر</span>
+                <span class="nav-icon">📜</span><span class="nav-label">سندات الأمر والكمبيالات</span>
               </a>
+              <a class="nav-item" data-route="trust-receipts" onclick="navigate('trust-receipts')">
+                <span class="nav-icon">🛡️</span><span class="nav-label">سندات الأمانة والعهدة</span>
+              </a>
+              <a class="nav-item" data-route="cash-boxes" onclick="navigate('cash-boxes')">
+                <span class="nav-icon">&#128181;</span><span class="nav-label">الصناديق النقدية والتحويلات</span>
+              </a>
+              <a class="nav-item" data-route="bank-accounts" onclick="navigate('bank-accounts')">
+                <span class="nav-icon">&#127974;</span><span class="nav-label">الحسابات البنكية والتسوية</span>
+              </a>
+
+              <!-- 2. المحاسبة العامة والدليل المحاسبي -->
+              <div class="nav-sub-divider master">
+                <span>⚖️ المحاسبة العامة والدليل المحاسبي</span>
+              </div>
               <a class="nav-item" data-route="chart-of-accounts" onclick="navigate('chart-of-accounts')">
-                <span class="nav-icon">&#127795;</span><span class="nav-label">شجرة الحسابات</span>
+                <span class="nav-icon">&#127795;</span><span class="nav-label">شجرة الحسابات (الدليل)</span>
               </a>
               <a class="nav-item" data-route="journal-entries" onclick="navigate('journal-entries')">
-                <span class="nav-icon">&#128209;</span><span class="nav-label">القيود اليومية</span>
+                <span class="nav-icon">&#128209;</span><span class="nav-label">دفتر القيود اليومية والتسويات</span>
               </a>
-              <a class="nav-item" data-route="cost-centers" onclick="navigate('cost-centers')" style="background:linear-gradient(135deg,rgba(5,150,105,.15),rgba(16,185,129,.08));border:1px solid rgba(5,150,105,.3);border-radius:8px;margin:2px 0;">
-                <span class="nav-icon">🚐</span><span class="nav-label" style="color:#6ee7b7;font-weight:800;">مراكز التكلفة والسيارات ✦</span>
+              <a class="nav-item" data-route="cost-centers" onclick="navigate('cost-centers')">
+                <span class="nav-icon">🚐</span><span class="nav-label">مراكز التكلفة والسيارات</span>
               </a>
               <a class="nav-item" data-route="vat-zakat" onclick="navigate('vat-zakat')">
                 <span class="nav-icon">&#127963;&#65039;</span><span class="nav-label">ضريبة VAT والزكاة والدخل</span>
               </a>
 
-              <!-- التقارير والقوائم المالية -->
-              <div style="margin:10px 8px 4px; padding-top:6px; border-top:1px dashed var(--border-soft); font-size:10.5px; font-weight:800; color:var(--text-3); display:flex; align-items:center; gap:5px;">
-                <span>⚖️ التقارير والقوائم المالية</span>
+              <!-- 3. القوائم والتقارير المالية الختامية -->
+              <div class="nav-sub-divider reports">
+                <span>📊 القوائم والتقارير المالية الختامية</span>
               </div>
               <a class="nav-item" data-route="financial-reports" onclick="navigate('financial-reports')">
-                <span class="nav-icon">&#128200;</span><span class="nav-label">القوائم المالية والتحليل</span>
-              </a>
-              <a class="nav-item" data-route="financial-analysis" onclick="navigate('financial-analysis')" style="background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(139,92,246,.08));border:1px solid rgba(99,102,241,.25);border-radius:8px;margin:2px 0;">
-                <span class="nav-icon">&#128293;</span><span class="nav-label" style="color:#a5b4fc;font-weight:800;">التحليل المالي الشامل ✦</span>
-              </a>
-              <a class="nav-item" data-route="realtime-cogs" onclick="navigate('realtime-cogs')" style="background:linear-gradient(135deg,rgba(245,158,11,.15),rgba(217,119,6,.08));border:1px solid rgba(245,158,11,.3);border-radius:8px;margin:2px 0;">
-                <span class="nav-icon">⚡</span><span class="nav-label" style="color:#fcd34d;font-weight:800;">الشاشة اللحظية لتكلفة المبيعات ✦</span>
+                <span class="nav-icon">&#128200;</span><span class="nav-label">القوائم المالية (ميزان المراجعة / الأستاذ)</span>
               </a>
               <a class="nav-item" data-route="report-profit-loss" onclick="navigate('report-profit-loss')">
-                <span class="nav-icon">&#128185;</span><span class="nav-label">أرباح وخسائر</span>
+                <span class="nav-icon">&#128185;</span><span class="nav-label">أرباح وخسائر (قائمة الدخل)</span>
+              </a>
+              <a class="nav-item" data-route="financial-analysis" onclick="navigate('financial-analysis')">
+                <span class="nav-icon">&#128293;</span><span class="nav-label">التحليل المالي ومؤشرات السيولة</span>
+              </a>
+              <a class="nav-item" data-route="realtime-cogs" onclick="navigate('realtime-cogs')">
+                <span class="nav-icon">⚡</span><span class="nav-label">الشاشة اللحظية لتكلفة المبيعات</span>
               </a>
               <a class="nav-item" data-route="report-expense-analysis" onclick="navigate('report-expense-analysis')">
                 <span class="nav-icon">💸</span><span class="nav-label">تحليل المصروفات</span>
@@ -791,9 +854,6 @@
               </a>
               <a class="nav-item" data-route="settings-users" onclick="navigate('settings-users')">
                 <span class="nav-icon">&#128100;</span><span class="nav-label">المستخدمون</span>
-              </a>
-              <a class="nav-item" data-route="data-reset" onclick="navigate('data-reset')" style="color:var(--danger,#ef4444);">
-                <span class="nav-icon">🗑️</span><span class="nav-label">تصفير البيانات</span>
               </a>
             </div>
           </div>
@@ -906,6 +966,9 @@
               <a class="nav-item" data-route="customer-statement" onclick="navigate('customer-statement')">
                 <span class="nav-icon">📊</span><span class="nav-label">كشف حساب عميل</span>
               </a>
+              <a class="nav-item" data-route="broker-statement" onclick="navigate('broker-statement')" style="border-right:3px solid #8b5cf6;">
+                <span class="nav-icon">💼</span><span class="nav-label">مستحقات الوسيط (زياد)</span>
+              </a>
               <a class="nav-item" data-route="customer-notes" onclick="navigate('customer-notes')">
                 <span class="nav-icon">📝</span><span class="nav-label">ملاحظات العملاء</span>
               </a>
@@ -931,7 +994,7 @@
                 <span class="nav-icon">🔍</span><span class="nav-label">مطالبات وتوالف الموردين</span>
               </a>
               <a class="nav-item" data-route="supplier-price-history" onclick="navigate('supplier-price-history')">
-                <span class="nav-icon">📈</span><span class="nav-label">تتبع أسعار الشراء</span>
+                <span class="nav-icon">📈</span><span class="nav-label">مشتريات وتقلبات أسعار الموردين</span>
               </a>
               <a class="nav-item" data-route="supplier-notes" onclick="navigate('supplier-notes')">
                 <span class="nav-icon">📝</span><span class="nav-label">الحسابات البنكية والملاحظات</span>
@@ -967,6 +1030,9 @@
               </a>
               <a class="nav-item" data-route="sales-invoices" onclick="navigate('sales-invoices')">
                 <span class="nav-icon">&#128196;</span><span class="nav-label">فواتير المبيعات</span>
+              </a>
+              <a class="nav-item" data-route="delivery-notes" onclick="navigate('delivery-notes')">
+                <span class="nav-icon">📦</span><span class="nav-label">سندات تسليم البضاعة (DN)</span>
               </a>
               <a class="nav-item" data-route="pos" onclick="navigate('pos')">
                 <span class="nav-icon">&#128722;</span><span class="nav-label">نقطة البيع (POS)</span>
@@ -1016,6 +1082,9 @@
               </a>
               <a class="nav-item" data-route="promissory-notes" onclick="navigate('promissory-notes')">
                 <span class="nav-icon">📜</span><span class="nav-label">سندات الأمر</span>
+              </a>
+              <a class="nav-item" data-route="trust-receipts" onclick="navigate('trust-receipts')">
+                <span class="nav-icon">🛡️</span><span class="nav-label">سندات الأمانة والعهدة</span>
               </a>
               <a class="nav-item" data-route="expenses" onclick="navigate('expenses')">
                 <span class="nav-icon">&#128184;</span><span class="nav-label">سندات الصرف</span>
@@ -1159,9 +1228,6 @@
               <a class="nav-item" data-route="settings-users" onclick="navigate('settings-users')">
                 <span class="nav-icon">&#128100;</span><span class="nav-label">المستخدمون</span>
               </a>
-              <a class="nav-item" data-route="data-reset" onclick="navigate('data-reset')" style="color:var(--danger,#ef4444);">
-                <span class="nav-icon">🗑️</span><span class="nav-label">تصفير البيانات</span>
-              </a>
             </div>
           </div>
 
@@ -1271,6 +1337,33 @@
       </main>
 
     </div><!-- /main-content -->
+
+    <!-- Mobile Sidebar Backdrop Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
+
+    <!-- Mobile Bottom Navigation Bar (Thumb-friendly 5 Core Actions) -->
+    <nav id="mobile-bottom-nav" class="mobile-bottom-nav no-print">
+      <button class="mb-nav-btn active" data-route="dashboard" onclick="navigate('dashboard')">
+        <span class="mb-nav-icon">🏠</span>
+        <span class="mb-nav-label">الرئيسية</span>
+      </button>
+      <button class="mb-nav-btn" data-route="sales-invoices" onclick="navigate('sales-invoices')">
+        <span class="mb-nav-icon">🛒</span>
+        <span class="mb-nav-label">المبيعات</span>
+      </button>
+      <button class="mb-nav-btn" data-route="rep-daily-journal" onclick="navigate('rep-daily-journal')">
+        <span class="mb-nav-icon">📋</span>
+        <span class="mb-nav-label">اليومية</span>
+      </button>
+      <button class="mb-nav-btn" data-route="stock-report" onclick="navigate('stock-report')">
+        <span class="mb-nav-icon">📦</span>
+        <span class="mb-nav-label">المخزون</span>
+      </button>
+      <button class="mb-nav-btn" onclick="toggleMobileSidebar()">
+        <span class="mb-nav-icon">☰</span>
+        <span class="mb-nav-label">القائمة</span>
+      </button>
+    </nav>
   </div><!-- /app -->
 
   <!-- ══════════════════════════════════════ -->
@@ -1281,7 +1374,7 @@
   <!-- ══════════════════════════════════════ -->
   <!-- App Entrypoint -->
   <!-- ══════════════════════════════════════ -->
-  <script type="module" src="js/app.js?v=146.0"></script>
+  <script type="module" src="js/app.js?v=233.0"></script>
 
   <script>
     // Service Worker disabled in offline desktop mode
@@ -1834,14 +1927,14 @@
         const { left, top, docked } = JSON.parse(savedPos);
         const winW = window.innerWidth || 1024;
         const winH = window.innerHeight || 768;
+        const safeTop = Math.min(Math.max(110, top), winH - 60);
         if (typeof left === 'number' && typeof top === 'number' &&
-            left >= 5 && left <= winW - 55 &&
-            top >= 5 && top <= winH - 55) {
+            left >= 5 && left <= winW - 55) {
           fabContainer.style.left = left + 'px';
-          fabContainer.style.top = top + 'px';
+          fabContainer.style.top = safeTop + 'px';
           fabContainer.style.bottom = 'auto';
           fabContainer.style.right = 'auto';
-          updateFabOrientation(left, top);
+          updateFabOrientation(left, safeTop);
         } else {
           localStorage.removeItem('idham_quick_fab_pos_v2');
           setDefaultFabPosition();
@@ -1902,7 +1995,7 @@
 
       if (hasMoved) {
         const newLeft = Math.min(Math.max(10, startLeft + dx), window.innerWidth - 60);
-        const newTop = Math.min(Math.max(10, startTop + dy), window.innerHeight - 60);
+        const newTop = Math.min(Math.max(110, startTop + dy), window.innerHeight - 60);
 
         fabContainer.style.left = newLeft + 'px';
         fabContainer.style.top = newTop + 'px';
