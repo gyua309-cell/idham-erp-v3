@@ -1,35 +1,92 @@
 // ============================================================
+
 // IDHAM ERP — Sales Invoice Module (ZATCA Compliant)
+
 // ============================================================
 
+
+
 import { COLS, create, getAll, getById, update, remove, generateInvoiceNumber,
+
          adjustStock, adjustStockBulk, createJournalEntry, deleteJournalEntry, autoCashTransaction, autoBankTransaction, isPeriodClosed } from "../utils/db.js";
+
 import { collection, query, where, orderBy, limit, getDocs, serverTimestamp, doc, getDoc, updateDoc, increment } from "../utils/db.js";
+
 import { formatCurrency, formatDate, formatISOTimestamp, calcInvoiceTotals,
-         getInvoiceStatusBadge, calcLineTotal, todayString, debounce, uuid } from "../utils/formatters.js";
+
+         getInvoiceStatusBadge, calcLineTotal, todayString, debounce, uuid, tafqeetArabic } from "../utils/formatters.js";
+
 import { generateZATCAQRBase64, renderZATCAQR } from "../utils/zatca-qr.js";
+
 import { APP_CONFIG, COMPANY_ID, getUserProfile } from "../firebase-config.js";
+
 import { db } from "../firebase-config.js";
+
 import { autoSalesJE } from "../utils/accounting-engine.js";
+
 import { exportToExcel } from "../utils/excel.js";
 
+import { recalculateCustomerBalance } from "../utils/balance-sync.js";
+
+
+
+function translateUnit(u) {
+
+  const map = {
+
+    Piece:'حبة', Carton:'كرتون', Box:'بوكس', Bag:'كيس', Pack:'شد',
+
+    Sack:'شوال', Bale:'بالة', Barrel:'برميل', Tray:'طبق', Gallon:'جالون',
+
+    Kilogram:'كيلو', Ton:'طن', Liter:'لتر', Gram:'جرام', Can:'علبة',
+
+    Bottle:'زجاجة', Meter:'متر', Tank:'تنك', Roll:'رول', Pallet:'باليت',
+
+    PCS:'حبة'
+
+  };
+
+  return map[u] || u || '';
+
+}
+
+
+
 let invoiceLines = [];
+
 let selectedCustomer = null;
+
 let selectedRep = null;
+
 let selectedWarehouse = null;
+
 let allProducts = [];
+
 let allCategories = [];
+
 let currentView = "list"; // "list" | "new" | "view"
+
 let currentInvoice = null;
+
 let pricingSettings = null;
 
+
+
 const showToast = (message, type = "info") => {
+
   if (window.showToast) {
+
     window.showToast(message, type);
+
   } else {
-    console.log(`[Toast Fallback - ${type}]:`, message);
+
+    console.log(`[Toast Fallback - ${type}]: ${message}`);
+
   }
+
 };
+
+
 
 function showErr(msg) {
   const errEl = document.getElementById("inv-form-error");
@@ -64,16 +121,32 @@ export async function render(container, user) {
   document.getElementById("inv-status-filter").addEventListener("change", () => loadInvoicesList());
   document.getElementById("inv-zatca-filter").addEventListener("change", () => loadInvoicesList());
 
-  // ديبونس على حقل البحث — 300ms تأخير بعد التوقف عن الكتابة
+  // ديبونس على حقل البحث العام — 250ms تأخير بعد التوقف عن الكتابة
   const searchEl = document.getElementById("inv-text-filter");
   if (searchEl) {
-    searchEl.addEventListener("input", (window.debounce || ((fn) => fn))(() => loadInvoicesList(), 300));
+    searchEl.addEventListener("input", (window.debounce || ((fn) => fn))(() => loadInvoicesList(), 250));
   }
 
-  await Promise.all([
-    loadListFiltersData(),
-    loadInvoicesList()
-  ]);
+  // البحث في حقل العميل المخصص مع المزامنة
+  const custSearchInp = document.getElementById("inv-customer-search-input");
+  if (custSearchInp) {
+    custSearchInp.addEventListener("input", (window.debounce || ((fn) => fn))(() => {
+      const val = custSearchInp.value.trim();
+      const clearBtn = document.getElementById("inv-customer-clear-btn");
+      if (clearBtn) clearBtn.style.display = val ? "block" : "none";
+
+      const matched = cachedCustomers?.find(c => (c.name || "").trim().toLowerCase() === val.toLowerCase());
+      const custSel = document.getElementById("inv-customer-filter");
+      if (custSel) custSel.value = matched ? matched.id : "";
+
+      loadInvoicesList();
+    }, 200));
+  }
+
+  // Load filters and invoices asynchronously so render() completes instantly (<10ms)
+  // and dismisses the top progress bar immediately without waiting on network
+  loadListFiltersData().catch(e => console.warn("Filters load:", e));
+  loadInvoicesList().catch(e => console.warn("Invoices load:", e));
 
   // Check incoming purchase invoice to convert
   const convertPurStr = sessionStorage.getItem("convert_purchase_to_sale");
@@ -83,6 +156,18 @@ export async function render(container, user) {
       const data = JSON.parse(convertPurStr);
       setTimeout(() => {
         window.openSalesInvoiceFromPurchase(data);
+      }, 200);
+    } catch(e) { console.error(e); }
+  }
+
+  // Check incoming quotation to convert
+  const convertQuoteStr = sessionStorage.getItem("convert_quote");
+  if (convertQuoteStr) {
+    sessionStorage.removeItem("convert_quote");
+    try {
+      const data = JSON.parse(convertQuoteStr);
+      setTimeout(() => {
+        window.openSalesInvoiceFromQuote(data);
       }, 200);
     } catch(e) { console.error(e); }
   }
@@ -103,6 +188,11 @@ async function loadListFiltersData() {
     const custSel = document.getElementById("inv-customer-filter");
     if (custSel) custSel.innerHTML = '<option value="">كل العملاء</option>' +
       custs.map(c => `<option value="${c.id}">${c.name}</option>`).join("");
+
+    const datalist = document.getElementById("inv-customers-datalist");
+    if (datalist) {
+      datalist.innerHTML = custs.map(c => `<option value="${c.name}">${c.code ? `[${c.code}] ` : ''}${c.phone || ''}</option>`).join("");
+    }
 
     const repSel = document.getElementById("inv-rep-filter");
     if (repSel) {
@@ -131,6 +221,11 @@ function buildListPage() {
   return `
     <!-- Filter Bar -->
     <div class="filterbar" style="flex-wrap: wrap; gap: 8px; align-items: flex-end;">
+      <!-- Search Input for Invoices & Customers -->
+      <div class="search-bar" style="min-width:240px; flex:1; max-width:300px;">
+        <input type="text" id="inv-text-filter" class="input" placeholder="🔍 بحث سريع باسم العميل أو الفاتورة…" autocomplete="off" />
+      </div>
+
       <div class="date-range-group">
         <label>من</label>
         <input type="date" id="inv-from" value="${new Date(new Date().setDate(1)).toISOString().split('T')[0]}" />
@@ -141,7 +236,7 @@ function buildListPage() {
       </div>
       <div class="filter-select-group">
         <label>الحالة</label>
-        <select id="inv-status-filter">
+        <select id="inv-status-filter" onchange="loadInvoicesList()">
           <option value="">الكل</option>
           <option value="posted">مرحلة</option>
           <option value="pending">معلقة</option>
@@ -153,17 +248,22 @@ function buildListPage() {
       </div>
       <div class="filter-select-group">
         <label>ZATCA</label>
-        <select id="inv-zatca-filter">
+        <select id="inv-zatca-filter" onchange="loadInvoicesList()">
           <option value="">الكل</option>
           <option value="reported">مُرسلة</option>
           <option value="pending">لم تُرسل</option>
         </select>
       </div>
-      <div class="filter-select-group">
-        <label>العميل</label>
-        <select id="inv-customer-filter" onchange="loadInvoicesList()">
-          <option value="">كل العملاء</option>
-        </select>
+      <div class="filter-select-group" style="position:relative;">
+        <label>العميل (بحث بالاسم)</label>
+        <div style="display:flex; align-items:center; position:relative; min-width:190px;">
+          <input type="text" id="inv-customer-search-input" list="inv-customers-datalist" class="input" placeholder="🔍 اكتب أو اختر العميل…" style="padding-left:24px; font-size:12px; width:100%;" autocomplete="off" />
+          <datalist id="inv-customers-datalist"></datalist>
+          <button type="button" id="inv-customer-clear-btn" style="position:absolute; left:6px; background:none; border:none; color:var(--text-3); cursor:pointer; font-size:12px; font-weight:bold; display:none;" onclick="window.clearInvoiceCustomerFilter()" title="إلغاء التصفية بالعميل">✕</button>
+          <select id="inv-customer-filter" onchange="window.onCustomerSelectChange()" style="display:none;">
+            <option value="">كل العملاء</option>
+          </select>
+        </div>
       </div>
       <div class="filter-select-group">
         <label>المندوب</label>
@@ -178,8 +278,9 @@ function buildListPage() {
         </select>
       </div>
       <div class="quick-filters">
-        <button class="quick-filter-btn" onclick="invFilterRange('today')">اليوم</button>
-        <button class="quick-filter-btn active" onclick="invFilterRange('month')">هذا الشهر</button>
+        <button class="quick-filter-btn" id="qf-today" onclick="invFilterRange('today')">اليوم</button>
+        <button class="quick-filter-btn active" id="qf-month" onclick="invFilterRange('month')">هذا الشهر</button>
+        <button class="quick-filter-btn" id="qf-all" onclick="invFilterRange('all')">كل الفترات</button>
       </div>
       <div style="margin-right:auto;display:flex;gap:8px;">
         <button class="btn-export" onclick="exportPagePDF('.data-dense','فواتير_المبيعات')" title="تصدير PDF"><span>📄</span> PDF</button>
@@ -239,188 +340,300 @@ function buildListPage() {
       </div>
     </div>
 
-    <!-- New/Edit Invoice Modal -->
-    <div class="modal-overlay" id="new-invoice-modal">
+    <!-- New/Edit Invoice Modal (True Fullscreen Cockpit - Identical Ergonomics to Purchase Invoices) -->
+    <div class="modal-overlay" id="new-invoice-modal" onclick="if(event.target===this)closeModal('new-invoice-modal')">
+      <style>
+        #new-invoice-modal {
+          position: fixed !important;
+          inset: 0 !important;
+          width: 100vw !important;
+          height: 100vh !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          background: rgba(15, 23, 42, 0.85) !important;
+          z-index: 9999 !important;
+          display: flex !important;
+          align-items: stretch !important;
+          justify-content: stretch !important;
+        }
+        #new-invoice-modal .modal-xl {
+          width: 100vw !important;
+          height: 100vh !important;
+          max-width: 100vw !important;
+          max-height: 100vh !important;
+          border-radius: 0 !important;
+          margin: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          overflow: hidden !important;
+          border: none !important;
+          background: #f8fafc !important;
+        }
+        #new-invoice-modal .form-control {
+          border: 1px solid #cbd5e1;
+          border-radius: 6px;
+          background: #ffffff;
+          color: #0f172a;
+          box-sizing: border-box;
+        }
+        #new-invoice-modal .no-spin::-webkit-outer-spin-button,
+        #new-invoice-modal .no-spin::-webkit-inner-spin-button {
+          -webkit-appearance: none !important;
+          margin: 0 !important;
+        }
+        #new-invoice-modal .no-spin {
+          -moz-appearance: textfield !important;
+        }
+        #new-invoice-modal input:focus, #new-invoice-modal select:focus {
+          outline: 2px solid #2563eb !important;
+          outline-offset: -1px !important;
+          background-color: #eff6ff !important;
+        }
+        #invoice-lines-tbody tr:hover {
+          background-color: #f1f5f9 !important;
+        }
+        .sale-hud-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 4px 10px;
+          border-radius: 6px;
+          background: #ffffff;
+          border: 1.5px solid #cbd5e1;
+          font-size: 11.5px;
+          font-weight: 700;
+          color: #334155;
+          white-space: nowrap;
+          box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        .sale-hud-pill b {
+          font-family: monospace;
+          font-size: 12.5px;
+          font-weight: 800;
+        }
+      </style>
       <div class="modal modal-xl">
-        <div class="modal-header">
-          <h3 class="modal-title" id="invoice-modal-title">فاتورة مبيعات جديدة</h3>
-          <button class="modal-close" onclick="closeModal('new-invoice-modal')">×</button>
-        </div>
-        <div class="modal-body" style="padding:20px;">
-          <!-- Header Fields -->
-          <div class="grid-3 gap-16 mb-16">
-            <div class="form-group">
-              <label>رقم الفاتورة</label>
-              <input type="text" id="inv-number" class="input mono" readonly placeholder="يُولَّد تلقائياً" />
-            </div>
-            <div class="form-group">
-              <label>التاريخ *</label>
-              <input type="date" id="inv-date" class="input" value="${todayString()}" />
-            </div>
-            <div class="form-group">
-              <label>نوع الفاتورة</label>
-              <select id="inv-type">
-                <option value="standard">فاتورة ضريبية (B2B)</option>
-                <option value="simplified">فاتورة مبسطة (B2C)</option>
-              </select>
-            </div>
+        
+        <!-- Header (Crisp Light Theme 44px) -->
+        <div class="modal-header" style="height:44px; padding:6px 18px; border-bottom:1.5px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; background:#ffffff; color:#0f172a; flex-shrink:0; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:20px;">📄</span>
+            <h3 class="modal-title" id="invoice-modal-title" style="margin:0; font-size:15px; font-weight:900; color:#0f172a;">
+              فاتورة مبيعات جديدة
+            </h3>
+            <span class="badge" style="background:#e0e7ff; color:#3730a3; font-weight:800; font-size:10.5px; padding:2px 7px; border:1px solid #c7d2fe;">
+              ⛶ شاشة كاملة
+            </span>
           </div>
 
-          <div class="grid-3 gap-16 mb-16">
-            <!-- Customer -->
-            <div class="form-group">
-              <label>العميل *</label>
-              <div class="autocomplete-container" id="customer-ac-wrap">
-                <input type="text" id="customer-search" class="input" placeholder="ابحث باسم العميل…" autocomplete="off" />
-                <div class="autocomplete-results hidden" id="customer-results"></div>
-                <input type="hidden" id="customer-id" />
+          <div style="display:flex; align-items:center; gap:8px;">
+            <select id="inv-type" class="form-control font-bold" style="height:30px; font-size:11.5px; padding:2px 8px;" title="نوع الفاتورة">
+              <option value="standard">فاتورة ضريبية (B2B)</option>
+              <option value="simplified">فاتورة مبسطة (B2C)</option>
+            </select>
+            <button class="modal-close" onclick="closeModal('new-invoice-modal')" style="color:#64748b; font-size:24px; line-height:1; padding:0 6px; background:transparent; border:none; cursor:pointer; font-weight:700;">×</button>
+          </div>
+        </div>
+
+        <!-- Body (Flex 1, No outer scroll, pure ergonomics like purchase invoices) -->
+        <div class="modal-body" style="padding:8px 12px; overflow:hidden; flex:1 1 0%; min-height:0; display:flex; flex-direction:column; gap:6px; background:#f1f5f9;">
+
+          <!-- Section 1: Compact Ergonomic Meta Bar (Single Row ~40px) -->
+          <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:6px 10px; box-shadow:0 1px 3px rgba(0,0,0,0.04); flex-shrink:0;">
+            <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+              
+              <div style="width:115px;">
+                <input type="text" id="inv-number" class="form-control mono font-bold" readonly
+                  style="background:#f8fafc; color:#4338ca; font-size:11.5px; height:30px; padding:2px 6px; text-align:center;" placeholder="رقم الفاتورة" title="رقم الفاتورة بالنظام" />
               </div>
-              <div id="donation-badge" class="alert info hidden" style="margin-top:8px; padding: 6px 12px; font-size:11px; font-weight: bold; border-left: 3px solid var(--info, #3b82f6); background: rgba(59,130,246,0.1); color: #3b82f6;"></div>
-              <!-- Credit Status -->
-              <div id="credit-status-bar" class="hidden" style="margin-top:8px;">
-                <div class="credit-meter">
-                  <div class="meter-label">
-                    <span id="credit-label">الرصيد المتاح</span>
-                    <span id="credit-numbers" class="mono"></span>
-                  </div>
-                  <div class="progress-bar">
-                    <div class="fill" id="credit-fill" style="width:0%;"></div>
-                  </div>
+
+              <div style="width:125px;">
+                <input type="date" id="inv-date" class="form-control mono font-bold" value="${todayString()}"
+                  style="height:30px; padding:2px 6px; font-size:11.5px; text-align:center;" title="تاريخ الفاتورة *" />
+              </div>
+
+              <div style="flex:2; min-width:220px; position:relative;">
+                <div class="autocomplete-container" id="customer-ac-wrap">
+                  <input type="text" id="customer-search" class="form-control font-bold"
+                    placeholder="👤 ابحث باسم العميل أو اختر العميل... *" autocomplete="off"
+                    style="height:30px; padding:2px 10px; font-size:12px; border-color:#2563eb; background:#fff;" />
+                  <div class="autocomplete-results hidden" id="customer-results" style="z-index:99999; max-height:260px; box-shadow:0 8px 24px rgba(0,0,0,0.18);"></div>
+                  <input type="hidden" id="customer-id" />
+                </div>
+              </div>
+
+              <div style="width:130px;">
+                <select id="inv-warehouse" class="form-control font-bold" style="height:30px; padding:2px 6px; font-size:11.5px;" title="المخزن المستخرج منه" onchange="window.resolveAllLineBatches(); renderInvoiceLines(); window.autoSelectCostCenter && window.autoSelectCostCenter();">
+                  <option value="">المخزن *</option>
+                </select>
+              </div>
+
+              <div style="width:130px;">
+                <select id="inv-rep" class="form-control font-bold" style="height:30px; padding:2px 6px; font-size:11.5px;" title="المندوب (اختياري)" onchange="window.autoSelectCostCenter && window.autoSelectCostCenter()">
+                  <option value="">بيع مباشر (بدون مندوب)</option>
+                </select>
+              </div>
+
+              <div style="width:115px;">
+                <select id="inv-payment" class="form-control font-bold" style="height:30px; padding:2px 6px; font-size:11.5px;" title="طريقة الدفع" onchange="updateInvoiceTotals()">
+                  <option value="credit">آجل (سداد لاحق)</option>
+                  <option value="cash">نقدي (خزينة)</option>
+                  <option value="transfer">تحويل بنكي</option>
+                  <option value="check">شيك مصرفي</option>
+                </select>
+              </div>
+
+              <div style="width:105px;">
+                <input type="number" id="inv-paid-amount" class="form-control mono font-bold no-spin" step="0.01" min="0" placeholder="0.00" style="height:30px; padding:2px 6px; font-size:11.5px; text-align:center;" title="المبلغ المدفوع (ر.س)" />
+              </div>
+
+              <button type="button" class="btn btn-secondary btn-sm" onclick="window.toggleSaleExtraDetails()" style="height:30px; font-size:11px; padding:0 8px; font-weight:700;" title="إظهار مركز التكلفة، الملاحظات، والمرفقات">
+                ⚙️ تفاصيل إضافية
+              </button>
+
+            </div>
+
+            <!-- Secondary Extra Details Drawer -->
+            <div id="sale-extra-details-drawer" style="display:none; margin-top:6px; padding-top:6px; border-top:1px dashed #cbd5e1; gap:10px; align-items:center; flex-wrap:wrap;">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">🏷️ مركز التكلفة:</label>
+                <select id="inv-cost-center" class="form-control" style="height:28px; padding:2px 6px; font-size:11px; width:150px;">
+                  <option value="">بدون مركز تكلفة</option>
+                </select>
+              </div>
+              <div style="display:flex; align-items:center; gap:6px; flex:1; min-width:220px;">
+                <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">ملاحظات:</label>
+                <input type="text" id="inv-notes" class="form-control" placeholder="ملاحظات اختيارية على الفاتورة..." style="height:28px; padding:2px 8px; font-size:11px; flex:1;" />
+              </div>
+              <div style="display:flex; align-items:center; gap:6px; min-width:220px;">
+                <label style="font-size:11px; font-weight:700; color:#475569; white-space:nowrap;">📁 إرفاق مستند:</label>
+                <input type="file" id="inv-file-upload" class="form-control" accept="image/*,application/pdf" style="height:28px; padding:1px 4px; font-size:10.5px;" />
+              </div>
+            </div>
+
+            <!-- Customer Alerts (Donation / Broker / Credit) -->
+            <div id="donation-badge" class="alert info hidden" style="margin-top:6px; padding:4px 10px; font-size:11px; font-weight:bold;"></div>
+            <div id="inv-broker-alert" style="display:none; margin-top:6px; padding:4px 10px; font-size:11.5px; font-weight:800; border-left:3px solid #0284c7; background:rgba(2,132,199,0.08); color:#0369a1; border-radius:6px;"></div>
+            <div id="credit-status-bar" class="hidden" style="margin-top:6px;">
+              <div class="credit-meter">
+                <div class="meter-label">
+                  <span id="credit-label">الرصيد المتاح</span>
+                  <span id="credit-numbers" class="mono"></span>
+                </div>
+                <div class="progress-bar">
+                  <div class="fill" id="credit-fill" style="width:0%;"></div>
                 </div>
               </div>
             </div>
+            <div id="inv-aging-alert" class="hidden" style="margin-top:6px; padding:6px 12px; font-size:11.5px; font-weight:800; border-radius:8px;"></div>
 
-            <!-- Sales Rep -->
-            <div class="form-group">
-              <label>المندوب (اختياري)</label>
-              <select id="inv-rep" onchange="window.autoSelectCostCenter && window.autoSelectCostCenter()">
-                <option value="">بيع مباشر (بدون مندوب)</option>
-              </select>
-            </div>
+          </div>
 
-            <!-- Warehouse -->
-            <div class="form-group">
-              <label>المخزن *</label>
-              <select id="inv-warehouse" onchange="window.resolveAllLineBatches(); renderInvoiceLines(); window.autoSelectCostCenter && window.autoSelectCostCenter();">
-                <option value="">اختر المخزن</option>
+          <!-- Section 2: Search & Smart Action Toolbar (Directly Above Table, exactly like Purchase Invoices) -->
+          <div style="background:#fff; border:1px solid #cbd5e1; border-radius:8px; padding:4px 8px; box-shadow:0 1px 3px rgba(0,0,0,0.04); flex-shrink:0; display:flex; gap:8px; align-items:center; justify-content:space-between; flex-wrap:wrap;">
+            <div style="display:flex; gap:6px; flex:1; min-width:320px; align-items:center;">
+              <select id="inv-product-category-filter" class="form-control" style="width:130px; height:32px; font-size:11.5px; padding:2px 6px;">
+                <option value="">كل الفئات</option>
               </select>
-            </div>
-
-            <!-- Cost Center -->
-            <div class="form-group">
-              <label>🏷️ مركز التكلفة (اختياري)</label>
-              <select id="inv-cost-center">
-                <option value="">بدون مركز تكلفة</option>
-              </select>
+              <div class="autocomplete-container" style="flex:1; position:relative;">
+                <input type="text" id="product-search-input" class="form-control"
+                  placeholder="🔍 ابحث باسم الصنف أو امسح الباركود لإضافة الصنف فوراً... [F8 للبحث المتقدم]" autocomplete="off"
+                  style="height:32px; font-size:12.5px; font-weight:700; padding:2px 10px; background:#fff; border-color:#2563eb;" />
+                <div class="autocomplete-results hidden" id="product-search-results" style="z-index:99999; max-height:280px; box-shadow:0 10px 30px rgba(0,0,0,0.18);"></div>
+              </div>
+              <span class="badge" id="inv-items-badge" style="font-size:11px; background:#e0e7ff; color:#3730a3; font-weight:800; padding:4px 8px; white-space:nowrap;">0 صنف</span>
+              <button type="button" class="btn sm" onclick="window.refreshInvoiceCostsFromCatalog()" style="height:30px; font-size:11px; padding:2px 8px; white-space:nowrap; background:#f0f9ff; border:1px solid #bae6fd; color:#0369a1; font-weight:700; border-radius:6px; cursor:pointer;" title="تحديث تكاليف البنود في الفاتورة وفق أحدث أسعار وتكاليف المخزون الحالية">
+                🔄 تحديث التكاليف من المخزن
+              </button>
             </div>
           </div>
 
-          <div class="grid-3 gap-16 mb-16">
-            <div class="form-group">
-              <label>طريقة الدفع</label>
-              <select id="inv-payment" onchange="updateInvoiceTotals()">
-                <option value="cash">نقدي</option>
-                <option value="credit">آجل</option>
-                <option value="transfer">تحويل بنكي</option>
-                <option value="check">شيك</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>المبلغ المدفوع (ر.س)</label>
-              <input type="number" id="inv-paid-amount" class="input mono" step="0.01" min="0" placeholder="0.00" />
-            </div>
-            <div class="form-group">
-              <label>ملاحظات</label>
-              <input type="text" id="inv-notes" class="input" placeholder="ملاحظة اختيارية" />
-            </div>
-          </div>
-
-          <div class="divider-label">بنود الفاتورة</div>
-
-          <!-- Line Items -->
-          <div class="invoice-lines">
-            <table style="width:100%;font-size:12.5px;">
+          <!-- Section 3: THE MAIN ITEMS TABLE (Maximized Screen Real Estate) -->
+          <div class="table-container" style="border:1.5px solid #cbd5e1; border-radius:8px; flex:1 1 0%; min-height:0; overflow-y:auto; overflow-x:auto; background:#fff; box-shadow:inset 0 1px 3px rgba(0,0,0,0.04);">
+            <table class="data-dense" style="margin:0; font-size:12px; width:100%; border-collapse:collapse;">
               <thead>
-                <tr style="background:var(--bg-2);border-bottom:1px solid var(--border);">
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">#</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">الصنف</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">الوحدة</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">الكمية</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">سعر الوحدة</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">خصم%</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">رقم التشغيلة</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">تاريخ الانتهاء</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">ض.ق.م</th>
-                  <th style="padding:8px 10px;text-align:right;font-size:11px;color:var(--text-2);">الإجمالي</th>
-                  <th style="width:36px;"></th>
+                <tr style="background:#f8fafc; color:#1e293b; position:sticky; top:0; z-index:10; border-bottom:2px solid #cbd5e1; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                  <th style="width:30px; text-align:center; padding:8px 4px; color:#475569; font-weight:800;">#</th>
+                  <th style="padding:8px 8px; text-align:right; color:#0f172a; font-weight:900; min-width:240px;">الصنف</th>
+                  <th style="width:105px; padding:8px 4px; text-align:center; color:#334155; font-weight:800;">الوحدة</th>
+                  <th style="width:85px; text-align:center; padding:8px 4px; color:#0284c7; font-weight:900;">الكمية</th>
+                  <th style="width:95px; text-align:left; padding:8px 4px; color:#334155; font-weight:800;">سعر الوحدة</th>
+                  <th style="width:110px; text-align:center; padding:8px 4px; color:#dc2626; font-weight:900;">الخصم ✂️</th>
+                  <th style="width:95px; text-align:center; padding:8px 4px; color:#0369a1; background:#f0f9ff; font-weight:800;" title="متوسط التكلفة المرجح للصنف (WAC)">متوسط التكلفة ⚖️</th>
+                  <th style="width:85px; text-align:center; padding:8px 4px; color:#047857; background:#ecfdf5; font-weight:900;" title="نسبة هامش الربح للسطر وفق المتوسط المرجح">هامش الربح % 📈</th>
+                  <th style="width:110px; padding:8px 4px; color:#334155; font-weight:800;">التشغيلة</th>
+                  <th style="width:100px; padding:8px 4px; color:#334155; font-weight:800;">الانتهاء</th>
+                  <th style="width:65px; text-align:center; padding:8px 4px; color:#334155; font-weight:800;">VAT</th>
+                  <th style="width:110px; text-align:left; padding:8px 8px; color:#1e40af; font-weight:900;">الإجمالي</th>
+                  <th style="width:36px; padding:8px 2px; text-align:center;"></th>
                 </tr>
               </thead>
               <tbody id="invoice-lines-tbody"></tbody>
             </table>
           </div>
 
-          <div class="grid-2 gap-16" style="margin-top:16px; align-items:start;">
-            <!-- Add Product & Search -->
-            <div>
-              <div style="display:grid; grid-template-columns:160px 1fr; gap:12px; align-items:end;">
-                <div class="form-group" style="margin-bottom:0;">
-                  <label style="font-size:11px; margin-bottom:4px;">تصفية بالفئة</label>
-                  <select id="inv-product-category-filter" class="input" style="padding:6px; font-size:12px; height:34px;">
-                    <option value="">كل الفئات</option>
-                  </select>
-                </div>
-                <div class="form-group" style="margin-bottom:0;">
-                  <label style="font-size:11px; margin-bottom:4px;">إضافة صنف للفاتورة</label>
-                  <div class="autocomplete-container">
-                    <input type="text" id="product-search-input" class="input" style="padding:6px; font-size:12px; height:34px;" placeholder="🔍 ابحث باسم الصنف أو الكود للإضافة... [F8 للبحث المتقدم]" autocomplete="off" />
-                    <div class="autocomplete-results hidden" id="product-search-results"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div id="inv-form-error" class="alert bad hidden" style="margin:0; padding:6px 10px; font-size:11.5px;"></div>
 
-            <!-- Totals -->
-            <div style="display:flex; justify-content:flex-end;">
-              <div class="invoice-totals" style="width:100%; max-width:320px;">
-                <div class="invoice-total-row">
-                  <span>المجموع الفرعي</span>
-                  <span class="mono" id="total-subtotal">0.00 ر.س</span>
-                </div>
-                <div class="invoice-total-row">
-                  <span>الخصم الإجمالي</span>
-                  <span class="mono text-bad" id="total-discount">0.00 ر.س</span>
-                </div>
-                <div class="invoice-total-row">
-                  <span>ضريبة القيمة المضافة (15%)</span>
-                  <span class="mono text-warn" id="total-vat">0.00 ر.س</span>
-                </div>
-                <div class="invoice-total-row grand-total">
-                  <span>الإجمالي النهائي</span>
-                  <span class="mono" id="total-grand">0.00 ر.س</span>
-                </div>
-                <div class="invoice-total-row" style="border-top:1px dashed var(--border-soft); margin-top:8px; padding-top:8px;">
-                  <span style="font-weight:bold;color:var(--good);">الربح التقديري (صافي)</span>
-                  <span class="mono font-bold text-good" id="total-profit">0.00 ر.س</span>
-                </div>
-                <div class="invoice-total-row">
-                  <span style="font-weight:bold;color:var(--good);">نسبة الهامش التقديرية</span>
-                  <span class="mono font-bold text-good" id="total-margin">0.0%</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-group mb-16" style="margin-top: 16px;">
-            <label>📁 إرفاق مستند / سند تسليم الفاتورة (أتمتة الأرشيف)</label>
-            <input type="file" id="inv-file-upload" class="input" accept="image/*,application/pdf" />
-          </div>
-
-          <div id="inv-form-error" class="alert bad hidden" style="margin-top:12px;"></div>
         </div>
-        <div class="modal-footer">
-          <button class="btn btn-ghost" onclick="closeModal('new-invoice-modal')">إلغاء</button>
-          <button class="btn btn-secondary" onclick="saveInvoice('draft')">حفظ مسودة</button>
-          <button class="btn btn-primary" onclick="saveInvoice('pending')" id="save-inv-btn">💾 حفظ وإصدار</button>
+
+        <!-- Section 4: FIXED BOTTOM HUD BAR (Crisp High-Contrast Light Theme) -->
+        <div class="modal-footer" style="height:54px; padding:0 16px; background:#ffffff; border-top:2px solid #cbd5e1; display:flex; justify-content:space-between; align-items:center; flex-shrink:0; box-shadow:0 -2px 10px rgba(0,0,0,0.04);">
+          
+          <!-- Live Totals Strip -->
+          <div style="display:flex; align-items:center; gap:8px; overflow-x:auto; flex:1; margin-left:12px;">
+            
+            <div class="sale-hud-pill">
+              <span style="color:#64748b;">المجموع الفرعي:</span>
+              <b id="total-subtotal" style="color:#0f172a;">0.00 ر.س</b>
+            </div>
+
+            <div class="sale-hud-pill" style="display:inline-flex; align-items:center; gap:4px; background:#fff1f2; border:1px solid #fecdd3; padding:2px 8px; border-radius:6px;" title="خصم إضافي على إجمالي الفاتورة (مبلغ أو نسبة)">
+              <span style="color:#dc2626; font-weight:800; font-size:11px; white-space:nowrap;">خصم إضافي:</span>
+              <input type="number" id="inv-global-discount-val" class="mono font-bold no-spin" step="0.01" min="0" value="0" placeholder="0" style="width:55px; height:24px; padding:1px 4px; font-size:11.5px; text-align:center; border:1px solid #fda4af; border-radius:4px; background:#ffffff; color:#be123c;" oninput="window.onGlobalDiscountChanged()" title="أدخل قيمة الخصم الإضافي" />
+              <select id="inv-global-discount-type" style="height:24px; padding:0 2px; font-size:11px; font-weight:bold; border:1px solid #fda4af; border-radius:4px; background:#ffffff; color:#be123c; cursor:pointer;" onchange="window.onGlobalDiscountChanged()" title="نوع الخصم: مبلغ (ر.س) أو نسبة مئوية (%)">
+                <option value="amount">ر.س</option>
+                <option value="percent">%</option>
+              </select>
+              <b id="total-discount" style="color:#dc2626; font-size:11.5px; margin-right:4px; white-space:nowrap;">- 0.00 ر.س</b>
+            </div>
+
+            <div class="sale-hud-pill">
+              <span style="color:#d97706;">الضريبة (15%):</span>
+              <b id="total-vat" style="color:#d97706;">0.00 ر.س</b>
+            </div>
+
+            <div class="sale-hud-pill" title="تكلفة البضاعة المباعة وفق المتوسط المرجح">
+              <span style="color:#64748b;">التكلفة (WAC):</span>
+              <b id="inv-hud-cost" style="color:#64748b;">0.00 ر.س</b>
+            </div>
+
+            <div class="sale-hud-pill" title="صافي ربح الفاتورة التقديري">
+              <span style="color:#16a34a;">الربح التقديري:</span>
+              <b id="total-profit" style="color:#16a34a;">0.00 ر.س</b>
+            </div>
+
+            <div class="sale-hud-pill" id="inv-hud-margin-pill" style="background:#ecfdf5; border-color:#6ee7b7;" title="نسبة هامش الربح للفاتورة">
+              <span style="color:#065f46;">🎯 هامش الربح:</span>
+              <b id="total-margin" style="color:#059669; font-size:12.5px;">0.0%</b>
+            </div>
+
+            <!-- Pinned Grand Total -->
+            <div style="display:inline-flex; align-items:center; gap:8px; padding:5px 16px; background:linear-gradient(135deg, #1e40af, #2563eb); border-radius:8px; border:1px solid #1d4ed8; box-shadow:0 2px 6px rgba(37,99,235,0.25);">
+              <span style="font-size:12.5px; font-weight:800; color:#dbeafe;">المستحق:</span>
+              <span class="mono" style="font-size:18px; font-weight:900; color:#ffffff;" id="total-grand">0.00 ر.س</span>
+            </div>
+
+          </div>
+
+          <!-- Action Buttons -->
+          <div style="display:flex; gap:6px; align-items:center; flex-shrink:0;">
+            <button class="btn btn-ghost sm" onclick="closeModal('new-invoice-modal')" style="color:#64748b; height:34px; font-size:12px; font-weight:700;">إلغاء</button>
+            <button class="btn btn-secondary sm" onclick="saveInvoice('draft')" style="height:34px; font-size:12px; padding:0 12px; background:#f8fafc; border:1.5px solid #cbd5e1; color:#0f172a; font-weight:800;">حفظ مسودة</button>
+            <button class="btn btn-primary" onclick="saveInvoice('pending')" id="save-inv-btn" style="height:36px; padding:0 20px; font-weight:900; font-size:13px; background:linear-gradient(135deg,#2563eb,#1d4ed8); box-shadow:0 2px 6px rgba(37,99,235,0.3);">
+              💾 حفظ وإصدار الفاتورة
+            </button>
+          </div>
+
         </div>
       </div>
     </div>
@@ -470,6 +683,10 @@ async function fetchInvoices() {
     const from = document.getElementById("inv-from")?.value;
     const to   = document.getElementById("inv-to")?.value;
 
+    const textFilter = (document.getElementById("inv-text-filter")?.value || "").trim().toLowerCase();
+    const custSearchText = (document.getElementById("inv-customer-search-input")?.value || "").trim().toLowerCase();
+    const custF = document.getElementById("inv-customer-filter")?.value;
+
     let q = COLS.salesInvoices();
     const constraints = [];
     if (from) {
@@ -479,15 +696,15 @@ async function fetchInvoices() {
       constraints.push(where("date", "<=", to));
     }
 
-    if (!from && !to) {
+    const finalConstraints = [...constraints, orderBy("date", "desc")];
+    if (!from && !to && !custF && !custSearchText && !textFilter) {
       // جلب آخر 100 فاتورة فقط لتسريع الصفحة الافتتاحية
-      q = query(q, ...constraints, orderBy("date", "desc"), limit(100));
+      finalConstraints.push(limit(100));
     } else {
-      q = query(q, ...constraints, orderBy("date", "desc"));
+      finalConstraints.push(limit(500));
     }
 
-    const snap = await getDocs(q);
-    let invs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    let invs = await getAll(COLS.salesInvoices(), finalConstraints);
 
     // Cache loaded invoices in memory for 0ms instant view
     invs.forEach(inv => invoicesCache.set(inv.id, inv));
@@ -497,10 +714,30 @@ async function fetchInvoices() {
     if (statusF) {
       invs = invs.filter(inv => inv.status === statusF);
     }
-    const custF = document.getElementById("inv-customer-filter")?.value;
-    if (custF) {
-      invs = invs.filter(inv => inv.customerId === custF || inv.customerName === (cachedCustomers?.find(c => c.id === custF)?.name));
+
+    // ── تصفية بالبحث النصي السريع (اسم العميل، رقم الفاتورة، هاتف العميل، المندوب، الملاحظات) ──
+    if (textFilter) {
+      invs = invs.filter(inv => {
+        const cName = ((cachedCustomers && cachedCustomers.find(c => c.id === inv.customerId)?.name) || inv.customerName || "").toLowerCase();
+        const num = (inv.number || inv.invoiceNumber || inv.id || "").toLowerCase();
+        const rName = (inv.repName || "").toLowerCase();
+        const phone = (inv.customerPhone || "").toLowerCase();
+        const notes = (inv.notes || "").toLowerCase();
+        return cName.includes(textFilter) || num.includes(textFilter) || rName.includes(textFilter) || phone.includes(textFilter) || notes.includes(textFilter);
+      });
     }
+
+    // ── تصفية بالعميل (سواء باختيار المعرّف أو بالبحث المباشر في حقل العميل) ──
+    if (custF) {
+      const selectedCustName = (cachedCustomers?.find(c => c.id === custF)?.name || "").toLowerCase();
+      invs = invs.filter(inv => inv.customerId === custF || (selectedCustName && (inv.customerName || "").toLowerCase() === selectedCustName));
+    } else if (custSearchText) {
+      invs = invs.filter(inv => {
+        const cName = ((cachedCustomers && cachedCustomers.find(c => c.id === inv.customerId)?.name) || inv.customerName || "").toLowerCase();
+        return cName.includes(custSearchText);
+      });
+    }
+
     const repF = document.getElementById("inv-rep-filter")?.value;
     const selectedRepName = repF ? cachedReps?.find(r => r.id === repF)?.name : null;
     if (repF) {
@@ -543,14 +780,14 @@ async function fetchInvoices() {
         rConstraints.push(where("date", "<=", to));
       }
 
+      const finalRConstraints = [...rConstraints, orderBy("date", "desc")];
       if (!from && !to && !custF) {
-        rq = query(rq, ...rConstraints, orderBy("date", "desc"), limit(100));
+        finalRConstraints.push(limit(100));
       } else {
-        rq = query(rq, ...rConstraints, orderBy("date", "desc"));
+        finalRConstraints.push(limit(300));
       }
 
-      const rcptSnap = await getDocs(rq);
-      const receipts = rcptSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      const receipts = await getAll(COLS.receipts(), finalRConstraints);
 
       const filteredRcpts = receipts.filter(r => {
         const d = r.date || (r.createdAt?.toDate ? r.createdAt.toDate().toISOString().slice(0,10) : "");
@@ -571,12 +808,7 @@ async function fetchInvoices() {
       totalPaid = activeInvs.reduce((s, i) => s + (parseFloat(i.amountPaid || i.paidAmount || 0)), 0);
     }
 
-    let totalUnpaid = Math.max(0, totalSales - totalPaid);
-    if (repF) {
-      const repCusts = cachedCustomers?.filter(c => c.repId === repF || c.repName === selectedRepName || (selectedRepName && c.repName?.includes("مصطفى"))) || [];
-      const repDebtSum = repCusts.reduce((sum, c) => sum + parseFloat(c.balance || 0), 0);
-      if (repDebtSum > 0) totalUnpaid = repDebtSum;
-    }
+    const totalUnpaid = Math.max(0, totalSales - totalPaid);
     const zatcaCount = invs.filter(i => i.zatcaStatus === "reported").length;
 
     document.getElementById("kpi-total").textContent  = formatCurrency(totalSales);
@@ -587,7 +819,17 @@ async function fetchInvoices() {
 
 
     if (invs.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:32px;color:var(--text-2);">لا توجد فواتير</td></tr>`;
+      const hasDateFilter = from || to;
+      const hasSearch = textFilter || custSearchText || custF;
+      tbody.innerHTML = `<tr><td colspan="12" style="text-align:center;padding:36px;color:var(--text-2);">
+        <div style="font-size:15px;font-weight:700;margin-bottom:6px;">لا توجد فواتير تطابق شروط البحث والتصفية</div>
+        ${hasDateFilter && hasSearch ? `
+          <div style="margin-top:10px;">
+            <button class="btn btn-sm btn-secondary" onclick="window.invFilterRange('all')" style="border:1.5px solid var(--brand);color:var(--brand);font-weight:700;">
+              📅 البحث في جميع الفترات والتواريخ
+            </button>
+          </div>` : ''}
+      </td></tr>`;
     } else {
       tbody.innerHTML = invs.map(inv => `
         <tr style="cursor:pointer;" onclick="viewInvoice('${inv.id}')">
@@ -623,9 +865,36 @@ async function fetchInvoices() {
 
   } catch (err) {
     console.error(err);
-    tbody.innerHTML = `<tr><td colspan="11"><div class="alert bad" style="margin:8px;">${err.message}</div></td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="12"><div class="alert bad" style="margin:8px;">${err.message}</div></td></tr>`;
   }
 }
+
+window.clearInvoiceCustomerFilter = () => {
+  const custSearchInp = document.getElementById("inv-customer-search-input");
+  if (custSearchInp) custSearchInp.value = "";
+  const custSel = document.getElementById("inv-customer-filter");
+  if (custSel) custSel.value = "";
+  const clearBtn = document.getElementById("inv-customer-clear-btn");
+  if (clearBtn) clearBtn.style.display = "none";
+  loadInvoicesList();
+};
+
+window.onCustomerSelectChange = () => {
+  const custSel = document.getElementById("inv-customer-filter");
+  const custSearchInp = document.getElementById("inv-customer-search-input");
+  const clearBtn = document.getElementById("inv-customer-clear-btn");
+  if (custSel && custSearchInp) {
+    const selectedOpt = custSel.options[custSel.selectedIndex];
+    if (custSel.value) {
+      custSearchInp.value = selectedOpt ? selectedOpt.text : "";
+      if (clearBtn) clearBtn.style.display = "block";
+    } else {
+      custSearchInp.value = "";
+      if (clearBtn) clearBtn.style.display = "none";
+    }
+  }
+  loadInvoicesList();
+};
 
 window.invFilterRange = (range) => {
   const today = todayString();
@@ -635,9 +904,13 @@ window.invFilterRange = (range) => {
   } else if (range === "month") {
     document.getElementById("inv-from").value = new Date(new Date().setDate(1)).toISOString().split("T")[0];
     document.getElementById("inv-to").value   = today;
+  } else if (range === "all") {
+    document.getElementById("inv-from").value = "";
+    document.getElementById("inv-to").value   = "";
   }
   document.querySelectorAll(".quick-filter-btn").forEach(b => b.classList.remove("active"));
-  event.target.classList.add("active");
+  const btn = document.getElementById(`qf-${range}`);
+  if (btn) btn.classList.add("active");
   loadInvoicesList();
 };
 
@@ -646,6 +919,9 @@ window.openNewInvoice = () => {
   invoiceLines = [];
   selectedCustomer = null;
   window._editingInvoiceId = null;
+  window._editingInvoiceVersion = null;
+  window._editingOldInvoice = null;
+  window._editingOldLines = null;
 
   const btn = document.getElementById("save-inv-btn");
   if (btn) btn.textContent = "💾 حفظ وإصدار الفاتورة";
@@ -658,9 +934,14 @@ window.openNewInvoice = () => {
   document.getElementById("inv-payment").value = "credit";
   document.getElementById("inv-paid-amount").value = "";
   document.getElementById("inv-notes").value = "";
-  document.getElementById("credit-status-bar").classList.add("hidden");
+  document.getElementById("credit-status-bar").classList.add("hidden"); document.getElementById("inv-aging-alert")?.classList.add("hidden");
   document.getElementById("donation-badge")?.classList.add("hidden");
   document.getElementById("inv-form-error").classList.add("hidden");
+
+  const globalDiscValEl = document.getElementById("inv-global-discount-val");
+  const globalDiscTypeEl = document.getElementById("inv-global-discount-type");
+  if (globalDiscValEl) globalDiscValEl.value = "0";
+  if (globalDiscTypeEl) globalDiscTypeEl.value = "amount";
 
   renderInvoiceLines();
   updateInvoiceTotals();
@@ -764,6 +1045,11 @@ window.autoSelectCostCenter = () => {
       }
     }
   }
+
+  // تحديث أسعار البيع السابقة للأصناف الحالية فور اختيار أو تغيير العميل
+  if (id && invoiceLines.length > 0) {
+    refreshLastPricesForCustomer(id);
+  }
 };
 
 function setupCustomerAutocomplete() {
@@ -809,6 +1095,26 @@ window.selectCustomer = (id, name, creditLimit, balance) => {
   document.getElementById("customer-id").value = id;
   document.getElementById("customer-results").classList.add("hidden");
 
+  // ── Broker Commission Detection ──
+  const fullCust = (cachedCustomers || []).find(c => c.id === id);
+  const brokerAlert = document.getElementById("inv-broker-alert");
+  if (fullCust?.hasBrokerCommission && parseFloat(fullCust?.brokerRate) > 0) {
+    selectedCustomer.hasBrokerCommission = true;
+    selectedCustomer.brokerName = fullCust.brokerName || "زياد";
+    selectedCustomer.brokerRate = parseFloat(fullCust.brokerRate) || 1.0;
+    selectedCustomer.brokerTrigger = fullCust.brokerTrigger || "on_payment";
+    selectedCustomer.brokerAccountCode = fullCust.brokerAccountCode || "2-1-4-2";
+    selectedCustomer.brokerExpenseCode = fullCust.brokerExpenseCode || "5-4-10";
+
+    if (brokerAlert) {
+      brokerAlert.style.display = "block";
+      brokerAlert.innerHTML = `💼 <strong>عميل مرتبط بعمولة وسيط (${selectedCustomer.brokerName}):</strong> يتم إضافة نسبة (+${selectedCustomer.brokerRate}%) آلياً على أي سعر أساسي تدخله قبل الضريبة (الاستحقاق: عند سداد الفاتورة).`;
+    }
+  } else {
+    selectedCustomer.hasBrokerCommission = false;
+    if (brokerAlert) brokerAlert.style.display = "none";
+  }
+
   const donationBadge = document.getElementById("donation-badge");
   const isDonation = id === "005" || name.includes("سلة البركة");
 
@@ -817,7 +1123,7 @@ window.selectCustomer = (id, name, creditLimit, balance) => {
       donationBadge.textContent = "🎁 عميل تبرعات (معفى من الضريبة وتكلفتها مصروف تبرعات)";
       donationBadge.classList.remove("hidden");
     }
-    document.getElementById("credit-status-bar")?.classList.add("hidden");
+    document.getElementById("credit-status-bar")?.classList.add("hidden"); document.getElementById("inv-aging-alert")?.classList.add("hidden");
   } else {
     if (donationBadge) {
       donationBadge.classList.add("hidden");
@@ -846,8 +1152,39 @@ window.selectCustomer = (id, name, creditLimit, balance) => {
         labelEl.textContent = "الرصيد المستخدم";
       }
     } else {
-      document.getElementById("credit-status-bar")?.classList.add("hidden");
+      document.getElementById("credit-status-bar")?.classList.add("hidden"); document.getElementById("inv-aging-alert")?.classList.add("hidden");
     }
+
+    // Show Aging & Outstanding Balance Alert
+    const agingAlert = document.getElementById("inv-aging-alert");
+    if (agingAlert) {
+      if (balance > 0) {
+        agingAlert.classList.remove("hidden");
+        const days = fullCust?.creditDays || 0;
+        if (days > 0) {
+          agingAlert.style.background = "#fff7ed";
+          agingAlert.style.border = "1px solid #fed7aa";
+          agingAlert.style.color = "#c2410c";
+          agingAlert.innerHTML = `⚠️ <b>تنبيه ائتماني:</b> العميل عليه مديونية سابقة بقيمة <b>${formatCurrency(balance)}</b> (مهلة السداد: ${days} يوماً). يرجى التأكد من التزام العميل قبل تسليم بضاعة جديدة.`;
+        } else {
+          agingAlert.style.background = "#fef2f2";
+          agingAlert.style.border = "1px solid #fecaca";
+          agingAlert.style.color = "#b91c1c";
+          agingAlert.innerHTML = `⚠️ <b>تنبيه مديونية:</b> العميل عليه مديونية قائمة بقيمة <b>${formatCurrency(balance)}</b> بدون مهلة ائتمانية (حساب فوري/نقدي).`;
+        }
+      } else {
+        agingAlert.classList.remove("hidden");
+        agingAlert.style.background = "#f0fdf4";
+        agingAlert.style.border = "1px solid #bbf7d0";
+        agingAlert.style.color = "#15803d";
+        agingAlert.innerHTML = `✅ <b>الوضع الائتماني:</b> رصيد العميل 0.00 ر.س (لا توجد مديونيات سابقة معلقة).`;
+      }
+    }
+  }
+
+  // تحديث أسعار البيع السابقة للأصناف الحالية فور اختيار أو تغيير العميل
+  if (id && invoiceLines.length > 0) {
+    refreshLastPricesForCustomer(id);
   }
 };
 
@@ -909,17 +1246,29 @@ function setupProductAutocomplete() {
       const safeCat   = (p.taxCategory || 'S');
       const safePrice = p.salePrice || 0;
       // ✅ FIX: أولوية التكلفة: averageCost (محسوب من المشتريات) → costPrice → purchasePrice → 0
-      const safeCost  = p.averageCost || p.costPrice || p.purchasePrice || 0;
+      // ✅ أولوية التكلفة: المتوسط المرجح WAC
+      const safeCost  = p.averageCost || p.costPrice || p.lastPurchasePrice || p.avgCostPrice || p.purchasePrice || 0;
+      const safeAltUnit = (p.altUnit || '').replace(/'/g, '&#39;');
+      const safeFactor = parseFloat(p.unitFactor) || 1;
+      const expMargin = safePrice > 0 ? (((safePrice - safeCost) / safePrice) * 100).toFixed(1) : 0;
       return `
-        <div class="autocomplete-item" onclick="addProductLine('${p.id}','${safeName}',${safePrice},'${safeUnit}','${safeCat}',${safeCost})">
+        <div class="autocomplete-item" onclick="addProductLine('${p.id}','${safeName}',${safePrice},'${safeUnit}','${safeCat}',${safeCost},'${safeAltUnit}',${safeFactor})">
           <div class="flex justify-between">
-            <span>${p.name}</span>
+            <span style="font-weight:700;">${p.name}</span>
             <div>
-              <span class="mono text-indigo" style="margin-left:12px;">${formatCurrency(p.salePrice)}</span>
+              <span class="mono text-indigo font-bold" style="margin-left:12px;">${formatCurrency(p.salePrice)}</span>
               <span class="${qtyClass}" style="font-size:10px;">المتاح: ${qty}</span>
             </div>
           </div>
-          <div class="item-code">${p.sku || ''} | ${p.unit || ''}</div>
+          <div class="item-code" style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+            <span>${p.sku || ''} | ${translateUnit(p.unit)||''}
+              ${p.altUnit && p.unitFactor > 1 ? `<span style="color:#d97706;font-weight:700;"> 📦 ${p.unitFactor} ${translateUnit(p.unit)} = 1 ${translateUnit(p.altUnit)}</span>` : ''}
+            </span>
+            <span style="font-size:10.5px; color:#475569;">
+              متوسط التكلفة: <b style="color:#0f172a;">${formatCurrency(safeCost)}</b>
+              <span class="badge ${expMargin >= 0 ? 'good' : 'bad'}" style="font-size:9.5px; padding:1px 5px; margin-right:4px;">هامش: ${expMargin}%</span>
+            </span>
+          </div>
         </div>`;
     }).join("");
     results.classList.remove("hidden");
@@ -960,12 +1309,68 @@ async function loadProductsAndCategories() {
   }
 }
 
-window.addProductLine = (productId, productName, unitPrice, unit, taxCategory, costPrice = 0) => {
+window.addProductLine = (productId, productName, unitPrice, unit, taxCategory, costPrice = 0, altUnit = '', unitFactor = 1) => {
   document.getElementById("product-search-input").value = "";
   document.getElementById("product-search-results").classList.add("hidden");
 
+  const parsedFactor = parseFloat(unitFactor) || 1;
+  const defaultToAlt = !!(altUnit && parsedFactor > 1);
+  // basePricePerUnit = salePrice as entered = price per altUnit (carton/box)
+  const basePricePerUnit = parseFloat(unitPrice) || 0;
+  // Default to carton → show carton price. Default to piece → show carton÷factor
+  const initialPrice = defaultToAlt ? basePricePerUnit : (parsedFactor > 1 ? parseFloat((basePricePerUnit / parsedFactor).toFixed(4)) : basePricePerUnit);
+  const selectedUnit = defaultToAlt ? altUnit : unit;
+
+  // Auto-calculate broker markup (+1%) if customer has broker commission
+  let lineUnitPrice = initialPrice;
+  let lineBasePrice = initialPrice;
+  let lineCommPerUnit = 0;
+  if (selectedCustomer?.hasBrokerCommission && selectedCustomer?.brokerRate > 0) {
+    const rate = parseFloat(selectedCustomer.brokerRate) || 1.0;
+    lineUnitPrice = parseFloat((initialPrice * (1 + rate / 100)).toFixed(2));
+    lineBasePrice = initialPrice;
+    lineCommPerUnit = parseFloat((lineUnitPrice - lineBasePrice).toFixed(2));
+  }
+
+  // 🛡️ SMART DUPLICATE PREVENTION & AUTO-MERGE:
+  // If the product already exists with the same unit, increment qty instead of duplicating the row!
+  const existingIdx = invoiceLines.findIndex(l => 
+    l.productId === productId && 
+    (l.selectedUnit || l.unit) === selectedUnit && 
+    !l.isCustom && 
+    !String(l.productId || '').startsWith('adhoc_')
+  );
+
+  if (existingIdx !== -1) {
+    const exLine = invoiceLines[existingIdx];
+    exLine.qty = (parseFloat(exLine.qty) || 0) + 1;
+    renderInvoiceLines();
+    updateInvoiceTotals();
+    window.resolveLineBatches(existingIdx);
+
+    if (window.showToast) {
+      window.showToast(`تمت زيادة كمية (${productName}) إلى ${exLine.qty} في السطر (${existingIdx + 1}) بدلاً من تكرار الصنف`, "info", 3000);
+    }
+
+    setTimeout(() => {
+      const tbody = document.getElementById("invoice-lines-tbody");
+      const row = tbody?.children[existingIdx];
+      if (row) {
+        row.style.transition = "background-color 0.4s ease";
+        row.style.backgroundColor = "rgba(16, 185, 129, 0.25)";
+        row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        setTimeout(() => { row.style.backgroundColor = ""; }, 1500);
+      }
+    }, 50);
+    return;
+  }
+
   invoiceLines.push({
     productId, productName, unit,
+    altUnit: altUnit || '',
+    unitFactor: parsedFactor,
+    selectedUnit: defaultToAlt ? altUnit : unit,
+    basePricePerUnit,          // always per base unit — used for price recalc on unit switch
     unitCode: (() => {
       const map = {
         "Carton": "CTN", "كرتون": "CTN",
@@ -985,8 +1390,14 @@ window.addProductLine = (productId, productName, unitPrice, unit, taxCategory, c
       return map[unit] || "PCE";
     })(),
     taxCategory: taxCategory || "S",
-    qty: 1, unitPrice, discount: 0,
+    qty: 1, unitPrice: (typeof lineUnitPrice !== 'undefined' ? lineUnitPrice : initialPrice),
+    basePrice: (typeof lineBasePrice !== 'undefined' ? lineBasePrice : initialPrice),
+    brokerCommissionPerUnit: (typeof lineCommPerUnit !== 'undefined' ? lineCommPerUnit : 0),
+    brokerCommissionTotal: (typeof lineCommPerUnit !== 'undefined' ? lineCommPerUnit : 0),
+    discount: 0,
+    discountType: "percent",
     costPrice: costPrice || 0,
+    averageCost: costPrice || 0,
     batchNumber: "",
     expiryDate: "",
     availableBatches: []
@@ -997,6 +1408,11 @@ window.addProductLine = (productId, productName, unitPrice, unit, taxCategory, c
   updateInvoiceTotals();
   
   window.resolveLineBatches(lineIdx);
+
+  // جلب آخر سعر بيع لهذا الصنف مع العميل الحالي تلقائياً
+  if (selectedCustomer?.id) {
+    attachLastPriceToLine(lineIdx, selectedCustomer.id, productId, selectedUnit);
+  }
 };
 
 function renderInvoiceLines() {
@@ -1004,7 +1420,7 @@ function renderInvoiceLines() {
   if (!tbody) return;
 
   if (invoiceLines.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="11" style="text-align:center;padding:16px;color:var(--text-2);font-size:12px;">لم يتم إضافة أصناف بعد</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="13" style="text-align:center;padding:16px;color:var(--text-2);font-size:12px;">لم يتم إضافة أصناف بعد</td></tr>`;
     return;
   }
 
@@ -1021,7 +1437,7 @@ function renderInvoiceLines() {
   }
 
   tbody.innerHTML = invoiceLines.map((line, i) => {
-    const lineTotal = calcLineTotal(line.qty, line.unitPrice, line.discount);
+    const lineTotal = calcLineTotal(line.qty, line.unitPrice, line.discount, line.discountType || "percent");
     const vatAmt = line.taxCategory === "S" ? (lineTotal * 0.15) : 0;
     // If warehouse selected, find stock for that warehouse; otherwise sum all warehouses
     let avail = 0;
@@ -1034,29 +1450,117 @@ function renderInvoiceLines() {
         .filter(s => s.productId === line.productId)
         .reduce((sum, s) => sum + (s.qty || 0), 0);
     }
-    const isOver = line.qty > avail;
+
+    // In edit mode: If current warehouse matches old invoice warehouse (or no warehouse filter),
+    // add back the original quantity of this product from the invoice being edited
+    let oldBaseQty = 0;
+    if (window._editingInvoiceId && window._editingOldLines && window._editingOldInvoice) {
+      const oldWh = window._editingOldInvoice.warehouseId;
+      if (!whId || whId === oldWh) {
+        oldBaseQty = window._editingOldLines
+          .filter(ol => ol.productId === line.productId)
+          .reduce((sum, ol) => {
+            const factor = (ol.altUnit && ol.unitFactor > 1 && ol.selectedUnit === ol.altUnit) ? (parseFloat(ol.unitFactor) || 1) : 1;
+            return sum + ((parseFloat(ol.qty) || 0) * factor);
+          }, 0);
+      }
+    }
+
+    const totalAvail = avail + oldBaseQty;
+    const saleQtyInBaseUnit = (parseFloat(line.qty)||0) * ((line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? (parseFloat(line.unitFactor)||1) : 1);
+    const isOver = !line.isCustom && !String(line.productId || "").startsWith("adhoc_") && (saleQtyInBaseUnit > oldBaseQty && (saleQtyInBaseUnit - oldBaseQty) > avail);
 
     return `<tr style="border-bottom:1px solid var(--border-soft);">
       <td style="padding:6px 10px;color:var(--text-2);width:30px;">${i + 1}</td>
       <td style="padding:6px 10px;"><span style="font-family:var(--font-heading);font-size:12.5px;">${line.productName}</span></td>
-      <td style="padding:6px 10px;font-size:11px;color:var(--text-2);">${line.unit}</td>
+      <td style="padding:6px 6px;min-width:90px;">
+        ${(line.altUnit && line.unitFactor > 1)
+          ? `<select class="input" style="height:30px;font-size:11px;padding:2px 4px;color:var(--brand);font-weight:700;"
+               onchange="updateSalesLineUnit(${i},this.value)">
+               <option value="${line.altUnit}" ${line.selectedUnit===line.altUnit?'selected':''}>${translateUnit(line.altUnit)}</option>
+               <option value="${line.unit}" ${line.selectedUnit===line.unit?'selected':''}>${translateUnit(line.unit)}</option>
+             </select>
+             <div style="font-size:9.5px;color:#64748b;margin-top:2px;text-align:center">
+               ${line.selectedUnit===line.altUnit
+                 ? `1 ${translateUnit(line.altUnit)} = ${line.unitFactor} ${translateUnit(line.unit)}`
+                 : translateUnit(line.unit)}
+             </div>`
+          : `<span style="font-size:11px;color:var(--text-2)">${translateUnit(line.unit||'Piece')}</span>`
+        }
+      </td>
       <td style="padding:6px 10px;width:80px;">
         <input type="number" class="input mono" style="width:70px;height:30px;font-size:12px;${isOver ? 'border-color:var(--bad);background-color:rgba(239,68,68,0.05);' : ''}"
           value="${line.qty}" min="0.001" step="0.001"
           onchange="updateLine(${i},'qty',this.value)" />
         <div style="font-size:9.5px;margin-top:2px;white-space:nowrap;color:${isOver ? 'var(--bad)' : 'var(--text-dim)'};font-weight:${isOver ? '700' : 'normal'};">
-          المتاح: ${avail}
+          ${(line.altUnit && line.unitFactor > 1)
+            ? `متاح: ${Math.floor(totalAvail/line.unitFactor)} ${translateUnit(line.altUnit)} + ${totalAvail % line.unitFactor} ${translateUnit(line.unit)}`
+            : `المتاح: ${totalAvail}`}
+        </div>
+        ${(line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit)
+          ? `<div style="font-size:9.5px;color:#059669;margin-top:2px;text-align:center;font-weight:700;">
+               = ${(parseFloat(line.qty)||0) * line.unitFactor} ${translateUnit(line.unit)}
+             </div>`
+          : ''}
+      </td>
+      <td style="padding:6px 8px; width:${selectedCustomer?.hasBrokerCommission ? '145px' : '125px'};">
+        <input type="number" class="input mono" style="width:105px; height:30px; font-size:12px; font-weight:bold;"
+          value="${(selectedCustomer?.hasBrokerCommission && line.basePrice !== undefined) ? line.basePrice : line.unitPrice}" min="0" step="0.01"
+          title="${selectedCustomer?.hasBrokerCommission ? 'أدخل سعر الاتفاق الأساسي وسيضاف عليه الـ 1% تلقائياً' : 'سعر الوحدة'}"
+          onchange="updateLine(${i},'unitPrice',this.value)" />
+        ${selectedCustomer?.hasBrokerCommission ? `
+          <div style="font-size:9.5px; color:#0284c7; font-weight:800; margin-top:2px; white-space:nowrap;">
+            سعر الفاتورة: <strong>${line.unitPrice}</strong> <span style="font-size:8.5px; color:#059669;">(+${selectedCustomer.brokerRate}%)</span>
+          </div>
+        ` : ''}
+        ${(line.lastCustomerPrice !== undefined && line.lastCustomerPrice !== null) ? `
+          <div style="margin-top:3px; display:inline-flex; align-items:center; gap:3px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:4px; padding:1px 5px; font-size:10px; color:#1e40af; white-space:nowrap; box-shadow:0 1px 2px rgba(0,0,0,0.03);"
+               title="آخر بيع لهذا العميل: فاتورة #${line.lastCustomerInvoiceNumber || ''} بتاريخ ${line.lastCustomerInvoiceDate || ''}">
+            <span>🏷️ آخر بيع: <strong>${line.lastCustomerPrice}</strong>${line.lastCustomerUnit && line.lastCustomerUnit !== line.selectedUnit ? ` (${translateUnit(line.lastCustomerUnit)})` : ''}</span>
+            ${Number(line.lastCustomerPrice) !== Number(line.unitPrice) ? `
+              <button type="button" onclick="window.applyLastCustomerPrice(${i})" 
+                      style="border:none; background:#2563eb; color:#fff; font-size:9.5px; font-weight:800; padding:1px 5px; border-radius:3px; cursor:pointer; line-height:1.2;"
+                      title="تطبيق آخر سعر بيع (${line.lastCustomerPrice} ر.س)">
+                تطبيق
+              </button>
+            ` : '<span style="color:#059669; font-weight:800; font-size:9px;">(مطابق)</span>'}
+          </div>
+        ` : ''}
+      </td>
+      <td style="padding:6px 6px; width:110px; text-align:center;">
+        <div style="display:inline-flex; align-items:center; gap:2px; background:#fff; border:1px solid #cbd5e1; border-radius:6px; padding:1px 2px;">
+          <input type="number" class="input mono font-bold no-spin" style="width:52px; height:26px; font-size:11.5px; text-align:center; padding:1px 3px; border:none; background:transparent; color:#be123c;"
+            value="${line.discount || 0}" min="0" ${line.discountType === 'amount' ? '' : 'max="100"'} step="${line.discountType === 'amount' ? '0.01' : '1'}"
+            placeholder="0"
+            onchange="updateLine(${i},'discount',this.value)" />
+          <button type="button" onclick="window.toggleLineDiscountType(${i})" 
+            title="تبديل نوع الخصم بين نسبة مئوية (%) ومبلغ نقدي (ر.س)"
+            style="border:none; background:${line.discountType === 'amount' ? '#dbeafe' : '#fef2f2'}; color:${line.discountType === 'amount' ? '#1d4ed8' : '#dc2626'}; font-weight:900; font-size:10px; padding:2px 5px; border-radius:4px; cursor:pointer; white-space:nowrap; transition:all 0.15s;">
+            ${line.discountType === 'amount' ? 'ر.س' : '%'}
+          </button>
         </div>
       </td>
-      <td style="padding:6px 10px;width:110px;">
-        <input type="number" class="input mono" style="width:100px;height:30px;font-size:12px;"
-          value="${line.unitPrice}" min="0" step="0.01"
-          onchange="updateLine(${i},'unitPrice',this.value)" />
+      <td style="padding:6px 8px; text-align:center; white-space:nowrap; background:#f0f9ff;">
+        <span class="mono font-bold" style="font-size:11.5px; color:#0369a1;" title="متوسط التكلفة المرجح للصنف (WAC)">${formatCurrency(parseFloat(line.averageCost || line.costPrice || 0))}</span>
       </td>
-      <td style="padding:6px 10px;width:70px;">
-        <input type="number" class="input mono" style="width:60px;height:30px;font-size:12px;"
-          value="${line.discount}" min="0" max="100" step="0.1"
-          onchange="updateLine(${i},'discount',this.value)" />
+      <td style="padding:6px 8px; text-align:center; white-space:nowrap; background:#ecfdf5;">
+        ${(() => {
+          const q = parseFloat(line.qty) || 1;
+          const gross = (parseFloat(line.qty) || 0) * (parseFloat(line.unitPrice) || 0);
+          let lineDiscAmt = 0;
+          if (line.discountType === 'amount') {
+            lineDiscAmt = Math.min(gross, Math.max(0, parseFloat(line.discount || 0)));
+          } else {
+            lineDiscAmt = Math.min(gross, Math.max(0, gross * (parseFloat(line.discount || 0) / 100)));
+          }
+          const netLineTotal = Math.max(0, gross - lineDiscAmt);
+          const effP = q > 0 ? (netLineTotal / q) : 0;
+          const uCost = parseFloat(line.averageCost || line.costPrice || 0);
+          const mPct = effP > 0 ? ((effP - uCost) / effP) * 100 : 0;
+          return `<span class="badge ${mPct >= 0 ? 'good' : 'bad'}" style="font-size:11px; font-weight:800; padding:2px 7px;" title="هامش ربح الصنف وفق المتوسط المرجح: ${mPct.toFixed(1)}% ${mPct < 0 ? '⚠️ بيع بأقل من التكلفة' : ''}">
+            ${mPct >= 0 ? '+' : ''}${mPct.toFixed(1)}%
+          </span>`;
+        })()}
       </td>
       <td style="padding:6px 10px;width:120px;">
         <select class="input mono" style="width:110px;height:30px;font-size:11px;padding:2px 6px;"
@@ -1149,14 +1653,73 @@ window.selectLineBatch = (idx, batchNum) => {
 };
 
 window.updateLine = (idx, field, val) => {
-  invoiceLines[idx][field] = parseFloat(val) || 0;
+  const line = invoiceLines[idx];
+  if (!line) return;
+  const numVal = parseFloat(val) || 0;
+
+  if (field === 'unitPrice' && selectedCustomer?.hasBrokerCommission && selectedCustomer?.brokerRate > 0) {
+    const rate = parseFloat(selectedCustomer.brokerRate) || 1.0;
+    const baseP = numVal;
+    const finalP = parseFloat((baseP * (1 + rate / 100)).toFixed(2));
+    line.basePrice = baseP;
+    line.unitPrice = finalP;
+    line.brokerCommissionPerUnit = parseFloat((finalP - baseP).toFixed(2));
+    line.brokerCommissionTotal = parseFloat((line.brokerCommissionPerUnit * (parseFloat(line.qty) || 0)).toFixed(2));
+  } else {
+    line[field] = numVal;
+    if (field === 'qty' && selectedCustomer?.hasBrokerCommission && line.brokerCommissionPerUnit) {
+      line.brokerCommissionTotal = parseFloat((line.brokerCommissionPerUnit * numVal).toFixed(2));
+    }
+  }
+
   renderInvoiceLines();
   updateInvoiceTotals();
 };
 
+window.updateSalesLineUnit = (i, newUnit) => {
+  const l = invoiceLines[i];
+  if (!l) return;
+  const oldUnit = l.selectedUnit;
+  l.selectedUnit = newUnit;
+
+  // Auto-adjust price based on unit switch
+  const factor = parseFloat(l.unitFactor) || 1;
+  const base = parseFloat(l.basePricePerUnit) || 0;
+  if (factor > 1 && base > 0) {
+    if (newUnit === l.altUnit) {
+      // Switching to carton → show salePrice (carton price as entered in product)
+      l.unitPrice = base;
+    } else {
+      // Switching to piece/box/bag → salePrice ÷ factor
+      l.unitPrice = parseFloat((base / factor).toFixed(4));
+    }
+  }
+
+  renderInvoiceLines();
+  updateInvoiceTotals();
+
+  // تحديث آخر سعر بيع بحسب الوحدة الجديدة المختارة
+  if (selectedCustomer?.id && l.productId) {
+    attachLastPriceToLine(i, selectedCustomer.id, l.productId, newUnit);
+  }
+};
+
+
 window.removeLine = (idx) => {
   invoiceLines.splice(idx, 1);
   renderInvoiceLines();
+  updateInvoiceTotals();
+};
+
+window.toggleLineDiscountType = (i) => {
+  const line = invoiceLines[i];
+  if (!line) return;
+  line.discountType = line.discountType === "amount" ? "percent" : "amount";
+  renderInvoiceLines();
+  updateInvoiceTotals();
+};
+
+window.onGlobalDiscountChanged = () => {
   updateInvoiceTotals();
 };
 
@@ -1171,7 +1734,12 @@ async function updateInvoiceTotals() {
     if (paidInput) paidInput.value = ""; // Default to full amount
   }
   
-  // Calculate base totals using default formula
+  const isDonation = selectedCustomer?.id === "005" || (selectedCustomer?.name || "").includes("سلة البركة");
+  if (isDonation) {
+    invoiceLines.forEach(l => { l.taxCategory = "E"; });
+  }
+
+  // Calculate base totals using default formula (respects line-level taxCategory: 'E', 'Z', etc.)
   const totals = calcInvoiceTotals(invoiceLines);
   
   let additionalDiscountPct = 0;
@@ -1193,20 +1761,28 @@ async function updateInvoiceTotals() {
     autoDiscountAmount = Math.round((totals.subtotal * (additionalDiscountPct / 100)) * 100) / 100;
   }
 
-  const isDonation = selectedCustomer?.id === "005" || (selectedCustomer?.name || "").includes("سلة البركة");
-  if (isDonation) {
-    invoiceLines.forEach(l => { l.taxCategory = "E"; });
+  // 3. Manual global discount on invoice
+  const globalDiscVal = parseFloat(document.getElementById("inv-global-discount-val")?.value) || 0;
+  const globalDiscType = document.getElementById("inv-global-discount-type")?.value || "amount";
+
+  let globalDiscAmt = 0;
+  if (globalDiscType === "percent") {
+    globalDiscAmt = Math.round((totals.subtotal * (Math.min(100, Math.max(0, globalDiscVal)) / 100)) * 100) / 100;
+  } else {
+    globalDiscAmt = Math.min(totals.subtotal, Math.max(0, globalDiscVal));
   }
 
-  const finalSubtotal = isDonation ? 0 : Math.max(0, totals.subtotal - autoDiscountAmount);
-  const finalVat = isDonation ? 0 : Math.round((finalSubtotal * 0.15) * 100) / 100;
-  const finalGrand = finalSubtotal + finalVat;
+  const totalInvoiceLevelDiscount = globalDiscAmt + autoDiscountAmount;
+  const finalSubtotal = isDonation ? 0 : Math.max(0, totals.subtotal - totalInvoiceLevelDiscount);
+  const discountRatio = totals.subtotal > 0 ? (totalInvoiceLevelDiscount / totals.subtotal) : 0;
+  const finalVat = isDonation ? 0 : Math.round((totals.vatTotal * (1 - discountRatio)) * 100) / 100;
+  const finalGrand = Math.round((finalSubtotal + finalVat) * 100) / 100;
 
   const fmt = (n) => `${formatCurrency(n)}`;
   document.getElementById("total-subtotal").textContent  = fmt(totals.subtotal + totals.discountTotal);
   
-  // Display total discount including automatic ones
-  const totalDiscount = totals.discountTotal + autoDiscountAmount;
+  // Display total discount including line discounts and invoice-level discounts
+  const totalDiscount = totals.discountTotal + totalInvoiceLevelDiscount;
   document.getElementById("total-discount").textContent  = `- ${fmt(totalDiscount)}`;
   document.getElementById("total-vat").textContent       = fmt(finalVat);
   document.getElementById("total-grand").textContent     = fmt(finalGrand);
@@ -1242,9 +1818,38 @@ async function updateInvoiceTotals() {
     }
   }
 
-  // Store automatic discount info on window
+  // Update Live Top HUD
+  const hudLines = document.getElementById("inv-hud-lines-count");
+  const hudSub = document.getElementById("inv-hud-subtotal");
+  const hudCost = document.getElementById("inv-hud-cost");
+  const hudProfit = document.getElementById("inv-hud-profit");
+  const hudMargin = document.getElementById("inv-hud-margin");
+
+  if (hudLines) hudLines.textContent = invoiceLines.length;
+  const itemsBadge = document.getElementById("inv-items-badge");
+  if (itemsBadge) itemsBadge.textContent = `${invoiceLines.length} صنف`;
+  if (hudSub) hudSub.textContent = fmt(finalSubtotal);
+  if (hudCost) hudCost.textContent = fmt(totalCost);
+  if (hudProfit) {
+    hudProfit.textContent = `${estimatedProfit >= 0 ? '+' : ''}${fmt(estimatedProfit)}`;
+    hudProfit.style.color = estimatedProfit >= 0 ? "#16a34a" : "#dc2626";
+  }
+  if (hudMargin) {
+    hudMargin.textContent = `${profitMarginPct >= 0 ? '+' : ''}${profitMarginPct.toFixed(1)}%`;
+    hudMargin.style.color = profitMarginPct >= 0 ? "#059669" : "#dc2626";
+    const pill = document.getElementById("inv-hud-margin-pill");
+    if (pill) {
+      pill.style.background = profitMarginPct >= 0 ? "#ecfdf5" : "#fef2f2";
+      pill.style.borderColor = profitMarginPct >= 0 ? "#6ee7b7" : "#fca5a5";
+    }
+  }
+
+  // Store discount info on window
   window._autoDiscountAmount = autoDiscountAmount;
   window._autoDiscountRate = additionalDiscountPct;
+  window._globalDiscountAmount = globalDiscAmt;
+  window._globalDiscountValue = globalDiscVal;
+  window._globalDiscountType = globalDiscType;
 }
 
 async function cleanupInvoiceAssociatedTransactions(oldInv) {
@@ -1379,20 +1984,43 @@ window.saveInvoice = async (status = "pending") => {
   }
   const baseTotals = calcInvoiceTotals(invoiceLines);
   const autoDiscount = window._autoDiscountAmount || 0;
-  
-  const subtotal = isDonation ? 0 : Math.max(0, baseTotals.subtotal - autoDiscount);
-  const discountTotal = baseTotals.discountTotal + autoDiscount;
-  const totalVat = isDonation ? 0 : Math.round((subtotal * 0.15) * 100) / 100;
-  const totalWithVat = subtotal + totalVat;
+
+  const globalDiscVal = parseFloat(document.getElementById("inv-global-discount-val")?.value) || 0;
+  const globalDiscType = document.getElementById("inv-global-discount-type")?.value || "amount";
+
+  let globalDiscAmt = 0;
+  if (globalDiscType === "percent") {
+    globalDiscAmt = Math.round((baseTotals.subtotal * (Math.min(100, Math.max(0, globalDiscVal)) / 100)) * 100) / 100;
+  } else {
+    globalDiscAmt = Math.min(baseTotals.subtotal, Math.max(0, globalDiscVal));
+  }
+
+  const totalInvoiceLevelDiscount = globalDiscAmt + autoDiscount;
+  const grossSubtotal = Math.round((baseTotals.subtotal + baseTotals.discountTotal) * 100) / 100;
+  const subtotal = isDonation ? 0 : Math.max(0, baseTotals.subtotal - totalInvoiceLevelDiscount);
+  const discountTotal = Math.round((baseTotals.discountTotal + totalInvoiceLevelDiscount) * 100) / 100;
+  const discountRatio = baseTotals.subtotal > 0 ? (totalInvoiceLevelDiscount / baseTotals.subtotal) : 0;
+  const totalVat = isDonation ? 0 : Math.round((baseTotals.vatTotal * (1 - discountRatio)) * 100) / 100;
+  const totalWithVat = Math.round((subtotal + totalVat) * 100) / 100;
   const remainingAmount = Math.max(0, totalWithVat - paidAmount);
 
   // 1. Max rep manual discount check
   let exceededDiscount = false;
   invoiceLines.forEach(line => {
-    if (line.discount > (pricingPolicy.maxRepDiscount ?? 3)) {
+    let pct = 0;
+    if (line.discountType === 'amount') {
+      const g = (parseFloat(line.qty) || 1) * (parseFloat(line.unitPrice) || 1);
+      pct = g > 0 ? ((parseFloat(line.discount) || 0) / g) * 100 : 0;
+    } else {
+      pct = parseFloat(line.discount) || 0;
+    }
+    if (pct > (pricingPolicy.maxRepDiscount ?? 3)) {
       exceededDiscount = true;
     }
   });
+  if (globalDiscType === 'percent' && globalDiscVal > (pricingPolicy.maxRepDiscount ?? 3)) {
+    exceededDiscount = true;
+  }
 
   const resetBtn = () => {
     window._isSavingInvoice = false;
@@ -1496,17 +2124,54 @@ window.saveInvoice = async (status = "pending") => {
       return;
     }
 
+    // 🛡️ Pre-Save Auto-Consolidation: Ensure no duplicate product lines with identical unit exist
+    const consolidatedMap = new Map();
+    const consolidatedLines = [];
+    let mergedDuplicatesCount = 0;
+
+    for (const line of invoiceLines) {
+      if (!line.productId || line.isCustom || String(line.productId).startsWith("adhoc_")) {
+        consolidatedLines.push(line);
+        continue;
+      }
+      const unitKey = (line.selectedUnit || line.unit || "CTN").trim().toLowerCase();
+      const key = `${line.productId}_${unitKey}`;
+
+      if (consolidatedMap.has(key)) {
+        const target = consolidatedMap.get(key);
+        const prevQty = parseFloat(target.qty) || 0;
+        const addQty = parseFloat(line.qty) || 0;
+        target.qty = prevQty + addQty;
+        mergedDuplicatesCount++;
+      } else {
+        consolidatedMap.set(key, line);
+        consolidatedLines.push(line);
+      }
+    }
+
+    if (mergedDuplicatesCount > 0) {
+      invoiceLines = consolidatedLines;
+      renderInvoiceLines();
+      updateInvoiceTotals();
+      if (window.showToast) {
+        window.showToast(`تم دمج ${mergedDuplicatesCount} بنود مكررة تلقائياً لضبط كميات الفاتورة والمخزون`, "info", 3500);
+      }
+    }
+
     // Verify stock availability for all items before saving invoice
     // If editing, load the old invoice and add back its quantities to the validation pool
     let oldInv = null;
     let oldInvMap = {};
     if (window._editingInvoiceId) {
       try {
-        oldInv = await getById("salesInvoices", window._editingInvoiceId);
-        if (oldInv && oldInv.lines && oldInv.warehouseId === warehouseId) {
-          oldInv.lines.forEach(l => {
+        oldInv = window._editingOldInvoice || await getById("salesInvoices", window._editingInvoiceId);
+        const oldLines = oldInv ? (oldInv.lines || oldInv.items || []) : [];
+        if (oldInv && oldLines.length > 0 && (oldInv.warehouseId === warehouseId || !warehouseId)) {
+          oldLines.forEach(l => {
             if (l.productId) {
-              oldInvMap[l.productId] = (oldInvMap[l.productId] || 0) + (l.qty || 0);
+              const factor = (l.altUnit && l.unitFactor > 1 && l.selectedUnit === l.altUnit) ? (parseFloat(l.unitFactor) || 1) : 1;
+              const baseQty = (parseFloat(l.qty) || 0) * factor;
+              oldInvMap[l.productId] = (oldInvMap[l.productId] || 0) + baseQty;
             }
           });
         }
@@ -1516,19 +2181,21 @@ window.saveInvoice = async (status = "pending") => {
     }
 
     const stockPromises = invoiceLines.map(async (line) => {
-      if (!line.productId || !line.qty) return null;
+      if (!line.productId || !line.qty || String(line.productId).startsWith("adhoc_") || line.isCustom) return null;
       try {
+        const reqBaseQty = (parseFloat(line.qty) || 0) * ((line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? (parseFloat(line.unitFactor) || 1) : 1);
+        const oldBaseQty = oldInvMap[line.productId] || 0;
+        const netExtraNeeded = reqBaseQty - oldBaseQty;
+
+        // If no additional stock is required beyond what the invoice already holds, pass!
+        if (netExtraNeeded <= 0) return null;
+
         const stockDocId = `${warehouseId}_${line.productId}`;
         const stockSnap = await getDoc(doc(db, `companies/${COMPANY_ID}/stockByWarehouse`, stockDocId));
         let currentQty = stockSnap.exists() ? (stockSnap.data().qty || 0) : 0;
-        
-        // Add back the quantity from the old invoice since it will be reversed
-        if (oldInvMap[line.productId]) {
-          currentQty += oldInvMap[line.productId];
-        }
 
-        if (currentQty < line.qty) {
-          return `⚠️ الكمية المطلوبة من الصنف "${line.productName || line.productId}" (${line.qty}) تتجاوز المتوفر في هذا المخزن (${currentQty})`;
+        if (currentQty < netExtraNeeded) {
+          return `⚠️ الكمية الإضافية المطلوبة من الصنف "${line.productName || line.productId}" (${netExtraNeeded} ${translateUnit(line.unit || 'Piece')}) تتجاوز المتوفر في المخزن (${currentQty})`;
         }
       } catch (e) {
         console.warn(`Stock check failed for product ${line.productId}:`, e);
@@ -1540,8 +2207,9 @@ window.saveInvoice = async (status = "pending") => {
     const stockErr = stockResults.find(r => r !== null);
     if (stockErr) {
       showErr(stockErr);
+      window._isSavingInvoice = false;
       btn.disabled = false;
-      btn.textContent = "💾 حفظ وإصدار";
+      btn.textContent = window._editingInvoiceId ? "💾 تحديث الفاتورة" : "💾 حفظ وإصدار";
       return;
     }
 
@@ -1565,124 +2233,222 @@ window.saveInvoice = async (status = "pending") => {
       : (remainingAmount > 0 ? "posted" : "paid");
 
     const invoiceData = {
-      number:       invNum,
-      uuid:         invUUID,
-      date:         invDate,
-      invoiceType:  invType,
-      customerId:   customerId || null,
-      customerName: customerName || "عميل نقدي",
+      number:        invNum,
+      invoiceNumber: invNum,
+      uuid:          invUUID,
+      date:          invDate,
+      invoiceType:   invType,
+      customerId:    customerId || null,
+      customerName:  customerName || "عميل نقدي",
       repId, repName, warehouseId, warehouseName,
-      costCenterId: costCenterId || null,
+      costCenterId:   costCenterId || null,
       costCenterName: costCenterName || null,
-      lines:        invoiceLines,
+      lines:         invoiceLines,
+      items:         invoiceLines,
       subtotal,
+      grossSubtotal,
       discountTotal,
+      globalDiscountValue: globalDiscVal,
+      globalDiscountType: globalDiscType,
+      globalDiscountAmount: globalDiscAmt,
       totalVat,
-      vatAmount:    totalVat,
-      total:        totalWithVat,
+      vatAmount:     totalVat,
+      total:         totalWithVat,
       totalWithVat,
       paymentMethod: payment,
       paidAmount,
       remainingAmount,
       notes,
-      status:       finalStatus,
-      zatcaStatus:  "pending",
+      status:        finalStatus,
+      zatcaStatus:   "pending",
       qrBase64,
-      createdBy:    window._salesUser?.uid || "system",
+      createdBy:     window._salesUser?.uid || "system",
       autoDiscountAmount: autoDiscount,
       autoDiscountRate: window._autoDiscountRate || 0,
+      stockStatus:   "pending_deduction",
+      hasBrokerCommission:   !!selectedCustomer?.hasBrokerCommission,
+      brokerName:            selectedCustomer?.brokerName || "",
+      brokerRate:            parseFloat(selectedCustomer?.brokerRate) || 0,
+      brokerTrigger:         selectedCustomer?.brokerTrigger || "on_payment",
+      brokerAccountCode:     selectedCustomer?.brokerAccountCode || "2-1-4-2",
+      brokerExpenseCode:     selectedCustomer?.brokerExpenseCode || "5-4-10",
+      brokerCommissionTotal: selectedCustomer?.hasBrokerCommission 
+        ? Math.round(invoiceLines.reduce((s, l) => s + (parseFloat(l.brokerCommissionTotal) || (l.unitPrice ? (l.unitPrice - (l.basePrice || (l.unitPrice / 1.01))) * (parseFloat(l.qty) || 0) : 0)), 0) * 100) / 100 || Math.round(subtotal * (parseFloat(selectedCustomer.brokerRate || 1) / 100) * 100) / 100
+        : 0,
+      brokerCommissionStatus: selectedCustomer?.hasBrokerCommission ? (payment === "cash" ? "earned" : "pending_payment") : "none",
+      brokerCommissionEarned: selectedCustomer?.hasBrokerCommission && payment === "cash" 
+        ? Math.round(subtotal * (parseFloat(selectedCustomer.brokerRate || 1) / 100) * 100) / 100 
+        : 0,
     };
 
     // Save invoice
     let invId = window._editingInvoiceId;
-    if (invId) {
-      // Optimized Stock adjustments for edit: only reverse/issue changed items
-      const oldInv = await getById("salesInvoices", invId);
-      if (oldInv) {
-        const oldLinesMap = {};
-        if (oldInv.lines) {
-          oldInv.lines.forEach(l => {
-            const key = `${l.productId}_${l.batchNumber || ""}`;
-            oldLinesMap[key] = {
-              productId: l.productId,
-              qty: l.qty,
-              warehouseId: oldInv.warehouseId,
-              batchNumber: l.batchNumber || "",
-              expiryDate: l.expiryDate || ""
-            };
-          });
-        }
-        const newLinesMap = {};
-        invoiceLines.forEach(l => {
-          const key = `${l.productId}_${l.batchNumber || ""}`;
-          newLinesMap[key] = {
-            productId: l.productId,
-            qty: l.qty,
-            warehouseId: warehouseId,
-            batchNumber: l.batchNumber || "",
-            expiryDate: l.expiryDate || ""
-          };
-        });
+    const isEditing = !!invId;
 
-        // 1. Gather all stock changes for edit mode in bulk
-        const adjustments = [];
-        for (const [key, oldLine] of Object.entries(oldLinesMap)) {
-          const newLine = newLinesMap[key];
-          if (!newLine || newLine.qty !== oldLine.qty || newLine.warehouseId !== oldLine.warehouseId) {
-            adjustments.push({
-              warehouseId: oldLine.warehouseId,
-              productId: oldLine.productId,
-              qtyDelta: oldLine.qty,
-              metadata: {
-                type: "sale_reverse_edit",
-                refId: oldInv.number,
-                documentNumber: oldInv.number,
-                invoiceNumber: oldInv.number,
-                batchNumber: oldLine.batchNumber || "",
-                expiryDate: oldLine.expiryDate || "",
-                notes: `تعديل الفاتورة ${oldInv.number} (عكس الكمية القديمة)`
-              }
-            });
-          }
-        }
+    if (isEditing) {
+      if (!oldInv) {
+        oldInv = await getById("salesInvoices", invId);
+      }
+      // حماية التزامن التفاؤلي: منع الكتابة فوق تعديل تم من جلسة أخرى
+      if (oldInv && oldInv.version && window._editingInvoiceVersion && window._editingInvoiceVersion !== oldInv.version) {
+        showErr("⚠️ تم تعديل هذه الفاتورة مسبقاً من جلسة أخرى. يرجى إغلاق الفاتورة وإعادة فتحها لتجنب تضارب البيانات.");
+        btn.disabled = false;
+        btn.textContent = "💾 تحديث الفاتورة";
+        window._isSavingInvoice = false;
+        return;
+      }
+      invoiceData.version = (oldInv?.version || 1) + 1;
 
-        invoiceLines.forEach(line => {
-          if (!line.productId || !line.qty) return;
-          const key = `${line.productId}_${line.batchNumber || ""}`;
-          const oldLine = oldLinesMap[key];
-          if (!oldLine || oldLine.qty !== line.qty || oldLine.warehouseId !== warehouseId) {
-            adjustments.push({
-              warehouseId,
-              productId: line.productId,
-              qtyDelta: -line.qty,
-              metadata: {
-                type: "sale_out",
-                sourceType: "salesInvoice",
-                sourceId: invId,
-                documentNumber: invoiceData.number,
-                invoiceNumber: invoiceData.number,
-                date: invoiceData.date || new Date().toISOString().split("T")[0],
-                productName: line.productName || line.name || "",
-                userId: window._salesUser?.uid,
-                createdByName: window._salesUser?.displayName || window._salesUser?.email || "النظام",
-                batchNumber: line.batchNumber || "",
-                expiryDate: line.expiryDate || "",
-                notes: `فاتورة بيع ${invoiceData.number}`,
-              }
-            });
-          }
-        });
+      const oldLines = oldInv ? (oldInv.lines || oldInv.items || []) : [];
+      const wasStockCompleted = oldInv && oldInv.status !== "draft" && oldInv.status !== "cancelled" && oldInv.stockStatus !== "draft";
+      const adjustments = [];
+      const nowTs = Date.now();
+      const oldWh = oldInv?.warehouseId || warehouseId;
+      const newWh = warehouseId;
+      const isSameWarehouse = (oldWh === newWh);
 
-        if (adjustments.length > 0) {
-          try {
-            await adjustStockBulk(adjustments);
-          } catch (stockErr) {
-            console.error("[adjustStockBulk] ❌ Edit adjust stock failed:", stockErr.message);
-            if (stockErr.message.includes("رصيد")) {
-              window.showToast?.(`⚠️ رصيد غير كافٍ لبعض الأصناف`, "warn");
+      // Smart Differential Stock Adjustment (حساب الفارق الصافي لمنع الحركات الوهمية)
+      if (wasStockCompleted) {
+        if (!isSameWarehouse) {
+          // If warehouse changed, return old lines to old warehouse and deduct from new warehouse
+          oldLines.forEach((ol, idx) => {
+            if (!ol.productId || String(ol.productId).startsWith("adhoc_") || ol.isCustom) return;
+            const factor = (ol.altUnit && ol.unitFactor > 1 && ol.selectedUnit === ol.altUnit) ? (parseFloat(ol.unitFactor) || 1) : 1;
+            const oldBaseQty = (parseFloat(ol.qty) || 0) * factor;
+            if (oldBaseQty > 0) {
+              adjustments.push({
+                warehouseId: oldWh,
+                productId: ol.productId,
+                qtyDelta: oldBaseQty,
+                metadata: {
+                  type: "sale_reverse_edit",
+                  txDocId: `tx_rev_edit_${invId}_${nowTs}_${idx}_${ol.productId}`,
+                  documentNumber: invoiceData.number,
+                  invoiceNumber: invoiceData.number,
+                  allowNegative: false,
+                  date: invoiceData.date || new Date().toISOString().split("T")[0],
+                  productName: ol.productName || ol.name || "",
+                  notes: `تعديل الفاتورة ${invoiceData.number} (نقل للمخزن الجديد)`
+                }
+              });
             }
+          });
+          invoiceLines.forEach((line, idx) => {
+            if (!line.productId || !line.qty || String(line.productId).startsWith("adhoc_") || line.isCustom) return;
+            const factor = (line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? (parseFloat(line.unitFactor) || 1) : 1;
+            const newBaseQty = (parseFloat(line.qty) || 0) * factor;
+            if (newBaseQty > 0) {
+              adjustments.push({
+                warehouseId: newWh,
+                productId: line.productId,
+                qtyDelta: -newBaseQty,
+                metadata: {
+                  type: "sale_out",
+                  sourceType: "salesInvoice",
+                  sourceId: invId,
+                  txDocId: `tx_sale_out_edit_${invId}_${nowTs}_${idx}_${line.productId}`,
+                  documentNumber: invoiceData.number,
+                  invoiceNumber: invoiceData.number,
+                  allowNegative: false,
+                  date: invoiceData.date || new Date().toISOString().split("T")[0],
+                  productName: line.productName || line.name || "",
+                  notes: `فاتورة بيع ${invoiceData.number} (معدلة)`
+                }
+              });
+            }
+          });
+        } else {
+          // Same warehouse: Clean Differential Delta per product
+          const oldQtyMap = {};
+          oldLines.forEach(ol => {
+            if (!ol.productId || String(ol.productId).startsWith("adhoc_") || ol.isCustom) return;
+            const factor = (ol.altUnit && ol.unitFactor > 1 && ol.selectedUnit === ol.altUnit) ? (parseFloat(ol.unitFactor) || 1) : 1;
+            const q = (parseFloat(ol.qty) || 0) * factor;
+            oldQtyMap[ol.productId] = (oldQtyMap[ol.productId] || 0) + q;
+          });
+
+          const newQtyMap = {};
+          const newMetaMap = {};
+          invoiceLines.forEach((nl, idx) => {
+            if (!nl.productId || String(nl.productId).startsWith("adhoc_") || nl.isCustom) return;
+            const factor = (nl.altUnit && nl.unitFactor > 1 && nl.selectedUnit === nl.altUnit) ? (parseFloat(nl.unitFactor) || 1) : 1;
+            const q = (parseFloat(nl.qty) || 0) * factor;
+            newQtyMap[nl.productId] = (newQtyMap[nl.productId] || 0) + q;
+            newMetaMap[nl.productId] = { ...nl, lineIdx: idx };
+          });
+
+          const allPids = new Set([...Object.keys(oldQtyMap), ...Object.keys(newQtyMap)]);
+          for (const pid of allPids) {
+            const oldQ = oldQtyMap[pid] || 0;
+            const newQ = newQtyMap[pid] || 0;
+            const delta = Math.round((newQ - oldQ) * 1000) / 1000;
+
+            if (delta > 0) {
+              // Net increase in sales -> deduct delta from warehouse
+              const meta = newMetaMap[pid] || {};
+              adjustments.push({
+                warehouseId: newWh,
+                productId: pid,
+                qtyDelta: -delta,
+                metadata: {
+                  type: "sale_out",
+                  sourceType: "salesInvoice",
+                  sourceId: invId,
+                  txDocId: `tx_sale_out_delta_${invId}_v${invoiceData.version}_${pid}`,
+                  documentNumber: invoiceData.number,
+                  invoiceNumber: invoiceData.number,
+                  allowNegative: false,
+                  date: invoiceData.date || new Date().toISOString().split("T")[0],
+                  productName: meta.productName || meta.name || "",
+                  notes: `فاتورة بيع ${invoiceData.number} (زيادة كمية بعد التعديل: +${delta})`
+                }
+              });
+            } else if (delta < 0) {
+              // Net decrease in sales -> return |delta| to warehouse
+              const meta = newMetaMap[pid] || oldLines.find(ol => ol.productId === pid) || {};
+              const returnQty = Math.abs(delta);
+              adjustments.push({
+                warehouseId: newWh,
+                productId: pid,
+                qtyDelta: returnQty,
+                metadata: {
+                  type: "sale_reverse_edit",
+                  txDocId: `tx_rev_edit_delta_${invId}_v${invoiceData.version}_${pid}`,
+                  refId: invoiceData.number,
+                  documentNumber: invoiceData.number,
+                  invoiceNumber: invoiceData.number,
+                  allowNegative: false,
+                  date: invoiceData.date || new Date().toISOString().split("T")[0],
+                  productName: meta.productName || meta.name || "",
+                  notes: `تعديل الفاتورة ${invoiceData.number} (إنقاص كمية: -${returnQty})`
+                }
+              });
+            }
+            // delta === 0: EXACT SAME QUANTITY -> DO NOTHING! ZERO TRANSACTION!
           }
         }
+      }
+
+      if (adjustments.length > 0) {
+        try {
+          await adjustStockBulk(adjustments);
+          invoiceData.stockStatus = "completed";
+          invoiceData.stockError = "";
+        } catch (stockErr) {
+          console.error("[adjustStockBulk] ❌ Edit adjust stock failed:", stockErr.message);
+          const isQuota = (stockErr?.message || "").includes("Quota exceeded") || (stockErr?.code === "resource-exhausted") || (stockErr?.message || "").includes("429");
+          if (isQuota) {
+            showErr("🚨 تنبيه حصة السيرفر (Firebase Quota Exceeded): تم استهلاك الحد الأقصى اليومي المجاني لقراءات فايربيز (50,000 عملية). يتجدد العداد تلقائياً عند منتصف الليل UTC (3:00 فجراً بتوقيت السعودية)، أو يمكن ترقية المشروع إلى باقة (Blaze Plan) لمنع التوقف نهائياً.");
+          } else {
+            showErr(`❌ تعذر تحديث المخزون: ${stockErr.message}`);
+          }
+          window._isSavingInvoice = false;
+          btn.disabled = false;
+          btn.textContent = "💾 تحديث الفاتورة";
+          return; // ⛔ STOP! Never proceed if stock deduction fails!
+        }
+      } else {
+        invoiceData.stockStatus = "completed";
       }
 
       // Clean up old transactions, receipts, and their JEs
@@ -1692,7 +2458,7 @@ window.saveInvoice = async (status = "pending") => {
 
       // Delete ALL linked journal entries (main + COGS) before recreating
       const oldSourceKey = oldInv?.invoiceNumber || oldInv?.number || invId;
-      const editJeTypes  = ["salesInvoice", "sales", "salesCOGS", "salesInvoice_cogs", "salesReturnCOGS", "posCOGS"];
+      const editJeTypes  = ["salesInvoice", "sales", "salesCOGS", "salesInvoice_cogs", "salesReturnCOGS", "posCOGS", "broker_commission"];
       for (const sType of editJeTypes) {
         try {
           const jeSnap = await getDocs(
@@ -1726,20 +2492,19 @@ window.saveInvoice = async (status = "pending") => {
       // Update invoice data
       await update("salesInvoices", invId, invoiceData);
     } else {
-      // Create new invoice
-      invId = await create(COLS.salesInvoices(), invoiceData);
-
-      // Adjust stock for each line in bulk
-      const adjustments = invoiceLines.map(line => ({
+      // ── Create New Invoice ──
+      // Prepare adjustments with strict allowNegative: false
+      const adjustments = invoiceLines.filter(line => line.productId && !String(line.productId).startsWith("adhoc_") && !line.isCustom).map(line => ({
         warehouseId,
         productId: line.productId,
-        qtyDelta: -line.qty,
+        qtyDelta: -((parseFloat(line.qty)||0) * ((line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? (parseFloat(line.unitFactor)||1) : 1)),
         metadata: {
           type: "sale_out",
           sourceType: "salesInvoice",
-          sourceId: invId,
+          sourceId: invoiceData.number,
           documentNumber: invoiceData.number,
           invoiceNumber: invoiceData.number,
+          allowNegative: false, // ⚠️ منع البيع بالسالب قطعياً
           date: invoiceData.date || new Date().toISOString().split("T")[0],
           productName: line.productName || line.name || "",
           userId: window._salesUser?.uid,
@@ -1749,23 +2514,39 @@ window.saveInvoice = async (status = "pending") => {
           notes: `فاتورة بيع ${invoiceData.number}`,
         }
       }));
+
+      // Adjust stock in bulk FIRST before creating the invoice
       if (adjustments.length > 0) {
         try {
           await adjustStockBulk(adjustments);
+          invoiceData.stockStatus = "completed";
+          invoiceData.stockError = "";
         } catch (stockErr) {
           console.error("[adjustStockBulk] ❌ Create adjust stock failed:", stockErr.message);
-          if (stockErr.message.includes("رصيد")) {
-            window.showToast?.(`⚠️ رصيد غير كافٍ لبعض الأصناف`, "warn");
+          const isQuota = (stockErr?.message || "").includes("Quota exceeded") || (stockErr?.code === "resource-exhausted") || (stockErr?.message || "").includes("429");
+          if (isQuota) {
+            showErr("🚨 تنبيه حصة السيرفر (Firebase Quota Exceeded): تم استهلاك الحد الأقصى اليومي المجاني لقراءات فايربيز (50,000 عملية). يتجدد العداد تلقائياً عند منتصف الليل UTC (3:00 فجراً بتوقيت السعودية)، أو يمكن ترقية المشروع إلى باقة (Blaze Plan) لمنع التوقف نهائياً.");
+          } else {
+            showErr(`❌ تعذر خصم المخزون وحفظ الفاتورة: ${stockErr.message}`);
           }
+          window._isSavingInvoice = false;
+          btn.disabled = false;
+          btn.textContent = "💾 حفظ وإصدار";
+          return; // ⛔ STOP! Never create invoice if stock deduction fails!
         }
+      } else {
+        invoiceData.stockStatus = "completed";
       }
+
+      // Create new invoice document only after stock deduction succeeded
+      invId = await create(COLS.salesInvoices(), invoiceData);
     }
 
     // ─── Automated Accounting Engine ───
-    // ✅ FIX: أولوية averageCost موحدة في كل مكان — averageCost → costPrice → purchasePrice
+    // ✅ FIX: حساب التكلفة الدقيقة لكل بند (الكمية المباعة × سعر تكلفة الوحدة)
     let totalCost = invoiceLines.reduce((s, l) => {
-      const avgCost = l.averageCost || l.costPrice || l.purchasePrice || 0;
-      return s + (avgCost * (l.qty || 0));
+      const unitCost = l.averageCost || l.costPrice || l.lastPurchasePrice || l.avgCostPrice || l.purchasePrice || 0;
+      return s + ((parseFloat(l.qty) || 0) * unitCost);
     }, 0);
 
     // If totalCost is 0, try to fetch product costs from Firestore in parallel
@@ -1777,11 +2558,10 @@ window.saveInvoice = async (status = "pending") => {
             const prodSnap = await getDoc(doc(db, `companies/${COMPANY_ID}/products`, l.productId));
             if (prodSnap.exists()) {
               const pd = prodSnap.data();
-              // ✅ FIX: أولوية موحدة: averageCost → costPrice → purchasePrice
-              const cost = pd.averageCost || pd.costPrice || pd.purchasePrice || 0;
-              l.averageCost = cost;  // ✅ تخزينها في averageCost للاتساق مع الحساب الفوري
+              const cost = pd.averageCost || pd.costPrice || pd.lastPurchasePrice || pd.avgCostPrice || pd.purchasePrice || 0;
+              l.averageCost = cost;
               l.costPrice = cost;
-              return cost * (l.qty || 0);
+              return ((parseFloat(l.qty) || 0) * cost);
             }
           } catch (e) {
             console.warn(`[COGS] Failed to fetch cost for product ${l.productId}:`, e.message);
@@ -1792,9 +2572,8 @@ window.saveInvoice = async (status = "pending") => {
         const fetchedCost = costs.reduce((s, c) => s + c, 0);
         if (fetchedCost > 0.01) {
           totalCost = fetchedCost;
-          console.log(`[COGS] Fetched from Firestore in parallel: ${totalCost}`);
         }
-      } catch(e) {
+      } catch (e) {
         console.warn("[COGS] Failed to fetch product costs:", e.message);
       }
     }
@@ -1803,7 +2582,7 @@ window.saveInvoice = async (status = "pending") => {
       const warehouses = await getAll(COLS.warehouses());
       
       // If editing an existing invoice, delete old journal entries so autoSalesJE can recreate them with updated cost center
-      if (window._editingInvoiceId) {
+      if (isEditing) {
         try {
           const { deleteJournalEntry } = await import("../utils/db.js");
           const oldJEs = await getDocs(query(collection(db, `companies/${COMPANY_ID}/journalEntries`), where("sourceId", "in", [invId, invNum])));
@@ -1824,6 +2603,8 @@ window.saveInvoice = async (status = "pending") => {
         customerType:  selectedCustomer?.type || "retail",
         paymentMethod: payment,
         subtotal:      subtotal,
+        grossSubtotal: grossSubtotal,
+        discountTotal: discountTotal,
         taxAmount:     totalVat,
         total:         totalWithVat,
         paidAmount:    paidAmount,
@@ -1832,8 +2613,12 @@ window.saveInvoice = async (status = "pending") => {
         warehouseId,
         warehouseName,
         costCenterId,
+        costCenterName,
         sourceType:    "salesInvoice",
         customerId:    customerId,
+        lines:         invoiceLines,
+        items:         invoiceLines,
+        repId:         repId,
       }, window._salesUser || {}, warehouses);
       await update("salesInvoices", invId, { journalEntryId: jeId, totalCost: Math.round(totalCost * 100) / 100 });
     } catch(jeErr) {
@@ -1841,6 +2626,51 @@ window.saveInvoice = async (status = "pending") => {
       console.error("[AccountingEngine] Sales JE failed:", jeErr.message);
       try { await update("salesInvoices", invId, { journalEntryError: jeErr.message, journalEntryId: null }); } catch(_){}
       window.showToast?.("⚠️ تم حفظ الفاتورة لكن القيد المحاسبي فشل — " + jeErr.message, "warn");
+    }
+
+    // ── Auto Broker Commission Accrual JE on Invoice Issuance ──
+    const commAmount = parseFloat(invoiceData.brokerCommissionTotal) || 0;
+    const bTrigger = invoiceData.brokerTrigger || "on_invoice";
+    if (invoiceData.hasBrokerCommission && commAmount > 0.01 && (bTrigger === "on_invoice" || payment === "cash" || payment === "نقدي")) {
+      try {
+        const brokerAcc = invoiceData.brokerAccountCode || "2-1-4-2";
+        const expenseAcc = invoiceData.brokerExpenseCode || "5-4-10";
+        const bName = invoiceData.brokerName || "زياد";
+        
+        const brokerJeLines = [
+          {
+            accountCode: expenseAcc,
+            accountName: "مصروفات عمولات وسيط",
+            debit: commAmount,
+            credit: 0,
+            note: `استحقاق عمولة الوسيط (${bName}) عن فاتورة ${invNum}`
+          },
+          {
+            accountCode: brokerAcc,
+            accountName: `مستحقات عمولات الوسطاء - ${bName}`,
+            debit: 0,
+            credit: commAmount,
+            note: `استحقاق عمولة الوسيط (${bName}) عن فاتورة ${invNum}`
+          }
+        ];
+
+        const bJeId = await createJournalEntry({
+          date: invDate || todayString(),
+          sourceType: "broker_commission",
+          sourceId: invId,
+          description: `قيد استحقاق عمولة الوسيط ${bName} (${commAmount} ر.س) عن مبيعات فاتورة ${invNum} — ${customerName || "عميل"}`,
+          lines: brokerJeLines
+        });
+
+        await update("salesInvoices", invId, {
+          brokerCommissionStatus: "earned",
+          brokerCommissionEarned: commAmount,
+          brokerJournalEntryId: bJeId
+        });
+        console.log(`[BrokerCommission] Auto accrued ${commAmount} SAR via JE ${bJeId} for invoice ${invNum}`);
+      } catch (bJeErr) {
+        console.warn("[BrokerCommission] Accrual JE failed:", bJeErr.message);
+      }
     }
 
     // ─── Auto Cash Box: أضف للصندوق إذا كان الدفع نقداً ───
@@ -1875,22 +2705,38 @@ window.saveInvoice = async (status = "pending") => {
       }
     }
 
-    // Update Customer balance on client side (since Cloud Functions are disabled on Spark plan)
-    if (customerId && remainingAmount > 0) {
-      try {
-        const custRef = doc(db, `companies/${COMPANY_ID}/customers`, customerId);
-        await updateDoc(custRef, {
-          balance: increment(remainingAmount),
-          updatedAt: serverTimestamp()
-        });
-        console.log(`[CustomerBalance] Client-side incremented customer ${customerId} balance by +${remainingAmount}`);
-      } catch (custErr) {
-        console.warn("Failed to update customer balance on client:", custErr.message);
+    // Update Customer balance on client side
+    if (isEditing) {
+      // On edit: Recompute real accurate balance from actual records to avoid duplicate increments
+      if (customerId) {
+        await recalculateCustomerBalance(customerId).catch(e => console.warn(e));
+      }
+      if (oldInv?.customerId && oldInv.customerId !== customerId) {
+        await recalculateCustomerBalance(oldInv.customerId).catch(e => console.warn(e));
+      }
+    } else {
+      // On create new invoice
+      if (customerId && remainingAmount > 0) {
+        try {
+          const custRef = doc(db, `companies/${COMPANY_ID}/customers`, customerId);
+          await updateDoc(custRef, {
+            balance: increment(remainingAmount),
+            updatedAt: serverTimestamp()
+          });
+          console.log(`[CustomerBalance] Client-side incremented customer ${customerId} balance by +${remainingAmount}`);
+        } catch (custErr) {
+          console.warn("Failed to update customer balance on client:", custErr.message);
+        }
+      }
+      if (customerId) {
+        recalculateCustomerBalance(customerId).catch(e => console.warn(e));
       }
     }
 
-    const successMsg = window._editingInvoiceId ? `تم تحديث الفاتورة ${invNum} بنجاح` : `تم إنشاء الفاتورة ${invNum} بنجاح`;
+    const successMsg = isEditing ? `تم تحديث الفاتورة ${invNum} بنجاح` : `تم إنشاء الفاتورة ${invNum} بنجاح`;
     window._editingInvoiceId = null;
+    window._editingOldInvoice = null;
+    window._editingOldLines = null;
     showToast(successMsg, "success");
 
     const fileInput = document.getElementById("inv-file-upload");
@@ -1901,10 +2747,6 @@ window.saveInvoice = async (status = "pending") => {
 
     closeModal("new-invoice-modal");
     await loadInvoicesList();
-
-    if (customerId) {
-      import("../utils/balance-sync.js").then(m => m.recalculateCustomerBalance(customerId)).catch(e => console.warn(e));
-    }
 
   } catch (err) {
     errEl.textContent = err.message;
@@ -1929,7 +2771,7 @@ window.viewInvoice = async (id) => {
     const invNo = inv.number || inv.invoiceNumber || id;
     title.textContent = `فاتورة: ${invNo}`;
 
-    const lines = (inv.lines || []).map((l, i) => {
+    const lines = (inv.lines || inv.items || []).map((l, i) => {
       const pName = l.productName || l.name || "";
       const pQty = l.qty || 0;
       const pPrice = l.unitPrice !== undefined ? l.unitPrice : (l.price || 0);
@@ -2000,6 +2842,7 @@ window.viewInvoice = async (id) => {
       footer.innerHTML = `
         <button class="btn btn-ghost" onclick="closeModal('view-invoice-modal')">إغلاق</button>
         ${inv.status !== 'paid' && inv.status !== 'cancelled' ? `<button class="btn" style="background:#16a34a;color:#fff;" onclick="markSalesAsPaidManually('${inv.id}')">💵 تعيين كمدفوعة (مسددة بسند)</button>` : ''}
+        <button class="btn btn-secondary" onclick="window.openGoodsReceiptAckForInvoice('${inv.id}')" style="background:#0284c7;color:#fff;border-color:#0284c7;font-weight:700;"><span style="margin-left:4px;">📜</span> إقرار استلام وسند لأمر</button>
         <button class="btn btn-secondary" onclick="printInvoice()">🖨️ طباعة</button>
         <button class="btn btn-lime" onclick="sendToZATCA()" id="zatca-send-btn">⚡ إرسال ZATCA</button>
       `;
@@ -2066,13 +2909,14 @@ window.cancelInvoice = async (id) => {
     const sourceKey = invData.invoiceNumber || id;
 
     // ── 1. عكس المخزون لكل سطر دفعة واحدة ──
-    const lines = invData.items || invData.lines || [];
+    const lines = invData.lines || invData.items || [];
     const warehouseId = invData.warehouseId || invData.sourceWarehouseId;
     if (warehouseId && lines.length > 0) {
       const adjustments = [];
       for (const item of lines) {
         const productId = item.productId || item.id;
-        const qty = parseFloat(item.quantity || item.qty || 0);
+        const factor = (item.altUnit && item.unitFactor > 1 && item.selectedUnit === item.altUnit) ? (parseFloat(item.unitFactor) || 1) : 1;
+        const qty = (parseFloat(item.quantity || item.qty || 0)) * factor;
         if (productId && qty > 0) {
           adjustments.push({
             warehouseId,
@@ -2171,275 +3015,608 @@ window.sendToZATCA = async () => {
   }
 };
 
-window.printInvoice = async () => {
-  if (!currentInvoice) return;
-  const inv = currentInvoice;
-
-  // 1. Load company settings (from localStorage cache first, then Firestore)
-  let co = {
-    name: "مؤسسة إدهام للمواد الغذائية",
-    vatNumber: "300987654300003",
-    address: "الرياض، المملكة العربية السعودية",
-    phone: "", email: "", logoUrl: "", crNumber: ""
-  };
-  // Fast path: use cached company data from localStorage
+window.printInvoice = async (invoiceOrId) => {
   try {
-    const cached = JSON.parse(localStorage.getItem("idham_company") || "{}");
-    if (cached.name) Object.assign(co, cached);
-  } catch(_) {}
-  try {
-    const [compSnap, logoSnap] = await Promise.all([
-      getDoc(doc(db, `companies/${COMPANY_ID}/settings`, "company")),
-      getDoc(doc(db, `companies/${COMPANY_ID}/settings`, "logo"))
-    ]);
-    if (compSnap.exists()) {
-      const d = compSnap.data();
-      // Normalize: `cr` field → `crNumber`
-      if (d.cr && !d.crNumber) d.crNumber = d.cr;
-      Object.assign(co, d);
-      // Cache for future use
-      const cached2 = JSON.parse(localStorage.getItem("idham_company") || "{}");
-      localStorage.setItem("idham_company", JSON.stringify({ ...cached2, ...d, crNumber: d.crNumber || d.cr || "" }));
+    let inv = (typeof invoiceOrId === "object" && invoiceOrId !== null) ? invoiceOrId : currentInvoice;
+    if (!inv && typeof invoiceOrId === "string") {
+      const snap = await getDoc(doc(db, `companies/${COMPANY_ID}/salesInvoices`, invoiceOrId));
+      if (snap.exists()) inv = { id: snap.id, ...snap.data() };
     }
-    if (logoSnap.exists() && logoSnap.data().dataUrl) {
-      co.logoUrl = logoSnap.data().dataUrl;
+    if (!inv) {
+      if (window.showToast) window.showToast("يرجى اختيار الفاتورة للطباعة", "warning");
+      return;
     }
-  } catch (e) { console.warn("Failed to load company settings from Firestore:", e); }
 
-  // 2. Load customer full data from Firestore
-  let cust = {
-    name: inv.customerName || "—",
-    vatNumber: "", phone: inv.customerPhone || "", address: "", crNumber: "", email: ""
-  };
-  if (inv.customerId) {
+    // 1. Load company settings (from localStorage cache first, then Firestore)
+    let co = {
+      name: "شركة نظم الإمداد المتطورة",
+      vatNumber: "314996148100003",
+      crNumber: "7054969006",
+      phone: "0549141648",
+      email: "Nuzmalamdad@gmail.com",
+      logoUrl: "",
+      street: "ينبع  الصناعية 2179",
+      district: "حي غرناطة",
+      city: "ينبع",
+      buildingNo: "7689",
+      zip: "46414",
+      additionalNo: "2811",
+      country: "المملكة العربية السعودية"
+    };
+
     try {
-      const { getDoc: gd2, doc: dd2 } = await import("https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js");
-      const custSnap = await gd2(dd2(db, `companies/${COMPANY_ID}/customers`, inv.customerId));
-      if (custSnap.exists()) {
-        Object.assign(cust, custSnap.data());
-        if (custSnap.data().name) cust.name = custSnap.data().name;
+      const cached = JSON.parse(localStorage.getItem("idham_company") || "{}");
+      if (cached.name) Object.assign(co, cached);
+    } catch(_) {}
+
+    try {
+      const [compSnap, logoSnap] = await Promise.all([
+        getDoc(doc(db, `companies/${COMPANY_ID}/settings`, "company")),
+        getDoc(doc(db, `companies/${COMPANY_ID}/settings`, "logo"))
+      ]);
+      if (compSnap.exists()) {
+        const d = compSnap.data();
+        const rawCr = d.crNumber || d.cr || d.commercialRegistration || "";
+        d.crNumber = (rawCr && (rawCr.startsWith("70") || rawCr.startsWith("47") || rawCr.length >= 7)) ? rawCr : (co.crNumber || "7054969006");
+        d.vatNumber = d.vatNumber || co.vatNumber || "314996148100003";
+        d.name = d.name || co.name || "شركة نظم الإمداد المتطورة";
+        Object.assign(co, d);
+        const cached2 = JSON.parse(localStorage.getItem("idham_company") || "{}");
+        localStorage.setItem("idham_company", JSON.stringify({ ...cached2, ...d, crNumber: co.crNumber, vatNumber: co.vatNumber, name: co.name }));
       }
-    } catch (e) { console.warn("Failed to load customer data:", e); }
-  }
+      if (logoSnap.exists() && logoSnap.data().dataUrl) {
+        co.logoUrl = logoSnap.data().dataUrl;
+      }
+    } catch (e) { console.warn("Failed to load company settings from Firestore:", e); }
 
-  // 3. Build QR TLV (ZATCA-compliant Base64 encoding)
-  function buildZatcaQr(sellerName, vatNum, invoiceDate, totalWithVat, vatAmount) {
-    function tlv(tag, value) {
-      const encoded = new TextEncoder().encode(value);
-      return new Uint8Array([tag, encoded.length, ...encoded]);
+    // 2. Load customer full data from Firestore
+    let cust = {
+      name: inv.customerName || "—",
+      vatNumber: inv.customerVat || "",
+      phone: inv.customerPhone || "",
+      crNumber: inv.customerCr || "",
+      email: "",
+      street: "",
+      district: "",
+      city: "",
+      buildingNo: "",
+      postalCode: "",
+      additionalNo: "",
+      country: "المملكة العربية السعودية",
+      address: "",
+      balance: 0
+    };
+
+    if (inv.customerId || inv.customerName) {
+      try {
+        let custSnap = null;
+        if (inv.customerId) {
+          custSnap = await getDoc(doc(db, `companies/${COMPANY_ID}/customers`, inv.customerId));
+          if (!custSnap.exists()) {
+            const custQ = query(collection(db, `companies/${COMPANY_ID}/customers`), where("accountId", "==", inv.customerId));
+            const qSnap = await getDocs(custQ);
+            if (!qSnap.empty) {
+              custSnap = qSnap.docs[0];
+            }
+          }
+        }
+        if ((!custSnap || !custSnap.exists()) && inv.customerName) {
+          const nameQ = query(collection(db, `companies/${COMPANY_ID}/customers`), where("name", "==", inv.customerName));
+          const nSnap = await getDocs(nameQ);
+          if (!nSnap.empty) custSnap = nSnap.docs[0];
+        }
+
+        if (custSnap && custSnap.exists()) {
+          const cd = custSnap.data();
+          Object.assign(cust, cd);
+          if (cd.name) cust.name = cd.name;
+          if (cd.vatNumber || cd.vat || cd.taxNumber || cd.taxNo || cd.taxId) {
+            cust.vatNumber = cd.vatNumber || cd.vat || cd.taxNumber || cd.taxNo || cd.taxId;
+          }
+          if (cd.nationalId || cd.crNumber || cd.cr || cd.commercialRegistration || cd.idNumber) {
+            cust.crNumber = cd.nationalId || cd.crNumber || cd.cr || cd.commercialRegistration || cd.idNumber;
+          }
+          if (cd.buildingNo || cd.buildingNumber) cust.buildingNo = cd.buildingNo || cd.buildingNumber;
+          if (cd.additionalNo || cd.additionalNumber) cust.additionalNo = cd.additionalNo || cd.additionalNumber;
+          if (cd.postalCode || cd.zip || cd.zipCode) cust.postalCode = cd.postalCode || cd.zip || cd.zipCode;
+          if (cd.city || cd.zone) cust.city = cd.city || cd.zone;
+          if (cd.street) cust.street = cd.street;
+          if (cd.district) cust.district = cd.district;
+          if (cd.balance !== undefined) cust.balance = parseFloat(cd.balance) || 0;
+        }
+      } catch (e) { console.warn("Failed to load customer data:", e); }
     }
-    const dateStr = invoiceDate ? new Date(invoiceDate).toISOString() : new Date().toISOString();
-    const parts = [
-      tlv(1, sellerName),
-      tlv(2, vatNum || ""),
-      tlv(3, dateStr),
-      tlv(4, String(totalWithVat?.toFixed(2) || "0.00")),
-      tlv(5, String(vatAmount?.toFixed(2) || "0.00"))
-    ];
-    const merged = new Uint8Array(parts.reduce((acc, arr) => acc + arr.length, 0));
-    let offset = 0;
-    parts.forEach(arr => { merged.set(arr, offset); offset += arr.length; });
-    return btoa(String.fromCharCode(...merged));
-  }
 
-  // Always regenerate QR with real company data (don't trust the stored QR which may have old/wrong data)
-  const qrData = buildZatcaQr(
-    co.name      || "مؤسسة إدهام للمواد الغذائية",
-    co.vatNumber || co.crNumber || "",
-    inv.date, inv.totalWithVat, inv.totalVat
-  ) || inv.zatcaQr || inv.qrBase64 || inv.qrCodeData || inv.qr;
-
-  // 4. Build line items HTML
-  const linesHtml = (inv.lines || []).map((l, i) => {
-    const qty = parseFloat(l.qty || 0);
-    const price = parseFloat(l.unitPrice || 0);
-    const discPercent = parseFloat(l.discount || 0);
-    const taxableAmount = (qty * price) * (1 - discPercent / 100);
-    const vatRate = (l.taxCategory === "E" || l.taxCategory === "Z") ? 0 : 15;
-    const vatAmount = taxableAmount * (vatRate / 100);
-    const totalWithVat = taxableAmount + vatAmount;
-
-    return `
-      <tr>
-        <td>${i + 1}</td>
-        <td class="desc">${l.productName || ""}<br><span style="font-size:9px;color:#6b7280;">الواحدة: ${l.unit || "حبة"}</span></td>
-        <td>${qty}</td>
-        <td class="mono">${formatCurrency(price)}</td>
-        <td class="mono">${formatCurrency(taxableAmount)}</td>
-        <td>${vatRate}%</td>
-        <td class="mono">${formatCurrency(vatAmount)}</td>
-        <td class="mono" style="font-weight:700;">${formatCurrency(totalWithVat)}</td>
-      </tr>`;
-  }).join("");
-
-    const logoSrc = co.logoUrl || co.logoBase64 || co.logo || "";
-  const logoHtml = logoSrc
-    ? `<div class="logo-circle"><img src="${logoSrc}" alt="شعار" /></div>`
-    : `<div class="logo-circle"><div class="default-logo">🏢</div></div>`;
-
-  const barcodeSvg = (() => {
-    const clean = inv.number.replace(/[^a-zA-Z0-9]/g, '');
-    let svg = '<svg width="140" height="36" viewBox="0 0 140 36" xmlns="http://www.w3.org/2000/svg">';
-    let x = 12;
-    let hash = 5381;
-    for (let i = 0; i < clean.length; i++) {
-      hash = ((hash << 5) + hash) + clean.charCodeAt(i);
+    // Smart parsing for customer address components if structured fields are blank
+    if (cust.address) {
+      const addr = cust.address;
+      if (!cust.buildingNo) {
+        const m = addr.match(/(?:المبنى|رقم المبنى)\s*:\s*([^—\-\n,]+)/i);
+        if (m && m[1]) cust.buildingNo = m[1].trim();
+      }
+      if (!cust.street) {
+        const m = addr.match(/(?:الشارع|شارع)\s*:\s*([^—\-\n,]+)/i);
+        if (m && m[1]) cust.street = m[1].trim();
+      }
+      if (!cust.district) {
+        const m = addr.match(/(?:الحي|حي)\s*:\s*([^—\-\n,]+)/i);
+        if (m && m[1]) cust.district = m[1].trim();
+      }
+      if (!cust.city) {
+        const m = addr.match(/(?:المدينة|مدينة)\s*:\s*([^—\-\n,]+)/i);
+        if (m && m[1]) cust.city = m[1].trim();
+      }
+      if (!cust.postalCode) {
+        const m = addr.match(/(?:الرمز البريدي|الرمز|البريدي)\s*:\s*([^—\-\n,]+)/i);
+        if (m && m[1]) cust.postalCode = m[1].trim();
+      }
+      if (!cust.additionalNo) {
+        const m = addr.match(/(?:الرقم الإضافي|الرقم الاضافي|الإضافي|الاضافي)\s*:\s*([^—\-\n,]+)/i);
+        if (m && m[1]) cust.additionalNo = m[1].trim();
+      }
     }
-    svg += '<rect x="' + x + '" y="2" width="2" height="20" fill="#000" />'; x += 3;
-    svg += '<rect x="' + x + '" y="2" width="1" height="20" fill="#000" />'; x += 2;
-    for (let i = 0; i < 18; i++) {
-      const width = ((Math.abs(hash) >> i) & 1) ? 2.5 : 1;
-      svg += '<rect x="' + x + '" y="2" width="' + width + '" height="20" fill="#000" />';
-      x += width + 1.5;
-    }
-    svg += '<rect x="' + x + '" y="2" width="1" height="20" fill="#000" />'; x += 2;
-    svg += '<rect x="' + x + '" y="2" width="2" height="20" fill="#000" />';
-    svg += '<text x="70" y="32" font-family="monospace" font-size="8" text-anchor="middle" fill="#000">' + inv.number + '</text>';
-    svg += '</svg>';
-    return svg;
-  })();
 
-  const printWindow = window.open("", "_blank");
-  printWindow.document.write(`<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+    if (!cust.district && (cust.street || cust.address)) {
+      const fullAddr = cust.street || cust.address || "";
+      if (fullAddr.includes("حي")) {
+        const match = fullAddr.match(/(?:-|—|,|\/)?\s*(حي\s+[^,-—\/]+)/);
+        if (match && match[1]) {
+          cust.district = match[1].trim();
+          if (cust.street && cust.street.includes(match[0])) {
+            cust.street = cust.street.replace(match[0], "").trim();
+          }
+        }
+      }
+    }
+
+    // Determine ZATCA Invoice Category (Standard B2B vs Simplified B2C)
+    const isB2B = !!(cust.vatNumber && cust.vatNumber.trim().length >= 10);
+    const titleAr = isB2B ? "فاتورة ضريبية" : "فاتورة ضريبية مبسطة";
+    const titleEn = isB2B ? "TAX INVOICE" : "SIMPLIFIED TAX INVOICE";
+    const typeTag = isB2B ? "فاتورة ضريبية قياسية (B2B)" : "فاتورة ضريبية مبسطة (B2C)";
+
+    // 3. Build QR TLV (ZATCA-compliant Base64 encoding)
+    function buildZatcaQr(sellerName, vatNum, invoiceDate, totalWithVat, vatAmount) {
+      function tlv(tag, value) {
+        const encoded = new TextEncoder().encode(value);
+        return new Uint8Array([tag, encoded.length, ...encoded]);
+      }
+      const dateStr = invoiceDate ? new Date(invoiceDate).toISOString() : new Date().toISOString();
+      const parts = [
+        tlv(1, sellerName),
+        tlv(2, vatNum || ""),
+        tlv(3, dateStr),
+        tlv(4, String(totalWithVat?.toFixed(2) || "0.00")),
+        tlv(5, String(vatAmount?.toFixed(2) || "0.00"))
+      ];
+      const merged = new Uint8Array(parts.reduce((acc, arr) => acc + arr.length, 0));
+      let offset = 0;
+      parts.forEach(arr => { merged.set(arr, offset); offset += arr.length; });
+      return btoa(String.fromCharCode(...merged));
+    }
+
+    const qrData = buildZatcaQr(
+      co.name || "شركة نظم الإمداد المتطورة",
+      co.vatNumber || "314996148100003",
+      inv.date, inv.totalWithVat, inv.totalVat
+    ) || inv.zatcaQr || inv.qrBase64 || inv.qrCodeData || inv.qr;
+
+    // Pre-render QR Code Data URL synchronously in parent window
+    let qrImgDataUrl = "";
+    if (qrData) {
+      try {
+        if (typeof window.QRCode !== "undefined") {
+          const tempDiv = document.createElement("div");
+          new window.QRCode(tempDiv, {
+            text: qrData,
+            width: 90,
+            height: 90,
+            correctLevel: window.QRCode.CorrectLevel ? window.QRCode.CorrectLevel.M : 0
+          });
+          const canvas = tempDiv.querySelector("canvas");
+          const img = tempDiv.querySelector("img");
+          if (canvas) {
+            qrImgDataUrl = canvas.toDataURL("image/png");
+          } else if (img && img.src) {
+            qrImgDataUrl = img.src;
+          }
+        }
+      } catch(err) {
+        console.warn("QR pre-generation error:", err);
+      }
+    }
+
+    // 4. Line items & packaging totals (with smart unit lookup from catalog)
+    let totalItemsCount = 0;
+    let totalQtySum = 0;
+    let totalDiscountSum = 0;
+    let taxableBaseSum = 0;
+    let exemptBaseSum = 0;
+    let lineVatSum = 0;
+
+    if (!allProducts || allProducts.length === 0) {
+      try {
+        allProducts = await getAll(COLS.products());
+      } catch(_) {}
+    }
+    const prodMap = new Map((allProducts || []).map(p => [p.id, p]));
+
+    const linesHtml = (inv.lines || inv.items || []).map((l, i) => {
+      const qty = parseFloat(l.qty || 0);
+      const price = parseFloat(l.unitPrice || l.price || 0);
+      const discVal = parseFloat(l.discount || 0);
+      const discType = l.discountType || "percent";
+      let lineDiscountAmt = 0;
+      if (discType === "amount") {
+        lineDiscountAmt = Math.min(qty * price, Math.max(0, discVal));
+      } else {
+        lineDiscountAmt = (qty * price) * (discVal / 100);
+      }
+      const taxableAmount = Math.max(0, (qty * price) - lineDiscountAmt);
+      const vatRate = (l.taxCategory === "E" || l.taxCategory === "Z") ? 0 : 15;
+      const vatAmount = taxableAmount * (vatRate / 100);
+      const totalWithVat = taxableAmount + vatAmount;
+
+      totalItemsCount++;
+      totalQtySum += qty;
+      totalDiscountSum += lineDiscountAmt;
+      if (vatRate > 0) {
+        taxableBaseSum += taxableAmount;
+      } else {
+        exemptBaseSum += taxableAmount;
+      }
+      lineVatSum += vatAmount;
+
+      // Smart unit determination:
+      let rawUnit = l.unit;
+      const pName = l.productName || l.name || "";
+      if (!rawUnit || rawUnit === "Piece" || rawUnit === "PCS" || rawUnit === "حبة") {
+        const matchedProd = l.productId ? prodMap.get(l.productId) : (allProducts || []).find(p => p.name === pName);
+        if (matchedProd && matchedProd.unit && matchedProd.unit !== "Piece" && matchedProd.unit !== "PCS") {
+          rawUnit = matchedProd.unit;
+        }
+      }
+      const unitArabic = (!rawUnit || rawUnit === "Piece" || rawUnit === "PCS" || rawUnit === "حبة") ? "كرتون" : rawUnit;
+
+      return `
+        <tr>
+          <td class="mono font-bold" style="color:#6366f1;">${i + 1}</td>
+          <td class="desc">
+            <div class="font-bold" style="font-size:11px; color:#1e1b4b;">${pName}</div>
+            <div style="font-size:9px; color:#64748b;">الوحدة: <b style="color:#1e1b4b;">${unitArabic}</b></div>
+          </td>
+          <td class="mono font-bold" style="font-size:11.5px;">${qty}</td>
+          <td class="mono">${formatCurrency(price)}</td>
+          <td class="mono" style="color:${discVal > 0 ? '#dc2626' : '#9ca3af'};">${discVal > 0 ? (discType === 'amount' ? `${discVal} ر.س` : `${discVal}%`) : "—"}</td>
+          <td class="mono font-bold">${formatCurrency(taxableAmount)}</td>
+          <td class="mono" style="font-size:10px;">${vatRate}%</td>
+          <td class="mono">${formatCurrency(vatAmount)}</td>
+          <td class="mono font-bold" style="color:#1e1b4b; font-size:11.5px;">${formatCurrency(totalWithVat)}</td>
+        </tr>
+      `;
+    }).join("");
+
+    const amountInWords = (typeof tafqeetArabic === "function") ? tafqeetArabic(inv.totalWithVat || 0) : "";
+
+    // Logo formatting
+    const logoHtml = co.logoUrl 
+      ? `<div class="logo-circle"><img src="${co.logoUrl}" alt="شعار المؤسسة" /></div>` 
+      : `<div class="logo-circle"><span class="default-logo">🏢</span></div>`;
+
+    const invNum = inv.number || inv.invoiceNumber || inv.id || "—";
+    const barcodeSvg = typeof JsBarcode !== "undefined" 
+      ? (() => {
+          const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          try {
+            JsBarcode(svg, invNum, { format: "CODE128", width: 1.2, height: 32, displayValue: false, margin: 0 });
+            return svg.outerHTML;
+          } catch(_) { return ""; }
+        })()
+      : "";
+
+    // 5. Open popup print window with clean styled template
+    const lineCount = (inv.items || inv.lines || []).length;
+    const isSmallInvoice = lineCount <= 4;
+    const printWindow = window.open("", "_blank");
+    if (!printWindow) {
+      if (window.showToast) window.showToast("يرجى السماح بالنوافذ المنبثقة للطباعة", "warning");
+      return;
+    }
+
+    printWindow.document.write(`<!DOCTYPE html>
+<html dir="rtl" lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>فاتورة ضريبية مبسطة #${inv.number}</title>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>فاتورة ضريبية — ${invNum}</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@500;700&display=swap');
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: rtl; color: #1f2937; background: #f3f4f6; padding: 10px; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    body { font-family: 'Cairo', system-ui, -apple-system, sans-serif; background: #f3f4f6; color: #1e293b; padding: 20px; line-height: 1.35; font-size: 11.5px; }
     
-    .no-print { background: #1f2937; padding: 10px; display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; border-radius: 8px; }
-    .btn { padding: 8px 18px; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; font-size: 13px; font-family: inherit; }
+    .no-print { margin-bottom: 12px; display: flex; gap: 8px; justify-content: flex-end; }
+    .btn { padding: 6px 14px; border-radius: 6px; font-family: 'Cairo', sans-serif; font-size: 12px; font-weight: 700; cursor: pointer; border: none; }
     
-    .invoice-container { background: #fff; max-width: 210mm; margin: 0 auto; padding: 15px; border: 1.5px solid #5b3ec2; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .invoice-container { max-width: 210mm; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 16px; box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
     
-    /* Top Barcode and Title */
-    .top-row { display: flex; justify-content: center; align-items: center; margin-bottom: 12px; position: relative; }
-    .title-box { text-align: center; }
-    .title-box h1 { font-size: 22px; color: #5b3ec2; font-weight: 800; margin-bottom: 2px; }
-    .title-box h2 { font-size: 10px; color: #5b3ec2; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    /* Top Header Bar */
+    .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #1e1b4b; padding-bottom: 6px; margin-bottom: 8px; }
+    .title-box h1 { font-size: 19px; font-weight: 900; color: #1e1b4b; line-height: 1.1; margin-bottom: 1px; }
+    .title-box h2 { font-size: 11px; font-weight: 700; color: #6366f1; letter-spacing: 0.5px; }
+    .doc-badge { display: inline-block; background: #eef2ff; color: #3730a3; border: 1px solid #c7d2fe; padding: 2px 7px; border-radius: 4px; font-size: 10px; font-weight: 700; margin-top: 3px; }
     
-    /* Purple Company Banner */
-    .company-banner { background: #5b3ec2 !important; color: #fff !important; border-radius: 8px; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    .banner-left { text-align: right; font-size: 12px; font-weight: 500; line-height: 1.5; color: #fff !important; }
-    .banner-left div { color: #fff !important; }
-    .banner-left strong { color: #fff !important; }
-    .banner-right { text-align: left; line-height: 1.4; color: #fff !important; }
-    .banner-right h2 { font-size: 17px; font-weight: 800; margin-bottom: 4px; color: #fff !important; }
-    .banner-right div { font-size: 12px; color: #fff !important; }
-    .banner-right strong { color: #fff !important; }
-    .logo-circle { width: 70px; height: 70px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 4px; border: 1.5px solid #5b3ec2; box-shadow: 0 3px 6px rgba(0,0,0,0.1); }
+    /* Purple Header Banner */
+    .company-banner { background: #1e1b4b !important; color: #fff !important; border-radius: 8px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .banner-meta { display: flex; flex-direction: column; gap: 2px; }
+    .banner-meta .meta-line { font-size: 10.5px; display: flex; gap: 5px; color: rgba(255,255,255,0.95); }
+    .banner-meta .m-lbl { opacity: 0.85; font-size: 10px; }
+    .banner-meta .m-val { color: #fff; font-weight: 800; }
+    
+    .banner-co { text-align: left; direction: ltr; }
+    .banner-co h2 { font-size: 14.5px; font-weight: 900; color: #fff !important; margin-bottom: 3px; direction: rtl; text-align: right; }
+    .co-id-row { display: flex; gap: 6px; flex-wrap: wrap; direction: rtl; }
+    .co-pill { background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); padding: 1px 6px; border-radius: 4px; font-size: 10px; color: #fff !important; display: inline-flex; align-items: center; gap: 4px; }
+    .co-pill strong { color: #fff !important; font-size: 10.5px; }
+    
+    .logo-circle { width: 56px; height: 56px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; padding: 3px; border: 2px solid #6366f1; box-shadow: 0 2px 6px rgba(0,0,0,0.15); flex-shrink: 0; margin: 0 10px; }
     .logo-circle img { max-width: 100%; max-height: 100%; object-fit: contain; }
-    .logo-circle .default-logo { font-size: 30px; }
+    .logo-circle .default-logo { font-size: 24px; }
     
-    /* Info Strips */
-    .info-strip { border: 1px solid #5b3ec2; border-radius: 6px; padding: 6px 12px; font-size: 10.5px; background: #fdfcff; margin-bottom: 8px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-    .info-strip span { color: #1f2937; }
-    .info-strip strong { color: #5b3ec2; }
+    /* ZATCA National Address Grid (Compact & Elegant Horizontal Layout) */
+    .parties-container { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+    .party-card { border: 1.2px solid #cbd5e1; border-radius: 6px; background: #f8fafc; padding: 6px 10px; font-size: 10.5px; }
+    .party-card.seller { border-color: #a5b4fc; background: #fdfcff; }
+    .party-card.buyer { border-color: #cbd5e1; background: #f8fafc; }
+    
+    .party-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 3px; margin-bottom: 4px; }
+    .party-title { font-weight: 800; color: #3730a3; font-size: 11px; }
+    .party-name { font-size: 12.5px; font-weight: 800; color: #0f172a; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    /* Dedicated Party ID Badges (CR & VAT) */
+    .party-ids-row { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 4px; }
+    .id-badge { background: #fff; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 6px; display: flex; justify-content: space-between; align-items: center; font-size: 9.5px; }
+    .id-badge.vat-badge { border-color: #818cf8; background: #fdfcff; }
+    .id-lbl { color: #475569; font-weight: 700; }
+    .id-val { font-weight: 800; color: #1e1b4b; font-size: 10.5px; }
+    
+    .badge-vat { background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+    .badge-novat { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 4px; }
+
+    /* Compact Horizontal Address Matrix */
+    .addr-compact-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px 6px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 4px 6px;
+    }
+    .addr-line-item {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 9.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .addr-line-item .lbl { color: #64748b; font-weight: 700; }
+    .addr-line-item .val { color: #1e293b; font-weight: 800; }
+    .addr-line-item.full { grid-column: span 3; }
     
     /* Table Styling */
-    .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 15px; border: 1px solid #5b3ec2; border-radius: 8px; overflow: hidden; }
-    .invoice-table thead tr { background: #5b3ec2 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    .invoice-table thead th { color: #fff !important; font-size: 10.5px; font-weight: 700; padding: 8px 4px; text-align: center; border: 1px solid rgba(255,255,255,0.15); }
-    .invoice-table tbody tr { border-bottom: 1px solid #5b3ec2; }
+    .invoice-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; border: 1.5px solid #1e1b4b; border-radius: 6px; overflow: hidden; }
+    .invoice-table thead tr { background: #1e1b4b !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .invoice-table thead th { color: #fff !important; font-size: 9.5px; font-weight: 700; padding: 5px 3px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+    .invoice-table tbody tr { border-bottom: 1px solid #e2e8f0; }
     .invoice-table tbody tr:nth-child(even) { background: #fdfcff; }
-    .invoice-table tbody tr:last-child { border-bottom: none; }
-    .invoice-table tbody td { padding: 8px 4px; font-size: 11px; text-align: center; border: 1px solid #e5e7eb; color: #1f2937; white-space: nowrap; }
-    .invoice-table tbody td.desc { text-align: right; font-weight: 700; white-space: normal; }
-    .invoice-table tbody td.mono { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-weight: 500; }
+    .invoice-table tbody td { padding: 5px 4px; font-size: 10px; text-align: center; border: 1px solid #e2e8f0; color: #1f2937; }
+    .invoice-table tbody td.desc { text-align: right; }
+    .mono { font-family: 'IBM Plex Mono', 'Courier New', monospace; }
+    .font-bold { font-weight: 700; }
     
-    /* Totals section */
-    .totals-section { display: flex; justify-content: space-between; align-items: stretch; gap: 15px; margin-top: 10px; }
-    .left-footer-box { width: 52%; display: flex; gap: 10px; align-items: stretch; }
-    .qr-wrapper { border: 1px solid #5b3ec2; border-radius: 8px; padding: 6px; background: #fff; display: flex; align-items: center; justify-content: center; width: 90px; flex-shrink: 0; }
-    .notes-box { flex-grow: 1; font-size: 10.5px; color: #4b5563; border: 1px solid #5b3ec2; border-radius: 8px; padding: 10px; background: #fff; }
-    .notes-box h4 { color: #5b3ec2; font-weight: 700; margin-bottom: 4px; font-size: 11px; }
-    .notes-content { line-height: 1.4; color: #4b5563; }
+    /* Tafqeet Amount Strip */
+    .tafqeet-strip { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 6px; padding: 5px 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 10.5px; }
+    .tafqeet-text { font-weight: 800; color: #3730a3; }
+    .packages-count { font-size: 10px; color: #4b5563; font-weight: 600; }
     
-    .totals-box { width: 44%; border: 1px solid #5b3ec2; border-radius: 8px; overflow: hidden; background: #fff; display: flex; flex-direction: column; justify-content: space-between; }
-    .totals-row { display: flex; justify-content: space-between; padding: 7px 10px; font-size: 11px; border-bottom: 1px solid #e5e7eb; color: #4b5563; }
-    .totals-row:last-child { border-bottom: none; }
-    .totals-row.grand-total { background: #5b3ec2 !important; color: #fff !important; font-weight: 800; font-size: 13.5px; border-bottom: none; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-    .totals-row.grand-total span { color: #fff !important; }
-    .totals-row span.val { font-family: 'IBM Plex Mono', 'Courier New', monospace; font-weight: 700; }
-    .totals-row.discount { color: #dc2626; }
+    /* Totals & QR Section */
+    .bottom-layout { display: grid; grid-template-columns: 105px 1fr 275px; gap: 8px; margin-bottom: 8px; align-items: stretch; margin-top: 10px; }
     
-    .thank-you { text-align: center; padding: 10px; font-size: 11px; color: #6b7280; font-weight: 500; border-top: 1px dashed #5b3ec2; margin-top: 15px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .qr-box { border: 1.2px solid #cbd5e1; border-radius: 6px; padding: 4px; background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    .qr-box span { font-size: 8px; color: #64748b; margin-top: 3px; font-weight: 700; }
     
-    @page {
-      size: A4;
-      margin: 8mm 10mm 8mm 10mm;
-    }
+    .notes-box { border: 1.2px solid #cbd5e1; border-radius: 6px; padding: 6px 8px; background: #fff; font-size: 9.5px; display: flex; flex-direction: column; justify-content: space-between; }
+    .notes-title { font-weight: 800; color: #1e1b4b; margin-bottom: 2px; font-size: 10px; }
+    .notes-body { color: #475569; line-height: 1.3; }
+    .official-receipt-notice { margin-top: 3px; background: #fef2f2; border: 1px dashed #ef4444; border-radius: 4px; padding: 2px 5px; }
+    .notice-ar { font-weight: 800; color: #991b1b; font-size: 9px; }
+    .notice-en { font-size: 7.5px; color: #7f1d1d; font-weight: 600; direction: ltr; text-align: right; }
+    .meta-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+    .meta-pill { background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; padding: 1px 6px; font-size: 9px; font-weight: 600; }
+    
+    /* Totals Table - Zero Collision */
+    .totals-table-wrap { border: 1.5px solid #1e1b4b; border-radius: 6px; overflow: hidden; background: #fff; }
+    .totals-table { width: 100%; border-collapse: collapse; }
+    .totals-table tr td { padding: 4px 8px; font-size: 10px; border-bottom: 1px solid #f1f5f9; }
+    .totals-table tr td.lbl { text-align: right; color: #475569; font-weight: 600; }
+    .totals-table tr td.val { text-align: left; font-family: 'IBM Plex Mono', monospace; font-weight: 700; direction: ltr; white-space: nowrap; }
+    .totals-table tr.grand td { background: #1e1b4b !important; color: #fff !important; font-weight: 800; font-size: 12px; border-bottom: none; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    .totals-table tr.grand td.val { color: #fff !important; }
+    .totals-table tr.balance-row td { background: #f8fafc; font-size: 9.5px; color: #64748b; }
+    .totals-table tr.due-row td { background: #fdfcff; font-weight: 800; color: #1e1b4b; font-size: 10.5px; }
+    
+    /* Signatures Section */
+    .signatures-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; border-top: 1px dashed #cbd5e1; padding-top: 6px; margin-top: 4px; }
+    .sig-box { border: 1px dashed #cbd5e1; border-radius: 5px; padding: 6px 10px; background: #fafafa; font-size: 9.5px; }
+    .sig-title { font-weight: 800; color: #334155; margin-bottom: 14px; }
+    .sig-line { border-top: 1px solid #94a3b8; padding-top: 3px; display: flex; justify-content: space-between; font-size: 9px; color: #64748b; }
+    
+    /* Footer */
+    .footer-bar { text-align: center; padding-top: 6px; font-size: 9.5px; color: #64748b; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #e2e8f0; margin-top: 6px; }
+    
+    @page { size: A4; margin: 4mm 6mm 4mm 6mm; }
     @media print {
-      body { background: #fff; padding: 0; }
+      html, body {
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        height: 100% !important;
+        font-size: 10px !important;
+      }
+      .no-print, .toolbar { display: none !important; }
+      .invoice-container {
+        box-shadow: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        border: 1px solid #1e1b4b !important;
+        padding: 5px 8px !important;
+        max-width: 100% !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .top-header { padding-bottom: 3px !important; margin-bottom: 4px !important; }
+      .title-box h1 { font-size: 16px !important; }
+      .company-banner { padding: 4px 8px !important; margin-bottom: 4px !important; border-radius: 6px !important; }
+      .company-banner h2 { font-size: 13px !important; }
+      .logo-circle { width: 42px !important; height: 42px !important; margin: 0 4px !important; }
+      .parties-container { gap: 4px !important; margin-bottom: 4px !important; }
+      .party-card { padding: 3px 5px !important; font-size: 8.5px !important; }
+      .party-ids-row { gap: 2px !important; margin-bottom: 2px !important; }
+      .id-badge { padding: 1px 3px !important; font-size: 8px !important; }
+      .addr-compact-grid { padding: 2px 4px !important; }
+      .addr-line-item { font-size: 8px !important; }
+      .invoice-table { margin-bottom: 4px !important; }
+      .invoice-table thead th { padding: 3px 2px !important; font-size: 8.5px !important; }
+      .invoice-table tbody td { padding: 2px 2px !important; font-size: 8.5px !important; }
+      .tafqeet-strip { padding: 2px 5px !important; margin-bottom: 4px !important; font-size: 8.5px !important; }
+      .bottom-layout { gap: 5px !important; margin-bottom: 4px !important; grid-template-columns: 80px 1fr 230px !important; }
+      .qr-box { padding: 2px !important; }
+      .qr-box svg, .qr-box img { max-width: 70px !important; max-height: 70px !important; }
+      .notes-box { padding: 3px 5px !important; font-size: 8px !important; }
+      .totals-table tr td { padding: 2px 5px !important; font-size: 8.5px !important; }
+      .totals-table tr.grand td { font-size: 10px !important; padding: 2.5px 5px !important; }
+      .signatures-grid { gap: 6px !important; margin-top: 3px !important; padding-top: 3px !important; }
+      .sig-box { padding: 3px 5px !important; font-size: 8px !important; }
+      .sig-title { margin-bottom: 6px !important; font-size: 8px !important; }
+      .footer-bar { margin-top: 3px !important; padding-top: 2px !important; font-size: 8px !important; }
+    }
       .no-print { display: none !important; }
-      .invoice-container { max-width: 100%; box-shadow: none; border-radius: 0; border: 1px solid #5b3ec2; padding: 12px; }
-      .company-banner { background: #5b3ec2 !important; color: #fff !important; }
-      .invoice-table thead tr { background: #5b3ec2 !important; }
-      .totals-row.grand-total { background: #5b3ec2 !important; color: #fff !important; }
+      .invoice-container { max-width: 100%; box-shadow: none; border-radius: 0; border: 1px solid #1e1b4b; padding: 8px; }
+      .company-banner { background: #1e1b4b !important; color: #fff !important; }
+      .invoice-table thead tr { background: #1e1b4b !important; color: #fff !important; }
+      .totals-table tr.grand td { background: #1e1b4b !important; color: #fff !important; }
     }
   </style>
 </head>
 <body>
   <div class="no-print">
-    <button class="btn" style="background:#5b3ec2;color:#fff;" onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
-    <button class="btn" style="background:#374151;color:#fff;" onclick="window.close()">✕ إغلاق</button>
+    <button class="btn" style="background:#1e1b4b;color:#fff;" onclick="window.print()">🖨️ طباعة الفاتورة A4</button>
+    <button class="btn" style="background:#334155;color:#fff;" onclick="window.close()">✕ إغلاق النافذة</button>
   </div>
 
   <div class="invoice-container">
-    <!-- Top Barcode and Title -->
-    <div class="top-row">
+    <!-- Top Header with Barcode & Title -->
+    <div class="top-header">
       <div class="title-box">
-        <h1>فاتورة ضريبية مبسطة</h1>
-        <h2>SIMPLIFIED TAX INVOICE</h2>
+        <h1>${titleAr}</h1>
+        <h2>${titleEn}</h2>
+        <span class="doc-badge">${typeTag}</span>
+      </div>
+      <div>
+        ${barcodeSvg}
       </div>
     </div>
 
-    <!-- Purple Company Banner -->
+    <!-- Purple Header Banner -->
     <div class="company-banner">
-      <div class="banner-left">
-        <div>رقم الفاتورة / Invoice No: <strong>${inv.number}</strong></div>
-        <div>تاريخ الفاتورة / Date: <strong>${inv.date || "—"}</strong></div>
-        <div>طريقة الدفع / Payment: <strong>${inv.paymentMethod === "cash" ? "نقدي" : "آجل"}</strong></div>
+      <div class="banner-meta">
+        <div class="meta-line"><span class="m-lbl">رقم الفاتورة / Inv No:</span> <strong class="m-val mono">${invNum}</strong></div>
+        <div class="meta-line"><span class="m-lbl">تاريخ الإصدار / Date:</span> <strong class="m-val mono">${inv.date || "—"}</strong></div>
+        <div class="meta-line"><span class="m-lbl">طريقة الدفع / Terms:</span> <strong class="m-val">${inv.paymentMethod === "cash" ? "نقدي (Cash)" : "آجل (Credit)"}</strong></div>
+        ${inv.dueDate ? `<div class="meta-line"><span class="m-lbl">الاستحقاق / Due:</span> <strong class="m-val mono">${inv.dueDate}</strong></div>` : ""}
       </div>
       ${logoHtml}
-      <div class="banner-right">
+      <div class="banner-co">
         <h2>${co.name}</h2>
-        ${co.vatNumber ? `<div>الرقم الضريبي: <strong>${co.vatNumber}</strong></div>` : ""}
-        ${co.crNumber ? `<div>السجل التجاري: <strong>${co.crNumber}</strong></div>` : ""}
+        <div class="co-id-row">
+          <span class="co-pill">الرقم الضريبي (VAT): <strong class="mono">${co.vatNumber || "314996148100003"}</strong></span>
+          <span class="co-pill">السجل التجاري (CR): <strong class="mono">${co.crNumber || "7054969006"}</strong></span>
+        </div>
       </div>
     </div>
 
-    <!-- Seller Info Strip -->
-    <div class="info-strip">
-      <span><strong>بيانات البائع / Seller:</strong> ${co.name}</span>
-      <span><strong>الرقم الضريبي:</strong> ${co.vatNumber || "—"}</span>
-      <span><strong>السجل التجاري:</strong> ${co.crNumber || "—"}</span>
-      <span><strong>العنوان:</strong> ${co.address || "المملكة العربية السعودية"}</span>
-    </div>
+    <!-- ZATCA National Address Tabs/Cards for Seller & Buyer -->
+    <div class="parties-container">
+      <!-- Seller Box -->
+      <div class="party-card seller">
+        <div class="party-head">
+          <span class="party-title">🏢 بيانات المورد / البائع (Seller)</span>
+        </div>
+        <div class="party-name">${co.name}</div>
+        <div class="party-ids-row">
+          <div class="id-badge">
+            <span class="id-lbl">السجل التجاري (CR):</span>
+            <span class="id-val mono">${co.crNumber || "7054969006"}</span>
+          </div>
+          <div class="id-badge vat-badge">
+            <span class="id-lbl">الرقم الضريبي (VAT):</span>
+            <span class="id-val mono">${co.vatNumber || "314996148100003"}</span>
+          </div>
+        </div>
+        <div class="addr-compact-grid">
+          <div class="addr-line-item"><span class="lbl">المدينة:</span> <span class="val">${co.city || "ينبع"}</span></div>
+          <div class="addr-line-item"><span class="lbl">الحي:</span> <span class="val">${co.district || "حي النزهة"}</span></div>
+          <div class="addr-line-item"><span class="lbl">الشارع:</span> <span class="val">${co.street || "عامر الشعبي"}</span></div>
+          <div class="addr-line-item"><span class="lbl">المبنى:</span> <span class="val mono">${co.buildingNo || "7480"}</span></div>
+          <div class="addr-line-item"><span class="lbl">الرمز البريدي:</span> <span class="val mono">${co.zip || co.postalCode || "46424"}</span></div>
+          <div class="addr-line-item"><span class="lbl">الرقم الإضافي:</span> <span class="val mono">${co.additionalNo || "3180"}</span></div>
+          <div class="addr-line-item full"><span class="lbl">الدولة:</span> <span class="val">${co.country || "المملكة العربية السعودية"}</span></div>
+        </div>
+      </div>
 
-    <!-- Client Info Strip -->
-    <div class="info-strip">
-      <span><strong>بيانات المشتري / Client:</strong> ${cust.name}</span>
-      <span><strong>الرقم الضريبي:</strong> ${cust.vatNumber || "—"}</span>
-      <span><strong>السجل التجاري:</strong> ${cust.crNumber || cust.nationalId || cust.cr || "—"}</span>
-      <span><strong>العنوان:</strong> ${cust.address || "—"}</span>
+      <!-- Buyer Box -->
+      <div class="party-card buyer">
+        <div class="party-head">
+          <span class="party-title">👤 بيانات العميل / المشتري (Buyer)</span>
+          <span class="${cust.vatNumber ? 'badge-vat' : 'badge-novat'}">${cust.vatNumber ? 'مسجل ضريبياً' : 'غير مسجل'}</span>
+        </div>
+        <div class="party-name">${cust.name}</div>
+        <div class="party-ids-row">
+          <div class="id-badge">
+            <span class="id-lbl">السجل / الهوية:</span>
+            <span class="id-val mono">${cust.crNumber || "—"}</span>
+          </div>
+          <div class="id-badge vat-badge">
+            <span class="id-lbl">الرقم الضريبي (VAT):</span>
+            <span class="id-val mono" style="color:${cust.vatNumber ? '#1e1b4b' : '#6b7280'};">${cust.vatNumber || "غير مسجل"}</span>
+          </div>
+        </div>
+        <div class="addr-compact-grid">
+          <div class="addr-line-item"><span class="lbl">المدينة:</span> <span class="val">${cust.city || "—"}</span></div>
+          <div class="addr-line-item"><span class="lbl">الحي:</span> <span class="val">${cust.district || "—"}</span></div>
+          <div class="addr-line-item"><span class="lbl">الشارع:</span> <span class="val">${cust.street || "—"}</span></div>
+          <div class="addr-line-item"><span class="lbl">المبنى:</span> <span class="val mono">${cust.buildingNo || "—"}</span></div>
+          <div class="addr-line-item"><span class="lbl">الرمز البريدي:</span> <span class="val mono">${cust.postalCode || "—"}</span></div>
+          <div class="addr-line-item"><span class="lbl">الرقم الإضافي:</span> <span class="val mono">${cust.additionalNo || "—"}</span></div>
+          <div class="addr-line-item full"><span class="lbl">الدولة:</span> <span class="val">${cust.country || "المملكة العربية السعودية"}</span></div>
+        </div>
+      </div>
     </div>
 
     <!-- Items Table -->
     <table class="invoice-table">
       <thead>
         <tr>
-          <th style="width:36px;">م / SR</th>
-          <th>الصنف والبيان / Description</th>
-          <th style="width:55px;">الكمية / Qty</th>
-          <th style="width:80px;">السعر / Price</th>
-          <th style="width:85px;">الخاضع / Taxable</th>
-          <th style="width:55px;">النسبة / Rate</th>
-          <th style="width:80px;">الضريبة / VAT</th>
-          <th style="width:90px;">الإجمالي / Total</th>
+          <th style="width:30px;">م<br><span style="font-size:7.5px;">#</span></th>
+          <th>الصنف والبيان<br><span style="font-size:7.5px;">Description & Packaging</span></th>
+          <th style="width:50px;">الكمية<br><span style="font-size:7.5px;">Qty</span></th>
+          <th style="width:70px;">سعر الوحدة<br><span style="font-size:7.5px;">Unit Price</span></th>
+          <th style="width:55px;">الخصم<br><span style="font-size:7.5px;">Discount</span></th>
+          <th style="width:75px;">الخاضع<br><span style="font-size:7.5px;">Taxable Base</span></th>
+          <th style="width:45px;">النسبة<br><span style="font-size:7.5px;">Rate</span></th>
+          <th style="width:70px;">الضريبة<br><span style="font-size:7.5px;">VAT (15%)</span></th>
+          <th style="width:80px;">الإجمالي<br><span style="font-size:7.5px;">Total (Inc. VAT)</span></th>
         </tr>
       </thead>
       <tbody>
@@ -2447,79 +3624,112 @@ window.printInvoice = async () => {
       </tbody>
     </table>
 
-    <!-- Totals Section -->
-    <div class="totals-section">
-      <!-- Left Side: QR Code + Notes -->
-      <div class="left-footer-box">
-        <div class="qr-wrapper">
-          <div id="qrcode-container"></div>
-        </div>
-        <div class="notes-box">
-          <h4>شروط وملاحظات / Notes</h4>
-          <div class="notes-content">
-            ${inv.notes || "شكراً لتعاملكم معنا."}
-            ${inv.repName ? `<br><span style="font-weight:700; color:#5b3ec2;">المندوب: ${inv.repName}</span>` : ""}
-            ${inv.warehouseName ? ` | <span>المستودع: ${inv.warehouseName}</span>` : ""}
+    <!-- Tafqeet (Amount in words) & Packaging Bar -->
+    <div class="tafqeet-strip">
+      <div class="tafqeet-text">
+        <span>✍️ المبلغ بالحروف:</span> ${amountInWords}
+      </div>
+      <div class="packages-count">
+        📦 إجمالي الكمية: <b class="mono">${totalQtySum}</b> | عدد البنود: <b class="mono">${totalItemsCount}</b> صنف
+      </div>
+    </div>
+
+    <!-- Bottom Layout: QR + Notes + Totals -->
+    <div class="bottom-layout">
+      <!-- QR Code -->
+      <div class="qr-box">
+        ${qrImgDataUrl ? `<img src="${qrImgDataUrl}" width="86" height="86" style="display:block;margin:0 auto;border-radius:4px;" alt="ZATCA QR" />` : `<div id="qrcode-container" style="width:86px;height:86px;border:1px dashed #cbd5e1;display:flex;align-items:center;justify-content:center;font-size:9px;color:#94a3b8;">ZATCA QR</div>`}
+        <span>ZATCA</span>
+      </div>
+
+      <!-- Notes & Metadata -->
+      <div class="notes-box">
+        <div>
+          <div class="notes-title">📌 شروط وملاحظات / Notes & Terms:</div>
+          <div class="notes-body">
+            <div>${inv.notes || "البضاعة المباعة لا ترد ولا تستبدل إلا بموجب الفاتورة الأصلية وخلال المدة النظامية."}</div>
+            <div class="official-receipt-notice">
+              <div class="notice-ar">⚠️ لا تعتبر هذه الفاتورة محصلة إلا بموجب سند قبض رسمي</div>
+              <div class="notice-en">The invoice is not considered collected except with an official receipt</div>
+            </div>
           </div>
         </div>
+        <div class="meta-tags">
+          ${inv.repName ? `<span class="meta-pill">👤 المندوب: <b>${inv.repName}</b></span>` : ""}
+          ${inv.warehouseName ? `<span class="meta-pill">🏢 المستودع: <b>${inv.warehouseName}</b></span>` : ""}
+          <span class="meta-pill">🕒 وقت الطباعة: <b>${new Date().toLocaleTimeString('ar-SA')}</b></span>
+        </div>
       </div>
 
-      <!-- Right Side: Totals -->
-      <div class="totals-box">
-        <div class="totals-row"><span>المجموع الخاضع للضريبة / Taxable Amount:</span><span class="val">${formatCurrency(inv.subtotal || 0)}</span></div>
-        ${(inv.discountTotal || 0) > 0 ? `<div class="totals-row discount"><span>إجمالي الخصم / Discount:</span><span class="val">- ${formatCurrency(inv.discountTotal)}</span></div>` : ""}
-        <div class="totals-row"><span>ضريبة القيمة المضافة / VAT (15%):</span><span class="val">${formatCurrency(inv.totalVat || 0)}</span></div>
-        <div class="totals-row grand-total">
-          <span>الإجمالي شامل الضريبة / Grand Total:</span>
-          <span class="val">${formatCurrency(inv.totalWithVat || 0)} ر.س</span>
-        </div>
-        ${(inv.paymentMethod === "credit" || (cust.balance || 0) > 0) ? `
-        <div class="totals-row" style="margin-top:2px; border-top:1px dashed #d1d5db; padding-top:2px; font-size:10px; color:#6b7280;">
-          <span>الرصيد السابق للعميل:</span>
-          <span class="val">${formatCurrency((cust.balance || 0) - (inv.remainingAmount || 0))} ر.س</span>
-        </div>
-        <div class="totals-row" style="font-weight:700; color:#5b3ec2; font-size:11.5px; padding-top:2px;">
-          <span>إجمالي الرصيد المستحق:</span>
-          <span class="val">${formatCurrency(cust.balance || 0)} ر.س</span>
-        </div>
-        ` : ""}
+      <!-- Totals Box (Zero Overlap Guaranteed) -->
+      <div class="totals-table-wrap">
+        <table class="totals-table">
+          ${exemptBaseSum > 0 ? `
+          <tr>
+            <td class="lbl">الخاضع للضريبة (15%):</td>
+            <td class="val">${formatCurrency(taxableBaseSum)}</td>
+          </tr>
+          <tr>
+            <td class="lbl" style="color:#059669;">معفى / غير خاضع (0%):</td>
+            <td class="val" style="color:#059669;">${formatCurrency(exemptBaseSum)}</td>
+          </tr>
+          <tr>
+            <td class="lbl">المجموع قبل الضريبة (Subtotal):</td>
+            <td class="val">${formatCurrency(inv.subtotal || (taxableBaseSum + exemptBaseSum))}</td>
+          </tr>` : `
+          <tr>
+            <td class="lbl">المجموع قبل الضريبة (Taxable):</td>
+            <td class="val">${formatCurrency(inv.subtotal || 0)}</td>
+          </tr>`}
+          ${(inv.discountTotal || totalDiscountSum) > 0 ? `
+          <tr>
+            <td class="lbl" style="color:#dc2626;">إجمالي الخصم (Discount):</td>
+            <td class="val" style="color:#dc2626;">- ${formatCurrency(inv.discountTotal || totalDiscountSum)}</td>
+          </tr>` : ""}
+          <tr>
+            <td class="lbl">ضريبة القيمة المضافة (15% VAT):</td>
+            <td class="val">${formatCurrency(inv.totalVat !== undefined ? inv.totalVat : (inv.vatAmount !== undefined ? inv.vatAmount : lineVatSum))}</td>
+          </tr>
+          <tr class="grand">
+            <td class="lbl">الإجمالي شامل الضريبة (Grand Total):</td>
+            <td class="val font-bold">${formatCurrency(inv.totalWithVat !== undefined ? inv.totalWithVat : (inv.total || 0))}</td>
+          </tr>
+        </table>
       </div>
     </div>
 
-    <!-- Thank you footer -->
-    <div class="thank-you">
-      <div>
-        شكراً لتعاملكم معنا — ${co.name}
-        ${co.phone ? `| 📞 الهاتف: ${co.phone}` : ""}
-        ${co.email ? `| ✉️ البريد: ${co.email}` : ""}
+    <!-- Signatures & Acceptance Strip -->
+    <div class="signatures-grid">
+      <div class="sig-box">
+        <div class="sig-title">✍️ استلام واعتماد العميل (Received & Accepted By):</div>
+        <div class="sig-line">
+          <span>اسم المستلم: ______________________</span>
+          <span>التوقيع والختم: ________________</span>
+        </div>
       </div>
-      <div style="margin-top: 5px;">
-        ${barcodeSvg}
+      <div class="sig-box">
+        <div class="sig-title">🚚 تسليم المندوب / السائق (Delivered By):</div>
+        <div class="sig-line">
+          <span>المندوب: <b>${inv.repName || "سائق المؤسسة"}</b></span>
+          <span>التوقيع: ____________________</span>
+        </div>
       </div>
+    </div>
+
+    <!-- Footer Bar -->
+    <div class="footer-bar">
+      <div>📞 الهاتف: <b>${co.phone || "0549141648"}</b> | ✉️ البريد: <b>${co.email || "Nuzmalamdad@gmail.com"}</b></div>
+      <div>شكراً لتعاملكم معنا — ${co.name}</div>
     </div>
   </div>
-
-  <script src="js/utils/qrcode.min.js"><\/script>
-  <script>
-    const qrData = "${qrData.replace(/"/g, '\\"')}";
-    if (qrData) {
-      try {
-        new QRCode(document.getElementById("qrcode-container"), {
-          text: qrData,
-          width: 80,
-          height: 80,
-          correctLevel: QRCode.CorrectLevel.M
-        });
-      } catch(e) {
-        document.getElementById("qrcode-container").innerHTML = '<p style="font-size:9px;color:#9ca3af;">تعذر توليد QR</p>';
-      }
-    }
-  </script>
 </body>
 </html>`);
-  printWindow.document.close();
+    printWindow.document.close();
+  } catch (err) {
+    console.error("[printInvoice] Error:", err);
+    if (window.showToast) window.showToast("خطأ أثناء الطباعة: " + err.message, "error");
+  }
 };
-
 
 window.exportInvoices = async () => { window.exportInvoicesExcel(); };
 window.exportInvoicesExcel = async () => {
@@ -2559,20 +3769,37 @@ window.editInvoice = async (id) => {
     const inv = await getById("salesInvoices", id);
     if (!inv) { showToast("لم يتم العثور على الفاتورة", "error"); return; }
 
+    const rawLines = inv.lines || inv.items || [];
     window._editingInvoiceId = id;
+    window._editingInvoiceVersion = inv.version || 1;
+    window._editingOldInvoice = inv;
+    window._editingOldLines = JSON.parse(JSON.stringify(rawLines));
+
+    // Ensure products and categories (and stockByWarehouse) are loaded into memory/cache
+    await loadProductsAndCategories();
 
     // Set form fields
-    document.getElementById("inv-number").value = inv.number;
+    document.getElementById("inv-number").value = inv.number || inv.invoiceNumber || "";
     document.getElementById("customer-search").value = inv.customerName || "";
     document.getElementById("customer-id").value = inv.customerId || "";
-    document.getElementById("inv-date").value = inv.date || "";
+    document.getElementById("inv-date").value = inv.date || todayString();
     document.getElementById("inv-payment").value = inv.paymentMethod || "credit";
-    document.getElementById("inv-paid-amount").value = inv.paidAmount || "";
+    document.getElementById("inv-paid-amount").value = inv.paidAmount !== undefined ? inv.paidAmount : "";
     document.getElementById("inv-notes").value = inv.notes || "";
-    document.getElementById("inv-type").value = inv.invoiceType || "B2C";
+    document.getElementById("inv-type").value = inv.invoiceType || "standard";
+    document.getElementById("inv-form-error")?.classList.add("hidden");
+
+    const globalDiscValEl = document.getElementById("inv-global-discount-val");
+    const globalDiscTypeEl = document.getElementById("inv-global-discount-type");
+    if (globalDiscValEl) globalDiscValEl.value = inv.globalDiscountValue || (inv.globalDiscountAmount ? inv.globalDiscountAmount : "0");
+    if (globalDiscTypeEl) globalDiscTypeEl.value = inv.globalDiscountType || "amount";
 
     // Set customer object in memory
     selectedCustomer = inv.customerId ? { id: inv.customerId, name: inv.customerName, type: inv.customerType || "retail" } : null;
+    if (inv.customerId && cachedCustomers) {
+      const c = cachedCustomers.find(cust => cust.id === inv.customerId);
+      if (c) selectedCustomer = { ...c, ...selectedCustomer };
+    }
 
     // Show donation badge if appropriate
     const donationBadge = document.getElementById("donation-badge");
@@ -2582,7 +3809,7 @@ window.editInvoice = async (id) => {
         donationBadge.textContent = "🎁 عميل تبرعات (معفى من الضريبة وتكلفتها مصروف تبرعات)";
         donationBadge.classList.remove("hidden");
       }
-      document.getElementById("credit-status-bar")?.classList.add("hidden");
+      document.getElementById("credit-status-bar")?.classList.add("hidden"); document.getElementById("inv-aging-alert")?.classList.add("hidden");
     } else {
       if (donationBadge) donationBadge.classList.add("hidden");
     }
@@ -2606,21 +3833,38 @@ window.editInvoice = async (id) => {
     }
 
     // Set lines — must map ALL fields used by renderInvoiceLines and saveInvoice
-    invoiceLines = (inv.lines || []).map(line => ({
-      productId:   line.productId,
-      productName: line.productName,
-      qty:         line.qty         || 1,
-      unit:        line.unit        || "PCS",
-      unitCode:    line.unitCode    || "PCE",
-      unitPrice:   line.unitPrice   || line.price || 0,
-      discount:    line.discount    || 0,
-      taxCategory: line.taxCategory || "S",
-      sku:         line.sku         || "",
-      costPrice:   line.costPrice   || 0,
-      batchNumber: line.batchNumber || "",
-      expiryDate:  line.expiryDate  || "",
-      availableBatches: []
-    }));
+    invoiceLines = rawLines.map(line => {
+      const dbProd = allProducts.find(p => p.id === line.productId);
+      const unit = line.unit || dbProd?.unit || "PCS";
+      const altUnit = line.altUnit || dbProd?.altUnit || "";
+      const unitFactor = parseFloat(line.unitFactor || dbProd?.unitFactor) || 1;
+      const selectedUnit = line.selectedUnit || unit;
+      const unitPrice = line.unitPrice !== undefined ? parseFloat(line.unitPrice) : (parseFloat(line.price) || 0);
+      const basePricePerUnit = line.basePricePerUnit || (selectedUnit === altUnit ? unitPrice : (unitFactor > 1 ? parseFloat((unitPrice * unitFactor).toFixed(4)) : unitPrice));
+
+      return {
+        productId:   line.productId,
+        productName: line.productName || line.name || (dbProd?.name || ""),
+        qty:         parseFloat(line.qty) || 1,
+        unit:        unit,
+        altUnit:     altUnit,
+        unitFactor:  unitFactor,
+        selectedUnit: selectedUnit,
+        basePricePerUnit: basePricePerUnit,
+        unitCode:    line.unitCode || "PCE",
+        unitPrice:   unitPrice,
+        discount:    parseFloat(line.discount) || 0,
+        discountType: line.discountType || "percent",
+        taxCategory: line.taxCategory || "S",
+        sku:         line.sku || dbProd?.sku || "",
+        costPrice:   (dbProd && (dbProd.averageCost || dbProd.costPrice || dbProd.lastPurchasePrice || dbProd.avgCostPrice)) ? (dbProd.averageCost || dbProd.costPrice || dbProd.lastPurchasePrice || dbProd.avgCostPrice) : (line.averageCost || line.costPrice || 0),
+        averageCost: (dbProd && (dbProd.averageCost || dbProd.costPrice || dbProd.lastPurchasePrice || dbProd.avgCostPrice)) ? (dbProd.averageCost || dbProd.costPrice || dbProd.lastPurchasePrice || dbProd.avgCostPrice) : (line.averageCost || line.costPrice || 0),
+        batchNumber: line.batchNumber || "",
+        expiryDate:  line.expiryDate  || "",
+        availableBatches: [],
+        isCustom:    !!line.isCustom || String(line.productId || "").startsWith("adhoc_")
+      };
+    });
 
     // Resolve batches asynchronously for edit
     invoiceLines.forEach((_, idx) => {
@@ -2652,21 +3896,25 @@ window.deleteInvoice = async (id, number) => {
     await cleanupInvoiceAssociatedTransactions(inv);
 
     // 1. Reverse stock adjustment in bulk — non-blocking (cancelled invoices already reversed)
-    if (inv.lines && inv.warehouseId && inv.status !== "cancelled") {
-      const adjustments = inv.lines.map(line => ({
-        warehouseId: inv.warehouseId,
-        productId: line.productId,
-        qtyDelta: line.qty,
-        metadata: {
-          type: "sale_reverse",
-          refId: inv.number,
-          documentNumber: inv.number,
-          invoiceNumber: inv.number,
-          notes: `حذف الفاتورة ${inv.number}`,
-          batchNumber: line.batchNumber || "",
-          expiryDate: line.expiryDate || "",
-        }
-      }));
+    const oldLines = inv.lines || inv.items || [];
+    if (oldLines.length > 0 && inv.warehouseId && inv.status !== "cancelled") {
+      const adjustments = oldLines.map(line => {
+        const baseQty = (parseFloat(line.qty) || 0) * ((line.altUnit && line.unitFactor > 1 && line.selectedUnit === line.altUnit) ? (parseFloat(line.unitFactor) || 1) : 1);
+        return {
+          warehouseId: inv.warehouseId,
+          productId: line.productId,
+          qtyDelta: baseQty,
+          metadata: {
+            type: "sale_reverse",
+            refId: inv.number || inv.invoiceNumber || id,
+            documentNumber: inv.number || inv.invoiceNumber || id,
+            invoiceNumber: inv.number || inv.invoiceNumber || id,
+            notes: `حذف الفاتورة ${inv.number || inv.invoiceNumber || id}`,
+            batchNumber: line.batchNumber || "",
+            expiryDate: line.expiryDate || "",
+          }
+        };
+      });
       if (adjustments.length > 0) {
         try {
           await adjustStockBulk(adjustments);
@@ -2727,6 +3975,84 @@ window.deleteInvoice = async (id, number) => {
   }
 };
 
+window.openSalesInvoiceFromQuote = async (data) => {
+  await loadProductsAndCategories();
+  invoiceLines = [];
+
+  for (const item of (data.items || [])) {
+    const dbProd = allProducts.find(p => p.id === item.productId);
+    const unitPrice = parseFloat(item.unitPrice) || 0;
+    const qty = parseFloat(item.qty) || 1;
+    const discount = parseFloat(item.discount) || 0;
+    const unit = item.unit || dbProd?.unit || "كرتون";
+    const altUnit = dbProd?.altUnit || "";
+    const unitFactor = parseFloat(dbProd?.unitFactor) || 1;
+    const isCustom = !!item.isCustom || String(item.productId || "").startsWith("adhoc_");
+
+    invoiceLines.push({
+      productId: item.productId,
+      productName: item.productName,
+      sku: item.sku || dbProd?.sku || (isCustom ? "بند حر" : ""),
+      unit: unit,
+      altUnit: altUnit,
+      unitFactor: unitFactor,
+      selectedUnit: unit,
+      basePricePerUnit: unitPrice,
+      qty: qty,
+      unitPrice: unitPrice,
+      discount: discount,
+      taxCategory: item.taxCategory || "S",
+      costPrice: item.cost || dbProd?.averageCost || dbProd?.costPrice || dbProd?.lastPurchasePrice || 0,
+      isCustom: isCustom
+    });
+  }
+
+  selectedCustomer = null;
+  window._editingInvoiceId = null;
+
+  if (data.customerId && data.customerId !== "general") {
+    const cust = (cachedCustomers || []).find(c => c.id === data.customerId);
+    if (cust) {
+      selectedCustomer = cust;
+    } else {
+      selectedCustomer = { id: data.customerId, name: data.customerName };
+    }
+  }
+
+  const btn = document.getElementById("save-inv-btn");
+  if (btn) btn.textContent = "💾 حفظ وإصدار الفاتورة";
+
+  document.getElementById("inv-number").value = "جارٍ التوليد…";
+  document.getElementById("customer-search").value = data.customerName || "";
+  document.getElementById("customer-id").value = (data.customerId && data.customerId !== "general") ? data.customerId : "";
+  document.getElementById("inv-date").value = todayString();
+  document.getElementById("inv-payment").value = "credit";
+  document.getElementById("inv-paid-amount").value = "";
+  document.getElementById("credit-status-bar").classList.add("hidden"); document.getElementById("inv-aging-alert")?.classList.add("hidden");
+  document.getElementById("donation-badge")?.classList.add("hidden");
+  document.getElementById("inv-form-error").classList.add("hidden");
+
+  const globalDiscValEl = document.getElementById("inv-global-discount-val");
+  const globalDiscTypeEl = document.getElementById("inv-global-discount-type");
+  if (globalDiscValEl) globalDiscValEl.value = "0";
+  if (globalDiscTypeEl) globalDiscTypeEl.value = "amount";
+
+  setupCustomerAutocomplete();
+  setupProductAutocomplete();
+
+  renderInvoiceLines();
+  updateInvoiceTotals();
+
+  setTimeout(() => {
+    const notesEl = document.getElementById("inv-notes");
+    if (notesEl) notesEl.value = `محولة من عرض سعر رقم ${data.quoteNumber || ""}${data.notes ? " | " + data.notes : ""}`;
+  }, 300);
+
+  openModal("new-invoice-modal");
+  loadRepsDropdown();
+  showToast(`تم استيراد بنود عرض السعر ${data.quoteNumber || ""} بنجاح`, "success");
+};
+
 window.openSalesInvoiceFromPurchase = async (data) => {
   // Pre-load products, categories, and live stock balances to populate ERP_CACHE
   await loadProductsAndCategories();
@@ -2775,9 +4101,14 @@ window.openSalesInvoiceFromPurchase = async (data) => {
   document.getElementById("inv-date").value = todayString();
   document.getElementById("inv-payment").value = "credit";
   document.getElementById("inv-paid-amount").value = "";
-  document.getElementById("credit-status-bar").classList.add("hidden");
+  document.getElementById("credit-status-bar").classList.add("hidden"); document.getElementById("inv-aging-alert")?.classList.add("hidden");
   document.getElementById("donation-badge")?.classList.add("hidden");
   document.getElementById("inv-form-error").classList.add("hidden");
+
+  const globalDiscValEl = document.getElementById("inv-global-discount-val");
+  const globalDiscTypeEl = document.getElementById("inv-global-discount-type");
+  if (globalDiscValEl) globalDiscValEl.value = "0";
+  if (globalDiscTypeEl) globalDiscTypeEl.value = "amount";
 
   setupCustomerAutocomplete();
   setupProductAutocomplete();
@@ -2808,6 +4139,15 @@ window.openSalesInvoiceFromPurchase = async (data) => {
     const num = await generateInvoiceNumber("INV");
     document.getElementById("inv-number").value = num;
   } catch {}
+};
+
+window.openGoodsReceiptAckForInvoice = async (invId) => {
+  if (typeof window.openGoodsReceiptAckModal === "function") {
+    window.openGoodsReceiptAckModal({ invoiceId: invId });
+  } else {
+    const mod = await import("./goods-receipt-ack.js?v=1.0");
+    mod.openGoodsReceiptAckModal({ invoiceId: invId });
+  }
 };
 
 

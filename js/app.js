@@ -165,7 +165,7 @@ const ROUTES = {
   "promissory-notes":         () => import("./modules/promissory-notes.js?v=2.4"),
   "trust-receipts":           () => import("./modules/trust-receipts.js?v=2.6"),
   "goods-receipt-ack":        () => import("./modules/goods-receipt-ack.js?v=2.3"),
-  "sales-invoices":           () => import("./modules/sales-invoices.js?v=66.0"),
+  "sales-invoices":           () => import("./modules/sales-invoices.js?v=67.0"),
   "broker-statement":         () => import("./modules/broker-statement.js?v=1.4"),
   "delivery-notes":           () => import("./modules/delivery-notes.js?v=2.3"),
   "sales-returns":            () => import("./modules/sales-returns.js?v=39.5"),
